@@ -255,11 +255,11 @@ supabase/         migrations (profiles, models, RLS policies)
 | 4a ✅ | **Content pipeline + gallery** | Models written as code recipes (`src/models/recipes`) and built by `npm run models` into `public/models/<id>.fold` plus an SVG thumbnail. Paper plane, cup, samurai helmet and fortune teller. Thumbnails, "coming soon" cards, and resuming where you left off. **First public release** (learning only). |
 | 4b-1 ✅ | **Compound folds + crane** | A layer-order solver (crease directions, taco–taco, taco–tortilla, tortilla–tortilla, transitivity) and a collapse operation for squash, petal and reverse folds and collapsing into bases. The traditional crane (29 steps). |
 | 4b-2 ✅ | **Jumping frog + multiple sheets** | The jumping frog (15 steps, from a 3 × 5 card). Models can have several sheets, each with its own colours and patch of sheet coordinates. |
-| 4b-3 | **Ninja star** | Follow [origami.me/ninja-star](https://origami.me/ninja-star/) (the reference to use). Needs moving a whole sheet and tucking flaps into another sheet's pockets. |
 | 5 ✅ | **Polish** | Fold guides (dashed valley / dotted mountain creases and an arrow along the paper's path), the camera framing each step, speed control, a "Done!" card, keyboard shortcuts dialog, screen-reader labels, PWA/offline with generated icons (`npm run icons`). Translations are moved to a later milestone. |
 | 6 ✅ | **Accounts + roles** | Supabase schema (profiles, creator requests, models) with row-level security tested in PGlite; emailed sign-in links; account menu; asking to become a creator; an admin page to approve requests; `/studio` opens the editor for creators. See `docs/accounts.md`. |
 | 7a ✅ | **Cloud Studio** | Creators save models to the cloud, reopen them from "My models", share a private link (`/s/<token>`), and submit for the gallery. Admins preview, publish or send back with a note. Published models appear under "From the community" in the gallery (`/m/<id>`). |
-| 7b | **Studio folding tools** | Compound-fold presets (reverse, squash, petal) using the collapse engine, a Pose tool for 3D finishing steps, and the ninja star's sheet moving and tucking. |
+| 7b ✅ | **Studio folding tools** | Reverse folds (inside/outside), Collapse (add valley, mountain or open creases, then apply together, for squash, petal and sink folds or bases) and Lift (turn part of the paper up by an angle for 3D finishing), each limitable to the top layers. |
+| 7c | **Ninja star** | Following [origami.me/ninja-star](https://origami.me/ninja-star/): moving or turning over a single sheet, and tucking a flap into another sheet's pocket. |
 
 Milestones 0–4 deliver everything except advanced mode. Advanced mode then gets the dev Studio from milestone 3 almost for free.
 

@@ -893,6 +893,16 @@ kbd {
   stroke-dasharray: 10 4 2 4 2 4;
 }
 
+.fold-editor .crease.pending {
+  opacity: 0.55;
+}
+
+/* An opened-out crease in a collapse: dotted and thin. */
+.fold-editor .crease.flat {
+  stroke-width: 1.5px;
+  stroke-dasharray: 2 4;
+}
+
 .fold-editor .snap {
   fill: var(--bg);
   stroke: var(--fg);
@@ -993,6 +1003,12 @@ kbd {
   color: var(--fg);
   font-size: 14px;
   resize: vertical;
+}
+
+.field.inline .angle {
+  min-width: 3ch;
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
 }
 
 .field.inline select {

@@ -31,10 +31,11 @@ describe('fold guides', () => {
 
   it('works out guides for every step of every model', () => {
     for (const make of RECIPES) {
-      const fs = framesOf(make());
+      const model = make();
+      const fs = framesOf(model);
       for (let k = 1; k < fs.length; k++) {
         const g = guidesFor(fs[k - 1], fs[k]);
-        expect(g.arrows.length + g.creases.length, `${make().id} step ${k}`).toBeGreaterThan(0);
+        expect(g.arrows.length + g.creases.length, `${model.id} step ${k}`).toBeGreaterThan(0);
       }
     }
   });
