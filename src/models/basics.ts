@@ -32,7 +32,7 @@ const halves = [
 export const basics: OrigamiModel = {
   id: 'basics',
   title: 'Folding basics',
-  sheet: { size: [1, 1], front: '#5b54e8', back: '#f6f3ec' },
+  sheets: [{ size: [1, 1], front: '#5b54e8', back: '#f6f3ec' }],
   start: {
     vertices_paper: corners,
     vertices_coords: corners.map(flat),

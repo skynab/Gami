@@ -41,12 +41,18 @@ export interface Sheet {
   size: Vec2;
   front: string;
   back: string;
+  /**
+   * Where this sheet's centre is in sheet coordinates. Each sheet of a multi-sheet model gets its own
+   * patch of sheet coordinates, so a point there says which sheet it's on. Defaults to (0, 0).
+   */
+  origin?: Vec2;
 }
 
 export interface OrigamiModel {
   id: string;
   title: string;
-  sheet: Sheet;
+  /** One sheet for most models; two or more for modular ones like the ninja star. */
+  sheets: Sheet[];
   /** The paper before step 1, usually the flat sheet. */
   start: FoldFrame;
   steps: Step[];

@@ -1,5 +1,6 @@
 import { toFlat } from './fold';
 import { frontUp } from './geometry2d';
+import { faceColour } from './sheets';
 import type { OrigamiModel } from './types';
 
 /**
@@ -23,7 +24,7 @@ export function thumbnailSvg(model: OrigamiModel, size = 240): string {
   const stroke = +(span / 220).toFixed(5);
   const polys = faces
     .map((f) => {
-      const fill = frontUp(f.world, f.paper) ? model.sheet.front : model.sheet.back;
+      const fill = faceColour(model, f.paper, frontUp(f.world, f.paper));
       const points = f.world.map((p) => p.map((n) => +n.toFixed(4)).join(',')).join(' ');
       return `<polygon points="${points}" fill="${fill}"/>`;
     })

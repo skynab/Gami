@@ -23,7 +23,9 @@ export interface FoldFile extends FoldFileFrame {
   file_title: string;
   file_classes: string[];
   'gami:id': string;
-  'gami:sheet': OrigamiModel['sheet'];
+  'gami:sheets': OrigamiModel['sheets'];
+  /** Files from before multi-sheet models had a single sheet. */
+  'gami:sheet'?: OrigamiModel['sheets'][number];
   file_frames: FoldFileFrame[];
 }
 
@@ -34,7 +36,7 @@ export function toFoldFile(model: OrigamiModel): FoldFile {
     file_title: model.title,
     file_classes: ['diagrams'],
     'gami:id': model.id,
-    'gami:sheet': model.sheet,
+    'gami:sheets': model.sheets,
     ...writeFrame(model.start),
     file_frames: model.steps.map((s) => ({
       frame_title: s.title,
@@ -46,11 +48,12 @@ export function toFoldFile(model: OrigamiModel): FoldFile {
 }
 
 export function fromFoldFile(file: FoldFile): OrigamiModel {
-  if (!file['gami:sheet'] || !Array.isArray(file.file_frames)) throw new Error('This .fold file wasn’t made by Gami.');
+  const sheets = file['gami:sheets'] ?? (file['gami:sheet'] && [file['gami:sheet']]);
+  if (!sheets || !Array.isArray(file.file_frames)) throw new Error('This .fold file wasn’t made by Gami.');
   return {
     id: file['gami:id'],
     title: file.file_title,
-    sheet: file['gami:sheet'],
+    sheets,
     start: readFrame(file),
     steps: file.file_frames.map(
       (f): Step => ({

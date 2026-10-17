@@ -43,7 +43,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'fortune-teller', title: 'Fortune teller', blurb: 'Pick a colour, pick a number.', difficulty: 2, category: 'toy', steps: 17, minutes: 8, sheets: 1 },
   { id: 'boat', title: 'Boat', blurb: 'A little sailboat that really floats.', difficulty: 2, category: 'object', minutes: 6, sheets: 1 },
   { id: 'heart', title: 'Heart', blurb: 'A simple heart, nice for cards.', difficulty: 2, category: 'object', minutes: 5, sheets: 1 },
-  { id: 'jumping-frog', title: 'Jumping frog', blurb: 'Press its back and watch it hop.', difficulty: 2, category: 'animal', minutes: 8, sheets: 1 },
+  { id: 'jumping-frog', title: 'Jumping frog', blurb: 'From a 3 × 5 card. Press its back and watch it hop.', difficulty: 2, category: 'animal', steps: 15, minutes: 8, sheets: 1 },
   { id: 'ninja-star', title: 'Ninja star', blurb: 'Two sheets locked into a spinning shuriken.', difficulty: 2, category: 'modular', minutes: 10, sheets: 2 },
   { id: 'tulip', title: 'Tulip', blurb: 'A blossom and a stem from two squares.', difficulty: 3, category: 'flower', minutes: 10, sheets: 2 },
   { id: 'fox', title: 'Fox', blurb: 'A sly fox face with pointy ears.', difficulty: 3, category: 'animal', minutes: 8, sheets: 1 },

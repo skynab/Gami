@@ -156,7 +156,7 @@ export default function StudioDev() {
         <section className="studio-editor">
           <FoldEditor
             frame={frame}
-            sheet={model.sheet}
+            model={model}
             picks={picks}
             line={line}
             kind={kind}

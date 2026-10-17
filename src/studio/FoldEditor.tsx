@@ -1,16 +1,17 @@
 import { useMemo, useRef, type PointerEvent } from 'react';
 import { toFlat } from '../fold/fold';
 import { dist, signedArea, split, type Line } from '../fold/geometry2d';
-import type { FoldFrame, Sheet, Vec2 } from '../fold/types';
+import { faceColour } from '../fold/sheets';
+import type { FoldFrame, OrigamiModel, Vec2 } from '../fold/types';
 import { frontUp, snapPoints, viewBox } from './editor';
 
 /**
  * The paper seen from above, as you'd see it on the table. Click the dots to place a fold: the crease
  * shows as a line, the side that moves is shaded, and a dashed outline shows where it will land.
  */
-export function FoldEditor({ frame, sheet, picks, line, kind, preview, onPick }: {
+export function FoldEditor({ frame, model, picks, line, kind, preview, onPick }: {
   frame: FoldFrame;
-  sheet: Sheet;
+  model: Pick<OrigamiModel, 'sheets'>;
   picks: Vec2[];
   line: Line | null;
   kind: 'valley' | 'mountain';
@@ -56,7 +57,7 @@ export function FoldEditor({ frame, sheet, picks, line, kind, preview, onPick }:
   return (
     <svg ref={svg} className="fold-editor" viewBox={box.join(' ')} onPointerDown={pick} role="img" aria-label="The paper from above">
       {faces.map((f, i) => (
-        <polygon key={i} points={pts(f.world)} fill={frontUp(f.world, f.paper) ? sheet.front : sheet.back} className="face" />
+        <polygon key={i} points={pts(f.world)} fill={faceColour(model, f.paper, frontUp(f.world, f.paper))} className="face" />
       ))}
       {movingSide && <polygon points={pts(movingSide)} className="moving-side" />}
       {landed.map((f, i) => (

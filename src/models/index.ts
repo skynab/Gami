@@ -6,7 +6,7 @@ import { findModel } from '../gallery/catalog';
 export const BLANK_SHEET: OrigamiModel = {
   id: 'blank',
   title: '',
-  sheet: { size: [1, 1], front: '#5b54e8', back: '#f6f3ec' },
+  sheets: [{ size: [1, 1], front: '#5b54e8', back: '#f6f3ec' }],
   start: {
     vertices_paper: [[-0.5, 0.5], [0.5, 0.5], [0.5, -0.5], [-0.5, -0.5]],
     vertices_coords: [[-0.5, 0, 0.5], [0.5, 0, 0.5], [0.5, 0, -0.5], [-0.5, 0, -0.5]],
