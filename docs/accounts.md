@@ -36,5 +36,15 @@ people can't use. `npm test` runs `supabase/tests/rls.test.ts`, which checks the
 
    After that, approve creators at `/admin`.
 
+## How a model gets into the gallery
+
+1. A creator makes it in the Studio and presses **Save to my models**. It's a private draft.
+2. **Copy share link** gives a private link (`/s/…`) anyone can open, without it being listed anywhere.
+3. **Submit for the gallery** sends it to the admins. It's locked while it's reviewed.
+4. An admin opens **Review models and creators** (`/admin`), previews it, and either publishes it or sends
+   it back with a note. Sent-back models unlock; editing puts them back to draft, ready to resubmit.
+5. Published models appear under **From the community** in the gallery, at `/m/<id>`. To change one, the
+   creator saves a copy and submits that.
+
 Sign-in uses emailed links (no passwords). Supabase's built-in email sender is rate-limited; set up custom
 SMTP under **Authentication → Emails** before launch.

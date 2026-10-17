@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router';
 import './app/app.css';
 import { useAuth } from './auth/store';
 import { Gallery } from './routes/Gallery';
+import { CommunityModel } from './routes/CommunityModel';
 import { Learn } from './routes/Learn';
 import { NotFound } from './routes/NotFound';
 
@@ -22,6 +23,8 @@ createRoot(document.getElementById('root')!).render(
       <Routes>
         <Route path="/" element={<Gallery />} />
         <Route path="/learn/:modelId" element={<Learn />} />
+        <Route path="/m/:id" element={<CommunityModel />} />
+        <Route path="/s/:token" element={<CommunityModel shared />} />
         <Route
           path="/studio/:draftId?"
           element={

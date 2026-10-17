@@ -290,6 +290,18 @@ a {
   pointer-events: none;
 }
 
+.viewer-notice {
+  position: absolute;
+  inset-block-start: 12px;
+  inset-inline-start: 12px;
+  max-width: calc(100% - 140px);
+  padding: 6px 12px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.08);
+  font-size: 13px;
+}
+
 .stage-empty {
   position: absolute;
   inset: 0;
@@ -504,6 +516,72 @@ kbd {
   display: flex;
   align-items: flex-start;
   gap: 8px;
+}
+
+.cloud {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-block-end: 16px;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.cloud p {
+  margin: 0;
+}
+
+.cloud-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.review-note {
+  padding: 8px 10px;
+  border-inline-start: 3px solid var(--danger);
+  border-radius: 6px;
+  background: var(--bg);
+  font-size: 14px;
+}
+
+.my-models {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.my-models li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.my-models li > div:first-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.community {
+  margin-block-start: 40px;
+}
+
+.community h2 {
+  margin: 0 0 4px;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+
+.community .grid {
+  margin-block-start: 16px;
 }
 
 .done {

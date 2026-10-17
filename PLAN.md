@@ -258,7 +258,8 @@ supabase/         migrations (profiles, models, RLS policies)
 | 4b-3 | **Ninja star** | Follow [origami.me/ninja-star](https://origami.me/ninja-star/) (the reference to use). Needs moving a whole sheet and tucking flaps into another sheet's pockets. |
 | 5 ✅ | **Polish** | Fold guides (dashed valley / dotted mountain creases and an arrow along the paper's path), the camera framing each step, speed control, a "Done!" card, keyboard shortcuts dialog, screen-reader labels, PWA/offline with generated icons (`npm run icons`). Translations are moved to a later milestone. |
 | 6 ✅ | **Accounts + roles** | Supabase schema (profiles, creator requests, models) with row-level security tested in PGlite; emailed sign-in links; account menu; asking to become a creator; an admin page to approve requests; `/studio` opens the editor for creators. See `docs/accounts.md`. |
-| 7 | **Studio for creators** | Compound-fold presets, Pose tool, step list editing, cloud drafts, share links, submit and approve, published models in the gallery. |
+| 7a ✅ | **Cloud Studio** | Creators save models to the cloud, reopen them from "My models", share a private link (`/s/<token>`), and submit for the gallery. Admins preview, publish or send back with a note. Published models appear under "From the community" in the gallery (`/m/<id>`). |
+| 7b | **Studio folding tools** | Compound-fold presets (reverse, squash, petal) using the collapse engine, a Pose tool for 3D finishing steps, and the ninja star's sheet moving and tucking. |
 
 Milestones 0–4 deliver everything except advanced mode. Advanced mode then gets the dev Studio from milestone 3 almost for free.
 

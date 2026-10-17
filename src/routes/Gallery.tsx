@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { Link } from 'react-router';
 import { SearchIcon, StudioIcon } from '../app/icons';
 import { TopBar } from '../app/TopBar';
 import { AccountButton } from '../auth/AccountButton';
+import { accountsEnabled } from '../auth/store';
 import { CATEGORIES, filterModels, LEVELS, MODELS, type Category, type Level } from '../gallery/catalog';
 import { ModelCard } from '../gallery/ModelCard';
+
+// Community models need the database, so they're only loaded on sites with accounts.
+const Community = accountsEnabled ? lazy(() => import('../gallery/Community')) : null;
 
 export function Gallery() {
   const [query, setQuery] = useState('');
@@ -72,6 +76,11 @@ export function Gallery() {
           <div className="empty">
             <p className="muted">No models match. Try another search or filter.</p>
           </div>
+        )}
+        {Community && (
+          <Suspense fallback={null}>
+            <Community />
+          </Suspense>
         )}
       </main>
     </div>

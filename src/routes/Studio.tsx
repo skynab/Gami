@@ -18,7 +18,7 @@ export default function Studio() {
   if (status === 'signed-in' && (role === 'creator' || role === 'admin')) {
     return (
       <Suspense fallback={null}>
-        <StudioEditor end={<AccountButton />} />
+        <StudioEditor end={<AccountButton />} cloud />
       </Suspense>
     );
   }

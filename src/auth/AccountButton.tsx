@@ -70,7 +70,7 @@ function AccountMenu() {
           )}
           {role === 'admin' && (
             <Link role="menuitem" to="/admin" onClick={() => setOpen(false)}>
-              Creator requests
+              Review models and creators
             </Link>
           )}
           <button type="button" role="menuitem" onClick={() => void useAuth.getState().signOut()}>

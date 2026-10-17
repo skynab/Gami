@@ -7,6 +7,7 @@ import { flipLine, lineOnto, lineThrough, type Line } from '../fold/geometry2d';
 import type { FoldFrame, Step, Vec2 } from '../fold/types';
 import { useDraft } from '../studio/draft';
 import { smallerSideMoves, unfoldTarget } from '../studio/editor';
+import { CloudPanel } from '../studio/CloudPanel';
 import { FoldEditor } from '../studio/FoldEditor';
 import { usePlayback } from '../state/playback';
 import { useViewer } from '../state/viewer';
@@ -25,7 +26,11 @@ const HINTS: Record<Tool, string> = {
  * The Studio editor: fold a model step by step and export it as a .fold file. Creators reach it through
  * /studio (signed in); in development builds it's also at /studio/dev without signing in.
  */
-export default function StudioEditor({ end }: { end?: React.ReactNode }) {
+export default function StudioEditor({ end, cloud = false }: {
+  end?: React.ReactNode;
+  /** Signed in as a creator: show saving to the cloud. */
+  cloud?: boolean;
+}) {
   const model = useDraft((s) => s.model);
   const { addStep, undo, editStep, setInfo, replace, clear, current } = useDraft.getState();
   const frame = useMemo(() => current(), [model, current]);
@@ -174,6 +179,7 @@ export default function StudioEditor({ end }: { end?: React.ReactNode }) {
             </Suspense>
           </div>
           <div className="studio-steps">
+            {cloud && <CloudPanel />}
             <label className="field">
               <span>Title</span>
               <input value={model.title} onChange={(e) => setInfo({ title: e.target.value })} />

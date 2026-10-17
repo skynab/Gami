@@ -109,6 +109,16 @@ describe('models', () => {
     await expect(as(db, CREATOR, `update public.models set share_token = 'x' where id = $1`, [draft])).rejects.toThrow(/permission denied/);
   });
 
+  it('go back to draft when a rejected one is edited, and can be resubmitted', async () => {
+    const [{ id }] = await as<{ id: string }>(db, CREATOR, `insert into public.models (title, fold) values ('Frog', $1) returning id`, [fold]);
+    await as(db, CREATOR, `update public.models set status = 'submitted' where id = $1`, [id]);
+    await as(db, ADMIN, `update public.models set status = 'rejected', review_note = 'Step 3 is unclear' where id = $1`, [id]);
+    await as(db, CREATOR, `update public.models set title = 'Frog 2', status = 'draft' where id = $1`, [id]);
+    await as(db, CREATOR, `update public.models set status = 'submitted' where id = $1`, [id]);
+    const [m] = await as<{ title: string; status: string; review_note: string }>(db, CREATOR, 'select title, status, review_note from public.models where id = $1', [id]);
+    expect(m).toEqual({ title: 'Frog 2', status: 'submitted', review_note: 'Step 3 is unclear' });
+  });
+
   it('are published by admins, and then everyone can see them', async () => {
     await as(db, ADMIN, `update public.models set status = 'published', review_note = 'Lovely' where id = $1`, [draft]);
     expect(await as(db, null, 'select title from public.models where id = $1', [draft])).toEqual([{ title: 'Swan' }]);
