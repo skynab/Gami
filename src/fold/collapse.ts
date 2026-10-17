@@ -1,5 +1,5 @@
 import { FoldError, fromFlat, toFlat, type FlatFace } from './fold';
-import { dot, frontUp, overlapArea, sideOf, split, sub, type Line } from './geometry2d';
+import { frontUp, overlapArea, sharedSegment, sideOf, split, sub, type Line } from './geometry2d';
 import { LayerError, solveLayers, type LayerEdge } from './layers';
 import type { FoldFrame, Vec2 } from './types';
 
@@ -158,29 +158,6 @@ function sharedEdges(faces: FlatFace[]): { f: number; g: number; pa: Vec2; pb: V
     }
   }
   return out;
-}
-
-function sharedSegment(p: Vec2[], q: Vec2[]): [Vec2, Vec2] | null {
-  for (let i = 0; i < p.length; i++) {
-    const a0 = p[i];
-    const a1 = p[(i + 1) % p.length];
-    const d = sub(a1, a0);
-    const len = Math.hypot(d[0], d[1]);
-    const u: Vec2 = [d[0] / len, d[1] / len];
-    for (let j = 0; j < q.length; j++) {
-      const b0 = q[j];
-      const b1 = q[(j + 1) % q.length];
-      const off0 = u[0] * (b0[1] - a0[1]) - u[1] * (b0[0] - a0[0]);
-      const off1 = u[0] * (b1[1] - a0[1]) - u[1] * (b1[0] - a0[0]);
-      if (Math.abs(off0) > 1e-7 || Math.abs(off1) > 1e-7) continue;
-      const t0 = dot(sub(b0, a0), u);
-      const t1 = dot(sub(b1, a0), u);
-      const lo = Math.max(0, Math.min(t0, t1));
-      const hi = Math.min(len, Math.max(t0, t1));
-      if (hi - lo > 1e-7) return [[a0[0] + u[0] * lo, a0[1] + u[1] * lo], [a0[0] + u[0] * hi, a0[1] + u[1] * hi]];
-    }
-  }
-  return null;
 }
 
 function contains(poly: Vec2[], p: Vec2): boolean {

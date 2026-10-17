@@ -71,15 +71,19 @@ export function poseAt(t: Transition, s: number): Vec3[][] {
   return t.faces.map((f) => f.before.map((p) => move(t.motions[f.motion], p, s)));
 }
 
-/** A sphere around the paper through every step, including mid-fold poses like a sheet lifted to turn over. */
-export function boundsOf(model: OrigamiModel): { center: Vec3; radius: number } {
+/**
+ * A sphere around the paper for each step, for framing the camera: item k covers step k from start to end,
+ * including mid-fold poses like a sheet lifted to turn over. Item 0 is the paper before the first step.
+ */
+export function stepBounds(model: OrigamiModel): { center: Vec3; radius: number }[] {
   const frames = framesOf(model);
-  const points: Vec3[] = frames.flatMap((f) => f.vertices_coords);
-  for (let k = 1; k < frames.length; k++) {
-    const t = transition(frames[k - 1], frames[k]);
+  return frames.map((frame, k) => {
+    if (k === 0) return sphereAround(frame.vertices_coords);
+    const t = transition(frames[k - 1], frame);
+    const points: Vec3[] = [...frames[k - 1].vertices_coords, ...frame.vertices_coords];
     for (const s of [0.25, 0.5, 0.75]) for (const face of poseAt(t, s)) points.push(...face);
-  }
-  return sphereAround(points);
+    return sphereAround(points);
+  });
 }
 
 const turn = new Quaternion();

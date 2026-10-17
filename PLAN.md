@@ -256,7 +256,7 @@ supabase/         migrations (profiles, models, RLS policies)
 | 4b-1 ✅ | **Compound folds + crane** | A layer-order solver (crease directions, taco–taco, taco–tortilla, tortilla–tortilla, transitivity) and a collapse operation for squash, petal and reverse folds and collapsing into bases. The traditional crane (29 steps). |
 | 4b-2 ✅ | **Jumping frog + multiple sheets** | The jumping frog (15 steps, from a 3 × 5 card). Models can have several sheets, each with its own colours and patch of sheet coordinates. |
 | 4b-3 | **Ninja star** | Follow [origami.me/ninja-star](https://origami.me/ninja-star/) (the reference to use). Needs moving a whole sheet and tucking flaps into another sheet's pockets. |
-| 5 | **Polish** | Annotations (arrows, ghost, crease styles), auto camera per step, reduced motion, accessibility, PWA/offline, i18n. |
+| 5 ✅ | **Polish** | Fold guides (dashed valley / dotted mountain creases and an arrow along the paper's path), the camera framing each step, speed control, a "Done!" card, keyboard shortcuts dialog, screen-reader labels, PWA/offline with generated icons (`npm run icons`). Translations are moved to a later milestone. |
 | 6 | **Accounts + roles** | Supabase auth, profiles, roles, row-level security. Sign-in UI. `/studio` gated for creators. |
 | 7 | **Studio for creators** | Compound-fold presets, Pose tool, step list editing, cloud drafts, share links, submit and approve, published models in the gallery. |
 
@@ -272,6 +272,8 @@ Milestones 0–4 deliver everything except advanced mode. Advanced mode then get
 - **The crane ends with its wings up**, with "fold the wings down and spread them" in the last step's text. After narrowing, the narrowing flaps lie over the wings and are joined to the legs, so the engine can't fold the wings flat. Revisit when 3D finishing poses arrive.
 - **The jumping frog has no separate back-leg folds.** The folded-up bottom serves as the back legs, which is common in simple versions; the leg folds tried either turned inward or would tear.
 - **The ninja star follows [origami.me/ninja-star](https://origami.me/ninja-star/)**, chosen as the reference because written instructions elsewhere disagree on the folds.
+- **Translations are deferred** (milestone 5). Most of the text is model instructions, which would each need translating; better done once the content settles.
+- **The camera frames each step automatically**, keeping whatever angle you're looking from; only the distance and centre change.
 - **Paper may pass through itself in v1** during complex 3D steps. Collision-free animation is a later goal, not a launch blocker.
 - **Dev Studio** lives at `/studio/dev` in development builds only (left out of production). It folds through all layers or the top 1–3, snaps fold lines to corners and edge midpoints (point-to-point and through-2-points), and can unfold, turn over, rotate and undo. The edge-to-edge (angle bisector) helper is deferred until a model needs it.
 

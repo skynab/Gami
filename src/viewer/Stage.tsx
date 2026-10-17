@@ -3,20 +3,23 @@ import { Canvas } from '@react-three/fiber';
 import { useMemo } from 'react';
 import { Sphere, Vector3 } from 'three';
 import { useThemeColors } from '../app/useThemeColors';
-import { boundsOf } from '../fold/animate';
+import { stepBounds } from '../fold/animate';
 import type { OrigamiModel } from '../fold/types';
+import { usePlayback } from '../state/playback';
 import { CameraRig } from './CameraRig';
 import { FoldedPaper } from './FoldedPaper';
+import { FoldGuides } from './FoldGuides';
 import { ViewCube } from './ViewCube';
 
 /** The 3D viewport: the paper on a table, lit softly, with a view cube in the corner. Loaded on demand. */
 export default function Stage({ model }: { model: OrigamiModel }) {
   const colors = useThemeColors();
-  // Fits every step of the model. Stable per model, so the camera doesn't re-run its last command on every render.
-  const bounds = useMemo(() => {
-    const { center, radius } = boundsOf(model);
-    return new Sphere(new Vector3(...center), radius);
-  }, [model]);
+  // The camera frames whichever step is showing. Spheres are made once per model, so the camera only
+  // moves when the step changes.
+  const spheres = useMemo(() => stepBounds(model).map(({ center, radius }) => new Sphere(new Vector3(...center), radius)), [model]);
+  const step = usePlayback((s) => s.step);
+  const total = usePlayback((s) => s.total);
+  const fit = spheres[Math.min(spheres.length - 1, total ? step : 0)];
   const narrow = matchMedia('(max-width: 560px)').matches;
 
   return (
@@ -34,10 +37,11 @@ export default function Stage({ model }: { model: OrigamiModel }) {
       <directionalLight position={[-2, -3, -1]} intensity={1.2} />
 
       <FoldedPaper model={model} edgeColor={colors.muted} />
+      <FoldGuides model={model} color={colors.accent} />
       {/* A little below the table top, so the paper (pushed back in depth to keep its crease lines visible) always wins. */}
       <ContactShadows position-y={-0.01} scale={3} blur={2.4} far={1} opacity={0.35} />
 
-      <CameraRig bounds={bounds} />
+      <CameraRig fit={fit} />
 
       <GizmoHelper alignment="top-right" margin={narrow ? [60, 60] : [76, 76]}>
         <ViewCube colors={colors} />

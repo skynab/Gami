@@ -3,6 +3,8 @@ import { Link, useParams, useSearchParams } from 'react-router';
 import {
   BackIcon,
   FirstIcon,
+  GuidesIcon,
+  KeyboardIcon,
   LastIcon,
   LockIcon,
   NextIcon,
@@ -22,6 +24,8 @@ import { useViewer } from '../state/viewer';
 import { VIEWS } from '../viewer/views';
 import { NotFound } from './NotFound';
 
+const SPEEDS = [1, 2, 0.5];
+
 // three.js is most of the download, so the gallery never loads it.
 const Stage = lazy(() => import('../viewer/Stage'));
 
@@ -31,13 +35,18 @@ export function Learn() {
   const [params, setParams] = useSearchParams();
   const [data, setData] = useState<OrigamiModel | null>(null);
   const [failed, setFailed] = useState(false);
+  const [help, setHelp] = useState(false);
   const view = useViewer((s) => s.view);
   const locked = useViewer((s) => s.locked);
-  const { setView, toggleLock, resetCamera } = useViewer.getState();
+  const guides = useViewer((s) => s.guides);
+  const { setView, toggleLock, toggleGuides, resetCamera } = useViewer.getState();
   const step = usePlayback((s) => s.step);
   const total = usePlayback((s) => s.total);
   const playing = usePlayback((s) => s.playing);
-  const { goTo, replay, togglePlay } = usePlayback.getState();
+  const speed = usePlayback((s) => s.speed);
+  const finished = usePlayback((s) => s.total > 0 && s.pos >= s.total);
+  const { goTo, replay, togglePlay, setSpeed } = usePlayback.getState();
+  const nextSpeed = () => setSpeed(SPEEDS[(SPEEDS.indexOf(speed) + 1) % SPEEDS.length]);
 
   // The step in the address when the page opened, or where this person left off. After that, the address follows playback.
   const startStep = useRef(Number(params.get('step')) || (modelId && readProgress(modelId)?.step) || 1);
@@ -84,7 +93,7 @@ export function Learn() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLInputElement || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (help || e.target instanceof HTMLInputElement || e.metaKey || e.ctrlKey || e.altKey) return;
       // Space on a focused button presses that button.
       if (e.key === ' ' && e.target instanceof HTMLButtonElement) return;
       if (e.key === 'ArrowLeft') goTo(step - 1);
@@ -96,6 +105,9 @@ export function Learn() {
       else if (e.key >= '1' && e.key <= '4') setView(VIEWS[Number(e.key) - 1].id);
       else if (e.key === '0') resetCamera();
       else if (e.key === 'l' || e.key === 'L') toggleLock();
+      else if (e.key === 'g' || e.key === 'G') toggleGuides();
+      else if (e.key === 's' || e.key === 'S') nextSpeed();
+      else if (e.key === '?') setHelp(true);
       else return;
       e.preventDefault();
     };
@@ -118,10 +130,15 @@ export function Learn() {
             <span className="page-title">{info.title}</span>
           </>
         }
-        center={total > 0 && <span aria-live="polite">Step {step} of {total}</span>}
+        center={total > 0 && <span>Step {step} of {total}</span>}
+        end={
+          <button type="button" className="icon" aria-label="Keyboard shortcuts" title="Keyboard shortcuts (?)" onClick={() => setHelp(true)}>
+            <KeyboardIcon />
+          </button>
+        }
       />
 
-      <main className="stage">
+      <main className="stage" aria-label={`${info.title} in 3D. Drag to turn it, scroll or pinch to zoom.`}>
         {data && (
           <Suspense fallback={null}>
             <Stage model={data} />
@@ -134,11 +151,38 @@ export function Learn() {
               <h2>
                 {step}. {current.title}
               </h2>
-              <button type="button" className="icon small-icon" aria-label="Replay this step" title="Replay this step (R)" onClick={replay}>
-                <ReplayIcon width={18} height={18} />
-              </button>
+              <div className="step-card-actions">
+                <button
+                  type="button"
+                  className="icon small-icon"
+                  aria-label="Show fold lines and arrows"
+                  title="Show fold lines and arrows (G)"
+                  aria-pressed={guides}
+                  onClick={toggleGuides}
+                >
+                  <GuidesIcon width={18} height={18} />
+                </button>
+                <button type="button" className="icon small-icon" aria-label="Replay this step" title="Replay this step (R)" onClick={replay}>
+                  <ReplayIcon width={18} height={18} />
+                </button>
+              </div>
             </div>
             {current.text && <p className="muted small">{current.text}</p>}
+            {finished && (
+              <div className="done">
+                <p>
+                  <strong>Done!</strong> Nice folding.
+                </p>
+                <div className="done-actions">
+                  <Link to="/" className="primary small-button">
+                    Fold another
+                  </Link>
+                  <button type="button" className="secondary" onClick={() => goTo(1)}>
+                    Start over
+                  </button>
+                </div>
+              </div>
+            )}
           </section>
         )}
         {none && failed && (
@@ -157,6 +201,8 @@ export function Learn() {
           </section>
         )}
       </main>
+
+      {help && <ShortcutsDialog onClose={() => setHelp(false)} />}
 
       <footer className="bottombar">
         <div className="group">
@@ -181,6 +227,16 @@ export function Learn() {
           </button>
           <button type="button" className="icon" aria-label="Last step" title="Last step (End)" disabled={step >= total} onClick={() => goTo(total)}>
             <LastIcon />
+          </button>
+          <button
+            type="button"
+            className="icon speed"
+            aria-label={`Speed ${speed}×`}
+            title="Folding speed (S)"
+            disabled={!total}
+            onClick={nextSpeed}
+          >
+            {speed}×
           </button>
         </div>
 
@@ -210,6 +266,43 @@ export function Learn() {
         </div>
       </footer>
     </div>
+  );
+}
+
+const SHORTCUTS: [string, string][] = [
+  ['← →', 'Previous / next step'],
+  ['Home / End', 'First / last step'],
+  ['Space', 'Play or pause'],
+  ['R', 'Replay this step'],
+  ['S', 'Change the folding speed'],
+  ['G', 'Show or hide fold lines and arrows'],
+  ['1 – 4', 'Free, top, front or side view'],
+  ['L', 'Lock the view'],
+  ['0', 'Reset the view'],
+];
+
+function ShortcutsDialog({ onClose }: { onClose(): void }) {
+  const ref = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    ref.current?.showModal();
+  }, []);
+  return (
+    <dialog ref={ref} className="modal" aria-labelledby="shortcuts-title" onClose={onClose} onClick={(e) => e.target === ref.current && ref.current.close()}>
+      <h2 id="shortcuts-title">Keyboard shortcuts</h2>
+      <dl className="shortcuts">
+        {SHORTCUTS.map(([keys, what]) => (
+          <div key={keys}>
+            <dt>
+              <kbd>{keys}</kbd>
+            </dt>
+            <dd>{what}</dd>
+          </div>
+        ))}
+      </dl>
+      <form method="dialog">
+        <button className="primary small-button">Close</button>
+      </form>
+    </dialog>
   );
 }
 

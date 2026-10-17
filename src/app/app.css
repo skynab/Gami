@@ -344,6 +344,85 @@ a {
   gap: 8px;
 }
 
+.modal {
+  width: min(420px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 20px 22px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--fg);
+  box-shadow: 0 16px 48px rgb(0 0 0 / 0.25);
+}
+
+.modal::backdrop {
+  background: rgb(0 0 0 / 0.4);
+}
+
+.modal h2 {
+  margin: 0 0 12px;
+  font-size: 18px;
+}
+
+.shortcuts {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 16px;
+}
+
+.shortcuts div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.shortcuts dd {
+  margin: 0;
+  color: var(--muted);
+  text-align: end;
+}
+
+kbd {
+  padding: 1px 6px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  font: 600 13px/1.6 system-ui, sans-serif;
+  white-space: nowrap;
+}
+
+.done {
+  margin-block-start: 10px;
+  padding-block-start: 10px;
+  border-block-start: 1px solid var(--line);
+}
+
+.done p {
+  margin: 0 0 8px;
+}
+
+.done-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.primary.small-button {
+  min-height: 34px;
+  padding: 0 14px;
+  font-size: 14px;
+}
+
+.icon.speed {
+  font-size: 13px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.step-card-actions {
+  display: flex;
+  gap: 2px;
+}
+
 .small-icon {
   width: 32px;
   height: 32px;

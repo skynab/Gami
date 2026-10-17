@@ -60,6 +60,19 @@ export const PaperIcon = icon(
     <path d="M4 4l16 16" strokeDasharray="2.5 2.5" />
   </>,
 );
+export const GuidesIcon = icon(
+  <>
+    <path d="M4 20L20 4" strokeDasharray="3 3" />
+    <path d="M6 9a7 7 0 0 1 9-3" />
+    <path d="M15 3.5l.3 2.6-2.6.6" />
+  </>,
+);
+export const KeyboardIcon = icon(
+  <>
+    <rect x="3" y="6" width="18" height="12" rx="2" />
+    <path d="M7 10h.01M11 10h.01M15 10h.01M7 14h10" />
+  </>,
+);
 export const PauseIcon = icon(<path d="M8 5.5v13M16 5.5v13" />);
 export const ReplayIcon = icon(
   <>
