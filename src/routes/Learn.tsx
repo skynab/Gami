@@ -14,6 +14,7 @@ import {
   ReplayIcon,
   ResetIcon,
 } from '../app/icons';
+import { Modal } from '../app/Modal';
 import { TopBar } from '../app/TopBar';
 import type { OrigamiModel } from '../fold/types';
 import { findModel, MODELS } from '../gallery/catalog';
@@ -282,13 +283,8 @@ const SHORTCUTS: [string, string][] = [
 ];
 
 function ShortcutsDialog({ onClose }: { onClose(): void }) {
-  const ref = useRef<HTMLDialogElement>(null);
-  useEffect(() => {
-    ref.current?.showModal();
-  }, []);
   return (
-    <dialog ref={ref} className="modal" aria-labelledby="shortcuts-title" onClose={onClose} onClick={(e) => e.target === ref.current && ref.current.close()}>
-      <h2 id="shortcuts-title">Keyboard shortcuts</h2>
+    <Modal title="Keyboard shortcuts" onClose={onClose}>
       <dl className="shortcuts">
         {SHORTCUTS.map(([keys, what]) => (
           <div key={keys}>
@@ -302,7 +298,7 @@ function ShortcutsDialog({ onClose }: { onClose(): void }) {
       <form method="dialog">
         <button className="primary small-button">Close</button>
       </form>
-    </dialog>
+    </Modal>
   );
 }
 

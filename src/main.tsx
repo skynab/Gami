@@ -2,14 +2,19 @@ import { lazy, StrictMode, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import './app/app.css';
+import { useAuth } from './auth/store';
 import { Gallery } from './routes/Gallery';
 import { Learn } from './routes/Learn';
 import { NotFound } from './routes/NotFound';
 
 // Only creators need the Studio, so everyone else never downloads it.
 const Studio = lazy(() => import('./routes/Studio'));
-// The internal Studio for writing the built-in models. Left out of production builds entirely.
-const StudioDev = import.meta.env.DEV ? lazy(() => import('./routes/StudioDev')) : null;
+const Admin = lazy(() => import('./routes/Admin'));
+// The Studio editor without signing in, for writing the built-in models. Left out of production builds.
+const StudioDev = import.meta.env.DEV ? lazy(() => import('./routes/StudioEditor')) : null;
+
+// Picks up a saved session, or the sign-in link someone just clicked. Does nothing on sites without accounts.
+useAuth.getState().start();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -22,6 +27,14 @@ createRoot(document.getElementById('root')!).render(
           element={
             <Suspense fallback={null}>
               <Studio />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <Suspense fallback={null}>
+              <Admin />
             </Suspense>
           }
         />

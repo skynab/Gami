@@ -257,7 +257,7 @@ supabase/         migrations (profiles, models, RLS policies)
 | 4b-2 ✅ | **Jumping frog + multiple sheets** | The jumping frog (15 steps, from a 3 × 5 card). Models can have several sheets, each with its own colours and patch of sheet coordinates. |
 | 4b-3 | **Ninja star** | Follow [origami.me/ninja-star](https://origami.me/ninja-star/) (the reference to use). Needs moving a whole sheet and tucking flaps into another sheet's pockets. |
 | 5 ✅ | **Polish** | Fold guides (dashed valley / dotted mountain creases and an arrow along the paper's path), the camera framing each step, speed control, a "Done!" card, keyboard shortcuts dialog, screen-reader labels, PWA/offline with generated icons (`npm run icons`). Translations are moved to a later milestone. |
-| 6 | **Accounts + roles** | Supabase auth, profiles, roles, row-level security. Sign-in UI. `/studio` gated for creators. |
+| 6 ✅ | **Accounts + roles** | Supabase schema (profiles, creator requests, models) with row-level security tested in PGlite; emailed sign-in links; account menu; asking to become a creator; an admin page to approve requests; `/studio` opens the editor for creators. See `docs/accounts.md`. |
 | 7 | **Studio for creators** | Compound-fold presets, Pose tool, step list editing, cloud drafts, share links, submit and approve, published models in the gallery. |
 
 Milestones 0–4 deliver everything except advanced mode. Advanced mode then gets the dev Studio from milestone 3 almost for free.
@@ -274,6 +274,9 @@ Milestones 0–4 deliver everything except advanced mode. Advanced mode then get
 - **The ninja star follows [origami.me/ninja-star](https://origami.me/ninja-star/)**, chosen as the reference because written instructions elsewhere disagree on the folds.
 - **Translations are deferred** (milestone 5). Most of the text is model instructions, which would each need translating; better done once the content settles.
 - **The camera frames each step automatically**, keeping whatever angle you're looking from; only the distance and centre change.
+- **Security rules are tested without Docker** (milestone 6). The migrations run in PGlite (Postgres in-process) with a small stand-in for Supabase's `auth` schema and roles, and the tests act as guest, learner, creator and admin.
+- **Sign-in is by emailed link**, with no passwords to store or reset. The first admin is made by hand in SQL; after that, admins approve creators at `/admin`.
+- **Accounts are optional per deployment.** Without Supabase settings the site hides sign-in and the Studio; the Supabase library is only downloaded when they're set.
 - **Paper may pass through itself in v1** during complex 3D steps. Collision-free animation is a later goal, not a launch blocker.
 - **Dev Studio** lives at `/studio/dev` in development builds only (left out of production). It folds through all layers or the top 1–3, snaps fold lines to corners and edge midpoints (point-to-point and through-2-points), and can unfold, turn over, rotate and undo. The edge-to-edge (angle bisector) helper is deferred until a model needs it.
 

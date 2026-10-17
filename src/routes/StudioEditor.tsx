@@ -22,10 +22,10 @@ const HINTS: Record<Tool, string> = {
 };
 
 /**
- * The internal Studio, used to write the built-in models. Only in development builds: the public
- * Studio for creators (milestones 6–7) grows out of this.
+ * The Studio editor: fold a model step by step and export it as a .fold file. Creators reach it through
+ * /studio (signed in); in development builds it's also at /studio/dev without signing in.
  */
-export default function StudioDev() {
+export default function StudioEditor({ end }: { end?: React.ReactNode }) {
   const model = useDraft((s) => s.model);
   const { addStep, undo, editStep, setInfo, replace, clear, current } = useDraft.getState();
   const frame = useMemo(() => current(), [model, current]);
@@ -135,9 +135,10 @@ export default function StudioDev() {
   return (
     <div className="app">
       <TopBar
-        center="Studio · development"
+        center="Studio"
         end={
           <>
+            {end}
             <button type="button" className="secondary" onClick={() => file.current?.click()}>
               Open
             </button>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import { SearchIcon, StudioIcon } from '../app/icons';
 import { TopBar } from '../app/TopBar';
+import { AccountButton } from '../auth/AccountButton';
 import { CATEGORIES, filterModels, LEVELS, MODELS, type Category, type Level } from '../gallery/catalog';
 import { ModelCard } from '../gallery/ModelCard';
 
@@ -15,10 +16,13 @@ export function Gallery() {
     <div className="page">
       <TopBar
         end={
-          <Link to="/studio" className="secondary" title="Build your own models (creators only)">
-            <StudioIcon width={18} height={18} />
-            <span>Studio</span>
-          </Link>
+          <>
+            <Link to="/studio" className="secondary" title="Build your own models (creators only)">
+              <StudioIcon width={18} height={18} />
+              <span>Studio</span>
+            </Link>
+            <AccountButton />
+          </>
         }
       />
       <main className="gallery">
