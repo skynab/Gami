@@ -47,7 +47,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'ninja-star', title: 'Ninja star', blurb: 'Two sheets locked into a spinning shuriken.', difficulty: 2, category: 'modular', steps: 17, minutes: 10, sheets: 2 },
   { id: 'tulip', title: 'Tulip', blurb: 'A blossom and a stem from two squares.', difficulty: 3, category: 'flower', minutes: 10, sheets: 2 },
   { id: 'fox', title: 'Fox', blurb: 'A sly fox face with pointy ears.', difficulty: 3, category: 'animal', minutes: 8, sheets: 1 },
-  { id: 'crane', title: 'Crane', blurb: 'The traditional symbol of peace and luck.', difficulty: 4, category: 'animal', steps: 29, minutes: 20, sheets: 1 },
+  { id: 'crane', title: 'Crane', blurb: 'The traditional symbol of peace and luck.', difficulty: 4, category: 'animal', steps: 32, minutes: 20, sheets: 1 },
   { id: 'lily', title: 'Lily', blurb: 'Six curled petals from the frog base.', difficulty: 5, category: 'flower', minutes: 20, sheets: 1 },
 ];
 

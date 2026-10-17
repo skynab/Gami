@@ -4,8 +4,7 @@ import type { Vec2 } from '../../fold/types';
 
 /**
  * The traditional crane: square base, petal folds into the bird base, narrow the legs, reverse-fold
- * the neck and tail, then the head. Folding the wings down and spreading them is left to the last step's
- * text: the narrowing folds lie over the wings here, so the engine can't fold them down flat.
+ * the neck and tail, the head, then the wings down.
  *
  * The sheet's quarters each become one flap of the square base: the front flap is the quarter u > 0, v < 0,
  * the back flap u < 0, v > 0, and the two inner flaps are the other quarters, each folded along its diagonal.
@@ -132,7 +131,7 @@ export function crane() {
   r.collapse(
     {
       title: 'Reverse-fold the head',
-      text: 'Push the tip of the neck down between its layers to make the head. To finish, fold the wings down and gently pull them apart to puff out the body.',
+      text: 'Push the tip of the neck down between its layers to make the head.',
       kind: 'reverse',
     },
     [
@@ -145,5 +144,13 @@ export function crane() {
     paper(-0.3, 0.3),
   );
 
+  // The wings fold down level with the top of the body, the sheet's centre. Any lower and the fold would cut
+  // through the two small triangles between the wings, which join the front wing to the back one.
+  const top = r.where(paper(0, 0))[1];
+  const wing = (flap: (c: Vec2) => boolean, tip: Vec2, title: string, text: string) =>
+    r.along(table(-2, top), table(2, top), paper(...tip), { title, text, only: flap });
+  wing(front, [0.5, -0.5], 'Fold a wing down', 'Fold the front wing down, level with the top of the body.');
+  r.turnOver('Turn the crane over.');
+  wing(back, [-0.5, 0.5], 'Fold the other wing down', 'Fold the other wing down to match. Gently pull the wings apart to puff out the body, and it’s done.');
   return r.build();
 }
