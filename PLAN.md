@@ -263,6 +263,7 @@ supabase/         migrations (profiles, models, RLS policies)
 | 7d ✅ | **Heart and fox** | Two more gallery models, each following origami.me: an easy heart (20 steps) and Mitsuo Okuda's sitting fox (13 steps, with a squash fold for the face). The crane's wings now fold down. The boat is parked on the `wip/boat` branch (see the decisions log). |
 | 7e ✅ | **Tulip** | The traditional flat tulip (15 steps): a blossom from one square and a stem with a leaf from a bigger one, pulled out with a reverse fold, then put together. |
 | 8 ✅ | **3D shaping** | `shape`: bend the paper about lines drawn on its last flat state, by any angle, with nested bends chaining (so a row of small bends curls a flap). Recipes get `shape` (with `segments` for curls); the Studio's Lift can curl and can be repeated. The crane now finishes by spreading its wings. |
+| 8b ✅ | **Studio sheets** | Before the first step, creators set the paper: colours, size (square, 1 : 2, A4) and how many sheets, laid out in a row. With several sheets, a Sheet selector limits any step to one sheet, Move picks a sheet up and puts it down (turned, turned over, on top or underneath, its middle on a picked point), and Collapse can slide the moving paper under a chosen sheet (tucking). |
 
 Milestones 0–4 deliver everything except advanced mode. Advanced mode then gets the dev Studio from milestone 3 almost for free.
 

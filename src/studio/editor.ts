@@ -66,9 +66,10 @@ export function project(frame: FoldFrame): FlatFace[] {
 /**
  * A point on the sheet that stays still when folding along `lines` (the first one decides which side): the
  * middle of the biggest piece behind it, once the paper is cut along every line, so it's never on a crease.
+ * With `only`, the piece is one of those faces (so a fold of one sheet anchors on that sheet).
  */
-export function anchorFor(frame: FoldFrame, lines: Line[]): Vec2 | null {
-  let pieces: Piece[] = toFlat(frame);
+export function anchorFor(frame: FoldFrame, lines: Line[], only?: (paper: Vec2[]) => boolean): Vec2 | null {
+  let pieces: Piece[] = toFlat(frame).filter((f) => !only || only(f.paper));
   for (const l of lines) pieces = pieces.flatMap((f) => [split(f, l).pos, split(f, l).neg].filter((p): p is Piece => p !== null));
   let best: { area: number; at: Vec2 } | null = null;
   for (const p of pieces) {

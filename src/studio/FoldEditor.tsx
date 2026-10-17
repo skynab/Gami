@@ -1,4 +1,5 @@
 import { useMemo, useRef, type PointerEvent } from 'react';
+import { placeLike } from '../fold/fold';
 import { dist, signedArea, split, type Line } from '../fold/geometry2d';
 import { faceColour } from '../fold/sheets';
 import type { FoldFrame, OrigamiModel, Vec2 } from '../fold/types';
@@ -26,13 +27,15 @@ export function FoldEditor({ frame, model, picks, line, kind, preview, extra = [
   const box = useMemo(() => viewBox([...faces.flatMap((f) => f.world), ...(preview ? project(preview).flatMap((f) => f.world) : [])]), [faces, preview]);
   const unit = box[2] / 100;
 
-  // Faces of the result that turned over are the ones that moved.
+  // Faces of the result that moved: turned over (by a fold), or put down somewhere else (by a move).
   const landed = useMemo(() => {
     if (!preview) return [];
     const before = project(frame);
     return project(preview).filter((f, i) => {
       const parent = before[preview.faces_parent?.[i] ?? i];
-      return Math.sign(signedArea(f.world)) !== Math.sign(signedArea(parent.world));
+      if (Math.sign(signedArea(f.world)) !== Math.sign(signedArea(parent.world))) return true;
+      const was = placeLike(parent);
+      return f.paper.some((p, k) => dist(was(p), f.world[k]) > 1e-6);
     });
   }, [frame, preview]);
 

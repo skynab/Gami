@@ -2,8 +2,9 @@ import { collapse, type CreaseKind } from './collapse';
 import { fold, FoldError, placeLike, rotate, toFlat, turnOver, unfoldTo, type FoldKind } from './fold';
 import { place } from './place';
 import { reparent, shape, type Bend } from './shape';
+import { startFrame } from './sheets';
 import { flipLine, lineOnto, lineThrough, sideOf, signedArea, sub, type Line } from './geometry2d';
-import type { FoldFrame, OrigamiModel, Sheet, Step, Vec2, Vec3 } from './types';
+import type { FoldFrame, OrigamiModel, Sheet, Step, Vec2 } from './types';
 
 /**
  * Writing a model as code: a list of folds described the way a diagram would ("this corner onto that
@@ -56,21 +57,7 @@ export class Recipe {
   constructor(info: { id: string; title: string } & ({ sheet: Sheet } | { sheets: (Sheet & { at?: Vec2 })[] })) {
     const sheets: (Sheet & { at?: Vec2 })[] = 'sheet' in info ? [info.sheet] : info.sheets;
     this.info = { id: info.id, title: info.title, sheets: sheets.map(({ at: _, ...s }) => s as Sheet) };
-    const vertices_paper: Vec2[] = [];
-    const vertices_coords: Vec3[] = [];
-    const faces_vertices: number[][] = [];
-    for (const s of sheets) {
-      const [w, h] = s.size;
-      const [ou, ov] = s.origin ?? [0, 0];
-      const [ax, az] = s.at ?? [ou, ov];
-      const base = vertices_paper.length;
-      for (const [du, dv] of [[-w / 2, h / 2], [w / 2, h / 2], [w / 2, -h / 2], [-w / 2, -h / 2]]) {
-        vertices_paper.push([ou + du, ov + dv]);
-        vertices_coords.push([ax + du, 0, az + dv]);
-      }
-      faces_vertices.push([base, base + 1, base + 2, base + 3]);
-    }
-    this.start = { vertices_paper, vertices_coords, faces_vertices };
+    this.start = startFrame(sheets);
   }
 
   get current(): FoldFrame {

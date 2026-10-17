@@ -5,7 +5,9 @@ import { fold, FoldError, rotate, turnOver, unfoldTo, type FoldKind } from '../f
 import { fromFoldFile, toFoldFile } from '../fold/fold-format';
 import { framesOf } from '../fold/frames';
 import { flipLine, lineOnto, lineThrough, type Line } from '../fold/geometry2d';
-import type { FoldFrame, Step, Vec2 } from '../fold/types';
+import { place } from '../fold/place';
+import { sheetOf } from '../fold/sheets';
+import type { FoldFrame, Sheet, Step, Vec2 } from '../fold/types';
 import { useDraft } from '../studio/draft';
 import { curl, reparent, shape, type Bend } from '../fold/shape';
 import { anchorFor, smallerSideMoves, topLayers, unfoldTarget } from '../studio/editor';
@@ -18,8 +20,11 @@ const Stage = lazy(() => import('../viewer/Stage'));
 
 type Tool = 'onto' | 'through';
 type Layers = 'all' | 1 | 2 | 3;
-/** What the picked line does: a plain fold, a reverse fold, a crease for a collapse, or lifting into 3D. */
-type Action = 'fold' | 'reverse' | 'collapse' | 'lift';
+/**
+ * What the picked line does: a plain fold, a reverse fold, a crease for a collapse, or lifting into 3D.
+ * Or, for models of several sheets, moving one sheet (picking where its middle goes).
+ */
+type Action = 'fold' | 'reverse' | 'collapse' | 'lift' | 'move';
 
 const HINTS: Record<Tool, string> = {
   onto: 'Pick the point to move (A), then where it should land (B).',
@@ -31,6 +36,7 @@ const READY: Record<Action, string> = {
   reverse: 'Enter to reverse-fold · F for the other side · Esc to start again.',
   collapse: 'Enter adds this crease · add every crease that changes, then press Collapse.',
   lift: 'Enter to lift · F to lift the other side · Esc to start again.',
+  move: 'Enter to move the sheet · pick again to put it somewhere else.',
 };
 
 const ACTIONS: { id: Action; label: string; title: string }[] = [
@@ -38,9 +44,18 @@ const ACTIONS: { id: Action; label: string; title: string }[] = [
   { id: 'reverse', label: 'Reverse', title: 'Push a flap between its layers (inside) or wrap it round them (outside)' },
   { id: 'collapse', label: 'Collapse', title: 'Several creases at once: squash, petal and sink folds, or collapsing into a base' },
   { id: 'lift', label: 'Lift', title: 'Turn part of the paper up off the table, for 3D finishing steps' },
+  { id: 'move', label: 'Move', title: 'Pick up one sheet and put it down elsewhere: turned, turned over, on top or underneath' },
 ];
 
-const APPLY_LABEL: Record<Action, string> = { fold: 'Fold', reverse: 'Reverse fold', collapse: 'Collapse', lift: 'Lift' };
+const APPLY_LABEL: Record<Action, string> = { fold: 'Fold', reverse: 'Reverse fold', collapse: 'Collapse', lift: 'Lift', move: 'Move' };
+
+/** Sheet sizes to start from. */
+const SIZES: { label: string; size: [number, number] }[] = [
+  { label: 'Square', size: [1, 1] },
+  { label: 'Half square (1 : 2)', size: [0.5, 1] },
+  { label: 'A4 (1 : √2)', size: [1, Math.SQRT2] },
+];
+const sizeLabel = (s: Sheet) => SIZES.find((o) => o.size[0] === s.size[0] && o.size[1] === s.size[1])?.label ?? `${s.size[0]} × ${s.size[1]}`;
 
 /**
  * The Studio editor: fold a model step by step and export it as a .fold file. Creators reach it through
@@ -52,7 +67,7 @@ export default function StudioEditor({ end, cloud = false }: {
   cloud?: boolean;
 }) {
   const model = useDraft((s) => s.model);
-  const { addStep, undo, editStep, setInfo, replace, clear, current } = useDraft.getState();
+  const { addStep, undo, editStep, setInfo, setSheets, replace, clear, current } = useDraft.getState();
   const frame = useMemo(() => current(), [model, current]);
 
   const [tool, setTool] = useState<Tool>('onto');
@@ -69,6 +84,15 @@ export default function StudioEditor({ end, cloud = false }: {
   const shaping = shaped.current.get(model.steps.length);
   const editFrame = shaping?.base ?? frame;
   const [layers, setLayers] = useState<Layers>('all');
+  // Models of several sheets: which one the next step works on (or all), and for a move, how it's put down.
+  const [sheet, setSheet] = useState<number | 'all'>('all');
+  const [turn, setTurn] = useState(0);
+  const [overturn, setOverturn] = useState(false);
+  const [underneath, setUnderneath] = useState(false);
+  const [tuck, setTuck] = useState<number | null>(null);
+  const many = model.sheets.length > 1;
+  const chosen = many && sheet !== 'all' && sheet < model.sheets.length ? sheet : null;
+  const inSheet = useMemo(() => (chosen === null ? undefined : (paper: Vec2[]) => sheetOf(model.sheets, paper) === chosen), [chosen, model.sheets]);
   const [picks, setPicks] = useState<Vec2[]>([]);
   const [flipped, setFlipped] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -84,27 +108,38 @@ export default function StudioEditor({ end, cloud = false }: {
   const n = layers === 'all' ? undefined : layers;
   // For a lift, `onFlat` is the preview with its faces matched to the flat state the lines are picked on.
   const result = useMemo((): { frame: FoldFrame; onFlat?: FoldFrame; bends?: Bend[] } | { error: string } | null => {
+    if (action === 'move') {
+      if (!inSheet) return { error: 'Choose which sheet to move.' };
+      try {
+        return { frame: place(frame, { only: inSheet, to: picks[0], angle: (turn * Math.PI) / 180, flip: overturn, under: underneath }) };
+      } catch (e) {
+        if (e instanceof FoldError) return { error: e.message };
+        throw e;
+      }
+    }
     // A collapse previews the creases added so far; the others preview the picked line.
     if (action === 'collapse' ? !creases.length : !line) return null;
     try {
-      if (action === 'fold') return { frame: fold(frame, { line: line!, kind, layers: n }) };
+      if (action === 'fold') return { frame: fold(frame, { line: line!, kind, layers: n, only: inSheet }) };
       if (action === 'lift') {
         if (!shaping && frame.vertices_coords.some((p) => Math.abs(p[1]) > 1e-6))
           throw new FoldError('This step is already shaped in 3D. Undo it to shape again from the flat paper.');
-        const bends = [...(shaping?.bends ?? []), ...curl(editFrame, { line: line!, angle: (angle * Math.PI) / 180, layers: n }, segments)];
+        const bends = [...(shaping?.bends ?? []), ...curl(editFrame, { line: line!, angle: (angle * Math.PI) / 180, layers: n, only: inSheet }, segments)];
         const lifted = shape(editFrame, bends);
         return { frame: shaping ? reparent(frame, lifted) : lifted, onFlat: lifted, bends };
       }
-      const anchor = anchorFor(frame, action === 'reverse' ? [line!] : creases.map((c) => c.line));
+      const anchor = anchorFor(frame, action === 'reverse' ? [line!] : creases.map((c) => c.line), inSheet);
       if (!anchor) throw new FoldError('There’s no paper on the side that stays still. Try Flip side.');
       const list: Crease[] =
-        action === 'reverse' ? [{ line: line!, kind: reverseKind, only: n === undefined ? undefined : topLayers(frame, line!, n) }] : creases;
-      return { frame: collapse(frame, { creases: list, anchor }) };
+        action === 'reverse' ? [{ line: line!, kind: reverseKind, only: both(n === undefined ? undefined : topLayers(frame, line!, n), inSheet) }] : creases;
+      // Tucking: the paper that moves slides under the chosen sheet.
+      const under = action === 'collapse' && tuck !== null ? (paper: Vec2[]) => sheetOf(model.sheets, paper) === tuck : undefined;
+      return { frame: collapse(frame, { creases: list, anchor, under }) };
     } catch (e) {
       if (e instanceof FoldError) return { error: e.message };
       throw e;
     }
-  }, [frame, editFrame, shaping, line, kind, n, action, reverseKind, creases, angle, segments]);
+  }, [frame, editFrame, shaping, line, kind, n, action, reverseKind, creases, angle, segments, inSheet, picks, turn, overturn, underneath, tuck, model.sheets]);
   const preview = result && 'frame' in result ? result.frame : null;
 
   const startOver = () => {
@@ -122,7 +157,7 @@ export default function StudioEditor({ end, cloud = false }: {
   const addCrease = () => {
     if (!line) return;
     try {
-      const only = n === undefined ? undefined : topLayers(frame, line, n);
+      const only = both(n === undefined ? undefined : topLayers(frame, line, n), inSheet);
       setCreases((cs) => [...cs, { line, kind: creaseKind, only }]);
       startOver();
     } catch (e) {
@@ -145,7 +180,8 @@ export default function StudioEditor({ end, cloud = false }: {
     else if (action === 'collapse') {
       add({ title: 'Collapse', kind: 'fold', frame: preview });
       setCreases([]);
-    } else if (result && 'bends' in result && result.bends) {
+    } else if (action === 'move') add({ title: 'Move a sheet', kind: 'assemble', frame: preview });
+    else if (result && 'bends' in result && result.bends) {
       const after = model.steps.length + 1;
       add({ title: segments > 1 ? 'Curl' : 'Lift', kind: 'pose', frame: preview });
       shaped.current.set(after, { base: editFrame, bends: result.bends });
@@ -223,7 +259,13 @@ export default function StudioEditor({ end, cloud = false }: {
   const status = message ?? (result && 'error' in result ? result.error : null);
   const waiting = creases.length === 1 ? '1 crease ready' : `${creases.length} creases ready`;
   const hint =
-    action === 'collapse' && creases.length && picks.length < 2
+    action === 'move'
+      ? preview
+        ? picks.length
+          ? READY.move
+          : 'Pick where the sheet’s middle should go, or leave it where it is.'
+        : null
+      : action === 'collapse' && creases.length && picks.length < 2
       ? `${waiting} · add more, or press Collapse.`
       : picks.length < 2
         ? HINTS[tool]
@@ -262,7 +304,7 @@ export default function StudioEditor({ end, cloud = false }: {
             kind={action === 'fold' ? kind : action === 'collapse' && creaseKind === 'mountain' ? 'mountain' : 'valley'}
             preview={result && 'frame' in result ? (result.onFlat ?? result.frame) : null}
             extra={creases}
-            onPick={(p) => setPicks((prev) => (prev.length >= 2 ? [p] : [...prev, p]))}
+            onPick={(p) => setPicks((prev) => (action === 'move' || prev.length >= 2 ? [p] : [...prev, p]))}
           />
           {(status || hint) && <div className={status ? 'badge error' : 'badge'}>{status ?? hint}</div>}
         </section>
@@ -283,6 +325,7 @@ export default function StudioEditor({ end, cloud = false }: {
               <span>File name</span>
               <input value={model.id} onChange={(e) => setInfo({ id: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-') })} />
             </label>
+            <SheetsPanel sheets={model.sheets} locked={model.steps.length > 0} onChange={(next) => (setSheets(next), setSheet('all'))} />
             <ol>
               {model.steps.map((s, i) => (
                 <li key={i}>
@@ -308,12 +351,48 @@ export default function StudioEditor({ end, cloud = false }: {
       <footer className="bottombar">
         <div className="group">
           <div className="segmented" role="group" aria-label="Action">
-            {ACTIONS.map((a) => (
+            {ACTIONS.filter((a) => a.id !== 'move' || many).map((a) => (
               <button key={a.id} type="button" aria-pressed={action === a.id} title={a.title} onClick={() => switchAction(a.id)}>
                 {a.label}
               </button>
             ))}
           </div>
+          {many && (
+            <label className="field inline" title="Which sheet the next step works on">
+              <span>Sheet</span>
+              <select value={String(sheet)} onChange={(e) => setSheet(e.target.value === 'all' ? 'all' : Number(e.target.value))}>
+                <option value="all">{action === 'move' ? 'Choose…' : 'All'}</option>
+                {model.sheets.map((_, i) => (
+                  <option key={i} value={i}>
+                    Sheet {i + 1}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+          {action === 'move' && (
+            <>
+              <label className="field inline">
+                <span>Turn</span>
+                <select value={turn} onChange={(e) => setTurn(Number(e.target.value))}>
+                  {[0, 45, 90, 135, 180, -135, -90, -45].map((d) => (
+                    <option key={d} value={d}>
+                      {d === 0 ? 'None' : `${Math.abs(d)}° ${d > 0 ? 'anticlockwise' : 'clockwise'}`}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="field inline">
+                <input type="checkbox" checked={overturn} onChange={(e) => setOverturn(e.target.checked)} />
+                <span>Turn it over</span>
+              </label>
+              <label className="field inline">
+                <input type="checkbox" checked={underneath} onChange={(e) => setUnderneath(e.target.checked)} />
+                <span>Underneath</span>
+              </label>
+            </>
+          )}
+          {action !== 'move' && (
           <div className="segmented" role="group" aria-label="Fold line">
             <button type="button" aria-pressed={tool === 'onto'} onClick={() => (setTool('onto'), startOver())}>
               Point to point
@@ -322,6 +401,7 @@ export default function StudioEditor({ end, cloud = false }: {
               Through 2 points
             </button>
           </div>
+          )}
           {action === 'fold' && (
             <div className="segmented" role="group" aria-label="Fold type">
               <button type="button" aria-pressed={kind === 'valley'} title="Valley (V)" onClick={() => setKind('valley')}>
@@ -355,6 +435,19 @@ export default function StudioEditor({ end, cloud = false }: {
               </button>
             </div>
           )}
+          {action === 'collapse' && many && (
+            <label className="field inline" title="Tucking: the paper that moves goes underneath this sheet, as when a point slides into a pocket">
+              <span>Slide under</span>
+              <select value={tuck === null ? '' : String(tuck)} onChange={(e) => setTuck(e.target.value === '' ? null : Number(e.target.value))}>
+                <option value="">Nothing</option>
+                {model.sheets.map((_, i) => (
+                  <option key={i} value={i}>
+                    Sheet {i + 1}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
           {action === 'lift' && (
             <label className="field inline">
               <span>Angle</span>
@@ -373,6 +466,7 @@ export default function StudioEditor({ end, cloud = false }: {
               </select>
             </label>
           )}
+          {action !== 'move' && (
           <label className="field inline">
             <span>Layers</span>
             <select value={String(layers)} onChange={(e) => setLayers(e.target.value === 'all' ? 'all' : (Number(e.target.value) as Layers))}>
@@ -382,9 +476,12 @@ export default function StudioEditor({ end, cloud = false }: {
               <option value="3">Top 3</option>
             </select>
           </label>
+          )}
+          {action !== 'move' && (
           <button type="button" className="secondary" disabled={!line} onClick={() => setFlipped(!flipped)} title="Fold the other side (F)">
             Flip side
           </button>
+          )}
           {action === 'collapse' && (
             <>
               <button type="button" className="secondary" disabled={!line} onClick={addCrease} title="Add this crease (Enter)">
@@ -421,5 +518,45 @@ export default function StudioEditor({ end, cloud = false }: {
         </div>
       </footer>
     </div>
+  );
+}
+
+/** Both tests, when there are two (either one alone otherwise). */
+function both(a?: (p: Vec2[]) => boolean, b?: (p: Vec2[]) => boolean): ((p: Vec2[]) => boolean) | undefined {
+  return a && b ? (p) => a(p) && b(p) : (a ?? b);
+}
+
+/** The sheets a model starts from: their colours and size, and adding or removing sheets (before the first step). */
+function SheetsPanel({ sheets, locked, onChange }: { sheets: Sheet[]; locked: boolean; onChange(sheets: Sheet[]): void }) {
+  const edit = (i: number, patch: Partial<Sheet>) => onChange(sheets.map((s, j) => (j === i ? { ...s, ...patch } : s)));
+  return (
+    <fieldset className="sheets" disabled={locked}>
+      <legend>{sheets.length === 1 ? 'Paper' : `Paper: ${sheets.length} sheets`}</legend>
+      {sheets.map((s, i) => (
+        <div key={i} className="sheet-row">
+          {sheets.length > 1 && <span className="small">Sheet {i + 1}</span>}
+          <input type="color" value={s.front} onChange={(e) => edit(i, { front: e.target.value })} title="Front (face up at the start)" aria-label={`Sheet ${i + 1} front colour`} />
+          <input type="color" value={s.back} onChange={(e) => edit(i, { back: e.target.value })} title="Back" aria-label={`Sheet ${i + 1} back colour`} />
+          <select value={sizeLabel(s)} onChange={(e) => edit(i, { size: SIZES.find((o) => o.label === e.target.value)!.size })} aria-label={`Sheet ${i + 1} size`}>
+            {!SIZES.some((o) => o.label === sizeLabel(s)) && <option>{sizeLabel(s)}</option>}
+            {SIZES.map((o) => (
+              <option key={o.label}>{o.label}</option>
+            ))}
+          </select>
+          {sheets.length > 1 && !locked && (
+            <button type="button" className="link small" onClick={() => onChange(sheets.filter((_, j) => j !== i))}>
+              Remove
+            </button>
+          )}
+        </div>
+      ))}
+      {locked ? (
+        <p className="muted small">The paper is set once the first step is made.</p>
+      ) : (
+        <button type="button" className="link small" onClick={() => onChange([...sheets, { ...sheets.at(-1)!, origin: undefined }])}>
+          Add a sheet
+        </button>
+      )}
+    </fieldset>
   );
 }

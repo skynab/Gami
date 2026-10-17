@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import type { SavedModel, Status } from '../cloud/models';
 import { fromFoldFile, toFoldFile, type FoldFile } from '../fold/fold-format';
-import type { FoldFrame, OrigamiModel, Step } from '../fold/types';
+import { layOut } from '../fold/sheets';
+import type { FoldFrame, OrigamiModel, Sheet, Step } from '../fold/types';
 import { BLANK_SHEET } from '../models';
 
 /**
@@ -31,6 +32,8 @@ interface DraftState {
   undo(): void;
   editStep(index: number, patch: Partial<Pick<Step, 'title' | 'text'>>): void;
   setInfo(patch: Partial<Pick<OrigamiModel, 'id' | 'title'>>): void;
+  /** Changes the sheets (their colours, sizes, how many), laid out in a row. Only before the first step. */
+  setSheets(sheets: Sheet[]): void;
   /** Opens a model from a file: it's new to the cloud. */
   replace(model: OrigamiModel): void;
   /** Opens or has just saved a cloud model. `withModel` also replaces the model (when opening). */
@@ -83,6 +86,9 @@ export const useDraft = create<DraftState>()((set, get) => ({
   },
   setInfo(patch) {
     set(({ model }) => ({ model: { ...model, ...patch }, dirty: true }));
+  },
+  setSheets(sheets) {
+    set(({ model }) => (model.steps.length ? {} : { model: { ...model, ...layOut(sheets) }, dirty: true }));
   },
   replace(model) {
     set({ model, cloud: null, dirty: true });

@@ -955,6 +955,47 @@ kbd {
   padding: 12px 16px 24px;
 }
 
+.studio-steps .sheets {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 16px 0 0;
+  padding: 8px 10px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.studio-steps .sheets legend {
+  padding: 0 4px;
+  color: var(--muted);
+  font-size: 0.85em;
+}
+
+.sheet-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sheet-row input[type='color'] {
+  width: 28px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+}
+
+.sheet-row select {
+  flex: 1;
+  min-width: 0;
+}
+
+.studio-steps .sheets .link {
+  align-self: flex-start;
+}
+
 .studio-steps ol {
   display: flex;
   flex-direction: column;
