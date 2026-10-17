@@ -1,6 +1,7 @@
 import { collapse, type CreaseKind } from './collapse';
 import { fold, FoldError, placeLike, rotate, toFlat, turnOver, unfoldTo, type FoldKind } from './fold';
 import { place } from './place';
+import { reparent, shape, type Bend } from './shape';
 import { flipLine, lineOnto, lineThrough, sideOf, signedArea, sub, type Line } from './geometry2d';
 import type { FoldFrame, OrigamiModel, Sheet, Step, Vec2, Vec3 } from './types';
 
@@ -27,9 +28,24 @@ interface FoldStep {
   only?: (centre: Vec2) => boolean;
 }
 
+/**
+ * One bend of a 3D shaping step: about the line through two points, turning the side `moving` is on up by
+ * `degrees`. With `segments`, the turn is spread over that many bends between the line and `moving`, curling it.
+ */
+export interface ShapeBend {
+  through: [At, At];
+  moving: At;
+  degrees: number;
+  segments?: number;
+  layers?: number;
+  only?: (centre: Vec2) => boolean;
+}
+
 export class Recipe {
   private start: FoldFrame;
   private steps: Step[] = [];
+  /** After 3D shaping: the flat state it started from, and its bends so far. */
+  private shaping?: { base: FoldFrame; bends: Bend[] };
 
   private info: { id: string; title: string; sheets: Sheet[] };
 
@@ -75,9 +91,9 @@ export class Recipe {
     return paper(...placeLike({ ...f, paper: f.world, world: f.paper })(spot));
   }
 
-  /** Where a point is on the table right now. */
+  /** Where a point is on the table right now (or, once shaping has started, in the flat state it started from). */
   where(at: At): Vec2 {
-    return 'table' in at ? at.table : locate(this.current, at.paper);
+    return 'table' in at ? at.table : locate(this.shaping?.base ?? this.current, at.paper);
   }
 
   /** Folds so `from` lands exactly on `to`. */
@@ -180,6 +196,42 @@ export class Recipe {
     }
   }
 
+  /**
+   * Shapes the paper in 3D: opening flaps partway, curling petals. Lines are drawn on the last flat state,
+   * and a later shaping step adds its bends to the earlier ones'. Nothing can be folded flat afterwards.
+   */
+  shape(step: { title: string; text?: string }, bends: ShapeBend[]): this {
+    const base = this.shaping?.base ?? this.current;
+    const added = bends.flatMap((b): Bend[] => {
+      const test = b.only && ((poly: Vec2[]) => b.only!([avg(poly, 0), avg(poly, 1)]));
+      let line = lineThrough(this.where(b.through[0]), this.where(b.through[1]));
+      const tip = this.where(b.moving);
+      if (sideOf(line, tip) < 0) line = flipLine(line);
+      const n = b.segments ?? 1;
+      // A curl: the same line moved towards the tip, a step at a time, each turning its share of the angle.
+      const len = Math.hypot(line.d[0], line.d[1]);
+      const across: Vec2 = [-line.d[1] / len, line.d[0] / len];
+      const reach = sideOf(line, tip) / len;
+      return Array.from({ length: n }, (_, i) => ({
+        line: { p: [line.p[0] + (across[0] * reach * i) / n, line.p[1] + (across[1] * reach * i) / n] as Vec2, d: line.d },
+        angle: ((b.degrees / n) * Math.PI) / 180,
+        layers: b.layers,
+        only: test,
+      }));
+    });
+    const bendsSoFar = [...(this.shaping?.bends ?? []), ...added];
+    try {
+      // Shaped again from the flat state: each face's parent is the face of the last step it lies within.
+      const frame = this.shaping ? reparent(this.current, shape(base, bendsSoFar)) : shape(base, bendsSoFar);
+      this.push({ title: step.title, text: step.text, kind: 'pose' }, frame);
+    } catch (e) {
+      if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
+      throw e;
+    }
+    this.shaping = { base, bends: bendsSoFar };
+    return this;
+  }
+
   turnOver(text = 'Flip the paper over from left to right.'): this {
     return this.push({ title: 'Turn over', text, kind: 'turn-over' }, turnOver(this.current));
   }
@@ -204,6 +256,7 @@ export class Recipe {
   }
 
   private push({ title, text, kind }: Omit<Step, 'frame'>, frame: FoldFrame): this {
+    this.shaping = undefined;
     this.steps.push({ title, ...(text && { text }), kind, frame });
     return this;
   }

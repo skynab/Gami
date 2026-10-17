@@ -1,14 +1,16 @@
 import { toFlat } from './fold';
 import { frontUp } from './geometry2d';
 import { faceColour } from './sheets';
-import type { OrigamiModel } from './types';
+import type { FoldFrame, OrigamiModel } from './types';
 
 /**
- * The finished model seen from above, as a small SVG for the gallery. Built from the last frame,
- * so it needs no browser or WebGL, and its transparent background suits light and dark themes.
+ * The finished model seen from above, as a small SVG for the gallery. Built from the last flat frame (a
+ * model finished by 3D shaping shows as it was just before), so it needs no browser or WebGL, and its
+ * transparent background suits light and dark themes.
  */
 export function thumbnailSvg(model: OrigamiModel, size = 240): string {
-  const frame = model.steps.at(-1)?.frame ?? model.start;
+  const flat = (f: FoldFrame) => f.vertices_coords.every((p) => Math.abs(p[1]) < 1e-6);
+  const frame = model.steps.map((s) => s.frame).findLast(flat) ?? model.start;
   const faces = toFlat(frame).sort((a, b) => a.layer - b.layer);
   const pts = faces.flatMap((f) => f.world);
   const xs = pts.map((p) => p[0]);

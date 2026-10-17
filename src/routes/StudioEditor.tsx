@@ -7,7 +7,7 @@ import { framesOf } from '../fold/frames';
 import { flipLine, lineOnto, lineThrough, type Line } from '../fold/geometry2d';
 import type { FoldFrame, Step, Vec2 } from '../fold/types';
 import { useDraft } from '../studio/draft';
-import { pose } from '../fold/pose';
+import { curl, reparent, shape, type Bend } from '../fold/shape';
 import { anchorFor, smallerSideMoves, topLayers, unfoldTarget } from '../studio/editor';
 import { CloudPanel } from '../studio/CloudPanel';
 import { FoldEditor } from '../studio/FoldEditor';
@@ -62,6 +62,12 @@ export default function StudioEditor({ end, cloud = false }: {
   const [creaseKind, setCreaseKind] = useState<'valley' | 'mountain' | 'flat'>('valley');
   const [creases, setCreases] = useState<Crease[]>([]);
   const [angle, setAngle] = useState(90);
+  const [segments, setSegments] = useState(1);
+  // Lifts made this session, by the step count after them: the flat state they started from and their
+  // bends, so another lift can add to them. (Lines are picked on that flat state.)
+  const shaped = useRef(new Map<number, { base: FoldFrame; bends: Bend[] }>());
+  const shaping = shaped.current.get(model.steps.length);
+  const editFrame = shaping?.base ?? frame;
   const [layers, setLayers] = useState<Layers>('all');
   const [picks, setPicks] = useState<Vec2[]>([]);
   const [flipped, setFlipped] = useState(false);
@@ -71,17 +77,24 @@ export default function StudioEditor({ end, cloud = false }: {
   const line = useMemo((): Line | null => {
     if (picks.length < 2) return null;
     const [a, b] = picks;
-    const base = tool === 'onto' ? lineOnto(a, b) : smallerSideMoves(frame, lineThrough(a, b));
+    const base = tool === 'onto' ? lineOnto(a, b) : smallerSideMoves(editFrame, lineThrough(a, b));
     return flipped ? flipLine(base) : base;
-  }, [picks, tool, frame, flipped]);
+  }, [picks, tool, editFrame, flipped]);
 
   const n = layers === 'all' ? undefined : layers;
-  const result = useMemo((): { frame: FoldFrame } | { error: string } | null => {
+  // For a lift, `onFlat` is the preview with its faces matched to the flat state the lines are picked on.
+  const result = useMemo((): { frame: FoldFrame; onFlat?: FoldFrame; bends?: Bend[] } | { error: string } | null => {
     // A collapse previews the creases added so far; the others preview the picked line.
     if (action === 'collapse' ? !creases.length : !line) return null;
     try {
       if (action === 'fold') return { frame: fold(frame, { line: line!, kind, layers: n }) };
-      if (action === 'lift') return { frame: pose(frame, { line: line!, angle: (angle * Math.PI) / 180, layers: n }) };
+      if (action === 'lift') {
+        if (!shaping && frame.vertices_coords.some((p) => Math.abs(p[1]) > 1e-6))
+          throw new FoldError('This step is already shaped in 3D. Undo it to shape again from the flat paper.');
+        const bends = [...(shaping?.bends ?? []), ...curl(editFrame, { line: line!, angle: (angle * Math.PI) / 180, layers: n }, segments)];
+        const lifted = shape(editFrame, bends);
+        return { frame: shaping ? reparent(frame, lifted) : lifted, onFlat: lifted, bends };
+      }
       const anchor = anchorFor(frame, action === 'reverse' ? [line!] : creases.map((c) => c.line));
       if (!anchor) throw new FoldError('There’s no paper on the side that stays still. Try Flip side.');
       const list: Crease[] =
@@ -91,7 +104,7 @@ export default function StudioEditor({ end, cloud = false }: {
       if (e instanceof FoldError) return { error: e.message };
       throw e;
     }
-  }, [frame, line, kind, n, action, reverseKind, creases, angle]);
+  }, [frame, editFrame, shaping, line, kind, n, action, reverseKind, creases, angle, segments]);
   const preview = result && 'frame' in result ? result.frame : null;
 
   const startOver = () => {
@@ -119,6 +132,7 @@ export default function StudioEditor({ end, cloud = false }: {
   };
 
   const add = (step: Step) => {
+    shaped.current.delete(model.steps.length + 1);
     addStep(step);
     startOver();
     setMessage(null);
@@ -131,7 +145,11 @@ export default function StudioEditor({ end, cloud = false }: {
     else if (action === 'collapse') {
       add({ title: 'Collapse', kind: 'fold', frame: preview });
       setCreases([]);
-    } else add({ title: 'Lift', kind: 'pose', frame: preview });
+    } else if (result && 'bends' in result && result.bends) {
+      const after = model.steps.length + 1;
+      add({ title: segments > 1 ? 'Curl' : 'Lift', kind: 'pose', frame: preview });
+      shaped.current.set(after, { base: editFrame, bends: result.bends });
+    }
   };
 
   const safely = (make: () => Step) => {
@@ -194,6 +212,7 @@ export default function StudioEditor({ end, cloud = false }: {
     if (!f) return;
     try {
       replace(fromFoldFile(JSON.parse(await f.text())));
+      shaped.current.clear();
       startOver();
       setMessage(null);
     } catch (e) {
@@ -226,7 +245,7 @@ export default function StudioEditor({ end, cloud = false }: {
             <button type="button" className="secondary" onClick={exportFile}>
               Export .fold
             </button>
-            <button type="button" className="secondary" onClick={() => confirm('Start a new model? The current one will be cleared.') && (clear(), startOver())}>
+            <button type="button" className="secondary" onClick={() => confirm('Start a new model? The current one will be cleared.') && (clear(), shaped.current.clear(), startOver())}>
               New
             </button>
           </>
@@ -236,12 +255,12 @@ export default function StudioEditor({ end, cloud = false }: {
       <main className="studio">
         <section className="studio-editor">
           <FoldEditor
-            frame={frame}
+            frame={editFrame}
             model={model}
             picks={picks}
             line={line}
             kind={action === 'fold' ? kind : action === 'collapse' && creaseKind === 'mountain' ? 'mountain' : 'valley'}
-            preview={preview}
+            preview={result && 'frame' in result ? (result.onFlat ?? result.frame) : null}
             extra={creases}
             onPick={(p) => setPicks((prev) => (prev.length >= 2 ? [p] : [...prev, p]))}
           />
@@ -341,6 +360,17 @@ export default function StudioEditor({ end, cloud = false }: {
               <span>Angle</span>
               <input type="range" min={10} max={170} step={5} value={angle} onChange={(e) => setAngle(Number(e.target.value))} />
               <span className="angle">{angle}°</span>
+            </label>
+          )}
+          {action === 'lift' && (
+            <label className="field inline" title="Spread the turn over several bends, rolling the paper instead of creasing it">
+              <span>Curl</span>
+              <select value={segments} onChange={(e) => setSegments(Number(e.target.value))}>
+                <option value={1}>No curl</option>
+                <option value={3}>Gentle</option>
+                <option value={6}>Smooth</option>
+                <option value={10}>Smoother</option>
+              </select>
             </label>
           )}
           <label className="field inline">

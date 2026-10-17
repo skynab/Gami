@@ -1,5 +1,5 @@
 import type { CreaseKind } from '../../fold/collapse';
-import { paper, Recipe, table, type At } from '../../fold/recipe';
+import { locate, paper, Recipe, table, type At } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 
 /**
@@ -151,6 +151,14 @@ export function crane() {
     r.along(table(-2, top), table(2, top), paper(...tip), { title, text, only: flap });
   wing(front, [0.5, -0.5], 'Fold a wing down', 'Fold the front wing down, level with the top of the body.');
   r.turnOver('Turn the crane over.');
-  wing(back, [-0.5, 0.5], 'Fold the other wing down', 'Fold the other wing down to match. Gently pull the wings apart to puff out the body, and it’s done.');
-  return r.build();
+  // The back wing: the part of the back flap above the line, before it folds down.
+  const beforeWing = r.current;
+  const backWing = (c: Vec2) => back(c) && locate(beforeWing, c)[1] < top;
+  wing(back, [-0.5, 0.5], 'Fold the other wing down', 'Fold the other wing down to match.');
+  // Lying on its side, the crane spreads its wings by standing the top one up.
+  return r
+    .shape({ title: 'Spread the wings', text: 'Lift the wings out to the sides and gently pull them apart to puff out the body. Done!' }, [
+      { through: [table(-2, top), table(2, top)], moving: paper(-0.5, 0.5), degrees: 95, only: backWing },
+    ])
+    .build();
 }
