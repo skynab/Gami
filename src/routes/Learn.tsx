@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router';
 import {
   BackIcon,
@@ -6,34 +6,34 @@ import {
   LastIcon,
   LockIcon,
   NextIcon,
-  PaperIcon,
   PlayIcon,
   PrevIcon,
   ResetIcon,
 } from '../app/icons';
 import { TopBar } from '../app/TopBar';
 import { findModel } from '../gallery/catalog';
+import { useViewer } from '../state/viewer';
+import { VIEWS } from '../viewer/views';
 import { NotFound } from './NotFound';
 
-const VIEWS = [
-  { id: 'free', label: 'Free' },
-  { id: 'top', label: 'Top' },
-  { id: 'front', label: 'Front' },
-  { id: 'side', label: 'Side' },
-] as const;
-type View = (typeof VIEWS)[number]['id'];
+// three.js is most of the download, so the gallery never loads it.
+const Stage = lazy(() => import('../viewer/Stage'));
 
 export function Learn() {
   const { modelId } = useParams();
   const model = findModel(modelId);
   const [params, setParams] = useSearchParams();
-  const [view, setView] = useState<View>('free');
-  const [locked, setLocked] = useState(false);
+  const view = useViewer((s) => s.view);
+  const locked = useViewer((s) => s.locked);
+  const { setView, toggleLock, resetCamera } = useViewer.getState();
 
   const total = model?.steps ?? 1;
   const step = clamp(Number(params.get('step')) || 1, 1, total);
   // Replace, not push: stepping through a model shouldn't fill the back button's history.
   const goTo = (n: number) => setParams({ step: String(clamp(n, 1, total)) }, { replace: true });
+
+  // Each model starts in the default view, unlocked.
+  useEffect(() => useViewer.getState().init(), [modelId]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -43,7 +43,8 @@ export function Learn() {
       else if (e.key === 'Home') goTo(1);
       else if (e.key === 'End') goTo(total);
       else if (e.key >= '1' && e.key <= '4') setView(VIEWS[Number(e.key) - 1].id);
-      else if (e.key === '0') setView('free');
+      else if (e.key === '0') resetCamera();
+      else if (e.key === 'l' || e.key === 'L') toggleLock();
       else return;
       e.preventDefault();
     };
@@ -72,16 +73,12 @@ export function Learn() {
       />
 
       <main className="stage">
-        {/* The 3D viewport replaces this in milestone 1. */}
-        <div className="stage-empty">
-          <PaperIcon className="stage-icon" />
-          <h1>{model.title}</h1>
-          <p className="muted">The 3D viewer is on its way.</p>
-        </div>
+        <Suspense fallback={null}>
+          <Stage />
+        </Suspense>
+        {locked && <div className="badge">View locked · drag to pan</div>}
         <section className="step-card" aria-label="Instructions">
-          <h2>
-            Step {step}
-          </h2>
+          <h2>Step {step}</h2>
           <p className="muted small">Instructions for each fold appear here.</p>
         </section>
       </main>
@@ -128,13 +125,13 @@ export function Learn() {
             type="button"
             className="icon"
             aria-label="Lock view"
-            title="Lock view: zoom only, no rotating"
+            title="Lock view: drag pans instead of rotating (L)"
             aria-pressed={locked}
-            onClick={() => setLocked(!locked)}
+            onClick={toggleLock}
           >
             <LockIcon />
           </button>
-          <button type="button" className="icon" aria-label="Reset view" title="Reset view (0)" onClick={() => setView('free')}>
+          <button type="button" className="icon" aria-label="Reset view" title="Reset view (0)" onClick={resetCamera}>
             <ResetIcon />
           </button>
         </div>

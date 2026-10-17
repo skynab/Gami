@@ -1,0 +1,53 @@
+import { ContactShadows, GizmoHelper } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
+import { useMemo } from 'react';
+import { Sphere, Vector3 } from 'three';
+import { useThemeColors } from '../app/useThemeColors';
+import { CameraRig } from './CameraRig';
+import { PaperMesh } from './PaperMesh';
+import { ViewCube } from './ViewCube';
+
+const SQUARE: [number, number] = [1, 1];
+
+/** The 3D viewport: the paper on a table, lit softly, with a view cube in the corner. Loaded on demand. */
+export default function Stage({ size = SQUARE }: { size?: [number, number] }) {
+  const colors = useThemeColors();
+  const [w, h] = size;
+  // Stable while the size is, so the camera doesn't re-run its last command on every render.
+  const bounds = useMemo(() => new Sphere(new Vector3(), Math.hypot(w, h) / 2), [w, h]);
+  const narrow = matchMedia('(max-width: 560px)').matches;
+
+  return (
+    <Canvas
+      className="viewer"
+      // Draw only when something changes, so an idle model costs no battery.
+      frameloop="demand"
+      dpr={[1, 2]}
+      camera={{ fov: 35, near: 0.01, far: 100, position: [0, 2, 2] }}
+      fallback={<NoWebGL />}
+    >
+      <hemisphereLight args={['#ffffff', '#dcd8e6', 2.2]} />
+      <directionalLight position={[2, 4, 3]} intensity={1.8} />
+      {/* From below too, so the back of the sheet reads as white paper when you look underneath. */}
+      <directionalLight position={[-2, -3, -1]} intensity={1.2} />
+
+      <PaperMesh size={size} edgeColor={colors.muted} />
+      <ContactShadows scale={3} blur={2.4} far={1} opacity={0.35} />
+
+      <CameraRig bounds={bounds} />
+
+      <GizmoHelper alignment="top-right" margin={narrow ? [60, 60] : [76, 76]}>
+        <ViewCube colors={colors} />
+      </GizmoHelper>
+    </Canvas>
+  );
+}
+
+function NoWebGL() {
+  return (
+    <div className="stage-empty">
+      <h1>3D isn’t available</h1>
+      <p className="muted">Your browser or device couldn’t start WebGL, which Gami needs to show the model.</p>
+    </div>
+  );
+}

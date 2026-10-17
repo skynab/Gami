@@ -142,7 +142,7 @@ Writing a 20-step crane as raw coordinates by hand is not realistic. **Build the
 **Camera**
 - **Free:** orbit (drag), zoom (wheel or pinch), pan (right-drag or two-finger drag). Uses drei `CameraControls` for damped, animated moves.
 - **View lock** (segmented control): **Top, Front, Side**, plus an **Auto** option that follows each step's suggested `camera`. Picking a view animates the camera there.
-- **🔒 Lock:** keeps the chosen view and turns rotation off while still allowing zoom. This is the "lock to top" behaviour. Dragging while locked shows a small toast: "View locked – tap 🔒 to rotate".
+- **🔒 Lock (`L`):** keeps the chosen view. Rotation is turned off, a one-finger or left-button drag pans instead, and zoom still works. This is the "lock to top" behaviour. A small badge says "View locked · drag to pan".
 - **Turn-over steps** rotate the model, not the camera, so Top always means "looking down at the table".
 - **↺ Reset** fits the model to the screen.
 
@@ -249,7 +249,7 @@ supabase/         migrations (profiles, models, RLS policies)
 | # | Milestone | Outcome |
 |---|---|---|
 | 0 ✅ | **Scaffold** | Vite, React, TypeScript and the router, with BackSubtract's tokens, bars and buttons ported. Empty gallery and an empty stage. |
-| 1 | **Stage + camera** | A flat square in the R3F stage with two-sided paper. Orbit, zoom and pan, the gizmo, Top/Front/Side presets, lock and reset. |
+| 1 ✅ | **Stage + camera** | A flat square in the R3F stage with two-sided paper. Orbit, zoom and pan, the gizmo, Top/Front/Side presets, lock and reset. |
 | 2 | **Playback** | The step format and rigid-face animation. The step bar, scrubber, keys and URL step. A hand-written 3-step model proves it works. |
 | 3 | **Fold engine + dev Studio** | Flat folds through all layers or the top layer, fold line snapping, unfold, turn over. A dev-only Studio route that exports `.fold`. |
 | 4 | **Content + gallery** | Author the plane, boat, cup, frog, ninja star (multi-sheet) and crane. Thumbnails, filters, search, "continue" badges. **First public release** (learning only). |
