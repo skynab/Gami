@@ -1,3 +1,4 @@
+import { collapse, type CreaseKind } from './collapse';
 import { fold, FoldError, placeLike, rotate, toFlat, turnOver, unfoldTo, type FoldKind } from './fold';
 import { flipLine, lineOnto, lineThrough, sideOf, signedArea, sub, type Line } from './geometry2d';
 import type { FoldFrame, OrigamiModel, Sheet, Step, Vec2 } from './types';
@@ -65,11 +66,48 @@ export class Recipe {
     return this.unfold({ title: 'Unfold', text: 'Open it back up, leaving a crease.' });
   }
 
-  unfold(step: { title?: string; text?: string } = {}): this {
-    const lastUnfold = this.steps.findLastIndex((s) => s.kind === 'unfold');
-    const lastFold = this.steps.findLastIndex((s) => s.kind === 'fold');
-    if (lastFold <= lastUnfold) throw new FoldError(`${this.info.id}: nothing to unfold at step ${this.steps.length + 1}`);
-    return this.push({ title: step.title ?? 'Unfold', text: step.text, kind: 'unfold' }, unfoldTo(this.frames(), lastFold));
+  /**
+   * Opens the paper back up, keeping the creases. By default undoes the last fold; pass `to` (from `mark()`)
+   * to open everything folded since then.
+   */
+  unfold(step: { title?: string; text?: string; to?: number } = {}): this {
+    let to = step.to;
+    if (to === undefined) {
+      const lastUnfold = this.steps.findLastIndex((s) => s.kind === 'unfold');
+      const lastFold = this.steps.findLastIndex((s) => s.kind === 'fold');
+      if (lastFold <= lastUnfold) throw new FoldError(`${this.info.id}: nothing to unfold at step ${this.steps.length + 1}`);
+      to = lastFold;
+    }
+    return this.push({ title: step.title ?? 'Unfold', text: step.text, kind: 'unfold' }, unfoldTo(this.frames(), to));
+  }
+
+  /** A bookmark for `unfold({ to })`: the paper as it is now. */
+  mark(): number {
+    return this.steps.length;
+  }
+
+  /**
+   * Several creases at once: a squash, petal, reverse or sink fold, or collapsing into a base.
+   * Each crease runs through two points; `anchor` is a point on the sheet that stays put.
+   */
+  collapse(
+    step: { title: string; text?: string; kind?: Step['kind'] },
+    creases: { through: [At, At]; kind: CreaseKind; only?: (centre: Vec2) => boolean }[],
+    anchor: At,
+  ): this {
+    const lines = creases.map((c) => ({
+      line: lineThrough(this.where(c.through[0]), this.where(c.through[1])),
+      kind: c.kind,
+      only: c.only && ((poly: Vec2[]) => c.only!([avg(poly, 0), avg(poly, 1)])),
+    }));
+    const at = 'paper' in anchor ? anchor.paper : null;
+    if (!at) throw new FoldError(`${this.info.id}: a collapse's anchor must be a point on the sheet.`);
+    try {
+      return this.push({ title: step.title, text: step.text, kind: step.kind ?? 'fold' }, collapse(this.current, { creases: lines, anchor: at }));
+    } catch (e) {
+      if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
+      throw e;
+    }
   }
 
   turnOver(text = 'Flip the paper over from left to right.'): this {

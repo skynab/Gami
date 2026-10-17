@@ -1,0 +1,2 @@
+# Keep LF everywhere: generated model files are compared byte for byte in tests.
+* text=auto eol=lf

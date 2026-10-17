@@ -253,7 +253,8 @@ supabase/         migrations (profiles, models, RLS policies)
 | 2 ✅ | **Playback** | The step format and rigid-face animation. The step bar, scrubber, keys and URL step. A hand-written 4-step "Folding basics" model (fold, unfold, turn over, fold) proves it works. |
 | 3 ✅ | **Fold engine + dev Studio** | Flat folds through all layers or the top layer, fold line snapping, unfold, turn over. A dev-only Studio route that exports `.fold`. |
 | 4a ✅ | **Content pipeline + gallery** | Models written as code recipes (`src/models/recipes`) and built by `npm run models` into `public/models/<id>.fold` plus an SVG thumbnail. Paper plane, cup, samurai helmet and fortune teller. Thumbnails, "coming soon" cards, and resuming where you left off. **First public release** (learning only). |
-| 4b | **Compound folds + more models** | Reverse, squash and petal folds (with a layer-order solver), and assembling two sheets. Then the crane, jumping frog and ninja star. |
+| 4b-1 ✅ | **Compound folds + crane** | A layer-order solver (crease directions, taco–taco, taco–tortilla, tortilla–tortilla, transitivity) and a collapse operation for squash, petal and reverse folds and collapsing into bases. The traditional crane (29 steps). |
+| 4b-2 | **Jumping frog + ninja star** | The waterbomb-base frog, then multiple sheets and tucking flaps into pockets for the ninja star. |
 | 5 | **Polish** | Annotations (arrows, ghost, crease styles), auto camera per step, reduced motion, accessibility, PWA/offline, i18n. |
 | 6 | **Accounts + roles** | Supabase auth, profiles, roles, row-level security. Sign-in UI. `/studio` gated for creators. |
 | 7 | **Studio for creators** | Compound-fold presets, Pose tool, step list editing, cloud drafts, share links, submit and approve, published models in the gallery. |
@@ -266,6 +267,8 @@ Milestones 0–4 deliver everything except advanced mode. Advanced mode then get
 - **Sharing:** creators can always share a draft by private (unlisted) link. Getting into the public gallery needs **admin approval** (`status`: `draft` → `submitted` → `published` / `rejected`).
 - **Built-in models are code, not hand-made files** (decided in milestone 4a). Recipes describe folds the way a diagram does ("this corner onto that point") and the engine works out the geometry, so they can be regenerated whenever the engine improves. Tests check every step of every model is physically valid and that the generated files are current. Studio exports use the same `.fold` format.
 - **Compound folds moved up from milestone 7 to 4b**, because the crane, frog and ninja star can't be made without them.
+- **Compound folds are crease changes plus a solver** (milestone 4b). A collapse step lists which creases fold, open or reverse; positions follow by reflecting across creases from an anchor face, and stacking comes from a flat-folding layer solver. The square base and petal fold were found by searching crease assignments with the solver, and every step is checked by the model validator.
+- **The crane ends with its wings up**, with "fold the wings down and spread them" in the last step's text. After narrowing, the narrowing flaps lie over the wings and are joined to the legs, so the engine can't fold the wings flat. Revisit when 3D finishing poses arrive.
 - **Paper may pass through itself in v1** during complex 3D steps. Collision-free animation is a later goal, not a launch blocker.
 - **Dev Studio** lives at `/studio/dev` in development builds only (left out of production). It folds through all layers or the top 1–3, snaps fold lines to corners and edge midpoints (point-to-point and through-2-points), and can unfold, turn over, rotate and undo. The edge-to-edge (angle bisector) helper is deferred until a model needs it.
 
