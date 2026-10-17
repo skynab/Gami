@@ -1,5 +1,6 @@
 import { collapse, type CreaseKind } from './collapse';
 import { fold, FoldError, placeLike, rotate, toFlat, turnOver, unfoldTo, type FoldKind } from './fold';
+import { place } from './place';
 import { flipLine, lineOnto, lineThrough, sideOf, signedArea, sub, type Line } from './geometry2d';
 import type { FoldFrame, OrigamiModel, Sheet, Step, Vec2, Vec3 } from './types';
 
@@ -60,6 +61,20 @@ export class Recipe {
     return this.steps.at(-1)?.frame ?? this.start;
   }
 
+  /**
+   * The point of the sheet lying at `spot` on the table: on the topmost face there that `only` accepts.
+   * For anchoring a compound fold on a particular piece, in multi-sheet models.
+   */
+  sheetAt(spot: Vec2, only: (centre: Vec2) => boolean = () => true): At {
+    const faces = toFlat(this.current)
+      .filter((f) => only([avg(f.paper, 0), avg(f.paper, 1)]) && inside(f.world, spot))
+      .sort((a, b) => b.layer - a.layer);
+    if (!faces.length) throw new FoldError(`${this.info.id}: no paper at (${spot.join(', ')}).`);
+    const f = faces[0];
+    // The face's map from table back to sheet: the same construction with the roles swapped.
+    return paper(...placeLike({ ...f, paper: f.world, world: f.paper })(spot));
+  }
+
   /** Where a point is on the table right now. */
   where(at: At): Vec2 {
     return 'table' in at ? at.table : locate(this.current, at.paper);
@@ -97,6 +112,42 @@ export class Recipe {
     return this.push({ title: step.title ?? 'Unfold', text: step.text, kind: 'unfold' }, unfoldTo(this.frames(), to));
   }
 
+  /**
+   * Picks up the faces `only` selects (a sheet, usually) and puts them down: optionally turned over and
+   * turned by `degrees`, with their middle at `to`, on top of or under the rest.
+   */
+  move(
+    step: { title: string; text?: string },
+    only: (centre: Vec2) => boolean,
+    how: { to?: At; degrees?: number; flip?: boolean; under?: boolean },
+  ): this {
+    const test = (poly: Vec2[]) => only([avg(poly, 0), avg(poly, 1)]);
+    const to = how.to && this.where(how.to);
+    return this.push(
+      { title: step.title, text: step.text, kind: 'assemble' },
+      place(this.current, { only: test, to, angle: ((how.degrees ?? 0) * Math.PI) / 180, flip: how.flip, under: how.under }),
+    );
+  }
+
+  /**
+   * Several folds shown as one step, such as the same fold on both sheets of a modular model.
+   * `make` adds the folds as usual; they're then merged, and play at the same time.
+   */
+  together(step: { title: string; text?: string; kind?: Step['kind'] }, make: (r: this) => void): this {
+    const before = this.steps.length;
+    make(this);
+    const added = this.steps.splice(before);
+    if (!added.length) return this;
+    const last = added.at(-1)!.frame;
+    // Each face's parent, followed back through the merged folds to the frame before them.
+    const faces_parent = last.faces_vertices.map((_, f) => {
+      let p = f;
+      for (let k = added.length - 1; k >= 0; k--) p = added[k].frame.faces_parent?.[p] ?? p;
+      return p;
+    });
+    return this.push({ title: step.title, text: step.text, kind: step.kind ?? added.at(-1)!.kind }, { ...last, faces_parent });
+  }
+
   /** A bookmark for `unfold({ to })`: the paper as it is now. */
   mark(): number {
     return this.steps.length;
@@ -110,6 +161,8 @@ export class Recipe {
     step: { title: string; text?: string; kind?: Step['kind'] },
     creases: { through: [At, At]; kind: CreaseKind; only?: (centre: Vec2) => boolean }[],
     anchor: At,
+    /** Tucking: the moving paper slides under the faces this picks out (by their centre on the sheet). */
+    under?: (centre: Vec2) => boolean,
   ): this {
     const lines = creases.map((c) => ({
       line: lineThrough(this.where(c.through[0]), this.where(c.through[1])),
@@ -119,7 +172,8 @@ export class Recipe {
     const at = 'paper' in anchor ? anchor.paper : null;
     if (!at) throw new FoldError(`${this.info.id}: a collapse's anchor must be a point on the sheet.`);
     try {
-      return this.push({ title: step.title, text: step.text, kind: step.kind ?? 'fold' }, collapse(this.current, { creases: lines, anchor: at }));
+      const tuck = under && ((poly: Vec2[]) => under([avg(poly, 0), avg(poly, 1)]));
+      return this.push({ title: step.title, text: step.text, kind: step.kind ?? 'fold' }, collapse(this.current, { creases: lines, anchor: at, under: tuck }));
     } catch (e) {
       if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
       throw e;

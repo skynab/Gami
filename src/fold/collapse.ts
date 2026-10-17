@@ -27,9 +27,14 @@ export interface CollapseOptions {
   creases: Crease[];
   /** A point on the sheet whose face stays where it is. */
   anchor: Vec2;
+  /**
+   * Tucking: the paper that moves must end up underneath these faces wherever they overlap, as when a flap
+   * slides into another piece's pocket instead of lying on top of it.
+   */
+  under?: (paper: Vec2[]) => boolean;
 }
 
-export function collapse(frame: FoldFrame, { creases, anchor }: CollapseOptions): FoldFrame {
+export function collapse(frame: FoldFrame, { creases, anchor, under }: CollapseOptions): FoldFrame {
   // Cut faces along the new creases (opening a crease out needs no cut).
   let faces: FlatFace[] = toFlat(frame);
   for (const c of creases) {
@@ -47,10 +52,14 @@ export function collapse(frame: FoldFrame, { creases, anchor }: CollapseOptions)
   const change = edges.map((e) => {
     const a = apply(old[e.f], e.pa);
     const b = apply(old[e.f], e.pb);
+    // A valley or mountain along a line where the paper is already folded leaves that fold as it is:
+    // only paper lying flat across the line gets the new crease. (Reverse folds do re-fold folded edges.)
+    const alreadyFolded = frontUp(faces[e.f].world, faces[e.f].paper) !== frontUp(faces[e.g].world, faces[e.g].paper);
     return creases.find(
       (c) =>
         Math.abs(sideOf(c.line, a)) < 1e-7 &&
         Math.abs(sideOf(c.line, b)) < 1e-7 &&
+        !(alreadyFolded && (c.kind === 'valley' || c.kind === 'mountain')) &&
         (!c.only || (c.only(faces[e.f].paper) && c.only(faces[e.g].paper))),
     );
   });
@@ -136,6 +145,12 @@ export function collapse(frame: FoldFrame, { creases, anchor }: CollapseOptions)
         const r = creaseOrder.get(g * faces.length + f);
         if (r !== undefined) return !r;
         if (group[f] === group[g] && overlappedBefore(f, g)) return wasAbove(f, g) !== flipped[f];
+        // A tucked flap goes under the faces it slides beneath.
+        if (under) {
+          const moved = (i: number) => group[i] !== group[start];
+          if (moved(f) && !moved(g) && under(faces[g].paper)) return false;
+          if (moved(g) && !moved(f) && under(faces[f].paper)) return true;
+        }
         return undefined;
       },
       (f, g) => (overlappedBefore(f, g) ? wasAbove(f, g) : group[f] !== group[start]),

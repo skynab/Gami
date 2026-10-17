@@ -259,7 +259,7 @@ supabase/         migrations (profiles, models, RLS policies)
 | 6 ✅ | **Accounts + roles** | Supabase schema (profiles, creator requests, models) with row-level security tested in PGlite; emailed sign-in links; account menu; asking to become a creator; an admin page to approve requests; `/studio` opens the editor for creators. See `docs/accounts.md`. |
 | 7a ✅ | **Cloud Studio** | Creators save models to the cloud, reopen them from "My models", share a private link (`/s/<token>`), and submit for the gallery. Admins preview, publish or send back with a note. Published models appear under "From the community" in the gallery (`/m/<id>`). |
 | 7b ✅ | **Studio folding tools** | Reverse folds (inside/outside), Collapse (add valley, mountain or open creases, then apply together, for squash, petal and sink folds or bases) and Lift (turn part of the paper up by an angle for 3D finishing), each limitable to the top layers. |
-| 7c | **Ninja star** | Following [origami.me/ninja-star](https://origami.me/ninja-star/): moving or turning over a single sheet, and tucking a flap into another sheet's pocket. |
+| 7c ✅ | **Ninja star** | Following [origami.me/ninja-star](https://origami.me/ninja-star/): two units folded side by side, assembled by moving and turning over one sheet, then four tucks into each other's pockets (17 steps). |
 
 Milestones 0–4 deliver everything except advanced mode. Advanced mode then gets the dev Studio from milestone 3 almost for free.
 
@@ -278,6 +278,8 @@ Milestones 0–4 deliver everything except advanced mode. Advanced mode then get
 - **Security rules are tested without Docker** (milestone 6). The migrations run in PGlite (Postgres in-process) with a small stand-in for Supabase's `auth` schema and roles, and the tests act as guest, learner, creator and admin.
 - **Sign-in is by emailed link**, with no passwords to store or reset. The first admin is made by hand in SQL; after that, admins approve creators at `/admin`.
 - **Accounts are optional per deployment.** Without Supabase settings the site hides sign-in and the Studio; the Supabase library is only downloaded when they're set.
+- **Tucks are folds with a stacking rule** (milestone 7c). A tuck is a collapse whose moving paper must end up *under* the other piece, which the layer solver enforces. A valley or mountain crease along a line where the paper is already folded leaves that fold alone, so only paper lying flat across the line folds.
+- **Steps can combine folds** (`Recipe.together`), so the same fold on both sheets of a modular model is one step that plays at once.
 - **Paper may pass through itself in v1** during complex 3D steps. Collision-free animation is a later goal, not a launch blocker.
 - **Dev Studio** lives at `/studio/dev` in development builds only (left out of production). It folds through all layers or the top 1–3, snaps fold lines to corners and edge midpoints (point-to-point and through-2-points), and can unfold, turn over, rotate and undo. The edge-to-edge (angle bisector) helper is deferred until a model needs it.
 
