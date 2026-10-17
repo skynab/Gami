@@ -261,6 +261,7 @@ supabase/         migrations (profiles, models, RLS policies)
 | 7b ✅ | **Studio folding tools** | Reverse folds (inside/outside), Collapse (add valley, mountain or open creases, then apply together, for squash, petal and sink folds or bases) and Lift (turn part of the paper up by an angle for 3D finishing), each limitable to the top layers. |
 | 7c ✅ | **Ninja star** | Following [origami.me/ninja-star](https://origami.me/ninja-star/): two units folded side by side, assembled by moving and turning over one sheet, then four tucks into each other's pockets (17 steps). |
 | 7d ✅ | **Heart and fox** | Two more gallery models, each following origami.me: an easy heart (20 steps) and Mitsuo Okuda's sitting fox (13 steps, with a squash fold for the face). The crane's wings now fold down. The boat is parked on the `wip/boat` branch (see the decisions log). |
+| 7e ✅ | **Tulip** | The traditional flat tulip (15 steps): a blossom from one square and a stem with a leaf from a bigger one, pulled out with a reverse fold, then put together. |
 
 Milestones 0–4 deliver everything except advanced mode. Advanced mode then gets the dev Studio from milestone 3 almost for free.
 
@@ -274,6 +275,7 @@ Milestones 0–4 deliver everything except advanced mode. Advanced mode then get
 - **The crane's wings fold down level with the top of its body** (the sheet's centre), not along the bird base's middle crease. Lower down, the fold would cut through the two small triangles between the wings, which join the front wing to the back one, so it would tear. Real paper gives a little there; the engine doesn't.
 - **The jumping frog has no separate back-leg folds.** The folded-up bottom serves as the back legs, which is common in simple versions; the leg folds tried either turned inward or would tear.
 - **The heart and fox follow origami.me** ([heart](https://origami.me/heart/), [fox](https://origami.me/fox/)). The fox's squash is two steps: the head flap folds over with the ear, then its back half opens back out while the tip flattens into the face.
+- **The tulip is the flat, two-square one**, as the gallery card promised, not origami.me's single-square tulip, whose blossom is blown up into 3D at the end. The stem's square is half as big again, so the stem isn't stubby next to the blossom.
 - **The boat waits for 3D reshaping.** It folds as far as the second diamond (on the `wip/boat` branch, with a collapse change that lets hinged layers swap order when a hat is opened into a diamond). The last move, pulling the points apart into the hull, isn't a flat fold or a single lift, so the boat stays "coming soon" until the engine can show it.
 - **The ninja star follows [origami.me/ninja-star](https://origami.me/ninja-star/)**, chosen as the reference because written instructions elsewhere disagree on the folds.
 - **Translations are deferred** (milestone 5). Most of the text is model instructions, which would each need translating; better done once the content settles.
