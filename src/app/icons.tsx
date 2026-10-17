@@ -60,3 +60,11 @@ export const PaperIcon = icon(
     <path d="M4 4l16 16" strokeDasharray="2.5 2.5" />
   </>,
 );
+export const PauseIcon = icon(<path d="M8 5.5v13M16 5.5v13" />);
+export const ReplayIcon = icon(
+  <>
+    <path d="M4 12a8 8 0 1 0 2.4-5.7" />
+    <path d="M4 4v4h4" />
+    <path d="M10.5 9.5v5l4-2.5z" />
+  </>,
+);

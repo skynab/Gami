@@ -321,8 +321,25 @@ a {
 }
 
 .step-card h2 {
-  margin: 0 0 2px;
+  margin: 0;
   font-size: 15px;
+}
+
+.step-card p {
+  margin-block-start: 4px;
+}
+
+.step-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.small-icon {
+  width: 32px;
+  height: 32px;
+  margin: -6px -6px -6px 0;
 }
 
 @media (max-width: 560px) {

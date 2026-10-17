@@ -3,18 +3,20 @@ import { Canvas } from '@react-three/fiber';
 import { useMemo } from 'react';
 import { Sphere, Vector3 } from 'three';
 import { useThemeColors } from '../app/useThemeColors';
+import { boundsOf } from '../fold/animate';
+import type { OrigamiModel } from '../fold/types';
 import { CameraRig } from './CameraRig';
-import { PaperMesh } from './PaperMesh';
+import { FoldedPaper } from './FoldedPaper';
 import { ViewCube } from './ViewCube';
 
-const SQUARE: [number, number] = [1, 1];
-
 /** The 3D viewport: the paper on a table, lit softly, with a view cube in the corner. Loaded on demand. */
-export default function Stage({ size = SQUARE }: { size?: [number, number] }) {
+export default function Stage({ model }: { model: OrigamiModel }) {
   const colors = useThemeColors();
-  const [w, h] = size;
-  // Stable while the size is, so the camera doesn't re-run its last command on every render.
-  const bounds = useMemo(() => new Sphere(new Vector3(), Math.hypot(w, h) / 2), [w, h]);
+  // Fits every step of the model. Stable per model, so the camera doesn't re-run its last command on every render.
+  const bounds = useMemo(() => {
+    const { center, radius } = boundsOf(model);
+    return new Sphere(new Vector3(...center), radius);
+  }, [model]);
   const narrow = matchMedia('(max-width: 560px)').matches;
 
   return (
@@ -31,7 +33,7 @@ export default function Stage({ size = SQUARE }: { size?: [number, number] }) {
       {/* From below too, so the back of the sheet reads as white paper when you look underneath. */}
       <directionalLight position={[-2, -3, -1]} intensity={1.2} />
 
-      <PaperMesh size={size} edgeColor={colors.muted} />
+      <FoldedPaper model={model} edgeColor={colors.muted} />
       <ContactShadows scale={3} blur={2.4} far={1} opacity={0.35} />
 
       <CameraRig bounds={bounds} />

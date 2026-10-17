@@ -3,7 +3,7 @@
  * until then each entry only carries what the gallery and step bar need.
  */
 
-export type Category = 'animal' | 'object' | 'toy' | 'modular' | 'flower';
+export type Category = 'basics' | 'animal' | 'object' | 'toy' | 'modular' | 'flower';
 export type Difficulty = 1 | 2 | 3 | 4 | 5;
 export type Level = 'easy' | 'medium' | 'hard';
 
@@ -20,6 +20,7 @@ export interface ModelInfo {
 }
 
 export const CATEGORIES: { id: Category; label: string }[] = [
+  { id: 'basics', label: 'Basics' },
   { id: 'animal', label: 'Animals' },
   { id: 'object', label: 'Objects' },
   { id: 'toy', label: 'Toys' },
@@ -34,6 +35,7 @@ export const LEVELS: { id: Level; label: string }[] = [
 ];
 
 export const MODELS: ModelInfo[] = [
+  { id: 'basics', title: 'Folding basics', blurb: 'Start here: fold, unfold and turn the paper over.', difficulty: 1, category: 'basics', steps: 4, minutes: 2, sheets: 1 },
   { id: 'paper-plane', title: 'Paper plane', blurb: 'The classic dart. Flies far and straight.', difficulty: 1, category: 'toy', steps: 7, minutes: 3, sheets: 1 },
   { id: 'boat', title: 'Boat', blurb: 'A little sailboat that really floats.', difficulty: 1, category: 'object', steps: 9, minutes: 5, sheets: 1 },
   { id: 'cup', title: 'Cup', blurb: 'A cup that holds water, for a while.', difficulty: 1, category: 'object', steps: 8, minutes: 4, sheets: 1 },

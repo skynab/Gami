@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router';
 import {
   BackIcon,
@@ -6,12 +6,17 @@ import {
   LastIcon,
   LockIcon,
   NextIcon,
+  PauseIcon,
   PlayIcon,
   PrevIcon,
+  ReplayIcon,
   ResetIcon,
 } from '../app/icons';
 import { TopBar } from '../app/TopBar';
-import { findModel } from '../gallery/catalog';
+import type { OrigamiModel } from '../fold/types';
+import { findModel, MODELS } from '../gallery/catalog';
+import { BLANK_SHEET, loadModel } from '../models';
+import { usePlayback } from '../state/playback';
 import { useViewer } from '../state/viewer';
 import { VIEWS } from '../viewer/views';
 import { NotFound } from './NotFound';
@@ -21,27 +26,59 @@ const Stage = lazy(() => import('../viewer/Stage'));
 
 export function Learn() {
   const { modelId } = useParams();
-  const model = findModel(modelId);
+  const info = findModel(modelId);
   const [params, setParams] = useSearchParams();
+  const [data, setData] = useState<OrigamiModel | null>(null);
   const view = useViewer((s) => s.view);
   const locked = useViewer((s) => s.locked);
   const { setView, toggleLock, resetCamera } = useViewer.getState();
+  const step = usePlayback((s) => s.step);
+  const total = usePlayback((s) => s.total);
+  const playing = usePlayback((s) => s.playing);
+  const { goTo, replay, togglePlay } = usePlayback.getState();
 
-  const total = model?.steps ?? 1;
-  const step = clamp(Number(params.get('step')) || 1, 1, total);
-  // Replace, not push: stepping through a model shouldn't fill the back button's history.
-  const goTo = (n: number) => setParams({ step: String(clamp(n, 1, total)) }, { replace: true });
+  // The step in the address when the page opened. After that, the address follows playback.
+  const startStep = useRef(Number(params.get('step')) || 1);
 
-  // Each model starts in the default view, unlocked.
-  useEffect(() => useViewer.getState().init(), [modelId]);
+  // Each model starts in the default view, unlocked, and plays its first step (or the linked one).
+  useEffect(() => {
+    useViewer.getState().init();
+    setData(null);
+    let live = true;
+    const loading = info && loadModel(info.id);
+    if (!loading) {
+      setData(BLANK_SHEET);
+      usePlayback.getState().load(0, 1);
+    } else {
+      void loading.then((model) => {
+        if (!live) return;
+        setData(model);
+        usePlayback.getState().load(model.steps.length, startStep.current);
+      });
+    }
+    return () => {
+      live = false;
+      usePlayback.getState().load(0, 1);
+    };
+  }, [info]);
+
+  useEffect(() => {
+    if (!total || params.get('step') === String(step)) return;
+    // Replace, not push: stepping through a model shouldn't fill the back button's history.
+    setParams({ step: String(step) }, { replace: true });
+  }, [step, total, params, setParams]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.metaKey || e.ctrlKey || e.altKey) return;
+      // Space on a focused button presses that button.
+      if (e.key === ' ' && e.target instanceof HTMLButtonElement) return;
       if (e.key === 'ArrowLeft') goTo(step - 1);
       else if (e.key === 'ArrowRight') goTo(step + 1);
       else if (e.key === 'Home') goTo(1);
       else if (e.key === 'End') goTo(total);
+      else if (e.key === ' ') togglePlay();
+      else if (e.key === 'r' || e.key === 'R') replay();
       else if (e.key >= '1' && e.key <= '4') setView(VIEWS[Number(e.key) - 1].id);
       else if (e.key === '0') resetCamera();
       else if (e.key === 'l' || e.key === 'L') toggleLock();
@@ -52,7 +89,9 @@ export function Learn() {
     return () => window.removeEventListener('keydown', onKey);
   });
 
-  if (!model) return <NotFound />;
+  if (!info) return <NotFound />;
+  const current = data?.steps[step - 1];
+  const none = data !== null && total === 0;
 
   return (
     <div className="app">
@@ -62,56 +101,70 @@ export function Learn() {
             <Link to="/" className="icon" aria-label="All models" title="All models">
               <BackIcon />
             </Link>
-            <span className="page-title">{model.title}</span>
+            <span className="page-title">{info.title}</span>
           </>
         }
-        center={
-          <span aria-live="polite">
-            Step {step} of {total}
-          </span>
-        }
+        center={total > 0 && <span aria-live="polite">Step {step} of {total}</span>}
       />
 
       <main className="stage">
-        <Suspense fallback={null}>
-          <Stage />
-        </Suspense>
+        {data && (
+          <Suspense fallback={null}>
+            <Stage model={data} />
+          </Suspense>
+        )}
         {locked && <div className="badge">View locked · drag to pan</div>}
-        <section className="step-card" aria-label="Instructions">
-          <h2>Step {step}</h2>
-          <p className="muted small">Instructions for each fold appear here.</p>
-        </section>
+        {current && (
+          <section className="step-card" aria-label="Instructions" aria-live="polite">
+            <div className="step-card-head">
+              <h2>
+                {step}. {current.title}
+              </h2>
+              <button type="button" className="icon small-icon" aria-label="Replay this step" title="Replay this step (R)" onClick={replay}>
+                <ReplayIcon width={18} height={18} />
+              </button>
+            </div>
+            {current.text && <p className="muted small">{current.text}</p>}
+          </section>
+        )}
+        {none && (
+          <section className="step-card" aria-label="Instructions">
+            <h2>Instructions coming soon</h2>
+            <p className="muted small">
+              The steps for this model aren’t ready yet. Try <Link to={`/learn/${MODELS[0].id}`}>{MODELS[0].title}</Link> in the
+              meantime.
+            </p>
+          </section>
+        )}
       </main>
 
       <footer className="bottombar">
         <div className="group">
-          <button type="button" className="icon" aria-label="First step" title="First step (Home)" disabled={step === 1} onClick={() => goTo(1)}>
+          <button type="button" className="icon" aria-label="First step" title="First step (Home)" disabled={step <= 1} onClick={() => goTo(1)}>
             <FirstIcon />
           </button>
-          <button type="button" className="icon" aria-label="Previous step" title="Previous step (←)" disabled={step === 1} onClick={() => goTo(step - 1)}>
+          <button type="button" className="icon" aria-label="Previous step" title="Previous step (←)" disabled={step <= 1} onClick={() => goTo(step - 1)}>
             <PrevIcon />
           </button>
-          <button type="button" className="icon" aria-label="Play" title="Play (Space)" disabled>
-            <PlayIcon />
+          <button
+            type="button"
+            className="icon"
+            aria-label={playing ? 'Pause' : 'Play'}
+            title={playing ? 'Pause (Space)' : 'Play (Space)'}
+            disabled={!total}
+            onClick={togglePlay}
+          >
+            {playing ? <PauseIcon /> : <PlayIcon />}
           </button>
-          <button type="button" className="icon" aria-label="Next step" title="Next step (→)" disabled={step === total} onClick={() => goTo(step + 1)}>
+          <button type="button" className="icon" aria-label="Next step" title="Next step (→)" disabled={step >= total} onClick={() => goTo(step + 1)}>
             <NextIcon />
           </button>
-          <button type="button" className="icon" aria-label="Last step" title="Last step (End)" disabled={step === total} onClick={() => goTo(total)}>
+          <button type="button" className="icon" aria-label="Last step" title="Last step (End)" disabled={step >= total} onClick={() => goTo(total)}>
             <LastIcon />
           </button>
         </div>
 
-        <input
-          type="range"
-          className="scrubber"
-          min={1}
-          max={total}
-          step={1}
-          value={step}
-          aria-label="Step"
-          onChange={(e) => goTo(Number(e.target.value))}
-        />
+        <Scrubber />
 
         <div className="group">
           <div className="segmented" role="group" aria-label="View">
@@ -140,6 +193,35 @@ export function Learn() {
   );
 }
 
-function clamp(n: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, Math.round(n)));
+/**
+ * Drag through the whole model, stopping anywhere, even halfway through a fold.
+ * Its own component because it re-renders on every animation frame.
+ */
+function Scrubber() {
+  const pos = usePlayback((s) => s.pos);
+  const total = usePlayback((s) => s.total);
+  const step = usePlayback((s) => s.step);
+  return (
+    <>
+      <input
+        type="range"
+        className="scrubber"
+        min={0}
+        max={Math.max(1, total)}
+        step={0.001}
+        value={pos}
+        list="step-ticks"
+        disabled={!total}
+        aria-label="Progress through the steps"
+        aria-valuetext={`Step ${step} of ${total}`}
+        onChange={(e) => usePlayback.getState().scrub(Number(e.target.value))}
+      />
+      {/* A tick where each step ends. */}
+      <datalist id="step-ticks">
+        {Array.from({ length: total + 1 }, (_, i) => (
+          <option key={i} value={i} />
+        ))}
+      </datalist>
+    </>
+  );
 }
