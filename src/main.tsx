@@ -8,6 +8,8 @@ import { NotFound } from './routes/NotFound';
 
 // Only creators need the Studio, so everyone else never downloads it.
 const Studio = lazy(() => import('./routes/Studio'));
+// The internal Studio for writing the built-in models. Left out of production builds entirely.
+const StudioDev = import.meta.env.DEV ? lazy(() => import('./routes/StudioDev')) : null;
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -23,6 +25,16 @@ createRoot(document.getElementById('root')!).render(
             </Suspense>
           }
         />
+        {StudioDev && (
+          <Route
+            path="/studio/dev"
+            element={
+              <Suspense fallback={null}>
+                <StudioDev />
+              </Suspense>
+            }
+          />
+        )}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

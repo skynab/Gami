@@ -226,6 +226,14 @@ a {
   color: var(--accent);
 }
 
+.link {
+  border: 0;
+  background: none;
+  padding: 0;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
 .segmented {
   display: flex;
   padding: 3px;
@@ -523,4 +531,197 @@ a {
 .empty {
   padding: 48px 16px;
   text-align: center;
+}
+
+/* Studio (development) */
+
+.studio {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  flex: 1;
+  min-height: 0;
+}
+
+.studio-editor {
+  position: relative;
+  min-height: 0;
+  background: var(--canvas-bg);
+}
+
+.fold-editor {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+.fold-editor .face {
+  stroke: var(--muted);
+  stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
+  stroke-linejoin: round;
+}
+
+.fold-editor .moving-side {
+  fill: var(--accent);
+  fill-opacity: 0.12;
+  pointer-events: none;
+}
+
+.fold-editor .landing {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2px;
+  stroke-dasharray: 6 4;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+/* Origami diagram convention: valley folds are dashed, mountain folds dash-dot-dot. */
+.fold-editor .crease {
+  stroke: var(--accent);
+  stroke-width: 2.5px;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.fold-editor .crease.valley {
+  stroke-dasharray: 10 6;
+}
+
+.fold-editor .crease.mountain {
+  stroke-dasharray: 10 4 2 4 2 4;
+}
+
+.fold-editor .snap {
+  fill: var(--bg);
+  stroke: var(--fg);
+  stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
+  cursor: pointer;
+}
+
+.fold-editor .snap:hover {
+  fill: var(--accent);
+}
+
+.fold-editor .picked {
+  fill: var(--accent);
+  stroke: var(--bg);
+  stroke-width: 2px;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.fold-editor .pick-label {
+  fill: var(--fg);
+  font-weight: 700;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.badge.error {
+  background: var(--danger);
+}
+
+.studio-side {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-inline-start: 1px solid var(--line);
+}
+
+.studio-preview {
+  position: relative;
+  flex: none;
+  height: 42%;
+  background: var(--canvas-bg);
+  border-block-end: 1px solid var(--line);
+}
+
+.studio-steps {
+  flex: 1;
+  overflow: auto;
+  padding: 12px 16px 24px;
+}
+
+.studio-steps ol {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.studio-steps li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.studio-steps li .link {
+  align-self: flex-start;
+  color: var(--muted);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-block-end: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.field.inline {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  margin: 0 6px;
+}
+
+.studio input:not([type]),
+.studio textarea,
+.field input,
+.field select {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 14px;
+  resize: vertical;
+}
+
+.field.inline select {
+  width: auto;
+}
+
+.bottombar .group {
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.secondary:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+@media (max-width: 760px) {
+  .studio {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(260px, 1fr) auto;
+  }
+
+  .studio-side {
+    border-inline-start: 0;
+    border-block-start: 1px solid var(--line);
+  }
+
+  .studio-preview {
+    height: 220px;
+  }
 }

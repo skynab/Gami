@@ -251,7 +251,7 @@ supabase/         migrations (profiles, models, RLS policies)
 | 0 ✅ | **Scaffold** | Vite, React, TypeScript and the router, with BackSubtract's tokens, bars and buttons ported. Empty gallery and an empty stage. |
 | 1 ✅ | **Stage + camera** | A flat square in the R3F stage with two-sided paper. Orbit, zoom and pan, the gizmo, Top/Front/Side presets, lock and reset. |
 | 2 ✅ | **Playback** | The step format and rigid-face animation. The step bar, scrubber, keys and URL step. A hand-written 4-step "Folding basics" model (fold, unfold, turn over, fold) proves it works. |
-| 3 | **Fold engine + dev Studio** | Flat folds through all layers or the top layer, fold line snapping, unfold, turn over. A dev-only Studio route that exports `.fold`. |
+| 3 ✅ | **Fold engine + dev Studio** | Flat folds through all layers or the top layer, fold line snapping, unfold, turn over. A dev-only Studio route that exports `.fold`. |
 | 4 | **Content + gallery** | Author the plane, boat, cup, frog, ninja star (multi-sheet) and crane. Thumbnails, filters, search, "continue" badges. **First public release** (learning only). |
 | 5 | **Polish** | Annotations (arrows, ghost, crease styles), auto camera per step, reduced motion, accessibility, PWA/offline, i18n. |
 | 6 | **Accounts + roles** | Supabase auth, profiles, roles, row-level security. Sign-in UI. `/studio` gated for creators. |
@@ -264,6 +264,7 @@ Milestones 0–4 deliver everything except advanced mode. Advanced mode then get
 - **Studio access needs a login.** Creators sign in through Supabase Auth, and an admin grants the creator role. No payments are planned for now.
 - **Sharing:** creators can always share a draft by private (unlisted) link. Getting into the public gallery needs **admin approval** (`status`: `draft` → `submitted` → `published` / `rejected`).
 - **Paper may pass through itself in v1** during complex 3D steps. Collision-free animation is a later goal, not a launch blocker.
+- **Dev Studio** lives at `/studio/dev` in development builds only (left out of production). It folds through all layers or the top 1–3, snaps fold lines to corners and edge midpoints (point-to-point and through-2-points), and can unfold, turn over, rotate and undo. The edge-to-edge (angle bisector) helper is deferred until a model needs it.
 
 ## 11. Open questions
 

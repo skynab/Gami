@@ -34,7 +34,8 @@ export default function Stage({ model }: { model: OrigamiModel }) {
       <directionalLight position={[-2, -3, -1]} intensity={1.2} />
 
       <FoldedPaper model={model} edgeColor={colors.muted} />
-      <ContactShadows scale={3} blur={2.4} far={1} opacity={0.35} />
+      {/* A little below the table top, so the paper (pushed back in depth to keep its crease lines visible) always wins. */}
+      <ContactShadows position-y={-0.01} scale={3} blur={2.4} far={1} opacity={0.35} />
 
       <CameraRig bounds={bounds} />
 
