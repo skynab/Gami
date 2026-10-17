@@ -1,19 +1,23 @@
 import { paper, Recipe, table } from '../../fold/recipe';
+import type { Vec2 } from '../../fold/types';
 
 /**
- * The jumping frog, from a 3 × 5 card: a waterbomb base at the top makes the head and front legs,
- * and a pleat at the back makes the spring. Press down on its back and let go to make it jump.
+ * The jumping frog, from a rectangle twice as long as it is wide (as origami.me/jumping-frog folds it):
+ * a waterbomb base at the top makes the head and front legs, another upside down at the bottom the back
+ * legs, and a pleat across the body the spring. Press down on its back and let go to make it jump.
  */
 export function jumpingFrog() {
-  const w = 0.6;
+  const w = 0.5;
   const top = -0.5;
   // The top of the card is a w × w square: its diagonals cross at `centre`, and its bottom edge is `base`.
   const base = top + w;
   const centre = top + w / 2;
   const quarter = w / 4;
+  // The back legs: an upside-down waterbomb at the bottom of the strip. The strip is `2 * quarter` wide, so
+  // the bottom `2 * quarter` of it is a square; `legs` runs across its middle.
+  const legs = 0.5 - quarter;
 
-  return (
-    new Recipe({ id: 'jumping-frog', title: 'Jumping frog', sheet: { size: [w, 1], front: '#f6f3ec', back: '#3f9b4f' } })
+  const r = new Recipe({ id: 'jumping-frog', title: 'Jumping frog', sheet: { size: [w, 1], front: '#f6f3ec', back: '#3f9b4f' } })
       .crease(paper(w / 2, top), table(-w / 2, base), {
         title: 'Fold a top corner across',
         text: 'Bring the top-right corner down to the left edge, making a diagonal crease across the top square. Unfold.',
@@ -48,22 +52,63 @@ export function jumpingFrog() {
         title: 'Fold the left side in',
         text: 'Fold the left edge of the card in to the middle. It tucks under the front legs.',
       })
-      .along(table(quarter, -1), table(quarter, 1), table(w / 2 - 0.01, 0.3), { title: 'Fold the right side in', text: 'And the right edge.' })
-      .onto(table(0, 0.5), table(0, base), {
+      .along(table(quarter, -1), table(quarter, 1), table(w / 2 - 0.01, 0.3), { title: 'Fold the right side in', text: 'And the right edge.' });
+
+  const beforeLegs = r.mark();
+  r      .along(table(-1, legs), table(1, legs), table(0, 0.5), {
         title: 'Fold the bottom up',
-        text: 'Bring the bottom edge up to the base of the triangle. This makes the back legs.',
+        text: 'Fold the bottom edge up, a quarter of the card’s width.',
       })
-      // The spring: fold the body up over the head, then fold half of it back down.
-      .along(table(-1, base), table(1, base), table(0, base + 0.1), {
-        title: 'Fold the body up',
-        text: 'Fold the whole bottom part up along the base of the triangle.',
+      // Each crease runs from a top corner of the flap to the middle of its fold.
+      .along(table(-quarter, legs - quarter), table(0, legs), table(-quarter + 0.01, legs - 0.01), {
+        title: 'Crease a corner',
+        text: 'Fold the flap’s bottom left corner up along the line from its top left corner to the middle of the fold, and unfold.',
       })
-      .along(table(-1, base - 0.1), table(1, base - 0.1), table(0, base - 0.15), {
-        title: 'Fold half of it back down',
-        text: 'Fold the top half back down again, making a zig-zag pleat. This is the spring.',
-        only: ([, v]) => v > base,
+      .unfold({ title: 'Unfold', text: 'Open it, leaving the crease.' })
+      .along(table(quarter, legs - quarter), table(0, legs), table(quarter - 0.01, legs - 0.01), {
+        title: 'Crease the other corner',
+        text: 'The same on the right.',
       })
-      .turnOver('Turn the frog over. Press down on its back, slide your finger off, and it jumps!')
-      .build()
+      .unfold({ title: 'Unfold', text: 'Open the corner and the bottom flap out again, leaving the creases.', to: beforeLegs });
+
+  // The bottom square collapses like the head, upside down: the fold across its middle and its diagonals (the
+  // corner creases, in every layer) make a waterbomb base, the sides folding in and the bottom edge coming up.
+  r.collapse(
+    {
+      title: 'Push the bottom up',
+      text: 'Push the sides of the bottom square in along the creases, bringing the bottom edge up to the fold. It collapses into a small triangle, like the head.',
+    },
+    [
+      { through: [table(-1, legs), table(1, legs)], kind: 'mountain' },
+      { through: [table(-quarter, 0.5), table(quarter, legs - quarter)], kind: 'valley' },
+      { through: [table(quarter, 0.5), table(-quarter, legs - quarter)], kind: 'valley' },
+    ],
+    paper(0, -0.4),
   );
+
+  // The back legs, like the front ones: the small triangle's top corners fold down to its point.
+  const hip = legs - quarter;
+  // The legs are the bottom half of the square (on the sheet), which the push brought up on top.
+  const flaps = ([, v]: Vec2) => v > legs;
+  // The spring: a zig-zag pleat across the middle of the body, between the head and the back legs.
+  const fold1 = (base + hip) / 2;
+  const fold2 = fold1 - (hip - base) / 4;
+  return r
+    .onto(table(-quarter, hip), table(0, legs), {
+      title: 'Fold down a back leg',
+      text: 'Fold the small triangle’s top left corner down to its bottom point.',
+      only: flaps,
+    })
+    .onto(table(quarter, hip), table(0, legs), { title: 'Fold down the other back leg', text: 'Match it on the right.', only: flaps })
+    .along(table(-1, fold1), table(1, fold1), table(0, legs), {
+      title: 'Fold the back end up',
+      text: 'Fold the back half up across the middle of the body.',
+    })
+    .along(table(-1, fold2), table(1, fold2), table(0, fold2 - 0.01), {
+      title: 'Fold half of it back down',
+      text: 'Fold the top part back down again, making a zig-zag pleat. This is the spring.',
+      only: ([, v]) => v > fold1,
+    })
+    .turnOver('Turn the frog over. Press down on its back, slide your finger off, and it jumps!')
+    .build();
 }
