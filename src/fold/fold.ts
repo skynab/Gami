@@ -192,7 +192,7 @@ function widest(paper: Vec2[]): [Vec2, Vec2, Vec2] {
 }
 
 /** Moving and still parts may only be joined along the fold line, or the paper would tear. */
-function checkNoTear(pieces: (FlatFace & { moves: boolean })[], line: Line) {
+export function checkNoTear(pieces: (FlatFace & { moves: boolean })[], line: Line) {
   const onLine = (x: Vec2) => Math.abs(sideOf(line, x)) < 1e-7;
   for (const m of pieces.filter((p) => p.moves)) {
     for (const s of pieces.filter((p) => !p.moves)) {
