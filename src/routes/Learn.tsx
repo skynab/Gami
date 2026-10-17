@@ -17,6 +17,7 @@ import type { OrigamiModel } from '../fold/types';
 import { findModel, MODELS } from '../gallery/catalog';
 import { BLANK_SHEET, loadModel } from '../models';
 import { usePlayback } from '../state/playback';
+import { readProgress, saveProgress } from '../state/progress';
 import { useViewer } from '../state/viewer';
 import { VIEWS } from '../viewer/views';
 import { NotFound } from './NotFound';
@@ -29,6 +30,7 @@ export function Learn() {
   const info = findModel(modelId);
   const [params, setParams] = useSearchParams();
   const [data, setData] = useState<OrigamiModel | null>(null);
+  const [failed, setFailed] = useState(false);
   const view = useViewer((s) => s.view);
   const locked = useViewer((s) => s.locked);
   const { setView, toggleLock, resetCamera } = useViewer.getState();
@@ -37,30 +39,42 @@ export function Learn() {
   const playing = usePlayback((s) => s.playing);
   const { goTo, replay, togglePlay } = usePlayback.getState();
 
-  // The step in the address when the page opened. After that, the address follows playback.
-  const startStep = useRef(Number(params.get('step')) || 1);
+  // The step in the address when the page opened, or where this person left off. After that, the address follows playback.
+  const startStep = useRef(Number(params.get('step')) || (modelId && readProgress(modelId)?.step) || 1);
 
   // Each model starts in the default view, unlocked, and plays its first step (or the linked one).
   useEffect(() => {
     useViewer.getState().init();
     setData(null);
+    setFailed(false);
     let live = true;
     const loading = info && loadModel(info.id);
     if (!loading) {
       setData(BLANK_SHEET);
       usePlayback.getState().load(0, 1);
     } else {
-      void loading.then((model) => {
-        if (!live) return;
-        setData(model);
-        usePlayback.getState().load(model.steps.length, startStep.current);
-      });
+      loading.then(
+        (model) => {
+          if (!live) return;
+          setData(model);
+          usePlayback.getState().load(model.steps.length, startStep.current);
+        },
+        () => {
+          if (!live) return;
+          setFailed(true);
+          setData(BLANK_SHEET);
+        },
+      );
     }
     return () => {
       live = false;
       usePlayback.getState().load(0, 1);
     };
   }, [info]);
+
+  useEffect(() => {
+    if (info && total) saveProgress(info.id, step, total);
+  }, [info, step, total]);
 
   useEffect(() => {
     if (!total || params.get('step') === String(step)) return;
@@ -127,7 +141,13 @@ export function Learn() {
             {current.text && <p className="muted small">{current.text}</p>}
           </section>
         )}
-        {none && (
+        {none && failed && (
+          <section className="step-card" aria-label="Instructions">
+            <h2>Couldn’t load the steps</h2>
+            <p className="muted small">Check your connection and reload the page to try again.</p>
+          </section>
+        )}
+        {none && !failed && (
           <section className="step-card" aria-label="Instructions">
             <h2>Instructions coming soon</h2>
             <p className="muted small">

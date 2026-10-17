@@ -24,6 +24,11 @@ export function signedArea(poly: Vec2[]): number {
   return a / 2;
 }
 
+/** Whether a flat face shows its front (coloured) side from above: its corners go the same way round as on the sheet. */
+export function frontUp(world: Vec2[], paper: Vec2[]): boolean {
+  return Math.sign(signedArea(world)) === Math.sign(signedArea(paper));
+}
+
 /** A straight line through `p` along unit direction `d`. */
 export interface Line {
   p: Vec2;

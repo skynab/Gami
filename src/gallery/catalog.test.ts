@@ -23,10 +23,3 @@ describe('catalog', () => {
     expect(filterModels(MODELS, {})).toHaveLength(MODELS.length);
   });
 });
-
-describe('catalog and step data', () => {
-  it('lists the right step count for models that have steps', async () => {
-    const { basics } = await import('../models/basics');
-    expect(MODELS.find((m) => m.id === 'basics')?.steps).toBe(basics.steps.length);
-  });
-});

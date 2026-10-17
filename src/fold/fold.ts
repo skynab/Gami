@@ -31,6 +31,8 @@ export interface FoldOptions {
   kind: FoldKind;
   /** Fold only the top N layers on the moving side. Leave out to fold through every layer. */
   layers?: number;
+  /** Fold only faces whose corners on the sheet pass this test, such as one half of the paper. */
+  only?: (paper: Vec2[]) => boolean;
 }
 
 export class FoldError extends Error {}
@@ -77,7 +79,7 @@ export function fromFlat(faces: FlatFace[]): FoldFrame {
 }
 
 /** Folds the paper along a line. The side to the left of the line's direction moves. */
-export function fold(frame: FoldFrame, { line, kind, layers }: FoldOptions): FoldFrame {
+export function fold(frame: FoldFrame, { line, kind, layers, only }: FoldOptions): FoldFrame {
   const faces = toFlat(frame);
   const movingSideLayers = faces.filter((f) => f.world.some((x) => sideOf(line, x) > 1e-7)).map((f) => f.layer);
   if (!movingSideLayers.length) throw new FoldError('Nothing is on the folding side of that line.');
@@ -86,7 +88,7 @@ export function fold(frame: FoldFrame, { line, kind, layers }: FoldOptions): Fol
   // Cut every face that takes part along the line.
   const pieces: (FlatFace & { moves: boolean })[] = [];
   faces.forEach((f, i) => {
-    if (f.layer < from) {
+    if (f.layer < from || (only && !only(f.paper))) {
       pieces.push({ ...f, parent: i, moves: false });
       return;
     }
@@ -97,7 +99,7 @@ export function fold(frame: FoldFrame, { line, kind, layers }: FoldOptions): Fol
 
   const moving = pieces.filter((p) => p.moves);
   if (!moving.length) throw new FoldError('Nothing is on the folding side of that line.');
-  if (layers !== undefined) checkNoTear(pieces, line);
+  if (layers !== undefined || only) checkNoTear(pieces, line);
 
   // New stacking. Turning a pile over reverses it: in a valley fold the old top lands lowest of the
   // folded part, on top of everything else; in a mountain fold the old top ends up lowest of all.
@@ -163,7 +165,7 @@ export function unfoldTo(frames: FoldFrame[], target: number): FoldFrame {
 }
 
 /** Maps sheet points to the table the way `face` is placed. */
-function placeLike(face: FlatFace): (p: Vec2) => Vec2 {
+export function placeLike(face: FlatFace): (p: Vec2) => Vec2 {
   const [q0, q1, q2] = widest(face.paper);
   const [w0, w1, w2] = [q0, q1, q2].map((q) => face.world[face.paper.indexOf(q)]);
   const a = sub(q1, q0);

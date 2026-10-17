@@ -486,15 +486,42 @@ a {
 }
 
 .card-thumb {
+  position: relative;
   display: grid;
   place-items: center;
   aspect-ratio: 4 / 3;
   background: var(--canvas-bg);
 }
 
-.card-thumb svg {
-  width: 45%;
-  height: 45%;
+.card-thumb img {
+  width: 70%;
+  height: 85%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgb(0 0 0 / 0.12));
+}
+
+.card-thumb .placeholder {
+  width: 40%;
+  height: 40%;
+  color: var(--muted);
+  opacity: 0.5;
+}
+
+.card-badge {
+  position: absolute;
+  inset-block-start: 10px;
+  inset-inline-start: 10px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.card-badge.soon {
+  background: var(--surface);
+  color: var(--muted);
 }
 
 .card-body {

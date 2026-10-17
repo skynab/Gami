@@ -1,5 +1,6 @@
 import { toFlat } from '../fold/fold';
 import { flipLine, lerp, signedArea, split, type Line } from '../fold/geometry2d';
+export { frontUp } from '../fold/geometry2d';
 import type { FoldFrame, Step, Vec2 } from '../fold/types';
 
 /** Helpers for the Studio's fold editor that don't need React. */
@@ -27,11 +28,6 @@ export function smallerSideMoves(frame: FoldFrame, line: Line): Line {
     if (parts.neg) neg += Math.abs(signedArea(parts.neg.world));
   }
   return pos > neg ? flipLine(line) : line;
-}
-
-/** Whether a face shows its front (coloured) side from above: its corners go the same way round as on the sheet. */
-export function frontUp(world: Vec2[], paper: Vec2[]): boolean {
-  return Math.sign(signedArea(world)) === Math.sign(signedArea(paper));
 }
 
 /**

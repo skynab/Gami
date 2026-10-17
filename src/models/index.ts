@@ -1,12 +1,6 @@
+import { fromFoldFile } from '../fold/fold-format';
 import type { OrigamiModel } from '../fold/types';
-
-/**
- * Step-by-step data for the models that have it, loaded only when opened.
- * Milestone 4 moves these to .fold files in public/models.
- */
-const LOADERS: Record<string, () => Promise<OrigamiModel>> = {
-  basics: () => import('./basics').then((m) => m.basics),
-};
+import { findModel } from '../gallery/catalog';
 
 /** A plain square and no steps, for models whose instructions aren't written yet. */
 export const BLANK_SHEET: OrigamiModel = {
@@ -21,6 +15,14 @@ export const BLANK_SHEET: OrigamiModel = {
   steps: [],
 };
 
+/** Where a built-in model's files are served from. */
+export const modelUrl = (id: string, ext: 'fold' | 'svg') => `${import.meta.env.BASE_URL}models/${id}.${ext}`;
+
+/** Fetches a built-in model's steps, or returns null for models that don't have any yet. */
 export function loadModel(id: string): Promise<OrigamiModel> | null {
-  return LOADERS[id]?.() ?? null;
+  if (!findModel(id)?.steps) return null;
+  return fetch(modelUrl(id, 'fold')).then(async (res) => {
+    if (!res.ok) throw new Error(`Couldn’t load ${id} (${res.status})`);
+    return fromFoldFile(await res.json());
+  });
 }
