@@ -1,0 +1,62 @@
+import type { ReactNode, SVGProps } from 'react';
+
+function icon(paths: ReactNode) {
+  return function Icon(props: SVGProps<SVGSVGElement>) {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        width="22"
+        height="22"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+        {...props}
+      >
+        {paths}
+      </svg>
+    );
+  };
+}
+
+export const BackIcon = icon(<path d="M15 5l-7 7 7 7" />);
+export const SearchIcon = icon(
+  <>
+    <circle cx="11" cy="11" r="6.5" />
+    <path d="M20 20l-4.2-4.2" />
+  </>,
+);
+export const FirstIcon = icon(<path d="M6 5v14M18 6l-8 6 8 6z" />);
+export const PrevIcon = icon(<path d="M15 6l-6 6 6 6" />);
+export const PlayIcon = icon(<path d="M8 5.5v13l10.5-6.5z" />);
+export const NextIcon = icon(<path d="M9 6l6 6-6 6" />);
+export const LastIcon = icon(<path d="M18 5v14M6 6l8 6-8 6z" />);
+export const LockIcon = icon(
+  <>
+    <rect x="5" y="11" width="14" height="9" rx="2" />
+    <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+  </>,
+);
+export const ResetIcon = icon(
+  <>
+    <path d="M4 12a8 8 0 1 0 2.4-5.7" />
+    <path d="M4 4v4h4" />
+  </>,
+);
+export const StudioIcon = icon(
+  <>
+    <path d="M4 20h4L19 9l-4-4L4 16z" />
+    <path d="M13.5 6.5l4 4" />
+  </>,
+);
+
+/** A square sheet with one corner folded over: Gami's stand-in for "a model". */
+export const PaperIcon = icon(
+  <>
+    <path d="M4 4l16 16H4z" fill="currentColor" fillOpacity=".22" stroke="none" />
+    <path d="M4 4h16v16H4z" />
+    <path d="M4 4l16 16" strokeDasharray="2.5 2.5" />
+  </>,
+);
