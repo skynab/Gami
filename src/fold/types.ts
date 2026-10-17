@@ -34,6 +34,11 @@ export interface Step {
   kind?: StepKind;
   /** The paper after this step. */
   frame: FoldFrame;
+  /**
+   * Frames the step passes through on its way there, in order, when one movement can't show it: unfolding
+   * several folds at once plays them back one after another.
+   */
+  via?: FoldFrame[];
 }
 
 export interface Sheet {

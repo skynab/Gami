@@ -15,6 +15,8 @@ interface FoldFileFrame {
   'gami:faces_layer'?: number[];
   'gami:text'?: string;
   'gami:kind'?: StepKind;
+  /** Frames the step passes through on its way, as when unfolding several folds one after another. */
+  'gami:via'?: FoldFileFrame[];
 }
 
 export interface FoldFile extends FoldFileFrame {
@@ -42,6 +44,7 @@ export function toFoldFile(model: OrigamiModel): FoldFile {
       frame_title: s.title,
       ...(s.text && { 'gami:text': s.text }),
       ...(s.kind && { 'gami:kind': s.kind }),
+      ...(s.via?.length && { 'gami:via': s.via.map(writeFrame) }),
       ...writeFrame(s.frame),
     })),
   };
@@ -60,6 +63,7 @@ export function fromFoldFile(file: FoldFile): OrigamiModel {
         title: f.frame_title ?? '',
         ...(f['gami:text'] && { text: f['gami:text'] }),
         ...(f['gami:kind'] && { kind: f['gami:kind'] }),
+        ...(f['gami:via'] && { via: f['gami:via'].map(readFrame) }),
         frame: readFrame(f),
       }),
     ),

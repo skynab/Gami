@@ -264,6 +264,7 @@ supabase/         migrations (profiles, models, RLS policies)
 | 7e ✅ | **Tulip** | The traditional flat tulip (15 steps): a blossom from one square and a stem with a leaf from a bigger one, pulled out with a reverse fold, then put together. |
 | 8 ✅ | **3D shaping** | `shape`: bend the paper about lines drawn on its last flat state, by any angle, with nested bends chaining (so a row of small bends curls a flap). Recipes get `shape` (with `segments` for curls); the Studio's Lift can curl and can be repeated. The crane now finishes by spreading its wings. |
 | 8b ✅ | **Studio sheets** | Before the first step, creators set the paper: colours, size (square, 1 : 2, A4) and how many sheets, laid out in a row. With several sheets, a Sheet selector limits any step to one sheet, Move picks a sheet up and puts it down (turned, turned over, on top or underneath, its middle on a picked point), and Collapse can slide the moving paper under a chosen sheet (tucking). |
+| 8c ✅ | **Less paper through paper** | A checker (`crossings`) finds paper passing through paper while steps animate. Fixes: stacked layers turning over together go the same way round; half turns take the way round that crosses least (folding behind goes under); the whole model lifts off the table instead of one part rising through the rest; unfolding several folds at once plays them back one at a time (steps can carry in-between frames, `via`, kept in .fold files); compound steps can move hinged, crease by crease, when that crosses less. Left: tucks (the ninja star's points sliding into pockets) and some squash and reverse folds still graze through, shallowly. |
 
 Milestones 0–4 deliver everything except advanced mode. Advanced mode then gets the dev Studio from milestone 3 almost for free.
 
@@ -289,7 +290,7 @@ Milestones 0–4 deliver everything except advanced mode. Advanced mode then get
 - **Accounts are optional per deployment.** Without Supabase settings the site hides sign-in and the Studio; the Supabase library is only downloaded when they're set.
 - **Tucks are folds with a stacking rule** (milestone 7c). A tuck is a collapse whose moving paper must end up *under* the other piece, which the layer solver enforces. A valley or mountain crease along a line where the paper is already folded leaves that fold alone, so only paper lying flat across the line folds.
 - **Steps can combine folds** (`Recipe.together`), so the same fold on both sheets of a modular model is one step that plays at once.
-- **Paper may pass through itself in v1** during complex 3D steps. Collision-free animation is a later goal, not a launch blocker.
+- **Paper may pass through itself in v1** during complex 3D steps. Collision-free animation is a later goal, not a launch blocker. Milestone 8c cut it down to tucks and a few shallow grazes; `crossings` measures it, and the tests keep the simple models clean.
 - **Dev Studio** lives at `/studio/dev` in development builds only (left out of production). It folds through all layers or the top 1–3, snaps fold lines to corners and edge midpoints (point-to-point and through-2-points), and can unfold, turn over, rotate and undo. The edge-to-edge (angle bisector) helper is deferred until a model needs it.
 
 ## 11. Open questions

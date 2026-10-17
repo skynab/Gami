@@ -1,5 +1,5 @@
 import { collapse, type CreaseKind } from './collapse';
-import { fold, FoldError, placeLike, rotate, toFlat, turnOver, unfoldTo, type FoldKind } from './fold';
+import { fold, FoldError, placeLike, rotate, toFlat, turnOver, unfoldStep, type FoldKind } from './fold';
 import { place } from './place';
 import { reparent, shape, type Bend } from './shape';
 import { startFrame } from './sheets';
@@ -112,7 +112,10 @@ export class Recipe {
       if (lastFold <= lastUnfold) throw new FoldError(`${this.info.id}: nothing to unfold at step ${this.steps.length + 1}`);
       to = lastFold;
     }
-    return this.push({ title: step.title ?? 'Unfold', text: step.text, kind: 'unfold' }, unfoldTo(this.frames(), to));
+    const { frame, via } = unfoldStep(this.frames(), to);
+    this.push({ title: step.title ?? 'Unfold', text: step.text, kind: 'unfold' }, frame);
+    if (via) this.steps.at(-1)!.via = via;
+    return this;
   }
 
   /**

@@ -164,6 +164,16 @@ export function unfoldTo(frames: FoldFrame[], target: number): FoldFrame {
   );
 }
 
+/**
+ * Unfolding back to an earlier frame as a step: the frame it ends at, and the frames it passes on the way,
+ * undoing the folds one at a time, latest first, so the animation opens each in turn.
+ */
+export function unfoldStep(frames: FoldFrame[], target: number): { frame: FoldFrame; via?: FoldFrame[] } {
+  const via: FoldFrame[] = [];
+  for (let k = frames.length - 2; k > target; k--) via.push(unfoldTo(frames, k));
+  return { frame: unfoldTo(frames, target), ...(via.length && { via }) };
+}
+
 /** Maps sheet points to the table the way `face` is placed. */
 export function placeLike(face: FlatFace): (p: Vec2) => Vec2 {
   const [q0, q1, q2] = widest(face.paper);

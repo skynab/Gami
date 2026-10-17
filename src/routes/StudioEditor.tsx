@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { TopBar } from '../app/TopBar';
 import { collapse, type Crease } from '../fold/collapse';
-import { fold, FoldError, rotate, turnOver, unfoldTo, type FoldKind } from '../fold/fold';
+import { fold, FoldError, rotate, turnOver, unfoldStep, type FoldKind } from '../fold/fold';
 import { fromFoldFile, toFoldFile } from '../fold/fold-format';
 import { framesOf } from '../fold/frames';
 import { flipLine, lineOnto, lineThrough, type Line } from '../fold/geometry2d';
@@ -198,7 +198,7 @@ export default function StudioEditor({ end, cloud = false }: {
   };
 
   const target = unfoldTarget(model.steps);
-  const doUnfold = () => target !== null && safely(() => ({ title: 'Unfold', kind: 'unfold', frame: unfoldTo(framesOf(model), target) }));
+  const doUnfold = () => target !== null && safely(() => ({ title: 'Unfold', kind: 'unfold', ...unfoldStep(framesOf(model), target) }));
   const doTurnOver = () => safely(() => ({ title: 'Turn over', kind: 'turn-over', frame: turnOver(frame) }));
   const doRotate = () => safely(() => ({ title: 'Rotate a quarter turn', kind: 'rotate', frame: rotate(frame, Math.PI / 2) }));
 

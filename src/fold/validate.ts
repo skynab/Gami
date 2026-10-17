@@ -1,4 +1,4 @@
-import { poseAt, transition } from './animate';
+import { poseAt, stepTransition } from './animate';
 import { toFlat } from './fold';
 import { framesOf } from './frames';
 import { overlapArea, signedArea } from './geometry2d';
@@ -34,7 +34,7 @@ export function problems(model: OrigamiModel): string[] {
       }
     }
     if (k) {
-      const t = transition(frames[k - 1], frame);
+      const t = stepTransition(model, k);
       for (const s of [0.25, 0.5, 0.75]) {
         poseAt(t, s).forEach((pts, f) => {
           if (!sameShape(pts, t.faces[f].paper)) out.push(`${where}: face ${f} stretches while animating`);

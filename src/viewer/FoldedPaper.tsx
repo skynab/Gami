@@ -11,7 +11,7 @@ import {
   type LineSegments,
   type Mesh,
 } from 'three';
-import { poseAt, transition, type Transition } from '../fold/animate';
+import { poseAt, stepTransition, transition, type Transition } from '../fold/animate';
 import { framesOf, normal } from '../fold/frames';
 import { sheetOf } from '../fold/sheets';
 import type { OrigamiModel, Sheet } from '../fold/types';
@@ -40,7 +40,7 @@ export function FoldedPaper({ model, edgeColor }: { model: OrigamiModel; edgeCol
       const k = Math.min(total, Math.max(0, Math.ceil(pos)));
       let b = built.get(k);
       if (!b) {
-        b = build(k === 0 ? transition(frames[0], frames[0]) : transition(frames[k - 1], frames[k]), model.sheets);
+        b = build(k === 0 ? transition(frames[0], frames[0]) : stepTransition(model, k), model.sheets);
         built.set(k, b);
       }
       if (b !== shown) {
