@@ -19,6 +19,7 @@ import { Modal } from '../app/Modal';
 import { TopBar } from '../app/TopBar';
 import type { OrigamiModel } from '../fold/types';
 import { MODELS } from '../gallery/catalog';
+import { useStepText } from '../i18n/steps';
 import { BLANK_SHEET } from '../models';
 import { usePlayback } from '../state/playback';
 import { readProgress, saveProgress } from '../state/progress';
@@ -130,6 +131,8 @@ export function ModelViewer({ progressKey, title, load, notice }: {
   });
 
   const current = data?.steps[step - 1];
+  // Built-in models' steps in the interface's language; anything else as written.
+  const say = useStepText();
   const name = title || data?.title || '';
   const none = data !== null && total === 0;
 
@@ -164,7 +167,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
           <section className="step-card" aria-label={t('viewer.instructions')} aria-live="polite">
             <div className="step-card-head">
               <h2>
-                {step}. {current.title}
+                {step}. {say(current.title)}
               </h2>
               <div className="step-card-actions">
                 <button
@@ -182,7 +185,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
                 </button>
               </div>
             </div>
-            {current.text && <p className="muted small">{current.text}</p>}
+            {current.text && <p className="muted small">{say(current.text)}</p>}
             {finished && (
               <div className="done">
                 <p>
