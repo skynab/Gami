@@ -178,9 +178,11 @@ Imported and shared files are untrusted data:
    reading and writing `gami:op` and `gami:ops`. Tests with hand-written ops (`src/fold/ops.test.ts`),
    including the paper plane replayed to its recipe's frames. The helpers replay shares with the Studio
    and recipes (`locate`, `anchorFor`, `topLayers`, `smallerSideMoves`) moved to `src/fold/select.ts`.
-2. **Recipes record ops.** `Recipe` records in every method, closures become `inPaper`. Rebuild
-   `public/models` and add the replay test for every built-in model. This is the step most likely to turn
-   up surprises (compound and shaping steps), so it comes before any UI.
+2. ✅ **Recipes record ops.** Every `Recipe` method records its op; tests on faces are recorded by
+   `recorder` as the outlines of the faces they picked, rounded like the frames. Every built-in model
+   replays from its .fold file to the same frames (`src/models/models.test.ts`), and the frames in
+   `public/models` didn't change. The files grew by about a third (the tulip, with many picked faces, by
+   about 70%). A `moving` point lying on its own line turns the line round, as `along` always did.
 3. **Studio records ops.** Every new Studio step has an op; lifts read their base from ops instead of the
    session map.
 4. **Studio editing.** Edit, insert and delete steps, with replay and the failed-step messages.

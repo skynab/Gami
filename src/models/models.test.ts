@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { toFoldFile } from '../fold/fold-format';
+import { fromFoldFile, toFoldFile } from '../fold/fold-format';
+import { replay } from '../fold/ops';
 import { previewSvg, thumbnailSvg } from '../fold/thumbnail';
 import { problems } from '../fold/validate';
 import { MODELS } from '../gallery/catalog';
@@ -22,6 +23,18 @@ describe.each(models.map((m) => [m.id, m] as const))('%s', (id, model) => {
     expect(JSON.parse(file(`${id}.fold`))).toEqual(JSON.parse(JSON.stringify(toFoldFile(model))));
     expect(file(`${id}.svg`)).toBe(thumbnailSvg(model));
     expect(file(`${id}-preview.svg`)).toBe(previewSvg(model));
+  });
+
+  // Folding basics is written by hand as frames, so it has no operations.
+  it.runIf(model.steps.some((s) => s.op))('folds again from its .fold file exactly as its recipe did', () => {
+    const warnings: string[] = [];
+    const read = fromFoldFile(JSON.parse(JSON.stringify(toFoldFile(model))), warnings);
+    expect(warnings).toEqual([]);
+    const { model: again, status, error } = replay(read);
+    expect(error).toBeUndefined();
+    expect(status.every((s) => s === 'replayed')).toBe(true);
+    // Compared as the file keeps them, to 1e-9.
+    expect(toFoldFile(again)).toEqual(toFoldFile(read));
   });
 
   it('is listed in the gallery with the right number of steps', () => {

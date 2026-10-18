@@ -5,7 +5,8 @@ export { locate } from './select';
 import { place } from './place';
 import { radial, reparent, shape, type Bend, type Ray } from './shape';
 import { startFrame } from './sheets';
-import { flipLine, lineEdgeOnto, lineOnto, lineThrough, sideOf, type Line } from './geometry2d';
+import { sideOf } from './geometry2d';
+import { lineOf, type At, type Faces, type LineSpec, type Op } from './ops';
 import type { FoldFrame, OrigamiModel, Sheet, Step, Vec2 } from './types';
 
 /**
@@ -15,9 +16,12 @@ import type { FoldFrame, OrigamiModel, Sheet, Step, Vec2 } from './types';
  *
  * Points are given on the sheet with `paper(u, v)` and are found wherever that bit of paper is now,
  * or on the table with `table(x, z)`.
+ *
+ * Each step also records its operation (ops.ts), so a model built here can be folded again, and edited, from
+ * its .fold file. Tests on faces are recorded as the outlines of the faces they picked.
  */
 
-export type At = { paper: Vec2 } | { table: Vec2 };
+export type { At } from './ops';
 export const paper = (u: number, v: number): At => ({ paper: [u, v] });
 export const table = (x: number, z: number): At => ({ table: [x, z] });
 
@@ -110,20 +114,17 @@ export class Recipe {
 
   /** Folds so `from` lands exactly on `to`. */
   onto(from: At, to: At, step: FoldStep): this {
-    return this.fold(lineOnto(this.where(from), this.where(to)), step);
+    return this.fold({ onto: [from, to] }, step);
   }
 
   /** Folds the edge from `a1` to `a2` onto the line from `b1` to `b2` (`a1`'s end going `b1`'s way). */
   edgeOnto(edge: [At, At], onto: [At, At], step: FoldStep): this {
-    const line = lineEdgeOnto(...edge.map((p) => this.where(p)) as [Vec2, Vec2], ...onto.map((p) => this.where(p)) as [Vec2, Vec2]);
-    if (!line) throw new FoldError('That edge is already on that line.');
-    return this.fold(line, step);
+    return this.fold({ edgeOnto: [edge, onto] }, step);
   }
 
   /** Folds along the line through `a` and `b`, moving the side `moving` is on. */
   along(a: At, b: At, moving: At, step: FoldStep): this {
-    const line = lineThrough(this.where(a), this.where(b));
-    return this.fold(sideOf(line, this.where(moving)) > 0 ? line : flipLine(line), step);
+    return this.fold({ through: [a, b], moving }, step);
   }
 
   /** Folds and unfolds again, leaving just a crease. */
@@ -145,7 +146,7 @@ export class Recipe {
       to = lastFold;
     }
     const { frame, via } = unfoldStep(this.frames(), to);
-    this.push({ title: step.title ?? 'Unfold', text: step.text, kind: 'unfold' }, frame);
+    this.push({ title: step.title ?? 'Unfold', text: step.text, kind: 'unfold' }, frame, { op: 'unfold', ...(step.to !== undefined && { to }) });
     if (via) this.steps.at(-1)!.via = via;
     return this;
   }
@@ -159,12 +160,17 @@ export class Recipe {
     only: (centre: Vec2) => boolean,
     how: { to?: At; degrees?: number; flip?: boolean; under?: boolean },
   ): this {
-    const test = (poly: Vec2[]) => only([avg(poly, 0), avg(poly, 1)]);
+    const test = recorder(only);
     const to = how.to && this.where(how.to);
-    return this.push(
-      { title: step.title, text: step.text, kind: 'assemble' },
-      place(this.current, { only: test, to, angle: ((how.degrees ?? 0) * Math.PI) / 180, flip: how.flip, under: how.under }),
-    );
+    const frame = place(this.current, { only: test, to, angle: ((how.degrees ?? 0) * Math.PI) / 180, flip: how.flip, under: how.under });
+    return this.push({ title: step.title, text: step.text, kind: 'assemble' }, frame, {
+      op: 'move',
+      only: test.faces(),
+      ...(how.to && { to: how.to }),
+      ...(how.degrees !== undefined && { degrees: how.degrees }),
+      ...(how.flip !== undefined && { flip: how.flip }),
+      ...(how.under !== undefined && { under: how.under }),
+    });
   }
 
   /**
@@ -184,7 +190,8 @@ export class Recipe {
       for (let k = added.length - 1; k >= 0; k--) p = added[k].frame.faces_parent?.[p] ?? p;
       return p;
     });
-    return this.push({ title: step.title, text: step.text, kind: step.kind ?? added.at(-1)!.kind }, { ...last, faces_parent });
+    const op: Op = { op: 'together', ops: added.map((s) => s.op!) };
+    return this.push({ title: step.title, text: step.text, kind: step.kind ?? added.at(-1)!.kind }, { ...last, faces_parent }, op);
   }
 
   /**
@@ -192,7 +199,8 @@ export class Recipe {
    * must be flat and open where it began, as after unfolding everything: the new sheet appears in its place.
    */
   newSheet(step: { title: string; text?: string }): this {
-    return this.push({ title: step.title, text: step.text, kind: 'assemble' }, { ...this.start, faces_parent: this.start.faces_vertices.map((_, f) => this.sheetFace(f)) });
+    const faces_parent = this.start.faces_vertices.map((_, f) => this.sheetFace(f));
+    return this.push({ title: step.title, text: step.text, kind: 'assemble' }, { ...this.start, faces_parent }, { op: 'newSheet' });
   }
 
   /** A face of the current paper on the same sheet as the start's face `f`, to grow the fresh sheet from. */
@@ -227,15 +235,22 @@ export class Recipe {
     under?: (centre: Vec2) => boolean,
   ): this {
     const lines = creases.map((c) => ({
-      line: lineThrough(this.where(c.through[0]), this.where(c.through[1])),
+      spec: { through: c.through } as LineSpec,
+      line: lineOf({ through: c.through }, this.current),
       kind: c.kind,
-      only: c.only && ((poly: Vec2[]) => c.only!([avg(poly, 0), avg(poly, 1)])),
+      only: c.only && recorder(c.only),
     }));
     const at = 'paper' in anchor ? anchor.paper : null;
     if (!at) throw new FoldError(`${this.info.id}: a collapse's anchor must be a point on the sheet.`);
     try {
-      const tuck = under && ((poly: Vec2[]) => under([avg(poly, 0), avg(poly, 1)]));
-      return this.push({ title: step.title, text: step.text, kind: step.kind ?? 'fold' }, collapse(this.current, { creases: lines, anchor: at, under: tuck }));
+      const tuck = under && recorder(under);
+      const frame = collapse(this.current, { creases: lines, anchor: at, under: tuck });
+      return this.push({ title: step.title, text: step.text, kind: step.kind ?? 'fold' }, frame, {
+        op: 'collapse',
+        creases: lines.map((c) => ({ line: c.spec, kind: c.kind, ...(c.only && { only: c.only.faces() }) })),
+        anchor: { paper: at },
+        ...(tuck && { under: tuck.faces() }),
+      });
     } catch (e) {
       if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
       throw e;
@@ -248,11 +263,11 @@ export class Recipe {
    */
   shape(step: { title: string; text?: string }, bends: ShapeBend[]): this {
     const base = this.shaping?.base ?? this.current;
-    const added = bends.flatMap((b): Bend[] => {
-      const test = b.only && ((poly: Vec2[]) => b.only!([avg(poly, 0), avg(poly, 1)]));
-      let line = lineThrough(this.where(b.through[0]), this.where(b.through[1]));
+    const tests = bends.map((b) => b.only && recorder(b.only));
+    const added = bends.flatMap((b, k): Bend[] => {
+      const test = tests[k];
+      const line = lineOf({ through: b.through, moving: b.moving }, base);
       const tip = this.where(b.moving);
-      if (sideOf(line, tip) < 0) line = flipLine(line);
       const n = b.segments ?? 1;
       // A curl: the same line moved towards the tip, a step at a time, each turning its share of the angle.
       const len = Math.hypot(line.d[0], line.d[1]);
@@ -269,7 +284,17 @@ export class Recipe {
     try {
       // Shaped again from the flat state: each face's parent is the face of the last step it lies within.
       const frame = this.shaping ? reparent(this.current, shape(base, bendsSoFar)) : shape(base, bendsSoFar);
-      this.push({ title: step.title, text: step.text, kind: 'pose' }, frame);
+      this.push({ title: step.title, text: step.text, kind: 'pose' }, frame, {
+        op: 'shape',
+        bends: bends.map((b, k) => ({
+          line: { through: b.through, moving: b.moving },
+          degrees: b.degrees,
+          ...(b.segments !== undefined && { segments: b.segments }),
+          ...((b.segments ?? 1) > 1 && { reach: b.moving }),
+          ...(b.layers !== undefined && { layers: b.layers }),
+          ...(tests[k] && { only: tests[k].faces() }),
+        })),
+      });
     } catch (e) {
       if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
       throw e;
@@ -281,7 +306,7 @@ export class Recipe {
   /** Pops the model up about a point, creases from it rising along `rays` (see `radial`). Nothing can be folded after. */
   popUp(step: { title: string; text?: string }, centre: At, rays: Ray[]): this {
     try {
-      return this.push({ ...step, kind: 'pose' }, radial(this.current, this.where(centre), rays));
+      return this.push({ ...step, kind: 'pose' }, radial(this.current, this.where(centre), rays), { op: 'popUp', centre, rays });
     } catch (e) {
       if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
       throw e;
@@ -289,33 +314,40 @@ export class Recipe {
   }
 
   turnOver(text = 'Flip the paper over from left to right.'): this {
-    return this.push({ title: 'Turn over', text, kind: 'turn-over' }, turnOver(this.current));
+    return this.push({ title: 'Turn over', text, kind: 'turn-over' }, turnOver(this.current), { op: 'turnOver' });
   }
 
   /** Turns the paper on the table, anticlockwise seen from above. */
   rotate(degrees: number, step: { title: string; text?: string }): this {
-    return this.push({ ...step, kind: 'rotate' }, rotate(this.current, (degrees * Math.PI) / 180));
+    return this.push({ ...step, kind: 'rotate' }, rotate(this.current, (degrees * Math.PI) / 180), { op: 'rotate', degrees });
   }
 
   build(): OrigamiModel {
     return { ...this.info, start: this.start, steps: this.steps };
   }
 
-  private fold(line: Line, { title, text, kind = 'valley', layers, only }: FoldStep): this {
-    const test = only && ((poly: Vec2[]) => only([avg(poly, 0), avg(poly, 1)]));
+  private fold(spec: LineSpec, { title, text, kind = 'valley', layers, only }: FoldStep): this {
+    const test = only && recorder(only);
     try {
-      return this.push({ title, text, kind: 'fold' }, fold(this.current, { line, kind, layers, only: test }));
+      const frame = fold(this.current, { line: lineOf(spec, this.current), kind, layers, only: test });
+      return this.push({ title, text, kind: 'fold' }, frame, {
+        op: 'fold',
+        line: spec,
+        ...(kind !== 'valley' && { kind }),
+        ...(layers !== undefined && { layers }),
+        ...(test && { only: test.faces() }),
+      });
     } catch (e) {
       if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${title}): ${e.message}`;
       throw e;
     }
   }
 
-  private push({ title, text, kind }: Omit<Step, 'frame'>, frame: FoldFrame): this {
+  private push({ title, text, kind }: Omit<Step, 'frame' | 'op'>, frame: FoldFrame, op: Op): this {
     this.shaping = undefined;
     const section = this.sectionName;
     this.sectionName = undefined;
-    this.steps.push({ title, ...(text && { text }), kind, ...(section && { section }), frame });
+    this.steps.push({ title, ...(text && { text }), kind, ...(section && { section }), frame, op });
     return this;
   }
 
@@ -325,3 +357,19 @@ export class Recipe {
 }
 
 const avg = (poly: Vec2[], i: number) => poly.reduce((sum, p) => sum + p[i], 0) / poly.length;
+
+/**
+ * A test on faces' centres on the sheet, as the engine takes it (a test on their corners), that remembers the
+ * faces it picked so the step's operation can name them.
+ */
+function recorder(only: (centre: Vec2) => boolean): ((poly: Vec2[]) => boolean) & { faces(): Faces } {
+  const picked = new Map<string, Vec2[]>();
+  const test = (poly: Vec2[]) => {
+    const yes = only([avg(poly, 0), avg(poly, 1)]);
+    if (yes) picked.set(poly.map((p) => p.join(',')).join(' '), poly);
+    return yes;
+  };
+  // Rounded as .fold files round coordinates: each face's centre stays well inside its outline.
+  const round = (x: number) => Math.round(x * 1e9) / 1e9 || 0;
+  return Object.assign(test, { faces: (): Faces => ({ inPaper: [...picked.values()].map((poly) => poly.map((p) => p.map(round) as Vec2)) }) });
+}

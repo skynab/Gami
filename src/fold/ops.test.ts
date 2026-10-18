@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { basics } from '../models/basics';
 import { paperPlane } from '../models/recipes/paper-plane';
 import { fromFoldFile, toFoldFile } from './fold-format';
 import { OpError, OPS_VERSION, parseOp, replay, type Op } from './ops';
@@ -202,7 +203,7 @@ describe('.fold files with operations', () => {
   });
 
   it('writes no version when no step has an operation', () => {
-    expect(toFoldFile(paperPlane())).not.toHaveProperty('gami:ops');
+    expect(toFoldFile(basics)).not.toHaveProperty('gami:ops');
   });
 
   it('leaves out an operation that isn’t well formed, saying why', () => {

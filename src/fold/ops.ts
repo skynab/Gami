@@ -459,7 +459,8 @@ export function lineOf(spec: LineSpec, frame: FoldFrame, flip = false): Line {
   } else if ('through' in spec) {
     line = lineThrough(where(spec.through[0]), where(spec.through[1]));
     if (spec.moving === 'smaller') line = smallerSideMoves(frame, line);
-    else if (spec.moving && sideOf(line, where(spec.moving)) < 0) line = flipLine(line);
+    // A point on the line itself turns it round, as recipes always have.
+    else if (spec.moving && sideOf(line, where(spec.moving)) <= 0) line = flipLine(line);
   } else line = spec.line;
   return flip ? flipLine(line) : line;
 }
