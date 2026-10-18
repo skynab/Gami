@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { basics } from '../models/basics';
 import { paperPlane } from '../models/recipes/paper-plane';
 import { fromFoldFile, toFoldFile } from './fold-format';
-import { OpError, OPS_VERSION, parseOp, replay, type Op } from './ops';
+import { applyOp, lastFold, OpError, OPS_VERSION, parseOp, replay, type Op } from './ops';
+import { unfoldStep } from './fold';
 import { paper, Recipe, table } from './recipe';
 import type { FoldFrame, OrigamiModel, Vec2 } from './types';
 
@@ -227,5 +228,36 @@ describe('.fold files with operations', () => {
     expect(read.steps.every((s) => !s.op)).toBe(true);
     expect(warnings).toHaveLength(1);
     expect(read.steps).toHaveLength(paperPlane().steps.length);
+  });
+});
+
+describe('what a plain Unfold opens', () => {
+  /** A fold, then a step the Studio labels a reverse fold (a collapse), made from operations. */
+  function foldThenReverse(): OrigamiModel {
+    let model: OrigamiModel = { id: 't', title: 't', sheets: basics.sheets, start: basics.start, steps: [] };
+    const add = (kind: 'fold' | 'reverse', op: Op) => {
+      model = { ...model, steps: [...model.steps, { title: kind, kind, frame: applyOp(model, op).frame, op }] };
+    };
+    add('fold', { op: 'fold', line: { line: { p: [0, 0], d: [1, 0] } } });
+    add('reverse', {
+      op: 'collapse',
+      creases: [{ line: { line: { p: [0.1, 0], d: [0, 1] } }, kind: 'valley' }],
+      anchor: { auto: true },
+    });
+    return model;
+  }
+
+  it('opens a reverse fold, going by its operation rather than its label', () => {
+    const model = foldThenReverse();
+    expect(lastFold(model.steps)).toBe(1);
+    const frames = [model.start, ...model.steps.map((s) => s.frame)];
+    expect(applyOp(model, { op: 'unfold' }).frame).toEqual(unfoldStep(frames, 1).frame);
+  });
+
+  it('still goes by the label for steps with no operation', () => {
+    const model = foldThenReverse();
+    const steps = model.steps.map(({ op: _, ...s }) => s);
+    expect(lastFold(steps)).toBe(0);
+    expect(lastFold([...model.steps, { ...model.steps[0], kind: 'unfold', op: { op: 'unfold' } }])).toBeNull();
   });
 });

@@ -221,14 +221,13 @@ reader and writer (`src/fold/fold-format.ts`), and every path goes through them:
 
 What's left is small, and none of it stops a file from going out and coming back in:
 
-1. **A step's `kind` is both a label and logic.** Unfold with no step number undoes back to the last step of
-   kind `fold`, so a step labelled `reverse` (the Studio's reverse folds) is not what a plain Unfold opens.
-   Inside a `together`, the parts' kinds come from their ops (`opKind`) instead. Deciding unfolds from the
-   ops would be more consistent; check it changes no built-in model before switching.
-2. **The fold vocabulary is written out three times:** the engine's types (`CreaseKind`, `FoldKind`), the
-   `Op` types, and the lists `parseOp` accepts. A new crease kind (`split`, recently) has to be added to all
-   three. Sharing one `as const` list per vocabulary, checked with `satisfies`, would make the compiler
-   catch a missed one.
+1. **Done: unfolds are decided from the ops.** Unfold with no step number goes back to the latest step whose
+   op is a fold or collapse (`lastFold` in `src/fold/ops.ts`, used by `replay`, `Recipe.unfold` and the
+   Studio), so a Studio reverse fold is what a plain Unfold opens. Steps with no op still go by their `kind`.
+   No built-in model's frames changed.
+2. **Done: the fold vocabulary is written once.** `CREASE_KINDS`, `FOLD_KINDS` (checked against crease
+   kinds with `satisfies`) and `STEP_KINDS` are `as const` lists the types come from; `parseOp` checks
+   kinds against them, and reading a file drops a `gami:kind` that isn't in `STEP_KINDS`.
 3. **Gallery details live outside the file:** blurb, difficulty, category and minutes are in
    `src/gallery/catalog.ts`, and `card` (how the card shows a finished model) isn't kept in files. A model
    shared between people carries its title and steps only. If the creation tool shares models, add these as

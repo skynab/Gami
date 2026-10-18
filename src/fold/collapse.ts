@@ -16,7 +16,8 @@ import type { FoldFrame, Vec2 } from './types';
  * - split: no fold at all, the paper just divided along the line so its two sides can stack differently, as where
  *   one tucked point lies over a layer and the next goes under it.
  */
-export type CreaseKind = 'valley' | 'mountain' | 'flat' | 'inside' | 'outside' | 'split';
+export const CREASE_KINDS = ['valley', 'mountain', 'flat', 'inside', 'outside', 'split'] as const;
+export type CreaseKind = (typeof CREASE_KINDS)[number];
 
 export interface Crease {
   line: Line;

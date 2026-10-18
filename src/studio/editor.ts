@@ -4,7 +4,7 @@ import { lerp } from '../fold/geometry2d';
 export { frontUp } from '../fold/geometry2d';
 import { project } from '../fold/select';
 export { anchorFor, project, smallerSideMoves, topLayers } from '../fold/select';
-import type { FoldFrame, Step, Vec2 } from '../fold/types';
+import type { FoldFrame, Vec2 } from '../fold/types';
 
 /** Helpers for the Studio's fold editor that don't need React. */
 
@@ -35,15 +35,8 @@ export function cutsOnTable(frame: FoldFrame): [Vec2, Vec2][] {
   return out;
 }
 
-/**
- * The frame to unfold back to: the one before the latest fold made since the last unfold.
- * Frame k is the paper after step k, so the frame before step i (0-based) is frame i.
- */
-export function unfoldTarget(steps: Step[]): number | null {
-  const lastUnfold = steps.findLastIndex((s) => s.kind === 'unfold');
-  const lastFold = steps.findLastIndex((s) => s.kind === 'fold');
-  return lastFold > lastUnfold ? lastFold : null;
-}
+/** The frame to unfold back to: the one before the latest fold or collapse made since the last unfold. */
+export { lastFold as unfoldTarget } from '../fold/ops';
 
 /** A square box (x, z, size, size) centred on some points, with room to spare. */
 export function viewBox(points: Vec2[], pad = 0.15): [number, number, number, number] {

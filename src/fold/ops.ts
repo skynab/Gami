@@ -1,6 +1,6 @@
-import { collapse, type CreaseKind } from './collapse';
+import { collapse, CREASE_KINDS, type CreaseKind } from './collapse';
 import { cut } from './cut';
-import { fold, FoldError, placeLike, rotate, toFlat, turnOver, unfoldStep, type FoldKind } from './fold';
+import { fold, FoldError, placeLike, rotate, toFlat, turnOver, unfoldStep, FOLD_KINDS, type FoldKind } from './fold';
 import { flipLine, lineEdgeOnto, lineOnto, lineThrough, sideOf, type Line } from './geometry2d';
 import { place } from './place';
 import { anchorFor, centre, inside, locate, smallerSideMoves, topLayers } from './select';
@@ -100,7 +100,7 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
         op: 'fold',
         line: lineSpec(o.line, `${path}.line`),
         ...opt(o, 'flip', bool, path),
-        ...opt(o, 'kind', (v, p) => oneOf(v, p, ['valley', 'mountain'] as const), path),
+        ...opt(o, 'kind', (v, p) => oneOf(v, p, FOLD_KINDS), path),
         ...opt(o, 'layers', count, path),
         ...opt(o, 'only', (v, p) => faces(v, p, 0), path),
       };
@@ -112,7 +112,7 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
           return {
             line: lineSpec(r.line, `${p}.line`),
             ...opt(r, 'flip', bool, p),
-            kind: oneOf(r.kind, `${p}.kind`, ['valley', 'mountain', 'flat', 'inside', 'outside', 'split'] as const),
+            kind: oneOf(r.kind, `${p}.kind`, CREASE_KINDS),
             ...opt(r, 'only', (v, q) => faces(v, q, 0), p),
           };
         }),
@@ -342,6 +342,22 @@ export function opKind(op: Op): StepKind {
   }
 }
 
+/** What a step does, for deciding what an Unfold opens: from its operation if it has one, else its label. */
+function actsAs(step: Step): StepKind | undefined {
+  return step.op ? opKind(step.op) : step.kind;
+}
+
+/**
+ * The step a plain Unfold (no step number) goes back to: the latest fold or collapse since the last unfold,
+ * so a reverse or squash fold counts. Null when there's nothing to unfold. Frame k is the paper after step
+ * k, so this is also the frame to unfold to.
+ */
+export function lastFold(steps: Step[]): number | null {
+  const lastUnfold = steps.findLastIndex((s) => actsAs(s) === 'unfold');
+  const last = steps.findLastIndex((s) => actsAs(s) === 'fold');
+  return last > lastUnfold ? last : null;
+}
+
 /**
  * What became of each step: kept as it was (before `from`), folded again, failed (it and every step after
  * it keep their old paper), or a step with no operation, which replaying can't go past.
@@ -478,10 +494,9 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
     case 'unfold': {
       let to = op.to;
       if (to === undefined) {
-        const lastUnfold = ctx.steps.findLastIndex((s) => s.kind === 'unfold');
-        const lastFold = ctx.steps.findLastIndex((s) => s.kind === 'fold');
-        if (lastFold <= lastUnfold) throw new FoldError('Nothing to unfold.');
-        to = lastFold;
+        const last = lastFold(ctx.steps);
+        if (last === null) throw new FoldError('Nothing to unfold.');
+        to = last;
       }
       if (to >= frames.length - 1) throw new OpError(`Can’t unfold to step ${to}, which hasn’t happened yet.`);
       return unfoldStep(frames, to);

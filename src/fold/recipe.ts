@@ -7,7 +7,7 @@ import { place } from './place';
 import { radial, reparent, shape, type Bend, type Ray } from './shape';
 import { startFrame } from './sheets';
 import { frontUp, sideOf } from './geometry2d';
-import { lineOf, type At, type Faces, type LineSpec, type Op } from './ops';
+import { lastFold, lineOf, type At, type Faces, type LineSpec, type Op } from './ops';
 import type { FoldFrame, Mark, OrigamiModel, Sheet, Step, Vec2 } from './types';
 
 /**
@@ -141,10 +141,9 @@ export class Recipe {
   unfold(step: { title?: string; text?: string; to?: number } = {}): this {
     let to = step.to;
     if (to === undefined) {
-      const lastUnfold = this.steps.findLastIndex((s) => s.kind === 'unfold');
-      const lastFold = this.steps.findLastIndex((s) => s.kind === 'fold');
-      if (lastFold <= lastUnfold) throw new FoldError(`${this.info.id}: nothing to unfold at step ${this.steps.length + 1}`);
-      to = lastFold;
+      const last = lastFold(this.steps);
+      if (last === null) throw new FoldError(`${this.info.id}: nothing to unfold at step ${this.steps.length + 1}`);
+      to = last;
     }
     const { frame, via } = unfoldStep(this.frames(), to);
     this.push({ title: step.title ?? 'Unfold', text: step.text, kind: 'unfold' }, frame, { op: 'unfold', ...(step.to !== undefined && { to }) });

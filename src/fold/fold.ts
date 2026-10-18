@@ -14,6 +14,7 @@ import {
 } from './geometry2d';
 import { facePositions } from './frames';
 import type { FoldFrame, Vec2, Vec3 } from './types';
+import type { CreaseKind } from './collapse';
 
 /**
  * The fold engine: works out the paper after a fold, for models that lie flat on the table between steps.
@@ -27,7 +28,8 @@ export interface FlatFace extends Piece {
   parent: number;
 }
 
-export type FoldKind = 'valley' | 'mountain';
+export const FOLD_KINDS = ['valley', 'mountain'] as const satisfies readonly CreaseKind[];
+export type FoldKind = (typeof FOLD_KINDS)[number];
 
 export interface FoldOptions {
   line: Line;

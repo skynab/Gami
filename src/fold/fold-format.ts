@@ -1,5 +1,5 @@
 import { OPS_VERSION, parseMarks, parseOp, type Op } from './ops';
-import type { FoldFrame, Mark, OrigamiModel, Step, StepKind } from './types';
+import { STEP_KINDS, type FoldFrame, type Mark, type OrigamiModel, type Step, type StepKind } from './types';
 
 /**
  * Reading and writing .fold files (https://github.com/edemaine/fold). The start of the model is the file's
@@ -107,7 +107,7 @@ export function fromFoldFile(file: FoldFile, warnings: string[] = []): OrigamiMo
       (f, k): Step => ({
         title: f.frame_title ?? '',
         ...(f['gami:text'] && { text: f['gami:text'] }),
-        ...(f['gami:kind'] && { kind: f['gami:kind'] }),
+        ...(STEP_KINDS.includes(f['gami:kind']!) && { kind: f['gami:kind'] }),
         ...(f['gami:section'] && { section: f['gami:section'] }),
         ...(f['gami:via'] && { via: f['gami:via'].map(readFrame) }),
         frame: readFrame(f),

@@ -33,7 +33,8 @@ export interface FoldFrame {
   cuts?: [Vec2, Vec2][];
 }
 
-export type StepKind = 'fold' | 'unfold' | 'turn-over' | 'rotate' | 'squash' | 'reverse' | 'petal' | 'sink' | 'assemble' | 'pose' | 'draw' | 'cut';
+export const STEP_KINDS = ['fold', 'unfold', 'turn-over', 'rotate', 'squash', 'reverse', 'petal', 'sink', 'assemble', 'pose', 'draw', 'cut'] as const;
+export type StepKind = (typeof STEP_KINDS)[number];
 
 /**
  * A line or a filled shape drawn on the paper, as points on the unfolded sheet and the side of the paper it's
