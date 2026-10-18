@@ -294,8 +294,5 @@ Milestones 0–4 deliver everything except advanced mode. Advanced mode then get
 - **Steps can combine folds** (`Recipe.together`), so the same fold on both sheets of a modular model is one step that plays at once.
 - **Paper may pass through itself in v1** during complex 3D steps. Collision-free animation is a later goal, not a launch blocker. Milestone 8c cut it down to tucks and a few shallow grazes; `crossings` measures it, and the tests keep the simple models clean.
 - **Dev Studio** lives at `/studio/dev` in development builds only (left out of production). It folds through all layers or the top 1–3, snaps fold lines to corners and edge midpoints (point-to-point and through-2-points), and can unfold, turn over, rotate and undo. The edge-to-edge (angle bisector) helper is deferred until a model needs it.
-
-## 11. Open questions
-
-1. **Target devices:** is a mid-range phone a must for the viewer? That affects shader and texture budgets.
-2. **Name and brand:** is "Gami" final? It drives the favicon, colours and domain.
+- **A mid-range phone is not a must for the viewer.** Shader and texture budgets don't have to be cut down for it; the layout and touch controls still work at phone width.
+- **"Gami" is the final name.** The favicon, colours and domain can be settled around it.
