@@ -829,7 +829,7 @@ export function move(m: Motion, [x, y, z]: Vec3, s: number): Vec3 {
 }
 
 /** Maps points on the unfolded sheet to 3D, for a face whose corners are at `paper` and `world`. */
-function affine(paper: Vec2[], world: Vec3[]): (p: Vec2) => Vec3 {
+export function affine(paper: Vec2[], world: Vec3[]): (p: Vec2) => Vec3 {
   const [i, j, k] = spread(paper);
   const [q0, q1, q2] = [paper[i], paper[j], paper[k]];
   const [w0, w1, w2] = [world[i], world[j], world[k]];
