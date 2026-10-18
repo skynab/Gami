@@ -187,7 +187,12 @@ Imported and shared files are untrusted data:
    what replays. Picks are kept as the point of the sheet on top there (`atOf`), or on the table off the
    paper and for where a moved sheet lands. Another lift finds the flat state to add to from the ops
    (`shapingBase`), so it works after a refresh or import too.
-4. **Studio editing.** Edit, insert and delete steps, with replay and the failed-step messages.
+4. ✅ **Studio editing.** Each step in the Studio's list has **Change**, **Insert** and **Remove**
+   (`src/studio/steps.ts`). Change sets the tools from the step's op where they can show it, and the new fold
+   replaces the step. A title the creator wrote is kept; one the Studio gave it follows the new fold. Insert
+   keeps adding before the same step until cancelled. Unfolds that name a step by number are renumbered. A
+   step that no longer works is reported with **Change it** and **Remove steps N on**, and Undo takes back
+   any change this visit. Steps from a file without ops can't be changed, nor can anything before them.
 5. **Translations note.** Step text is translated by its English wording (`src/i18n/steps`), which ops
    don't change. Nothing to do, but worth checking edited built-ins still find their translations.
 

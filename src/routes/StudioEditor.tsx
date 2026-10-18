@@ -5,10 +5,12 @@ import type { CreaseKind } from '../fold/collapse';
 import { FoldError, type FoldKind } from '../fold/fold';
 import { fromFoldFile, toFoldFile } from '../fold/fold-format';
 import type { Line } from '../fold/geometry2d';
-import { applyOp, atOf, lineOf, NoStillError, OpError, shapingBase, type Faces, type LineSpec, type Op } from '../fold/ops';
-import type { FoldFrame, Sheet, Step, Vec2 } from '../fold/types';
+import { applyOp, atOf, lineOf, NoStillError, OpError, shapingBase, type At, type Faces, type LineSpec, type Op } from '../fold/ops';
+import { locate } from '../fold/select';
+import type { FoldFrame, OrigamiModel, Sheet, Step, Vec2 } from '../fold/types';
 import { useDraft } from '../studio/draft';
 import { unfoldTarget } from '../studio/editor';
+import { canInsert, canRemove, canReplace, insertStep, lastFixed, removeStep, replaceStep } from '../studio/steps';
 import { CloudPanel } from '../studio/CloudPanel';
 import { FoldEditor } from '../studio/FoldEditor';
 import { usePlayback } from '../state/playback';
@@ -45,8 +47,14 @@ export default function StudioEditor({ end, cloud = false }: {
 }) {
   const { t } = useTranslation();
   const model = useDraft((s) => s.model);
-  const { addStep, undo, editStep, setInfo, setSheets, replace, clear, current } = useDraft.getState();
-  const frame = useMemo(() => current(), [model, current]);
+  const problem = useDraft((s) => s.problem);
+  const canUndo = useDraft((s) => s.model.steps.length > 0 || s.history.length > 0);
+  const { addStep, undo: undoDraft, change, removeFrom, editStep, setInfo, setSheets, replace, clear } = useDraft.getState();
+  // Changing a step in the middle, or adding one before it: the tools then work on the paper before it.
+  const [at, setAt] = useState<{ index: number; mode: 'edit' | 'insert' } | null>(null);
+  const editing = at && at.index < model.steps.length ? at : null;
+  const before = useMemo(() => (editing ? { ...model, steps: model.steps.slice(0, editing.index) } : model), [model, editing]);
+  const frame = before.steps.at(-1)?.frame ?? before.start;
 
   const [tool, setTool] = useState<Tool>('onto');
   const [action, setAction] = useState<Action>('fold');
@@ -57,7 +65,7 @@ export default function StudioEditor({ end, cloud = false }: {
   const [angle, setAngle] = useState(90);
   const [segments, setSegments] = useState(1);
   // After a lift, another lift adds to its bends, picking lines on the flat state the lifts started from.
-  const base = useMemo(() => shapingBase(model), [model]);
+  const base = useMemo(() => shapingBase(before), [before]);
   const editFrame = base ?? frame;
   const [layers, setLayers] = useState<Layers>('all');
   // Models of several sheets: which one the next step works on (or all), and for a move, how it's put down.
@@ -120,14 +128,14 @@ export default function StudioEditor({ end, cloud = false }: {
     if (!op) return null;
     if (action === 'lift' && !base && frame.vertices_coords.some((p) => Math.abs(p[1]) > 1e-6)) return { error: t('studio.errors.shaped') };
     try {
-      const { frame: next, flat, via } = applyOp(model, op);
+      const { frame: next, flat, via } = applyOp(before, op);
       return { frame: next, ...(flat && { onFlat: flat }), ...(via && { via }) };
     } catch (e) {
       if (e instanceof NoStillError) return { error: t('studio.errors.noStill') };
       if (e instanceof FoldError || e instanceof OpError) return { error: e.message };
       throw e;
     }
-  }, [op, action, chosen, base, frame, model, t]);
+  }, [op, action, chosen, base, frame, before, t]);
   const preview = result && 'frame' in result ? result.frame : null;
 
   const startOver = () => {
@@ -150,9 +158,112 @@ export default function StudioEditor({ end, cloud = false }: {
   };
 
   const add = (step: Step) => {
-    addStep(step);
+    if (editing?.mode === 'edit') {
+      // The new fold takes the old step's place, keeping its words (its title too, unless it's one the Studio gave it).
+      const { title, text, section } = model.steps[editing.index];
+      const given = Object.values(t('studio.steps', { returnObjects: true }) as Record<string, string>).includes(title);
+      change(replaceStep(model, editing.index, { ...step, ...(!given && { title }), ...(text && { text }), ...(section && { section }) }));
+      setAt(null);
+    } else if (editing) {
+      change(insertStep(model, editing.index, step));
+      setAt({ index: editing.index + 1, mode: 'insert' });
+    } else addStep(step);
     startOver();
     setMessage(null);
+  };
+
+  const undo = () => {
+    undoDraft();
+    setAt(null);
+  };
+
+  /** Starts changing step `i`, with the tools set as it was made where they can be. */
+  const startEdit = (i: number) => {
+    setAt({ index: i, mode: 'edit' });
+    loadTools(model.steps[i].op, { ...model, steps: model.steps.slice(0, i) });
+    setMessage(null);
+    usePlayback.getState().goTo(i);
+  };
+
+  const startInsert = (i: number) => {
+    setAt({ index: i, mode: 'insert' });
+    setCreases([]);
+    startOver();
+    setMessage(null);
+    usePlayback.getState().goTo(i);
+  };
+
+  const remove = (i: number) => {
+    change(removeStep(model, i));
+    setAt(null);
+    startOver();
+  };
+
+  /** Sets the tools from a step's operation, on the model before it. Anything the tools can't show is left as it is. */
+  const loadTools = (made: Op | undefined, m: OrigamiModel) => {
+    setCreases([]);
+    setPicks([]);
+    setFlipped(false);
+    if (!made) return;
+    const paperBefore = m.steps.at(-1)?.frame ?? m.start;
+    const where = (a: At, on: FoldFrame): Vec2 => ('table' in a ? a.table : locate(on, a.paper));
+    // A fold line as the tool and points that pick it.
+    const pick = (spec: LineSpec, on: FoldFrame, flip?: boolean) => {
+      try {
+        if ('onto' in spec) (setTool('onto'), setPicks(spec.onto.map((a) => where(a, on))));
+        else if ('edgeOnto' in spec) (setTool('edges'), setPicks(spec.edgeOnto.flat().map((a) => where(a, on))));
+        else if ('through' in spec && spec.moving === 'smaller') (setTool('through'), setPicks(spec.through.map((a) => where(a, on))));
+        else return;
+        setFlipped(!!flip);
+      } catch (e) {
+        if (!(e instanceof FoldError)) throw e;
+      }
+    };
+    // Which sheet and how many layers a step works on.
+    const limits = (f?: Faces, layersToo = false) => {
+      const parts = !f ? [] : 'all' in f ? f.all : [f];
+      const one = parts.find((g) => 'sheet' in g);
+      const top = parts.find((g) => 'top' in g);
+      setSheet(one && 'sheet' in one ? one.sheet : 'all');
+      if (layersToo) setLayers(top && 'top' in top ? (Math.min(3, top.top) as Layers) : 'all');
+    };
+    if (made.op === 'fold') {
+      setAction('fold');
+      setKind(made.kind ?? 'valley');
+      setLayers(made.layers ? (Math.min(3, made.layers) as Layers) : 'all');
+      limits(made.only);
+      pick(made.line, paperBefore, made.flip);
+    } else if (made.op === 'collapse' && made.creases.length === 1 && (made.creases[0].kind === 'inside' || made.creases[0].kind === 'outside')) {
+      const c = made.creases[0];
+      setAction('reverse');
+      setReverseKind(c.kind as 'inside' | 'outside');
+      limits(c.only, true);
+      pick(c.line, paperBefore, c.flip);
+    } else if (made.op === 'collapse') {
+      setAction('collapse');
+      try {
+        setCreases(made.creases.map((c) => ({ line: lineOf(c.line, paperBefore, c.flip), kind: c.kind, op: c })));
+      } catch (e) {
+        if (!(e instanceof FoldError)) throw e;
+      }
+      setTuck(made.under && 'sheet' in made.under ? made.under.sheet : null);
+      if ('auto' in made.anchor) limits(made.anchor.among);
+    } else if (made.op === 'shape' && made.bends.length === 1) {
+      const b = made.bends[0];
+      setAction('lift');
+      setAngle(b.degrees);
+      setSegments(b.segments ?? 1);
+      setLayers(b.layers ? (Math.min(3, b.layers) as Layers) : 'all');
+      limits(b.only);
+      pick(b.line, shapingBase(m) ?? paperBefore, b.flip);
+    } else if (made.op === 'move') {
+      setAction('move');
+      limits(made.only);
+      setTurn(made.degrees ?? 0);
+      setOverturn(!!made.flip);
+      setUnderneath(!!made.under);
+      if (made.to && 'table' in made.to) setPicks([made.to.table]);
+    }
   };
 
   const apply = () => {
@@ -170,7 +281,7 @@ export default function StudioEditor({ end, cloud = false }: {
   /** Adds a step that needs no picks. */
   const now = (step: Omit<Step, 'frame'> & { op: Op }) => {
     try {
-      const { frame: next, via } = applyOp(model, step.op);
+      const { frame: next, via } = applyOp(before, step.op);
       add({ ...step, frame: next, ...(via && { via }) });
     } catch (e) {
       if (!(e instanceof FoldError)) throw e;
@@ -178,7 +289,8 @@ export default function StudioEditor({ end, cloud = false }: {
     }
   };
 
-  const target = unfoldTarget(model.steps);
+  const target = unfoldTarget(before.steps);
+  const fixed = lastFixed(model);
   const doUnfold = () => target !== null && now({ title: t('studio.steps.unfold'), kind: 'unfold', op: { op: 'unfold' } });
   const doTurnOver = () => now({ title: t('studio.steps.turnOver'), kind: 'turn-over', op: { op: 'turnOver' } });
   const doRotate = () => now({ title: t('studio.steps.rotate'), kind: 'rotate', op: { op: 'rotate', degrees: 90 } });
@@ -199,7 +311,10 @@ export default function StudioEditor({ end, cloud = false }: {
       if (e.key === 'Enter') {
         if (action === 'collapse' && line) addCrease();
         else apply();
-      } else if (e.key === 'Escape') startOver();
+      } else if (e.key === 'Escape') {
+        if (!picks.length && editing) setAt(null);
+        startOver();
+      }
       else if (e.key === 'f' || e.key === 'F') setFlipped((f) => !f);
       else if (e.key === 'v' || e.key === 'V') {
         setKind('valley');
@@ -229,6 +344,7 @@ export default function StudioEditor({ end, cloud = false }: {
     if (!f) return;
     try {
       replace(fromFoldFile(JSON.parse(await f.text())));
+      setAt(null);
       startOver();
       setMessage(null);
     } catch (e) {
@@ -266,7 +382,7 @@ export default function StudioEditor({ end, cloud = false }: {
             <button type="button" className="secondary" onClick={exportFile}>
               {t('studio.export')}
             </button>
-            <button type="button" className="secondary" onClick={() => confirm(t('studio.newConfirm')) && (clear(), startOver())}>
+            <button type="button" className="secondary" onClick={() => confirm(t('studio.newConfirm')) && (clear(), setAt(null), startOver())}>
               {t('studio.new')}
             </button>
           </>
@@ -306,12 +422,45 @@ export default function StudioEditor({ end, cloud = false }: {
               <input value={model.id} onChange={(e) => setInfo({ id: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-') })} />
             </label>
             <SheetsPanel sheets={model.sheets} locked={model.steps.length > 0} onChange={(next) => (setSheets(next), setSheet('all'))} />
+            {editing && (
+              <div className="studio-note">
+                <span>{editing.mode === 'edit' ? t('studio.changing', { n: editing.index + 1 }) : t('studio.inserting', { n: editing.index + 1 })}</span>
+                <button type="button" className="link small" onClick={() => (setAt(null), startOver())}>
+                  {t('studio.cancel')}
+                </button>
+              </div>
+            )}
+            {problem && (
+              <div className="studio-note error" role="alert">
+                <span>{t('studio.problem', { n: problem.step, error: problem.message })}</span>
+                <button type="button" className="link small" onClick={() => startEdit(problem.step - 1)}>
+                  {t('studio.fixStep')}
+                </button>
+                <button type="button" className="link small" onClick={() => (removeFrom(problem.step - 1), setAt(null))}>
+                  {t('studio.removeFrom', { n: problem.step })}
+                </button>
+              </div>
+            )}
+            {fixed >= 0 && model.steps.length > 0 && <p className="muted small">{t('studio.fixed', { n: fixed + 1 })}</p>}
             <ol>
               {model.steps.map((s, i) => (
-                <li key={i}>
-                  <button type="button" className="link small" onClick={() => usePlayback.getState().goTo(i + 1)}>
-                    {t('studio.step', { n: i + 1 })}
-                  </button>
+                <li key={i} className={[editing?.index === i && editing.mode, problem && i >= problem.step - 1 && 'stale'].filter(Boolean).join(' ') || undefined}>
+                  <div className="step-head">
+                    <button type="button" className="link small" onClick={() => usePlayback.getState().goTo(i + 1)}>
+                      {t('studio.step', { n: i + 1 })}
+                    </button>
+                    <span className="step-tools">
+                      <button type="button" className="link small" disabled={!canReplace(model, i)} title={t('studio.changeTitle')} onClick={() => startEdit(i)}>
+                        {t('studio.change')}
+                      </button>
+                      <button type="button" className="link small" disabled={!canInsert(model, i)} title={t('studio.insertTitle')} onClick={() => startInsert(i)}>
+                        {t('studio.insert')}
+                      </button>
+                      <button type="button" className="link small" disabled={!canRemove(model, i)} title={t('studio.removeTitle')} onClick={() => remove(i)}>
+                        {t('studio.removeStep')}
+                      </button>
+                    </span>
+                  </div>
                   <input aria-label={t('studio.stepTitle', { n: i + 1 })} value={s.title} onChange={(e) => editStep(i, { title: e.target.value })} />
                   <textarea
                     aria-label={t('studio.stepText', { n: i + 1 })}
@@ -497,7 +646,7 @@ export default function StudioEditor({ end, cloud = false }: {
           <button type="button" className="secondary" disabled={target === null} onClick={doUnfold}>
             {t('studio.unfold')}
           </button>
-          <button type="button" className="secondary" disabled={!model.steps.length} onClick={undo} title={t('studio.undoTitle')}>
+          <button type="button" className="secondary" disabled={!canUndo} onClick={undo} title={t('studio.undoTitle')}>
             {t('studio.undo')}
           </button>
         </div>
@@ -506,9 +655,9 @@ export default function StudioEditor({ end, cloud = false }: {
   );
 }
 
-/** Both tests, when there are two (either one alone otherwise). */
 type CreaseOp = Extract<Op, { op: 'collapse' }>['creases'][number];
 
+/** Both selectors, when there are two (either one alone otherwise). */
 function allOf(a?: Faces, b?: Faces): Faces | undefined {
   return a && b ? { all: [a, b] } : (a ?? b);
 }

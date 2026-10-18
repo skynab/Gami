@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { SavedModel, Status } from '../cloud/models';
 import { fromFoldFile, toFoldFile, type FoldFile } from '../fold/fold-format';
+import type { Replay } from '../fold/ops';
 import { layOut } from '../fold/sheets';
 import type { FoldFrame, OrigamiModel, Sheet, Step } from '../fold/types';
 import { BLANK_SHEET } from '../models';
@@ -20,16 +21,30 @@ export interface CloudInfo {
   shareToken: string | null;
 }
 
+/** A step that couldn't be folded again after an earlier one changed. It and the steps after it are as they were. */
+export interface Problem {
+  /** Numbered from 1, as the Studio shows steps. */
+  step: number;
+  message: string;
+}
+
 interface DraftState {
   model: OrigamiModel;
+  problem: Problem | null;
+  /** The model before each change this visit, latest last, for undo. */
+  history: { model: OrigamiModel; problem: Problem | null }[];
   cloud: CloudInfo | null;
   /** Changed since it was last saved to (or opened from) the cloud. */
   dirty: boolean;
   /** The paper after the last step: what the next fold starts from. */
   current(): FoldFrame;
   addStep(step: Step): void;
-  /** Removes the last step. Earlier steps can't be removed, since every later step builds on them. */
+  /** Takes back the last change this visit, or with none, removes the last step. */
   undo(): void;
+  /** Takes a change to the steps in the middle (from studio/steps.ts), folded again from there. */
+  change(result: Replay): void;
+  /** Drops every step from step `index` (0-based) on. */
+  removeFrom(index: number): void;
   editStep(index: number, patch: Partial<Pick<Step, 'title' | 'text'>>): void;
   setInfo(patch: Partial<Pick<OrigamiModel, 'id' | 'title'>>): void;
   /** Changes the sheets (their colours, sizes, how many), laid out in a row. Only before the first step. */
@@ -53,19 +68,23 @@ interface Stored {
   fold: FoldFile;
   cloud: CloudInfo | null;
   dirty: boolean;
+  problem?: Problem | null;
 }
 
-function restore(): Pick<DraftState, 'model' | 'cloud' | 'dirty'> {
+function restore(): Pick<DraftState, 'model' | 'cloud' | 'dirty' | 'problem' | 'history'> {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? 'null') as Stored | FoldFile | null;
     // Drafts saved before cloud saving were just the .fold file.
-    if (saved && 'fold' in saved) return { model: fromFoldFile(saved.fold), cloud: saved.cloud, dirty: saved.dirty };
-    if (saved) return { model: fromFoldFile(saved), cloud: null, dirty: true };
+    if (saved && 'fold' in saved) return { model: fromFoldFile(saved.fold), cloud: saved.cloud, dirty: saved.dirty, problem: saved.problem ?? null, history: [] };
+    if (saved) return { model: fromFoldFile(saved), cloud: null, dirty: true, problem: null, history: [] };
   } catch {
     // Storage blocked or the saved draft is unreadable: start fresh.
   }
-  return { model: emptyModel(), cloud: null, dirty: false };
+  return { model: emptyModel(), cloud: null, dirty: false, problem: null, history: [] };
 }
+
+/** Undo keeps this many changes. */
+const HISTORY = 50;
 
 const cloudInfo = (s: SavedModel): CloudInfo => ({ id: s.id, status: s.status, reviewNote: s.reviewNote, shareToken: s.shareToken });
 
@@ -76,10 +95,20 @@ export const useDraft = create<DraftState>()((set, get) => ({
     return model.steps.at(-1)?.frame ?? model.start;
   },
   addStep(step) {
-    set(({ model }) => ({ model: { ...model, steps: [...model.steps, step] }, dirty: true }));
+    set((s) => ({ model: { ...s.model, steps: [...s.model.steps, step] }, dirty: true, history: remember(s) }));
   },
   undo() {
-    set(({ model }) => ({ model: { ...model, steps: model.steps.slice(0, -1) }, dirty: true }));
+    set(({ model, history }) => {
+      const last = history.at(-1);
+      if (last) return { ...last, history: history.slice(0, -1), dirty: true };
+      return { model: { ...model, steps: model.steps.slice(0, -1) }, problem: null, dirty: true };
+    });
+  },
+  change(result) {
+    set((s) => ({ model: result.model, problem: result.error ?? null, dirty: true, history: remember(s) }));
+  },
+  removeFrom(index) {
+    set((s) => ({ model: { ...s.model, steps: s.model.steps.slice(0, index) }, problem: null, dirty: true, history: remember(s) }));
   },
   editStep(index, patch) {
     set(({ model }) => ({ model: { ...model, steps: model.steps.map((s, i) => (i === index ? { ...s, ...patch } : s)) }, dirty: true }));
@@ -91,10 +120,10 @@ export const useDraft = create<DraftState>()((set, get) => ({
     set(({ model }) => (model.steps.length ? {} : { model: { ...model, ...layOut(sheets) }, dirty: true }));
   },
   replace(model) {
-    set({ model, cloud: null, dirty: true });
+    set({ model, cloud: null, dirty: true, problem: null, history: [] });
   },
   fromCloud(saved, withModel) {
-    set({ ...(withModel && { model: saved.model }), cloud: cloudInfo(saved), dirty: false });
+    set({ ...(withModel && { model: saved.model, problem: null, history: [] }), cloud: cloudInfo(saved), dirty: false });
   },
   updateStatus(saved) {
     set({ cloud: cloudInfo(saved) });
@@ -103,14 +132,16 @@ export const useDraft = create<DraftState>()((set, get) => ({
     set({ cloud: null, dirty: true });
   },
   clear() {
-    set({ model: emptyModel(), cloud: null, dirty: false });
+    set({ model: emptyModel(), cloud: null, dirty: false, problem: null, history: [] });
   },
 }));
 
-useDraft.subscribe(({ model, cloud, dirty }, prev) => {
-  if (model === prev.model && cloud === prev.cloud && dirty === prev.dirty) return;
+const remember = ({ model, problem, history }: DraftState) => [...history.slice(1 - HISTORY), { model, problem }];
+
+useDraft.subscribe(({ model, cloud, dirty, problem }, prev) => {
+  if (model === prev.model && cloud === prev.cloud && dirty === prev.dirty && problem === prev.problem) return;
   try {
-    const stored: Stored = { fold: toFoldFile(model), cloud, dirty };
+    const stored: Stored = { fold: toFoldFile(model), cloud, dirty, problem };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
   } catch {
     // Storage full or blocked: the draft still works for this visit, and Export saves it for good.

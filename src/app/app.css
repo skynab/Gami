@@ -1142,6 +1142,64 @@ kbd {
   color: var(--muted);
 }
 
+.studio-steps .step-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.studio-steps .step-tools {
+  display: flex;
+  gap: 10px;
+}
+
+.studio-steps .step-tools .link:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* The step being changed, and steps that couldn't be folded again. */
+.studio-steps li.edit,
+.studio-steps li.insert {
+  margin-inline: -8px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: var(--accent-soft);
+}
+
+.studio-steps li.insert {
+  background: none;
+  border-block-start: 2px solid var(--accent);
+  border-radius: 0;
+}
+
+.studio-steps li.stale input,
+.studio-steps li.stale textarea {
+  border-color: var(--danger);
+}
+
+.studio-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  margin: 16px 0 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--accent-soft);
+  font-size: 13px;
+}
+
+.studio-note span {
+  flex-basis: 100%;
+}
+
+.studio-note.error {
+  background: color-mix(in srgb, var(--danger) 12%, var(--bg));
+  color: var(--fg);
+}
+
 .field {
   display: flex;
   flex-direction: column;
