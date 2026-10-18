@@ -202,6 +202,7 @@ export const ja: Messages = {
     hints: {
       onto: '動かす点(A)を選び、次に重ねる場所(B)を選びます。',
       through: '折り線が通る2点を選びます。',
+      edges: '動かす辺の上の2点(A)、次に重ねる線の上の2点(B)を選んでください。',
       fold: 'Enterで折る · Fで反対側を折る · Escでやり直し',
       reverse: 'Enterで中割り折り · Fで反対側 · Escでやり直し',
       collapse: 'Enterで折り線を追加 · 変わる折り線をすべて追加して「たたむ」を押します。',
@@ -259,6 +260,8 @@ export const ja: Messages = {
     foldLine: '折り線',
     pointToPoint: '点を点へ',
     throughTwo: '2点を通る',
+    edgeToEdge: '辺を辺へ',
+    edgeToEdgeTitle: '辺を別の線に重ねて折る：折り線は二つの線の角を二等分します',
     foldType: '折り方',
     valley: '谷折り',
     valleyTitle: '谷折り (V)',

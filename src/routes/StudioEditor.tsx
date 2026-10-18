@@ -5,7 +5,7 @@ import { collapse, type Crease } from '../fold/collapse';
 import { fold, FoldError, rotate, turnOver, unfoldStep, type FoldKind } from '../fold/fold';
 import { fromFoldFile, toFoldFile } from '../fold/fold-format';
 import { framesOf } from '../fold/frames';
-import { flipLine, lineOnto, lineThrough, type Line } from '../fold/geometry2d';
+import { flipLine, lineEdgeOnto, lineOnto, lineThrough, type Line } from '../fold/geometry2d';
 import { place } from '../fold/place';
 import { sheetOf } from '../fold/sheets';
 import type { FoldFrame, Sheet, Step, Vec2 } from '../fold/types';
@@ -19,7 +19,7 @@ import { useViewer } from '../state/viewer';
 
 const Stage = lazy(() => import('../viewer/Stage'));
 
-type Tool = 'onto' | 'through';
+type Tool = 'onto' | 'through' | 'edges';
 type Layers = 'all' | 1 | 2 | 3;
 /**
  * What the picked line does: a plain fold, a reverse fold, a crease for a collapse, or lifting into 3D.
@@ -79,12 +79,14 @@ export default function StudioEditor({ end, cloud = false }: {
   const [message, setMessage] = useState<string | null>(null);
   const file = useRef<HTMLInputElement>(null);
 
+  // Picks a fold line needs: two points, or for edge to edge, two along each edge.
+  const needs = tool === 'edges' ? 4 : 2;
   const line = useMemo((): Line | null => {
-    if (picks.length < 2) return null;
-    const [a, b] = picks;
-    const base = tool === 'onto' ? lineOnto(a, b) : smallerSideMoves(editFrame, lineThrough(a, b));
-    return flipped ? flipLine(base) : base;
-  }, [picks, tool, editFrame, flipped]);
+    if (picks.length < needs) return null;
+    const [a, b, c, d] = picks;
+    const base = tool === 'onto' ? lineOnto(a, b) : tool === 'edges' ? lineEdgeOnto(a, b, c, d) : smallerSideMoves(editFrame, lineThrough(a, b));
+    return base && (flipped ? flipLine(base) : base);
+  }, [picks, needs, tool, editFrame, flipped]);
 
   const n = layers === 'all' ? undefined : layers;
   // For a lift, `onFlat` is the preview with its faces matched to the flat state the lines are picked on.
@@ -245,9 +247,9 @@ export default function StudioEditor({ end, cloud = false }: {
           ? t('studio.hints.move')
           : t('studio.hints.moveWhere')
         : null
-      : action === 'collapse' && creases.length && picks.length < 2
+      : action === 'collapse' && creases.length && picks.length < needs
         ? t('studio.hints.creases', { count: creases.length })
-        : picks.length < 2
+        : picks.length < needs
           ? t(`studio.hints.${tool}`)
           : action === 'collapse' || preview
             ? t(`studio.hints.${action}`)
@@ -280,11 +282,12 @@ export default function StudioEditor({ end, cloud = false }: {
             frame={editFrame}
             model={model}
             picks={picks}
+            labels={tool === 'edges' ? ['A', 'A', 'B', 'B'] : undefined}
             line={line}
             kind={action === 'fold' ? kind : action === 'collapse' && creaseKind === 'mountain' ? 'mountain' : 'valley'}
             preview={result && 'frame' in result ? (result.onFlat ?? result.frame) : null}
             extra={creases}
-            onPick={(p) => setPicks((prev) => (action === 'move' || prev.length >= 2 ? [p] : [...prev, p]))}
+            onPick={(p) => setPicks((prev) => (action === 'move' || prev.length >= needs ? [p] : [...prev, p]))}
           />
           {(status || hint) && <div className={status ? 'badge error' : 'badge'}>{status ?? hint}</div>}
         </section>
@@ -379,6 +382,9 @@ export default function StudioEditor({ end, cloud = false }: {
             </button>
             <button type="button" aria-pressed={tool === 'through'} onClick={() => (setTool('through'), startOver())}>
               {t('studio.throughTwo')}
+            </button>
+            <button type="button" aria-pressed={tool === 'edges'} title={t('studio.edgeToEdgeTitle')} onClick={() => (setTool('edges'), startOver())}>
+              {t('studio.edgeToEdge')}
             </button>
           </div>
           )}

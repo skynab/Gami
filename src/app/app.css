@@ -923,6 +923,14 @@ kbd {
   pointer-events: none;
 }
 
+.fold-editor .picked-edge {
+  stroke: var(--accent);
+  stroke-width: 3px;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
 .fold-editor .pick-label {
   fill: var(--fg);
   font-weight: 700;

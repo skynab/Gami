@@ -48,6 +48,33 @@ export function lineOnto(a: Vec2, b: Vec2): Line {
   return cross(d, sub(a, mid)) > 0 ? { p: mid, d } : { p: mid, d: scale(d, -1) };
 }
 
+/**
+ * The crease that lays the edge from `a1` to `a2` along the line from `b1` to `b2`, `a1`'s end going the way
+ * of `b1`'s (the angle bisector, or the line midway between parallel edges), oriented so the edge is on its
+ * positive side. Null if the edges are on one line already.
+ */
+export function lineEdgeOnto(a1: Vec2, a2: Vec2, b1: Vec2, b2: Vec2): Line | null {
+  const u = normalize(sub(a2, a1));
+  const v = normalize(sub(b2, b1));
+  const parallel = Math.abs(cross(u, v)) < 1e-9;
+  let line: Line;
+  if (parallel) {
+    // Midway between the two lines, along them.
+    const off = cross(u, sub(b1, a1));
+    if (Math.abs(off) < 1e-9) return null;
+    line = { p: add(a1, scale([-u[1], u[0]], off / 2)), d: u };
+  } else {
+    // Through where the lines meet, along the direction that reflects u onto v.
+    const t = cross(sub(b1, a1), v) / cross(u, v);
+    const sum = add(u, v);
+    const d: Vec2 = Math.hypot(...sum) < 1e-9 ? [-u[1], u[0]] : normalize(sum);
+    line = { p: add(a1, scale(u, t)), d };
+  }
+  // The edge's side moves: its far end from the crease decides, as an edge can start on the crease.
+  const end = Math.abs(sideOf(line, a1)) > Math.abs(sideOf(line, a2)) ? a1 : a2;
+  return sideOf(line, end) > 0 ? line : flipLine(line);
+}
+
 export const flipLine = (l: Line): Line => ({ p: l.p, d: scale(l.d, -1) });
 
 /** Which side of the line a point is on: positive to the left of its direction. */

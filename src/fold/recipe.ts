@@ -3,7 +3,7 @@ import { fold, FoldError, placeLike, rotate, toFlat, turnOver, unfoldStep, type 
 import { place } from './place';
 import { reparent, shape, type Bend } from './shape';
 import { startFrame } from './sheets';
-import { flipLine, lineOnto, lineThrough, sideOf, signedArea, sub, type Line } from './geometry2d';
+import { flipLine, lineEdgeOnto, lineOnto, lineThrough, sideOf, signedArea, sub, type Line } from './geometry2d';
 import type { FoldFrame, OrigamiModel, Sheet, Step, Vec2 } from './types';
 
 /**
@@ -86,6 +86,13 @@ export class Recipe {
   /** Folds so `from` lands exactly on `to`. */
   onto(from: At, to: At, step: FoldStep): this {
     return this.fold(lineOnto(this.where(from), this.where(to)), step);
+  }
+
+  /** Folds the edge from `a1` to `a2` onto the line from `b1` to `b2` (`a1`'s end going `b1`'s way). */
+  edgeOnto(edge: [At, At], onto: [At, At], step: FoldStep): this {
+    const line = lineEdgeOnto(...edge.map((p) => this.where(p)) as [Vec2, Vec2], ...onto.map((p) => this.where(p)) as [Vec2, Vec2]);
+    if (!line) throw new FoldError('That edge is already on that line.');
+    return this.fold(line, step);
   }
 
   /** Folds along the line through `a` and `b`, moving the side `moving` is on. */

@@ -202,6 +202,7 @@ export const fr: Messages = {
     hints: {
       onto: 'Choisissez le point à déplacer (A), puis où il doit arriver (B).',
       through: 'Choisissez deux points par lesquels passe le pli.',
+      edges: 'Choisissez deux points sur le bord à déplacer (A), puis deux sur la ligne où il doit arriver (B).',
       fold: 'Entrée pour plier · F pour plier l’autre côté · Échap pour recommencer.',
       reverse: 'Entrée pour le pli inversé · F pour l’autre côté · Échap pour recommencer.',
       collapse: 'Entrée ajoute ce pli · ajoutez tous ceux qui changent, puis appuyez sur Replier.',
@@ -259,6 +260,8 @@ export const fr: Messages = {
     foldLine: 'Ligne de pli',
     pointToPoint: 'Point sur point',
     throughTwo: 'Par 2 points',
+    edgeToEdge: 'Bord sur bord',
+    edgeToEdgeTitle: 'Amène un bord sur une autre ligne : le pli coupe l’angle entre elles en deux',
     foldType: 'Type de pli',
     valley: 'Vallée',
     valleyTitle: 'Vallée (V)',

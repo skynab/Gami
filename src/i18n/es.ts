@@ -202,6 +202,7 @@ export const es: Messages = {
     hints: {
       onto: 'Elige el punto que se mueve (A) y luego dónde debe caer (B).',
       through: 'Elige dos puntos por los que pasa el pliegue.',
+      edges: 'Elige dos puntos del borde que se mueve (A) y luego dos de la línea donde debe quedar (B).',
       fold: 'Intro para plegar · F para plegar el otro lado · Esc para empezar de nuevo.',
       reverse: 'Intro para el pliegue invertido · F para el otro lado · Esc para empezar de nuevo.',
       collapse: 'Intro añade este pliegue · añade todos los que cambian y pulsa Colapsar.',
@@ -259,6 +260,8 @@ export const es: Messages = {
     foldLine: 'Línea de pliegue',
     pointToPoint: 'Punto a punto',
     throughTwo: 'Por 2 puntos',
+    edgeToEdge: 'Borde a borde',
+    edgeToEdgeTitle: 'Lleva un borde sobre otra línea: el pliegue divide el ángulo entre ellas por la mitad',
     foldType: 'Tipo de pliegue',
     valley: 'Valle',
     valleyTitle: 'Valle (V)',

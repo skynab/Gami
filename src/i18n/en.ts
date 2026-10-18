@@ -204,6 +204,7 @@ export const en = {
     hints: {
       onto: 'Pick the point to move (A), then where it should land (B).',
       through: 'Pick two points the crease goes through.',
+      edges: 'Pick two points along the edge to move (A), then two along the line it should land on (B).',
       fold: 'Enter to fold · F to fold the other side · Esc to start again.',
       reverse: 'Enter to reverse-fold · F for the other side · Esc to start again.',
       collapse: 'Enter adds this crease · add every crease that changes, then press Collapse.',
@@ -262,6 +263,8 @@ export const en = {
     foldLine: 'Fold line',
     pointToPoint: 'Point to point',
     throughTwo: 'Through 2 points',
+    edgeToEdge: 'Edge to edge',
+    edgeToEdgeTitle: 'Fold one edge onto another line: the crease halves the angle between them',
     foldType: 'Fold type',
     valley: 'Valley',
     valleyTitle: 'Valley (V)',

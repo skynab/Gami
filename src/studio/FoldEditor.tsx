@@ -9,10 +9,12 @@ import { frontUp, project, snapPoints, viewBox } from './editor';
  * The paper seen from above, as you'd see it on the table. Click the dots to place a fold: the crease
  * shows as a line, the side that moves is shaded, and a dashed outline shows where it will land.
  */
-export function FoldEditor({ frame, model, picks, line, kind, preview, extra = [], onPick }: {
+export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kind, preview, extra = [], onPick }: {
   frame: FoldFrame;
   model: Pick<OrigamiModel, 'sheets'>;
   picks: Vec2[];
+  /** What to call each pick. */
+  labels?: string[];
   line: Line | null;
   kind: 'valley' | 'mountain';
   /** The paper after the fold, when the fold is possible. */
@@ -89,11 +91,15 @@ export function FoldEditor({ frame, model, picks, line, kind, preview, extra = [
       {snaps.map((s, i) => (
         <circle key={i} cx={s[0]} cy={s[1]} r={1.1 * unit} className="snap" />
       ))}
+      {labels[0] === labels[1] &&
+        [picks.slice(0, 2), picks.slice(2, 4)].map(
+          (edge, i) => edge.length === 2 && <line key={i} x1={edge[0][0]} y1={edge[0][1]} x2={edge[1][0]} y2={edge[1][1]} className="picked-edge" />,
+        )}
       {picks.map((p, i) => (
         <g key={i}>
           <circle cx={p[0]} cy={p[1]} r={1.8 * unit} className="picked" />
           <text x={p[0]} y={p[1] - 3 * unit} fontSize={3.2 * unit} className="pick-label">
-            {i === 0 ? 'A' : 'B'}
+            {labels[i] ?? ''}
           </text>
         </g>
       ))}
