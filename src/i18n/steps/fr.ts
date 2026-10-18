@@ -54,8 +54,12 @@ export const fr: Record<string, string> = {
     "Retournez le papier de gauche à droite.",
   "Fold the other wing to match":
     "Plier l’autre aile pareil",
-  "Line it up with the first wing. Open both wings out flat, and it’s ready to fly.":
-    "Alignez-la sur la première. Ouvrez les deux ailes à plat : il est prêt à voler.",
+  "Line it up with the first wing.":
+    "Alignez-la sur la première.",
+  "Open the wings":
+    "Ouvrir les ailes",
+  "Open both wings out flat on either side of the body, at right angles to it. It’s ready to fly!":
+    "Ouvrez les deux ailes à plat de chaque côté du corps, à angle droit avec lui. Il est prêt à voler !",
   "Bring the top-right corner down to the bottom-left corner.":
     "Amenez le coin en haut à droite sur le coin en bas à gauche.",
   "Turn it point up":
@@ -328,22 +332,22 @@ export const fr: Record<string, string> = {
     "Posez la pièce bleue dessus, en croix avec la jaune.",
   "Tuck in a yellow point":
     "Rentrer une pointe jaune",
-  "Fold the top yellow point down along its middle and tuck it under the blue unit, into its pocket.":
-    "Pliez la pointe jaune du haut en son milieu et glissez-la sous la pièce bleue, dans sa poche.",
+  "Fold the top yellow point down along its middle, over the blue unit. Slide its tip into the pocket where the blue triangles meet in the middle: between their layers, not underneath them.":
+    "Pliez la pointe jaune du haut en son milieu, par-dessus la pièce bleue. Glissez son extrémité dans la poche où les triangles bleus se rejoignent au centre : entre leurs couches, pas en dessous.",
   "Tuck in the other yellow point":
     "Rentrer l’autre pointe jaune",
-  "Tuck the bottom yellow point in the same way.":
-    "Rentrez la pointe jaune du bas de la même façon.",
+  "Tuck the bottom yellow point into the other blue triangle’s pocket the same way.":
+    "Rentrez la pointe jaune du bas dans la poche de l’autre triangle bleu, de la même façon.",
   "Turn the whole star over.":
     "Retournez toute l’étoile.",
   "Tuck in a blue point":
     "Rentrer une pointe bleue",
-  "Now tuck the blue points into the yellow unit’s pockets the same way.":
-    "Rentrez maintenant les pointes bleues dans les poches de la pièce jaune, de la même façon.",
+  "Now fold the blue points over the yellow unit and tuck them into the yellow triangles’ pockets the same way.":
+    "Pliez maintenant les pointes bleues par-dessus la pièce jaune et rentrez-les dans les poches des triangles jaunes, de la même façon.",
   "Tuck in the last point":
     "Rentrer la dernière pointe",
-  "Tuck the last blue point in. Crease everything firmly, and it’s ready to throw (gently, at nobody).":
-    "Rentrez la dernière pointe bleue. Marquez bien tous les plis, et elle est prête à lancer (doucement, vers personne).",
+  "Tuck the last blue point in. The two units are now locked together. Crease everything firmly, and it’s ready to throw (gently, at nobody).":
+    "Rentrez la dernière pointe bleue. Les deux pièces sont maintenant imbriquées. Marquez bien tous les plis, et elle est prête à lancer (doucement, vers personne).",
   "Start with two diamonds":
     "Commencer par deux losanges",
   "A pink square, white side up, and a bigger green one, each turned so a corner points towards you.":

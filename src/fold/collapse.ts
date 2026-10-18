@@ -12,9 +12,11 @@ import type { FoldFrame, Vec2 } from './types';
 /**
  * - valley / mountain: fold flat, as seen from above before the step (valley brings the faces' upper sides together);
  * - flat: open the crease out flat;
- * - inside / outside: a reverse fold, the moving part going between the layers of its flap, or wrapping round them.
+ * - inside / outside: a reverse fold, the moving part going between the layers of its flap, or wrapping round them;
+ * - split: no fold at all, the paper just divided along the line so its two sides can stack differently, as where
+ *   one tucked point lies over a layer and the next goes under it.
  */
-export type CreaseKind = 'valley' | 'mountain' | 'flat' | 'inside' | 'outside';
+export type CreaseKind = 'valley' | 'mountain' | 'flat' | 'inside' | 'outside' | 'split';
 
 export interface Crease {
   line: Line;
@@ -80,7 +82,7 @@ export function collapse(frame: FoldFrame, { creases, anchor, under }: CollapseO
       const c = change[i];
       let t: Affine;
       if (!c) t = compose(placed[u]!, compose(invert(old[u]), old[w]));
-      else if (c.kind === 'flat') t = placed[u]!;
+      else if (c.kind === 'flat' || c.kind === 'split') t = placed[u]!;
       else t = compose(reflection(apply(placed[u]!, e.pa), apply(placed[u]!, e.pb)), placed[u]!);
       if (!placed[w]) {
         placed[w] = t;
@@ -114,7 +116,7 @@ export function collapse(frame: FoldFrame, { creases, anchor, under }: CollapseO
   const setOrder = (f: number, g: number, fAbove: boolean) => creaseOrder.set(f * faces.length + g, fAbove);
   edges.forEach((e, i) => {
     const c = change[i];
-    if (!c || c.kind === 'flat') return;
+    if (!c || c.kind === 'flat' || c.kind === 'split') return;
     if (c.kind === 'valley' || c.kind === 'mountain') {
       // Valley: g lands on the side of f that faced up before the step.
       setOrder(e.g, e.f, (c.kind === 'valley') !== flipped[e.f]);

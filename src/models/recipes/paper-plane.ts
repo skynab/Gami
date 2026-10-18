@@ -1,4 +1,5 @@
-import { paper, Recipe, table } from '../../fold/recipe';
+import { locate, paper, Recipe, table, type At } from '../../fold/recipe';
+import type { Vec2 } from '../../fold/types';
 
 /** The classic dart, from a sheet shaped like A4 (1 : 1.41). */
 export function paperPlane() {
@@ -45,17 +46,31 @@ export function paperPlane() {
   // On its side, the centre crease runs along the bottom. Each wing folds down along a line parallel to it.
   const keel = Math.max(...plane.current.vertices_coords.map((p) => p[2]));
   const wingLine = keel - 0.13;
+  const fold: [At, At] = [table(-1, wingLine), table(1, wingLine)];
+  // Each wing: the part of its half of the sheet beyond the line, before it folds down.
+  const wingOf = (half: (c: Vec2) => boolean) => {
+    const before = plane.current;
+    return (c: Vec2) => half(c) && locate(before, c)[1] < wingLine;
+  };
+  const firstWing = wingOf(([u]) => u > 0);
+  plane.along(...fold, table(0, wingLine - 0.1), {
+    title: 'Fold the wing down',
+    text: 'Fold the top layers down so the wing’s edge meets the bottom of the plane.',
+    only: ([u]) => u > 0,
+  });
+  plane.turnOver();
+  const secondWing = wingOf(([u]) => u < 0);
   return plane
-    .along(table(-1, wingLine), table(1, wingLine), table(0, wingLine - 0.1), {
-      title: 'Fold the wing down',
-      text: 'Fold the top layers down so the wing’s edge meets the bottom of the plane.',
-      only: ([u]) => u > 0,
-    })
-    .turnOver()
-    .along(table(-1, wingLine), table(1, wingLine), table(0, wingLine - 0.1), {
+    .along(...fold, table(0, wingLine - 0.1), {
       title: 'Fold the other wing to match',
-      text: 'Line it up with the first wing. Open both wings out flat, and it’s ready to fly.',
+      text: 'Line it up with the first wing.',
       only: ([u]) => u < 0,
     })
+    // The first wing, underneath, stays on the table; the body stands up off it, and the other wing swings
+    // over to lie out on the far side, nearly flat: a plane seen from below, its keel pointing up.
+    .shape({ title: 'Open the wings', text: 'Open both wings out flat on either side of the body, at right angles to it. It’s ready to fly!' }, [
+      { through: fold, moving: table(0, keel), degrees: 90, only: (c) => !firstWing(c) },
+      { through: fold, moving: table(0, keel), degrees: 85, only: secondWing },
+    ])
     .build();
 }

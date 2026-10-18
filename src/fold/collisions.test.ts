@@ -5,12 +5,16 @@ import { crossDepth } from './cross3d';
 import { fromFoldFile, toFoldFile } from './fold-format';
 import { paper, Recipe } from './recipe';
 import { RECIPES } from '../models/recipes';
-import type { Vec3 } from './types';
+import { toFlat } from './fold';
+import { overlapArea } from './geometry2d';
+import { locate } from './select';
+import type { Vec2, Vec3 } from './types';
 
 const square = (y: number): Vec3[] => [[-1, y, -1], [1, y, -1], [1, y, 1], [-1, y, 1]];
 const deep = (model: Parameters<typeof crossings>[0]) => crossings(model).filter((c) => c.depth > 0.005);
 const models = RECIPES.map((make) => make());
 const byId = (id: string) => models.find((m) => m.id === id)!;
+const centre = (poly: Vec2[]): Vec2 => [poly.reduce((a, p) => a + p[0], 0) / poly.length, poly.reduce((a, p) => a + p[1], 0) / poly.length];
 
 describe('paper passing through paper', () => {
   it('measures how far one face pokes through another', () => {
@@ -36,12 +40,28 @@ describe('paper passing through paper', () => {
     expect(deep(helmet).filter((c) => c.step === helmet.steps.length)).toEqual([]);
   });
 
-  it('lifts the other unit out of the way to tuck a point under it', () => {
+  it('tucks each point into the other unit’s pocket, weaving the two together', () => {
     const star = byId('ninja-star');
     const tucks = star.steps.flatMap((s, i) => (s.title.startsWith('Tuck') ? [i + 1] : []));
     expect(tucks).toHaveLength(4);
-    for (const k of tucks) expect(stepTransition(star, k).makeWay, `step ${k}`).toBeDefined();
     expect(deep(star)).toEqual([]);
+    // Each tucked point has the other unit's paper both over it and under it: in a pocket, not underneath.
+    const yellow = ([u]: Vec2) => u < 5;
+    for (const k of tucks) {
+      const after = toFlat(star.steps[k - 1].frame);
+      const moved = after.filter((f) => {
+        const was = locate(star.steps[k - 2].frame, centre(f.paper));
+        const now = centre(f.world);
+        return Math.hypot(was[0] - now[0], was[1] - now[1]) > 1e-6;
+      });
+      expect(moved.length, `step ${k}`).toBeGreaterThan(0);
+      const unit = yellow(centre(moved[0].paper));
+      const sandwiched = moved.some((f) => {
+        const others = after.filter((g) => yellow(centre(g.paper)) !== unit && overlapArea(g.world, f.world) > 1e-6);
+        return others.some((g) => g.layer > f.layer) && others.some((g) => g.layer < f.layer);
+      });
+      expect(sandwiched, `step ${k}`).toBe(true);
+    }
   });
 
   it('folds thick stacks, petal folds and reverse folds without passing through', () => {

@@ -1,7 +1,7 @@
 import { Matrix4, Quaternion, Vector3 } from 'three';
 import { box, cornerKeys, crossDepth, overlapping } from './cross3d';
 import { facePositions, framesOf, LAYER_GAP, normal, sphereAround } from './frames';
-import { sharedSegment } from './geometry2d';
+import { overlapArea, sharedSegment } from './geometry2d';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from './types';
 
 /**
@@ -235,26 +235,38 @@ function moving(from: FoldFrame, to: FoldFrame, { yielding = false } = {}): Tran
   });
 
   // Moves with the same turn (stacked layers turning over together, say, which differ only by the gap
-  // between layers) go the same way round and rise as high, so they never pass through each other.
+  // between layers) go the same way round and rise as high, so they never pass through each other. Only
+  // about the same crease, though: layers stacked over it move apart up and down, not across the table.
+  // The same turn about a crease elsewhere (both sides folding in to the middle) goes its own way round.
   const classes: number[][] = [];
+  const across = (a: Vector3, b: Vector3) => Math.hypot(a.x - b.x, a.z - b.z);
   reps.forEach((r, i) => {
-    const c = classes.find((c) => Math.abs(reps[c[0]].q.dot(r.q)) > 1 - SAME);
+    const c = classes.find((c) => Math.abs(reps[c[0]].q.dot(r.q)) > 1 - SAME && across(reps[c[0]].t, r.t) < SLACK);
     if (c) c.push(i);
     else classes.push([i]);
   });
   const motions: Motion[] = new Array(reps.length);
   const choices: { c: number[]; options: Motion[][] }[] = [];
+  const put = reps.map((r) => Math.abs(r.q.w) > 1 - 1e-9 && r.t.length() < SLACK);
+  // A plain fold: one stack turning, the rest staying put.
+  const plain = classes.filter((c) => !c.every((i) => put[i])).length === 1;
   for (const c of classes) {
     const points = c.map((i) => reps[i].faces.flatMap((f) => faces[f].before));
+    // A half turn's axis could point either way, so line each one's two ways round up with the first's.
     const options = c.map((i) => screwsFor(reps[i].q, reps[i].t));
-    // A half turn can go either way round: by default the way that lifts the paper most, for all of them.
-    const way = options[0].length > 1 && sum(options.map((o, k) => midHeight(o[1], points[k]))) > sum(options.map((o, k) => midHeight(o[0], points[k]))) + 1e-9 ? 1 : 0;
+    for (const o of options) if (o.length > 1 && o[0].axis.dot(options[0][0].axis) < 0) o.reverse();
+    // A half turn can go either way round: by default over the top, lifting the paper most, for all of them;
+    // but in a plain fold, under, if it ends up beneath the paper staying put (folding behind).
+    let way = 0;
+    if (options[0].length > 1) {
+      const higher = sum(options.map((o, k) => midHeight(o[1], points[k]))) > sum(options.map((o, k) => midHeight(o[0], points[k]))) + 1e-9 ? 1 : 0;
+      way = plain && endsUnder(faces, c, put) ? 1 - higher : higher;
+    }
     c.forEach((i, k) => (motions[i] = options[k][way]));
     if (options[0].length > 1) choices.push({ c, options });
   }
   // But going the other way is better if it passes through less paper, as when folding a layer behind.
   if (choices.length) {
-    const put = reps.map((r) => Math.abs(r.q.w) > 1 - 1e-9 && r.t.length() < SLACK);
     const ignore = faces.map(() => false);
     if (yielding) for (const piece of pieces(faces)) if (piece.every((f) => put[faces[f].motion])) for (const f of piece) ignore[f] = true;
     for (const { c, options } of choices) {
@@ -299,6 +311,29 @@ function moving(from: FoldFrame, to: FoldFrame, { yielding = false } = {}): Tran
     if (fewest < passesThrough(out, WAY_SAMPLES)) return landInOrder(hinged!);
   }
   return landInOrder(out);
+}
+
+/**
+ * Whether the faces moving by the motions `group` end up mostly beneath the paper staying put that they land
+ * on. Judged by where they finish, since faces joined at a crease can't be told apart by passing through.
+ */
+function endsUnder(faces: FaceTrack[], group: number[], put: boolean[]): boolean {
+  const flat = (pts: Vec3[]): Vec2[] => pts.map((p) => [p[0], p[2]]);
+  const height = (pts: Vec3[]) => pts.reduce((a, p) => a + p[1], 0) / pts.length;
+  const inGroup = new Set(group);
+  let under = 0;
+  let over = 0;
+  for (const f of faces) {
+    if (!inGroup.has(f.motion)) continue;
+    for (const g of faces) {
+      if (!put[g.motion]) continue;
+      const area = overlapArea(flat(f.after), flat(g.after));
+      if (area < 1e-6) continue;
+      if (height(f.after) < height(g.after)) under += area;
+      else over += area;
+    }
+  }
+  return under > over;
 }
 
 /** A transition landing bottom layer first instead, if that passes through less paper as it settles. */

@@ -1,4 +1,5 @@
 import { paper, Recipe, table } from '../../fold/recipe';
+import { inside } from '../../fold/select';
 import type { Vec2 } from '../../fold/types';
 
 /**
@@ -82,33 +83,66 @@ export function ninjaStar() {
   // The star's half-width, and where the units' triangles meet, once assembled.
   const q = 0.375 * Math.SQRT1_2;
   const h = 0.125 * Math.SQRT1_2;
+  // The middle square is covered by the other unit's two end triangles, which meet along its diagonal. Each
+  // triangle is four layers, and along the diagonal its raw edges leave a slit between the top two and the
+  // bottom two: the pocket. A point folds over one triangle and slides into the other's pocket, so it goes
+  // under just the top two layers of that triangle (found at `spot`), and the units end up woven together.
+  const pocket = (spot: Vec2, unit: (c: Vec2) => boolean) => {
+    const above = r.stackAt(spot).filter(unit).slice(0, 2);
+    const outlines = r.pieces((c) => above.some(([u, v]) => Math.abs(u - c[0]) < 1e-9 && Math.abs(v - c[1]) < 1e-9));
+    return (c: Vec2) => outlines.some((o) => inside(o, c));
+  };
   // Each tuck folds a triangle's outer half along its middle (from the square corner to the long edge),
-  // anchored on the half that stays, and slides it under the other unit.
-  return r
-    .collapse(
-      { title: 'Tuck in a yellow point', text: 'Fold the top yellow point down along its middle and tuck it under the blue unit, into its pocket.', kind: 'fold' },
-      [{ through: [table(h, -q), table(-h, -h)], kind: 'valley', only: yellow }],
-      r.sheetAt([h / 3, -h], yellow),
-      blue,
-    )
-    .collapse(
-      { title: 'Tuck in the other yellow point', text: 'Tuck the bottom yellow point in the same way.', kind: 'fold' },
-      [{ through: [table(-h, q), table(h, h)], kind: 'valley', only: yellow }],
-      r.sheetAt([-h / 3, h], yellow),
-      blue,
-    )
-    .turnOver('Turn the whole star over.')
-    .collapse(
-      { title: 'Tuck in a blue point', text: 'Now tuck the blue points into the yellow unit’s pockets the same way.', kind: 'fold' },
-      [{ through: [table(q, -h), table(h, h)], kind: 'valley', only: blue }],
-      r.sheetAt([h, -h / 3], blue),
-      yellow,
-    )
-    .collapse(
-      { title: 'Tuck in the last point', text: 'Tuck the last blue point in. Crease everything firmly, and it’s ready to throw (gently, at nobody).', kind: 'fold' },
-      [{ through: [table(-q, h), table(-h, -h)], kind: 'valley', only: blue }],
-      r.sheetAt([-h, h / 3], blue),
-      yellow,
-    )
-    .build();
+  // anchored on the half that stays. The two points of a unit meet along the middle square's other diagonal,
+  // one going over a pocket's layers where the other goes under them, so those layers are split along it.
+  const tuck = (
+    step: { title: string; text: string },
+    through: [Vec2, Vec2],
+    anchor: Vec2,
+    spot: Vec2,
+    unit: (c: Vec2) => boolean,
+    other: (c: Vec2) => boolean,
+  ) => {
+    const into = pocket(spot, other);
+    r.collapse(
+      { ...step, kind: 'fold' },
+      [
+        { through: [table(...through[0]), table(...through[1])], kind: 'valley', only: unit },
+        { through: [table(...through[1]), table(0, 0)], kind: 'split', only: into },
+      ],
+      r.sheetAt(anchor, unit),
+      into,
+    );
+  };
+  const s = (2 * h) / 3;
+  tuck(
+    {
+      title: 'Tuck in a yellow point',
+      text: 'Fold the top yellow point down along its middle, over the blue unit. Slide its tip into the pocket where the blue triangles meet in the middle: between their layers, not underneath them.',
+    },
+    [[h, -q], [-h, -h]],
+    [h / 3, -h],
+    [s, 0],
+    yellow,
+    blue,
+  );
+  tuck({ title: 'Tuck in the other yellow point', text: 'Tuck the bottom yellow point into the other blue triangle’s pocket the same way.' }, [[-h, q], [h, h]], [-h / 3, h], [-s, 0], yellow, blue);
+  r.turnOver('Turn the whole star over.');
+  tuck(
+    { title: 'Tuck in a blue point', text: 'Now fold the blue points over the yellow unit and tuck them into the yellow triangles’ pockets the same way.' },
+    [[q, -h], [h, h]],
+    [h, -h / 3],
+    [0, -s],
+    blue,
+    yellow,
+  );
+  tuck(
+    { title: 'Tuck in the last point', text: 'Tuck the last blue point in. The two units are now locked together. Crease everything firmly, and it’s ready to throw (gently, at nobody).' },
+    [[-q, h], [-h, -h]],
+    [-h, h / 3],
+    [0, s],
+    blue,
+    yellow,
+  );
+  return r.build();
 }

@@ -54,8 +54,12 @@ export const ja: Record<string, string> = {
     "紙を左から右へ裏返します。",
   "Fold the other wing to match":
     "もう一方の翼も同じように折る",
-  "Line it up with the first wing. Open both wings out flat, and it’s ready to fly.":
-    "一枚目の翼にそろえます。両方の翼を平らに広げたら、飛ばせます。",
+  "Line it up with the first wing.":
+    "一枚目の翼にそろえます。",
+  "Open the wings":
+    "翼を開く",
+  "Open both wings out flat on either side of the body, at right angles to it. It’s ready to fly!":
+    "両方の翼を胴体の両側に、胴体と直角になるように平らに広げます。これで飛ばせます！",
   "Bring the top-right corner down to the bottom-left corner.":
     "右上の角を左下の角に合わせて折ります。",
   "Turn it point up":
@@ -328,22 +332,22 @@ export const ja: Record<string, string> = {
     "青いパーツを黄色に交差させて上に置きます。",
   "Tuck in a yellow point":
     "黄色の先を差し込む",
-  "Fold the top yellow point down along its middle and tuck it under the blue unit, into its pocket.":
-    "上の黄色の先を真ん中で折り下げ、青いパーツの下のポケットに差し込みます。",
+  "Fold the top yellow point down along its middle, over the blue unit. Slide its tip into the pocket where the blue triangles meet in the middle: between their layers, not underneath them.":
+    "上の黄色の先を真ん中で青いパーツの上に折り下げます。先を、中央で青い三角が合わさるところのポケットに差し込みます。下にではなく、層の間に入れます。",
   "Tuck in the other yellow point":
     "もう一方の黄色の先を差し込む",
-  "Tuck the bottom yellow point in the same way.":
-    "下の黄色の先も同じように差し込みます。",
+  "Tuck the bottom yellow point into the other blue triangle’s pocket the same way.":
+    "下の黄色の先も同じように、もう一方の青い三角のポケットに差し込みます。",
   "Turn the whole star over.":
     "星全体を裏返します。",
   "Tuck in a blue point":
     "青い先を差し込む",
-  "Now tuck the blue points into the yellow unit’s pockets the same way.":
-    "今度は青い先を同じように黄色のパーツのポケットに差し込みます。",
+  "Now fold the blue points over the yellow unit and tuck them into the yellow triangles’ pockets the same way.":
+    "今度は青い先を黄色のパーツの上に折り、同じように黄色の三角のポケットに差し込みます。",
   "Tuck in the last point":
     "最後の先を差し込む",
-  "Tuck the last blue point in. Crease everything firmly, and it’s ready to throw (gently, at nobody).":
-    "最後の青い先を差し込みます。全体にしっかり折り目をつけたら、投げられます（そっと、人のいない方へ）。",
+  "Tuck the last blue point in. The two units are now locked together. Crease everything firmly, and it’s ready to throw (gently, at nobody).":
+    "最後の青い先を差し込みます。これで二つのパーツが組み合わさりました。全体にしっかり折り目をつけたら、投げられます（そっと、人のいない方へ）。",
   "Start with two diamonds":
     "二つのひし形から始める",
   "A pink square, white side up, and a bigger green one, each turned so a corner points towards you.":

@@ -103,7 +103,7 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
           return {
             line: lineSpec(r.line, `${p}.line`),
             ...opt(r, 'flip', bool, p),
-            kind: oneOf(r.kind, `${p}.kind`, ['valley', 'mountain', 'flat', 'inside', 'outside'] as const),
+            kind: oneOf(r.kind, `${p}.kind`, ['valley', 'mountain', 'flat', 'inside', 'outside', 'split'] as const),
             ...opt(r, 'only', (v, q) => faces(v, q, 0), p),
           };
         }),
