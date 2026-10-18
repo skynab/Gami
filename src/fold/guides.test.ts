@@ -34,6 +34,8 @@ describe('fold guides', () => {
       const model = make();
       const fs = framesOf(model);
       for (let k = 1; k < fs.length; k++) {
+        // Starting again on a fresh sheet (fewer faces than before) moves nothing, so has nothing to show.
+        if (fs[k].faces_vertices.length < fs[k - 1].faces_vertices.length) continue;
         const g = guidesFor(fs[k - 1], fs[k]);
         expect(g.arrows.length + g.creases.length, `${model.id} step ${k}`).toBeGreaterThan(0);
       }

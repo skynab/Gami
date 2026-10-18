@@ -52,7 +52,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'swan', title: 'Swan', blurb: 'A kite folded narrow, with a neck that stands up.', difficulty: 1, category: 'animal', steps: 14, minutes: 5, sheets: 1 },
   { id: 'lily', title: 'Lily', blurb: 'Four curled petals from the frog base.', difficulty: 5, category: 'flower', steps: 42, minutes: 20, sheets: 1 },
   // A lesson rather than a model, kept last: geometry by folding.
-  { id: 'folding-geometry', title: 'Geometry by folding', blurb: 'The rules of mathematical folding, and an angle split in three.', difficulty: 1, category: 'math', steps: 22, minutes: 15, sheets: 1 },
+  { id: 'folding-geometry', title: 'Geometry by folding', blurb: 'The rules of mathematical folding, and an angle split in three.', difficulty: 1, category: 'math', steps: 23, minutes: 15, sheets: 1 },
 ];
 
 export function levelOf(difficulty: Difficulty): Level {

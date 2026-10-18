@@ -698,4 +698,8 @@ export const ja: Record<string, string> = {
     "そして角から、下の折り目の端が重なった点を通る線を。三分の二、40°です。角が三等分されました。定規とコンパスだけでは不可能だと証明されていることです。",
   "Open it and look at the angle: three equal parts. Origami can do everything a straightedge and compass can, and more: axiom 6 also doubles a cube and folds a regular heptagon (7 sides). Axiom 7 folds a point onto one line, square to another.":
     "開いて角を見てみましょう。三つの等しい部分です。折り紙は定規とコンパスでできることがすべてでき、さらにそれ以上ができます。公理6では立方体の倍積や正七角形（7辺）も折れます。公理7は、点をある線に重ね、別の線に垂直に折るものです。",
+  "A fresh square":
+    "新しい正方形",
+  "Put the creased square aside and take a new one, so the next creases stand out.":
+    "折り目のついた紙は脇に置いて、新しい紙を用意しましょう。これからの折り目が見分けやすくなります。",
 };

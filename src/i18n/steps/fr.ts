@@ -698,4 +698,8 @@ export const fr: Record<string, string> = {
     "Et une droite depuis le coin, passant par l’endroit où l’extrémité du pli du bas est arrivée : deux tiers, 40°. L’angle est trisecté, ce qui est impossible, on l’a démontré, avec la règle et le compas seuls.",
   "Open it and look at the angle: three equal parts. Origami can do everything a straightedge and compass can, and more: axiom 6 also doubles a cube and folds a regular heptagon (7 sides). Axiom 7 folds a point onto one line, square to another.":
     "Rouvrez-le et regardez l’angle : trois parties égales. L’origami peut faire tout ce que font la règle et le compas, et plus encore : l’axiome 6 duplique aussi le cube et plie un heptagone régulier (7 côtés). L’axiome 7 pose un point sur une droite, perpendiculairement à une autre.",
+  "A fresh square":
+    "Un carré neuf",
+  "Put the creased square aside and take a new one, so the next creases stand out.":
+    "Mettez de côté le carré plié et prenez-en un neuf, pour bien voir les prochains plis.",
 };

@@ -49,6 +49,11 @@ export function foldingGeometry() {
   const corner = bl;
   const angle = (60 * Math.PI) / 180;
   const ray: Vec2 = [corner[0] + Math.cos(angle) * 0.9, corner[1] - Math.sin(angle) * 0.9];
+  // A fresh square, so the trisection's creases aren't lost among the axioms'.
+  r.newSheet({
+    title: 'A fresh square',
+    text: 'Put the creased square aside and take a new one, so the next creases stand out.',
+  });
   crease(corner, ray, [0.3, 0.3], {
     title: 'An angle to trisect',
     text: 'Now something a straightedge and compass can’t do. Fold a line from the bottom left corner: here at 60° to the bottom edge, but any angle works.',

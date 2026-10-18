@@ -182,6 +182,23 @@ export class Recipe {
     return this.push({ title: step.title, text: step.text, kind: step.kind ?? added.at(-1)!.kind }, { ...last, faces_parent });
   }
 
+  /**
+   * Puts the paper aside and starts again on a fresh, uncreased sheet (or sheets) as at the start. The paper
+   * must be flat and open where it began, as after unfolding everything: the new sheet appears in its place.
+   */
+  newSheet(step: { title: string; text?: string }): this {
+    return this.push({ title: step.title, text: step.text, kind: 'assemble' }, { ...this.start, faces_parent: this.start.faces_vertices.map((_, f) => this.sheetFace(f)) });
+  }
+
+  /** A face of the current paper on the same sheet as the start's face `f`, to grow the fresh sheet from. */
+  private sheetFace(f: number): number {
+    const face = this.start.faces_vertices[f].map((v) => this.start.vertices_paper[v]);
+    const centre: Vec2 = [avg(face, 0), avg(face, 1)];
+    const at = this.current.faces_vertices.findIndex((g) => inside(g.map((v) => this.current.vertices_paper[v]), centre));
+    if (at < 0) throw new FoldError(`${this.info.id}: no paper to replace at step ${this.steps.length + 1}`);
+    return at;
+  }
+
   /** A bookmark for `unfold({ to })`: the paper as it is now. */
   mark(): number {
     return this.steps.length;
