@@ -56,6 +56,7 @@ export const en = {
     'fortune-teller': { title: 'Fortune teller', blurb: 'Pick a colour, pick a number.' },
     boat: { title: 'Boat', blurb: 'The classic paper boat. It really floats, for a while.' },
     heart: { title: 'Heart', blurb: 'A simple heart, nice for cards.' },
+    cicada: { title: 'Cicada', blurb: 'A traditional Japanese cicada, its wings folded out from a diamond.' },
     'jumping-frog': { title: 'Jumping frog', blurb: 'From half a square of paper. Press its back and watch it hop.' },
     'ninja-star': { title: 'Ninja star', blurb: 'Two sheets locked into a spinning shuriken.' },
     tulip: { title: 'Tulip', blurb: 'A blossom and a stem from two squares.' },

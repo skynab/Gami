@@ -54,6 +54,7 @@ export const es: Messages = {
     'fortune-teller': { title: 'Comecocos', blurb: 'Elige un color, elige un número.' },
     boat: { title: 'Barco', blurb: 'El clásico barco de papel. Flota de verdad, un rato.' },
     heart: { title: 'Corazón', blurb: 'Un corazón sencillo, ideal para tarjetas.' },
+    cicada: { title: 'Cigarra', blurb: 'Una cigarra tradicional japonesa, con las alas dobladas desde un rombo.' },
     'jumping-frog': { title: 'Rana saltarina', blurb: 'Con medio cuadrado de papel. Pulsa su lomo y verás cómo salta.' },
     'ninja-star': { title: 'Estrella ninja', blurb: 'Dos hojas encajadas en un shuriken giratorio.' },
     tulip: { title: 'Tulipán', blurb: 'Una flor y un tallo con dos cuadrados.' },

@@ -778,4 +778,36 @@ export const ja: Record<string, string> = {
     "柄頭",
   "Fold the end of the handle up a little. Your sword is ready.":
     "柄の端を少し折り上げます。剣のできあがりです。",
+  "Start white side up, and turn the square so a corner points towards you.":
+    "白い面を上にして、角が手前に来るように紙を回します。",
+  "Fold the bottom corner up to the top corner, making a triangle.":
+    "下の角を上の角に合わせて折り、三角にします。",
+  "Bring the left corner up to the top point.":
+    "左の角を上の先に合わせて折り上げます。",
+  "Bring the right corner up to match. Now it’s a diamond.":
+    "右の角も同じように折り上げます。これでひし形です。",
+  "Fold the flaps down":
+    "折った部分を下ろす",
+  "Fold the two flaps you just made back down, so their points meet the bottom point.":
+    "いま折り上げた二つの部分を、先が下の先に合うように折り下げます。",
+  "Fold out the left wing":
+    "左の羽を出す",
+  "Fold the left flap’s point down and out at an angle, from the middle of the top edge.":
+    "左の部分の先を、上の辺の真ん中から斜めに外側へ折り下げます。",
+  "Fold out the right wing":
+    "右の羽を出す",
+  "Match it with the right flap.":
+    "右の部分も同じように折ります。",
+  "Fold the top layer down":
+    "一枚目を折り下げる",
+  "Fold the top layer of the top point down, about a fifth of the way.":
+    "上の先の一枚目を、五分の一ほど折り下げます。",
+  "Fold the next layer down":
+    "二枚目を折り下げる",
+  "Fold the next layer down too, a little higher, so a band of the first shows below it.":
+    "二枚目も少し上で折り下げて、一枚目の帯が下に見えるようにします。",
+  "Fold the sides behind":
+    "両脇をうしろへ折る",
+  "Fold both sides behind, from beside the head down past the wings, so the body narrows. Done!":
+    "頭のわきから羽の先まで、両脇をうしろへ折って胴を細くします。できあがり！",
 };

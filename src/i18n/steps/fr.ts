@@ -778,4 +778,36 @@ export const fr: Record<string, string> = {
     "Le pommeau",
   "Fold the end of the handle up a little. Your sword is ready.":
     "Pliez un peu vers le haut le bout de la poignée. Votre épée est prête.",
+  "Start white side up, and turn the square so a corner points towards you.":
+    "Commencez face blanche vers le haut, et tournez le carré pour qu’un coin pointe vers vous.",
+  "Fold the bottom corner up to the top corner, making a triangle.":
+    "Pliez le coin du bas jusqu’au coin du haut, pour faire un triangle.",
+  "Bring the left corner up to the top point.":
+    "Amenez le coin gauche jusqu’à la pointe du haut.",
+  "Bring the right corner up to match. Now it’s a diamond.":
+    "Amenez le coin droit de la même façon. C’est maintenant un losange.",
+  "Fold the flaps down":
+    "Rabattre les rabats",
+  "Fold the two flaps you just made back down, so their points meet the bottom point.":
+    "Rabattez vers le bas les deux rabats que vous venez de faire, jusqu’à ce que leurs pointes touchent la pointe du bas.",
+  "Fold out the left wing":
+    "Sortir l’aile gauche",
+  "Fold the left flap’s point down and out at an angle, from the middle of the top edge.":
+    "Pliez la pointe du rabat gauche vers le bas et vers l’extérieur, en biais, depuis le milieu du bord du haut.",
+  "Fold out the right wing":
+    "Sortir l’aile droite",
+  "Match it with the right flap.":
+    "Faites de même avec le rabat droit.",
+  "Fold the top layer down":
+    "Rabattre la première couche",
+  "Fold the top layer of the top point down, about a fifth of the way.":
+    "Rabattez la première couche de la pointe du haut, d’environ un cinquième.",
+  "Fold the next layer down":
+    "Rabattre la couche suivante",
+  "Fold the next layer down too, a little higher, so a band of the first shows below it.":
+    "Rabattez aussi la couche suivante, un peu plus haut, pour qu’une bande de la première reste visible dessous.",
+  "Fold the sides behind":
+    "Plier les côtés derrière",
+  "Fold both sides behind, from beside the head down past the wings, so the body narrows. Done!":
+    "Pliez les deux côtés vers l’arrière, d’à côté de la tête jusqu’au-delà des ailes, pour affiner le corps. C’est fini !",
 };

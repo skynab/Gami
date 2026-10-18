@@ -778,4 +778,36 @@ export const es: Record<string, string> = {
     "El pomo",
   "Fold the end of the handle up a little. Your sword is ready.":
     "Dobla un poco hacia arriba el extremo de la empuñadura. Tu espada está lista.",
+  "Start white side up, and turn the square so a corner points towards you.":
+    "Empieza con el lado blanco hacia arriba y gira el cuadrado para que una esquina apunte hacia ti.",
+  "Fold the bottom corner up to the top corner, making a triangle.":
+    "Dobla la esquina de abajo hasta la de arriba, formando un triángulo.",
+  "Bring the left corner up to the top point.":
+    "Lleva la esquina izquierda hasta la punta de arriba.",
+  "Bring the right corner up to match. Now it’s a diamond.":
+    "Lleva la esquina derecha arriba también. Ahora es un rombo.",
+  "Fold the flaps down":
+    "Dobla las solapas hacia abajo",
+  "Fold the two flaps you just made back down, so their points meet the bottom point.":
+    "Vuelve a doblar hacia abajo las dos solapas que acabas de hacer, hasta que sus puntas lleguen a la punta de abajo.",
+  "Fold out the left wing":
+    "Saca el ala izquierda",
+  "Fold the left flap’s point down and out at an angle, from the middle of the top edge.":
+    "Dobla la punta de la solapa izquierda hacia abajo y hacia fuera, en ángulo, desde el centro del borde de arriba.",
+  "Fold out the right wing":
+    "Saca el ala derecha",
+  "Match it with the right flap.":
+    "Haz lo mismo con la solapa derecha.",
+  "Fold the top layer down":
+    "Dobla la capa de arriba hacia abajo",
+  "Fold the top layer of the top point down, about a fifth of the way.":
+    "Dobla hacia abajo la capa de arriba de la punta superior, más o menos una quinta parte.",
+  "Fold the next layer down":
+    "Dobla la siguiente capa hacia abajo",
+  "Fold the next layer down too, a little higher, so a band of the first shows below it.":
+    "Dobla también la siguiente capa, un poco más arriba, para que se vea una franja de la primera debajo.",
+  "Fold the sides behind":
+    "Dobla los lados hacia atrás",
+  "Fold both sides behind, from beside the head down past the wings, so the body narrows. Done!":
+    "Dobla los dos lados hacia atrás, desde junto a la cabeza hasta pasadas las alas, para estrechar el cuerpo. ¡Listo!",
 };

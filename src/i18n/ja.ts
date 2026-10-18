@@ -54,6 +54,7 @@ export const ja: Messages = {
     'fortune-teller': { title: 'パクパク', blurb: '色を選んで、数字を選んで。' },
     boat: { title: 'ふね', blurb: '定番の紙のふね。しばらくは水に浮かびます。' },
     heart: { title: 'ハート', blurb: 'カードに添えたい、シンプルなハート。' },
+    cicada: { title: 'せみ', blurb: 'ひし形から羽を折り出す、日本の伝統的なせみ。' },
     'jumping-frog': { title: 'ぴょんぴょんガエル', blurb: '長方形の紙で。背中を押すと跳びはねます。' },
     'ninja-star': { title: '手裏剣', blurb: '2枚の紙を組み合わせる手裏剣。' },
     tulip: { title: 'チューリップ', blurb: '2枚の紙で花と茎を作ります。' },

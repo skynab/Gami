@@ -54,6 +54,7 @@ export const fr: Messages = {
     'fortune-teller': { title: 'Cocotte', blurb: 'Choisissez une couleur, choisissez un nombre.' },
     boat: { title: 'Bateau', blurb: 'Le bateau en papier classique. Il flotte vraiment, un moment.' },
     heart: { title: 'Cœur', blurb: 'Un cœur tout simple, idéal pour les cartes.' },
+    cicada: { title: 'Cigale', blurb: 'Une cigale traditionnelle japonaise, ses ailes pliées à partir d’un losange.' },
     'jumping-frog': { title: 'Grenouille sauteuse', blurb: 'Avec une demi-feuille carrée. Appuyez sur son dos pour la faire sauter.' },
     'ninja-star': { title: 'Étoile ninja', blurb: 'Deux feuilles emboîtées en un shuriken qui tourne.' },
     tulip: { title: 'Tulipe', blurb: 'Une fleur et une tige avec deux carrés.' },

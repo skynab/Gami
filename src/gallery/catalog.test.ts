@@ -19,7 +19,7 @@ describe('catalog', () => {
     expect(filterModels(MODELS, { query: 'CRANE' }).map((m) => m.id)).toEqual(['crane']);
     expect(filterModels(MODELS, { level: 'hard' }).every((m) => m.difficulty >= 4)).toBe(true);
     expect(filterModels(MODELS, { category: 'modular' }).map((m) => m.id)).toEqual(['ninja-star']);
-    expect(filterModels(MODELS, { level: 'easy', category: 'animal' }).map((m) => m.id)).toEqual(['jumping-frog', 'fox', 'swan']);
+    expect(filterModels(MODELS, { level: 'easy', category: 'animal' }).map((m) => m.id)).toEqual(['cicada', 'jumping-frog', 'fox', 'swan']);
     expect(filterModels(MODELS, {})).toHaveLength(MODELS.length);
   });
 });
