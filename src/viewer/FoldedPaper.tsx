@@ -188,7 +188,7 @@ function buildPart(t: Transition, faceIndices: number[]): { part: Part; update(p
 
   /**
    * Each join's bend, from the edge on one face to the same edge on the other, bulging out away from both
-   * faces. Faces whose edges meet (paper lying flat, or mid-fold) leave it with no size.
+   * faces. Faces whose edges meet, or that meet at an angle, leave it with no size.
    */
   const placeBends = (pose: Vec3[][]) => {
     const [front, back] = bends.map((g) => [g.attributes.position.array as Float32Array, g.attributes.normal.array as Float32Array]);
@@ -202,7 +202,8 @@ function buildPart(t: Transition, faceIndices: number[]): { part: Part; update(p
       const clear = ([positions]: Float32Array[]) => {
         for (let v = 0; v < (BEND_STEPS + 1) * 2; v++) positions.set(onA[0], (first + v) * 3);
       };
-      if (width < 1e-5) {
+      // Only folds pressed flat stack their layers apart: faces at an angle (mid-fold, or shaped) need none.
+      if (width < 1e-5 || Math.abs(dot(normal(pa), normal(pb))) < 0.999) {
         clear(front);
         clear(back);
         return;

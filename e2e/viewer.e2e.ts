@@ -94,7 +94,7 @@ test.describe('viewer', () => {
   test('draws the finished models', async ({ page }) => {
     // The top view, locked, at the last step: the same picture every time.
     for (const [id, steps] of [
-      ['paper-plane', 12],
+      ['paper-plane', 13],
       ['fortune-teller', 19],
     ] as const) {
       await page.goto(`/learn/${id}?step=${steps}`);

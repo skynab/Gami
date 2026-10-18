@@ -935,11 +935,17 @@ function easeFor(m: Motion, points: Vec3[]): Vector3 | undefined {
   return out.lengthSq() > 1e-18 ? out.normalize().multiplyScalar(below) : undefined;
 }
 
-/** How far to raise the move so it doesn't dip below the table. */
+/**
+ * How far to raise the move so it doesn't dip below the table. The lift rises and falls through the move, so a
+ * dip early on (a tall shape turning over) needs more of it than one halfway.
+ */
 function liftFor(m: Motion, points: Vec3[]): number {
-  let lowest = 0;
-  for (let i = 1; i < 16; i++) for (const p of points) lowest = Math.min(lowest, move(m, p, i / 16)[1]);
-  return lowest < -1e-4 ? -lowest + 0.02 : 0;
+  let need = 0;
+  for (let i = 1; i < 16; i++) {
+    const lowest = Math.min(...points.map((p) => move(m, p, i / 16)[1]));
+    if (lowest < -1e-4) need = Math.max(need, -lowest / Math.sin((Math.PI * i) / 16));
+  }
+  return need ? need + 0.02 : 0;
 }
 
 /**

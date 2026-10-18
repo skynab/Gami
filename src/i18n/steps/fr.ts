@@ -58,8 +58,10 @@ export const fr: Record<string, string> = {
     "Alignez-la sur la première.",
   "Open the wings":
     "Ouvrir les ailes",
-  "Open both wings out flat on either side of the body, at right angles to it. It’s ready to fly!":
-    "Ouvrez les deux ailes à plat de chaque côté du corps, à angle droit avec lui. Il est prêt à voler !",
+  "Open both wings out flat on either side of the body, at right angles to it.":
+    "Ouvrez les deux ailes à plat de chaque côté du corps, à angle droit avec lui.",
+  "Turn the plane over, so it stands on its keel with its wings level on top. It’s ready to fly!":
+    "Retournez l’avion pour qu’il repose sur sa quille, les ailes à plat au-dessus. Il est prêt à voler !",
   "Bring the top-right corner down to the bottom-left corner.":
     "Amenez le coin en haut à droite sur le coin en bas à gauche.",
   "Turn it point up":

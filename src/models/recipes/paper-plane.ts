@@ -67,10 +67,11 @@ export function paperPlane() {
       only: ([u]) => u < 0,
     })
     // The first wing, underneath, stays on the table; the body stands up off it, and the other wing swings
-    // over to lie out on the far side, nearly flat: a plane seen from below, its keel pointing up.
-    .shape({ title: 'Open the wings', text: 'Open both wings out flat on either side of the body, at right angles to it. It’s ready to fly!' }, [
+    // right over to lie out flat on the far side: the plane upside down, its keel pointing up.
+    .shape({ title: 'Open the wings', text: 'Open both wings out flat on either side of the body, at right angles to it.' }, [
       { through: fold, moving: table(0, keel), degrees: 90, only: (c) => !firstWing(c) },
-      { through: fold, moving: table(0, keel), degrees: 85, only: secondWing },
+      { through: fold, moving: table(0, keel), degrees: 90, only: secondWing },
     ])
+    .turnOver('Turn the plane over, so it stands on its keel with its wings level on top. It’s ready to fly!')
     .build();
 }

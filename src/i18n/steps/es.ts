@@ -58,8 +58,10 @@ export const es: Record<string, string> = {
     "Alinéala con la primera.",
   "Open the wings":
     "Abre las alas",
-  "Open both wings out flat on either side of the body, at right angles to it. It’s ready to fly!":
-    "Abre las dos alas en plano a cada lado del cuerpo, en ángulo recto con él. ¡Ya puede volar!",
+  "Open both wings out flat on either side of the body, at right angles to it.":
+    "Abre las dos alas en plano a cada lado del cuerpo, en ángulo recto con él.",
+  "Turn the plane over, so it stands on its keel with its wings level on top. It’s ready to fly!":
+    "Da la vuelta al avión para que se apoye en la quilla con las alas niveladas arriba. ¡Ya puede volar!",
   "Bring the top-right corner down to the bottom-left corner.":
     "Lleva la esquina de arriba a la derecha hasta la esquina de abajo a la izquierda.",
   "Turn it point up":

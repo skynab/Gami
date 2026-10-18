@@ -31,6 +31,7 @@ function planeOps(): Op[] {
     { op: 'fold', line: { through: [on(-1, wing), on(1, wing)], moving: on(0, wing - 0.1) }, only: { inPaper: [half(-1)] } },
     // Opening the wings picks out the folded wings' faces, which are fiddly to write by hand: as the recipe records it.
     plane.steps[11].op!,
+    { op: 'turnOver' },
   ];
 }
 

@@ -58,8 +58,10 @@ export const ja: Record<string, string> = {
     "一枚目の翼にそろえます。",
   "Open the wings":
     "翼を開く",
-  "Open both wings out flat on either side of the body, at right angles to it. It’s ready to fly!":
-    "両方の翼を胴体の両側に、胴体と直角になるように平らに広げます。これで飛ばせます！",
+  "Open both wings out flat on either side of the body, at right angles to it.":
+    "両方の翼を胴体の両側に、胴体と直角になるように平らに広げます。",
+  "Turn the plane over, so it stands on its keel with its wings level on top. It’s ready to fly!":
+    "飛行機を裏返して、竜骨を下に、翼を上で水平にします。これで飛ばせます！",
   "Bring the top-right corner down to the bottom-left corner.":
     "右上の角を左下の角に合わせて折ります。",
   "Turn it point up":

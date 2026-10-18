@@ -9,6 +9,7 @@ import {
   type Line,
   type Piece,
 } from './geometry2d';
+import { facePositions } from './frames';
 import type { FoldFrame, Vec2, Vec3 } from './types';
 
 /**
@@ -122,11 +123,33 @@ export function fold(frame: FoldFrame, { line, kind, layers, only }: FoldOptions
 
 /** Turns the paper over from left to right, about its own middle. */
 export function turnOver(frame: FoldFrame): FoldFrame {
+  if (frame.vertices_coords.some((p) => Math.abs(p[1]) > FLAT)) return turnOverShaped(frame);
   const faces = toFlat(frame);
   const xs = faces.flatMap((f) => f.world.map((w) => w[0]));
   const mid = (Math.min(...xs) + Math.max(...xs)) / 2;
   const top = Math.max(...faces.map((f) => f.layer));
   return fromFlat(faces.map((f) => ({ ...f, world: f.world.map(([x, z]): Vec2 => [2 * mid - x, z]), layer: top - f.layer })));
+}
+
+/**
+ * Turns paper shaped in 3D over, end over end from left to right, and sets it down on what was its top. Each
+ * face gets its own corners where it's drawn, stacked layers' gaps and all, so it turns over exactly.
+ */
+function turnOverShaped(frame: FoldFrame): FoldFrame {
+  const placed = facePositions(frame);
+  const xs = placed.flat().map((p) => p[0]);
+  const mid = (Math.min(...xs) + Math.max(...xs)) / 2;
+  const top = Math.max(...placed.flat().map((p) => p[1]));
+  const vertices_paper: Vec2[] = [];
+  const vertices_coords: Vec3[] = [];
+  const faces_vertices = frame.faces_vertices.map((face, f) =>
+    face.map((v, i) => {
+      const [x, y, z] = placed[f][i];
+      vertices_coords.push([2 * mid - x, top - y, z]);
+      return vertices_paper.push(frame.vertices_paper[v]) - 1;
+    }),
+  );
+  return { vertices_paper, vertices_coords, faces_vertices, faces_parent: frame.faces_vertices.map((_, f) => f) };
 }
 
 /** Turns the paper on the table about its own middle, anticlockwise seen from above. */

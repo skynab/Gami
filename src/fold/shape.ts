@@ -81,14 +81,24 @@ export function shape(frame: FoldFrame, bends: Bend[]): FoldFrame {
   );
   // A turned piece stands off its surface by its layer's gap (flat pieces get theirs when drawn), each with
   // its own corners: otherwise a thick stack's upper layers swing down through the lower ones at the bend.
-  pieces.forEach((p, i) => {
-    if (!order.some((k) => moves[k][i]) || !p.layer) return;
+  const ups = pieces.map((p, i): Vec3 | null => {
+    if (!order.some((k) => moves[k][i])) return null;
     const [w] = p.world;
     const a = place(i, w);
-    const up = place(i, w, 1).map((c, n) => c - a[n]);
+    return place(i, w, 1).map((c, n) => c - a[n]) as Vec3;
+  });
+  // A stack turned right over lies flat again, so it's drawn lifted by its layers like any flat paper, which
+  // would undo standing it off downwards. It's lifted instead so its layers, now upside down, end up stacked
+  // the other way round, on the table.
+  const over = (i: number) => ups[i] !== null && ups[i]![1] < -0.999;
+  const overTop = Math.max(0, ...pieces.filter((_, i) => over(i)).map((p) => p.layer));
+  pieces.forEach((p, i) => {
+    const up = ups[i];
+    if (!up || (!p.layer && !over(i))) return;
+    const offset: Vec3 = over(i) ? [0, (overTop - 2 * p.layer) * LAYER_GAP, 0] : (up.map((c) => c * p.layer * LAYER_GAP) as Vec3);
     faces_vertices[i] = faces_vertices[i].map((v) => {
       vertices_paper.push(vertices_paper[v]);
-      return vertices_coords.push(vertices_coords[v].map((c, n) => c + p.layer * LAYER_GAP * up[n]) as Vec3) - 1;
+      return vertices_coords.push(vertices_coords[v].map((c, n) => c + offset[n]) as Vec3) - 1;
     });
   });
   return {
