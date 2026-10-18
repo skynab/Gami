@@ -3,7 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { useMemo } from 'react';
 import { Sphere, Vector3 } from 'three';
 import { useThemeColors } from '../app/useThemeColors';
-import { stepBounds } from '../fold/animate';
+import { stepBound } from '../fold/animate';
 import type { OrigamiModel } from '../fold/types';
 import { usePlayback } from '../state/playback';
 import { CameraRig } from './CameraRig';
@@ -14,12 +14,15 @@ import { ViewCube } from './ViewCube';
 /** The 3D viewport: the paper on a table, lit softly, with a view cube in the corner. Loaded on demand. */
 export default function Stage({ model }: { model: OrigamiModel }) {
   const colors = useThemeColors();
-  // The camera frames whichever step is showing. Spheres are made once per model, so the camera only
+  // The camera frames whichever step is showing, worked out when the step is reached, so the camera only
   // moves when the step changes.
-  const spheres = useMemo(() => stepBounds(model).map(({ center, radius }) => new Sphere(new Vector3(...center), radius)), [model]);
   const step = usePlayback((s) => s.step);
   const total = usePlayback((s) => s.total);
-  const fit = spheres[Math.min(spheres.length - 1, total ? step : 0)];
+  const k = Math.min(model.steps.length, total ? step : 0);
+  const fit = useMemo(() => {
+    const { center, radius } = stepBound(model, k);
+    return new Sphere(new Vector3(...center), radius);
+  }, [model, k]);
   const narrow = matchMedia('(max-width: 560px)').matches;
 
   return (

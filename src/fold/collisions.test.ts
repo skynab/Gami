@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { stepTransition } from './animate';
 import { crossings } from './collisions';
 import { crossDepth } from './cross3d';
 import { fromFoldFile, toFoldFile } from './fold-format';
@@ -33,6 +34,20 @@ describe('paper passing through paper', () => {
     // The helmet's last fold takes the back point up behind.
     const helmet = byId('samurai-helmet');
     expect(deep(helmet).filter((c) => c.step === helmet.steps.length)).toEqual([]);
+  });
+
+  it('lifts the other unit out of the way to tuck a point under it', () => {
+    const star = byId('ninja-star');
+    const tucks = star.steps.flatMap((s, i) => (s.title.startsWith('Tuck') ? [i + 1] : []));
+    expect(tucks).toHaveLength(4);
+    for (const k of tucks) expect(stepTransition(star, k).makeWay, `step ${k}`).toBeDefined();
+    expect(deep(star)).toEqual([]);
+  });
+
+  it('folds thick stacks, petal folds and reverse folds without passing through', () => {
+    // Stacks ease off their creases, hinged layers settle into place as they turn, and creases nearer the
+    // still paper can fold first.
+    for (const id of ['heart', 'jumping-frog', 'tulip', 'crane']) expect(deep(byId(id)), id).toEqual([]);
   });
 
   it('unfolds several folds one at a time, and keeps that in .fold files', () => {
