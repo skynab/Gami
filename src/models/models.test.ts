@@ -25,8 +25,7 @@ describe.each(models.map((m) => [m.id, m] as const))('%s', (id, model) => {
     expect(file(`${id}-preview.svg`)).toBe(previewSvg(model));
   });
 
-  // Folding basics is written by hand as frames, so it has no operations.
-  it.runIf(model.steps.some((s) => s.op))('folds again from its .fold file exactly as its recipe did', () => {
+  it('folds again from its .fold file exactly as its recipe did', () => {
     const warnings: string[] = [];
     const read = fromFoldFile(JSON.parse(JSON.stringify(toFoldFile(model))), warnings);
     expect(warnings).toEqual([]);

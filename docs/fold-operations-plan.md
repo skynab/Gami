@@ -196,6 +196,38 @@ Imported and shared files are untrusted data:
 5. **Translations note.** Step text is translated by its English wording (`src/i18n/steps`), which ops
    don't change. Nothing to do, but worth checking edited built-ins still find their translations.
 
+## How folds are represented across the app
+
+Checked after step 4. There is one model type (`OrigamiModel`, `src/fold/types.ts`), one file format and one
+reader and writer (`src/fold/fold-format.ts`), and every path goes through them:
+
+- **Built-in models:** recipe → `npm run models` → `public/models/<id>.fold` → `loadModel` → `fromFoldFile`.
+- **Studio:** draft in browser storage, **Export .fold** and cloud saves all hold a `FoldFile`; **Open**,
+  reloading and opening a cloud model all read one back with `fromFoldFile`.
+- **Viewer:** playback, fold guides, animation and gallery cards work only from the frames (and `via`), and
+  nothing looks a model up by its id. So an imported file plays exactly as it did where it was made.
+- **Operations:** every gallery model now records them. "Folding basics" was the last one written by hand
+  as frames; the gallery's copy is now made by a recipe (`src/models/recipes/basics.ts`), and the
+  hand-written one stays as the engine tests' fixture (`src/models/basics.ts`).
+
+What's left is small, and none of it stops a file from going out and coming back in:
+
+1. **A step's `kind` is both a label and logic.** Unfold with no step number undoes back to the last step of
+   kind `fold`, so a step labelled `reverse` (the Studio's reverse folds) is not what a plain Unfold opens.
+   Inside a `together`, the parts' kinds come from their ops (`opKind`) instead. Deciding unfolds from the
+   ops would be more consistent; check it changes no built-in model before switching.
+2. **The fold vocabulary is written out three times:** the engine's types (`CreaseKind`, `FoldKind`), the
+   `Op` types, and the lists `parseOp` accepts. A new crease kind (`split`, recently) has to be added to all
+   three. Sharing one `as const` list per vocabulary, checked with `satisfies`, would make the compiler
+   catch a missed one.
+3. **Gallery details live outside the file:** blurb, difficulty, category and minutes are in
+   `src/gallery/catalog.ts`, and `card` (how the card shows a finished model) isn't kept in files. A model
+   shared between people carries its title and steps only. If the creation tool shares models, add these as
+   a `gami:about` block.
+4. **Some recipe operations have no Studio tool:** `together`, `newSheet`, `popUp`, shaping with several
+   bends, and faces picked by outline (`inPaper`). Those steps replay and can be removed in the Studio;
+   **Change** on one starts from blank tools.
+
 ## Open questions
 
 - **Exact replay across browsers.** Replay uses `Math.sin`, `Math.hypot` and so on, which can differ in the
