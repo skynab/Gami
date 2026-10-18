@@ -308,8 +308,11 @@ function moving(from: FoldFrame, to: FoldFrame, { yielding = false } = {}): Tran
       if (count < fewest) [hinged, fewest] = [tried, count];
       if (!count) break;
     }
-    // Each way of moving has cases the other handles better: keep whichever passes through less paper.
-    if (fewest < passesThrough(out, WAY_SAMPLES)) return landInOrder(hinged!);
+    // Each way of moving has cases the other handles better: keep whichever passes through less paper. When
+    // neither passes through any, as a collapse's faces all meeting at a point count as touching, judge by
+    // how deep any faces cut through each other, joined or not.
+    const plain = passesThrough(out, WAY_SAMPLES);
+    if (fewest < plain || (fewest === plain && deepestCut(hinged!) <= deepestCut(out))) return landInOrder(hinged!);
   }
   return landInOrder(out);
 }
@@ -351,6 +354,22 @@ function landInOrder(t: Transition): Transition {
     if (d < now) [best, now] = [ordered, d];
   }
   return best;
+}
+
+/** The deepest any two faces moving apart cut through each other, at a few points: faces joined at a corner too. */
+function deepestCut(t: Transition): number {
+  let deepest = 0;
+  for (const s of WAY_SAMPLES) {
+    const pose = poseAt(t, s);
+    const boxes = pose.map(box);
+    for (let a = 0; a < pose.length; a++) {
+      for (let b = a + 1; b < pose.length; b++) {
+        if (together(t, a, b) || !overlapping(boxes[a], boxes[b])) continue;
+        deepest = Math.max(deepest, crossDepth(pose[a], pose[b]));
+      }
+    }
+  }
+  return deepest;
 }
 
 /** How much paper passes through paper, closely: the depth of each crossing past stacking, added up. */
