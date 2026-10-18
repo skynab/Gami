@@ -810,4 +810,40 @@ export const ja: Record<string, string> = {
     "両脇をうしろへ折る",
   "Fold both sides behind, from beside the head down past the wings, so the body narrows. Done!":
     "頭のわきから羽の先まで、両脇をうしろへ折って胴を細くします。できあがり！",
+  "Crease the middle":
+    "真ん中に折り筋をつける",
+  "Fold the left corner over to the right one, then unfold, leaving a crease down the middle.":
+    "左の角を右の角に合わせて折り、開いて真ん中に折り筋をつけます。",
+  "Fold down an ear":
+    "耳を折り下げる",
+  "Fold the left corner down at a slant, so it hangs beside the face.":
+    "左の角を斜めに折り下げて、顔のわきに垂らします。",
+  "Fold down the other ear":
+    "もう一方の耳を折り下げる",
+  "Fold the right corner down to match.":
+    "右の角も同じように折り下げます。",
+  "Fold up the nose":
+    "鼻を折り上げる",
+  "Fold the top layer of the bottom point up a little, for the nose.":
+    "下の先の一枚目を少し折り上げて、鼻にします。",
+  "Fold the chin behind":
+    "あごをうしろへ折る",
+  "Fold the point that’s left behind, just below the nose.":
+    "残った先を、鼻のすぐ下でうしろへ折ります。",
+  "Fold the top behind":
+    "上をうしろへ折る",
+  "Fold the top edge behind a little, rounding off the head. Draw on eyes and a nose!":
+    "上の辺を少しうしろへ折って、頭を丸くします。目と鼻をかきましょう！",
+  "Fold up an ear":
+    "耳を折り上げる",
+  "Fold the left corner up, so its point sticks up past the top point and out to the side.":
+    "左の角を折り上げて、先が上の先より上に、外向きに出るようにします。",
+  "Fold up the other ear":
+    "もう一方の耳を折り上げる",
+  "Fold the right corner up to match.":
+    "右の角も同じように折り上げます。",
+  "Fold the top point down behind, between the ears.":
+    "上の先を、耳のあいだでうしろへ折り下げます。",
+  "Turn it over. Draw on eyes, a nose and whiskers!":
+    "裏返します。目と鼻とひげをかきましょう！",
 };

@@ -810,4 +810,40 @@ export const fr: Record<string, string> = {
     "Plier les côtés derrière",
   "Fold both sides behind, from beside the head down past the wings, so the body narrows. Done!":
     "Pliez les deux côtés vers l’arrière, d’à côté de la tête jusqu’au-delà des ailes, pour affiner le corps. C’est fini !",
+  "Crease the middle":
+    "Marquer le milieu",
+  "Fold the left corner over to the right one, then unfold, leaving a crease down the middle.":
+    "Pliez le coin gauche sur le coin droit, puis dépliez, pour marquer un pli au milieu.",
+  "Fold down an ear":
+    "Rabattre une oreille",
+  "Fold the left corner down at a slant, so it hangs beside the face.":
+    "Pliez le coin gauche vers le bas en biais, pour qu’il pende à côté du visage.",
+  "Fold down the other ear":
+    "Rabattre l’autre oreille",
+  "Fold the right corner down to match.":
+    "Pliez le coin droit vers le bas de la même façon.",
+  "Fold up the nose":
+    "Relever le nez",
+  "Fold the top layer of the bottom point up a little, for the nose.":
+    "Relevez un peu la première couche de la pointe du bas, pour le nez.",
+  "Fold the chin behind":
+    "Plier le menton derrière",
+  "Fold the point that’s left behind, just below the nose.":
+    "Pliez derrière la pointe qui reste, juste sous le nez.",
+  "Fold the top behind":
+    "Plier le haut derrière",
+  "Fold the top edge behind a little, rounding off the head. Draw on eyes and a nose!":
+    "Pliez un peu le bord du haut derrière, pour arrondir la tête. Dessinez les yeux et le nez !",
+  "Fold up an ear":
+    "Relever une oreille",
+  "Fold the left corner up, so its point sticks up past the top point and out to the side.":
+    "Pliez le coin gauche vers le haut, pour que sa pointe dépasse au-dessus de la pointe du haut, vers le côté.",
+  "Fold up the other ear":
+    "Relever l’autre oreille",
+  "Fold the right corner up to match.":
+    "Pliez le coin droit vers le haut de la même façon.",
+  "Fold the top point down behind, between the ears.":
+    "Pliez la pointe du haut derrière, entre les oreilles.",
+  "Turn it over. Draw on eyes, a nose and whiskers!":
+    "Retournez-le. Dessinez les yeux, le nez et les moustaches !",
 };

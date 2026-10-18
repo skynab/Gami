@@ -49,6 +49,8 @@ export const es: Messages = {
   models: {
     basics: { title: 'Lo básico', blurb: 'Empieza aquí: plegar, desplegar y dar la vuelta al papel.' },
     'paper-plane': { title: 'Avión de papel', blurb: 'El clásico dardo. Vuela lejos y recto.' },
+    'dog-face': { title: 'Cara de perro', blurb: 'Un primer plegado: un triángulo con orejas caídas.' },
+    'cat-face': { title: 'Cara de gato', blurb: 'Un primer plegado: un triángulo con orejas puntiagudas.' },
     cup: { title: 'Vaso', blurb: 'Un vaso que aguanta agua, un rato.' },
     'samurai-helmet': { title: 'Casco samurái', blurb: 'Un kabuto con cuernos. Hazlo grande y póntelo.' },
     'fortune-teller': { title: 'Comecocos', blurb: 'Elige un color, elige un número.' },

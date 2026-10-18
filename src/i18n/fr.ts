@@ -49,6 +49,8 @@ export const fr: Messages = {
   models: {
     basics: { title: 'Les bases', blurb: 'Commencez ici : plier, déplier et retourner la feuille.' },
     'paper-plane': { title: 'Avion en papier', blurb: 'La fléchette classique. Vole loin et droit.' },
+    'dog-face': { title: 'Tête de chien', blurb: 'Un premier pliage : un triangle aux oreilles tombantes.' },
+    'cat-face': { title: 'Tête de chat', blurb: 'Un premier pliage : un triangle aux oreilles pointues.' },
     cup: { title: 'Gobelet', blurb: 'Un gobelet qui tient l’eau, un moment.' },
     'samurai-helmet': { title: 'Casque de samouraï', blurb: 'Un kabuto à cornes. Pliez-en un grand pour le porter.' },
     'fortune-teller': { title: 'Cocotte', blurb: 'Choisissez une couleur, choisissez un nombre.' },

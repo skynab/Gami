@@ -51,6 +51,8 @@ export const en = {
   models: {
     basics: { title: 'Folding basics', blurb: 'Start here: fold, unfold and turn the paper over.' },
     'paper-plane': { title: 'Paper plane', blurb: 'The classic dart. Flies far and straight.' },
+    'dog-face': { title: 'Dog face', blurb: 'A first fold: a triangle with floppy ears.' },
+    'cat-face': { title: 'Cat face', blurb: 'A first fold: a triangle with pointed ears.' },
     cup: { title: 'Cup', blurb: 'A cup that holds water, for a while.' },
     'samurai-helmet': { title: 'Samurai helmet', blurb: 'A kabuto with horns. Fold a big one to wear.' },
     'fortune-teller': { title: 'Fortune teller', blurb: 'Pick a colour, pick a number.' },
