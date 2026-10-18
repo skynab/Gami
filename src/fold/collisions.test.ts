@@ -50,6 +50,18 @@ describe('paper passing through paper', () => {
     for (const id of ['heart', 'jumping-frog', 'tulip', 'crane']) expect(deep(byId(id)), id).toEqual([]);
   });
 
+  it('stands a flap up before squashing it', () => {
+    // The fox's squash and the lily's squash-and-petal folds play in stages: the flap lifts about its hinge
+    // first, then each part goes to its place.
+    const fox = byId('fox');
+    expect(deep(fox)).toEqual([]);
+    expect(stepTransition(fox, 12).path).toBeDefined();
+    const lily = byId('lily');
+    const squashes = lily.steps.flatMap((s, i) => (s.kind === 'petal' ? [i + 1] : []));
+    expect(squashes).toHaveLength(4);
+    expect(deep(lily).filter((c) => c.step === squashes[0])).toEqual([]);
+  });
+
   it('unfolds several folds one at a time, and keeps that in .fold files', () => {
     const r = new Recipe({ id: 'kite', title: 'Kite', sheet: { size: [1, 1], front: '#fff', back: '#000' } });
     const before = r.mark();

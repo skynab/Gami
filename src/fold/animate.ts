@@ -16,7 +16,8 @@ import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from './types';
  * rather than one part rising through the rest. Paper has some thickness to allow for: a stack folding over
  * eases off its crease, hinged layers settle into their new place on the way, and the creases of a compound
  * fold can fold one after another. A separate piece of paper in the way (tucking a point under another
- * unit) is lifted out of it while the step plays.
+ * unit) is lifted out of it while the step plays, and a compound fold can play in stages, its flap stood up
+ * about its hinge before it's squashed.
  */
 
 export interface FaceTrack {
@@ -77,28 +78,132 @@ const SAME = 1e-4;
 const SLACK = 20 * LAYER_GAP;
 
 /** Transitions already worked out, by the frames they go between: the viewer, guides and camera all ask. */
-const known = [new WeakMap<FoldFrame, WeakMap<FoldFrame, Transition>>(), new WeakMap<FoldFrame, WeakMap<FoldFrame, Transition>>()];
+const known = [0, 1, 2, 3].map(() => new WeakMap<FoldFrame, WeakMap<FoldFrame, Transition>>());
+// (Frames made for a stage are new each time, so the stage depth needn't be part of the key.)
 
-/** How the paper gets from `from` to `to`. */
-export function transition(from: FoldFrame, to: FoldFrame, { makeWay = true } = {}): Transition {
-  const cache = known[makeWay ? 1 : 0];
+/**
+ * How the paper gets from `from` to `to`. `makeWay` lets separate paper lift out of the way, and `stage` lets
+ * a compound fold lift its moving paper first (both on unless asked otherwise).
+ */
+export function transition(from: FoldFrame, to: FoldFrame, { makeWay = true, stage = true } = {}): Transition {
+  return transitionStaged(from, to, makeWay, stage ? STAGES : 0);
+}
+
+/** How many times over a step can be split into stages (a stage can itself be staged). */
+const STAGES = 2;
+
+function transitionStaged(from: FoldFrame, to: FoldFrame, makeWay: boolean, stages: number): Transition {
+  const cache = known[(makeWay ? 1 : 0) + (makeWay && stages ? 2 : 0)];
   let byTo = cache.get(from);
   if (!byTo) cache.set(from, (byTo = new WeakMap()));
   let t = byTo.get(to);
-  if (!t) byTo.set(to, (t = workOut(from, to, makeWay)));
+  if (!t) byTo.set(to, (t = workOut(from, to, makeWay, stages)));
   return t;
 }
 
-function workOut(from: FoldFrame, to: FoldFrame, makeWay: boolean): Transition {
+function workOut(from: FoldFrame, to: FoldFrame, makeWay: boolean, stages: number): Transition {
   const t = moving(from, to);
   if (!makeWay) return t;
   const made = withWayMade(t);
   // With paper that can get out of the way, the way round that goes through it may be the better one.
   const keys = t.faces.map((f) => cornerKeys(f.paper));
-  const left = passesThrough(made, keys, WAY_SAMPLES);
-  if (!left) return made;
+  let best = made;
+  let fewest = passesThrough(made, keys, WAY_SAMPLES);
+  if (!fewest) return made;
   const yielding = withWayMade(moving(from, to, { yielding: true }));
-  return passesThrough(yielding, keys, WAY_SAMPLES) < left ? yielding : made;
+  const y = passesThrough(yielding, keys, WAY_SAMPLES);
+  if (y < fewest) [best, fewest] = [yielding, y];
+  if (fewest && stages) {
+    // Staged moves are judged more closely: they're quicker, and paper can slip through in a moment.
+    fewest = passesThrough(best, keys, STAGE_SAMPLES);
+    for (const staged of stagedWays(from, to, t, stages - 1)) {
+      const way = staged();
+      if (!way) continue;
+      const n = passesThrough(way, keys, STAGE_SAMPLES, { limit: fewest });
+      if (n < fewest) [best, fewest] = [way, n];
+      if (!fewest) break;
+    }
+  }
+  return best;
+}
+
+/**
+ * A compound fold played in two stages, as you'd do it: the paper that moves first lifts off as one about the
+ * line where it joins the paper staying put (a flap stood up before it's squashed), then each part goes to
+ * its place from there. One way for each way of lifting it; none if the moving paper isn't joined along one line.
+ */
+function stagedWays(from: FoldFrame, to: FoldFrame, t: Transition, stages: number): (() => Transition | null)[] {
+  const put = t.motions.map((m) => !m.angle && m.shift.length() < SLACK);
+  const moving = t.faces.map((f) => !put[f.motion]);
+  if (!moving.some(Boolean) || moving.every(Boolean)) return [];
+  // Each joint between faces, where it is before the step.
+  const joints = sharedEdges(t.faces).map(({ i, j, shared }) => {
+    const place = affine(t.faces[i].paper, t.faces[i].before);
+    return { i, j, ends: shared.map((q) => new Vector3(...place(q))) };
+  });
+  // A hinge is a line through a joint between moving and staying paper. The paper lifted about it is all
+  // that's joined to the moving paper other than along it (a whole flap, parts of which end where they began),
+  // so long as that isn't everything.
+  const hinges: { a: Vector3; axis: Vector3; lifted: boolean[] }[] = [];
+  for (const { i, j, ends } of joints) {
+    if (moving[i] === moving[j]) continue;
+    // Hinges are lines on the table: stacked layers' joints along one differ only by the gaps between layers.
+    const [a, b] = ends;
+    const axis = b.clone().sub(a).setY(0);
+    if (axis.length() < 1e-6) continue;
+    axis.normalize();
+    const flat = (p: Vector3) => p.clone().sub(a).setY(0);
+    const onLine = (p: Vector3) => flat(p).cross(axis).length() < 1e-5;
+    if (hinges.some((h) => h.axis.clone().cross(axis).length() < 1e-6 && onLine(h.a))) continue;
+    const lifted = moving.slice();
+    const queue = lifted.flatMap((m, f) => (m ? [f] : []));
+    while (queue.length) {
+      const f = queue.pop()!;
+      for (const e of joints) {
+        if (e.i !== f && e.j !== f) continue;
+        const g = e.i === f ? e.j : e.i;
+        if (lifted[g] || e.ends.every(onLine)) continue;
+        lifted[g] = true;
+        queue.push(g);
+      }
+    }
+    if (!lifted.every(Boolean)) hinges.push({ a, axis, lifted });
+  }
+
+  // The paper after the step, each face with its own corners, so the stages can share its faces.
+  const own = (positions: Vec3[][], parent?: number[], layers?: number[]): FoldFrame => {
+    let n = 0;
+    return {
+      vertices_coords: positions.flat(),
+      vertices_paper: t.faces.flatMap((f) => f.paper),
+      faces_vertices: positions.map((pts) => pts.map(() => n++)),
+      ...(parent && { faces_parent: parent }),
+      ...(layers && { faces_layer: layers }),
+    };
+  };
+  const end = { ...to, faces_parent: undefined };
+  const same = t.faces.map((_, i) => i);
+  /** The step staged by standing the lifted paper up by `degrees` about its hinge first; null if that's into the table. */
+  const stood = ({ a, axis, lifted }: (typeof hinges)[number], degrees: number): Transition | null => {
+    const turn = new Matrix4()
+      .makeTranslation(a.x, a.y, a.z)
+      .multiply(new Matrix4().makeRotationAxis(axis, (degrees * Math.PI) / 180))
+      .multiply(new Matrix4().makeTranslation(-a.x, -a.y, -a.z));
+    const p = new Vector3();
+    const positions = t.faces.map((f, i) => (lifted[i] ? f.before.map((q) => p.set(...q).applyMatrix4(turn).toArray() as Vec3) : f.before));
+    if (positions.some((pts) => pts.some((q) => q[1] < -1e-6))) return null;
+    const up = own(positions, to.faces_parent ?? same);
+    // Standing it up is one plain turn; the rest can be staged again, `stages` more times.
+    const parts = [transitionStaged(from, up, false, 0), transitionStaged(up, end, true, stages)];
+    return { ...t, path: { parts, ancestors: [same, same] } };
+  };
+  // Worked out only when tried. The first stage tries a few heights to stand the paper up to; one within it, just upright.
+  return hinges.flatMap((h) =>
+    (stages ? [90, -90, 60, -60] : [90, -90]).map((degrees) => {
+      let made: Transition | null | undefined;
+      return () => (made === undefined ? (made = stood(h, degrees)) : made);
+    }),
+  );
 }
 
 /**
@@ -402,6 +507,7 @@ const OPEN = 0.25;
 const PLAY: [number, number] = [0.2, 0.75];
 const WAY_SAMPLES = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];
 const CLOSE_SAMPLES = Array.from({ length: 99 }, (_, i) => (i + 1) / 100);
+const STAGE_SAMPLES = Array.from({ length: 31 }, (_, i) => (i + 1) / 32);
 /** How far to try lifting paper out of the way, in degrees. */
 const TILTS = [10, 20, 35, 50, 70, 90];
 

@@ -48,7 +48,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'tulip', title: 'Tulip', blurb: 'A blossom and a stem from two squares.', difficulty: 3, category: 'flower', steps: 15, minutes: 10, sheets: 2 },
   { id: 'fox', title: 'Fox', blurb: 'A sitting fox with big ears and a bushy tail.', difficulty: 2, category: 'animal', steps: 13, minutes: 5, sheets: 1 },
   { id: 'crane', title: 'Crane', blurb: 'The traditional symbol of peace and luck.', difficulty: 4, category: 'animal', steps: 33, minutes: 20, sheets: 1 },
-  { id: 'lily', title: 'Lily', blurb: 'Four curled petals from the frog base.', difficulty: 5, category: 'flower', steps: 32, minutes: 20, sheets: 1 },
+  { id: 'lily', title: 'Lily', blurb: 'Four curled petals from the frog base.', difficulty: 5, category: 'flower', steps: 37, minutes: 20, sheets: 1 },
 ];
 
 export function levelOf(difficulty: Difficulty): Level {

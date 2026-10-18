@@ -35,8 +35,6 @@ export function lily() {
   const quarter = (su: number, sv: number) => ([u, v]: Vec2) => Math.sign(u) === su && Math.sign(v) === sv;
   const halfA = (su: number, sv: number) => (c: Vec2) => quarter(su, sv)(c) && Math.abs(c[0]) < Math.abs(c[1]);
   const halfB = (su: number, sv: number) => (c: Vec2) => quarter(su, sv)(c) && Math.abs(c[0]) > Math.abs(c[1]);
-  // A flap's petal: its corner's side of the step-5 crease, which on the sheet runs halfway along the diagonal.
-  const petal = (su: number, sv: number) => (c: Vec2) => quarter(su, sv)(c) && Math.abs(c[0]) + Math.abs(c[1]) > 0.5;
   const lerp = (a: Vec2, b: Vec2, t: number): Vec2 => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
   const at = (p: Vec2): At => table(...p);
 
@@ -61,15 +59,14 @@ export function lily() {
   };
 
   /** Origami.me steps 5–7 for a flap: its corner up to the top point, that folded in half, both undone. */
-  const precrease = (su: number, sv: number, behind: boolean, text: [string, string], unfold = true) => {
+  const precrease = (su: number, sv: number, text: [string, string], unfold = true) => {
     const { T, C, M, meet } = flap(su, sv);
     const before = r.mark();
-    const kind = behind ? ('mountain' as const) : ('valley' as const);
     const only = quarter(su, sv);
     // The flap's outer half moves to the centre: the side of the T–meet line away from the hinge.
     const away: Vec2 = [2 * meet[0] - M[0], 2 * meet[1] - M[1]];
-    r.onto(at(C), at(T), { title: 'Fold the corner up', text: text[0], only, kind })
-      .along(at(T), at(meet), at(away), { title: 'Fold it in half', text: text[1], only, kind });
+    r.onto(at(C), at(T), { title: 'Fold the corner up', text: text[0], only })
+      .along(at(T), at(meet), at(away), { title: 'Fold it in half', text: text[1], only });
     return unfold ? r.unfold({ title: 'Unfold', text: 'Open both folds, leaving the creases.', to: before }) : r;
   };
 
@@ -107,18 +104,25 @@ export function lily() {
     return f;
   };
 
-  precrease(-1, -1, false, [
+  precrease(-1, -1, [
     'Fold the bottom right corner of the top flap up to the top point.',
     'Fold that flap in half: its right edge to the centre line. Crease well at the top.',
   ]);
-  const others = r.mark();
-  r.together({ title: 'Repeat on the other flaps', text: 'Do the same on the other three flaps, the two at the back folding behind.' }, (r) => {
-    void r;
-    precrease(1, -1, false, ['', ''], false);
-    precrease(-1, 1, true, ['', ''], false);
-    precrease(1, 1, true, ['', ''], false);
-  });
-  r.unfold({ title: 'Unfold', text: 'Open them all again.', to: others });
+  precrease(1, -1, ['Do the same on the left flap: its corner up to the top point…', '…and that folded in half.']);
+  r.turnOver('Turn over, to crease the two flaps at the back.');
+  const backFlaps = r.mark();
+  const corner = (su: number, sv: number) => (r: Recipe) => {
+    const { T, C } = flap(su, sv);
+    r.onto(at(C), at(T), { title: '', only: quarter(su, sv) });
+  };
+  const half = (su: number, sv: number) => (r: Recipe) => {
+    const { T, M, meet } = flap(su, sv);
+    r.along(at(T), at(meet), at([2 * meet[0] - M[0], 2 * meet[1] - M[1]]), { title: '', only: quarter(su, sv) });
+  };
+  r.together({ title: 'Fold both corners up', text: 'Fold the bottom corners of both flaps up to the top point.' }, (r) => (corner(-1, 1)(r), corner(1, 1)(r)))
+    .together({ title: 'Fold both in half', text: 'Fold each in half, its outer edge to the centre line.' }, (r) => (half(-1, 1)(r), half(1, 1)(r)))
+    .unfold({ title: 'Unfold', text: 'Open them again.', to: backFlaps })
+    .turnOver('Turn back over.');
 
   const first = squashPetal(-1, -1, {
     title: 'Squash and petal-fold a flap',
@@ -178,37 +182,12 @@ export function lily() {
   r.turnOver('Turn over.');
   flip({ title: 'Flip two flaps', text: 'Turn two flaps over from right to left here too.' });
   narrow({ title: 'Narrow again', text: 'And fold the top edges to the centre.' });
-  r.rotate(180, { title: 'Turn it round', text: 'Turn the model round, so the petals point down and the narrow part is at the bottom.' });
+  // Opening the petals is left to the folder: each lies under narrowed flaps (its own page's and others'),
+  // which real paper lets you ease it out from but rigid paper doesn't, so any bend would pass through them.
+  r.rotate(180, {
+    title: 'Open the petals',
+    text: 'Turn the model round, so the narrow part is at the bottom. Ease each petal out to about a right angle and curl it gently. Your lily is finished.',
+  });
 
-  // The petals lie along the narrow part, from the waist to the point (the sheet's corners there, under its
-  // centre). Each opens out on a line just past the waist, clear of the narrowing folds there; the front one
-  // curls right up, the side ones (each folded in half) part way, and the back one stays on the table.
-  const T = r.where(paper(0, 0));
-  // Along the model from the point towards the waist (and on to the edges' middles, at the far end).
-  const along = Math.sign(r.where(paper(0.5, 0))[1] - T[1]);
-  const waist = T[1] + along * (0.5 - (2 - Math.SQRT2) / 4);
-  const hinge = waist - along * 0.04;
-  const petalsAt = (dx: number) => {
-    const seen: string[] = [];
-    for (const [u, v] of r.stackAt([T[0] + dx, (hinge + T[1]) / 2])) {
-      const key = `${Math.sign(u)},${Math.sign(v)}`;
-      if (Math.abs(u) + Math.abs(v) > 0.5 && !seen.includes(key)) seen.push(key);
-    }
-    return seen;
-  };
-  const [left, right] = [petalsAt(-0.01), petalsAt(0.01)];
-  const front = left.find((k) => k === right[0]) ?? right[0];
-  const back = left.at(-1)!;
-  const opening = [...new Set([...left, ...right])].filter((k) => k !== back);
-  r.shape(
-    { title: 'Open the petals', text: 'Fold the petals out to about a right angle, curling them gently. Your lily is finished.' },
-    opening.map((k) => {
-      const [su, sv] = k.split(',').map(Number);
-      // The front petal bends straight out; a side petal on a slant, so it leans out to its own side.
-      const lean = k === front ? 0 : left.includes(k) ? -1 : 1;
-      const through: [At, At] = [table(T[0], hinge), table(T[0] + 1, hinge - along * lean)];
-      return { through, moving: at(T), degrees: k === front ? 110 : 60, segments: 4, only: petal(su, sv) };
-    }),
-  );
   return r.build();
 }
