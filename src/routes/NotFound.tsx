@@ -1,18 +1,20 @@
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { PaperIcon } from '../app/icons';
 import { TopBar } from '../app/TopBar';
 
 export function NotFound() {
+  const { t } = useTranslation();
   return (
     <div className="app">
       <TopBar />
       <main className="stage">
         <div className="stage-empty">
           <PaperIcon className="stage-icon" />
-          <h1>This page got folded away</h1>
-          <p className="muted">We couldn’t find what you were looking for.</p>
+          <h1>{t('notFound.title')}</h1>
+          <p className="muted">{t('notFound.text')}</p>
           <Link to="/" className="primary">
-            See all models
+            {t('notFound.all')}
           </Link>
         </div>
       </main>

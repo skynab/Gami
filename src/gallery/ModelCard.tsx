@@ -1,19 +1,26 @@
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { PaperIcon } from '../app/icons';
 import { modelUrl } from '../models';
 import { readProgress } from '../state/progress';
-import { LEVELS, levelOf, type ModelInfo } from './catalog';
+import { levelOf, type ModelInfo } from './catalog';
 
 export function ModelCard({ model }: { model: ModelInfo }) {
-  const level = LEVELS.find((l) => l.id === levelOf(model.difficulty))!.label;
+  const { t } = useTranslation();
+  const level = t(`levels.${levelOf(model.difficulty)}`);
   const progress = model.steps ? readProgress(model.id) : null;
   const badge = !model.steps
-    ? 'Coming soon'
+    ? t('card.soon')
     : progress?.done
-      ? 'Folded ✓'
+      ? t('card.folded')
       : progress && progress.step > 1
-        ? `Continue · step ${progress.step}`
+        ? t('card.continue', { step: progress.step })
         : null;
+  const details = [
+    model.steps && t('card.steps', { count: model.steps }),
+    t('card.minutes', { count: model.minutes }),
+    model.sheets > 1 && t('card.sheets', { count: model.sheets }),
+  ].filter(Boolean);
 
   return (
     <Link to={`/learn/${model.id}`} className="card">
@@ -29,17 +36,14 @@ export function ModelCard({ model }: { model: ModelInfo }) {
       <div className="card-body">
         <div className="card-title">
           <span>{model.title}</span>
-          <span className="dots" role="img" aria-label={`${level}, difficulty ${model.difficulty} of 5`} title={level}>
+          <span className="dots" role="img" aria-label={t('card.difficulty', { level, n: model.difficulty })} title={level}>
             {[1, 2, 3, 4, 5].map((n) => (
               <span key={n} className={n <= model.difficulty ? 'on' : undefined} />
             ))}
           </span>
         </div>
         <p className="muted small">{model.blurb}</p>
-        <p className="muted small">
-          {model.steps ? `${model.steps} steps · ` : ''}
-          {model.minutes} min{model.sheets > 1 ? ` · ${model.sheets} sheets` : ''}
-        </p>
+        <p className="muted small">{details.join(' · ')}</p>
       </div>
     </Link>
   );

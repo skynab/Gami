@@ -1081,3 +1081,12 @@ kbd {
     height: 220px;
   }
 }
+
+/* The language menu at the end of the top bar. */
+.language select {
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  cursor: pointer;
+}

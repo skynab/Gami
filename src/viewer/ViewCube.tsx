@@ -1,11 +1,12 @@
 import type { ThreeEvent } from '@react-three/fiber';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { CanvasTexture, SRGBColorSpace, Vector3 } from 'three';
 import type { ThemeColors } from '../app/useThemeColors';
 import { useViewer } from '../state/viewer';
 
 /** In three.js box material order: +X, −X, +Y, −Y, +Z, −Z. */
-const FACES = ['Right', 'Left', 'Top', 'Bottom', 'Front', 'Back'];
+const FACES = ['right', 'left', 'top', 'bottom', 'front', 'back'] as const;
 
 const at = (xyz: number[]) => new Vector3(...xyz).multiplyScalar(0.38);
 const CORNERS = [
@@ -26,7 +27,8 @@ const sizeOf = (p: Vector3): [number, number, number] =>
  */
 export function ViewCube({ colors }: { colors: ThemeColors }) {
   const [hover, setHover] = useState<number | null>(null);
-  const textures = useMemo(() => FACES.map((label) => faceTexture(label, colors)), [colors]);
+  const { t, i18n } = useTranslation();
+  const textures = useMemo(() => FACES.map((face) => faceTexture(t(`cube.${face}`), colors)), [colors, t, i18n.language]);
   const lookFrom = (e: ThreeEvent<MouseEvent>, d: Vector3) => {
     e.stopPropagation();
     useViewer.getState().lookFrom([d.x, d.y, d.z]);

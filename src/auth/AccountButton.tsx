@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { Modal } from '../app/Modal';
 import { useAuth } from './store';
-
-const ROLE_LABEL = { learner: 'Learner', creator: 'Creator', admin: 'Admin' } as const;
 
 /**
  * Sign in, or the signed-in person's menu. Shows nothing on sites without accounts set up.
  */
 export function AccountButton() {
+  const { t } = useTranslation();
   const status = useAuth((s) => s.status);
   const [signingIn, setSigningIn] = useState(false);
 
@@ -17,7 +17,7 @@ export function AccountButton() {
     return (
       <>
         <button type="button" className="secondary" onClick={() => setSigningIn(true)}>
-          Sign in
+          {t('common.signIn')}
         </button>
         {signingIn && <SignInDialog onClose={() => setSigningIn(false)} />}
       </>
@@ -27,6 +27,7 @@ export function AccountButton() {
 }
 
 function AccountMenu() {
+  const { t } = useTranslation();
   const { name, email, role } = useAuth();
   const [open, setOpen] = useState(false);
   const box = useRef<HTMLDivElement>(null);
@@ -45,10 +46,10 @@ function AccountMenu() {
     };
   }, [open]);
 
-  const label = name || email || 'You';
+  const label = name || email || t('account.you');
   return (
     <div className="account" ref={box}>
-      <button type="button" className="avatar" aria-haspopup="menu" aria-expanded={open} aria-label={`Account: ${label}`} onClick={() => setOpen(!open)}>
+      <button type="button" className="avatar" aria-haspopup="menu" aria-expanded={open} aria-label={t('account.account', { name: label })} onClick={() => setOpen(!open)}>
         {label.slice(0, 1).toUpperCase()}
       </button>
       {open && (
@@ -56,25 +57,25 @@ function AccountMenu() {
           <div className="menu-head">
             <strong>{label}</strong>
             {email && email !== label && <span className="muted small">{email}</span>}
-            {role && <span className="role">{ROLE_LABEL[role]}</span>}
+            {role && <span className="role">{t(`account.roles.${role}`)}</span>}
           </div>
           {role === 'learner' && (
             <Link role="menuitem" to="/studio" onClick={() => setOpen(false)}>
-              Become a creator
+              {t('account.become')}
             </Link>
           )}
           {(role === 'creator' || role === 'admin') && (
             <Link role="menuitem" to="/studio" onClick={() => setOpen(false)}>
-              Studio
+              {t('common.studio')}
             </Link>
           )}
           {role === 'admin' && (
             <Link role="menuitem" to="/admin" onClick={() => setOpen(false)}>
-              Review models and creators
+              {t('account.review')}
             </Link>
           )}
           <button type="button" role="menuitem" onClick={() => void useAuth.getState().signOut()}>
-            Sign out
+            {t('account.signOut')}
           </button>
         </div>
       )}
@@ -84,6 +85,7 @@ function AccountMenu() {
 
 /** Email sign-in: no password, just a link. */
 export function SignInDialog({ onClose }: { onClose(): void }) {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [state, setState] = useState<'idle' | 'sending' | 'sent' | { error: string }>('idle');
 
@@ -95,19 +97,19 @@ export function SignInDialog({ onClose }: { onClose(): void }) {
   };
 
   return (
-    <Modal title="Sign in" onClose={onClose}>
+    <Modal title={t('common.signIn')} onClose={onClose}>
       {state === 'sent' ? (
         <>
-          <p>Check your email. We sent a sign-in link to {email}.</p>
+          <p>{t('account.checkEmail', { email })}</p>
           <form method="dialog">
-            <button className="primary small-button">OK</button>
+            <button className="primary small-button">{t('account.ok')}</button>
           </form>
         </>
       ) : (
         <form onSubmit={(e) => void send(e)} className="stack">
-          <p className="muted small">You don’t need an account to learn. Sign in to make your own models in the Studio.</p>
+          <p className="muted small">{t('account.noAccount')}</p>
           <label className="field">
-            <span>Email</span>
+            <span>{t('account.email')}</span>
             <input type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
           </label>
           {typeof state === 'object' && (
@@ -116,7 +118,7 @@ export function SignInDialog({ onClose }: { onClose(): void }) {
             </p>
           )}
           <button className="primary" disabled={state === 'sending'}>
-            {state === 'sending' ? 'Sending…' : 'Email me a sign-in link'}
+            {state === 'sending' ? t('common.sending') : t('account.sendLink')}
           </button>
         </form>
       )}

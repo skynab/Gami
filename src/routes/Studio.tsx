@@ -1,4 +1,5 @@
 import { lazy, Suspense, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { StudioIcon } from '../app/icons';
 import { TopBar } from '../app/TopBar';
@@ -12,6 +13,7 @@ const StudioEditor = lazy(() => import('./StudioEditor'));
  * This only decides what to show: the database's row-level security is what actually guards saved models.
  */
 export default function Studio() {
+  const { t } = useTranslation();
   const status = useAuth((s) => s.status);
   const role = useAuth((s) => s.role);
 
@@ -25,14 +27,14 @@ export default function Studio() {
 
   return (
     <div className="app">
-      <TopBar center="Studio" end={<AccountButton />} />
+      <TopBar center={t('common.studio')} end={<AccountButton />} />
       <main className="stage">
         <div className="stage-empty">
           <StudioIcon className="stage-icon" />
-          <h1>Design your own models</h1>
+          <h1>{t('gate.heading')}</h1>
           <Gate />
           <Link to="/" className="muted small">
-            Back to the gallery
+            {t('common.backToGallery')}
           </Link>
         </div>
       </main>
@@ -41,28 +43,30 @@ export default function Studio() {
 }
 
 function Gate() {
+  const { t } = useTranslation();
   const { status, role, request } = useAuth();
   const [signingIn, setSigningIn] = useState(false);
 
-  if (status === 'off') return <p className="muted">Accounts aren’t set up on this site yet, so the Studio isn’t available.</p>;
-  if (status === 'loading' || (status === 'signed-in' && !role)) return <p className="muted">Checking your account…</p>;
+  if (status === 'off') return <p className="muted">{t('gate.off')}</p>;
+  if (status === 'loading' || (status === 'signed-in' && !role)) return <p className="muted">{t('gate.checking')}</p>;
   if (status === 'signed-out') {
     return (
       <>
-        <p className="muted">The Studio is for approved creators. Sign in to ask for access.</p>
+        <p className="muted">{t('gate.signedOut')}</p>
         <button type="button" className="primary" onClick={() => setSigningIn(true)}>
-          Sign in
+          {t('common.signIn')}
         </button>
         {signingIn && <SignInDialog onClose={() => setSigningIn(false)} />}
       </>
     );
   }
-  if (request === 'pending') return <p className="muted">Thanks for asking! Your request is waiting for an admin to look at it.</p>;
-  if (request === 'declined') return <p className="muted">Your request wasn’t approved this time.</p>;
+  if (request === 'pending') return <p className="muted">{t('gate.pending')}</p>;
+  if (request === 'declined') return <p className="muted">{t('gate.declined')}</p>;
   return <AskForAccess />;
 }
 
 function AskForAccess() {
+  const { t } = useTranslation();
   const [message, setMessage] = useState('');
   const [state, setState] = useState<'idle' | 'sending' | { error: string }>('idle');
 
@@ -75,9 +79,9 @@ function AskForAccess() {
 
   return (
     <form className="stack ask" onSubmit={(e) => void send(e)}>
-      <p className="muted">The Studio is for approved creators. Ask for access and an admin will review it.</p>
+      <p className="muted">{t('gate.ask')}</p>
       <label className="field">
-        <span>What would you like to make? (optional)</span>
+        <span>{t('gate.askLabel')}</span>
         <textarea rows={3} maxLength={1000} value={message} onChange={(e) => setMessage(e.target.value)} />
       </label>
       {typeof state === 'object' && (
@@ -86,7 +90,7 @@ function AskForAccess() {
         </p>
       )}
       <button className="primary" disabled={state === 'sending'}>
-        {state === 'sending' ? 'Sending…' : 'Ask to become a creator'}
+        {state === 'sending' ? t('common.sending') : t('gate.askButton')}
       </button>
     </form>
   );

@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
 import {
   BackIcon,
@@ -42,6 +43,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
   /** A note above the step card, such as "Shared draft". */
   notice?: ReactNode;
 }) {
+  const { t } = useTranslation();
   const [params, setParams] = useSearchParams();
   const [data, setData] = useState<OrigamiModel | null>(null);
   const [failed, setFailed] = useState(false);
@@ -136,30 +138,30 @@ export function ModelViewer({ progressKey, title, load, notice }: {
       <TopBar
         start={
           <>
-            <Link to="/" className="icon" aria-label="All models" title="All models">
+            <Link to="/" className="icon" aria-label={t('viewer.allModels')} title={t('viewer.allModels')}>
               <BackIcon />
             </Link>
             <span className="page-title">{name}</span>
           </>
         }
-        center={total > 0 && <span>Step {step} of {total}</span>}
+        center={total > 0 && <span>{t('viewer.stepOf', { step, total })}</span>}
         end={
-          <button type="button" className="icon" aria-label="Keyboard shortcuts" title="Keyboard shortcuts (?)" onClick={() => setHelp(true)}>
+          <button type="button" className="icon" aria-label={t('viewer.shortcuts')} title={t('viewer.shortcutsTitle')} onClick={() => setHelp(true)}>
             <KeyboardIcon />
           </button>
         }
       />
 
-      <main className="stage" aria-label={`${name} in 3D. Drag to turn it, scroll or pinch to zoom.`}>
+      <main className="stage" aria-label={t('viewer.stage', { name })}>
         {data && (
           <Suspense fallback={null}>
             <Stage model={data} />
           </Suspense>
         )}
-        {locked && <div className="badge">View locked · drag to pan</div>}
+        {locked && <div className="badge">{t('viewer.locked')}</div>}
         {notice && <div className="viewer-notice">{notice}</div>}
         {current && (
-          <section className="step-card" aria-label="Instructions" aria-live="polite">
+          <section className="step-card" aria-label={t('viewer.instructions')} aria-live="polite">
             <div className="step-card-head">
               <h2>
                 {step}. {current.title}
@@ -168,14 +170,14 @@ export function ModelViewer({ progressKey, title, load, notice }: {
                 <button
                   type="button"
                   className="icon small-icon"
-                  aria-label="Show fold lines and arrows"
-                  title="Show fold lines and arrows (G)"
+                  aria-label={t('viewer.guides')}
+                  title={t('viewer.guidesTitle')}
                   aria-pressed={guides}
                   onClick={toggleGuides}
                 >
                   <GuidesIcon width={18} height={18} />
                 </button>
-                <button type="button" className="icon small-icon" aria-label="Replay this step" title="Replay this step (R)" onClick={replay}>
+                <button type="button" className="icon small-icon" aria-label={t('viewer.replay')} title={t('viewer.replayTitle')} onClick={replay}>
                   <ReplayIcon width={18} height={18} />
                 </button>
               </div>
@@ -184,14 +186,14 @@ export function ModelViewer({ progressKey, title, load, notice }: {
             {finished && (
               <div className="done">
                 <p>
-                  <strong>Done!</strong> Nice folding.
+                  <strong>{t('viewer.done')}</strong> {t('viewer.doneText')}
                 </p>
                 <div className="done-actions">
                   <Link to="/" className="primary small-button">
-                    Fold another
+                    {t('viewer.another')}
                   </Link>
                   <button type="button" className="secondary" onClick={() => goTo(1)}>
-                    Start over
+                    {t('viewer.startOver')}
                   </button>
                 </div>
               </div>
@@ -199,17 +201,20 @@ export function ModelViewer({ progressKey, title, load, notice }: {
           </section>
         )}
         {none && failed && (
-          <section className="step-card" aria-label="Instructions">
-            <h2>Couldn’t load the steps</h2>
-            <p className="muted small">Check your connection and reload the page to try again.</p>
+          <section className="step-card" aria-label={t('viewer.instructions')}>
+            <h2>{t('viewer.failed')}</h2>
+            <p className="muted small">{t('viewer.failedText')}</p>
           </section>
         )}
         {none && !failed && (
-          <section className="step-card" aria-label="Instructions">
-            <h2>Instructions coming soon</h2>
+          <section className="step-card" aria-label={t('viewer.instructions')}>
+            <h2>{t('viewer.soon')}</h2>
             <p className="muted small">
-              The steps for this model aren’t ready yet. Try <Link to={`/learn/${MODELS[0].id}`}>{MODELS[0].title}</Link> in the
-              meantime.
+              <Trans
+                i18nKey="viewer.soonText"
+                values={{ model: t(`models.${MODELS[0].id}.title`, { defaultValue: MODELS[0].title }) }}
+                components={[<Link key="model" to={`/learn/${MODELS[0].id}`} />]}
+              />
             </p>
           </section>
         )}
@@ -219,33 +224,33 @@ export function ModelViewer({ progressKey, title, load, notice }: {
 
       <footer className="bottombar">
         <div className="group">
-          <button type="button" className="icon" aria-label="First step" title="First step (Home)" disabled={step <= 1} onClick={() => goTo(1)}>
+          <button type="button" className="icon" aria-label={t('viewer.first')} title={t('viewer.firstTitle')} disabled={step <= 1} onClick={() => goTo(1)}>
             <FirstIcon />
           </button>
-          <button type="button" className="icon" aria-label="Previous step" title="Previous step (←)" disabled={step <= 1} onClick={() => goTo(step - 1)}>
+          <button type="button" className="icon" aria-label={t('viewer.prev')} title={t('viewer.prevTitle')} disabled={step <= 1} onClick={() => goTo(step - 1)}>
             <PrevIcon />
           </button>
           <button
             type="button"
             className="icon"
-            aria-label={playing ? 'Pause' : 'Play'}
-            title={playing ? 'Pause (Space)' : 'Play (Space)'}
+            aria-label={playing ? t('viewer.pause') : t('viewer.play')}
+            title={playing ? t('viewer.pauseTitle') : t('viewer.playTitle')}
             disabled={!total}
             onClick={togglePlay}
           >
             {playing ? <PauseIcon /> : <PlayIcon />}
           </button>
-          <button type="button" className="icon" aria-label="Next step" title="Next step (→)" disabled={step >= total} onClick={() => goTo(step + 1)}>
+          <button type="button" className="icon" aria-label={t('viewer.next')} title={t('viewer.nextTitle')} disabled={step >= total} onClick={() => goTo(step + 1)}>
             <NextIcon />
           </button>
-          <button type="button" className="icon" aria-label="Last step" title="Last step (End)" disabled={step >= total} onClick={() => goTo(total)}>
+          <button type="button" className="icon" aria-label={t('viewer.last')} title={t('viewer.lastTitle')} disabled={step >= total} onClick={() => goTo(total)}>
             <LastIcon />
           </button>
           <button
             type="button"
             className="icon speed"
-            aria-label={`Speed ${speed}×`}
-            title="Folding speed (S)"
+            aria-label={t('viewer.speed', { speed })}
+            title={t('viewer.speedTitle')}
             disabled={!total}
             onClick={nextSpeed}
           >
@@ -256,24 +261,24 @@ export function ModelViewer({ progressKey, title, load, notice }: {
         <Scrubber />
 
         <div className="group">
-          <div className="segmented" role="group" aria-label="View">
+          <div className="segmented" role="group" aria-label={t('viewer.view')}>
             {VIEWS.map((v, i) => (
-              <button key={v.id} type="button" aria-pressed={view === v.id} title={`${v.label} view (${i + 1})`} onClick={() => setView(v.id)}>
-                {v.label}
+              <button key={v.id} type="button" aria-pressed={view === v.id} title={t('viewer.viewTitle', { view: t(`views.${v.id}`), key: i + 1 })} onClick={() => setView(v.id)}>
+                {t(`views.${v.id}`)}
               </button>
             ))}
           </div>
           <button
             type="button"
             className="icon"
-            aria-label="Lock view"
-            title="Lock view: drag pans instead of rotating (L)"
+            aria-label={t('viewer.lock')}
+            title={t('viewer.lockTitle')}
             aria-pressed={locked}
             onClick={toggleLock}
           >
             <LockIcon />
           </button>
-          <button type="button" className="icon" aria-label="Reset view" title="Reset view (0)" onClick={resetCamera}>
+          <button type="button" className="icon" aria-label={t('viewer.reset')} title={t('viewer.resetTitle')} onClick={resetCamera}>
             <ResetIcon />
           </button>
         </div>
@@ -282,33 +287,35 @@ export function ModelViewer({ progressKey, title, load, notice }: {
   );
 }
 
+/** Keys (or a key in `shortcuts`, for named keys) and what they do (a key in `shortcuts`). */
 const SHORTCUTS: [string, string][] = [
-  ['← →', 'Previous / next step'],
-  ['Home / End', 'First / last step'],
-  ['Space', 'Play or pause'],
-  ['R', 'Replay this step'],
-  ['S', 'Change the folding speed'],
-  ['G', 'Show or hide fold lines and arrows'],
-  ['1 – 4', 'Free, top, front or side view'],
-  ['L', 'Lock the view'],
-  ['0', 'Reset the view'],
+  ['← →', 'prevNext'],
+  ['shortcuts.homeEnd', 'firstLast'],
+  ['shortcuts.space', 'play'],
+  ['R', 'replay'],
+  ['S', 'speed'],
+  ['G', 'guides'],
+  ['1 – 4', 'views'],
+  ['L', 'lock'],
+  ['0', 'reset'],
 ];
 
 function ShortcutsDialog({ onClose }: { onClose(): void }) {
+  const { t } = useTranslation();
   return (
-    <Modal title="Keyboard shortcuts" onClose={onClose}>
+    <Modal title={t('viewer.shortcuts')} onClose={onClose}>
       <dl className="shortcuts">
         {SHORTCUTS.map(([keys, what]) => (
           <div key={keys}>
             <dt>
-              <kbd>{keys}</kbd>
+              <kbd>{keys.startsWith('shortcuts.') ? t(keys) : keys}</kbd>
             </dt>
-            <dd>{what}</dd>
+            <dd>{t(`shortcuts.${what}`)}</dd>
           </div>
         ))}
       </dl>
       <form method="dialog">
-        <button className="primary small-button">Close</button>
+        <button className="primary small-button">{t('common.close')}</button>
       </form>
     </Modal>
   );
@@ -322,6 +329,7 @@ function Scrubber() {
   const pos = usePlayback((s) => s.pos);
   const total = usePlayback((s) => s.total);
   const step = usePlayback((s) => s.step);
+  const { t } = useTranslation();
   return (
     <>
       <input
@@ -333,8 +341,8 @@ function Scrubber() {
         value={pos}
         list="step-ticks"
         disabled={!total}
-        aria-label="Progress through the steps"
-        aria-valuetext={`Step ${step} of ${total}`}
+        aria-label={t('viewer.progress')}
+        aria-valuetext={t('viewer.stepOf', { step, total })}
         onChange={(e) => usePlayback.getState().scrub(Number(e.target.value))}
       />
       {/* A tick where each step ends. */}
