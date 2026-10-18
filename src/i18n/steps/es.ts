@@ -728,4 +728,48 @@ export const es: Record<string, string> = {
     "Axioma 5",
   "Trisecting an angle":
     "Trisecar un ángulo",
+  "Bring the left edge to the right edge, crease, and open it again.":
+    "Lleva el borde izquierdo al derecho, marca el pliegue y vuelve a abrir.",
+  "Fold a corner to the middle":
+    "Una esquina al centro",
+  "Fold the top left corner down to the centre crease.":
+    "Dobla la esquina superior izquierda hasta el pliegue central.",
+  "And the other":
+    "Y la otra",
+  "Fold the top right corner to match, making a point.":
+    "Dobla igual la esquina superior derecha, formando una punta.",
+  "Fold an edge to the middle":
+    "Un borde al centro",
+  "Fold the left edge to the centre crease, all the way down.":
+    "Dobla el borde izquierdo hasta el pliegue central, de arriba abajo.",
+  "Fold the right edge to the centre crease.":
+    "Dobla el borde derecho hasta el pliegue central.",
+  "Narrower":
+    "Más estrecha",
+  "Fold the left edge to the centre once more.":
+    "Dobla otra vez el borde izquierdo hasta el centro.",
+  "Fold the right edge to the centre. The point gets sharper.":
+    "Dobla el borde derecho hasta el centro. La punta queda más afilada.",
+  "Turn the strip over, so the folds are underneath.":
+    "Da la vuelta a la tira, para que los dobleces queden debajo.",
+  "Turn the strip sideways":
+    "Gira la tira de lado",
+  "Fold the bottom of the strip up to the left at 45°, so it points sideways.":
+    "Dobla la parte de abajo de la tira hacia arriba y a la izquierda, a 45°, para que apunte de lado.",
+  "Fold it back":
+    "Dóblala hacia atrás",
+  "Fold the strip back to the right, a little way out from the blade.":
+    "Dobla la tira de vuelta hacia la derecha, un poco separada de la hoja.",
+  "And back again":
+    "Y otra vez",
+  "Fold it back to the left the same distance out on the other side. That’s the crossguard.":
+    "Vuelve a doblarla hacia la izquierda a la misma distancia del otro lado. Esa es la guarda.",
+  "Turn it down":
+    "Hacia abajo",
+  "Fold the end down at 45° where it crosses the blade. That’s the handle.":
+    "Dobla el extremo hacia abajo a 45° donde cruza la hoja. Esa es la empuñadura.",
+  "The pommel":
+    "El pomo",
+  "Fold the end of the handle up a little. Your sword is ready.":
+    "Dobla un poco hacia arriba el extremo de la empuñadura. Tu espada está lista.",
 };

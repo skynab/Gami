@@ -61,6 +61,7 @@ export const ja: Messages = {
     crane: { title: '鶴', blurb: '平和と幸運を願う、昔ながらの折り鶴。' },
     'folding-geometry': { title: '折り紙で幾何学', blurb: '数学的な折り方の規則と、角の三等分。' },
     swan: { title: '白鳥', blurb: '細く折った凧の形に、首が立ち上がります。' },
+    sword: { title: '剣', blurb: '一本の細長い紙から、つばのある騎士の剣。' },
     lily: { title: 'ユリ', blurb: 'カエルの基本形から、4枚の花びらを丸めて。' },
   },
   notFound: {

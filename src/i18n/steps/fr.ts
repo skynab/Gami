@@ -728,4 +728,48 @@ export const fr: Record<string, string> = {
     "Axiome 5",
   "Trisecting an angle":
     "Trisection d’un angle",
+  "Bring the left edge to the right edge, crease, and open it again.":
+    "Amenez le bord gauche sur le bord droit, marquez le pli et dépliez.",
+  "Fold a corner to the middle":
+    "Un coin au milieu",
+  "Fold the top left corner down to the centre crease.":
+    "Pliez le coin supérieur gauche jusqu’au pli central.",
+  "And the other":
+    "Et l’autre",
+  "Fold the top right corner to match, making a point.":
+    "Pliez le coin supérieur droit de la même façon, pour faire une pointe.",
+  "Fold an edge to the middle":
+    "Un bord au milieu",
+  "Fold the left edge to the centre crease, all the way down.":
+    "Pliez le bord gauche sur le pli central, sur toute la longueur.",
+  "Fold the right edge to the centre crease.":
+    "Pliez le bord droit sur le pli central.",
+  "Narrower":
+    "Plus étroit",
+  "Fold the left edge to the centre once more.":
+    "Pliez encore une fois le bord gauche au centre.",
+  "Fold the right edge to the centre. The point gets sharper.":
+    "Pliez le bord droit au centre. La pointe s’affine.",
+  "Turn the strip over, so the folds are underneath.":
+    "Retournez la bande, pour que les plis soient dessous.",
+  "Turn the strip sideways":
+    "Tournez la bande sur le côté",
+  "Fold the bottom of the strip up to the left at 45°, so it points sideways.":
+    "Pliez le bas de la bande vers le haut et la gauche à 45°, pour qu’il pointe sur le côté.",
+  "Fold it back":
+    "Repliez-la",
+  "Fold the strip back to the right, a little way out from the blade.":
+    "Repliez la bande vers la droite, un peu à l’écart de la lame.",
+  "And back again":
+    "Et encore",
+  "Fold it back to the left the same distance out on the other side. That’s the crossguard.":
+    "Repliez-la vers la gauche à la même distance de l’autre côté. C’est la garde.",
+  "Turn it down":
+    "Vers le bas",
+  "Fold the end down at 45° where it crosses the blade. That’s the handle.":
+    "Pliez l’extrémité vers le bas à 45° là où elle croise la lame. C’est la poignée.",
+  "The pommel":
+    "Le pommeau",
+  "Fold the end of the handle up a little. Your sword is ready.":
+    "Pliez un peu vers le haut le bout de la poignée. Votre épée est prête.",
 };

@@ -728,4 +728,48 @@ export const ja: Record<string, string> = {
     "公理5",
   "Trisecting an angle":
     "角の三等分",
+  "Bring the left edge to the right edge, crease, and open it again.":
+    "左の辺を右の辺に合わせて折り目をつけ、また開きます。",
+  "Fold a corner to the middle":
+    "角を真ん中へ",
+  "Fold the top left corner down to the centre crease.":
+    "左上の角を、真ん中の折り目まで折り下げます。",
+  "And the other":
+    "もう一方も",
+  "Fold the top right corner to match, making a point.":
+    "右上の角も同じように折り、先をとがらせます。",
+  "Fold an edge to the middle":
+    "辺を真ん中へ",
+  "Fold the left edge to the centre crease, all the way down.":
+    "左の辺を、下まで真ん中の折り目に合わせて折ります。",
+  "Fold the right edge to the centre crease.":
+    "右の辺を真ん中の折り目に合わせて折ります。",
+  "Narrower":
+    "さらに細く",
+  "Fold the left edge to the centre once more.":
+    "左の辺をもう一度真ん中に合わせて折ります。",
+  "Fold the right edge to the centre. The point gets sharper.":
+    "右の辺を真ん中に合わせて折ります。先がさらにとがります。",
+  "Turn the strip over, so the folds are underneath.":
+    "折った側が下になるように、紙を裏返します。",
+  "Turn the strip sideways":
+    "横に向ける",
+  "Fold the bottom of the strip up to the left at 45°, so it points sideways.":
+    "紙の下の部分を45°で左上へ折り上げ、横向きにします。",
+  "Fold it back":
+    "折り返す",
+  "Fold the strip back to the right, a little way out from the blade.":
+    "刃から少し離れたところで、右へ折り返します。",
+  "And back again":
+    "もう一度折り返す",
+  "Fold it back to the left the same distance out on the other side. That’s the crossguard.":
+    "反対側も同じだけ離れたところで、左へ折り返します。これがつばです。",
+  "Turn it down":
+    "下に向ける",
+  "Fold the end down at 45° where it crosses the blade. That’s the handle.":
+    "刃と交わるところで、端を45°で下へ折ります。これが柄です。",
+  "The pommel":
+    "柄頭",
+  "Fold the end of the handle up a little. Your sword is ready.":
+    "柄の端を少し折り上げます。剣のできあがりです。",
 };
