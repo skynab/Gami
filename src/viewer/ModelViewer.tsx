@@ -5,12 +5,11 @@ import {
   BackIcon,
   FirstIcon,
   GuidesIcon,
+  HalfStepIcon,
   KeyboardIcon,
-  LastIcon,
   LockIcon,
   NextIcon,
   PauseIcon,
-  PlayIcon,
   PrevIcon,
   ReplayIcon,
   ResetIcon,
@@ -55,10 +54,9 @@ export function ModelViewer({ progressKey, title, load, notice }: {
   const { setView, toggleLock, toggleGuides, resetCamera } = useViewer.getState();
   const step = usePlayback((s) => s.step);
   const total = usePlayback((s) => s.total);
-  const playing = usePlayback((s) => s.playing);
   const speed = usePlayback((s) => s.speed);
   const finished = usePlayback((s) => s.total > 0 && s.pos >= s.total);
-  const { goTo, replay, togglePlay, setSpeed } = usePlayback.getState();
+  const { goTo, replay, half, togglePlay, setSpeed } = usePlayback.getState();
   const nextSpeed = () => setSpeed(SPEEDS[(SPEEDS.indexOf(speed) + 1) % SPEEDS.length]);
 
   // The step in the address when the page opened, or where this person left off. After that, the address follows playback.
@@ -117,6 +115,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
       else if (e.key === 'End') goTo(total);
       else if (e.key === ' ') togglePlay();
       else if (e.key === 'r' || e.key === 'R') replay();
+      else if (e.key === 'h' || e.key === 'H') half();
       else if (e.key >= '1' && e.key <= '4') setView(VIEWS[Number(e.key) - 1].id);
       else if (e.key === '0') resetCamera();
       else if (e.key === 'l' || e.key === 'L') toggleLock();
@@ -180,9 +179,6 @@ export function ModelViewer({ progressKey, title, load, notice }: {
                 >
                   <GuidesIcon width={18} height={18} />
                 </button>
-                <button type="button" className="icon small-icon" aria-label={t('viewer.replay')} title={t('viewer.replayTitle')} onClick={replay}>
-                  <ReplayIcon width={18} height={18} />
-                </button>
               </div>
             </div>
             {current.text && <p className="muted small">{say(current.text)}</p>}
@@ -233,21 +229,12 @@ export function ModelViewer({ progressKey, title, load, notice }: {
           <button type="button" className="icon" aria-label={t('viewer.prev')} title={t('viewer.prevTitle')} disabled={step <= 1} onClick={() => goTo(step - 1)}>
             <PrevIcon />
           </button>
-          <button
-            type="button"
-            className="icon"
-            aria-label={playing ? t('viewer.pause') : t('viewer.play')}
-            title={playing ? t('viewer.pauseTitle') : t('viewer.playTitle')}
-            disabled={!total}
-            onClick={togglePlay}
-          >
-            {playing ? <PauseIcon /> : <PlayIcon />}
+          <button type="button" className="icon" aria-label={t('viewer.replay')} title={t('viewer.replayTitle')} disabled={!total} onClick={replay}>
+            <ReplayIcon />
           </button>
-          <button type="button" className="icon" aria-label={t('viewer.next')} title={t('viewer.nextTitle')} disabled={step >= total} onClick={() => goTo(step + 1)}>
-            <NextIcon />
-          </button>
-          <button type="button" className="icon" aria-label={t('viewer.last')} title={t('viewer.lastTitle')} disabled={step >= total} onClick={() => goTo(total)}>
-            <LastIcon />
+          <NextButton />
+          <button type="button" className="icon" aria-label={t('viewer.half')} title={t('viewer.halfTitle')} disabled={finished || !total} onClick={half}>
+            <HalfStepIcon />
           </button>
           <button
             type="button"
@@ -290,12 +277,67 @@ export function ModelViewer({ progressKey, title, load, notice }: {
   );
 }
 
+/** How long to hold the next-step button before it starts playing on through the steps. */
+const HOLD_TO_PLAY_MS = 450;
+
+/**
+ * Next step on a click; held down, it plays on through the steps instead, and while playing it pauses.
+ * Its own component for the timer that tells a click from a hold.
+ */
+function NextButton() {
+  const { t } = useTranslation();
+  const step = usePlayback((s) => s.step);
+  const total = usePlayback((s) => s.total);
+  const playing = usePlayback((s) => s.playing);
+  const timer = useRef(0);
+  // Set when a hold started playing, so the click that ends it doesn't also step on.
+  const held = useRef(false);
+  const release = () => clearTimeout(timer.current);
+  useEffect(() => release, []);
+  return (
+    <button
+      type="button"
+      className="icon hold"
+      aria-label={playing ? t('viewer.pause') : t('viewer.next')}
+      title={playing ? t('viewer.pauseTitle') : t('viewer.nextTitle')}
+      disabled={!playing && step >= total}
+      onPointerDown={(e) => {
+        held.current = false;
+        if (e.button !== 0 || usePlayback.getState().playing) return;
+        release();
+        timer.current = window.setTimeout(() => {
+          held.current = true;
+          usePlayback.getState().togglePlay();
+        }, HOLD_TO_PLAY_MS);
+      }}
+      onPointerUp={() => {
+        release();
+        // The icon changes under the pointer once playing, so the release may not count as a click at all:
+        // forget the hold once any click it makes has been and gone.
+        if (held.current) setTimeout(() => (held.current = false));
+      }}
+      onPointerLeave={release}
+      onPointerCancel={release}
+      onContextMenu={(e) => e.preventDefault()}
+      onClick={() => {
+        const playback = usePlayback.getState();
+        if (held.current) held.current = false;
+        else if (playback.playing) playback.togglePlay();
+        else playback.goTo(playback.step + 1);
+      }}
+    >
+      {playing ? <PauseIcon /> : <NextIcon />}
+    </button>
+  );
+}
+
 /** Keys (or a key in `shortcuts`, for named keys) and what they do (a key in `shortcuts`). */
 const SHORTCUTS: [string, string][] = [
   ['← →', 'prevNext'],
   ['shortcuts.homeEnd', 'firstLast'],
   ['shortcuts.space', 'play'],
   ['R', 'replay'],
+  ['H', 'half'],
   ['S', 'speed'],
   ['G', 'guides'],
   ['1 – 4', 'views'],

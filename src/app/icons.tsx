@@ -30,9 +30,16 @@ export const SearchIcon = icon(
 );
 export const FirstIcon = icon(<path d="M6 5v14M18 6l-8 6 8 6z" />);
 export const PrevIcon = icon(<path d="M15 6l-6 6 6 6" />);
-export const PlayIcon = icon(<path d="M8 5.5v13l10.5-6.5z" />);
 export const NextIcon = icon(<path d="M9 6l6 6-6 6" />);
-export const LastIcon = icon(<path d="M18 5v14M6 6l8 6-8 6z" />);
+/** A fold's arrow, drawn as the guides draw it, solid halfway over and dashed the rest: play half a step. */
+export const HalfStepIcon = icon(
+  <>
+    <path d="M20 18a8 8 0 0 0-8-8" />
+    <path d="M15 7l-3 3 3 3" />
+    <path d="M12 10a8 8 0 0 0-8 8" strokeDasharray="1.6 2.8" />
+    <path d="M2.5 18.5h3M18.5 18.5h3" />
+  </>,
+);
 export const LockIcon = icon(
   <>
     <rect x="5" y="11" width="14" height="9" rx="2" />

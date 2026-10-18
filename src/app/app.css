@@ -679,6 +679,13 @@ kbd {
   font-variant-numeric: tabular-nums;
 }
 
+/* Pressed and held to play: no text selection or callout menu on a long press. */
+.icon.hold {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
 .step-card-actions {
   display: flex;
   gap: 2px;

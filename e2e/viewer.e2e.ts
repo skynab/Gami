@@ -14,10 +14,36 @@ test.describe('viewer', () => {
     await expect(stepHeading(page)).toHaveText(/^2\. /);
     await expect(page).toHaveURL(/step=2/);
 
-    await page.getByRole('button', { name: 'Last step' }).click();
+    // Half a step at a time: halfway through step 3, then to its end.
+    const progress = page.getByRole('slider', { name: 'Progress through the steps' });
+    await expect(progress).toHaveValue('2');
+    await page.getByRole('button', { name: 'Play half a step' }).click();
+    await expect(progress).toHaveValue('2.5');
+    await expect(stepHeading(page)).toHaveText(/^3\. /);
+    await page.getByRole('button', { name: 'Play half a step' }).click();
+    await expect(progress).toHaveValue('3');
+
+    await page.keyboard.press('End');
     await expect(page.getByText('Done!')).toBeVisible();
     await page.getByRole('button', { name: 'Start over' }).click();
     await expect(stepHeading(page)).toHaveText(/^1\. /);
+  });
+
+  test('plays on through the steps while next is held, and pauses on a click', async ({ page }) => {
+    await page.goto('/learn/cup');
+    await expect(stepHeading(page)).toHaveText(/^1\. /);
+    const next = page.getByRole('button', { name: 'Next step' });
+    await next.hover();
+    await page.mouse.down();
+    await expect(page.getByRole('button', { name: 'Pause' })).toBeVisible();
+    await page.mouse.up();
+    // Held, not clicked: it plays from step 2 on, without skipping a step.
+    await expect(stepHeading(page)).toHaveText(/^2\. /);
+    await expect(stepHeading(page)).toHaveText(/^3\. /);
+    await page.getByRole('button', { name: 'Pause' }).click();
+    await expect(page.getByRole('button', { name: 'Next step' })).toBeVisible();
+    await page.getByRole('button', { name: 'Replay this step' }).click();
+    await expect(page.getByRole('button', { name: 'Next step' })).toBeVisible();
   });
 
   test('opens straight to a step from its link, and keeps it on reload', async ({ page }) => {
@@ -68,7 +94,7 @@ test.describe('viewer', () => {
   test('draws the finished models', async ({ page }) => {
     // The top view, locked, at the last step: the same picture every time.
     for (const [id, steps] of [
-      ['paper-plane', 11],
+      ['paper-plane', 12],
       ['fortune-teller', 19],
     ] as const) {
       await page.goto(`/learn/${id}?step=${steps}`);
