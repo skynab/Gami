@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { LANGUAGES, setLanguage, type Language } from '../i18n';
+import { DonateButton } from './Donate';
 
 /** The 52px bar at the top of every page. Pages fill the start, middle and end slots. */
 export function TopBar({ start, center, end }: { start?: ReactNode; center?: ReactNode; end?: ReactNode }) {
@@ -12,6 +13,7 @@ export function TopBar({ start, center, end }: { start?: ReactNode; center?: Rea
       <div className="topbar-end">
         {end}
         <LanguageMenu />
+        <DonateButton />
       </div>
     </header>
   );

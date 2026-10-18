@@ -13,6 +13,14 @@ export const en = {
     sending: 'Sending…',
     language: 'Language',
   },
+  donate: {
+    button: 'Donate',
+    title: 'Support Gami',
+    body: 'Gami is free, with no ads, and learning needs no account. If it helped you fold something, a small tip helps keep it running.',
+    other: 'Other amount',
+    note: 'Payments are handled securely by Stripe in a new tab. Tips are voluntary and not tax-deductible.',
+    thanks: 'Thank you for supporting Gami!',
+  },
   gallery: {
     title: 'Learn to fold',
     intro: 'Pick a model and follow every fold in 3D. Turn it, zoom in, go at your own pace.',

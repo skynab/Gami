@@ -73,6 +73,9 @@ export const KeyboardIcon = icon(
     <path d="M7 10h.01M11 10h.01M15 10h.01M7 14h10" />
   </>,
 );
+export const HeartIcon = icon(
+  <path d="M12 20s-7.5-4.6-7.5-10.1A4.4 4.4 0 0 1 12 7.2a4.4 4.4 0 0 1 7.5 2.7C19.5 15.4 12 20 12 20z" />,
+);
 export const PauseIcon = icon(<path d="M8 5.5v13M16 5.5v13" />);
 export const ReplayIcon = icon(
   <>

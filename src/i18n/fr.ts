@@ -11,6 +11,14 @@ export const fr: Messages = {
     sending: 'Envoi…',
     language: 'Langue',
   },
+  donate: {
+    button: 'Faire un don',
+    title: 'Soutenir Gami',
+    body: 'Gami est gratuit, sans publicité, et apprendre ne demande aucun compte. S’il vous a aidé à plier quelque chose, un petit pourboire aide à le faire vivre.',
+    other: 'Autre montant',
+    note: 'Les paiements sont traités de façon sécurisée par Stripe dans un nouvel onglet. Les dons sont facultatifs et ne sont pas déductibles des impôts.',
+    thanks: 'Merci de soutenir Gami !',
+  },
   gallery: {
     title: 'Apprendre à plier',
     intro: 'Choisissez un modèle et suivez chaque pli en 3D. Tournez-le, zoomez, avancez à votre rythme.',

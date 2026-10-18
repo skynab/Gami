@@ -11,6 +11,14 @@ export const es: Messages = {
     sending: 'Enviando…',
     language: 'Idioma',
   },
+  donate: {
+    button: 'Donar',
+    title: 'Apoya Gami',
+    body: 'Gami es gratis, sin anuncios, y para aprender no hace falta cuenta. Si te ayudó a doblar algo, una pequeña propina ayuda a mantenerlo en marcha.',
+    other: 'Otra cantidad',
+    note: 'Stripe procesa los pagos de forma segura en una pestaña nueva. Las propinas son voluntarias y no son deducibles de impuestos.',
+    thanks: '¡Gracias por apoyar Gami!',
+  },
   gallery: {
     title: 'Aprende a plegar',
     intro: 'Elige un modelo y sigue cada pliegue en 3D. Gíralo, acércate y ve a tu ritmo.',
