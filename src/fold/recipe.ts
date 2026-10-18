@@ -83,6 +83,27 @@ export class Recipe {
     return 'table' in at ? at.table : locate(this.shaping?.base ?? this.current, at.paper);
   }
 
+  /** How high up the paper picked out by `only` (a test on faces' centres on the sheet) is at a point on the table. */
+  layerAt(spot: Vec2, only: (centre: Vec2) => boolean): number {
+    const here = toFlat(this.current).filter((f) => only([avg(f.paper, 0), avg(f.paper, 1)]) && inside(f.world, spot));
+    return Math.max(-Infinity, ...here.map((f) => f.layer));
+  }
+
+  /** The paper over a point on the table, top first, as each face's centre on the sheet. */
+  stackAt(spot: Vec2): Vec2[] {
+    return toFlat(this.current)
+      .filter((f) => inside(f.world, spot))
+      .sort((a, b) => b.layer - a.layer)
+      .map((f): Vec2 => [avg(f.paper, 0), avg(f.paper, 1)]);
+  }
+
+  /** The faces passing a test on their centre on the sheet and on the table, as their outlines on the sheet. */
+  pieces(test: (centre: Vec2, at: Vec2) => boolean): Vec2[][] {
+    return toFlat(this.current)
+      .filter((f) => test([avg(f.paper, 0), avg(f.paper, 1)], [avg(f.world, 0), avg(f.world, 1)]))
+      .map((f) => f.paper);
+  }
+
   /** Folds so `from` lands exactly on `to`. */
   onto(from: At, to: At, step: FoldStep): this {
     return this.fold(lineOnto(this.where(from), this.where(to)), step);
