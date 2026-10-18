@@ -114,6 +114,7 @@ export const fr: Messages = {
     reset: 'Réinitialiser la vue',
     resetTitle: 'Réinitialiser la vue (0)',
     progress: 'Progression dans les étapes',
+    section: 'Aller à : {{name}} (étape {{step}})',
   },
   views: { free: 'Libre', top: 'Dessus', front: 'Face', side: 'Côté' },
   cube: { right: 'Droite', left: 'Gauche', top: 'Dessus', bottom: 'Dessous', front: 'Face', back: 'Dos' },

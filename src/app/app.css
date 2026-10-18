@@ -718,9 +718,38 @@ kbd {
 }
 
 .scrubber {
+  position: relative;
+  display: flex;
   flex: 1;
   min-width: 140px;
+}
+
+.scrubber input {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
   accent-color: var(--accent);
+}
+
+/* A small diamond above the track where a section starts. The range thumb is 16px, so its centre travels
+   from 8px in to 8px from the end. */
+.section-mark {
+  position: absolute;
+  inset-block-start: -9px;
+  inset-inline-start: calc(8px + (100% - 16px) * var(--at));
+  width: 9px;
+  height: 9px;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 1px;
+  background: var(--accent);
+  transform: translateX(-50%) rotate(45deg);
+  cursor: pointer;
+}
+
+.section-mark:hover {
+  outline: 2px solid color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
 /* Gallery */

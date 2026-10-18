@@ -15,29 +15,48 @@ export function foldingGeometry() {
   const crease = (a: Vec2, b: Vec2, moving: Vec2, step: { title: string; text: string }, open = 'Open it again. Each fold leaves a crease, a straight line.') =>
     r.along(at(a), at(b), at(moving), step).unfold({ title: 'Unfold', text: open });
 
+  // Each axiom, and then the trisection, on a fresh square of its own, so its creases are easy to see.
+  const fresh = () =>
+    r.newSheet({
+      title: 'A fresh square',
+      text: 'Put the creased square aside and take a new one, so the next creases stand out.',
+    });
+
   // 1. Through two points.
+  r.section('Axiom 1');
   crease(bl, tr, tl, {
     title: 'A line through two points',
     text: 'Axiom 1: through any two points there is exactly one fold. Fold through two corners. Folding draws straight lines, like a ruler.',
   });
   // 2. One point onto another.
+  r.section('Axiom 2');
+  fresh();
   r.onto(at(bl), at(br), {
     title: 'One point onto another',
     text: 'Axiom 2: there is exactly one fold that lays one point on another. Every point of the crease is the same distance from both: it’s the perpendicular bisector.',
   }).unfold({ title: 'Unfold', text: 'Open it. The crease cuts the square exactly in half.' });
-  // 3. One line onto another.
+  // 3. One line onto another: a diagonal first, to fold onto.
+  r.section('Axiom 3');
+  fresh();
+  crease(br, tl, tr, { title: 'A diagonal', text: 'Fold a diagonal, from the bottom right corner to the top left.' }, 'Open it. This crease is one of the lines.');
   r.edgeOnto([at(br), at(bl)], [at(br), at(tl)], {
     title: 'One line onto another',
     text: 'Axiom 3: fold one line onto another. The crease halves the angle between them: the bottom edge onto the diagonal halves 45° into 22.5°.',
   }).unfold({ title: 'Unfold', text: 'Open it. Halving angles is as easy as halving lengths.' });
-  // 4. Through a point, square to a line.
+  // 4. Through a point, square to a line: again a diagonal first.
+  r.section('Axiom 4');
+  fresh();
+  crease(bl, tr, tl, { title: 'A diagonal', text: 'Fold a diagonal, from the bottom left corner to the top right.' }, 'Open it. This crease is the given line.');
   crease([0, 0], [1, 1], tl, {
     title: 'Square to a line, through a point',
-    text: 'Axiom 4: through any point there is exactly one fold square to a given line. Fold through the centre at right angles to the first diagonal.',
+    text: 'Axiom 4: through any point there is exactly one fold square to a given line. Fold through the centre at right angles to the diagonal.',
   }, 'Open it. The two diagonals cross at right angles.');
 
   // 5. A point onto a line, through another point: the bottom left corner onto the middle crease, the fold
   // through the bottom right corner. It lands where it's as far from that corner as the side is long.
+  r.section('Axiom 5');
+  fresh();
+  r.onto(at(bl), at(br), { title: 'Fold in half', text: 'Fold the left edge onto the right edge.' }).unfold({ title: 'Unfold', text: 'Open it: a crease down the middle.' });
   const landing: Vec2 = [0, 0.5 - Math.sqrt(0.75)];
   r.onto(at(bl), at(landing), {
     title: 'A point onto a line, through a point',
@@ -49,11 +68,8 @@ export function foldingGeometry() {
   const corner = bl;
   const angle = (60 * Math.PI) / 180;
   const ray: Vec2 = [corner[0] + Math.cos(angle) * 0.9, corner[1] - Math.sin(angle) * 0.9];
-  // A fresh square, so the trisection's creases aren't lost among the axioms'.
-  r.newSheet({
-    title: 'A fresh square',
-    text: 'Put the creased square aside and take a new one, so the next creases stand out.',
-  });
+  r.section('Trisecting an angle');
+  fresh();
   crease(corner, ray, [0.3, 0.3], {
     title: 'An angle to trisect',
     text: 'Now something a straightedge and compass can’t do. Fold a line from the bottom left corner: here at 60° to the bottom edge, but any angle works.',

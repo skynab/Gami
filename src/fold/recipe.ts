@@ -47,6 +47,8 @@ export class Recipe {
   private steps: Step[] = [];
   /** After 3D shaping: the flat state it started from, and its bends so far. */
   private shaping?: { base: FoldFrame; bends: Bend[] };
+  /** The section the next step starts, from `section()`. */
+  private sectionName?: string;
 
   private info: { id: string; title: string; sheets: Sheet[]; card?: OrigamiModel['card'] };
 
@@ -172,6 +174,7 @@ export class Recipe {
     make(this);
     const added = this.steps.splice(before);
     if (!added.length) return this;
+    this.sectionName ??= added[0].section;
     const last = added.at(-1)!.frame;
     // Each face's parent, followed back through the merged folds to the frame before them.
     const faces_parent = last.faces_vertices.map((_, f) => {
@@ -197,6 +200,12 @@ export class Recipe {
     const at = this.current.faces_vertices.findIndex((g) => inside(g.map((v) => this.current.vertices_paper[v]), centre));
     if (at < 0) throw new FoldError(`${this.info.id}: no paper to replace at step ${this.steps.length + 1}`);
     return at;
+  }
+
+  /** Starts a part of the model called `name` (each topic of a lesson, say) with the next step. */
+  section(name: string): this {
+    this.sectionName = name;
+    return this;
   }
 
   /** A bookmark for `unfold({ to })`: the paper as it is now. */
@@ -302,7 +311,9 @@ export class Recipe {
 
   private push({ title, text, kind }: Omit<Step, 'frame'>, frame: FoldFrame): this {
     this.shaping = undefined;
-    this.steps.push({ title, ...(text && { text }), kind, frame });
+    const section = this.sectionName;
+    this.sectionName = undefined;
+    this.steps.push({ title, ...(text && { text }), kind, ...(section && { section }), frame });
     return this;
   }
 

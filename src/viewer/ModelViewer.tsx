@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
 import {
@@ -261,7 +261,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
           </button>
         </div>
 
-        <Scrubber />
+        <Scrubber sections={data?.steps.flatMap((st, i) => (st.section ? [{ step: i + 1, name: say(st.section) }] : [])) ?? []} />
 
         <div className="group">
           <div className="segmented" role="group" aria-label={t('viewer.view')}>
@@ -325,19 +325,19 @@ function ShortcutsDialog({ onClose }: { onClose(): void }) {
 }
 
 /**
- * Drag through the whole model, stopping anywhere, even halfway through a fold.
+ * Drag through the whole model, stopping anywhere, even halfway through a fold. A diamond marks where each
+ * section starts (each topic of a lesson); clicking it goes there.
  * Its own component because it re-renders on every animation frame.
  */
-function Scrubber() {
+function Scrubber({ sections }: { sections: { step: number; name: string }[] }) {
   const pos = usePlayback((s) => s.pos);
   const total = usePlayback((s) => s.total);
   const step = usePlayback((s) => s.step);
   const { t } = useTranslation();
   return (
-    <>
+    <div className="scrubber">
       <input
         type="range"
-        className="scrubber"
         min={0}
         max={Math.max(1, total)}
         step={0.001}
@@ -354,6 +354,22 @@ function Scrubber() {
           <option key={i} value={i} />
         ))}
       </datalist>
-    </>
+      {total > 0 &&
+        sections.map((s) => {
+          const label = t('viewer.section', { name: s.name, step: s.step });
+          return (
+            <button
+              key={s.step}
+              type="button"
+              className="section-mark"
+              // Where the section's first step starts on the track (the thumb's centre runs from half its width in).
+              style={{ '--at': (s.step - 1) / total } as CSSProperties}
+              aria-label={label}
+              title={label}
+              onClick={() => usePlayback.getState().goTo(s.step)}
+            />
+          );
+        })}
+    </div>
   );
 }

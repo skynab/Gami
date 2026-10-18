@@ -656,8 +656,6 @@ export const es: Record<string, string> = {
     "Ábrelo. Dividir ángulos por la mitad es tan fácil como dividir longitudes.",
   "Square to a line, through a point":
     "Perpendicular a una recta, por un punto",
-  "Axiom 4: through any point there is exactly one fold square to a given line. Fold through the centre at right angles to the first diagonal.":
-    "Axioma 4: por cualquier punto pasa exactamente un pliegue perpendicular a una recta dada. Dobla por el centro, en ángulo recto con la primera diagonal.",
   "Open it. The two diagonals cross at right angles.":
     "Ábrelo. Las dos diagonales se cruzan en ángulo recto.",
   "A point onto a line, through a point":
@@ -702,4 +700,32 @@ export const es: Record<string, string> = {
     "Un cuadrado nuevo",
   "Put the creased square aside and take a new one, so the next creases stand out.":
     "Deja a un lado el cuadrado con pliegues y toma uno nuevo, para que los próximos pliegues se distingan bien.",
+  "Axiom 4: through any point there is exactly one fold square to a given line. Fold through the centre at right angles to the diagonal.":
+    "Axioma 4: por cualquier punto pasa exactamente un pliegue perpendicular a una recta dada. Dobla por el centro en ángulo recto con la diagonal.",
+  "A diagonal":
+    "Una diagonal",
+  "Fold a diagonal, from the bottom right corner to the top left.":
+    "Dobla una diagonal, de la esquina inferior derecha a la superior izquierda.",
+  "Open it. This crease is one of the lines.":
+    "Ábrelo. Este pliegue es una de las rectas.",
+  "Fold a diagonal, from the bottom left corner to the top right.":
+    "Dobla una diagonal, de la esquina inferior izquierda a la superior derecha.",
+  "Open it. This crease is the given line.":
+    "Ábrelo. Este pliegue es la recta dada.",
+  "Fold the left edge onto the right edge.":
+    "Dobla el borde izquierdo sobre el derecho.",
+  "Open it: a crease down the middle.":
+    "Ábrelo: un pliegue vertical por el centro.",
+  "Axiom 1":
+    "Axioma 1",
+  "Axiom 2":
+    "Axioma 2",
+  "Axiom 3":
+    "Axioma 3",
+  "Axiom 4":
+    "Axioma 4",
+  "Axiom 5":
+    "Axioma 5",
+  "Trisecting an angle":
+    "Trisecar un ángulo",
 };

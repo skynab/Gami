@@ -656,8 +656,6 @@ export const ja: Record<string, string> = {
     "開きます。角を半分にするのは、長さを半分にするのと同じくらい簡単です。",
   "Square to a line, through a point":
     "一点を通り、線に垂直に",
-  "Axiom 4: through any point there is exactly one fold square to a given line. Fold through the centre at right angles to the first diagonal.":
-    "公理4：どの点を通っても、ある線に垂直な折り線はちょうど一本です。中心を通り、最初の対角線に直角に折ります。",
   "Open it. The two diagonals cross at right angles.":
     "開きます。二本の対角線は直角に交わります。",
   "A point onto a line, through a point":
@@ -702,4 +700,32 @@ export const ja: Record<string, string> = {
     "新しい正方形",
   "Put the creased square aside and take a new one, so the next creases stand out.":
     "折り目のついた紙は脇に置いて、新しい紙を用意しましょう。これからの折り目が見分けやすくなります。",
+  "Axiom 4: through any point there is exactly one fold square to a given line. Fold through the centre at right angles to the diagonal.":
+    "公理4：どんな点を通っても、与えられた線に垂直な折り線はちょうど一本です。中心を通り、対角線に直角になるように折りましょう。",
+  "A diagonal":
+    "対角線",
+  "Fold a diagonal, from the bottom right corner to the top left.":
+    "右下の角から左上の角へ、対角線で折ります。",
+  "Open it. This crease is one of the lines.":
+    "開きます。この折り目が線の一本です。",
+  "Fold a diagonal, from the bottom left corner to the top right.":
+    "左下の角から右上の角へ、対角線で折ります。",
+  "Open it. This crease is the given line.":
+    "開きます。この折り目が与えられた線です。",
+  "Fold the left edge onto the right edge.":
+    "左の辺を右の辺に合わせて折ります。",
+  "Open it: a crease down the middle.":
+    "開くと、真ん中に縦の折り目ができます。",
+  "Axiom 1":
+    "公理1",
+  "Axiom 2":
+    "公理2",
+  "Axiom 3":
+    "公理3",
+  "Axiom 4":
+    "公理4",
+  "Axiom 5":
+    "公理5",
+  "Trisecting an angle":
+    "角の三等分",
 };

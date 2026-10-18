@@ -4,8 +4,8 @@ import { es } from './es';
 import { fr } from './fr';
 import { ja } from './ja';
 
-/** Every built-in step's title and instruction, in English. */
-const english = new Set(RECIPES.flatMap((make) => make().steps.flatMap((s) => [s.title, s.text ?? ''])).filter(Boolean));
+/** Every built-in step's title, instruction and section name, in English. */
+const english = new Set(RECIPES.flatMap((make) => make().steps.flatMap((s) => [s.title, s.text ?? '', s.section ?? ''])).filter(Boolean));
 
 describe.each([
   ['ja', ja],

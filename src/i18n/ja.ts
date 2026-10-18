@@ -114,6 +114,7 @@ export const ja: Messages = {
     reset: '視点をリセット',
     resetTitle: '視点をリセット (0)',
     progress: '手順の進み具合',
+    section: '移動：{{name}}（手順{{step}}）',
   },
   views: { free: '自由', top: '上', front: '正面', side: '横' },
   cube: { right: '右', left: '左', top: '上', bottom: '下', front: '前', back: '後' },

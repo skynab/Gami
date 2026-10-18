@@ -114,6 +114,7 @@ export const es: Messages = {
     reset: 'Restablecer vista',
     resetTitle: 'Restablecer vista (0)',
     progress: 'Avance por los pasos',
+    section: 'Ir a: {{name}} (paso {{step}})',
   },
   views: { free: 'Libre', top: 'Arriba', front: 'Frente', side: 'Lado' },
   cube: { right: 'Der.', left: 'Izq.', top: 'Arriba', bottom: 'Abajo', front: 'Frente', back: 'Atrás' },

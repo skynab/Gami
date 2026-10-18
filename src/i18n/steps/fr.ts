@@ -656,8 +656,6 @@ export const fr: Record<string, string> = {
     "Rouvrez-le. Couper un angle en deux est aussi simple que couper une longueur en deux.",
   "Square to a line, through a point":
     "Perpendiculaire à une droite, par un point",
-  "Axiom 4: through any point there is exactly one fold square to a given line. Fold through the centre at right angles to the first diagonal.":
-    "Axiome 4 : par tout point passe exactement un pli perpendiculaire à une droite donnée. Pliez par le centre, à angle droit avec la première diagonale.",
   "Open it. The two diagonals cross at right angles.":
     "Rouvrez-le. Les deux diagonales se croisent à angle droit.",
   "A point onto a line, through a point":
@@ -702,4 +700,32 @@ export const fr: Record<string, string> = {
     "Un carré neuf",
   "Put the creased square aside and take a new one, so the next creases stand out.":
     "Mettez de côté le carré plié et prenez-en un neuf, pour bien voir les prochains plis.",
+  "Axiom 4: through any point there is exactly one fold square to a given line. Fold through the centre at right angles to the diagonal.":
+    "Axiome 4 : par tout point passe exactement un pli perpendiculaire à une droite donnée. Pliez par le centre, à angle droit avec la diagonale.",
+  "A diagonal":
+    "Une diagonale",
+  "Fold a diagonal, from the bottom right corner to the top left.":
+    "Pliez une diagonale, du coin inférieur droit au coin supérieur gauche.",
+  "Open it. This crease is one of the lines.":
+    "Dépliez. Ce pli est l’une des droites.",
+  "Fold a diagonal, from the bottom left corner to the top right.":
+    "Pliez une diagonale, du coin inférieur gauche au coin supérieur droit.",
+  "Open it. This crease is the given line.":
+    "Dépliez. Ce pli est la droite donnée.",
+  "Fold the left edge onto the right edge.":
+    "Pliez le bord gauche sur le bord droit.",
+  "Open it: a crease down the middle.":
+    "Dépliez : un pli vertical au milieu.",
+  "Axiom 1":
+    "Axiome 1",
+  "Axiom 2":
+    "Axiome 2",
+  "Axiom 3":
+    "Axiome 3",
+  "Axiom 4":
+    "Axiome 4",
+  "Axiom 5":
+    "Axiome 5",
+  "Trisecting an angle":
+    "Trisection d’un angle",
 };

@@ -32,6 +32,8 @@ export interface Step {
   title: string;
   text?: string;
   kind?: StepKind;
+  /** Set on the first step of a part of the model, such as each topic of a lesson: its name. The timeline marks it. */
+  section?: string;
   /** The paper after this step. */
   frame: FoldFrame;
   /**

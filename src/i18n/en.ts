@@ -116,6 +116,7 @@ export const en = {
     reset: 'Reset view',
     resetTitle: 'Reset view (0)',
     progress: 'Progress through the steps',
+    section: 'Go to: {{name}} (step {{step}})',
   },
   views: { free: 'Free', top: 'Top', front: 'Front', side: 'Side' },
   cube: { right: 'Right', left: 'Left', top: 'Top', bottom: 'Bottom', front: 'Front', back: 'Back' },
