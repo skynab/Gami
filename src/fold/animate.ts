@@ -2,6 +2,7 @@ import { Matrix4, Quaternion, Vector3 } from 'three';
 import { box, cornerKeys, crossDepth, overlapping } from './cross3d';
 import { facePositions, framesOf, LAYER_GAP, normal, sphereAround } from './frames';
 import { overlapArea, sharedSegment } from './geometry2d';
+import { applyOp } from './ops';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from './types';
 
 /**
@@ -392,7 +393,38 @@ function hingedWith(out: Transition, hinges: NonNullable<Transition['hinges']>):
 /** Step k's animation (k from 1): straight from the frame before, or through the frames it passes on its way. */
 export function stepTransition(model: OrigamiModel, k: number): Transition {
   const frames = framesOf(model);
+  const over = tuckedOver(model, k);
+  if (over) return transitionVia([frames[k - 1], over, { ...frames[k], faces_parent: sameFaces(over, frames[k]) }]);
   return transitionVia([frames[k - 1], ...(model.steps[k - 1].via ?? []), frames[k]]);
+}
+
+/**
+ * For a step that tucks paper into a pocket: the same folds with the paper landing on top of the pocket
+ * instead. The step plays through it, folding the point over and then settling it in between the pocket's
+ * layers, so the paper it tucks into stays where it is rather than lifting out of the way.
+ */
+function tuckedOver(model: OrigamiModel, k: number): FoldFrame | null {
+  const op = model.steps[k - 1].op;
+  if (op?.op !== 'collapse' || !op.under) return null;
+  try {
+    const { frame } = applyOp({ ...model, steps: model.steps.slice(0, k - 1) }, { ...op, under: undefined });
+    return sameFaces(frame, model.steps[k - 1].frame) ? frame : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Each of `b`'s faces' index in `a`, matched by their corners on the sheet; undefined unless they're the same faces. */
+function sameFaces(a: FoldFrame, b: FoldFrame): number[] | undefined {
+  if (a.faces_vertices.length !== b.faces_vertices.length) return undefined;
+  const key = (f: FoldFrame, i: number) =>
+    f.faces_vertices[i]
+      .map((v) => f.vertices_paper[v].map((c) => c.toFixed(6)).join(','))
+      .sort()
+      .join(' ');
+  const at = new Map(a.faces_vertices.map((_, i) => [key(a, i), i]));
+  const out = b.faces_vertices.map((_, i) => at.get(key(b, i)));
+  return out.every((i) => i !== undefined) ? (out as number[]) : undefined;
 }
 
 /** How the paper gets through a list of frames, one after another, as a single step. */
