@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { toFoldFile } from '../fold/fold-format';
-import { thumbnailSvg } from '../fold/thumbnail';
+import { previewSvg, thumbnailSvg } from '../fold/thumbnail';
 import { problems } from '../fold/validate';
 import { MODELS } from '../gallery/catalog';
 import { RECIPES } from './recipes';
@@ -21,6 +21,7 @@ describe.each(models.map((m) => [m.id, m] as const))('%s', (id, model) => {
   it('matches its generated files (run `npm run models` if not)', () => {
     expect(JSON.parse(file(`${id}.fold`))).toEqual(JSON.parse(JSON.stringify(toFoldFile(model))));
     expect(file(`${id}.svg`)).toBe(thumbnailSvg(model));
+    expect(file(`${id}-preview.svg`)).toBe(previewSvg(model));
   });
 
   it('is listed in the gallery with the right number of steps', () => {

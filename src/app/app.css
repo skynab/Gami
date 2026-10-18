@@ -840,6 +840,23 @@ kbd {
   filter: drop-shadow(0 4px 6px rgb(0 0 0 / 0.12));
 }
 
+/* The looping preview sits over the finished model, shown while the card is hovered or focused. */
+.card-thumb .card-preview {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.card-thumb .card-preview.playing {
+  opacity: 1;
+}
+
+.card-thumb:has(.card-preview.playing) img:not(.card-preview) {
+  opacity: 0;
+}
+
 .card-thumb .placeholder {
   width: 40%;
   height: 40%;

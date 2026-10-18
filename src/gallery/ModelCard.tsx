@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { PaperIcon } from '../app/icons';
@@ -10,6 +11,10 @@ export function ModelCard({ model }: { model: ModelInfo }) {
   const level = t(`levels.${levelOf(model.difficulty)}`);
   const progress = model.steps ? readProgress(model.id) : null;
   const lesson = model.category === 'math';
+  // The looping preview loads the first time the card is hovered or focused, and plays while it is.
+  const [preview, setPreview] = useState<'off' | 'on' | 'loaded'>('off');
+  const show = () => setPreview('on');
+  const hide = () => setPreview((p) => (p === 'off' ? 'off' : 'loaded'));
   const badge = !model.steps
     ? t('card.soon')
     : progress?.done
@@ -26,13 +31,24 @@ export function ModelCard({ model }: { model: ModelInfo }) {
   ].filter(Boolean);
 
   return (
-    <Link to={`/learn/${model.id}`} className={lesson ? 'card lesson' : 'card'}>
+    <Link
+      to={`/learn/${model.id}`}
+      className={lesson ? 'card lesson' : 'card'}
+      onPointerEnter={show}
+      onPointerLeave={hide}
+      onFocus={show}
+      onBlur={hide}
+    >
       <div className="card-thumb">
         {model.steps ? (
           // The finished model from above, generated with its steps (scripts/build-models.ts).
           <img src={modelUrl(model.id, 'svg')} alt="" loading="lazy" />
         ) : (
           <PaperIcon className="placeholder" />
+        )}
+        {model.steps && preview !== 'off' && (
+          // A few of its steps in turn (scripts/build-models.ts), over the finished model.
+          <img src={modelUrl(model.id, 'preview.svg')} alt="" className={preview === 'on' ? 'card-preview playing' : 'card-preview'} />
         )}
         {badge && <span className={model.steps ? 'card-badge' : 'card-badge soon'}>{badge}</span>}
       </div>

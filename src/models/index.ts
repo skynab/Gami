@@ -16,7 +16,8 @@ export const BLANK_SHEET: OrigamiModel = {
 };
 
 /** Where a built-in model's files are served from. */
-export const modelUrl = (id: string, ext: 'fold' | 'svg') => `${import.meta.env.BASE_URL}models/${id}.${ext}`;
+export const modelUrl = (id: string, ext: 'fold' | 'svg' | 'preview.svg') =>
+  `${import.meta.env.BASE_URL}models/${id}${ext === 'preview.svg' ? '-' : '.'}${ext}`;
 
 /** Fetches a built-in model's steps, or returns null for models that don't have any yet. */
 export function loadModel(id: string): Promise<OrigamiModel> | null {
