@@ -183,8 +183,10 @@ Imported and shared files are untrusted data:
    replays from its .fold file to the same frames (`src/models/models.test.ts`), and the frames in
    `public/models` didn't change. The files grew by about a third (the tulip, with many picked faces, by
    about 70%). A `moving` point lying on its own line turns the line round, as `along` always did.
-3. **Studio records ops.** Every new Studio step has an op; lifts read their base from ops instead of the
-   session map.
+3. ✅ **Studio records ops.** Every Studio step is built from its op (`applyOp`), so what's previewed is
+   what replays. Picks are kept as the point of the sheet on top there (`atOf`), or on the table off the
+   paper and for where a moved sheet lands. Another lift finds the flat state to add to from the ops
+   (`shapingBase`), so it works after a refresh or import too.
 4. **Studio editing.** Edit, insert and delete steps, with replay and the failed-step messages.
 5. **Translations note.** Step text is translated by its English wording (`src/i18n/steps`), which ops
    don't change. Nothing to do, but worth checking edited built-ins still find their translations.

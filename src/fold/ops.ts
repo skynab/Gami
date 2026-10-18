@@ -1,5 +1,5 @@
 import { collapse, type CreaseKind } from './collapse';
-import { fold, FoldError, rotate, turnOver, unfoldStep, type FoldKind } from './fold';
+import { fold, FoldError, placeLike, rotate, toFlat, turnOver, unfoldStep, type FoldKind } from './fold';
 import { flipLine, lineEdgeOnto, lineOnto, lineThrough, sideOf, type Line } from './geometry2d';
 import { place } from './place';
 import { anchorFor, centre, inside, locate, smallerSideMoves, topLayers } from './select';
@@ -74,6 +74,9 @@ export type Op =
   | { op: 'together'; ops: Op[] };
 
 export class OpError extends Error {}
+
+/** A compound fold where no part of the paper stays still, so there's nothing to fold it from. */
+export class NoStillError extends FoldError {}
 
 const LIMITS = { list: 256, outline: 64, outlines: 512, nesting: 4, steps: 2000, faces: 20000 };
 
@@ -344,6 +347,47 @@ export function replay(model: OrigamiModel, from = 0): Replay {
   return { model: { ...model, steps }, status };
 }
 
+/**
+ * The paper after one more step made by `op`, as the Studio previews and adds it. For a shaping step, `flat`
+ * is the same paper with its faces matched to the flat state its lines are picked on (see `shapingBase`).
+ */
+export function applyOp(model: OrigamiModel, op: Op): { frame: FoldFrame; via?: FoldFrame[]; flat?: FoldFrame } {
+  return run(op, { model, steps: model.steps });
+}
+
+/**
+ * When the last steps are shaping steps, the flat state before them: what another shaping step's lines are
+ * picked on, as its bends add to theirs. Null otherwise.
+ */
+export function shapingBase(model: OrigamiModel): FoldFrame | null {
+  const first = shapingRun(model.steps);
+  return first < model.steps.length ? (first ? model.steps[first - 1].frame : model.start) : null;
+}
+
+/** Where the run of shaping steps at the end of `steps` starts. */
+function shapingRun(steps: Step[]): number {
+  let first = steps.length;
+  while (first > 0 && steps[first - 1].op?.op === 'shape') first--;
+  return first;
+}
+
+/**
+ * A point picked on the table, as the point of the sheet on top there, so it follows that bit of paper if an
+ * earlier step changes. Off the paper (or on paper that isn't flat), it stays a point on the table.
+ */
+export function atOf(frame: FoldFrame, spot: Vec2): At {
+  let faces;
+  try {
+    faces = toFlat(frame).filter((f) => inside(f.world, spot));
+  } catch {
+    return { table: spot };
+  }
+  if (!faces.length) return { table: spot };
+  const top = faces.reduce((a, b) => (b.layer > a.layer ? b : a));
+  // The face's map from table back to sheet: the same construction with the roles swapped.
+  return { paper: placeLike({ ...top, paper: top.world, world: top.paper })(spot) };
+}
+
 interface Context {
   model: Pick<OrigamiModel, 'sheets' | 'start'>;
   /** The steps before this one, already replayed. */
@@ -352,7 +396,7 @@ interface Context {
 
 const radians = (degrees: number) => (degrees * Math.PI) / 180;
 
-function run(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[] } {
+function run(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; flat?: FoldFrame } {
   const frames = [ctx.model.start, ...ctx.steps.map((s) => s.frame)];
   const frame = frames[frames.length - 1];
   const where = (a: At, on = frame): Vec2 => ('table' in a ? a.table : locate(on, a.paper));
@@ -372,7 +416,7 @@ function run(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[] } {
       if ('paper' in op.anchor) anchor = op.anchor.paper;
       else {
         const found = anchorFor(frame, creases.map((c) => c.line), test(op.anchor.among));
-        if (!found) throw new FoldError('No part of the paper stays still.');
+        if (!found) throw new NoStillError('No part of the paper stays still.');
         anchor = found;
       }
       return { frame: collapse(frame, { creases, anchor, under: test(op.under) }) };
@@ -414,8 +458,7 @@ function run(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[] } {
     }
     case 'shape': {
       // The run of shaping steps this one adds to, and the flat state before it.
-      let first = ctx.steps.length;
-      while (first > 0 && ctx.steps[first - 1].op?.op === 'shape') first--;
+      const first = shapingRun(ctx.steps);
       if (first > 0 && !ctx.steps[first - 1].op && ctx.steps[first - 1].kind === 'pose')
         throw new OpError('Can’t add to a 3D step that has no operation saved.');
       const base = frames[first];
@@ -423,7 +466,7 @@ function run(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[] } {
         o.bends.flatMap((b) => bendsOf(b, base, ctx.model.sheets)),
       );
       const shaped = shape(base, bends);
-      return { frame: first < ctx.steps.length ? reparent(frame, shaped) : shaped };
+      return { frame: first < ctx.steps.length ? reparent(frame, shaped) : shaped, flat: shaped };
     }
     case 'popUp':
       return { frame: radial(frame, where(op.centre), op.rays) };

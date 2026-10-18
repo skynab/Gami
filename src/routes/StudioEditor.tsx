@@ -1,17 +1,14 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TopBar } from '../app/TopBar';
-import { collapse, type Crease } from '../fold/collapse';
-import { fold, FoldError, rotate, turnOver, unfoldStep, type FoldKind } from '../fold/fold';
+import type { CreaseKind } from '../fold/collapse';
+import { FoldError, type FoldKind } from '../fold/fold';
 import { fromFoldFile, toFoldFile } from '../fold/fold-format';
-import { framesOf } from '../fold/frames';
-import { flipLine, lineEdgeOnto, lineOnto, lineThrough, type Line } from '../fold/geometry2d';
-import { place } from '../fold/place';
-import { sheetOf } from '../fold/sheets';
+import type { Line } from '../fold/geometry2d';
+import { applyOp, atOf, lineOf, NoStillError, OpError, shapingBase, type Faces, type LineSpec, type Op } from '../fold/ops';
 import type { FoldFrame, Sheet, Step, Vec2 } from '../fold/types';
 import { useDraft } from '../studio/draft';
-import { curl, reparent, shape, type Bend } from '../fold/shape';
-import { anchorFor, smallerSideMoves, topLayers, unfoldTarget } from '../studio/editor';
+import { unfoldTarget } from '../studio/editor';
 import { CloudPanel } from '../studio/CloudPanel';
 import { FoldEditor } from '../studio/FoldEditor';
 import { usePlayback } from '../state/playback';
@@ -56,14 +53,12 @@ export default function StudioEditor({ end, cloud = false }: {
   const [kind, setKind] = useState<FoldKind>('valley');
   const [reverseKind, setReverseKind] = useState<'inside' | 'outside'>('inside');
   const [creaseKind, setCreaseKind] = useState<'valley' | 'mountain' | 'flat'>('valley');
-  const [creases, setCreases] = useState<Crease[]>([]);
+  const [creases, setCreases] = useState<{ line: Line; kind: CreaseKind; op: CreaseOp }[]>([]);
   const [angle, setAngle] = useState(90);
   const [segments, setSegments] = useState(1);
-  // Lifts made this session, by the step count after them: the flat state they started from and their
-  // bends, so another lift can add to them. (Lines are picked on that flat state.)
-  const shaped = useRef(new Map<number, { base: FoldFrame; bends: Bend[] }>());
-  const shaping = shaped.current.get(model.steps.length);
-  const editFrame = shaping?.base ?? frame;
+  // After a lift, another lift adds to its bends, picking lines on the flat state the lifts started from.
+  const base = useMemo(() => shapingBase(model), [model]);
+  const editFrame = base ?? frame;
   const [layers, setLayers] = useState<Layers>('all');
   // Models of several sheets: which one the next step works on (or all), and for a move, how it's put down.
   const [sheet, setSheet] = useState<number | 'all'>('all');
@@ -73,56 +68,66 @@ export default function StudioEditor({ end, cloud = false }: {
   const [tuck, setTuck] = useState<number | null>(null);
   const many = model.sheets.length > 1;
   const chosen = many && sheet !== 'all' && sheet < model.sheets.length ? sheet : null;
-  const inSheet = useMemo(() => (chosen === null ? undefined : (paper: Vec2[]) => sheetOf(model.sheets, paper) === chosen), [chosen, model.sheets]);
   const [picks, setPicks] = useState<Vec2[]>([]);
   const [flipped, setFlipped] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const file = useRef<HTMLInputElement>(null);
 
-  // Picks a fold line needs: two points, or for edge to edge, two along each edge.
+  // Picks a fold line needs: two points, or for edge to edge, two along each edge. Each is kept as the point
+  // of the sheet picked, so the step follows the paper if an earlier one changes.
   const needs = tool === 'edges' ? 4 : 2;
-  const line = useMemo((): Line | null => {
+  const spec = useMemo((): LineSpec | null => {
     if (picks.length < needs) return null;
-    const [a, b, c, d] = picks;
-    const base = tool === 'onto' ? lineOnto(a, b) : tool === 'edges' ? lineEdgeOnto(a, b, c, d) : smallerSideMoves(editFrame, lineThrough(a, b));
-    return base && (flipped ? flipLine(base) : base);
-  }, [picks, needs, tool, editFrame, flipped]);
-
-  const n = layers === 'all' ? undefined : layers;
-  // For a lift, `onFlat` is the preview with its faces matched to the flat state the lines are picked on.
-  const result = useMemo((): { frame: FoldFrame; onFlat?: FoldFrame; bends?: Bend[] } | { error: string } | null => {
-    if (action === 'move') {
-      if (!inSheet) return { error: t('studio.errors.chooseSheet') };
-      try {
-        return { frame: place(frame, { only: inSheet, to: picks[0], angle: (turn * Math.PI) / 180, flip: overturn, under: underneath }) };
-      } catch (e) {
-        if (e instanceof FoldError) return { error: e.message };
-        throw e;
-      }
-    }
-    // A collapse previews the creases added so far; the others preview the picked line.
-    if (action === 'collapse' ? !creases.length : !line) return null;
+    const [a, b, c, d] = picks.map((p) => atOf(editFrame, p));
+    return tool === 'onto' ? { onto: [a, b] } : tool === 'edges' ? { edgeOnto: [[a, b], [c, d]] } : { through: [a, b], moving: 'smaller' };
+  }, [picks, needs, tool, editFrame]);
+  const line = useMemo((): Line | null => {
+    if (!spec) return null;
     try {
-      if (action === 'fold') return { frame: fold(frame, { line: line!, kind, layers: n, only: inSheet }) };
-      if (action === 'lift') {
-        if (!shaping && frame.vertices_coords.some((p) => Math.abs(p[1]) > 1e-6))
-          throw new FoldError(t('studio.errors.shaped'));
-        const bends = [...(shaping?.bends ?? []), ...curl(editFrame, { line: line!, angle: (angle * Math.PI) / 180, layers: n, only: inSheet }, segments)];
-        const lifted = shape(editFrame, bends);
-        return { frame: shaping ? reparent(frame, lifted) : lifted, onFlat: lifted, bends };
-      }
-      const anchor = anchorFor(frame, action === 'reverse' ? [line!] : creases.map((c) => c.line), inSheet);
-      if (!anchor) throw new FoldError(t('studio.errors.noStill'));
-      const list: Crease[] =
-        action === 'reverse' ? [{ line: line!, kind: reverseKind, only: both(n === undefined ? undefined : topLayers(frame, line!, n), inSheet) }] : creases;
-      // Tucking: the paper that moves slides under the chosen sheet.
-      const under = action === 'collapse' && tuck !== null ? (paper: Vec2[]) => sheetOf(model.sheets, paper) === tuck : undefined;
-      return { frame: collapse(frame, { creases: list, anchor, under }) };
+      return lineOf(spec, editFrame, flipped);
     } catch (e) {
-      if (e instanceof FoldError) return { error: e.message };
+      if (e instanceof FoldError) return null;
       throw e;
     }
-  }, [frame, editFrame, shaping, line, kind, n, action, reverseKind, creases, angle, segments, inSheet, picks, turn, overturn, underneath, tuck, model.sheets, t]);
+  }, [spec, editFrame, flipped]);
+
+  const n = layers === 'all' ? undefined : layers;
+
+  // The step the tools describe now, if they describe one.
+  const op = useMemo((): Op | null => {
+    const inSheet: Faces | undefined = chosen === null ? undefined : { sheet: chosen };
+    const anchor = { auto: true as const, ...(inSheet && { among: inSheet }) };
+    const flip = flipped ? { flip: true } : {};
+    if (action === 'move')
+      return chosen === null ? null : { op: 'move', only: { sheet: chosen }, ...(picks[0] && { to: { table: picks[0] } }), degrees: turn, flip: overturn, under: underneath };
+    if (action === 'collapse')
+      return creases.length ? { op: 'collapse', creases: creases.map((c) => c.op), anchor, ...(tuck !== null && { under: { sheet: tuck } }) } : null;
+    if (!spec || !line) return null;
+    if (action === 'fold') return { op: 'fold', line: spec, ...flip, kind, ...(n !== undefined && { layers: n }), ...(inSheet && { only: inSheet }) };
+    if (action === 'reverse') {
+      const only = creaseFaces(n, chosen);
+      return { op: 'collapse', creases: [{ line: spec, ...flip, kind: reverseKind, ...(only && { only }) }], anchor };
+    }
+    return {
+      op: 'shape',
+      bends: [{ line: spec, ...flip, degrees: angle, ...(segments > 1 && { segments }), ...(n !== undefined && { layers: n }), ...(inSheet && { only: inSheet }) }],
+    };
+  }, [action, chosen, picks, turn, overturn, underneath, creases, tuck, spec, line, flipped, kind, n, reverseKind, angle, segments]);
+
+  // For a lift, `onFlat` is the preview with its faces matched to the flat state the lines are picked on.
+  const result = useMemo((): { frame: FoldFrame; onFlat?: FoldFrame; via?: FoldFrame[] } | { error: string } | null => {
+    if (action === 'move' && chosen === null) return { error: t('studio.errors.chooseSheet') };
+    if (!op) return null;
+    if (action === 'lift' && !base && frame.vertices_coords.some((p) => Math.abs(p[1]) > 1e-6)) return { error: t('studio.errors.shaped') };
+    try {
+      const { frame: next, flat, via } = applyOp(model, op);
+      return { frame: next, ...(flat && { onFlat: flat }), ...(via && { via }) };
+    } catch (e) {
+      if (e instanceof NoStillError) return { error: t('studio.errors.noStill') };
+      if (e instanceof FoldError || e instanceof OpError) return { error: e.message };
+      throw e;
+    }
+  }, [op, action, chosen, base, frame, model, t]);
   const preview = result && 'frame' in result ? result.frame : null;
 
   const startOver = () => {
@@ -138,42 +143,35 @@ export default function StudioEditor({ end, cloud = false }: {
 
   /** Collapse mode: keeps the picked line as one of the creases that change. */
   const addCrease = () => {
-    if (!line) return;
-    try {
-      const only = both(n === undefined ? undefined : topLayers(frame, line, n), inSheet);
-      setCreases((cs) => [...cs, { line, kind: creaseKind, only }]);
-      startOver();
-    } catch (e) {
-      if (!(e instanceof FoldError)) throw e;
-      setMessage(e.message);
-    }
+    if (!spec || !line) return;
+    const only = creaseFaces(n, chosen);
+    setCreases((cs) => [...cs, { line, kind: creaseKind, op: { line: spec, ...(flipped && { flip: true }), kind: creaseKind, ...(only && { only }) } }]);
+    startOver();
   };
 
   const add = (step: Step) => {
-    shaped.current.delete(model.steps.length + 1);
     addStep(step);
     startOver();
     setMessage(null);
   };
 
   const apply = () => {
-    if (!preview) return;
-    if (action === 'fold') add({ title: t(`studio.steps.${kind}`), kind: 'fold', frame: preview });
-    else if (action === 'reverse') add({ title: t(`studio.steps.${reverseKind}`), kind: 'reverse', frame: preview });
+    if (!result || !('frame' in result) || !op) return;
+    const made = { frame: result.frame, ...(result.via && { via: result.via }), op };
+    if (action === 'fold') add({ title: t(`studio.steps.${kind}`), kind: 'fold', ...made });
+    else if (action === 'reverse') add({ title: t(`studio.steps.${reverseKind}`), kind: 'reverse', ...made });
     else if (action === 'collapse') {
-      add({ title: t('studio.steps.collapse'), kind: 'fold', frame: preview });
+      add({ title: t('studio.steps.collapse'), kind: 'fold', ...made });
       setCreases([]);
-    } else if (action === 'move') add({ title: t('studio.steps.move'), kind: 'assemble', frame: preview });
-    else if (result && 'bends' in result && result.bends) {
-      const after = model.steps.length + 1;
-      add({ title: segments > 1 ? t('studio.steps.curl') : t('studio.steps.lift'), kind: 'pose', frame: preview });
-      shaped.current.set(after, { base: editFrame, bends: result.bends });
-    }
+    } else if (action === 'move') add({ title: t('studio.steps.move'), kind: 'assemble', ...made });
+    else add({ title: segments > 1 ? t('studio.steps.curl') : t('studio.steps.lift'), kind: 'pose', ...made });
   };
 
-  const safely = (make: () => Step) => {
+  /** Adds a step that needs no picks. */
+  const now = (step: Omit<Step, 'frame'> & { op: Op }) => {
     try {
-      add(make());
+      const { frame: next, via } = applyOp(model, step.op);
+      add({ ...step, frame: next, ...(via && { via }) });
     } catch (e) {
       if (!(e instanceof FoldError)) throw e;
       setMessage(e.message);
@@ -181,9 +179,9 @@ export default function StudioEditor({ end, cloud = false }: {
   };
 
   const target = unfoldTarget(model.steps);
-  const doUnfold = () => target !== null && safely(() => ({ title: t('studio.steps.unfold'), kind: 'unfold', ...unfoldStep(framesOf(model), target) }));
-  const doTurnOver = () => safely(() => ({ title: t('studio.steps.turnOver'), kind: 'turn-over', frame: turnOver(frame) }));
-  const doRotate = () => safely(() => ({ title: t('studio.steps.rotate'), kind: 'rotate', frame: rotate(frame, Math.PI / 2) }));
+  const doUnfold = () => target !== null && now({ title: t('studio.steps.unfold'), kind: 'unfold', op: { op: 'unfold' } });
+  const doTurnOver = () => now({ title: t('studio.steps.turnOver'), kind: 'turn-over', op: { op: 'turnOver' } });
+  const doRotate = () => now({ title: t('studio.steps.rotate'), kind: 'rotate', op: { op: 'rotate', degrees: 90 } });
 
   // The preview plays the newest step whenever one is added or removed.
   const total = model.steps.length;
@@ -231,7 +229,6 @@ export default function StudioEditor({ end, cloud = false }: {
     if (!f) return;
     try {
       replace(fromFoldFile(JSON.parse(await f.text())));
-      shaped.current.clear();
       startOver();
       setMessage(null);
     } catch (e) {
@@ -269,7 +266,7 @@ export default function StudioEditor({ end, cloud = false }: {
             <button type="button" className="secondary" onClick={exportFile}>
               {t('studio.export')}
             </button>
-            <button type="button" className="secondary" onClick={() => confirm(t('studio.newConfirm')) && (clear(), shaped.current.clear(), startOver())}>
+            <button type="button" className="secondary" onClick={() => confirm(t('studio.newConfirm')) && (clear(), startOver())}>
               {t('studio.new')}
             </button>
           </>
@@ -510,8 +507,15 @@ export default function StudioEditor({ end, cloud = false }: {
 }
 
 /** Both tests, when there are two (either one alone otherwise). */
-function both(a?: (p: Vec2[]) => boolean, b?: (p: Vec2[]) => boolean): ((p: Vec2[]) => boolean) | undefined {
-  return a && b ? (p) => a(p) && b(p) : (a ?? b);
+type CreaseOp = Extract<Op, { op: 'collapse' }>['creases'][number];
+
+function allOf(a?: Faces, b?: Faces): Faces | undefined {
+  return a && b ? { all: [a, b] } : (a ?? b);
+}
+
+/** What a compound fold's crease folds: the top N layers on its moving side, of one sheet. */
+function creaseFaces(n: number | undefined, sheet: number | null): Faces | undefined {
+  return allOf(n === undefined ? undefined : { top: n }, sheet === null ? undefined : { sheet });
 }
 
 /** The sheets a model starts from: their colours and size, and adding or removing sheets (before the first step). */
