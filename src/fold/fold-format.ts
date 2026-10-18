@@ -1,9 +1,13 @@
+import { OPS_VERSION, parseOp, type Op } from './ops';
 import type { FoldFrame, OrigamiModel, Step, StepKind } from './types';
 
 /**
  * Reading and writing .fold files (https://github.com/edemaine/fold). The start of the model is the file's
  * top-level frame and each step is one of `file_frames`. Standard fields keep their FOLD names; Gami's own
  * fields are prefixed `gami:`, which other FOLD tools ignore.
+ *
+ * A step may also say how it was made (`gami:op`, see ops.ts), so it can be folded again after an earlier
+ * step changes. Files with operations say which version of them they use in `gami:ops`.
  */
 
 interface FoldFileFrame {
@@ -18,6 +22,7 @@ interface FoldFileFrame {
   'gami:section'?: string;
   /** Frames the step passes through on its way, as when unfolding several folds one after another. */
   'gami:via'?: FoldFileFrame[];
+  'gami:op'?: Op;
 }
 
 export interface FoldFile extends FoldFileFrame {
@@ -29,6 +34,8 @@ export interface FoldFile extends FoldFileFrame {
   'gami:sheets': OrigamiModel['sheets'];
   /** Files from before multi-sheet models had a single sheet. */
   'gami:sheet'?: OrigamiModel['sheets'][number];
+  /** The version of the operations in `gami:op`, when any step has one. */
+  'gami:ops'?: number;
   file_frames: FoldFileFrame[];
 }
 
@@ -40,6 +47,7 @@ export function toFoldFile(model: OrigamiModel): FoldFile {
     file_classes: ['diagrams'],
     'gami:id': model.id,
     'gami:sheets': model.sheets,
+    ...(model.steps.some((s) => s.op) && { 'gami:ops': OPS_VERSION }),
     ...writeFrame(model.start),
     file_frames: model.steps.map((s) => ({
       frame_title: s.title,
@@ -47,27 +55,45 @@ export function toFoldFile(model: OrigamiModel): FoldFile {
       ...(s.kind && { 'gami:kind': s.kind }),
       ...(s.section && { 'gami:section': s.section }),
       ...(s.via?.length && { 'gami:via': s.via.map(writeFrame) }),
+      ...(s.op && { 'gami:op': s.op }),
       ...writeFrame(s.frame),
     })),
   };
 }
 
-export function fromFoldFile(file: FoldFile): OrigamiModel {
+/**
+ * Reads a .fold file made by Gami. Operations that aren't well formed, or are from a newer version of Gami,
+ * are left out, so those steps can only be played, not folded again; `warnings` collects why.
+ */
+export function fromFoldFile(file: FoldFile, warnings: string[] = []): OrigamiModel {
   const sheets = file['gami:sheets'] ?? (file['gami:sheet'] && [file['gami:sheet']]);
   if (!sheets || !Array.isArray(file.file_frames)) throw new Error('This .fold file wasn’t made by Gami.');
+  const version = file['gami:ops'];
+  const withOps = version === OPS_VERSION;
+  if (version !== undefined && !withOps) warnings.push(`This file’s steps were saved by a newer Gami, so they can be played but not changed.`);
+  const opOf = (f: FoldFileFrame, k: number): { op?: Op } => {
+    if (!withOps || f['gami:op'] === undefined) return {};
+    try {
+      return { op: parseOp(f['gami:op'], `step ${k + 1}`) };
+    } catch (e) {
+      warnings.push((e as Error).message);
+      return {};
+    }
+  };
   return {
     id: file['gami:id'],
     title: file.file_title,
     sheets,
     start: readFrame(file),
     steps: file.file_frames.map(
-      (f): Step => ({
+      (f, k): Step => ({
         title: f.frame_title ?? '',
         ...(f['gami:text'] && { text: f['gami:text'] }),
         ...(f['gami:kind'] && { kind: f['gami:kind'] }),
         ...(f['gami:section'] && { section: f['gami:section'] }),
         ...(f['gami:via'] && { via: f['gami:via'].map(readFrame) }),
         frame: readFrame(f),
+        ...opOf(f, k),
       }),
     ),
   };

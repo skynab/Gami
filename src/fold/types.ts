@@ -1,3 +1,5 @@
+import type { Op } from './ops';
+
 /**
  * How a model is stored. Loosely follows the FOLD format (https://github.com/edemaine/fold): each frame is
  * the whole paper after one step, as vertices and polygon faces. Field names match FOLD where they overlap.
@@ -41,6 +43,8 @@ export interface Step {
    * several folds at once plays them back one after another.
    */
   via?: FoldFrame[];
+  /** How the step was made from the paper before it, so it can be made again after an earlier step changes. */
+  op?: Op;
 }
 
 export interface Sheet {

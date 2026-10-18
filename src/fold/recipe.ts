@@ -1,9 +1,11 @@
 import { collapse, type CreaseKind } from './collapse';
 import { fold, FoldError, placeLike, rotate, toFlat, turnOver, unfoldStep, type FoldKind } from './fold';
+import { inside, locate } from './select';
+export { locate } from './select';
 import { place } from './place';
 import { radial, reparent, shape, type Bend, type Ray } from './shape';
 import { startFrame } from './sheets';
-import { flipLine, lineEdgeOnto, lineOnto, lineThrough, sideOf, signedArea, sub, type Line } from './geometry2d';
+import { flipLine, lineEdgeOnto, lineOnto, lineThrough, sideOf, type Line } from './geometry2d';
 import type { FoldFrame, OrigamiModel, Sheet, Step, Vec2 } from './types';
 
 /**
@@ -323,20 +325,3 @@ export class Recipe {
 }
 
 const avg = (poly: Vec2[], i: number) => poly.reduce((sum, p) => sum + p[i], 0) / poly.length;
-
-/** Where a point of the sheet is on the table in a flat frame. */
-export function locate(frame: FoldFrame, p: Vec2): Vec2 {
-  for (const face of toFlat(frame)) if (inside(face.paper, p)) return placeLike(face)(p);
-  throw new FoldError(`(${p.join(', ')}) isn’t on the paper.`);
-}
-
-function inside(poly: Vec2[], p: Vec2): boolean {
-  const s = Math.sign(signedArea(poly));
-  for (let i = 0; i < poly.length; i++) {
-    const a = poly[i];
-    const b = poly[(i + 1) % poly.length];
-    const e = sub(b, a);
-    if (s * (e[0] * (p[1] - a[1]) - e[1] * (p[0] - a[0])) < -1e-9) return false;
-  }
-  return true;
-}
