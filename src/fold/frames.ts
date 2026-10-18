@@ -1,7 +1,7 @@
 import type { FoldFrame, OrigamiModel, Vec3 } from './types';
 
 /** Gap between stacked layers, so flat faces on top of each other don't flicker. */
-export const LAYER_GAP = 0.002;
+export const LAYER_GAP = 0.0007;
 
 /** Every frame of a model: the start, then one per step. Frame k is the paper after step k. */
 export function framesOf(model: OrigamiModel): FoldFrame[] {
