@@ -1,7 +1,7 @@
 import { collapse, type CreaseKind } from './collapse';
 import { fold, FoldError, placeLike, rotate, toFlat, turnOver, unfoldStep, type FoldKind } from './fold';
 import { place } from './place';
-import { reparent, shape, type Bend } from './shape';
+import { radial, reparent, shape, type Bend, type Ray } from './shape';
 import { startFrame } from './sheets';
 import { flipLine, lineEdgeOnto, lineOnto, lineThrough, sideOf, signedArea, sub, type Line } from './geometry2d';
 import type { FoldFrame, OrigamiModel, Sheet, Step, Vec2 } from './types';
@@ -48,15 +48,15 @@ export class Recipe {
   /** After 3D shaping: the flat state it started from, and its bends so far. */
   private shaping?: { base: FoldFrame; bends: Bend[] };
 
-  private info: { id: string; title: string; sheets: Sheet[] };
+  private info: { id: string; title: string; sheets: Sheet[]; card?: OrigamiModel['card'] };
 
   /**
    * One `sheet`, or several `sheets`. Each sheet starts flat on the table, front up, with its centre at `at`
    * (by default, at its own `origin`).
    */
-  constructor(info: { id: string; title: string } & ({ sheet: Sheet } | { sheets: (Sheet & { at?: Vec2 })[] })) {
+  constructor(info: { id: string; title: string; card?: OrigamiModel['card'] } & ({ sheet: Sheet } | { sheets: (Sheet & { at?: Vec2 })[] })) {
     const sheets: (Sheet & { at?: Vec2 })[] = 'sheet' in info ? [info.sheet] : info.sheets;
-    this.info = { id: info.id, title: info.title, sheets: sheets.map(({ at: _, ...s }) => s as Sheet) };
+    this.info = { id: info.id, title: info.title, sheets: sheets.map(({ at: _, ...s }) => s as Sheet), ...(info.card && { card: info.card }) };
     this.start = startFrame(sheets);
   }
 
@@ -248,6 +248,16 @@ export class Recipe {
     }
     this.shaping = { base, bends: bendsSoFar };
     return this;
+  }
+
+  /** Pops the model up about a point, creases from it rising along `rays` (see `radial`). Nothing can be folded after. */
+  popUp(step: { title: string; text?: string }, centre: At, rays: Ray[]): this {
+    try {
+      return this.push({ ...step, kind: 'pose' }, radial(this.current, this.where(centre), rays));
+    } catch (e) {
+      if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
+      throw e;
+    }
   }
 
   turnOver(text = 'Flip the paper over from left to right.'): this {

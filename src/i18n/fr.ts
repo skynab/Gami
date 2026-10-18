@@ -33,9 +33,10 @@ export const fr: Messages = {
     communityIntro: 'Créés dans le Studio par des créateurs Gami.',
   },
   levels: { easy: 'Facile', medium: 'Moyen', hard: 'Difficile' },
-  categories: { basics: 'Bases', animal: 'Animaux', object: 'Objets', toy: 'Jouets', modular: 'Modulaires', flower: 'Fleurs' },
+  categories: { basics: 'Bases', animal: 'Animaux', object: 'Objets', toy: 'Jouets', modular: 'Modulaires', flower: 'Fleurs', math: 'Maths' },
   card: {
     soon: 'Bientôt',
+    lesson: 'Leçon',
     folded: 'Plié ✓',
     continue: 'Reprendre · étape {{step}}',
     steps_one: '{{count}} étape',
@@ -58,6 +59,8 @@ export const fr: Messages = {
     tulip: { title: 'Tulipe', blurb: 'Une fleur et une tige avec deux carrés.' },
     fox: { title: 'Renard', blurb: 'Un renard assis, aux grandes oreilles et à la queue touffue.' },
     crane: { title: 'Grue', blurb: 'Le symbole traditionnel de paix et de chance.' },
+    'folding-geometry': { title: 'La géométrie par pliage', blurb: 'Les règles du pliage mathématique, et un angle partagé en trois.' },
+    swan: { title: 'Cygne', blurb: 'Un cerf-volant affiné, avec un cou qui se dresse.' },
     lily: { title: 'Lys', blurb: 'Quatre pétales recourbés à partir de la base de la grenouille.' },
   },
   notFound: {

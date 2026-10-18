@@ -33,9 +33,10 @@ export const ja: Messages = {
     communityIntro: 'Gamiのクリエイターがスタジオで作った作品です。',
   },
   levels: { easy: 'やさしい', medium: 'ふつう', hard: 'むずかしい' },
-  categories: { basics: '基本', animal: '動物', object: 'もの', toy: 'おもちゃ', modular: 'ユニット', flower: '花' },
+  categories: { basics: '基本', animal: '動物', object: 'もの', toy: 'おもちゃ', modular: 'ユニット', flower: '花', math: '数学' },
   card: {
     soon: '近日公開',
+    lesson: 'レッスン',
     folded: '完成 ✓',
     continue: '続きから · {{step}}手順目',
     steps_one: '{{count}}手順',
@@ -58,6 +59,8 @@ export const ja: Messages = {
     tulip: { title: 'チューリップ', blurb: '2枚の紙で花と茎を作ります。' },
     fox: { title: 'キツネ', blurb: '大きな耳とふさふさのしっぽ、おすわりしたキツネ。' },
     crane: { title: '鶴', blurb: '平和と幸運を願う、昔ながらの折り鶴。' },
+    'folding-geometry': { title: '折り紙で幾何学', blurb: '数学的な折り方の規則と、角の三等分。' },
+    swan: { title: '白鳥', blurb: '細く折った凧の形に、首が立ち上がります。' },
     lily: { title: 'ユリ', blurb: 'カエルの基本形から、4枚の花びらを丸めて。' },
   },
   notFound: {

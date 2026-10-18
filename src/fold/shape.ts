@@ -1,5 +1,6 @@
 import { checkNoTear, FoldError, toFlat, type FlatFace } from './fold';
 import { sideOf, split, type Line } from './geometry2d';
+import { LAYER_GAP } from './frames';
 import type { FoldFrame, Vec2, Vec3 } from './types';
 
 /**
@@ -54,8 +55,8 @@ export function shape(frame: FoldFrame, bends: Bend[]): FoldFrame {
   // the one turning the most (nearest the paper that stays put).
   const count = moves.map((m) => m.filter(Boolean).length);
   const order = bends.map((_, k) => k).sort((a, b) => count[a] - count[b]);
-  const place = (i: number, [x, z]: Vec2): Vec3 => {
-    let q: Vec3 = [x, 0, z];
+  const place = (i: number, [x, z]: Vec2, y = 0): Vec3 => {
+    let q: Vec3 = [x, y, z];
     for (const k of order) if (moves[k][i]) q = turn(q, bends[k]);
     return q;
   };
@@ -78,6 +79,18 @@ export function shape(frame: FoldFrame, bends: Bend[]): FoldFrame {
       return v;
     }),
   );
+  // A turned piece stands off its surface by its layer's gap (flat pieces get theirs when drawn), each with
+  // its own corners: otherwise a thick stack's upper layers swing down through the lower ones at the bend.
+  pieces.forEach((p, i) => {
+    if (!order.some((k) => moves[k][i]) || !p.layer) return;
+    const [w] = p.world;
+    const a = place(i, w);
+    const up = place(i, w, 1).map((c, n) => c - a[n]);
+    faces_vertices[i] = faces_vertices[i].map((v) => {
+      vertices_paper.push(vertices_paper[v]);
+      return vertices_coords.push(vertices_coords[v].map((c, n) => c + p.layer * LAYER_GAP * up[n]) as Vec3) - 1;
+    });
+  });
   return {
     vertices_paper,
     vertices_coords,
@@ -157,3 +170,73 @@ function contains(poly: Vec2[], p: Vec2): boolean {
   }
   return true;
 }
+
+/**
+ * A crease from a centre point, lifted off the table: its direction on the table (radians, from +x towards
+ * +z) and how steeply it rises.
+ */
+export interface Ray {
+  azimuth: number;
+  elevation: number;
+}
+
+/**
+ * Pops a flat model up about a point, as a fortune teller opens: creases run out from `centre` along `rays`
+ * (in order round the point), each rising by its elevation, and the paper between each pair turns as one
+ * piece. Every sector must keep its angle, or the paper would stretch. Stacked layers keep their gaps
+ * straight up: the popped surface never stands past upright, so copies of it raised by different amounts
+ * never cross, where gaps measured off each sector would cross in its valleys.
+ */
+export function radial(frame: FoldFrame, centre: Vec2, rays: Ray[]): FoldFrame {
+  const dir = ({ azimuth, elevation }: Ray): Vec3 => [Math.cos(elevation) * Math.cos(azimuth), Math.sin(elevation), Math.cos(elevation) * Math.sin(azimuth)];
+  const n = rays.length;
+  for (let k = 0; k < n; k++) {
+    const [a, b] = [rays[k], rays[(k + 1) % n]];
+    const flat = (((b.azimuth - a.azimuth) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+    const [p, q] = [dir(a), dir(b)];
+    if (Math.abs(Math.acos(Math.min(1, p[0] * q[0] + p[1] * q[1] + p[2] * q[2])) - flat) > 1e-6) {
+      throw new FoldError('Those creases would stretch the paper between them.');
+    }
+  }
+  // Cut every face along each ray's line, so each piece lies in one sector.
+  let pieces: (FlatFace & { source: number })[] = toFlat(frame).map((f, i) => ({ ...f, parent: i, source: i }));
+  for (const r of rays) {
+    const line = { p: centre, d: [Math.cos(r.azimuth), Math.sin(r.azimuth)] as Vec2 };
+    pieces = pieces.flatMap((p) => {
+      const { pos, neg } = split(p, line);
+      return [pos, neg].filter((q) => q !== null).map((q) => ({ ...q!, layer: p.layer, parent: p.parent, source: p.source }));
+    });
+  }
+  const sectorOf = (pts: Vec2[]) => {
+    const c = centreOf(pts);
+    const ang = Math.atan2(c[1] - centre[1], c[0] - centre[0]);
+    for (let k = 0; k < n; k++) {
+      const a = rays[k].azimuth;
+      const span = (((rays[(k + 1) % n].azimuth - a) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+      if (((((ang - a) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI)) < span) return k;
+    }
+    return 0;
+  };
+  const vertices_paper: Vec2[] = [];
+  const vertices_coords: Vec3[] = [];
+  const faces_vertices = pieces.map((p) => {
+    const k = sectorOf(p.world);
+    const [ra, rb] = [rays[k], rays[(k + 1) % n]];
+    const [ua, ub]: Vec2[] = [ra, rb].map((r) => [Math.cos(r.azimuth), Math.sin(r.azimuth)]);
+    const [da, db] = [dir(ra), dir(rb)];
+    const up: Vec3 = [0, 1, 0];
+    const det = ua[0] * ub[1] - ua[1] * ub[0];
+    const rise = p.layer * LAYER_GAP;
+    // Each piece has its own corners, as stacked layers sit at different heights.
+    return p.world.map((w, j) => {
+      const [x, z] = [w[0] - centre[0], w[1] - centre[1]];
+      const a = (x * ub[1] - z * ub[0]) / det;
+      const b = (ua[0] * z - ua[1] * x) / det;
+      vertices_paper.push(p.paper[j]);
+      return vertices_coords.push([0, 1, 2].map((c) => (c === 0 ? centre[0] : c === 2 ? centre[1] : 0) + a * da[c] + b * db[c] + rise * up[c]) as Vec3) - 1;
+    });
+  });
+  return { vertices_paper, vertices_coords, faces_vertices, faces_parent: pieces.map((p) => p.parent) };
+}
+
+const centreOf = (pts: Vec2[]): Vec2 => [pts.reduce((s, p) => s + p[0], 0) / pts.length, pts.reduce((s, p) => s + p[1], 0) / pts.length];

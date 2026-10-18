@@ -6,6 +6,15 @@ import type { Vec2 } from '../../fold/types';
  * a waterbomb base at the top makes the head and front legs, another upside down at the bottom the back
  * legs, and a pleat across the body the spring. Press down on its back and let go to make it jump.
  */
+/** Whether a point is inside a convex polygon (or on its edge). */
+function inside(poly: Vec2[], p: Vec2): boolean {
+  const s = poly.map((a, i) => {
+    const b = poly[(i + 1) % poly.length];
+    return (b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0]);
+  });
+  return s.every((x) => x >= -1e-9) || s.every((x) => x <= 1e-9);
+}
+
 export function jumpingFrog() {
   const w = 0.5;
   const top = -0.5;
@@ -47,7 +56,14 @@ export function jumpingFrog() {
         text: 'Fold the triangle’s bottom-left corner up to its top point.',
         layers: 2,
       })
-      .onto(table(w / 2, base), table(0, centre), { title: 'Fold up the other front leg', text: 'Match it on the right.', layers: 2 })
+      .onto(table(w / 2, base), table(0, centre), { title: 'Fold up the other front leg', text: 'Match it on the right.', layers: 2 });
+  // Each front leg as pieces of the sheet: the two layers just folded up, over the middle of its half of the head.
+  const frontLegs = [-1, 1].map((side) => {
+    const spot: Vec2 = [(side * w) / 12, (2 * centre + base) / 3];
+    const [a, b] = r.stackAt(spot);
+    return r.pieces((c) => [a, b].some((p) => Math.hypot(p[0] - c[0], p[1] - c[1]) < 1e-9));
+  });
+  r
       .along(table(-quarter, -1), table(-quarter, 1), table(-w / 2 + 0.01, 0.3), {
         title: 'Fold the left side in',
         text: 'Fold the left edge of the card in to the middle. It tucks under the front legs.',
@@ -100,6 +116,18 @@ export function jumpingFrog() {
       only: flaps,
     })
     .onto(table(quarter, hip), table(0, legs), { title: 'Fold down the other back leg', text: 'Match it on the right.', only: flaps })
+    // Each front leg's tip (at the head's point) folds back out, about the leg's inner corner, to point
+    // forward at 45°: past the sides of the body, which is narrower than the head now.
+    .together({ title: 'Fold the front legs out', text: 'Fold the tip of each front leg out, so it points forwards and outwards.' }, (r) => {
+      for (const side of [-1, 1]) {
+        const turn = Math.PI / 8;
+        const leg = frontLegs[(side + 1) / 2];
+        r.along(table(0, base), table(side * Math.sin(turn) * w, base - Math.cos(turn) * w), table(0, centre), {
+          title: '',
+          only: (c) => leg.some((poly) => inside(poly, c)),
+        });
+      }
+    })
     .along(table(-1, fold1), table(1, fold1), table(0, legs), {
       title: 'Fold the back end up',
       text: 'Fold the back half up across the middle of the body.',

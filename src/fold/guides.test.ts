@@ -38,5 +38,6 @@ describe('fold guides', () => {
         expect(g.arrows.length + g.creases.length, `${model.id} step ${k}`).toBeGreaterThan(0);
       }
     }
-  });
+    // Every step of every model is animated here, which takes a few seconds.
+  }, 30_000);
 });

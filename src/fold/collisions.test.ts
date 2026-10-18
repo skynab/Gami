@@ -62,6 +62,16 @@ describe('paper passing through paper', () => {
     expect(deep(lily).filter((c) => c.step === squashes[0])).toEqual([]);
   });
 
+  it('opens the lily’s petals clear of the narrowing folds', () => {
+    // The tips open on a line past the slivers the narrowing caught, top one furthest; layers bend at their
+    // own heights, so the petals only graze the stack by a layer or two.
+    const lily = byId('lily');
+    const last = lily.steps.length;
+    expect(lily.steps[last - 1].kind).toBe('pose');
+    const opening = crossings(lily).filter((c) => c.step === last);
+    expect(Math.max(0, ...opening.map((c) => c.depth))).toBeLessThan(0.015);
+  });
+
   it('unfolds several folds one at a time, and keeps that in .fold files', () => {
     const r = new Recipe({ id: 'kite', title: 'Kite', sheet: { size: [1, 1], front: '#fff', back: '#000' } });
     const before = r.mark();

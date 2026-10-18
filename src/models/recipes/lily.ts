@@ -1,6 +1,6 @@
 import type { CreaseKind } from '../../fold/collapse';
 import { sideOf, lineThrough } from '../../fold/geometry2d';
-import { paper, Recipe, table, type At } from '../../fold/recipe';
+import { locate, paper, Recipe, table, type At } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 
 /**
@@ -35,6 +35,8 @@ export function lily() {
   const quarter = (su: number, sv: number) => ([u, v]: Vec2) => Math.sign(u) === su && Math.sign(v) === sv;
   const halfA = (su: number, sv: number) => (c: Vec2) => quarter(su, sv)(c) && Math.abs(c[0]) < Math.abs(c[1]);
   const halfB = (su: number, sv: number) => (c: Vec2) => quarter(su, sv)(c) && Math.abs(c[0]) > Math.abs(c[1]);
+  // A flap's petal: its corner's side of the step-5 crease, which on the sheet runs halfway along the diagonal.
+  const petal = (su: number, sv: number) => (c: Vec2) => quarter(su, sv)(c) && Math.abs(c[0]) + Math.abs(c[1]) > 0.5;
   const lerp = (a: Vec2, b: Vec2, t: number): Vec2 => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
   const at = (p: Vec2): At => table(...p);
 
@@ -124,10 +126,30 @@ export function lily() {
     .unfold({ title: 'Unfold', text: 'Open them again.', to: backFlaps })
     .turnOver('Turn back over.');
 
+  /** Mirror image of a point across the line through a and b. */
+  const mirror = (p: Vec2, a: Vec2, b: Vec2): Vec2 => {
+    const d = [b[0] - a[0], b[1] - a[1]];
+    const t = ((p[0] - a[0]) * d[0] + (p[1] - a[1]) * d[1]) / (d[0] * d[0] + d[1] * d[1]);
+    const foot: Vec2 = [a[0] + d[0] * t, a[1] + d[1] * t];
+    return [2 * foot[0] - p[0], 2 * foot[1] - p[1]];
+  };
+  // Each petal's tip, the part folded down (as pieces of the sheet, which later folds only cut smaller).
+  const tips: Vec2[][] = [];
+  const inTip = (c: Vec2) => tips.some((poly) => inside(poly, c));
+  /** Origami.me step 11: the petal just made (`made`, the flap as it was) folds down, across the diamond's side corners. */
+  const petalDown = ({ T, M, meet }: ReturnType<typeof flap>, su: number, sv: number, text: string) => {
+    const line = lineThrough(meet, mirror(meet, T, M));
+    const before = r.build().steps.at(-1)!.frame;
+    r.along(at(meet), at(mirror(meet, T, M)), at(T), { title: 'Fold the petal down', text, only: petal(su, sv) });
+    // The pieces that moved: those that were above the fold line before it.
+    tips.push(...r.pieces((c) => petal(su, sv)(c) && sideOf(line, locate(before, c)) * sideOf(line, T) > 0));
+  };
+
   const first = squashPetal(-1, -1, {
     title: 'Squash and petal-fold a flap',
     text: 'Lift the top right flap, open it and squash it along the creases at the top, then fold the bottom sides in behind and the corner up to the top point.',
   }, [0.3, -0.1]);
+  petalDown(first, -1, -1, 'Fold the petal you just made down.');
 
   /** Turns the paper picked out by `only` over the centre line, like a page, towards the side `to` is on. */
   const pageTurn = (only: (c: Vec2) => boolean, toRight: boolean, step: { title: string; text: string }) => {
@@ -137,11 +159,14 @@ export function lily() {
     return r.along(at(T), at([T[0], base[1]]), at(from), { ...step, only });
   };
   pageTurn(first.top, true, { title: 'Turn a page', text: 'Fold the left half of the diamond over to the right, showing the next flap.' });
-  squashPetal(1, -1, { title: 'Squash and petal-fold the next flap', text: 'Squash and petal-fold it the same way.' }, [-0.3, 0.1]);
+  const second = squashPetal(1, -1, { title: 'Squash and petal-fold the next flap', text: 'Squash and petal-fold it the same way.' }, [-0.3, 0.1]);
+  petalDown(second, 1, -1, 'Fold the petal down again.');
   r.turnOver('Turn the paper over, side to side.');
   const third = squashPetal(1, 1, { title: 'Squash and petal-fold a back flap', text: 'Squash and petal-fold the top right flap on this side too.' }, [-0.3, 0.1]);
+  petalDown(third, 1, 1, 'Fold its petal down.');
   pageTurn(third.top, true, { title: 'Turn a page', text: 'Fold the left half of the diamond over to the right.' });
-  squashPetal(-1, 1, { title: 'Squash and petal-fold the last flap', text: 'And the last flap.' }, [0.3, -0.1]);
+  const fourth = squashPetal(-1, 1, { title: 'Squash and petal-fold the last flap', text: 'And the last flap.' }, [0.3, -0.1]);
+  petalDown(fourth, -1, 1, 'Fold the last petal down. The four petals hang down from the base.');
 
   // The model is now a long diamond: four pages each side, each half of a quarter, with its petal half folded
   // down below the waist. Pages are picked out by their half of the sheet.
@@ -182,12 +207,41 @@ export function lily() {
   r.turnOver('Turn over.');
   flip({ title: 'Flip two flaps', text: 'Turn two flaps over from right to left here too.' });
   narrow({ title: 'Narrow again', text: 'And fold the top edges to the centre.' });
-  // Opening the petals is left to the folder: each lies under narrowed flaps (its own page's and others'),
-  // which real paper lets you ease it out from but rigid paper doesn't, so any bend would pass through them.
-  r.rotate(180, {
-    title: 'Open the petals',
-    text: 'Turn the model round, so the narrow part is at the bottom. Ease each petal out to about a right angle and curl it gently. Your lily is finished.',
-  });
+  r.rotate(180, { title: 'Turn it round', text: 'Turn the model round, so the petals point up and the narrow part is at the bottom.' });
 
+  // The petals' tips now lie on top of the short part, hinged at the waist. The narrowing folds caught slivers
+  // of them just past the waist, so each opens on a line a little beyond those: the top one furthest, each
+  // one under it less, so none passes through another, and the bottom one stays on the table.
+  const T = r.where(paper(0, 0));
+  const tipEnd = r.where(paper(0.5, 0.5));
+  const along = Math.sign(tipEnd[1] - T[1]);
+  const hinge = T[1] + along * (0.5 - (2 - Math.SQRT2) / 4 + 0.07);
+  const order: string[] = [];
+  for (const [u, v] of r.stackAt([T[0] + 0.01, (hinge + tipEnd[1]) / 2])) {
+    const key = `${Math.sign(u)},${Math.sign(v)}`;
+    if (inTip([u, v]) && !order.includes(key)) order.push(key);
+  }
+  r.shape(
+    { title: 'Open the petals', text: 'Fold the petals out and curl them gently, the front one furthest. Your lily is finished.' },
+    order.slice(0, -1).map((key, i) => {
+      const [su, sv] = key.split(',').map(Number);
+      return {
+        through: [table(T[0] - 1, hinge), table(T[0] + 1, hinge)] as [At, At],
+        moving: at(tipEnd),
+        degrees: 85 - 25 * i,
+        segments: 4,
+        only: (c: Vec2) => quarter(su, sv)(c) && inTip(c),
+      };
+    }),
+  );
   return r.build();
+}
+
+/** Whether a point is inside a convex polygon (or on its edge). */
+function inside(poly: Vec2[], p: Vec2): boolean {
+  const s = poly.map((a, i) => {
+    const b = poly[(i + 1) % poly.length];
+    return (b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0]);
+  });
+  return s.every((x) => x >= -1e-9) || s.every((x) => x <= 1e-9);
 }

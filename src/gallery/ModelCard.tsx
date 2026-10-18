@@ -9,13 +9,16 @@ export function ModelCard({ model }: { model: ModelInfo }) {
   const { t } = useTranslation();
   const level = t(`levels.${levelOf(model.difficulty)}`);
   const progress = model.steps ? readProgress(model.id) : null;
+  const lesson = model.category === 'math';
   const badge = !model.steps
     ? t('card.soon')
     : progress?.done
       ? t('card.folded')
       : progress && progress.step > 1
         ? t('card.continue', { step: progress.step })
-        : null;
+        : lesson
+          ? t('card.lesson')
+          : null;
   const details = [
     model.steps && t('card.steps', { count: model.steps }),
     t('card.minutes', { count: model.minutes }),
@@ -23,7 +26,7 @@ export function ModelCard({ model }: { model: ModelInfo }) {
   ].filter(Boolean);
 
   return (
-    <Link to={`/learn/${model.id}`} className="card">
+    <Link to={`/learn/${model.id}`} className={lesson ? 'card lesson' : 'card'}>
       <div className="card-thumb">
         {model.steps ? (
           // The finished model from above, generated with its steps (scripts/build-models.ts).

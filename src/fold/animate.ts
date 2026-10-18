@@ -1,6 +1,6 @@
 import { Matrix4, Quaternion, Vector3 } from 'three';
 import { box, cornerKeys, crossDepth, overlapping } from './cross3d';
-import { facePositions, framesOf, LAYER_GAP, sphereAround } from './frames';
+import { facePositions, framesOf, LAYER_GAP, normal, sphereAround } from './frames';
 import { sharedSegment } from './geometry2d';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from './types';
 
@@ -71,6 +71,11 @@ export interface Transition {
    * `angle` about `axis` through `pivot`), the step plays while it's up, and it comes back down after.
    */
   makeWay?: { lifted: boolean[]; pivot: Vec3; axis: Vec3; angle: number };
+  /**
+   * When each face finishes its move (0–1): faces ending lower in the stack land first, so paper settles
+   * bottom layer first, as it does by hand, instead of a lower layer coming down through upper ones.
+   */
+  landing?: number[];
 }
 
 const SAME = 1e-4;
@@ -106,22 +111,21 @@ function workOut(from: FoldFrame, to: FoldFrame, makeWay: boolean, stages: numbe
   if (!makeWay) return t;
   const made = withWayMade(t);
   // With paper that can get out of the way, the way round that goes through it may be the better one.
-  const keys = t.faces.map((f) => cornerKeys(f.paper));
   let best = made;
-  let fewest = passesThrough(made, keys, WAY_SAMPLES);
+  let fewest = passesThrough(made, WAY_SAMPLES);
   if (!fewest) return made;
   const yielding = withWayMade(moving(from, to, { yielding: true }));
-  const y = passesThrough(yielding, keys, WAY_SAMPLES);
+  const y = passesThrough(yielding, WAY_SAMPLES);
   if (y < fewest) [best, fewest] = [yielding, y];
   if (fewest && stages) {
-    // Staged moves are judged more closely: they're quicker, and paper can slip through in a moment.
-    fewest = passesThrough(best, keys, STAGE_SAMPLES);
+    // Judged by how deep paper goes through, closely: staged moves are quicker, and slip through in a moment.
+    let deepest = depthThrough(best);
     for (const staged of stagedWays(from, to, t, stages - 1)) {
       const way = staged();
       if (!way) continue;
-      const n = passesThrough(way, keys, STAGE_SAMPLES, { limit: fewest });
-      if (n < fewest) [best, fewest] = [way, n];
-      if (!fewest) break;
+      const d = depthThrough(way, deepest);
+      if (d < deepest) [best, deepest] = [way, d];
+      if (!deepest) break;
     }
   }
   return best;
@@ -250,16 +254,15 @@ function moving(from: FoldFrame, to: FoldFrame, { yielding = false } = {}): Tran
   }
   // But going the other way is better if it passes through less paper, as when folding a layer behind.
   if (choices.length) {
-    const keys = faces.map((f) => cornerKeys(f.paper));
     const put = reps.map((r) => Math.abs(r.q.w) > 1 - 1e-9 && r.t.length() < SLACK);
     const ignore = faces.map(() => false);
     if (yielding) for (const piece of pieces(faces)) if (piece.every((f) => put[faces[f].motion])) for (const f of piece) ignore[f] = true;
     for (const { c, options } of choices) {
-      const now = throughPaper(faces, motions, c, keys, ignore);
+      const now = throughPaper(faces, motions, c, ignore);
       if (!now) continue;
       const other = motions.slice();
       c.forEach((i, k) => (other[i] = options[k].find((m) => m !== motions[i])!));
-      if (throughPaper(faces, other, c, keys, ignore) < now) c.forEach((i) => (motions[i] = other[i]));
+      if (throughPaper(faces, other, c, ignore) < now) c.forEach((i) => (motions[i] = other[i]));
     }
   }
   motions.forEach((m, i) => (motions[i] = { ...m, lift: liftFor(m, reps[i].faces.flatMap((f) => faces[f].before)) }));
@@ -275,29 +278,61 @@ function moving(from: FoldFrame, to: FoldFrame, { yielding = false } = {}): Tran
   let out: Transition = { faces, motions: motions.map((m) => ({ ...m, lift })) };
   // Easing away from creases only where it helps: it can nudge a stack into paper beside the crease instead.
   if (motions.some((m) => m.ease)) {
-    const keys = faces.map((f) => cornerKeys(f.paper));
     const plain: Transition = { faces, motions: out.motions.map((m) => ({ ...m, ease: undefined })) };
-    const without = passesThrough(plain, keys, WAY_SAMPLES);
-    if (!without || without <= passesThrough(out, keys, WAY_SAMPLES, { limit: without })) out = plain;
+    const without = passesThrough(plain, WAY_SAMPLES);
+    if (!without || without <= passesThrough(out, WAY_SAMPLES, { limit: without })) out = plain;
   }
   const found = hingesFor(faces, reps);
   if (found) {
     // Folds of several creases rarely move in step: try the creases folding together, and nearest-first or
     // outermost-first when faces hang from turning paper, and keep whichever passes through least paper.
-    const keys = faces.map((f) => cornerKeys(f.paper));
     const deep = found.order.some((f) => found.parent[f] >= 0 && found.parent[found.parent[f]] >= 0);
     let hinged: Transition | null = null;
     let fewest = Infinity;
     for (const stagger of deep ? [0, 0.3, 0.5, -0.3] : [0]) {
       const tried = hingedWith(out, { ...found, stagger });
-      const count = passesThrough(tried, keys, WAY_SAMPLES);
+      const count = passesThrough(tried, WAY_SAMPLES);
       if (count < fewest) [hinged, fewest] = [tried, count];
       if (!count) break;
     }
     // Each way of moving has cases the other handles better: keep whichever passes through less paper.
-    if (fewest < passesThrough(out, keys, WAY_SAMPLES)) return hinged!;
+    if (fewest < passesThrough(out, WAY_SAMPLES)) return landInOrder(hinged!);
   }
-  return out;
+  return landInOrder(out);
+}
+
+/** A transition landing bottom layer first instead, if that passes through less paper as it settles. */
+function landInOrder(t: Transition): Transition {
+  // Only for paper settling flat: a step ending in 3D (petals opened out, say) has nothing to land.
+  if (t.faces.some((f) => Math.abs(normal(f.after)[1]) < 0.999)) return t;
+  // Judged by how deep paper goes through, as landing in order trades crossings in time for others.
+  let best = t;
+  let now = depthThrough(t);
+  for (const spread of LANDS) {
+    if (!now) break;
+    const ordered = inLandingOrder(t, spread);
+    const d = depthThrough(ordered, now);
+    if (d < now) [best, now] = [ordered, d];
+  }
+  return best;
+}
+
+/** How much paper passes through paper, closely: the depth of each crossing past stacking, added up. */
+function depthThrough(t: Transition, limit = Infinity): number {
+  let total = 0;
+  for (const s of STAGE_SAMPLES) {
+    if (total > limit) break;
+    const pose = poseAt(t, s);
+    const boxes = pose.map(box);
+    for (let a = 0; a < pose.length; a++) {
+      for (let b = a + 1; b < pose.length; b++) {
+        if (together(t, a, b) || !overlapping(boxes[a], boxes[b])) continue;
+        if (touching(t.faces, a, b)) continue;
+        total += Math.max(0, crossDepth(pose[a], pose[b]) - 2.5 * LAYER_GAP);
+      }
+    }
+  }
+  return total;
 }
 
 /** Hinged motion for a transition, with how far its paper rises and how its layers settle into place. */
@@ -360,7 +395,21 @@ export function poseAt(t: Transition, s: number): Vec3[][] {
     });
   }
   if (t.hinges) return hingedPose(t, s);
-  return t.faces.map((f) => f.before.map((p) => move(t.motions[f.motion], p, s)));
+  return t.faces.map((f, i) => f.before.map((p) => move(t.motions[f.motion], p, landed(t, i, s))));
+}
+
+/** Which faces share a corner on the sheet (joined there, so they touch without crossing), worked out once per step. */
+const joinedAt = new WeakMap<FaceTrack[], Uint8Array>();
+function touching(faces: FaceTrack[], a: number, b: number): boolean {
+  let m = joinedAt.get(faces);
+  if (!m) {
+    const n = faces.length;
+    const keys = faces.map((f) => cornerKeys(f.paper));
+    m = new Uint8Array(n * n);
+    for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) if ([...keys[i]].some((k) => keys[j].has(k))) m[i * n + j] = m[j * n + i] = 1;
+    joinedAt.set(faces, m);
+  }
+  return m[a * faces.length + b] === 1;
 }
 
 /** Whether two faces move as one through a transition, so they can't pass through each other. */
@@ -371,7 +420,6 @@ export function together(t: Transition, a: number, b: number): boolean {
 /** How much paper passes through paper in a transition: crossings deeper than stacking, at a few points. */
 function passesThrough(
   t: Transition,
-  keys: Set<string>[],
   samples = [0.25, 0.5, 0.75],
   { only, limit = Infinity, pairs }: { only?: (a: number, b: number) => boolean; limit?: number; pairs?: [number, number][] } = {},
 ): number {
@@ -383,7 +431,7 @@ function passesThrough(
     for (let a = 0; a < pose.length; a++) {
       for (let b = a + 1; b < pose.length; b++) {
         if ((only && !only(a, b)) || together(t, a, b) || !overlapping(boxes[a], boxes[b])) continue;
-        if ([...keys[a]].some((k) => keys[b].has(k))) continue;
+        if (touching(t.faces, a, b)) continue;
         if (crossDepth(pose[a], pose[b]) > 2.5 * LAYER_GAP) {
           count++;
           pairs?.push([a, b]);
@@ -508,6 +556,8 @@ const PLAY: [number, number] = [0.2, 0.75];
 const WAY_SAMPLES = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];
 const CLOSE_SAMPLES = Array.from({ length: 99 }, (_, i) => (i + 1) / 100);
 const STAGE_SAMPLES = Array.from({ length: 31 }, (_, i) => (i + 1) / 32);
+/** Which way round a half turn goes is judged along the way, and closely as it lands, where layers settle into order. */
+const WAY_ROUND_SAMPLES = [0.25, 0.5, 0.75, 0.9, 0.95, 0.98];
 /** How far to try lifting paper out of the way, in degrees. */
 const TILTS = [10, 20, 35, 50, 70, 90];
 
@@ -518,9 +568,8 @@ const TILTS = [10, 20, 35, 50, 70, 90];
  * each way, as little as works, and keeps it only if less paper passes through paper.
  */
 function withWayMade(t: Transition): Transition {
-  const keys = t.faces.map((f) => cornerKeys(f.paper));
   const crossing: [number, number][] = [];
-  const now = passesThrough(t, keys, WAY_SAMPLES, { pairs: crossing });
+  const now = passesThrough(t, WAY_SAMPLES, { pairs: crossing });
   if (!now) return t;
   // Pieces that stay put (give or take the gap between layers as the stack is renumbered), with moving paper
   // crossing them.
@@ -536,7 +585,6 @@ function withWayMade(t: Transition): Transition {
   let best: Transition | null = null;
   let fewest = Infinity;
   let least = Infinity;
-  const touching = keys.map((ka) => keys.map((kb) => [...ka].some((k) => kb.has(k))));
   const roughly = WAY_SAMPLES.map((s) => ({ s, pose: poseAt(t, played(s)) }));
   const closely = CLOSE_SAMPLES.map((s) => ({ s, pose: poseAt(t, played(s)) }));
   for (const piece of candidates) {
@@ -553,7 +601,7 @@ function withWayMade(t: Transition): Transition {
         const boxes = placed.map(box);
         for (const a of piece) {
           for (let b = 0; b < placed.length; b++) {
-            if (lifted[b] || touching[a][b] || !overlapping(boxes[a], boxes[b])) continue;
+            if (lifted[b] || touching(t.faces, a, b) || !overlapping(boxes[a], boxes[b])) continue;
             if (crossDepth(placed[a], placed[b]) > 2.5 * LAYER_GAP) count++;
           }
         }
@@ -584,7 +632,7 @@ function withWayMade(t: Transition): Transition {
       if (!count) break;
     }
   }
-  return best && passesThrough(best, keys, WAY_SAMPLES) < now ? best : t;
+  return best && passesThrough(best, WAY_SAMPLES) < now ? best : t;
 }
 
 /** A transition with paper making way: the rest plays in the middle, while the lifted paper is up. */
@@ -635,6 +683,21 @@ function centroid(points: Vec3[]): Vec3 {
   return [points.reduce((s, p) => s + p[0], 0) / n, points.reduce((s, p) => s + p[1], 0) / n, points.reduce((s, p) => s + p[2], 0) / n];
 }
 
+/** How far through its own move face `i` is, `s` of the way through the step (see `Transition.landing`). */
+const landed = (t: Transition, i: number, s: number) => (t.landing ? Math.min(1, s / t.landing[i]) : s);
+
+/** How much more of the step the top layer may take to land than the bottom one, when landing in order. */
+const LANDS = [0.2, 0.4];
+
+/** The same moves, landing bottom layer first: each face finishes earlier the lower it ends up, by up to `spread`. */
+function inLandingOrder(t: Transition, spread: number): Transition {
+  const heights = t.faces.map((f) => f.after.reduce((s, p) => s + p[1], 0) / f.after.length);
+  const order = heights.map((_, i) => i).sort((a, b) => heights[a] - heights[b]);
+  const landing = new Array<number>(t.faces.length);
+  order.forEach((f, rank) => (landing[f] = 1 - spread * (1 - rank / Math.max(1, order.length - 1))));
+  return { ...t, landing };
+}
+
 /** Faces placed by hinges, each turning about its crease by its share of the way, carried by its parent. */
 /** How much of its landing correction a hinged layer has made `s` of the way through: all of it by halfway. */
 const FIX = (s: number) => smooth(Math.min(1, 2 * s));
@@ -653,15 +716,15 @@ function hingedPose(t: Transition, s: number): Vec3[][] {
     const [ax, ay, az] = h.at[f];
     const turn = new Matrix4()
       .makeTranslation(ax, ay, az)
-      .multiply(new Matrix4().makeRotationAxis(new Vector3(...h.dir[f]), h.angle[f] * stagger(h.stagger ?? 0, depth[f], deepest, s)))
+      .multiply(new Matrix4().makeRotationAxis(new Vector3(...h.dir[f]), h.angle[f] * stagger(h.stagger ?? 0, depth[f], deepest, landed(t, f, s))))
       .multiply(new Matrix4().makeTranslation(-ax, -ay, -az));
     placed[f] = placed[h.parent[f]].clone().multiply(turn);
   }
   const p = new Vector3();
   const rise = h.lift * Math.sin(Math.PI * s);
-  const settle = h.fix ? FIX(s) : 0;
   return t.faces.map((f, i) => {
-    if (h.parent[i] === -2) return f.before.map((q) => move(t.motions[f.motion], q, s));
+    if (h.parent[i] === -2) return f.before.map((q) => move(t.motions[f.motion], q, landed(t, i, s)));
+    const settle = h.fix ? FIX(landed(t, i, s)) : 0;
     return f.before.map((q, c) => {
       p.set(...q).applyMatrix4(placed[i]);
       const d = h.fix?.[i][c];
@@ -772,17 +835,17 @@ const sum = (xs: number[]) => xs.reduce((a, b) => a + b, 0);
  * How much paper the moves `group` pass through on the way, against the faces moving otherwise: the number
  * of crossings, at a few points along the way, deeper than the gap between stacked layers.
  */
-function throughPaper(faces: FaceTrack[], motions: Motion[], group: number[], keys: Set<string>[], ignore: boolean[]): number {
+function throughPaper(faces: FaceTrack[], motions: Motion[], group: number[], ignore: boolean[]): number {
   const inGroup = new Set(group);
   let count = 0;
-  for (const s of [0.25, 0.5, 0.75]) {
+  for (const s of WAY_ROUND_SAMPLES) {
     const pose = faces.map((f) => f.before.map((p) => move({ ...motions[f.motion], lift: 0 }, p, s)));
     const boxes = pose.map(box);
     for (let a = 0; a < faces.length; a++) {
       if (!inGroup.has(faces[a].motion)) continue;
       for (let b = 0; b < faces.length; b++) {
         if (ignore[b] || inGroup.has(faces[b].motion) || !overlapping(boxes[a], boxes[b])) continue;
-        if ([...keys[a]].some((k) => keys[b].has(k))) continue;
+        if (touching(faces, a, b)) continue;
         if (crossDepth(pose[a], pose[b]) > 2.5 * LAYER_GAP) count++;
       }
     }

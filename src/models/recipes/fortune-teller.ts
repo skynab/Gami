@@ -5,8 +5,8 @@ export function fortuneTeller() {
   const centre = table(0, 0);
   const corner = (u: number, v: number, title: string, text?: string) => (r: Recipe) => r.onto(paper(u, v), centre, { title, text });
 
-  let r = new Recipe({ id: 'fortune-teller', title: 'Fortune teller', sheet: { size: [1, 1], front: '#e0a526', back: '#f6f3ec' } })
-    .crease(paper(-0.5, -0.5), paper(0.5, 0.5), { title: 'Fold in half diagonally', text: 'Bring one corner to the opposite corner.' })
+  let r = new Recipe({ id: 'fortune-teller', title: 'Fortune teller', card: 'finished', sheet: { size: [1, 1], front: '#f6f3ec', back: '#e0a526' } })
+    .crease(paper(-0.5, -0.5), paper(0.5, 0.5), { title: 'Fold in half diagonally', text: 'White side up. Bring one corner to the opposite corner.' })
     .crease(paper(0.5, -0.5), paper(-0.5, 0.5), { title: 'Fold the other diagonal', text: 'The two creases cross at the centre.' });
 
   for (const step of [
@@ -29,9 +29,20 @@ export function fortuneTeller() {
   return r
     // The finished square runs from −¼ to ¼ each way.
     .crease(table(-0.25, 0), table(0.25, 0), { title: 'Fold in half', text: 'Crease firmly through all the layers.' })
-    .crease(table(0, -0.25), table(0, 0.25), {
-      title: 'Fold in half the other way',
-      text: 'Turn it over, push the four corner pockets up with your fingers and thumbs, and it’s ready to play.',
-    })
+    .crease(table(0, -0.25), table(0, 0.25), { title: 'Fold in half the other way', text: 'Crease this way too.' })
+    .turnOver('Turn it over, so the four square pockets are on top.')
+    .popUp({ title: 'Pop it open', text: 'Push the pockets up and together with your fingers and thumbs, and it’s ready to play.' }, centre, popped(Math.PI / 3))
     .build();
+}
+
+/**
+ * The fortune teller opened for play: from the centre, creases along the pockets' diagonals rise to the four
+ * points by `steep`, and the creases between pockets rise less, just enough that no paper stretches.
+ */
+function popped(steep: number) {
+  // Neighbouring creases are 45° apart on the paper, and must stay so: a·cos(e) + b·sin(e) = cos 45°.
+  const a = Math.cos(steep) * Math.SQRT1_2;
+  const b = Math.sin(steep);
+  const gentle = Math.atan2(b, a) - Math.acos(Math.SQRT1_2 / Math.hypot(a, b));
+  return Array.from({ length: 8 }, (_, k) => ({ azimuth: (k * Math.PI) / 4, elevation: k % 2 ? steep : gentle }));
 }

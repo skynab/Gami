@@ -35,9 +35,10 @@ export const en = {
     communityIntro: 'Made in the Studio by Gami creators.',
   },
   levels: { easy: 'Easy', medium: 'Medium', hard: 'Hard' },
-  categories: { basics: 'Basics', animal: 'Animals', object: 'Objects', toy: 'Toys', modular: 'Modular', flower: 'Flowers' },
+  categories: { basics: 'Basics', animal: 'Animals', object: 'Objects', toy: 'Toys', modular: 'Modular', flower: 'Flowers', math: 'Math' },
   card: {
     soon: 'Coming soon',
+    lesson: 'Lesson',
     folded: 'Folded ✓',
     continue: 'Continue · step {{step}}',
     steps_one: '{{count}} step',
@@ -60,6 +61,8 @@ export const en = {
     tulip: { title: 'Tulip', blurb: 'A blossom and a stem from two squares.' },
     fox: { title: 'Fox', blurb: 'A sitting fox with big ears and a bushy tail.' },
     crane: { title: 'Crane', blurb: 'The traditional symbol of peace and luck.' },
+    'folding-geometry': { title: 'Geometry by folding', blurb: 'The rules of mathematical folding, and an angle split in three.' },
+    swan: { title: 'Swan', blurb: 'A kite folded narrow, with a neck that stands up.' },
     lily: { title: 'Lily', blurb: 'Four curled petals from the frog base.' },
   },
   notFound: {

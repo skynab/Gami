@@ -33,9 +33,10 @@ export const es: Messages = {
     communityIntro: 'Hechos en el Estudio por creadores de Gami.',
   },
   levels: { easy: 'Fácil', medium: 'Medio', hard: 'Difícil' },
-  categories: { basics: 'Básicos', animal: 'Animales', object: 'Objetos', toy: 'Juguetes', modular: 'Modulares', flower: 'Flores' },
+  categories: { basics: 'Básicos', animal: 'Animales', object: 'Objetos', toy: 'Juguetes', modular: 'Modulares', flower: 'Flores', math: 'Matemáticas' },
   card: {
     soon: 'Próximamente',
+    lesson: 'Lección',
     folded: 'Plegado ✓',
     continue: 'Continuar · paso {{step}}',
     steps_one: '{{count}} paso',
@@ -58,6 +59,8 @@ export const es: Messages = {
     tulip: { title: 'Tulipán', blurb: 'Una flor y un tallo con dos cuadrados.' },
     fox: { title: 'Zorro', blurb: 'Un zorro sentado, de orejas grandes y cola espesa.' },
     crane: { title: 'Grulla', blurb: 'El símbolo tradicional de la paz y la buena suerte.' },
+    'folding-geometry': { title: 'Geometría plegando', blurb: 'Las reglas del plegado matemático, y un ángulo dividido en tres.' },
+    swan: { title: 'Cisne', blurb: 'Una cometa estrecha con un cuello que se levanta.' },
     lily: { title: 'Lirio', blurb: 'Cuatro pétalos rizados a partir de la base de rana.' },
   },
   notFound: {

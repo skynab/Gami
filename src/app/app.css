@@ -859,6 +859,10 @@ kbd {
   font-weight: 600;
 }
 
+.card.lesson {
+  background: var(--accent-soft);
+}
+
 .card-badge.soon {
   background: var(--surface);
   color: var(--muted);

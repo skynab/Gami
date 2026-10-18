@@ -61,4 +61,9 @@ export interface OrigamiModel {
   /** The paper before step 1, usually the flat sheet. */
   start: FoldFrame;
   steps: Step[];
+  /**
+   * How the gallery card shows a model finished in 3D: as it was just before (the default), or finished,
+   * seen at a slant. Only used when building cards, so not kept in .fold files.
+   */
+  card?: 'flat' | 'finished';
 }
