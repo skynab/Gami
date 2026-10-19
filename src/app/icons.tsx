@@ -34,9 +34,9 @@ export const NextIcon = icon(<path d="M9 6l6 6-6 6" />);
 /** A fold's arrow, drawn as the guides draw it, solid halfway over and dashed the rest: play half a step. */
 export const HalfStepIcon = icon(
   <>
-    <path d="M20 18a8 8 0 0 0-8-8" />
-    <path d="M15 7l-3 3 3 3" />
-    <path d="M12 10a8 8 0 0 0-8 8" strokeDasharray="1.6 2.8" />
+    <path d="M4 18a8 8 0 0 1 8-8" />
+    <path d="M9 7l3 3-3 3" />
+    <path d="M12 10a8 8 0 0 1 8 8" strokeDasharray="1.6 2.8" />
     <path d="M2.5 18.5h3M18.5 18.5h3" />
   </>,
 );
