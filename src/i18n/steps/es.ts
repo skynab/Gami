@@ -850,4 +850,14 @@ export const es: Record<string, string> = {
     "Baja la nariz",
   "Fold the tip of that flap back down a little, for the nose.":
     "Vuelve a doblar un poco hacia abajo la punta de esa solapa, para la nariz.",
+  "Fold the point down":
+    "Baja la punta",
+  "Fold the point down to where the corners meet, making a flat nose.":
+    "Dobla la punta hacia abajo hasta donde se juntan las esquinas, formando un morro plano.",
+  "Fold the top layers down along a line close to the bottom, making a broad wing.":
+    "Dobla las capas de encima hacia abajo por una línea cerca de la parte de abajo, formando un ala ancha.",
+  "Fold the point behind":
+    "Dobla la punta hacia atrás",
+  "Fold the sharp point back behind the plane, making a stubby nose.":
+    "Dobla la punta afilada hacia atrás, detrás del avión, formando un morro chato.",
 };

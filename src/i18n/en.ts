@@ -51,6 +51,8 @@ export const en = {
   models: {
     basics: { title: 'Folding basics', blurb: 'Start here: fold, unfold and turn the paper over.' },
     'paper-plane': { title: 'Paper plane', blurb: 'The classic dart. Flies far and straight.' },
+    glider: { title: 'Glider', blurb: 'A flat-nosed plane with broad wings, for slow, long glides.' },
+    'bulldog-dart': { title: 'Bulldog dart', blurb: 'The dart with its point folded back: a stubby nose for rough landings.' },
     'dog-face': { title: 'Dog face', blurb: 'A first fold: a triangle with floppy ears.' },
     'cat-face': { title: 'Cat face', blurb: 'A first fold: a triangle with pointed ears.' },
     cup: { title: 'Cup', blurb: 'A cup that holds water, for a while.' },

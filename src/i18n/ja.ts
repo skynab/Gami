@@ -49,6 +49,8 @@ export const ja: Messages = {
   models: {
     basics: { title: '折り方の基本', blurb: 'まずはここから。折る、開く、裏返す。' },
     'paper-plane': { title: '紙飛行機', blurb: '定番のダーツ型。まっすぐ遠くまで飛びます。' },
+    glider: { title: 'グライダー', blurb: '平らな機首と広い翼で、ゆっくり長く飛びます。' },
+    'bulldog-dart': { title: 'ブルドッグダート', blurb: '先を折り返したダート。ずんぐりした機首で着地に強い。' },
     'dog-face': { title: 'いぬのかお', blurb: 'はじめての折り紙に。たれ耳の三角。' },
     'cat-face': { title: 'ねこのかお', blurb: 'はじめての折り紙に。とがった耳の三角。' },
     cup: { title: 'コップ', blurb: 'しばらくなら水も入るコップ。' },

@@ -1,5 +1,5 @@
 import { locate, paper, Recipe, table, type At } from '../../fold/recipe';
-import type { Vec2 } from '../../fold/types';
+import type { OrigamiModel, Vec2 } from '../../fold/types';
 
 /** The classic dart, from a sheet shaped like A4 (1 : 1.41). */
 export function paperPlane() {
@@ -35,7 +35,16 @@ export function paperPlane() {
     .onto(paper(r, corner), table(0, edge), {
       title: 'Fold the right edge to the middle',
       text: 'Match the left side. The edges meet along the centre.',
-    })
+    });
+  return finishPlane(plane, 0.13, 'Fold the top layers down so the wing’s edge meets the bottom of the plane.');
+}
+
+/**
+ * How a plane ends, from its nose folds: in half behind, turned on its side, a wing folded down each side along
+ * a line `body` up from the keel (`wingText` saying how), then the wings opened out and the plane turned over.
+ */
+export function finishPlane(plane: Recipe, body: number, wingText: string): OrigamiModel {
+  plane
     .along(table(0, -1), table(0, 1), table(-0.1, 0), {
       title: 'Fold in half behind',
       text: 'Mountain-fold along the centre crease, so the folds stay on the outside.',
@@ -45,7 +54,7 @@ export function paperPlane() {
 
   // On its side, the centre crease runs along the bottom. Each wing folds down along a line parallel to it.
   const keel = Math.max(...plane.current.vertices_coords.map((p) => p[2]));
-  const wingLine = keel - 0.13;
+  const wingLine = keel - body;
   const fold: [At, At] = [table(-1, wingLine), table(1, wingLine)];
   // Each wing: the part of its half of the sheet beyond the line, before it folds down.
   const wingOf = (half: (c: Vec2) => boolean) => {
@@ -55,7 +64,7 @@ export function paperPlane() {
   const firstWing = wingOf(([u]) => u > 0);
   plane.along(...fold, table(0, wingLine - 0.1), {
     title: 'Fold the wing down',
-    text: 'Fold the top layers down so the wing’s edge meets the bottom of the plane.',
+    text: wingText,
     only: ([u]) => u > 0,
   });
   plane.turnOver();

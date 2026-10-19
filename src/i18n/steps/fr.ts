@@ -850,4 +850,14 @@ export const fr: Record<string, string> = {
     "Rabattre le nez",
   "Fold the tip of that flap back down a little, for the nose.":
     "Rabattez un peu la pointe de ce rabat, pour le nez.",
+  "Fold the point down":
+    "Rabattre la pointe",
+  "Fold the point down to where the corners meet, making a flat nose.":
+    "Rabattez la pointe jusqu’à l’endroit où les coins se rejoignent, pour faire un nez plat.",
+  "Fold the top layers down along a line close to the bottom, making a broad wing.":
+    "Rabattez les couches du dessus le long d’une ligne proche du bas, pour faire une aile large.",
+  "Fold the point behind":
+    "Plier la pointe derrière",
+  "Fold the sharp point back behind the plane, making a stubby nose.":
+    "Pliez la pointe derrière l’avion, pour faire un nez camus.",
 };

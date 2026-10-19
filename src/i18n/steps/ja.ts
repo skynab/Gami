@@ -850,4 +850,14 @@ export const ja: Record<string, string> = {
     "鼻を折り下げる",
   "Fold the tip of that flap back down a little, for the nose.":
     "その先を少し折り下げて、鼻にします。",
+  "Fold the point down":
+    "先を折り下げる",
+  "Fold the point down to where the corners meet, making a flat nose.":
+    "先を角が合わさるところまで折り下げて、平らな機首にします。",
+  "Fold the top layers down along a line close to the bottom, making a broad wing.":
+    "上の層を、下の辺に近い線で折り下げて、広い翼にします。",
+  "Fold the point behind":
+    "先をうしろへ折る",
+  "Fold the sharp point back behind the plane, making a stubby nose.":
+    "とがった先を飛行機のうしろへ折って、ずんぐりした機首にします。",
 };

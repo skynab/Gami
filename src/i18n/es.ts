@@ -49,6 +49,8 @@ export const es: Messages = {
   models: {
     basics: { title: 'Lo básico', blurb: 'Empieza aquí: plegar, desplegar y dar la vuelta al papel.' },
     'paper-plane': { title: 'Avión de papel', blurb: 'El clásico dardo. Vuela lejos y recto.' },
+    glider: { title: 'Planeador', blurb: 'Un avión de morro plano y alas anchas, para planear despacio y lejos.' },
+    'bulldog-dart': { title: 'Dardo chato', blurb: 'El dardo con la punta doblada hacia atrás: un morro chato para aterrizajes bruscos.' },
     'dog-face': { title: 'Cara de perro', blurb: 'Un primer plegado: un triángulo con orejas caídas.' },
     'cat-face': { title: 'Cara de gato', blurb: 'Un primer plegado: un triángulo con orejas puntiagudas.' },
     cup: { title: 'Vaso', blurb: 'Un vaso que aguanta agua, un rato.' },
