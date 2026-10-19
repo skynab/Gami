@@ -822,14 +822,14 @@ export const fr: Record<string, string> = {
     "Rabattre l’autre oreille",
   "Fold the right corner down to match.":
     "Pliez le coin droit vers le bas de la même façon.",
-  "Fold up the nose":
-    "Relever le nez",
-  "Fold the top layer of the bottom point up a little, for the nose.":
-    "Relevez un peu la première couche de la pointe du bas, pour le nez.",
+  "Fold up the muzzle":
+    "Relever le museau",
+  "Fold the top layer of the bottom point up, for the muzzle.":
+    "Relevez la première couche de la pointe du bas, pour le museau.",
   "Fold the chin behind":
     "Plier le menton derrière",
-  "Fold the point that’s left behind, just below the nose.":
-    "Pliez derrière la pointe qui reste, juste sous le nez.",
+  "Fold the point that’s left behind, just below the muzzle.":
+    "Pliez derrière la pointe qui reste, juste sous le museau.",
   "Fold the top behind":
     "Plier le haut derrière",
   "Fold the top edge behind a little, rounding off the head. Draw on eyes and a nose!":
@@ -846,4 +846,8 @@ export const fr: Record<string, string> = {
     "Pliez la pointe du haut derrière, entre les oreilles.",
   "Turn it over. Draw on eyes, a nose and whiskers!":
     "Retournez-le. Dessinez les yeux, le nez et les moustaches !",
+  "Fold down the nose":
+    "Rabattre le nez",
+  "Fold the tip of that flap back down a little, for the nose.":
+    "Rabattez un peu la pointe de ce rabat, pour le nez.",
 };

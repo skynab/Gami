@@ -822,14 +822,14 @@ export const ja: Record<string, string> = {
     "もう一方の耳を折り下げる",
   "Fold the right corner down to match.":
     "右の角も同じように折り下げます。",
-  "Fold up the nose":
-    "鼻を折り上げる",
-  "Fold the top layer of the bottom point up a little, for the nose.":
-    "下の先の一枚目を少し折り上げて、鼻にします。",
+  "Fold up the muzzle":
+    "口もとを折り上げる",
+  "Fold the top layer of the bottom point up, for the muzzle.":
+    "下の先の一枚目を折り上げて、口もとにします。",
   "Fold the chin behind":
     "あごをうしろへ折る",
-  "Fold the point that’s left behind, just below the nose.":
-    "残った先を、鼻のすぐ下でうしろへ折ります。",
+  "Fold the point that’s left behind, just below the muzzle.":
+    "残った先を、口もとのすぐ下でうしろへ折ります。",
   "Fold the top behind":
     "上をうしろへ折る",
   "Fold the top edge behind a little, rounding off the head. Draw on eyes and a nose!":
@@ -846,4 +846,8 @@ export const ja: Record<string, string> = {
     "上の先を、耳のあいだでうしろへ折り下げます。",
   "Turn it over. Draw on eyes, a nose and whiskers!":
     "裏返します。目と鼻とひげをかきましょう！",
+  "Fold down the nose":
+    "鼻を折り下げる",
+  "Fold the tip of that flap back down a little, for the nose.":
+    "その先を少し折り下げて、鼻にします。",
 };

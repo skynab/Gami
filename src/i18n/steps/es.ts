@@ -822,14 +822,14 @@ export const es: Record<string, string> = {
     "Baja la otra oreja",
   "Fold the right corner down to match.":
     "Dobla la esquina derecha hacia abajo igual.",
-  "Fold up the nose":
-    "Sube la nariz",
-  "Fold the top layer of the bottom point up a little, for the nose.":
-    "Dobla un poco hacia arriba la capa de encima de la punta de abajo, para la nariz.",
+  "Fold up the muzzle":
+    "Sube el hocico",
+  "Fold the top layer of the bottom point up, for the muzzle.":
+    "Dobla hacia arriba la capa de encima de la punta de abajo, para el hocico.",
   "Fold the chin behind":
     "Dobla la barbilla hacia atrás",
-  "Fold the point that’s left behind, just below the nose.":
-    "Dobla hacia atrás la punta que queda, justo debajo de la nariz.",
+  "Fold the point that’s left behind, just below the muzzle.":
+    "Dobla hacia atrás la punta que queda, justo debajo del hocico.",
   "Fold the top behind":
     "Dobla la parte de arriba hacia atrás",
   "Fold the top edge behind a little, rounding off the head. Draw on eyes and a nose!":
@@ -846,4 +846,8 @@ export const es: Record<string, string> = {
     "Dobla la punta de arriba hacia abajo por detrás, entre las orejas.",
   "Turn it over. Draw on eyes, a nose and whiskers!":
     "Dale la vuelta. ¡Dibújale los ojos, la nariz y los bigotes!",
+  "Fold down the nose":
+    "Baja la nariz",
+  "Fold the tip of that flap back down a little, for the nose.":
+    "Vuelve a doblar un poco hacia abajo la punta de esa solapa, para la nariz.",
 };
