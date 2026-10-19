@@ -309,10 +309,11 @@ function moving(from: FoldFrame, to: FoldFrame, { yielding = false } = {}): Tran
       if (!count) break;
     }
     // Each way of moving has cases the other handles better: keep whichever passes through less paper. When
-    // neither passes through any, as a collapse's faces all meeting at a point count as touching, judge by
-    // how deep any faces cut through each other, joined or not.
-    const plain = passesThrough(out, WAY_SAMPLES);
-    if (fewest < plain || (fewest === plain && deepestCut(hinged!) <= deepestCut(out))) return landInOrder(hinged!);
+    // neither passes through any, as a collapse's faces all meeting at a point count as touching, judge a
+    // compound fold by how deep any faces cut through each other, joined or not. A plain fold stays as one
+    // turn: hinged, each layer of a stack turns about its own crease, and halfway they stand in one plane.
+    const through = passesThrough(out, WAY_SAMPLES);
+    if (fewest < through || (!plain && fewest === through && deepestCut(hinged!) <= deepestCut(out))) return landInOrder(hinged!);
   }
   return landInOrder(out);
 }
