@@ -28,7 +28,7 @@ export interface FoldFrame {
   faces_layer?: number[];
 }
 
-export type StepKind = 'fold' | 'unfold' | 'turn-over' | 'rotate' | 'squash' | 'reverse' | 'petal' | 'sink' | 'assemble' | 'pose';
+export type StepKind = 'fold' | 'unfold' | 'turn-over' | 'rotate' | 'squash' | 'reverse' | 'petal' | 'sink' | 'assemble' | 'pose' | 'draw';
 
 export interface Step {
   title: string;

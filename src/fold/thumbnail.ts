@@ -1,6 +1,7 @@
-import { toFlat } from './fold';
+import { placeLike, toFlat } from './fold';
 import { normal } from './frames';
 import { frontUp } from './geometry2d';
+import { faceOfMark, MARK_COLOUR, MARK_WIDTH, marksUpTo, type Mark } from './marks';
 import { faceColour } from './sheets';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from './types';
 
@@ -12,15 +13,22 @@ import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from './types';
 export function thumbnailSvg(model: OrigamiModel, size = 240): string {
   const last = model.steps.at(-1)?.frame ?? model.start;
   if (model.card === 'finished' && !flat(last)) return slanted(model, last, size);
-  const { box, body } = fromAbove(model, model.steps.map((s) => s.frame).findLast(flat) ?? model.start);
+  const k = model.steps.findLastIndex((s) => flat(s.frame)) + 1;
+  const { box, body } = fromAbove(model, k ? model.steps[k - 1].frame : model.start, marksAt(model, k));
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${box.join(' ')}" width="${size}" height="${size}">${body}</svg>
 `;
 }
 
 const flat = (f: FoldFrame) => f.vertices_coords.every((p) => Math.abs(p[1]) < 1e-6);
 
-/** A flat frame seen from above: its faces bottom layer first, and a square box round them. */
-function fromAbove(model: OrigamiModel, frame: FoldFrame): { box: number[]; body: string } {
+/** The marks drawn by the end of step k. */
+const marksAt = (model: OrigamiModel, k: number): Mark[] => marksUpTo(model, k).map((m) => m.mark);
+
+/**
+ * A flat frame seen from above: its faces bottom layer first, each with the marks drawn on its upper side,
+ * and a square box round them.
+ */
+function fromAbove(model: OrigamiModel, frame: FoldFrame, marks: Mark[] = []): { box: number[]; body: string } {
   const faces = toFlat(frame).sort((a, b) => a.layer - b.layer);
   const pts = faces.flatMap((f) => f.world);
   const xs = pts.map((p) => p[0]);
@@ -34,11 +42,23 @@ function fromAbove(model: OrigamiModel, frame: FoldFrame): { box: number[]; body
     span + 2 * pad,
   ].map((n) => +n.toFixed(4));
   const stroke = +(span / 220).toFixed(5);
+  const width = +(MARK_WIDTH * Math.max(...model.sheets.map((s) => Math.max(...s.size)))).toFixed(5);
   const polys = faces
     .map((f) => {
-      const fill = faceColour(model, f.paper, frontUp(f.world, f.paper));
+      const up = frontUp(f.world, f.paper);
+      const fill = faceColour(model, f.paper, up);
       const points = f.world.map((p) => p.map((n) => +n.toFixed(4)).join(',')).join(' ');
-      return `<polygon points="${points}" fill="${fill}"/>`;
+      const place = placeLike(f);
+      const drawn = marks
+        .filter((m) => (m.side === 'front') === up && faceOfMark(m, [f.paper]) === 0)
+        .map((m) => {
+          const pts = m.points.map((p) => place(p).map((n) => +n.toFixed(4)).join(',')).join(' ');
+          return m.fill
+            ? `<polygon points="${pts}" fill="${MARK_COLOUR}" stroke="none"/>`
+            : `<polyline points="${pts}" fill="none" stroke="${MARK_COLOUR}" stroke-opacity="1" stroke-width="${width}" stroke-linecap="round"/>`;
+        })
+        .join('');
+      return `<polygon points="${points}" fill="${fill}"/>${drawn}`;
     })
     .join('');
   return { box, body: `<g stroke="#2b2a33" stroke-opacity=".45" stroke-width="${stroke}" stroke-linejoin="round">${polys}</g>` };
@@ -54,7 +74,8 @@ const PREVIEW_SECONDS = 0.9;
  * shown in turn. Still, on the finished state, for anyone who prefers less motion.
  */
 export function previewSvg(model: OrigamiModel, size = 240): string {
-  const frames = [model.start, ...model.steps.map((s) => s.frame)].filter(flat);
+  // Each flat state, with how many steps it's after (for the marks drawn by then).
+  const frames = [model.start, ...model.steps.map((s) => s.frame)].map((frame, k) => ({ frame, k })).filter(({ frame }) => flat(frame));
   const n = Math.min(PREVIEW_FRAMES, frames.length);
   const picked = Array.from({ length: n }, (_, i) => frames[Math.round((i * (frames.length - 1)) / Math.max(1, n - 1))]);
   const cycle = n * PREVIEW_SECONDS;
@@ -65,8 +86,8 @@ export function previewSvg(model: OrigamiModel, size = 240): string {
     picked.map((_, i) => `.f${i}{animation-delay:${(i * PREVIEW_SECONDS).toFixed(2)}s}`).join('') +
     `@media (prefers-reduced-motion:reduce){.f{animation:none}.f${n - 1}{opacity:1}}`;
   const views = picked
-    .map((frame, i) => {
-      const { box, body } = fromAbove(model, frame);
+    .map(({ frame, k }, i) => {
+      const { box, body } = fromAbove(model, frame, marksAt(model, k));
       return `<svg class="f f${i}" viewBox="${box.join(' ')}" width="${size}" height="${size}">${body}</svg>`;
     })
     .join('');

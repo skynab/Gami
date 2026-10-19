@@ -1,6 +1,7 @@
 import { dist } from '../../fold/geometry2d';
 import { paper, Recipe, table } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
+import { faceMarks } from './face';
 
 /** A dog's face, the traditional first model: a triangle with its corners folded down into floppy ears. */
 export function dogFace() {
@@ -12,6 +13,8 @@ export function dogFace() {
   // How far up the muzzle folds (its tip goes twice as far), and how much of its tip folds back down as the nose.
   const muzzle = 0.2;
   const nose = 0.06;
+  // Where the top of the head is, once its edge is folded behind.
+  const top = 0.07;
   // The sheet's corner that comes down to the bottom point on top: the muzzle is the paper near it.
   const TR: Vec2 = [0.5, -0.5];
   return new Recipe({ id: 'dog-face', title: 'Dog face', sheet: { size: [1, 1], front: '#f6f3ec', back: '#a8703f' } })
@@ -41,10 +44,11 @@ export function dogFace() {
       text: 'Fold the point that’s left behind, just below the muzzle.',
       kind: 'mountain',
     })
-    .along(table(-1, 0.07), table(1, 0.07), table(0, 0), {
+    .along(table(-1, top), table(1, top), table(0, 0), {
       title: 'Fold the top behind',
-      text: 'Fold the top edge behind a little, rounding off the head. Draw on eyes and a nose!',
+      text: 'Fold the top edge behind a little, rounding off the head.',
       kind: 'mountain',
     })
+    .draw({ title: 'Draw a face', text: 'Draw on two eyes. Done!' }, faceMarks([0, top], [0, r - 0.8 * muzzle], { eyes: 'open', eyesAt: 0.3, eyeGap: 0.2 }))
     .build();
 }

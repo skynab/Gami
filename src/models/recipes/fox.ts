@@ -1,6 +1,7 @@
 import { lerp, lineThrough, reflect, sideOf } from '../../fold/geometry2d';
 import { paper, Recipe, table } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
+import { faceMarks } from './face';
 
 /** A sitting fox, after Mitsuo Okuda's design, following origami.me/fox. */
 export function fox() {
@@ -71,7 +72,11 @@ export function fox() {
     [{ through: [table(x, -2), table(x, 2)], kind: 'inside' }],
     paper(0.5, 0),
   );
-  return r.build();
+
+  // The face: the squashed diamond, from where the ears meet down to its point, where the sheet's corners are.
+  return r
+    .draw({ title: 'Draw a face', text: 'Draw two shut, smiling eyes and a little nose on the face. Done!' }, faceMarks(Q, r.where(paper(0.5, -0.5)), { eyes: 'closed', nose: true, noseAt: 0.78 }))
+    .build();
 }
 
 function inTriangle(p: Vec2, a: Vec2, b: Vec2, c: Vec2): boolean {

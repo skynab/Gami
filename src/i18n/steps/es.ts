@@ -832,8 +832,8 @@ export const es: Record<string, string> = {
     "Dobla hacia atrás la punta que queda, justo debajo del hocico.",
   "Fold the top behind":
     "Dobla la parte de arriba hacia atrás",
-  "Fold the top edge behind a little, rounding off the head. Draw on eyes and a nose!":
-    "Dobla un poco hacia atrás el borde de arriba, para redondear la cabeza. ¡Dibújale los ojos y la nariz!",
+  "Fold the top edge behind a little, rounding off the head.":
+    "Dobla un poco hacia atrás el borde de arriba, para redondear la cabeza.",
   "Fold up an ear":
     "Sube una oreja",
   "Fold the left corner up, so its point sticks up past the top point and out to the side.":
@@ -844,8 +844,8 @@ export const es: Record<string, string> = {
     "Dobla la esquina derecha hacia arriba igual.",
   "Fold the top point down behind, between the ears.":
     "Dobla la punta de arriba hacia abajo por detrás, entre las orejas.",
-  "Turn it over. Draw on eyes, a nose and whiskers!":
-    "Dale la vuelta. ¡Dibújale los ojos, la nariz y los bigotes!",
+  "Turn it over.":
+    "Dale la vuelta.",
   "Fold down the nose":
     "Baja la nariz",
   "Fold the tip of that flap back down a little, for the nose.":
@@ -860,4 +860,12 @@ export const es: Record<string, string> = {
     "Dobla la punta hacia atrás",
   "Fold the sharp point back behind the plane, making a stubby nose.":
     "Dobla la punta afilada hacia atrás, detrás del avión, formando un morro chato.",
+  "Draw a face":
+    "Dibuja una cara",
+  "Draw on two eyes. Done!":
+    "Dibújale dos ojos. ¡Listo!",
+  "Draw on eyes, a nose and whiskers. Done!":
+    "Dibújale los ojos, la nariz y los bigotes. ¡Listo!",
+  "Draw two shut, smiling eyes and a little nose on the face. Done!":
+    "Dibuja en la cara dos ojos cerrados y sonrientes y una naricita. ¡Listo!",
 };

@@ -832,8 +832,8 @@ export const ja: Record<string, string> = {
     "残った先を、口もとのすぐ下でうしろへ折ります。",
   "Fold the top behind":
     "上をうしろへ折る",
-  "Fold the top edge behind a little, rounding off the head. Draw on eyes and a nose!":
-    "上の辺を少しうしろへ折って、頭を丸くします。目と鼻をかきましょう！",
+  "Fold the top edge behind a little, rounding off the head.":
+    "上の辺を少しうしろへ折って、頭を丸くします。",
   "Fold up an ear":
     "耳を折り上げる",
   "Fold the left corner up, so its point sticks up past the top point and out to the side.":
@@ -844,8 +844,8 @@ export const ja: Record<string, string> = {
     "右の角も同じように折り上げます。",
   "Fold the top point down behind, between the ears.":
     "上の先を、耳のあいだでうしろへ折り下げます。",
-  "Turn it over. Draw on eyes, a nose and whiskers!":
-    "裏返します。目と鼻とひげをかきましょう！",
+  "Turn it over.":
+    "裏返します。",
   "Fold down the nose":
     "鼻を折り下げる",
   "Fold the tip of that flap back down a little, for the nose.":
@@ -860,4 +860,12 @@ export const ja: Record<string, string> = {
     "先をうしろへ折る",
   "Fold the sharp point back behind the plane, making a stubby nose.":
     "とがった先を飛行機のうしろへ折って、ずんぐりした機首にします。",
+  "Draw a face":
+    "顔をかく",
+  "Draw on two eyes. Done!":
+    "目を二つかきます。できあがり！",
+  "Draw on eyes, a nose and whiskers. Done!":
+    "目と鼻とひげをかきます。できあがり！",
+  "Draw two shut, smiling eyes and a little nose on the face. Done!":
+    "顔に、にっこり閉じた目を二つと小さな鼻をかきます。できあがり！",
 };

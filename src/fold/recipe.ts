@@ -5,8 +5,8 @@ export { locate } from './select';
 import { place } from './place';
 import { radial, reparent, shape, type Bend, type Ray } from './shape';
 import { startFrame } from './sheets';
-import { sideOf } from './geometry2d';
-import { lineOf, type At, type Faces, type LineSpec, type Op } from './ops';
+import { frontUp, sideOf } from './geometry2d';
+import { lineOf, type At, type Faces, type LineSpec, type Mark, type Op } from './ops';
 import type { FoldFrame, OrigamiModel, Sheet, Step, Vec2 } from './types';
 
 /**
@@ -311,6 +311,24 @@ export class Recipe {
       if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
       throw e;
     }
+  }
+
+  /**
+   * Draws on the paper where it lies now, as a face drawn on at the end: lines through points on the table, or
+   * shapes filled in. Each mark goes on whatever paper is on top under its first point, on the side facing up,
+   * and moves with it from then on.
+   */
+  draw(step: { title: string; text?: string }, marks: ({ line: Vec2[] } | { fill: Vec2[] })[]): this {
+    const faces = toFlat(this.current).sort((a, b) => b.layer - a.layer);
+    const drawn = marks.map((m): Mark => {
+      const points = 'line' in m ? m.line : m.fill;
+      const f = faces.find((face) => inside(face.world, points[0]));
+      if (!f) throw new FoldError(`${this.info.id}: no paper to draw on at (${points[0].join(', ')}).`);
+      // The face's map from table back to sheet: the same construction with the roles swapped.
+      const toSheet = placeLike({ ...f, paper: f.world, world: f.paper });
+      return { side: frontUp(f.world, f.paper) ? 'front' : 'back', points: points.map(toSheet), ...('fill' in m && { fill: true }) };
+    });
+    return this.push({ ...step, kind: 'draw' }, { ...this.current, faces_parent: undefined }, { op: 'draw', marks: drawn });
   }
 
   turnOver(text = 'Flip the paper over from left to right.'): this {

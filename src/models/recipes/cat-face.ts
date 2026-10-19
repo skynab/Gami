@@ -1,6 +1,7 @@
 import { lineOnto, sideOf } from '../../fold/geometry2d';
 import { locate, paper, Recipe, table } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
+import { faceMarks } from './face';
 
 /** A cat's face, the traditional first model: a triangle with its corners folded up into pointed ears. */
 export function catFace() {
@@ -20,7 +21,7 @@ export function catFace() {
   };
   const left = side([-r, 0], [-ear[0], ear[1]]);
   const right = side([r, 0], ear);
-  return recipe
+  recipe
     .onto(paper(-0.5, -0.5), table(-ear[0], ear[1]), {
       title: 'Fold up an ear',
       text: 'Fold the left corner up, so its point sticks up past the top point and out to the side.',
@@ -35,6 +36,10 @@ export function catFace() {
       kind: 'mountain',
       only: (c) => !left(c) && !right(c),
     })
-    .turnOver('Turn it over. Draw on eyes, a nose and whiskers!')
+    .turnOver('Turn it over.');
+  // The face: from the folded top edge down to the point where the ears' folds meet.
+  const chin = Math.max(...recipe.current.vertices_coords.map((p) => p[2]));
+  return recipe
+    .draw({ title: 'Draw a face', text: 'Draw on eyes, a nose and whiskers. Done!' }, faceMarks([0, -r + 0.2], [0, chin], { eyes: 'open', nose: true, whiskers: true, eyesAt: 0.35, eyeGap: 0.2, noseAt: 0.62 }))
     .build();
 }

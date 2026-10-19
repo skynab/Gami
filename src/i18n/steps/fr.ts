@@ -832,8 +832,8 @@ export const fr: Record<string, string> = {
     "Pliez derrière la pointe qui reste, juste sous le museau.",
   "Fold the top behind":
     "Plier le haut derrière",
-  "Fold the top edge behind a little, rounding off the head. Draw on eyes and a nose!":
-    "Pliez un peu le bord du haut derrière, pour arrondir la tête. Dessinez les yeux et le nez !",
+  "Fold the top edge behind a little, rounding off the head.":
+    "Pliez un peu le bord du haut derrière, pour arrondir la tête.",
   "Fold up an ear":
     "Relever une oreille",
   "Fold the left corner up, so its point sticks up past the top point and out to the side.":
@@ -844,8 +844,8 @@ export const fr: Record<string, string> = {
     "Pliez le coin droit vers le haut de la même façon.",
   "Fold the top point down behind, between the ears.":
     "Pliez la pointe du haut derrière, entre les oreilles.",
-  "Turn it over. Draw on eyes, a nose and whiskers!":
-    "Retournez-le. Dessinez les yeux, le nez et les moustaches !",
+  "Turn it over.":
+    "Retournez-le.",
   "Fold down the nose":
     "Rabattre le nez",
   "Fold the tip of that flap back down a little, for the nose.":
@@ -860,4 +860,12 @@ export const fr: Record<string, string> = {
     "Plier la pointe derrière",
   "Fold the sharp point back behind the plane, making a stubby nose.":
     "Pliez la pointe derrière l’avion, pour faire un nez camus.",
+  "Draw a face":
+    "Dessiner un visage",
+  "Draw on two eyes. Done!":
+    "Dessinez deux yeux. C’est fini !",
+  "Draw on eyes, a nose and whiskers. Done!":
+    "Dessinez les yeux, le nez et les moustaches. C’est fini !",
+  "Draw two shut, smiling eyes and a little nose on the face. Done!":
+    "Dessinez sur le visage deux yeux fermés et souriants, et un petit nez. C’est fini !",
 };

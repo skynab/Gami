@@ -51,6 +51,16 @@ export interface ShapeBend {
   only?: Faces;
 }
 
+/**
+ * A line or a filled shape drawn on the paper, as points on the sheet, on its front or back. A line is drawn
+ * through its points; a fill is the outline they make.
+ */
+export interface Mark {
+  side: 'front' | 'back';
+  points: Vec2[];
+  fill?: boolean;
+}
+
 export type Op =
   | { op: 'fold'; line: LineSpec; flip?: boolean; kind?: FoldKind; layers?: number; only?: Faces }
   | {
@@ -70,6 +80,8 @@ export type Op =
   /** Bends in 3D. Lines are found on the flat state before a run of shaping steps; each adds to the run's bends. */
   | { op: 'shape'; bends: ShapeBend[] }
   | { op: 'popUp'; centre: At; rays: { azimuth: number; elevation: number }[] }
+  /** Draws on the paper, leaving it where it is: a face, say. */
+  | { op: 'draw'; marks: Mark[] }
   /** Several operations shown as one step. */
   | { op: 'together'; ops: Op[] };
 
@@ -149,6 +161,16 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
         rays: list(o.rays, `${path}.rays`, (r, p) => {
           const ray = record(r, p);
           return { azimuth: num(ray.azimuth, `${p}.azimuth`), elevation: num(ray.elevation, `${p}.elevation`) };
+        }),
+      };
+    case 'draw':
+      return {
+        op: 'draw',
+        marks: list(o.marks, `${path}.marks`, (m, p) => {
+          const r = record(m, p);
+          const points = list(r.points, `${p}.points`, vec2, LIMITS.outline);
+          if (!points.length) throw new OpError(`${p}.points: a mark needs a point`);
+          return { side: oneOf(r.side, `${p}.side`, ['front', 'back'] as const), points, ...opt(r, 'fill', bool, p) };
         }),
       };
     case 'together':
@@ -293,6 +315,8 @@ export function opKind(op: Op): StepKind {
     case 'shape':
     case 'popUp':
       return 'pose';
+    case 'draw':
+      return 'draw';
     case 'together':
       return op.ops.length ? opKind(op.ops[op.ops.length - 1]) : 'fold';
   }
@@ -470,6 +494,8 @@ function run(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; flat?
     }
     case 'popUp':
       return { frame: radial(frame, where(op.centre), op.rays) };
+    case 'draw':
+      return { frame: { ...frame, faces_parent: undefined } };
     case 'together': {
       const added: Step[] = [];
       for (const part of op.ops) {

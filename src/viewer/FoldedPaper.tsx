@@ -15,8 +15,9 @@ import {
 import { affine, poseAt, stepTransition, transition, type Transition } from '../fold/animate';
 import { framesOf, normal } from '../fold/frames';
 import { sharedSegment } from '../fold/geometry2d';
+import { faceOfMark, MARK_COLOUR, MARK_WIDTH, marksUpTo } from '../fold/marks';
 import { sheetOf } from '../fold/sheets';
-import type { OrigamiModel, Sheet, Vec2, Vec3 } from '../fold/types';
+import type { OrigamiModel, Vec2, Vec3 } from '../fold/types';
 import { usePlayback } from '../state/playback';
 
 /**
@@ -24,6 +25,7 @@ import { usePlayback } from '../state/playback';
  * side gets its own colour; thin lines trace every face edge, which shows the creases and the paper's outline.
  * Stacked layers are drawn a little apart, so where a fold joins two of them a rounded bend closes the gap, in
  * the colour of the paper's outside there: seen from the side, it shows which layers are one piece.
+ * Marks drawn on the paper ride on their faces, and a step that draws them draws them stroke by stroke.
  * Geometry is rebuilt when the step changes (folds add faces) and updated in place on every frame.
  */
 export function FoldedPaper({ model, edgeColor }: { model: OrigamiModel; edgeColor: string }) {
@@ -32,6 +34,7 @@ export function FoldedPaper({ model, edgeColor }: { model: OrigamiModel; edgeCol
   const lines = useRef<(LineSegments | null)[]>([]);
   const bendsFront = useRef<(Mesh | null)[]>([]);
   const bendsBack = useRef<(Mesh | null)[]>([]);
+  const marks = useRef<Mesh | null>(null);
   const invalidate = useThree((s) => s.invalidate);
   const grain = useMemo(paperGrain, []);
 
@@ -46,7 +49,7 @@ export function FoldedPaper({ model, edgeColor }: { model: OrigamiModel; edgeCol
       const k = Math.min(total, Math.max(0, Math.ceil(pos)));
       let b = built.get(k);
       if (!b) {
-        b = build(k === 0 ? transition(frames[0], frames[0]) : stepTransition(model, k), model.sheets);
+        b = build(k === 0 ? transition(frames[0], frames[0]) : stepTransition(model, k), model, k);
         built.set(k, b);
       }
       if (b !== shown) {
@@ -56,6 +59,7 @@ export function FoldedPaper({ model, edgeColor }: { model: OrigamiModel; edgeCol
           bendsFront.current[i]!.geometry = part.bends[0];
           bendsBack.current[i]!.geometry = part.bends[1];
         });
+        marks.current!.geometry = b.marks;
         shown = b;
       }
       b.update(k === 0 ? 1 : pos - (k - 1));
@@ -95,6 +99,10 @@ export function FoldedPaper({ model, edgeColor }: { model: OrigamiModel; edgeCol
           </lineSegments>
         </group>
       ))}
+      {/* Drawn on the paper: just off its face, and pulled forward in depth so it never sinks into it. */}
+      <mesh ref={marks} frustumCulled={false}>
+        <meshStandardMaterial color={MARK_COLOUR} side={DoubleSide} roughness={0.9} polygonOffset polygonOffsetFactor={-1} polygonOffsetUnits={-1} />
+      </mesh>
     </group>
   );
 }
@@ -112,25 +120,123 @@ const BEND_STEPS = 6;
 interface Built {
   /** One per sheet. */
   parts: Part[];
+  /** Everything drawn on the paper by this step, all sheets together. */
+  marks: BufferGeometry;
   /** Poses the paper `s` of the way (0–1) through the step. */
   update(s: number): void;
   dispose(): void;
 }
 
-function build(t: Transition, sheets: Sheet[]): Built {
+/** Step k's paper (k from 1; 0 for the paper before any step). */
+function build(t: Transition, model: OrigamiModel, k: number): Built {
+  const { sheets } = model;
   const bySheet = sheets.map(() => [] as number[]);
   t.faces.forEach((f, i) => bySheet[sheetOf(sheets, f.paper)].push(i));
   const parts = bySheet.map((faces) => buildPart(t, faces));
+  const marks = buildMarks(t, model, k);
   return {
     parts: parts.map((p) => p.part),
+    marks: marks.geometry,
     update(s) {
       const pose = poseAt(t, s);
       for (const p of parts) p.update(pose);
+      marks.update(pose, s);
     },
     dispose() {
       for (const p of parts) p.dispose();
+      marks.geometry.dispose();
     },
   };
+}
+
+/** How far off its face a mark is drawn: under the gap to the next layer, so paper on top still covers it. */
+const MARK_LIFT = 0.00025;
+
+/**
+ * The marks drawn by step k's end, each on the face holding it: lines as thin strips through their points,
+ * fills as their outline filled in. Marks the step itself draws appear one after another as it plays.
+ */
+function buildMarks(t: Transition, model: OrigamiModel, k: number): { geometry: BufferGeometry; update(pose: Vec3[][], s: number): void } {
+  const width = MARK_WIDTH * Math.max(...model.sheets.map((sh) => Math.max(...sh.size)));
+  const papers = t.faces.map((f) => f.paper);
+  const placed = marksUpTo(model, k)
+    .map(({ step, mark }) => ({ step, mark, face: faceOfMark(mark, papers) }))
+    .filter((m) => m.face >= 0);
+  const drawing = placed.filter((m) => m.step === k).length;
+  // Vertices: a strip's two edges at each point, or a fill's corners.
+  const sizes = placed.map(({ mark }) => (mark.fill ? mark.points.length : mark.points.length * 2));
+  const starts = sizes.map((_, i) => sizes.slice(0, i).reduce((a, b) => a + b, 0));
+  const total = sizes.reduce((a, b) => a + b, 0);
+  const positions = new Float32Array(total * 3);
+  const normals = new Float32Array(total * 3);
+  const index: number[] = [];
+  placed.forEach(({ mark }, i) => {
+    const first = starts[i];
+    const n = mark.points.length;
+    if (mark.fill) for (let j = 1; j < n - 1; j++) index.push(first, first + j, first + j + 1);
+    else for (let j = 0; j < n - 1; j++) index.push(first + 2 * j, first + 2 * j + 1, first + 2 * j + 2, first + 2 * j + 2, first + 2 * j + 1, first + 2 * j + 3);
+  });
+  const geometry = new BufferGeometry();
+  geometry.setAttribute('position', new BufferAttribute(positions, 3));
+  geometry.setAttribute('normal', new BufferAttribute(normals, 3));
+  geometry.setIndex(index);
+
+  return {
+    geometry,
+    update(pose, s) {
+      let drawn = 0;
+      placed.forEach(({ step, mark, face }, i) => {
+        const first = starts[i];
+        const facing = normal(pose[face]);
+        const up = scale(facing, mark.side === 'front' ? 1 : -1);
+        const place = affine(t.faces[face].paper, pose[face]);
+        let pts = mark.points.map((p) => add(place(p), scale(up, MARK_LIFT)));
+        // Drawn in turn while this step plays: each mark gets an equal share of it.
+        if (step === k && drawing) {
+          const share = Math.min(1, Math.max(0, s * drawing - drawn));
+          drawn++;
+          if (mark.fill ? share < 1 : share <= 0) pts = pts.map(() => pts[0]);
+          else if (!mark.fill) pts = partOfLine(pts, share);
+        }
+        if (mark.fill) {
+          pts.forEach((p, j) => {
+            positions.set(p, (first + j) * 3);
+            normals.set(up, (first + j) * 3);
+          });
+          return;
+        }
+        pts.forEach((p, j) => {
+          const along = sub(pts[Math.min(pts.length - 1, j + 1)], pts[Math.max(0, j - 1)]);
+          const across = Math.hypot(...along) > 1e-9 ? scale(unit(cross(up, along)), width / 2) : ([0, 0, 0] as Vec3);
+          positions.set(add(p, across), (first + 2 * j) * 3);
+          positions.set(sub(p, across), (first + 2 * j + 1) * 3);
+          normals.set(up, (first + 2 * j) * 3);
+          normals.set(up, (first + 2 * j + 1) * 3);
+        });
+      });
+      geometry.attributes.position.needsUpdate = true;
+      geometry.attributes.normal.needsUpdate = true;
+    },
+  };
+}
+
+/** The first `share` (0–1) of a line along its length, as the same number of points (the rest gathered at its end). */
+function partOfLine(pts: Vec3[], share: number): Vec3[] {
+  const lengths = pts.slice(1).map((p, i) => Math.hypot(...sub(p, pts[i])));
+  let left = share * lengths.reduce((a, b) => a + b, 0);
+  const out: Vec3[] = [pts[0]];
+  for (let i = 1; i < pts.length; i++) {
+    const step = lengths[i - 1];
+    if (left >= step) {
+      out.push(pts[i]);
+      left -= step;
+    } else {
+      const end = lerp(pts[i - 1], pts[i], step ? left / step : 0);
+      while (out.length < pts.length) out.push(end);
+      break;
+    }
+  }
+  return out;
 }
 
 function buildPart(t: Transition, faceIndices: number[]): { part: Part; update(pose: ReturnType<typeof poseAt>): void; dispose(): void } {
