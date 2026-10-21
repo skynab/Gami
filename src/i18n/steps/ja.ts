@@ -1070,4 +1070,30 @@ export const ja: Record<string, string> = {
     "羽を持ち上げる",
   "Lift the wings a little, folding the butterfly gently in half along its body. Done!":
     "胴にそってちょうをそっと半分に折るように、羽を少し持ち上げます。できあがり！",
+  "Turn it a quarter turn, so the two flaps point to the left.":
+    "直角に回して、二つのひだを左に向けます。",
+  "Fold the point in":
+    "先を内側に折る",
+  "Fold the left point to the middle.":
+    "左の先を中心まで折ります。",
+  "Fold it back out":
+    "折り返す",
+  "Fold the point back to the left, a quarter of the way from the edge to the middle, so a little of it sticks out.":
+    "先を、ふちから中心までの四分の一のところで左に折り返し、少しはみ出させます。",
+  "Cut the tail":
+    "しっぽを切る",
+  "With scissors, cut a short way along the middle crease from the right point. This makes the two flukes.":
+    "はさみで、右の先から中心の折り目にそって少しだけ切ります。これが尾びれの二つの先になります。",
+  "Fold the bottom half up onto the top half.":
+    "下半分を上半分に重ねるように折り上げます。",
+  "Fold up a fluke":
+    "尾びれを折り上げる",
+  "Fold the top layer of the tail up on a slant, inside the cut.":
+    "しっぽの上の一枚を、切れ目の中でななめに折り上げます。",
+  "Fold down the other fluke":
+    "もう一つの尾びれを折り下げる",
+  "Fold the other half of the tail down on a slant, inside the cut.":
+    "しっぽのもう半分を、切れ目の中でななめに折り下げます。",
+  "Lift the two flaps out from the sides, for the fins. Your dolphin is done!":
+    "両側の二つのひだを外に起こして、ひれにします。イルカのできあがり！",
 };

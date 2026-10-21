@@ -1070,4 +1070,30 @@ export const fr: Record<string, string> = {
     "Relève les ailes",
   "Lift the wings a little, folding the butterfly gently in half along its body. Done!":
     "Relève un peu les ailes en pliant doucement le papillon en deux le long du corps. C’est fini !",
+  "Turn it a quarter turn, so the two flaps point to the left.":
+    "Tourne-le d’un quart de tour, les deux rabats vers la gauche.",
+  "Fold the point in":
+    "Rabats la pointe",
+  "Fold the left point to the middle.":
+    "Rabats la pointe gauche jusqu’au milieu.",
+  "Fold it back out":
+    "Replie-la vers l’extérieur",
+  "Fold the point back to the left, a quarter of the way from the edge to the middle, so a little of it sticks out.":
+    "Replie la pointe vers la gauche, au quart de la distance entre le bord et le milieu, pour qu’elle dépasse un peu.",
+  "Cut the tail":
+    "Coupe la queue",
+  "With scissors, cut a short way along the middle crease from the right point. This makes the two flukes.":
+    "Avec des ciseaux, coupe un peu le long du pli du milieu depuis la pointe droite. Cela fait les deux lobes de la queue.",
+  "Fold the bottom half up onto the top half.":
+    "Remonte la moitié du bas sur la moitié du haut.",
+  "Fold up a fluke":
+    "Relève un lobe de la queue",
+  "Fold the top layer of the tail up on a slant, inside the cut.":
+    "Relève en biais la couche du dessus de la queue, à l’intérieur de la coupe.",
+  "Fold down the other fluke":
+    "Abaisse l’autre lobe de la queue",
+  "Fold the other half of the tail down on a slant, inside the cut.":
+    "Abaisse en biais l’autre moitié de la queue, à l’intérieur de la coupe.",
+  "Lift the two flaps out from the sides, for the fins. Your dolphin is done!":
+    "Écarte les deux rabats des côtés, pour les nageoires. Ton dauphin est fini !",
 };

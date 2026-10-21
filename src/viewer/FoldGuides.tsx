@@ -14,7 +14,7 @@ const up = ([x, y, z]: Vec3, by = LIFT): Vec3 => [x, y + by, z];
 const HEAD = 0.05;
 
 /**
- * The current step's crease (dashed for valley, dotted for mountain) and an arrow along the path the paper
+ * The current step's crease (dashed for valley, dotted for mountain; a scissor cut solid) and an arrow along the path the paper
  * takes, as in an origami diagram. Drawn in the accent colour, on top of the paper.
  */
 export function FoldGuides({ model, color }: { model: OrigamiModel; color: string }) {
@@ -43,6 +43,10 @@ export function FoldGuides({ model, color }: { model: OrigamiModel; color: strin
           dashSize={c.valley ? 0.035 : 0.012}
           gapSize={c.valley ? 0.02 : 0.012}
         />
+      ))}
+      {g.cuts.map((c, i) => (
+        // A scissor cut: a solid line, where folds are dashed.
+        <Line key={`cut${i}`} points={[up(c.a), up(c.b)]} color={color} lineWidth={3.5} />
       ))}
       {g.arrows.map((a, i) => (
         <Arrow key={i} from={up(a.from, 0.02)} via={up(a.via, 0.02)} to={up(a.to, 0.02)} color={color} />

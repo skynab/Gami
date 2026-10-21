@@ -1070,4 +1070,30 @@ export const es: Record<string, string> = {
     "Levanta las alas",
   "Lift the wings a little, folding the butterfly gently in half along its body. Done!":
     "Levanta un poco las alas, doblando la mariposa suavemente por la mitad a lo largo del cuerpo. ¡Listo!",
+  "Turn it a quarter turn, so the two flaps point to the left.":
+    "Gíralo un cuarto de vuelta, para que las dos solapas apunten a la izquierda.",
+  "Fold the point in":
+    "Dobla la punta hacia dentro",
+  "Fold the left point to the middle.":
+    "Dobla la punta izquierda hasta el centro.",
+  "Fold it back out":
+    "Vuelve a doblarla hacia fuera",
+  "Fold the point back to the left, a quarter of the way from the edge to the middle, so a little of it sticks out.":
+    "Dobla la punta otra vez hacia la izquierda, a un cuarto del camino entre el borde y el centro, para que asome un poco.",
+  "Cut the tail":
+    "Corta la cola",
+  "With scissors, cut a short way along the middle crease from the right point. This makes the two flukes.":
+    "Con tijeras, corta un poco a lo largo del pliegue central desde la punta derecha. Así se forman las dos aletas de la cola.",
+  "Fold the bottom half up onto the top half.":
+    "Dobla la mitad de abajo sobre la de arriba.",
+  "Fold up a fluke":
+    "Levanta una aleta de la cola",
+  "Fold the top layer of the tail up on a slant, inside the cut.":
+    "Dobla hacia arriba en diagonal la capa de arriba de la cola, dentro del corte.",
+  "Fold down the other fluke":
+    "Baja la otra aleta de la cola",
+  "Fold the other half of the tail down on a slant, inside the cut.":
+    "Dobla hacia abajo en diagonal la otra mitad de la cola, dentro del corte.",
+  "Lift the two flaps out from the sides, for the fins. Your dolphin is done!":
+    "Separa las dos solapas de los lados, para hacer las aletas. ¡Tu delfín está listo!",
 };

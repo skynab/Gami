@@ -1,5 +1,6 @@
-import { paper, Recipe, table, type At } from '../../fold/recipe';
+import { paper, Recipe, type At } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
+import { fishBase } from './fish-base';
 
 /**
  * The traditional whale, following the order of folds at origami.me/whale: a fish base, its top point folded
@@ -7,47 +8,8 @@ import type { Vec2 } from '../../fold/types';
  * and the tail turned up by a reverse fold.
  */
 export function whale() {
-  // Turned to a diamond, the sheet's corners sit this far from the centre: top (½, −½), bottom (−½, ½),
-  // left (−½, −½), right (½, ½).
-  const h = Math.SQRT1_2;
-  // Where an edge folded to the middle crease from the top or bottom corner crosses the side-to-side diagonal.
-  const k = h * (Math.SQRT2 - 1);
-  // A point on the sheet given as (x, z) on the diamond before anything is folded.
-  const sheet = (x: number, z: number): Vec2 => [(x - z) / Math.SQRT2, (x + z) / Math.SQRT2];
-  const onDiamond = ([u, v]: Vec2): Vec2 => [(u + v) / Math.SQRT2, (v - u) / Math.SQRT2];
-  const T = (x: number, z: number) => table(x, z);
-
-  const r = new Recipe({ id: 'whale', title: 'Whale', sheet: { size: [1, 1], front: '#f6f3ec', back: '#3f7cc0' } })
-    .rotate(45, { title: 'Start as a diamond', text: 'Start white side up, with a corner pointing towards you.' })
-    .crease(T(0, -h), T(0, h), { title: 'Crease down the middle', text: 'Fold the left corner to the right corner, then unfold.' })
-    .crease(T(-h, 0), T(h, 0), { title: 'Crease across', text: 'Fold the bottom corner to the top corner, then unfold.' })
-    .crease(T(0, h), T(-k, 0), { title: 'Crease the lower left edge', text: 'Fold the lower left edge to the middle crease, then unfold.' })
-    .crease(T(0, h), T(k, 0), { title: 'Crease the lower right edge', text: 'The same with the lower right edge.' })
-    .crease(T(0, -h), T(-k, 0), { title: 'Crease the upper left edge', text: 'Now fold the upper left edge to the middle crease, and unfold.' })
-    .crease(T(0, -h), T(k, 0), { title: 'Crease the upper right edge', text: 'And the upper right edge.' });
-
-  // The fish base: each side corner's edges fold in along the creases just made, and the corner itself
-  // stands up as a flap, folded upwards.
-  const creases: { through: [At, At]; kind: 'valley' | 'mountain'; only: (c: Vec2) => boolean }[] = [];
-  for (const s of [-1, 1]) {
-    const side = (c: Vec2) => s * onDiamond(c)[0] > 0;
-    const outer = (c: Vec2) => s * onDiamond(c)[0] > k - 1e-9;
-    const P = T(s * k, 0);
-    creases.push(
-      { through: [T(0, -h), P], kind: 'valley', only: (c) => side(c) && onDiamond(c)[1] < 0 },
-      { through: [T(0, h), P], kind: 'valley', only: (c) => side(c) && onDiamond(c)[1] > 0 },
-      { through: [P, T(s * h, 0)], kind: 'mountain', only: outer },
-      { through: [P, T(s * (k + 0.1), -0.1)], kind: 'valley', only: (c) => outer(c) && onDiamond(c)[1] < 0 },
-    );
-  }
-  r.collapse(
-    {
-      title: 'Collapse into a fish base',
-      text: 'Push the left and right corners in along the creases, so the edges meet in the middle and each corner pinches up into a little flap. Lay both flaps upwards.',
-    },
-    creases,
-    paper(0, 0),
-  );
+  const r = new Recipe({ id: 'whale', title: 'Whale', sheet: { size: [1, 1], front: '#f6f3ec', back: '#3f7cc0' } });
+  const { h, k, sheet, onDiamond, T } = fishBase(r);
 
   // The flaps' tips, where the sheet's side corners went.
   const tip = r.where(paper(...sheet(-h, 0)));
