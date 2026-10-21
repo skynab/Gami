@@ -53,6 +53,23 @@ noted when it was written, and the model was folded from the common traditional 
 | `lily` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/lily](https://origami.me/lily/) | Clear | 17 Oct 2026 |
 | `sword` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 18 Oct 2026 |
 | `folding-geometry` | Mathematics: the Huzita–Hatori axioms and Hisashi Abe's angle trisection, after Robert Geretschläger's *Geometric Origami* | None needed: nobody owns it | the book, for the ideas only | Clear | 18 Oct 2026 |
+| `boat` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/traditional-boat](https://origami.me/traditional-boat/) | Clear | Coming soon |
+| `waterbomb` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/waterbomb](https://origami.me/waterbomb/) | Clear | Coming soon, listed 21 Oct 2026 |
+| `balloon-rabbit` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/balloon-rabbit](https://origami.me/balloon-rabbit/) | Clear | Coming soon, listed 21 Oct 2026 |
+| `flapping-bird` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/bird](https://origami.me/bird/) | Clear | Coming soon, listed 21 Oct 2026 |
+| `frog` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/traditional-frog](https://origami.me/traditional-frog/) | Clear | Coming soon, listed 21 Oct 2026 |
+| `penguin` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/penguin](https://origami.me/penguin/) | Clear | Coming soon, listed 21 Oct 2026 |
+| `whale` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/whale](https://origami.me/whale/) | Clear | Coming soon, listed 21 Oct 2026 |
+| `fish` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/fish](https://origami.me/fish/) | Clear | Coming soon, listed 21 Oct 2026 |
+| `dolphin` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/dolphin](https://origami.me/dolphin/) | Clear | Coming soon, listed 21 Oct 2026 |
+| `crow` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/crow](https://origami.me/crow/) | Clear | Coming soon, listed 21 Oct 2026 |
+| `butterfly` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/butterfly](https://origami.me/butterfly/) | Clear | Coming soon, listed 21 Oct 2026 |
+| `pajarita` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/pajarita](https://origami.me/pajarita/) | Clear | Coming soon, listed 21 Oct 2026 |
+| `iris` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/iris](https://origami.me/iris/) | Clear | Coming soon, listed 21 Oct 2026 |
+| `pinwheel` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/pinwheel](https://origami.me/pinwheel/) | Clear | Coming soon, listed 21 Oct 2026 |
+| `fan` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/fan](https://origami.me/fan/) | Clear | Coming soon, listed 21 Oct 2026 |
+| `masu-box` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/box](https://origami.me/box/) | Clear | Coming soon, listed 21 Oct 2026 |
+| `christmas-tree` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/christmas-tree](https://origami.me/christmas-tree/) | Clear | Coming soon, listed 21 Oct 2026 |
 
 ### Notes
 
@@ -68,8 +85,10 @@ noted when it was written, and the model was folded from the common traditional 
   fox doesn't pass on to Gami. "Designer unknown" models (the heart) get credited if a designer comes
   forward.
 - **Folding geometry.** Mathematical facts and methods aren't anyone's to own; the lesson's text is Gami's.
-- **The boat** is listed as coming soon and has no recipe in the gallery yet. It's traditional; add its row
-  when it ships.
+- **Coming soon.** The boat and the models listed on 21 October 2026 are gallery placeholders with no recipe
+  yet. Each is credited "Traditional" on origami.me. When one gets a recipe, set its reference to what was
+  actually followed and its date to when it shipped. Other traditional models on origami.me that aren't
+  listed yet are in `docs/origami-me-candidates.md`.
 
 ## Adding a model
 
