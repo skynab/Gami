@@ -5,7 +5,7 @@ import { place } from './place';
 import { anchorFor, centre, inside, locate, smallerSideMoves, topLayers } from './select';
 import { curl, radial, reparent, shape, type Bend } from './shape';
 import { sheetOf } from './sheets';
-import type { FoldFrame, OrigamiModel, Step, StepKind, Vec2 } from './types';
+import type { FoldFrame, Mark, OrigamiModel, Step, StepKind, Vec2 } from './types';
 
 /**
  * Fold operations: how each step was made, as plain data, so a model can be folded again from the start
@@ -51,15 +51,7 @@ export interface ShapeBend {
   only?: Faces;
 }
 
-/**
- * A line or a filled shape drawn on the paper, as points on the sheet, on its front or back. A line is drawn
- * through its points; a fill is the outline they make.
- */
-export interface Mark {
-  side: 'front' | 'back';
-  points: Vec2[];
-  fill?: boolean;
-}
+export type { Mark } from './types';
 
 export type Op =
   | { op: 'fold'; line: LineSpec; flip?: boolean; kind?: FoldKind; layers?: number; only?: Faces }
@@ -90,7 +82,7 @@ export class OpError extends Error {}
 /** A compound fold where no part of the paper stays still, so there's nothing to fold it from. */
 export class NoStillError extends FoldError {}
 
-const LIMITS = { list: 256, outline: 64, outlines: 512, nesting: 4, steps: 2000, faces: 20000 };
+const LIMITS = { list: 256, outline: 64, outlines: 512, nesting: 4, steps: 2000, faces: 20000, marks: 256 };
 
 // ——— Checking operations read from a file ———
 
@@ -164,21 +156,32 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
         }),
       };
     case 'draw':
-      return {
-        op: 'draw',
-        marks: list(o.marks, `${path}.marks`, (m, p) => {
-          const r = record(m, p);
-          const points = list(r.points, `${p}.points`, vec2, LIMITS.outline);
-          if (!points.length) throw new OpError(`${p}.points: a mark needs a point`);
-          return { side: oneOf(r.side, `${p}.side`, ['front', 'back'] as const), points, ...opt(r, 'fill', bool, p) };
-        }),
-      };
+      return { op: 'draw', marks: parseMarks(o.marks, `${path}.marks`) };
     case 'together':
       if (depth >= LIMITS.nesting) throw new OpError(`${path}: nested too deeply`);
       return { op: 'together', ops: list(o.ops, `${path}.ops`, (v, p) => parseOp(v, p, depth + 1)) };
     default:
       throw new OpError(`${path}.op: unknown operation ${JSON.stringify(o.op)}`);
   }
+}
+
+/**
+ * Checks marks read from a file (a step's own, or a draw operation's) are well formed: a side, and points on
+ * the sheet (two or more for a line, three for a fill), throwing an OpError that says where if not.
+ */
+export function parseMarks(x: unknown, path = 'marks'): Mark[] {
+  return list(
+    x,
+    path,
+    (m, p) => {
+      const r = record(m, p);
+      const points = list(r.points, `${p}.points`, vec2, LIMITS.outline);
+      const fill = r.fill === undefined ? false : bool(r.fill, `${p}.fill`);
+      if (points.length < (fill ? 3 : 2)) throw new OpError(`${p}.points: a ${fill ? 'fill needs three' : 'line needs two'} points`);
+      return { side: oneOf(r.side, `${p}.side`, ['front', 'back'] as const), points, ...(fill && { fill }) };
+    },
+    LIMITS.marks,
+  );
 }
 
 type Check<T> = (x: unknown, path: string) => T;
@@ -358,10 +361,10 @@ export function replay(model: OrigamiModel, from = 0): Replay {
     }
     if (!step.op) return stop(k, 'baked');
     try {
-      const { frame, via } = run(step.op, { model, steps });
+      const { frame, via, marks } = run(step.op, { model, steps });
       if (frame.faces_vertices.length > LIMITS.faces) throw new OpError(`more than ${LIMITS.faces} faces`);
-      const { via: _, ...rest } = step;
-      steps.push({ ...rest, frame, ...(via && { via }) });
+      const { via: _, marks: __, ...rest } = step;
+      steps.push({ ...rest, frame, ...(via && { via }), ...(marks?.length && { marks }) });
       status.push('replayed');
     } catch (e) {
       if (!(e instanceof Error)) throw e;
@@ -375,7 +378,7 @@ export function replay(model: OrigamiModel, from = 0): Replay {
  * The paper after one more step made by `op`, as the Studio previews and adds it. For a shaping step, `flat`
  * is the same paper with its faces matched to the flat state its lines are picked on (see `shapingBase`).
  */
-export function applyOp(model: OrigamiModel, op: Op): { frame: FoldFrame; via?: FoldFrame[]; flat?: FoldFrame } {
+export function applyOp(model: OrigamiModel, op: Op): { frame: FoldFrame; via?: FoldFrame[]; flat?: FoldFrame; marks?: Mark[] } {
   return run(op, { model, steps: model.steps });
 }
 
@@ -420,7 +423,7 @@ interface Context {
 
 const radians = (degrees: number) => (degrees * Math.PI) / 180;
 
-function run(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; flat?: FoldFrame } {
+function run(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; flat?: FoldFrame; marks?: Mark[] } {
   const frames = [ctx.model.start, ...ctx.steps.map((s) => s.frame)];
   const frame = frames[frames.length - 1];
   const where = (a: At, on = frame): Vec2 => ('table' in a ? a.table : locate(on, a.paper));
@@ -495,14 +498,15 @@ function run(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; flat?
     case 'popUp':
       return { frame: radial(frame, where(op.centre), op.rays) };
     case 'draw':
-      return { frame: { ...frame, faces_parent: undefined } };
+      return { frame: { ...frame, faces_parent: undefined }, marks: op.marks };
     case 'together': {
       const added: Step[] = [];
       for (const part of op.ops) {
-        const { frame: f } = run(part, { model: ctx.model, steps: [...ctx.steps, ...added] });
-        added.push({ title: '', kind: opKind(part), frame: f, op: part });
+        const { frame: f, marks } = run(part, { model: ctx.model, steps: [...ctx.steps, ...added] });
+        added.push({ title: '', kind: opKind(part), frame: f, op: part, ...(marks && { marks }) });
       }
       if (!added.length) return { frame };
+      const marks = added.flatMap((s) => s.marks ?? []);
       const last = added[added.length - 1].frame;
       // Each face's parent, followed back through the merged steps to the frame before them.
       const faces_parent = last.faces_vertices.map((_, f) => {
@@ -510,7 +514,7 @@ function run(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; flat?
         for (let k = added.length - 1; k >= 0; k--) p = added[k].frame.faces_parent?.[p] ?? p;
         return p;
       });
-      return { frame: { ...last, faces_parent } };
+      return { frame: { ...last, faces_parent }, ...(marks.length && { marks }) };
     }
   }
 }

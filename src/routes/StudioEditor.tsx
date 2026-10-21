@@ -281,8 +281,8 @@ export default function StudioEditor({ end, cloud = false }: {
   /** Adds a step that needs no picks. */
   const now = (step: Omit<Step, 'frame'> & { op: Op }) => {
     try {
-      const { frame: next, via } = applyOp(before, step.op);
-      add({ ...step, frame: next, ...(via && { via }) });
+      const { frame: next, via, marks } = applyOp(before, step.op);
+      add({ ...step, frame: next, ...(via && { via }), ...(marks && { marks }) });
     } catch (e) {
       if (!(e instanceof FoldError)) throw e;
       setMessage(e.message);

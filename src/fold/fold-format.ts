@@ -1,5 +1,5 @@
-import { OPS_VERSION, parseOp, type Op } from './ops';
-import type { FoldFrame, OrigamiModel, Step, StepKind } from './types';
+import { OPS_VERSION, parseMarks, parseOp, type Op } from './ops';
+import type { FoldFrame, Mark, OrigamiModel, Step, StepKind } from './types';
 
 /**
  * Reading and writing .fold files (https://github.com/edemaine/fold). The start of the model is the file's
@@ -8,6 +8,10 @@ import type { FoldFrame, OrigamiModel, Step, StepKind } from './types';
  *
  * A step may also say how it was made (`gami:op`, see ops.ts), so it can be folded again after an earlier
  * step changes. Files with operations say which version of them they use in `gami:ops`.
+ *
+ * What a step draws on the paper is part of the step, like its frame (`gami:marks`: lines and fills as points
+ * on the sheet, and the side they're on). It doesn't depend on the operations, so a file whose operations
+ * can't be read still shows its drawings.
  */
 
 interface FoldFileFrame {
@@ -22,6 +26,8 @@ interface FoldFileFrame {
   'gami:section'?: string;
   /** Frames the step passes through on its way, as when unfolding several folds one after another. */
   'gami:via'?: FoldFileFrame[];
+  /** What the step draws on the paper. */
+  'gami:marks'?: Mark[];
   'gami:op'?: Op;
 }
 
@@ -55,6 +61,7 @@ export function toFoldFile(model: OrigamiModel): FoldFile {
       ...(s.kind && { 'gami:kind': s.kind }),
       ...(s.section && { 'gami:section': s.section }),
       ...(s.via?.length && { 'gami:via': s.via.map(writeFrame) }),
+      ...(s.marks?.length && { 'gami:marks': s.marks.map(writeMark) }),
       ...(s.op && { 'gami:op': s.op }),
       ...writeFrame(s.frame),
     })),
@@ -80,6 +87,15 @@ export function fromFoldFile(file: FoldFile, warnings: string[] = []): OrigamiMo
       return {};
     }
   };
+  const marksOf = (f: FoldFileFrame, k: number): { marks?: Mark[] } => {
+    if (f['gami:marks'] === undefined) return {};
+    try {
+      return { marks: parseMarks(f['gami:marks'], `step ${k + 1} marks`) };
+    } catch (e) {
+      warnings.push((e as Error).message);
+      return {};
+    }
+  };
   return {
     id: file['gami:id'],
     title: file.file_title,
@@ -93,6 +109,7 @@ export function fromFoldFile(file: FoldFile, warnings: string[] = []): OrigamiMo
         ...(f['gami:section'] && { section: f['gami:section'] }),
         ...(f['gami:via'] && { via: f['gami:via'].map(readFrame) }),
         frame: readFrame(f),
+        ...marksOf(f, k),
         ...opOf(f, k),
       }),
     ),
@@ -110,6 +127,10 @@ function writeFrame(f: FoldFrame): FoldFileFrame {
     ...(f.faces_parent && { 'gami:faces_parent': f.faces_parent }),
     ...(f.faces_layer && { 'gami:faces_layer': f.faces_layer }),
   };
+}
+
+function writeMark(m: Mark): Mark {
+  return { side: m.side, points: m.points.map(([u, v]) => [round(u), round(v)]), ...(m.fill && { fill: true }) };
 }
 
 function readFrame(f: FoldFileFrame): FoldFrame {

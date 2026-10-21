@@ -6,8 +6,8 @@ import { place } from './place';
 import { radial, reparent, shape, type Bend, type Ray } from './shape';
 import { startFrame } from './sheets';
 import { frontUp, sideOf } from './geometry2d';
-import { lineOf, type At, type Faces, type LineSpec, type Mark, type Op } from './ops';
-import type { FoldFrame, OrigamiModel, Sheet, Step, Vec2 } from './types';
+import { lineOf, type At, type Faces, type LineSpec, type Op } from './ops';
+import type { FoldFrame, Mark, OrigamiModel, Sheet, Step, Vec2 } from './types';
 
 /**
  * Writing a model as code: a list of folds described the way a diagram would ("this corner onto that
@@ -191,7 +191,10 @@ export class Recipe {
       return p;
     });
     const op: Op = { op: 'together', ops: added.map((s) => s.op!) };
-    return this.push({ title: step.title, text: step.text, kind: step.kind ?? added.at(-1)!.kind }, { ...last, faces_parent }, op);
+    this.push({ title: step.title, text: step.text, kind: step.kind ?? added.at(-1)!.kind }, { ...last, faces_parent }, op);
+    const marks = added.flatMap((s) => s.marks ?? []);
+    if (marks.length) this.steps.at(-1)!.marks = marks;
+    return this;
   }
 
   /**
@@ -326,9 +329,14 @@ export class Recipe {
       if (!f) throw new FoldError(`${this.info.id}: no paper to draw on at (${points[0].join(', ')}).`);
       // The face's map from table back to sheet: the same construction with the roles swapped.
       const toSheet = placeLike({ ...f, paper: f.world, world: f.paper });
-      return { side: frontUp(f.world, f.paper) ? 'front' : 'back', points: points.map(toSheet), ...('fill' in m && { fill: true }) };
+      // Rounded as .fold files round coordinates, so the model and its file agree exactly.
+      const round = (x: number) => Math.round(x * 1e9) / 1e9 || 0;
+      const onSheet = points.map((p) => toSheet(p).map(round) as Vec2);
+      return { side: frontUp(f.world, f.paper) ? 'front' : 'back', points: onSheet, ...('fill' in m && { fill: true }) };
     });
-    return this.push({ ...step, kind: 'draw' }, { ...this.current, faces_parent: undefined }, { op: 'draw', marks: drawn });
+    this.push({ ...step, kind: 'draw' }, { ...this.current, faces_parent: undefined }, { op: 'draw', marks: drawn });
+    this.steps.at(-1)!.marks = drawn;
+    return this;
   }
 
   turnOver(text = 'Flip the paper over from left to right.'): this {

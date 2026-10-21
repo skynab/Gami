@@ -15,7 +15,7 @@ import {
 import { affine, poseAt, stepTransition, transition, type Transition } from '../fold/animate';
 import { framesOf, normal } from '../fold/frames';
 import { sharedSegment } from '../fold/geometry2d';
-import { faceOfMark, MARK_COLOUR, MARK_WIDTH, marksUpTo } from '../fold/marks';
+import { MARK_COLOUR, MARK_WIDTH, marksUpTo, onFace } from '../fold/marks';
 import { sheetOf } from '../fold/sheets';
 import type { OrigamiModel, Vec2, Vec3 } from '../fold/types';
 import { usePlayback } from '../state/playback';
@@ -153,27 +153,30 @@ function build(t: Transition, model: OrigamiModel, k: number): Built {
 const MARK_LIFT = 0.00025;
 
 /**
- * The marks drawn by step k's end, each on the face holding it: lines as thin strips through their points,
- * fills as their outline filled in. Marks the step itself draws appear one after another as it plays.
+ * The marks drawn by step k's end, cut into their parts on each face and placed with it: lines as thin strips
+ * through their points, fills as their outline filled in. Marks the step itself draws appear one after
+ * another as it plays.
  */
 function buildMarks(t: Transition, model: OrigamiModel, k: number): { geometry: BufferGeometry; update(pose: Vec3[][], s: number): void } {
   const width = MARK_WIDTH * Math.max(...model.sheets.map((sh) => Math.max(...sh.size)));
-  const papers = t.faces.map((f) => f.paper);
-  const placed = marksUpTo(model, k)
-    .map(({ step, mark }) => ({ step, mark, face: faceOfMark(mark, papers) }))
-    .filter((m) => m.face >= 0);
-  const drawing = placed.filter((m) => m.step === k).length;
+  const drawn = marksUpTo(model, k);
+  // Which of this step's marks each mark is (its turn to appear), or -1 for marks drawn earlier.
+  let turn = 0;
+  const turns = drawn.map(({ step }) => (step === k ? turn++ : -1));
+  const parts = drawn.flatMap(({ mark }, i) =>
+    t.faces.flatMap((face, f) => onFace(mark, face.paper).map((points) => ({ points, fill: !!mark.fill, front: mark.side === 'front', face: f, turn: turns[i] }))),
+  );
   // Vertices: a strip's two edges at each point, or a fill's corners.
-  const sizes = placed.map(({ mark }) => (mark.fill ? mark.points.length : mark.points.length * 2));
+  const sizes = parts.map(({ points, fill }) => (fill ? points.length : points.length * 2));
   const starts = sizes.map((_, i) => sizes.slice(0, i).reduce((a, b) => a + b, 0));
   const total = sizes.reduce((a, b) => a + b, 0);
   const positions = new Float32Array(total * 3);
   const normals = new Float32Array(total * 3);
   const index: number[] = [];
-  placed.forEach(({ mark }, i) => {
+  parts.forEach(({ points, fill }, i) => {
     const first = starts[i];
-    const n = mark.points.length;
-    if (mark.fill) for (let j = 1; j < n - 1; j++) index.push(first, first + j, first + j + 1);
+    const n = points.length;
+    if (fill) for (let j = 1; j < n - 1; j++) index.push(first, first + j, first + j + 1);
     else for (let j = 0; j < n - 1; j++) index.push(first + 2 * j, first + 2 * j + 1, first + 2 * j + 2, first + 2 * j + 2, first + 2 * j + 1, first + 2 * j + 3);
   });
   const geometry = new BufferGeometry();
@@ -184,21 +187,14 @@ function buildMarks(t: Transition, model: OrigamiModel, k: number): { geometry: 
   return {
     geometry,
     update(pose, s) {
-      let drawn = 0;
-      placed.forEach(({ step, mark, face }, i) => {
+      parts.forEach(({ points, fill, front, face, turn: at }, i) => {
         const first = starts[i];
-        const facing = normal(pose[face]);
-        const up = scale(facing, mark.side === 'front' ? 1 : -1);
+        const up = scale(normal(pose[face]), front ? 1 : -1);
         const place = affine(t.faces[face].paper, pose[face]);
-        let pts = mark.points.map((p) => add(place(p), scale(up, MARK_LIFT)));
-        // Drawn in turn while this step plays: each mark gets an equal share of it.
-        if (step === k && drawing) {
-          const share = Math.min(1, Math.max(0, s * drawing - drawn));
-          drawn++;
-          if (mark.fill ? share < 1 : share <= 0) pts = pts.map(() => pts[0]);
-          else if (!mark.fill) pts = partOfLine(pts, share);
-        }
-        if (mark.fill) {
+        let pts = points.map((p) => add(place(p), scale(up, MARK_LIFT)));
+        // While this step plays, its marks appear in turn, each in an equal share of it.
+        if (at >= 0 && s * turn < at + 1) pts = pts.map(() => pts[0]);
+        if (fill) {
           pts.forEach((p, j) => {
             positions.set(p, (first + j) * 3);
             normals.set(up, (first + j) * 3);
@@ -218,25 +214,6 @@ function buildMarks(t: Transition, model: OrigamiModel, k: number): { geometry: 
       geometry.attributes.normal.needsUpdate = true;
     },
   };
-}
-
-/** The first `share` (0–1) of a line along its length, as the same number of points (the rest gathered at its end). */
-function partOfLine(pts: Vec3[], share: number): Vec3[] {
-  const lengths = pts.slice(1).map((p, i) => Math.hypot(...sub(p, pts[i])));
-  let left = share * lengths.reduce((a, b) => a + b, 0);
-  const out: Vec3[] = [pts[0]];
-  for (let i = 1; i < pts.length; i++) {
-    const step = lengths[i - 1];
-    if (left >= step) {
-      out.push(pts[i]);
-      left -= step;
-    } else {
-      const end = lerp(pts[i - 1], pts[i], step ? left / step : 0);
-      while (out.length < pts.length) out.push(end);
-      break;
-    }
-  }
-  return out;
 }
 
 function buildPart(t: Transition, faceIndices: number[]): { part: Part; update(pose: ReturnType<typeof poseAt>): void; dispose(): void } {

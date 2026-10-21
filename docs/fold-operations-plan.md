@@ -108,7 +108,16 @@ selector may no longer match. Replay reports that (below) rather than guessing.
 | `newSheet` | — | the fresh sheet of `Recipe.newSheet` |
 | `shape` | `bends: { line, flip?, degrees, segments?, reach?, layers?, only? }[]` | `shape` / `reparent` |
 | `popUp` | `centre: At`, `rays: { azimuth, elevation }[]` | `radial` |
+| `draw` | `marks: { side: 'front' \| 'back', points: Vec2[], fill? }[]` | none: the paper stays put (`Recipe.draw`) |
 | `together` | `ops: Op[]` | several ops merged into one step, as `Recipe.together` |
+
+A `draw` step marks the paper without folding it: lines and filled shapes, as points on the sheet and the
+side they're on, so they move with the paper and show only from that side. What a step draws is also kept
+with the step itself, like its frame, as `gami:marks` (rounded like coordinates); the op's copy only lets a
+replay draw it again. So a file whose `gami:op`s can't be read (malformed, or a newer `gami:ops`) still shows
+its drawings, and `gami:marks` is checked on its own when a file is read (a bad one is dropped with a
+warning). To draw, the viewer and thumbnails cut each mark into its part on each face (faces are convex) and
+place and stack each part with its face, so a mark across a crease follows the paper on both sides of it.
 
 `anchor: { auto: true }` is what the Studio uses (`anchorFor`, among the faces of the chosen sheet),
 worked out again on replay. Recipes give their anchor point. A `shape` step keeps only its own bends: a run
@@ -224,7 +233,7 @@ What's left is small, and none of it stops a file from going out and coming back
    `src/gallery/catalog.ts`, and `card` (how the card shows a finished model) isn't kept in files. A model
    shared between people carries its title and steps only. If the creation tool shares models, add these as
    a `gami:about` block.
-4. **Some recipe operations have no Studio tool:** `together`, `newSheet`, `popUp`, shaping with several
+4. **Some recipe operations have no Studio tool:** `together`, `newSheet`, `popUp`, `draw`, shaping with several
    bends, and faces picked by outline (`inPaper`). Those steps replay and can be removed in the Studio;
    **Change** on one starts from blank tools.
 

@@ -1,7 +1,7 @@
 import { placeLike, toFlat } from './fold';
 import { normal } from './frames';
 import { frontUp } from './geometry2d';
-import { faceOfMark, MARK_COLOUR, MARK_WIDTH, marksUpTo, type Mark } from './marks';
+import { MARK_COLOUR, MARK_WIDTH, marksUpTo, onFace, type Mark } from './marks';
 import { faceColour } from './sheets';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from './types';
 
@@ -49,14 +49,17 @@ function fromAbove(model: OrigamiModel, frame: FoldFrame, marks: Mark[] = []): {
       const fill = faceColour(model, f.paper, up);
       const points = f.world.map((p) => p.map((n) => +n.toFixed(4)).join(',')).join(' ');
       const place = placeLike(f);
+      // Each mark's part on this face, if it's drawn on the side facing up.
       const drawn = marks
-        .filter((m) => (m.side === 'front') === up && faceOfMark(m, [f.paper]) === 0)
-        .map((m) => {
-          const pts = m.points.map((p) => place(p).map((n) => +n.toFixed(4)).join(',')).join(' ');
-          return m.fill
-            ? `<polygon points="${pts}" fill="${MARK_COLOUR}" stroke="none"/>`
-            : `<polyline points="${pts}" fill="none" stroke="${MARK_COLOUR}" stroke-opacity="1" stroke-width="${width}" stroke-linecap="round"/>`;
-        })
+        .filter((m) => (m.side === 'front') === up)
+        .flatMap((m) =>
+          onFace(m, f.paper).map((part) => {
+            const pts = part.map((p) => place(p).map((n) => +n.toFixed(4)).join(',')).join(' ');
+            return m.fill
+              ? `<polygon points="${pts}" fill="${MARK_COLOUR}" stroke="none"/>`
+              : `<polyline points="${pts}" fill="none" stroke="${MARK_COLOUR}" stroke-opacity="1" stroke-width="${width}" stroke-linecap="round"/>`;
+          }),
+        )
         .join('');
       return `<polygon points="${points}" fill="${fill}"/>${drawn}`;
     })

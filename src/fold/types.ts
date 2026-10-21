@@ -30,6 +30,17 @@ export interface FoldFrame {
 
 export type StepKind = 'fold' | 'unfold' | 'turn-over' | 'rotate' | 'squash' | 'reverse' | 'petal' | 'sink' | 'assemble' | 'pose' | 'draw';
 
+/**
+ * A line or a filled shape drawn on the paper, as points on the unfolded sheet and the side of the paper it's
+ * on, so it moves with the paper wherever it goes. A line runs through its points; a fill is the outline they
+ * make. Marks aren't paper: they never change how it folds.
+ */
+export interface Mark {
+  side: 'front' | 'back';
+  points: Vec2[];
+  fill?: boolean;
+}
+
 export interface Step {
   title: string;
   text?: string;
@@ -43,6 +54,8 @@ export interface Step {
    * several folds at once plays them back one after another.
    */
   via?: FoldFrame[];
+  /** What this step draws on the paper (shown from this step on). Kept with the step, like its frame. */
+  marks?: Mark[];
   /** How the step was made from the paper before it, so it can be made again after an earlier step changes. */
   op?: Op;
 }
