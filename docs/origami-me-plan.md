@@ -40,6 +40,7 @@ Easiest first, grouped by what the engine already has. Each group can ship on it
 | Dolphin | Blocked: origami.me's version needs a cut (step 11), and the engine has no scissors. Look for an uncut traditional dolphin, or cuts in the engine. |
 | Fish | Waiting: its folds are placed by eye ("this sets the tail size"), so exact reference points need choosing first. |
 | Pajarita | Waiting: built from swivel folds that move several flaps at once; needs a crease search like the fish base's. |
+| Fan | Waiting: the pleating works, but the fan's point is spreading into a half circle, which turns the pleats round one point and can't be done with rigid paper. Spreading it as a zigzag with `shape` didn't work either: bends on a stack of pleats whose creases lie on top of each other don't chain. Needs `shape` to handle that, or stays coming soon. |
 | Butterfly | Not from the water bomb base, as its card says: a collapse from cupboard folds, close to the pinwheel's. Do it with the pinwheel. |
 
 ## Done when
