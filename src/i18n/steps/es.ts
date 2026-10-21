@@ -868,4 +868,28 @@ export const es: Record<string, string> = {
     "Dibújale los ojos, la nariz y los bigotes. ¡Listo!",
   "Draw two shut, smiling eyes and a little nose on the face. Done!":
     "Dibuja en la cara dos ojos cerrados y sonrientes y una naricita. ¡Listo!",
+  "Start coloured side up, with a corner pointing towards you.":
+    "Empieza con el lado de color hacia arriba y una esquina apuntando hacia ti.",
+  "Turn it over, white side up.":
+    "Dale la vuelta, con el lado blanco hacia arriba.",
+  "Fold the top left edge in":
+    "Dobla hacia dentro el borde de arriba a la izquierda",
+  "Fold the top left edge in towards the middle crease, stopping a little short of it.":
+    "Dobla el borde de arriba a la izquierda hacia el pliegue central, sin llegar del todo.",
+  "Fold the top right edge in":
+    "Dobla hacia dentro el borde de arriba a la derecha",
+  "The same on the right, leaving a narrow white strip between the two.":
+    "Lo mismo a la derecha, dejando una franja blanca estrecha entre los dos.",
+  "Fold the left corner in a little way.":
+    "Dobla un poco hacia dentro la esquina izquierda.",
+  "And the right corner, to match.":
+    "Y la esquina derecha, igual.",
+  "Fold the bottom point up, level with the lower ends of those folds.":
+    "Dobla la punta de abajo hacia arriba, a la altura de los extremos inferiores de esos pliegues.",
+  "Fold the left half over onto the right, along the middle crease.":
+    "Dobla la mitad izquierda sobre la derecha, por el pliegue central.",
+  "Turn the head down":
+    "Baja la cabeza",
+  "Open the top a little and turn the point down round the outside, for the head and beak. Done!":
+    "Abre un poco la parte de arriba y baja la punta por fuera, para hacer la cabeza y el pico. ¡Listo!",
 };

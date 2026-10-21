@@ -868,4 +868,28 @@ export const fr: Record<string, string> = {
     "Dessinez les yeux, le nez et les moustaches. C’est fini !",
   "Draw two shut, smiling eyes and a little nose on the face. Done!":
     "Dessinez sur le visage deux yeux fermés et souriants, et un petit nez. C’est fini !",
+  "Start coloured side up, with a corner pointing towards you.":
+    "Commence face colorée vers le haut, un coin pointé vers toi.",
+  "Turn it over, white side up.":
+    "Retourne-le, face blanche vers le haut.",
+  "Fold the top left edge in":
+    "Rabats le bord en haut à gauche",
+  "Fold the top left edge in towards the middle crease, stopping a little short of it.":
+    "Rabats le bord en haut à gauche vers le pli du milieu, en t’arrêtant un peu avant.",
+  "Fold the top right edge in":
+    "Rabats le bord en haut à droite",
+  "The same on the right, leaving a narrow white strip between the two.":
+    "Pareil à droite, en laissant une fine bande blanche entre les deux.",
+  "Fold the left corner in a little way.":
+    "Rabats un peu le coin gauche vers l’intérieur.",
+  "And the right corner, to match.":
+    "Et le coin droit, pareil.",
+  "Fold the bottom point up, level with the lower ends of those folds.":
+    "Remonte la pointe du bas, au niveau du bas de ces plis.",
+  "Fold the left half over onto the right, along the middle crease.":
+    "Rabats la moitié gauche sur la droite, le long du pli du milieu.",
+  "Turn the head down":
+    "Rabats la tête",
+  "Open the top a little and turn the point down round the outside, for the head and beak. Done!":
+    "Ouvre un peu le haut et rabats la pointe par-dessus l’extérieur, pour la tête et le bec. C’est fini !",
 };

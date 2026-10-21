@@ -868,4 +868,28 @@ export const ja: Record<string, string> = {
     "目と鼻とひげをかきます。できあがり！",
   "Draw two shut, smiling eyes and a little nose on the face. Done!":
     "顔に、にっこり閉じた目を二つと小さな鼻をかきます。できあがり！",
+  "Start coloured side up, with a corner pointing towards you.":
+    "色の面を上にして、角を手前に向けて置きます。",
+  "Turn it over, white side up.":
+    "裏返して、白い面を上にします。",
+  "Fold the top left edge in":
+    "左上のふちを内側に折る",
+  "Fold the top left edge in towards the middle crease, stopping a little short of it.":
+    "左上のふちを中心の折り目に向かって折ります。折り目の少し手前で止めます。",
+  "Fold the top right edge in":
+    "右上のふちを内側に折る",
+  "The same on the right, leaving a narrow white strip between the two.":
+    "右も同じように折り、二つのあいだに白い細い帯を残します。",
+  "Fold the left corner in a little way.":
+    "左の角を少しだけ内側に折ります。",
+  "And the right corner, to match.":
+    "右の角も同じように折ります。",
+  "Fold the bottom point up, level with the lower ends of those folds.":
+    "下の角を、いま折ったところの下のはしの高さまで折り上げます。",
+  "Fold the left half over onto the right, along the middle crease.":
+    "中心の折り目で、左半分を右半分に重ねるように折ります。",
+  "Turn the head down":
+    "頭を折り下げる",
+  "Open the top a little and turn the point down round the outside, for the head and beak. Done!":
+    "上を少し開いて、先を外側にかぶせるように折り下げ、頭とくちばしにします。できあがり！",
 };
