@@ -36,7 +36,7 @@ Easiest first, grouped by what the engine already has. Each group can ship on it
 
 | Model | Status |
 |---|---|
-| Penguin, whale, crow, Christmas tree, water bomb | Done. The whale's fins are bent out in 3D: the diagrams swing them below the belly, which tears with rigid paper. The water bomb ends flat, ready to blow up. |
+| Penguin, whale, crow, Christmas tree, water bomb, flapping bird | Done. The whale's fins are bent out in 3D: the diagrams swing them below the belly, which tears with rigid paper. The water bomb ends flat, ready to blow up. |
 | Dolphin | Blocked: origami.me's version needs a cut (step 11), and the engine has no scissors. Look for an uncut traditional dolphin, or cuts in the engine. |
 | Fish | Waiting: its folds are placed by eye ("this sets the tail size"), so exact reference points need choosing first. |
 | Pajarita | Waiting: built from swivel folds that move several flaps at once; needs a crease search like the fish base's. |
