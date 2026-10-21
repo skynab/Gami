@@ -42,7 +42,7 @@ Easiest first, grouped by what the engine already has. Each group can ship on it
 | Pajarita | Waiting: built from swivel folds that move several flaps at once; needs a crease search like the fish base's. |
 | Fan | Waiting: the pleating works, but the fan's point is spreading into a half circle, which turns the pleats round one point and can't be done with rigid paper. Spreading it as a zigzag with `shape` didn't work either: bends on a stack of pleats whose creases lie on top of each other don't chain. Needs `shape` to handle that, or stays coming soon. |
 | Pinwheel, butterfly | Waiting: both need the windmill base's squash (pull a corner out of the cupboard fold and flatten it). A search over crease kinds for the squash (the middle crease, the cupboard edge, and the diagonals of the corner and inner squares) found no flat state with the corner pulled out; the candidate creases need rethinking, or a squash operation in the engine. The butterfly isn't from the water bomb base, as its card says. |
-| Frog, iris | Not started: both from the frog base, reached through four squash-and-petal folds as in the lily, then many reverse folds (frog) or swivel folds (iris). Each is a lily-sized job. |
+| Frog, iris | Waiting. The lily's route to the frog base, run without folding each petal down between squashes, builds but passes deep through paper (0.17 at the third squash); with the petals folded down, they lie across the part the frog narrows into legs. Next try: origami.me's own route (square base, four squashes, four petal folds), which needs a crease search for the squash like the windmill base. The iris also needs a swivel fold on each flap. |
 
 ## Done when
 
