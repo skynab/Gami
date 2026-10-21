@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { filterModels, levelOf, MODELS } from './catalog';
 
@@ -21,5 +22,11 @@ describe('catalog', () => {
     expect(filterModels(MODELS, { category: 'modular' }).map((m) => m.id)).toEqual(['ninja-star']);
     expect(filterModels(MODELS, { level: 'easy', category: 'animal' }).map((m) => m.id)).toEqual(['dog-face', 'cat-face', 'cicada', 'jumping-frog', 'fox', 'swan']);
     expect(filterModels(MODELS, {})).toHaveLength(MODELS.length);
+  });
+
+  it('records where every model with steps comes from', () => {
+    const provenance = readFileSync(new URL('../../PROVENANCE.md', import.meta.url), 'utf8');
+    const missing = MODELS.filter((m) => m.steps && !provenance.includes(`| \`${m.id}\` |`)).map((m) => m.id);
+    expect(missing, 'add a row to PROVENANCE.md for each').toEqual([]);
   });
 });
