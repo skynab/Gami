@@ -20,9 +20,10 @@ import { paperPlane } from './paper-plane';
 import { penguin } from './penguin';
 import { samuraiHelmet } from './samurai-helmet';
 import { tulip } from './tulip';
+import { whale } from './whale';
 
 /**
  * Every built-in model, as code. `npm run models` turns these into public/models/<id>.fold and <id>.svg,
  * which the site loads. Not bundled into the site itself.
  */
-export const RECIPES: (() => OrigamiModel)[] = [basics, paperPlane, glider, bulldogDart, dogFace, catFace, cup, samuraiHelmet, fortuneTeller, heart, cicada, jumpingFrog, ninjaStar, tulip, fox, crane, lily, swan, penguin, sword, foldingGeometry];
+export const RECIPES: (() => OrigamiModel)[] = [basics, paperPlane, glider, bulldogDart, dogFace, catFace, cup, samuraiHelmet, fortuneTeller, heart, cicada, jumpingFrog, ninjaStar, tulip, fox, crane, lily, swan, penguin, whale, sword, foldingGeometry];

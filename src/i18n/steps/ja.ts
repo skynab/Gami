@@ -892,4 +892,50 @@ export const ja: Record<string, string> = {
     "頭を折り下げる",
   "Open the top a little and turn the point down round the outside, for the head and beak. Done!":
     "上を少し開いて、先を外側にかぶせるように折り下げ、頭とくちばしにします。できあがり！",
+  "Start white side up, with a corner pointing towards you.":
+    "白い面を上にして、角を手前に向けて置きます。",
+  "Crease across":
+    "横に折り目をつける",
+  "Fold the bottom corner to the top corner, then unfold.":
+    "下の角を上の角に合わせて折り、開きます。",
+  "Crease the lower left edge":
+    "左下のふちに折り目をつける",
+  "Fold the lower left edge to the middle crease, then unfold.":
+    "左下のふちを中心の折り目に合わせて折り、開きます。",
+  "Crease the lower right edge":
+    "右下のふちに折り目をつける",
+  "The same with the lower right edge.":
+    "右下のふちも同じようにします。",
+  "Crease the upper left edge":
+    "左上のふちに折り目をつける",
+  "Now fold the upper left edge to the middle crease, and unfold.":
+    "次に左上のふちを中心の折り目に合わせて折り、開きます。",
+  "Crease the upper right edge":
+    "右上のふちに折り目をつける",
+  "And the upper right edge.":
+    "右上のふちも同じようにします。",
+  "Collapse into a fish base":
+    "さかなの基本形にたたむ",
+  "Push the left and right corners in along the creases, so the edges meet in the middle and each corner pinches up into a little flap. Lay both flaps upwards.":
+    "折り目にそって左右の角を内側に押しこみ、ふちを中心で合わせます。それぞれの角は小さなひだになって立ち上がるので、両方とも上向きにたおします。",
+  "Fold the top point behind":
+    "上の角をうしろに折る",
+  "Fold the top point back behind, level with the tips of the two flaps.":
+    "上の角を、二つのひだの先と同じ高さでうしろに折ります。",
+  "Fold the left corner in a little, to straighten the side.":
+    "左の角を少し内側に折って、横をまっすぐにします。",
+  "And the right corner.":
+    "右の角も折ります。",
+  "Fold the right half over onto the left.":
+    "右半分を左半分に重ねるように折ります。",
+  "Turn it a quarter turn, so the blunt end points left.":
+    "直角に回して、平らな方のはしを左に向けます。",
+  "Turn the tail up":
+    "しっぽを上げる",
+  "Open the thin end a little and turn it up round the outside, for the tail.":
+    "細い方のはしを少し開いて、外側にかぶせるように折り上げ、しっぽにします。",
+  "Open the fins":
+    "ひれを開く",
+  "Lift the two flaps out from the sides, for the fins. Your whale is done!":
+    "両側の二つのひだを外に起こして、ひれにします。くじらのできあがり！",
 };

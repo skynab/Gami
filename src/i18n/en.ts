@@ -64,7 +64,7 @@ export const en = {
     'flapping-bird': { title: 'Flapping bird', blurb: 'Pull its tail and the wings flap.' },
     frog: { title: 'Frog', blurb: 'The classic frog from the frog base, legs and all.' },
     penguin: { title: 'Penguin', blurb: 'A very easy penguin with a white front.' },
-    whale: { title: 'Whale', blurb: 'A kite folded into a whale with a flicked-up tail.' },
+    whale: { title: 'Whale', blurb: 'A fish base folded into a whale, with fins and a flicked-up tail.' },
     fish: { title: 'Fish', blurb: 'A very easy fish, all triangles.' },
     dolphin: { title: 'Dolphin', blurb: 'A traditional dolphin, leaping.' },
     crow: { title: 'Crow', blurb: 'A traditional crow with a sharp beak.' },

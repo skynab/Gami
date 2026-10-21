@@ -56,6 +56,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'swan', title: 'Swan', blurb: 'A kite folded narrow, with a neck that stands up.', difficulty: 1, category: 'animal', steps: 14, minutes: 5, sheets: 1 },
   { id: 'lily', title: 'Lily', blurb: 'Four curled petals from the frog base.', difficulty: 5, category: 'flower', steps: 42, minutes: 20, sheets: 1 },
   { id: 'penguin', title: 'Penguin', blurb: 'A very easy penguin with a white front.', difficulty: 1, category: 'animal', steps: 12, minutes: 3, sheets: 1 },
+  { id: 'whale', title: 'Whale', blurb: 'A fish base folded into a whale, with fins and a flicked-up tail.', difficulty: 2, category: 'animal', steps: 22, minutes: 8, sheets: 1 },
   { id: 'sword', title: 'Sword', blurb: 'A knight’s sword with a crossguard, from one long strip.', difficulty: 2, category: 'toy', steps: 14, minutes: 8, sheets: 1 },
   // Coming soon: listed, with no steps yet.
   { id: 'boat', title: 'Boat', blurb: 'The classic paper boat. It really floats, for a while.', difficulty: 2, category: 'object', minutes: 6, sheets: 1 },
@@ -63,7 +64,6 @@ export const MODELS: ModelInfo[] = [
   { id: 'balloon-rabbit', title: 'Balloon rabbit', blurb: 'A water bomb with long ears, puffed up round.', difficulty: 3, category: 'animal', minutes: 10, sheets: 1 },
   { id: 'flapping-bird', title: 'Flapping bird', blurb: 'Pull its tail and the wings flap.', difficulty: 3, category: 'toy', minutes: 10, sheets: 1 },
   { id: 'frog', title: 'Frog', blurb: 'The classic frog from the frog base, legs and all.', difficulty: 4, category: 'animal', minutes: 20, sheets: 1 },
-  { id: 'whale', title: 'Whale', blurb: 'A kite folded into a whale with a flicked-up tail.', difficulty: 1, category: 'animal', minutes: 4, sheets: 1 },
   { id: 'fish', title: 'Fish', blurb: 'A very easy fish, all triangles.', difficulty: 1, category: 'animal', minutes: 3, sheets: 1 },
   { id: 'dolphin', title: 'Dolphin', blurb: 'A traditional dolphin, leaping.', difficulty: 2, category: 'animal', minutes: 8, sheets: 1 },
   { id: 'crow', title: 'Crow', blurb: 'A traditional crow with a sharp beak.', difficulty: 2, category: 'animal', minutes: 6, sheets: 1 },

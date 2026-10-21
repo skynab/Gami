@@ -892,4 +892,50 @@ export const es: Record<string, string> = {
     "Baja la cabeza",
   "Open the top a little and turn the point down round the outside, for the head and beak. Done!":
     "Abre un poco la parte de arriba y baja la punta por fuera, para hacer la cabeza y el pico. ¡Listo!",
+  "Start white side up, with a corner pointing towards you.":
+    "Empieza con el lado blanco hacia arriba y una esquina apuntando hacia ti.",
+  "Crease across":
+    "Marca un pliegue de lado a lado",
+  "Fold the bottom corner to the top corner, then unfold.":
+    "Lleva la esquina de abajo a la de arriba y desdobla.",
+  "Crease the lower left edge":
+    "Marca el borde de abajo a la izquierda",
+  "Fold the lower left edge to the middle crease, then unfold.":
+    "Dobla el borde de abajo a la izquierda hasta el pliegue central y desdobla.",
+  "Crease the lower right edge":
+    "Marca el borde de abajo a la derecha",
+  "The same with the lower right edge.":
+    "Lo mismo con el borde de abajo a la derecha.",
+  "Crease the upper left edge":
+    "Marca el borde de arriba a la izquierda",
+  "Now fold the upper left edge to the middle crease, and unfold.":
+    "Ahora dobla el borde de arriba a la izquierda hasta el pliegue central y desdobla.",
+  "Crease the upper right edge":
+    "Marca el borde de arriba a la derecha",
+  "And the upper right edge.":
+    "Y el borde de arriba a la derecha.",
+  "Collapse into a fish base":
+    "Pliega en base de pez",
+  "Push the left and right corners in along the creases, so the edges meet in the middle and each corner pinches up into a little flap. Lay both flaps upwards.":
+    "Empuja las esquinas izquierda y derecha hacia dentro por los pliegues, para que los bordes se junten en el centro y cada esquina forme una pequeña solapa. Tumba las dos solapas hacia arriba.",
+  "Fold the top point behind":
+    "Dobla la punta de arriba hacia atrás",
+  "Fold the top point back behind, level with the tips of the two flaps.":
+    "Dobla la punta de arriba hacia atrás, a la altura de las puntas de las dos solapas.",
+  "Fold the left corner in a little, to straighten the side.":
+    "Dobla un poco hacia dentro la esquina izquierda, para enderezar el lado.",
+  "And the right corner.":
+    "Y la esquina derecha.",
+  "Fold the right half over onto the left.":
+    "Dobla la mitad derecha sobre la izquierda.",
+  "Turn it a quarter turn, so the blunt end points left.":
+    "Gíralo un cuarto de vuelta, para que el extremo romo apunte a la izquierda.",
+  "Turn the tail up":
+    "Levanta la cola",
+  "Open the thin end a little and turn it up round the outside, for the tail.":
+    "Abre un poco el extremo fino y súbelo por fuera, para hacer la cola.",
+  "Open the fins":
+    "Abre las aletas",
+  "Lift the two flaps out from the sides, for the fins. Your whale is done!":
+    "Separa las dos solapas de los lados, para hacer las aletas. ¡Tu ballena está lista!",
 };

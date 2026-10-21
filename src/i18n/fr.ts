@@ -62,7 +62,7 @@ export const fr: Messages = {
     'flapping-bird': { title: 'Oiseau qui bat des ailes', blurb: 'Tire sa queue et ses ailes battent.' },
     frog: { title: 'Grenouille', blurb: 'La grenouille classique, de la base grenouille jusqu’aux pattes.' },
     penguin: { title: 'Pingouin', blurb: 'Un pingouin très facile au ventre blanc.' },
-    whale: { title: 'Baleine', blurb: 'Un cerf-volant plié en baleine, la queue relevée.' },
+    whale: { title: 'Baleine', blurb: 'Une base du poisson pliée en baleine, avec des nageoires et la queue relevée.' },
     fish: { title: 'Poisson', blurb: 'Un poisson très facile, tout en triangles.' },
     dolphin: { title: 'Dauphin', blurb: 'Un dauphin traditionnel, en plein saut.' },
     crow: { title: 'Corbeau', blurb: 'Un corbeau traditionnel au bec pointu.' },

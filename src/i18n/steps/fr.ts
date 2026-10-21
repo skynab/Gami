@@ -892,4 +892,50 @@ export const fr: Record<string, string> = {
     "Rabats la tête",
   "Open the top a little and turn the point down round the outside, for the head and beak. Done!":
     "Ouvre un peu le haut et rabats la pointe par-dessus l’extérieur, pour la tête et le bec. C’est fini !",
+  "Start white side up, with a corner pointing towards you.":
+    "Commence face blanche vers le haut, un coin pointé vers toi.",
+  "Crease across":
+    "Marque un pli en travers",
+  "Fold the bottom corner to the top corner, then unfold.":
+    "Amène le coin du bas sur le coin du haut, puis déplie.",
+  "Crease the lower left edge":
+    "Marque le bord en bas à gauche",
+  "Fold the lower left edge to the middle crease, then unfold.":
+    "Rabats le bord en bas à gauche sur le pli du milieu, puis déplie.",
+  "Crease the lower right edge":
+    "Marque le bord en bas à droite",
+  "The same with the lower right edge.":
+    "Pareil avec le bord en bas à droite.",
+  "Crease the upper left edge":
+    "Marque le bord en haut à gauche",
+  "Now fold the upper left edge to the middle crease, and unfold.":
+    "Maintenant, rabats le bord en haut à gauche sur le pli du milieu, puis déplie.",
+  "Crease the upper right edge":
+    "Marque le bord en haut à droite",
+  "And the upper right edge.":
+    "Et le bord en haut à droite.",
+  "Collapse into a fish base":
+    "Plie en base du poisson",
+  "Push the left and right corners in along the creases, so the edges meet in the middle and each corner pinches up into a little flap. Lay both flaps upwards.":
+    "Pousse les coins gauche et droit vers l’intérieur le long des plis, pour que les bords se rejoignent au milieu et que chaque coin se pince en un petit rabat. Couche les deux rabats vers le haut.",
+  "Fold the top point behind":
+    "Rabats la pointe du haut derrière",
+  "Fold the top point back behind, level with the tips of the two flaps.":
+    "Rabats la pointe du haut derrière, au niveau des pointes des deux rabats.",
+  "Fold the left corner in a little, to straighten the side.":
+    "Rabats un peu le coin gauche, pour redresser le côté.",
+  "And the right corner.":
+    "Et le coin droit.",
+  "Fold the right half over onto the left.":
+    "Rabats la moitié droite sur la gauche.",
+  "Turn it a quarter turn, so the blunt end points left.":
+    "Tourne-le d’un quart de tour, le bout plat vers la gauche.",
+  "Turn the tail up":
+    "Relève la queue",
+  "Open the thin end a little and turn it up round the outside, for the tail.":
+    "Ouvre un peu le bout fin et relève-le par-dessus l’extérieur, pour la queue.",
+  "Open the fins":
+    "Ouvre les nageoires",
+  "Lift the two flaps out from the sides, for the fins. Your whale is done!":
+    "Écarte les deux rabats des côtés, pour les nageoires. Ta baleine est finie !",
 };

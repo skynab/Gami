@@ -62,7 +62,7 @@ export const es: Messages = {
     'flapping-bird': { title: 'Pájaro que aletea', blurb: 'Tira de la cola y mueve las alas.' },
     frog: { title: 'Rana', blurb: 'La rana clásica desde la base de rana, con todas sus patas.' },
     penguin: { title: 'Pingüino', blurb: 'Un pingüino muy fácil con la panza blanca.' },
-    whale: { title: 'Ballena', blurb: 'Una cometa doblada en ballena, con la cola levantada.' },
+    whale: { title: 'Ballena', blurb: 'Una base de pez doblada en ballena, con aletas y la cola levantada.' },
     fish: { title: 'Pez', blurb: 'Un pez muy fácil, todo triángulos.' },
     dolphin: { title: 'Delfín', blurb: 'Un delfín tradicional, en pleno salto.' },
     crow: { title: 'Cuervo', blurb: 'Un cuervo tradicional de pico afilado.' },

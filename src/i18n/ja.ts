@@ -62,7 +62,7 @@ export const ja: Messages = {
     'flapping-bird': { title: 'はばたく鳥', blurb: 'しっぽを引くと羽がぱたぱた動きます。' },
     frog: { title: 'かえる', blurb: 'かえるの基本形から作る定番のかえる。足もしっかり。' },
     penguin: { title: 'ペンギン', blurb: 'おなかの白い、とてもかんたんなペンギン。' },
-    whale: { title: 'くじら', blurb: 'たこの形から折る、しっぽの上がったくじら。' },
+    whale: { title: 'くじら', blurb: 'さかなの基本形から折る、ひれとしっぽの上がったくじら。' },
     fish: { title: 'さかな', blurb: '三角形でできた、とてもかんたんなさかな。' },
     dolphin: { title: 'イルカ', blurb: 'とびはねる伝承のイルカ。' },
     crow: { title: 'カラス', blurb: 'くちばしのとがった伝承のカラス。' },
