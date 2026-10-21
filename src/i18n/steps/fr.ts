@@ -938,4 +938,16 @@ export const fr: Record<string, string> = {
     "Ouvre les nageoires",
   "Lift the two flaps out from the sides, for the fins. Your whale is done!":
     "Écarte les deux rabats des côtés, pour les nageoires. Ta baleine est finie !",
+  "Make the feet":
+    "Fais les pattes",
+  "Push the point of each leg up between its layers so one sticks out to the left and one to the right, for the feet.":
+    "Pousse la pointe de chaque jambe vers le haut entre ses couches, pour que l’une sorte à gauche et l’autre à droite : ce sont les pattes.",
+  "Fold the top flap down":
+    "Rabats le rabat du haut",
+  "Fold the top flap down at the widest point, so its tip points to the bottom.":
+    "Rabats le rabat du haut vers le bas à l’endroit le plus large, pour que sa pointe soit en bas.",
+  "Make the head":
+    "Fais la tête",
+  "Push the top point down between its layers so it points forwards, for the head and beak. Your crow is done!":
+    "Pousse la pointe du haut entre ses couches pour qu’elle pointe vers l’avant : la tête et le bec. Ton corbeau est fini !",
 };

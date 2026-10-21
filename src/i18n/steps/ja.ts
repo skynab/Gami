@@ -938,4 +938,16 @@ export const ja: Record<string, string> = {
     "ひれを開く",
   "Lift the two flaps out from the sides, for the fins. Your whale is done!":
     "両側の二つのひだを外に起こして、ひれにします。くじらのできあがり！",
+  "Make the feet":
+    "足を作る",
+  "Push the point of each leg up between its layers so one sticks out to the left and one to the right, for the feet.":
+    "それぞれの足の先を、重なりのあいだに押しこみながら折り上げ、一つは左、一つは右に出して足にします。",
+  "Fold the top flap down":
+    "上のひだを折り下げる",
+  "Fold the top flap down at the widest point, so its tip points to the bottom.":
+    "上のひだを、いちばん幅の広いところで折り下げ、先を下に向けます。",
+  "Make the head":
+    "頭を作る",
+  "Push the top point down between its layers so it points forwards, for the head and beak. Your crow is done!":
+    "上の先を重なりのあいだに押しこんで前に向け、頭とくちばしにします。カラスのできあがり！",
 };

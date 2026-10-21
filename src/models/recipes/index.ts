@@ -4,6 +4,7 @@ import { bulldogDart } from './bulldog-dart';
 import { catFace } from './cat-face';
 import { cicada } from './cicada';
 import { crane } from './crane';
+import { crow } from './crow';
 import { cup } from './cup';
 import { dogFace } from './dog-face';
 import { fortuneTeller } from './fortune-teller';
@@ -26,4 +27,4 @@ import { whale } from './whale';
  * Every built-in model, as code. `npm run models` turns these into public/models/<id>.fold and <id>.svg,
  * which the site loads. Not bundled into the site itself.
  */
-export const RECIPES: (() => OrigamiModel)[] = [basics, paperPlane, glider, bulldogDart, dogFace, catFace, cup, samuraiHelmet, fortuneTeller, heart, cicada, jumpingFrog, ninjaStar, tulip, fox, crane, lily, swan, penguin, whale, sword, foldingGeometry];
+export const RECIPES: (() => OrigamiModel)[] = [basics, paperPlane, glider, bulldogDart, dogFace, catFace, cup, samuraiHelmet, fortuneTeller, heart, cicada, jumpingFrog, ninjaStar, tulip, fox, crane, lily, swan, penguin, whale, crow, sword, foldingGeometry];

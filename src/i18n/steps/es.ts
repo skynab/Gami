@@ -938,4 +938,16 @@ export const es: Record<string, string> = {
     "Abre las aletas",
   "Lift the two flaps out from the sides, for the fins. Your whale is done!":
     "Separa las dos solapas de los lados, para hacer las aletas. ¡Tu ballena está lista!",
+  "Make the feet":
+    "Haz las patas",
+  "Push the point of each leg up between its layers so one sticks out to the left and one to the right, for the feet.":
+    "Empuja la punta de cada pierna hacia arriba entre sus capas, para que una salga a la izquierda y otra a la derecha: son las patas.",
+  "Fold the top flap down":
+    "Baja la solapa de arriba",
+  "Fold the top flap down at the widest point, so its tip points to the bottom.":
+    "Dobla la solapa de arriba hacia abajo por la parte más ancha, para que su punta apunte hacia abajo.",
+  "Make the head":
+    "Haz la cabeza",
+  "Push the top point down between its layers so it points forwards, for the head and beak. Your crow is done!":
+    "Empuja la punta de arriba hacia abajo entre sus capas para que apunte hacia delante: la cabeza y el pico. ¡Tu cuervo está listo!",
 };
