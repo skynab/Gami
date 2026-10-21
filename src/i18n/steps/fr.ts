@@ -1002,4 +1002,12 @@ export const fr: Record<string, string> = {
     "Pareil avec la pointe droite, pour le cou.",
   "Push the tip of the neck down between its layers for the head. Hold the base of the neck and pull the tail gently: the wings flap!":
     "Pousse le bout du cou entre ses couches pour faire la tête. Tiens la base du cou et tire doucement la queue : les ailes battent !",
+  "Fold out an ear":
+    "Sors une oreille",
+  "Fold the loose point at the top left out a little to the side, for an ear.":
+    "Rabats un peu sur le côté la pointe libre en haut à gauche, pour une oreille.",
+  "Fold out the other ear":
+    "Sors l’autre oreille",
+  "And the other one. Blow gently into the hole at the bottom to puff up the rabbit, then open out the ears. Done!":
+    "Et l’autre. Souffle doucement dans le trou du bas pour gonfler le lapin, puis ouvre les oreilles. C’est fini !",
 };

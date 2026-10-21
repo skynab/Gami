@@ -1002,4 +1002,12 @@ export const ja: Record<string, string> = {
     "右の先も同じようにして、首にします。",
   "Push the tip of the neck down between its layers for the head. Hold the base of the neck and pull the tail gently: the wings flap!":
     "首の先を重なりのあいだに押しこんで、頭にします。首のつけねを持って、しっぽをそっと引くと、羽がぱたぱた動きます！",
+  "Fold out an ear":
+    "耳を折り出す",
+  "Fold the loose point at the top left out a little to the side, for an ear.":
+    "左上のはなれている先を、少し横に折り出して耳にします。",
+  "Fold out the other ear":
+    "もう一つの耳を折り出す",
+  "And the other one. Blow gently into the hole at the bottom to puff up the rabbit, then open out the ears. Done!":
+    "もう一つも折ります。下の穴にそっと息を吹きこんでうさぎをふくらませ、耳を開きます。できあがり！",
 };
