@@ -5,6 +5,7 @@ import { paper, Recipe, table } from '../../fold/recipe';
  * turned sideways by a 45° fold, doubled back across both sides for the crossguard, and turned down again
  * for the handle, with the end folded up for a pommel. Narrowing seals the front inside, so the finished
  * sword is all silver (the back); the gold front shows while folding, which keeps the early steps easy to follow.
+ * The design is licensed CC BY 4.0 (see DESIGNS-LICENSE.md).
  */
 export function sword() {
   const r = new Recipe({ id: 'sword', title: 'Sword', sheet: { size: [1, 4], front: '#d9a93a', back: '#c3cad2' } });
