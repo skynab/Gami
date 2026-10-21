@@ -32,6 +32,16 @@ Easiest first, grouped by what the engine already has. Each group can ship on it
 | **E. Squash folds and pleats** | pinwheel, fan | The pinwheel: cupboard folds, then four squashes into the windmill base. The fan: a row of alternating pleats, then `shape` to spread it. |
 | **F. Box** | masu box | Two sheets (box and lid). The walls rising together need the "several bends meeting at the corners" `shape` addition noted in `docs/bogota-2013-plan.md`. Last, as it needs new engine work. |
 
+## Progress
+
+| Model | Status |
+|---|---|
+| Penguin, whale, crow, Christmas tree, water bomb | Done. The whale's fins are bent out in 3D: the diagrams swing them below the belly, which tears with rigid paper. The water bomb ends flat, ready to blow up. |
+| Dolphin | Blocked: origami.me's version needs a cut (step 11), and the engine has no scissors. Look for an uncut traditional dolphin, or cuts in the engine. |
+| Fish | Waiting: its folds are placed by eye ("this sets the tail size"), so exact reference points need choosing first. |
+| Pajarita | Waiting: built from swivel folds that move several flaps at once; needs a crease search like the fish base's. |
+| Butterfly | Not from the water bomb base, as its card says: a collapse from cupboard folds, close to the pinwheel's. Do it with the pinwheel. |
+
 ## Done when
 
 Every model above has a recipe, translated steps, a finished `PROVENANCE.md` row and no "Coming soon"

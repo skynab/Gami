@@ -966,4 +966,30 @@ export const ja: Record<string, string> = {
     "下の先を木の下のはしまで折り上げて、植木ばちの形にします。",
   "Turn it over. Your tree is done!":
     "裏返します。ツリーのできあがり！",
+  "Fold the bottom left corner of the top flap up to the top point.":
+    "上のひだの左下の角を、上の先まで折り上げます。",
+  "And the bottom right corner. It’s a diamond.":
+    "右下の角も折り上げます。ひし形になります。",
+  "Fold the diamond’s left corner in to the middle.":
+    "ひし形の左の角を中心まで折ります。",
+  "Fold the left point down":
+    "左の先を折り下げる",
+  "Fold the loose point at the top left down and out.":
+    "左上のはなれている先を、外側に折り下げます。",
+  "Fold the right point down":
+    "右の先を折り下げる",
+  "And the one at the top right.":
+    "右上の先も同じようにします。",
+  "Tuck in the left point":
+    "左の先を差しこむ",
+  "Tuck the point into the pocket of the flap below it.":
+    "先を、下にあるひだのすきまに差しこみます。",
+  "Tuck in the right point":
+    "右の先を差しこむ",
+  "And the right point.":
+    "右の先も差しこみます。",
+  "Turn it over, and do the same on this side.":
+    "裏返して、こちら側も同じように折ります。",
+  "And the last one. Now blow gently into the hole at the bottom, and the water bomb puffs up into a ball. Done!":
+    "最後の一つも差しこみます。下の穴にそっと息を吹きこむと、水風船がふくらんで玉になります。できあがり！",
 };

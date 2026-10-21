@@ -966,4 +966,30 @@ export const fr: Record<string, string> = {
     "Remonte la pointe du bas jusqu’au bas du sapin, pour former le pot.",
   "Turn it over. Your tree is done!":
     "Retourne-le. Ton sapin est fini !",
+  "Fold the bottom left corner of the top flap up to the top point.":
+    "Remonte le coin en bas à gauche du rabat du dessus jusqu’à la pointe du haut.",
+  "And the bottom right corner. It’s a diamond.":
+    "Et le coin en bas à droite. C’est un losange.",
+  "Fold the diamond’s left corner in to the middle.":
+    "Rabats le coin gauche du losange jusqu’au milieu.",
+  "Fold the left point down":
+    "Rabats la pointe gauche",
+  "Fold the loose point at the top left down and out.":
+    "Rabats vers le bas et l’extérieur la pointe libre en haut à gauche.",
+  "Fold the right point down":
+    "Rabats la pointe droite",
+  "And the one at the top right.":
+    "Et celle en haut à droite.",
+  "Tuck in the left point":
+    "Glisse la pointe gauche",
+  "Tuck the point into the pocket of the flap below it.":
+    "Glisse la pointe dans la poche du rabat en dessous.",
+  "Tuck in the right point":
+    "Glisse la pointe droite",
+  "And the right point.":
+    "Et la pointe droite.",
+  "Turn it over, and do the same on this side.":
+    "Retourne-le et fais la même chose de ce côté.",
+  "And the last one. Now blow gently into the hole at the bottom, and the water bomb puffs up into a ball. Done!":
+    "Et la dernière. Souffle doucement dans le trou du bas : la bombe à eau se gonfle en boule. C’est fini !",
 };

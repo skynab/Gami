@@ -966,4 +966,30 @@ export const es: Record<string, string> = {
     "Sube la punta de abajo hasta la base del árbol, para dar forma a la maceta.",
   "Turn it over. Your tree is done!":
     "Dale la vuelta. ¡Tu árbol está listo!",
+  "Fold the bottom left corner of the top flap up to the top point.":
+    "Sube la esquina de abajo a la izquierda de la solapa de arriba hasta la punta superior.",
+  "And the bottom right corner. It’s a diamond.":
+    "Y la esquina de abajo a la derecha. Es un rombo.",
+  "Fold the diamond’s left corner in to the middle.":
+    "Dobla la esquina izquierda del rombo hasta el centro.",
+  "Fold the left point down":
+    "Baja la punta izquierda",
+  "Fold the loose point at the top left down and out.":
+    "Dobla hacia abajo y hacia fuera la punta suelta de arriba a la izquierda.",
+  "Fold the right point down":
+    "Baja la punta derecha",
+  "And the one at the top right.":
+    "Y la de arriba a la derecha.",
+  "Tuck in the left point":
+    "Mete la punta izquierda",
+  "Tuck the point into the pocket of the flap below it.":
+    "Mete la punta en el bolsillo de la solapa de debajo.",
+  "Tuck in the right point":
+    "Mete la punta derecha",
+  "And the right point.":
+    "Y la punta derecha.",
+  "Turn it over, and do the same on this side.":
+    "Dale la vuelta y haz lo mismo por este lado.",
+  "And the last one. Now blow gently into the hole at the bottom, and the water bomb puffs up into a ball. Done!":
+    "Y la última. Ahora sopla suavemente por el agujero de abajo y la bomba de agua se infla como una bola. ¡Listo!",
 };
