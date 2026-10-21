@@ -18,7 +18,11 @@ export interface ModelInfo {
   minutes: number;
   /** Number of sheets of paper. The ninja star uses two. */
   sheets: number;
+  /** Tools beyond paper, shown on the card so nobody starts one without them: scissors for a cut, a pen for drawing. */
+  needs?: Tool[];
 }
+
+export type Tool = 'scissors' | 'pen';
 
 export const CATEGORIES: { id: Category; label: string }[] = [
   { id: 'basics', label: 'Basics' },
@@ -41,8 +45,8 @@ export const MODELS: ModelInfo[] = [
   { id: 'paper-plane', title: 'Paper plane', blurb: 'The classic dart. Flies far and straight.', difficulty: 1, category: 'toy', steps: 13, minutes: 5, sheets: 1 },
   { id: 'glider', title: 'Glider', blurb: 'A flat-nosed plane with broad wings, for slow, long glides.', difficulty: 1, category: 'toy', steps: 12, minutes: 5, sheets: 1 },
   { id: 'bulldog-dart', title: 'Bulldog dart', blurb: 'The dart with its point folded back: a stubby nose for rough landings.', difficulty: 1, category: 'toy', steps: 14, minutes: 5, sheets: 1 },
-  { id: 'dog-face', title: 'Dog face', blurb: 'A first fold: a triangle with floppy ears.', difficulty: 1, category: 'animal', steps: 11, minutes: 2, sheets: 1 },
-  { id: 'cat-face', title: 'Cat face', blurb: 'A first fold: a triangle with pointed ears.', difficulty: 1, category: 'animal', steps: 7, minutes: 2, sheets: 1 },
+  { id: 'dog-face', title: 'Dog face', blurb: 'A first fold: a triangle with floppy ears.', difficulty: 1, category: 'animal', steps: 11, minutes: 2, sheets: 1, needs: ['pen'] },
+  { id: 'cat-face', title: 'Cat face', blurb: 'A first fold: a triangle with pointed ears.', difficulty: 1, category: 'animal', steps: 7, minutes: 2, sheets: 1, needs: ['pen'] },
   { id: 'cup', title: 'Cup', blurb: 'A cup that holds water, for a while.', difficulty: 1, category: 'object', steps: 7, minutes: 4, sheets: 1 },
   { id: 'samurai-helmet', title: 'Samurai helmet', blurb: 'A kabuto with horns. Fold a big one to wear.', difficulty: 2, category: 'object', steps: 10, minutes: 6, sheets: 1 },
   { id: 'fortune-teller', title: 'Fortune teller', blurb: 'Pick a colour, pick a number.', difficulty: 2, category: 'toy', steps: 19, minutes: 8, sheets: 1 },
@@ -51,7 +55,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'jumping-frog', title: 'Jumping frog', blurb: 'From half a square of paper. Press its back and watch it hop.', difficulty: 2, category: 'animal', steps: 23, minutes: 10, sheets: 1 },
   { id: 'ninja-star', title: 'Ninja star', blurb: 'Two sheets locked into a spinning shuriken.', difficulty: 2, category: 'modular', steps: 17, minutes: 10, sheets: 2 },
   { id: 'tulip', title: 'Tulip', blurb: 'A blossom and a stem from two squares.', difficulty: 3, category: 'flower', steps: 15, minutes: 10, sheets: 2 },
-  { id: 'fox', title: 'Fox', blurb: 'A sitting fox with big ears and a bushy tail.', difficulty: 2, category: 'animal', steps: 14, minutes: 5, sheets: 1 },
+  { id: 'fox', title: 'Fox', blurb: 'A sitting fox with big ears and a bushy tail.', difficulty: 2, category: 'animal', steps: 14, minutes: 5, sheets: 1, needs: ['pen'] },
   { id: 'crane', title: 'Crane', blurb: 'The traditional symbol of peace and luck.', difficulty: 4, category: 'animal', steps: 33, minutes: 20, sheets: 1 },
   { id: 'swan', title: 'Swan', blurb: 'A kite folded narrow, with a neck that stands up.', difficulty: 1, category: 'animal', steps: 14, minutes: 5, sheets: 1 },
   { id: 'lily', title: 'Lily', blurb: 'Four curled petals from the frog base.', difficulty: 5, category: 'flower', steps: 42, minutes: 20, sheets: 1 },
@@ -69,7 +73,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'boat', title: 'Boat', blurb: 'The classic paper boat. It really floats, for a while.', difficulty: 2, category: 'object', minutes: 6, sheets: 1 },
   { id: 'frog', title: 'Frog', blurb: 'The classic frog from the frog base, legs and all.', difficulty: 4, category: 'animal', minutes: 20, sheets: 1 },
   { id: 'fish', title: 'Fish', blurb: 'A very easy fish, all triangles.', difficulty: 1, category: 'animal', minutes: 3, sheets: 1 },
-  { id: 'dolphin', title: 'Dolphin', blurb: 'A traditional dolphin, leaping.', difficulty: 2, category: 'animal', minutes: 8, sheets: 1 },
+  { id: 'dolphin', title: 'Dolphin', blurb: 'A traditional dolphin, leaping.', difficulty: 2, category: 'animal', minutes: 8, sheets: 1, needs: ['scissors'] },
   { id: 'pajarita', title: 'Pajarita', blurb: 'The little paper bird of Spain, from a square with its corners folded in.', difficulty: 2, category: 'animal', minutes: 8, sheets: 1 },
   { id: 'iris', title: 'Iris', blurb: 'Three petals up, three down, from the frog base.', difficulty: 4, category: 'flower', minutes: 20, sheets: 1 },
   { id: 'fan', title: 'Fan', blurb: 'Pleat a sheet back and forth, then pinch the end.', difficulty: 1, category: 'object', minutes: 3, sheets: 1 },

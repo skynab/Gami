@@ -45,6 +45,8 @@ export const es: Messages = {
     sheets_one: '{{count}} hoja',
     sheets_other: '{{count}} hojas',
     difficulty: '{{level}}, dificultad {{n}} de 5',
+    needsScissors: 'Necesita tijeras',
+    needsPen: 'Necesita un bolígrafo',
   },
   models: {
     basics: { title: 'Lo básico', blurb: 'Empieza aquí: plegar, desplegar y dar la vuelta al papel.' },

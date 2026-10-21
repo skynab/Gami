@@ -47,6 +47,8 @@ export const en = {
     sheets_one: '{{count}} sheet',
     sheets_other: '{{count}} sheets',
     difficulty: '{{level}}, difficulty {{n}} of 5',
+    needsScissors: 'Needs scissors',
+    needsPen: 'Needs a pen',
   },
   models: {
     basics: { title: 'Folding basics', blurb: 'Start here: fold, unfold and turn the paper over.' },

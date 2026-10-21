@@ -45,6 +45,8 @@ export const fr: Messages = {
     sheets_one: '{{count}} feuille',
     sheets_other: '{{count}} feuilles',
     difficulty: '{{level}}, difficulté {{n}} sur 5',
+    needsScissors: 'Il faut des ciseaux',
+    needsPen: 'Il faut un stylo',
   },
   models: {
     basics: { title: 'Les bases', blurb: 'Commencez ici : plier, déplier et retourner la feuille.' },

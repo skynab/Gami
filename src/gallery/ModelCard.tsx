@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { PaperIcon } from '../app/icons';
+import { PaperIcon, PenIcon, ScissorsIcon } from '../app/icons';
 import { modelUrl } from '../models';
 import { readProgress } from '../state/progress';
 import { levelOf, type ModelInfo } from './catalog';
@@ -51,6 +51,20 @@ export function ModelCard({ model }: { model: ModelInfo }) {
           <img src={modelUrl(model.id, 'preview.svg')} alt="" className={preview === 'on' ? 'card-preview playing' : 'card-preview'} />
         )}
         {badge && <span className={model.steps ? 'card-badge' : 'card-badge soon'}>{badge}</span>}
+        {model.needs?.length ? (
+          // Tools beyond paper, so nobody starts it without them.
+          <span className="card-needs">
+            {model.needs.map((tool) => {
+              const label = t(tool === 'scissors' ? 'card.needsScissors' : 'card.needsPen');
+              const Icon = tool === 'scissors' ? ScissorsIcon : PenIcon;
+              return (
+                <span key={tool} role="img" aria-label={label} title={label}>
+                  <Icon width={16} height={16} />
+                </span>
+              );
+            })}
+          </span>
+        ) : null}
       </div>
       <div className="card-body">
         <div className="card-title">

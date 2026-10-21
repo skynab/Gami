@@ -45,6 +45,8 @@ export const ja: Messages = {
     sheets_one: '{{count}}枚',
     sheets_other: '{{count}}枚',
     difficulty: '{{level}}、難易度 5段階中{{n}}',
+    needsScissors: 'はさみが必要',
+    needsPen: 'ペンが必要',
   },
   models: {
     basics: { title: '折り方の基本', blurb: 'まずはここから。折る、開く、裏返す。' },

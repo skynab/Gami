@@ -36,6 +36,14 @@ describe.each(models.map((m) => [m.id, m] as const))('%s', (id, model) => {
     expect(toFoldFile(again)).toEqual(toFoldFile(read));
   });
 
+  it('says in the gallery which tools it needs: scissors for a cut, a pen for drawing', () => {
+    const needs = [
+      ...(model.steps.some((s) => s.kind === 'cut') ? ['scissors'] : []),
+      ...(model.steps.some((s) => s.kind === 'draw') ? ['pen'] : []),
+    ];
+    expect(MODELS.find((m) => m.id === id)?.needs ?? []).toEqual(needs);
+  });
+
   it('is listed in the gallery with the right number of steps', () => {
     expect(MODELS.find((m) => m.id === id)?.steps).toBe(model.steps.length);
   });
