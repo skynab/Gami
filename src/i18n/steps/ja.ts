@@ -992,4 +992,14 @@ export const ja: Record<string, string> = {
     "裏返して、こちら側も同じように折ります。",
   "And the last one. Now blow gently into the hole at the bottom, and the water bomb puffs up into a ball. Done!":
     "最後の一つも差しこみます。下の穴にそっと息を吹きこむと、水風船がふくらんで玉になります。できあがり！",
+  "Pull out the tail":
+    "しっぽを引き出す",
+  "Hold the body, and pull the left lower point out and up between the wings. Flatten it at an angle. This is the tail.":
+    "胴を持って、左下の先を羽のあいだから外へ斜め上に引き出し、ななめのまま平らにします。これがしっぽです。",
+  "Pull out the neck":
+    "首を引き出す",
+  "The same with the right point, for the neck.":
+    "右の先も同じようにして、首にします。",
+  "Push the tip of the neck down between its layers for the head. Hold the base of the neck and pull the tail gently: the wings flap!":
+    "首の先を重なりのあいだに押しこんで、頭にします。首のつけねを持って、しっぽをそっと引くと、羽がぱたぱた動きます！",
 };

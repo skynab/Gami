@@ -992,4 +992,14 @@ export const es: Record<string, string> = {
     "Dale la vuelta y haz lo mismo por este lado.",
   "And the last one. Now blow gently into the hole at the bottom, and the water bomb puffs up into a ball. Done!":
     "Y la última. Ahora sopla suavemente por el agujero de abajo y la bomba de agua se infla como una bola. ¡Listo!",
+  "Pull out the tail":
+    "Saca la cola",
+  "Hold the body, and pull the left lower point out and up between the wings. Flatten it at an angle. This is the tail.":
+    "Sujeta el cuerpo y saca la punta de abajo a la izquierda hacia fuera y arriba, entre las alas. Aplánala inclinada. Es la cola.",
+  "Pull out the neck":
+    "Saca el cuello",
+  "The same with the right point, for the neck.":
+    "Lo mismo con la punta derecha, para el cuello.",
+  "Push the tip of the neck down between its layers for the head. Hold the base of the neck and pull the tail gently: the wings flap!":
+    "Empuja la punta del cuello hacia abajo entre sus capas para hacer la cabeza. Sujeta la base del cuello y tira suavemente de la cola: ¡las alas aletean!",
 };

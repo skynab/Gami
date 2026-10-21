@@ -56,7 +56,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `boat` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/traditional-boat](https://origami.me/traditional-boat/) | Clear | Coming soon |
 | `waterbomb` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/waterbomb](https://origami.me/waterbomb/) | Clear | 21 Oct 2026 |
 | `balloon-rabbit` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/balloon-rabbit](https://origami.me/balloon-rabbit/) | Clear | Coming soon, listed 21 Oct 2026 |
-| `flapping-bird` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/bird](https://origami.me/bird/) | Clear | Coming soon, listed 21 Oct 2026 |
+| `flapping-bird` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/bird](https://origami.me/bird/) | Clear | 21 Oct 2026 |
 | `frog` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/traditional-frog](https://origami.me/traditional-frog/) | Clear | Coming soon, listed 21 Oct 2026 |
 | `penguin` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/penguin](https://origami.me/penguin/) | Clear | 21 Oct 2026 |
 | `whale` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/whale](https://origami.me/whale/) | Clear | 21 Oct 2026 |
