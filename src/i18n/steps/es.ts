@@ -1010,4 +1010,26 @@ export const es: Record<string, string> = {
     "Saca la otra oreja",
   "And the other one. Blow gently into the hole at the bottom to puff up the rabbit, then open out the ears. Done!":
     "Y la otra. Sopla suavemente por el agujero de abajo para inflar el conejo y luego abre las orejas. ¡Listo!",
+  "Fold in half side to side, then unfold.":
+    "Dobla por la mitad de lado a lado y desdobla.",
+  "And top to bottom, then unfold.":
+    "Y de arriba abajo, y desdobla.",
+  "Fold the left edge to the middle crease.":
+    "Dobla el borde izquierdo hasta el pliegue central.",
+  "Fold the top to the middle":
+    "Dobla la parte de arriba hasta el centro",
+  "Fold the top edge to the middle, then unfold.":
+    "Dobla el borde de arriba hasta el centro y desdobla.",
+  "Fold the bottom to the middle":
+    "Dobla la parte de abajo hasta el centro",
+  "And the bottom edge, then unfold.":
+    "Y el borde de abajo, y desdobla.",
+  "Squash the top":
+    "Aplasta la parte de arriba",
+  "Fold the top edge down to the middle, pulling the top left corner out to the side and the top right corner up. Flatten them into triangles.":
+    "Baja el borde de arriba hasta el centro, sacando la esquina de arriba a la izquierda hacia el lado y la de arriba a la derecha hacia arriba. Aplánalas en triángulos.",
+  "Squash the bottom":
+    "Aplasta la parte de abajo",
+  "The same at the bottom, the other way round: the bottom right corner out to the side and the bottom left one down. Pin the middle to a stick and blow: it spins!":
+    "Lo mismo abajo, al revés: la esquina de abajo a la derecha hacia el lado y la de abajo a la izquierda hacia abajo. Clava el centro en un palo y sopla: ¡gira!",
 };

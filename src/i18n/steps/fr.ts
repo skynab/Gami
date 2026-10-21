@@ -1010,4 +1010,26 @@ export const fr: Record<string, string> = {
     "Sors l’autre oreille",
   "And the other one. Blow gently into the hole at the bottom to puff up the rabbit, then open out the ears. Done!":
     "Et l’autre. Souffle doucement dans le trou du bas pour gonfler le lapin, puis ouvre les oreilles. C’est fini !",
+  "Fold in half side to side, then unfold.":
+    "Plie en deux d’un côté à l’autre, puis déplie.",
+  "And top to bottom, then unfold.":
+    "Et de haut en bas, puis déplie.",
+  "Fold the left edge to the middle crease.":
+    "Rabats le bord gauche sur le pli du milieu.",
+  "Fold the top to the middle":
+    "Plie le haut jusqu’au milieu",
+  "Fold the top edge to the middle, then unfold.":
+    "Rabats le bord du haut jusqu’au milieu, puis déplie.",
+  "Fold the bottom to the middle":
+    "Plie le bas jusqu’au milieu",
+  "And the bottom edge, then unfold.":
+    "Et le bord du bas, puis déplie.",
+  "Squash the top":
+    "Aplatis le haut",
+  "Fold the top edge down to the middle, pulling the top left corner out to the side and the top right corner up. Flatten them into triangles.":
+    "Rabats le bord du haut jusqu’au milieu en tirant le coin en haut à gauche sur le côté et le coin en haut à droite vers le haut. Aplatis-les en triangles.",
+  "Squash the bottom":
+    "Aplatis le bas",
+  "The same at the bottom, the other way round: the bottom right corner out to the side and the bottom left one down. Pin the middle to a stick and blow: it spins!":
+    "Pareil en bas, dans l’autre sens : le coin en bas à droite sur le côté et celui en bas à gauche vers le bas. Fixe le milieu sur un bâton et souffle : il tourne !",
 };

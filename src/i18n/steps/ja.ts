@@ -1010,4 +1010,26 @@ export const ja: Record<string, string> = {
     "もう一つの耳を折り出す",
   "And the other one. Blow gently into the hole at the bottom to puff up the rabbit, then open out the ears. Done!":
     "もう一つも折ります。下の穴にそっと息を吹きこんでうさぎをふくらませ、耳を開きます。できあがり！",
+  "Fold in half side to side, then unfold.":
+    "左右に半分に折って、開きます。",
+  "And top to bottom, then unfold.":
+    "上下にも半分に折って、開きます。",
+  "Fold the left edge to the middle crease.":
+    "左のふちを中心の折り目に合わせて折ります。",
+  "Fold the top to the middle":
+    "上を中心まで折る",
+  "Fold the top edge to the middle, then unfold.":
+    "上のふちを中心に合わせて折り、開きます。",
+  "Fold the bottom to the middle":
+    "下を中心まで折る",
+  "And the bottom edge, then unfold.":
+    "下のふちも折って、開きます。",
+  "Squash the top":
+    "上をつぶし折りする",
+  "Fold the top edge down to the middle, pulling the top left corner out to the side and the top right corner up. Flatten them into triangles.":
+    "上のふちを中心まで折り下げながら、左上の角を横に、右上の角を上に引き出し、三角形にしてつぶします。",
+  "Squash the bottom":
+    "下をつぶし折りする",
+  "The same at the bottom, the other way round: the bottom right corner out to the side and the bottom left one down. Pin the middle to a stick and blow: it spins!":
+    "下も逆向きに同じようにします。右下の角を横に、左下の角を下に引き出します。まん中を棒にとめて吹くと、くるくる回ります！",
 };
