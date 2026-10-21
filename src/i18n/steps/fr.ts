@@ -1032,4 +1032,42 @@ export const fr: Record<string, string> = {
     "Aplatis le bas",
   "The same at the bottom, the other way round: the bottom right corner out to the side and the bottom left one down. Pin the middle to a stick and blow: it spins!":
     "Pareil en bas, dans l’autre sens : le coin en bas à droite sur le côté et celui en bas à gauche vers le bas. Fixe le milieu sur un bâton et souffle : il tourne !",
+  "White side up. Fold in half side to side, then unfold.":
+    "Face blanche vers le haut, plie en deux d’un côté à l’autre, puis déplie.",
+  "And the other corners.":
+    "Et les autres coins.",
+  "Turn the paper back over.":
+    "Retourne de nouveau le papier.",
+  "Fold the left side to the middle":
+    "Plie le côté gauche jusqu’au milieu",
+  "Fold the left edge to the middle, then unfold.":
+    "Rabats le bord gauche jusqu’au milieu, puis déplie.",
+  "Fold the right side to the middle":
+    "Plie le côté droit jusqu’au milieu",
+  "And the bottom edge.":
+    "Et le bord du bas.",
+  "Fold the left edge to the middle again, and leave it there.":
+    "Rabats encore le bord gauche jusqu’au milieu et laisse-le.",
+  "Fold the top edge down to the middle, pulling both top corners out to the sides. Flatten them into triangles.":
+    "Rabats le bord du haut jusqu’au milieu en tirant les deux coins du haut sur les côtés. Aplatis-les en triangles.",
+  "Push the bottom edge up to the middle, letting the bottom corners come down below it, and flatten them.":
+    "Remonte le bord du bas jusqu’au milieu en laissant les coins du bas descendre en dessous, et aplatis-les.",
+  "Fold the top part back behind, along the middle. It’s a wide triangle now.":
+    "Rabats la partie du haut derrière, le long du milieu. C’est maintenant un large triangle.",
+  "Narrow the left side":
+    "Affine le côté gauche",
+  "Fold the top left flap in, from its top corner to the middle of its bottom edge.":
+    "Rabats vers l’intérieur le rabat en haut à gauche, de son coin du haut au milieu de son bord du bas.",
+  "Narrow the right side":
+    "Affine le côté droit",
+  "And the top right flap.":
+    "Et le rabat en haut à droite.",
+  "Fold out the wings":
+    "Déplie les ailes",
+  "Fold the top half back to the left, on a slant just beside the body. The wings spread out on both sides.":
+    "Rabats la moitié du dessus vers la gauche, en biais juste à côté du corps. Les ailes s’ouvrent des deux côtés.",
+  "Lift the wings":
+    "Relève les ailes",
+  "Lift the wings a little, folding the butterfly gently in half along its body. Done!":
+    "Relève un peu les ailes en pliant doucement le papillon en deux le long du corps. C’est fini !",
 };

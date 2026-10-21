@@ -36,12 +36,12 @@ Easiest first, grouped by what the engine already has. Each group can ship on it
 
 | Model | Status |
 |---|---|
-| Penguin, whale, crow, Christmas tree, water bomb, flapping bird, balloon rabbit, pinwheel | Done. The whale's fins are bent out in 3D: the diagrams swing them below the belly, which tears with rigid paper. The water bomb and balloon rabbit end flat, ready to blow up. |
+| Penguin, whale, crow, Christmas tree, water bomb, flapping bird, balloon rabbit, pinwheel, butterfly | Done. The whale's fins are bent out in 3D: the diagrams swing them below the belly, which tears with rigid paper. The water bomb and balloon rabbit end flat, ready to blow up. |
 | Dolphin | Blocked: origami.me's version needs a cut (step 11), and the engine has no scissors. Look for an uncut traditional dolphin, or cuts in the engine. |
 | Fish | Waiting: its folds are placed by eye ("this sets the tail size"), so exact reference points need choosing first. |
 | Pajarita | Waiting: built from swivel folds that move several flaps at once; needs a crease search like the fish base's. |
 | Fan | Waiting: the pleating works, but the fan's point is spreading into a half circle, which turns the pleats round one point and can't be done with rigid paper. Spreading it as a zigzag with `shape` didn't work either: bends on a stack of pleats whose creases lie on top of each other don't chain. Needs `shape` to handle that, or stays coming soon. |
-| Butterfly | Ready to do: its first eight steps are the pinwheel's windmill squash with both top corners pulled out sideways (the crease kinds are in `pinwheel.ts`; earlier searches failed only because the sheet wasn't creased at the middle, so a face centred on it slipped every region test). The butterfly isn't from the water bomb base, as its card says. |
+| (windmill squash) | Shared in `windmill.ts`: an end of the cupboard fold squashed with each corner pulled out sideways or along the sheet. The butterfly ends with its wings lifted in 3D instead of origami.me's last body fold, which tears with rigid paper. |
 | Frog, iris | Waiting. The lily's route to the frog base, run without folding each petal down between squashes, builds but passes deep through paper (0.17 at the third squash); with the petals folded down, they lie across the part the frog narrows into legs. Next try: origami.me's own route (square base, four squashes, four petal folds), which needs a crease search for the squash like the windmill base. The iris also needs a swivel fold on each flap. |
 
 ## Done when

@@ -66,7 +66,7 @@ export const es: Messages = {
     fish: { title: 'Pez', blurb: 'Un pez muy fácil, todo triángulos.' },
     dolphin: { title: 'Delfín', blurb: 'Un delfín tradicional, en pleno salto.' },
     crow: { title: 'Cuervo', blurb: 'Un cuervo tradicional de pico afilado.' },
-    butterfly: { title: 'Mariposa', blurb: 'Una mariposa fácil desde la base de bomba de agua.' },
+    butterfly: { title: 'Mariposa', blurb: 'Alas desplegadas desde un cuadrado aplastado, levantadas para volar.' },
     pajarita: { title: 'Pajarita', blurb: 'El pajarito de papel de España, desde un cuadrado con las esquinas al centro.' },
     iris: { title: 'Iris', blurb: 'Tres pétalos arriba y tres abajo, desde la base de rana.' },
     pinwheel: { title: 'Molinillo', blurb: 'Un molino de cuatro aspas. Clávalo en un palo y sopla.' },

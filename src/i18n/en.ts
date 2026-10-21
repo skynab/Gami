@@ -68,7 +68,7 @@ export const en = {
     fish: { title: 'Fish', blurb: 'A very easy fish, all triangles.' },
     dolphin: { title: 'Dolphin', blurb: 'A traditional dolphin, leaping.' },
     crow: { title: 'Crow', blurb: 'A traditional crow with a sharp beak.' },
-    butterfly: { title: 'Butterfly', blurb: 'An easy butterfly from the water bomb base.' },
+    butterfly: { title: 'Butterfly', blurb: 'Wings folded out from a squashed square, lifted for flight.' },
     pajarita: { title: 'Pajarita', blurb: 'The little paper bird of Spain, from a square with its corners folded in.' },
     iris: { title: 'Iris', blurb: 'Three petals up, three down, from the frog base.' },
     pinwheel: { title: 'Pinwheel', blurb: 'A windmill with four sails. Pin it to a stick and blow.' },

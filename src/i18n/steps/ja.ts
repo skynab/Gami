@@ -1032,4 +1032,42 @@ export const ja: Record<string, string> = {
     "下をつぶし折りする",
   "The same at the bottom, the other way round: the bottom right corner out to the side and the bottom left one down. Pin the middle to a stick and blow: it spins!":
     "下も逆向きに同じようにします。右下の角を横に、左下の角を下に引き出します。まん中を棒にとめて吹くと、くるくる回ります！",
+  "White side up. Fold in half side to side, then unfold.":
+    "白い面を上にして、左右に半分に折り、開きます。",
+  "And the other corners.":
+    "反対の角どうしも折ります。",
+  "Turn the paper back over.":
+    "紙をもう一度裏返します。",
+  "Fold the left side to the middle":
+    "左側を中心まで折る",
+  "Fold the left edge to the middle, then unfold.":
+    "左のふちを中心に合わせて折り、開きます。",
+  "Fold the right side to the middle":
+    "右側を中心まで折る",
+  "And the bottom edge.":
+    "下のふちも同じようにします。",
+  "Fold the left edge to the middle again, and leave it there.":
+    "もう一度左のふちを中心に合わせて折り、そのままにします。",
+  "Fold the top edge down to the middle, pulling both top corners out to the sides. Flatten them into triangles.":
+    "上のふちを中心まで折り下げながら、上の両方の角を横に引き出し、三角形にしてつぶします。",
+  "Push the bottom edge up to the middle, letting the bottom corners come down below it, and flatten them.":
+    "下のふちを中心まで押し上げ、下の角がその下に出てくるようにして、つぶします。",
+  "Fold the top part back behind, along the middle. It’s a wide triangle now.":
+    "上の部分を中心の線でうしろに折ります。横に広い三角形になります。",
+  "Narrow the left side":
+    "左側を細くする",
+  "Fold the top left flap in, from its top corner to the middle of its bottom edge.":
+    "左上のひだを、上の角から下のふちのまん中までの線で内側に折ります。",
+  "Narrow the right side":
+    "右側を細くする",
+  "And the top right flap.":
+    "右上のひだも折ります。",
+  "Fold out the wings":
+    "羽を折り出す",
+  "Fold the top half back to the left, on a slant just beside the body. The wings spread out on both sides.":
+    "上の半分を、胴のすぐ横のななめの線で左に折りもどします。羽が両側に広がります。",
+  "Lift the wings":
+    "羽を持ち上げる",
+  "Lift the wings a little, folding the butterfly gently in half along its body. Done!":
+    "胴にそってちょうをそっと半分に折るように、羽を少し持ち上げます。できあがり！",
 };

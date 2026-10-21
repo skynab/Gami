@@ -1032,4 +1032,42 @@ export const es: Record<string, string> = {
     "Aplasta la parte de abajo",
   "The same at the bottom, the other way round: the bottom right corner out to the side and the bottom left one down. Pin the middle to a stick and blow: it spins!":
     "Lo mismo abajo, al revés: la esquina de abajo a la derecha hacia el lado y la de abajo a la izquierda hacia abajo. Clava el centro en un palo y sopla: ¡gira!",
+  "White side up. Fold in half side to side, then unfold.":
+    "Con el lado blanco hacia arriba, dobla por la mitad de lado a lado y desdobla.",
+  "And the other corners.":
+    "Y las otras esquinas.",
+  "Turn the paper back over.":
+    "Vuelve a dar la vuelta al papel.",
+  "Fold the left side to the middle":
+    "Dobla el lado izquierdo hasta el centro",
+  "Fold the left edge to the middle, then unfold.":
+    "Dobla el borde izquierdo hasta el centro y desdobla.",
+  "Fold the right side to the middle":
+    "Dobla el lado derecho hasta el centro",
+  "And the bottom edge.":
+    "Y el borde de abajo.",
+  "Fold the left edge to the middle again, and leave it there.":
+    "Vuelve a doblar el borde izquierdo hasta el centro y déjalo así.",
+  "Fold the top edge down to the middle, pulling both top corners out to the sides. Flatten them into triangles.":
+    "Baja el borde de arriba hasta el centro, sacando las dos esquinas de arriba hacia los lados. Aplánalas en triángulos.",
+  "Push the bottom edge up to the middle, letting the bottom corners come down below it, and flatten them.":
+    "Sube el borde de abajo hasta el centro, dejando que las esquinas de abajo salgan por debajo, y aplánalas.",
+  "Fold the top part back behind, along the middle. It’s a wide triangle now.":
+    "Dobla la parte de arriba hacia atrás por el centro. Ahora es un triángulo ancho.",
+  "Narrow the left side":
+    "Estrecha el lado izquierdo",
+  "Fold the top left flap in, from its top corner to the middle of its bottom edge.":
+    "Dobla hacia dentro la solapa de arriba a la izquierda, desde su esquina de arriba hasta la mitad de su borde de abajo.",
+  "Narrow the right side":
+    "Estrecha el lado derecho",
+  "And the top right flap.":
+    "Y la solapa de arriba a la derecha.",
+  "Fold out the wings":
+    "Despliega las alas",
+  "Fold the top half back to the left, on a slant just beside the body. The wings spread out on both sides.":
+    "Dobla la mitad de arriba otra vez hacia la izquierda, en diagonal justo al lado del cuerpo. Las alas se abren a ambos lados.",
+  "Lift the wings":
+    "Levanta las alas",
+  "Lift the wings a little, folding the butterfly gently in half along its body. Done!":
+    "Levanta un poco las alas, doblando la mariposa suavemente por la mitad a lo largo del cuerpo. ¡Listo!",
 };

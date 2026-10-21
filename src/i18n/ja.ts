@@ -66,7 +66,7 @@ export const ja: Messages = {
     fish: { title: 'さかな', blurb: '三角形でできた、とてもかんたんなさかな。' },
     dolphin: { title: 'イルカ', blurb: 'とびはねる伝承のイルカ。' },
     crow: { title: 'カラス', blurb: 'くちばしのとがった伝承のカラス。' },
-    butterfly: { title: 'ちょう', blurb: '風船の基本形から作るかんたんなちょう。' },
+    butterfly: { title: 'ちょう', blurb: 'つぶし折りした正方形から羽を広げ、飛ぶように持ち上げます。' },
     pajarita: { title: 'パハリータ', blurb: 'スペインの小さな紙の鳥。角を中心に折った正方形から。' },
     iris: { title: 'あやめ', blurb: 'かえるの基本形から、上と下に花びら。' },
     pinwheel: { title: 'かざぐるま', blurb: '4枚羽根の風車。棒にとめて吹いてみよう。' },
