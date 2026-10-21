@@ -58,6 +58,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'penguin', title: 'Penguin', blurb: 'A very easy penguin with a white front.', difficulty: 1, category: 'animal', steps: 12, minutes: 3, sheets: 1 },
   { id: 'whale', title: 'Whale', blurb: 'A fish base folded into a whale, with fins and a flicked-up tail.', difficulty: 2, category: 'animal', steps: 22, minutes: 8, sheets: 1 },
   { id: 'crow', title: 'Crow', blurb: 'A traditional crow with a sharp beak.', difficulty: 3, category: 'animal', steps: 26, minutes: 12, sheets: 1 },
+  { id: 'christmas-tree', title: 'Christmas tree', blurb: 'A fir tree in a white pot, nice on a card.', difficulty: 1, category: 'object', steps: 11, minutes: 5, sheets: 1 },
   { id: 'sword', title: 'Sword', blurb: 'A knight’s sword with a crossguard, from one long strip.', difficulty: 2, category: 'toy', steps: 14, minutes: 8, sheets: 1 },
   // Coming soon: listed, with no steps yet.
   { id: 'boat', title: 'Boat', blurb: 'The classic paper boat. It really floats, for a while.', difficulty: 2, category: 'object', minutes: 6, sheets: 1 },
@@ -73,7 +74,6 @@ export const MODELS: ModelInfo[] = [
   { id: 'pinwheel', title: 'Pinwheel', blurb: 'A windmill with four sails. Pin it to a stick and blow.', difficulty: 2, category: 'toy', minutes: 6, sheets: 1 },
   { id: 'fan', title: 'Fan', blurb: 'Pleat a sheet back and forth, then pinch the end.', difficulty: 1, category: 'object', minutes: 3, sheets: 1 },
   { id: 'masu-box', title: 'Masu box', blurb: 'A square box with a lid, from two sheets.', difficulty: 2, category: 'object', minutes: 12, sheets: 2 },
-  { id: 'christmas-tree', title: 'Christmas tree', blurb: 'A layered tree, nice on a card.', difficulty: 2, category: 'object', minutes: 8, sheets: 1 },
   // A lesson rather than a model, kept last: geometry by folding.
   { id: 'folding-geometry', title: 'Geometry by folding', blurb: 'The rules of mathematical folding, and an angle split in three.', difficulty: 1, category: 'math', steps: 33, minutes: 15, sheets: 1 },
 ];

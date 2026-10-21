@@ -950,4 +950,20 @@ export const fr: Record<string, string> = {
     "Fais la tête",
   "Push the top point down between its layers so it points forwards, for the head and beak. Your crow is done!":
     "Pousse la pointe du haut entre ses couches pour qu’elle pointe vers l’avant : la tête et le bec. Ton corbeau est fini !",
+  "Fold the top left edge to the middle crease.":
+    "Rabats le bord en haut à gauche sur le pli du milieu.",
+  "And the top right edge. It’s a kite.":
+    "Et le bord en haut à droite. C’est un cerf-volant.",
+  "Fold the bottom corner up to the top corner. It’s all green now: a pentagon.":
+    "Remonte le coin du bas jusqu’au coin du haut. Tout est vert maintenant : un pentagone.",
+  "Fold the top left edge to the middle again.":
+    "Rabats encore le bord en haut à gauche sur le milieu.",
+  "And the top right edge.":
+    "Et le bord en haut à droite.",
+  "Fold the front layer’s point back down, level with where the side folds meet in the middle. It hangs below the tree.":
+    "Redescends la pointe de la couche de devant, au niveau où les plis des côtés se rejoignent au milieu. Elle pend sous le sapin.",
+  "Fold the bottom point up to the bottom of the tree, to square off the pot.":
+    "Remonte la pointe du bas jusqu’au bas du sapin, pour former le pot.",
+  "Turn it over. Your tree is done!":
+    "Retourne-le. Ton sapin est fini !",
 };

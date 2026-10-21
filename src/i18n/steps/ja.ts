@@ -950,4 +950,20 @@ export const ja: Record<string, string> = {
     "頭を作る",
   "Push the top point down between its layers so it points forwards, for the head and beak. Your crow is done!":
     "上の先を重なりのあいだに押しこんで前に向け、頭とくちばしにします。カラスのできあがり！",
+  "Fold the top left edge to the middle crease.":
+    "左上のふちを中心の折り目に合わせて折ります。",
+  "And the top right edge. It’s a kite.":
+    "右上のふちも折ります。たこの形になります。",
+  "Fold the bottom corner up to the top corner. It’s all green now: a pentagon.":
+    "下の角を上の角まで折り上げます。全部緑の五角形になります。",
+  "Fold the top left edge to the middle again.":
+    "もう一度、左上のふちを中心に合わせて折ります。",
+  "And the top right edge.":
+    "右上のふちも折ります。",
+  "Fold the front layer’s point back down, level with where the side folds meet in the middle. It hangs below the tree.":
+    "手前の一枚の先を、両側の折り目が中心で出会う高さで折り下げます。木の下にたれ下がります。",
+  "Fold the bottom point up to the bottom of the tree, to square off the pot.":
+    "下の先を木の下のはしまで折り上げて、植木ばちの形にします。",
+  "Turn it over. Your tree is done!":
+    "裏返します。ツリーのできあがり！",
 };

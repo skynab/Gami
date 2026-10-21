@@ -72,7 +72,7 @@ export const es: Messages = {
     pinwheel: { title: 'Molinillo', blurb: 'Un molino de cuatro aspas. Clávalo en un palo y sopla.' },
     fan: { title: 'Abanico', blurb: 'Pliega una hoja adelante y atrás y junta un extremo.' },
     'masu-box': { title: 'Caja masu', blurb: 'Una caja cuadrada con tapa, con dos hojas.' },
-    'christmas-tree': { title: 'Árbol de Navidad', blurb: 'Un árbol en capas, bonito en una tarjeta.' },
+    'christmas-tree': { title: 'Árbol de Navidad', blurb: 'Un abeto en una maceta blanca, bonito en una tarjeta.' },
     heart: { title: 'Corazón', blurb: 'Un corazón sencillo, ideal para tarjetas.' },
     cicada: { title: 'Cigarra', blurb: 'Una cigarra tradicional japonesa, con las alas dobladas desde un rombo.' },
     'jumping-frog': { title: 'Rana saltarina', blurb: 'Con medio cuadrado de papel. Pulsa su lomo y verás cómo salta.' },

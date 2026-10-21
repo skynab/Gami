@@ -72,7 +72,7 @@ export const fr: Messages = {
     pinwheel: { title: 'Moulin à vent', blurb: 'Un moulin à quatre ailes. Pique-le sur un bâton et souffle.' },
     fan: { title: 'Éventail', blurb: 'Plisse une feuille en accordéon, puis pince un bout.' },
     'masu-box': { title: 'Boîte masu', blurb: 'Une boîte carrée avec couvercle, en deux feuilles.' },
-    'christmas-tree': { title: 'Sapin de Noël', blurb: 'Un sapin en étages, joli sur une carte.' },
+    'christmas-tree': { title: 'Sapin de Noël', blurb: 'Un sapin dans un pot blanc, joli sur une carte.' },
     heart: { title: 'Cœur', blurb: 'Un cœur tout simple, idéal pour les cartes.' },
     cicada: { title: 'Cigale', blurb: 'Une cigale traditionnelle japonaise, ses ailes pliées à partir d’un losange.' },
     'jumping-frog': { title: 'Grenouille sauteuse', blurb: 'Avec une demi-feuille carrée. Appuyez sur son dos pour la faire sauter.' },

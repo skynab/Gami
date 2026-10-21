@@ -72,7 +72,7 @@ export const ja: Messages = {
     pinwheel: { title: 'かざぐるま', blurb: '4枚羽根の風車。棒にとめて吹いてみよう。' },
     fan: { title: 'せんす', blurb: 'じゃばらに折って、はしをまとめるだけ。' },
     'masu-box': { title: 'ます', blurb: '2枚で作る、ふたつきの四角い箱。' },
-    'christmas-tree': { title: 'クリスマスツリー', blurb: '段になった木。カードにぴったり。' },
+    'christmas-tree': { title: 'クリスマスツリー', blurb: '白い植木ばちに入ったもみの木。カードにぴったり。' },
     heart: { title: 'ハート', blurb: 'カードに添えたい、シンプルなハート。' },
     cicada: { title: 'せみ', blurb: 'ひし形から羽を折り出す、日本の伝統的なせみ。' },
     'jumping-frog': { title: 'ぴょんぴょんガエル', blurb: '長方形の紙で。背中を押すと跳びはねます。' },
