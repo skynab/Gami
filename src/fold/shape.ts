@@ -48,7 +48,7 @@ export function shape(frame: FoldFrame, bends: Bend[]): FoldFrame {
   );
   bends.forEach((b, k) => {
     if (!moves[k].some(Boolean)) throw new FoldError('Nothing is on the lifting side of that line.');
-    if (b.layers !== undefined || b.only) checkNoTear(pieces.map((p, i) => ({ ...p, moves: moves[k][i] })), b.line);
+    if (b.layers !== undefined || b.only) checkNoTear(pieces.map((p, i) => ({ ...p, moves: moves[k][i] })), b.line, frame.cuts);
   });
 
   // A piece's place: each bend it's beyond turns it, from the one turning the least paper (furthest out) to
@@ -66,7 +66,9 @@ export function shape(frame: FoldFrame, bends: Bend[]): FoldFrame {
   const vertices_coords: Vec3[] = [];
   const faces_vertices = pieces.map((p, i) =>
     p.paper.map((q, j) => {
-      const key = `${q[0].toFixed(7)},${q[1].toFixed(7)}`;
+      // The same paper point in the same place before shaping (cut paper can have one point in two places).
+      const [x, z] = p.world[j];
+      const key = `${q[0].toFixed(7)},${q[1].toFixed(7)},${Math.round(x * 1e6)},${Math.round(z * 1e6)}`;
       const at = place(i, p.world[j]);
       let v = index.get(key);
       if (v === undefined) {

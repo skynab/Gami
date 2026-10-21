@@ -188,3 +188,38 @@ export function sharedSegment(p: Vec2[], q: Vec2[]): [Vec2, Vec2] | null {
   }
   return null;
 }
+
+/** A cut through the paper: a segment on the sheet. Paper either side of it isn't joined there. */
+export type Cut = [Vec2, Vec2];
+
+/**
+ * Whether paper meeting along the segment a–b on the sheet is joined there: some of it isn't covered by cuts
+ * lying along the same line. A partly cut edge stays joined through the rest.
+ */
+export function joinedAlong(a: Vec2, b: Vec2, cuts: Cut[] | undefined, tol = 1e-7): boolean {
+  if (!cuts?.length) return true;
+  const d = sub(b, a);
+  const len = Math.hypot(d[0], d[1]);
+  if (len < tol) return false;
+  const u = scale(d, 1 / len);
+  const covered: [number, number][] = [];
+  for (const [c0, c1] of cuts) {
+    if (Math.abs(cross(u, sub(c0, a))) > tol || Math.abs(cross(u, sub(c1, a))) > tol) continue;
+    const t0 = dot(sub(c0, a), u);
+    const t1 = dot(sub(c1, a), u);
+    covered.push([Math.max(0, Math.min(t0, t1)), Math.min(len, Math.max(t0, t1))]);
+  }
+  covered.sort((p, q) => p[0] - q[0]);
+  let reach = 0;
+  for (const [lo, hi] of covered) {
+    if (lo > reach + tol) return true;
+    reach = Math.max(reach, hi);
+  }
+  return reach < len - tol;
+}
+
+/** The stretch two faces share on the sheet, if they're joined along it (see `sharedSegment` and `joinedAlong`). */
+export function joinedSegment(p: Vec2[], q: Vec2[], cuts: Cut[] | undefined): [Vec2, Vec2] | null {
+  const shared = sharedSegment(p, q);
+  return shared && joinedAlong(shared[0], shared[1], cuts) ? shared : null;
+}

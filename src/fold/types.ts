@@ -26,9 +26,14 @@ export interface FoldFrame {
   faces_parent?: number[];
   /** Stacking order of faces that lie flat on top of each other. Higher is on top. Defaults to 0. */
   faces_layer?: number[];
+  /**
+   * Scissor cuts made so far, as segments on the sheet. Faces meeting along a cut aren't joined there, though
+   * they may share its ends. Kept from frame to frame once made.
+   */
+  cuts?: [Vec2, Vec2][];
 }
 
-export type StepKind = 'fold' | 'unfold' | 'turn-over' | 'rotate' | 'squash' | 'reverse' | 'petal' | 'sink' | 'assemble' | 'pose' | 'draw';
+export type StepKind = 'fold' | 'unfold' | 'turn-over' | 'rotate' | 'squash' | 'reverse' | 'petal' | 'sink' | 'assemble' | 'pose' | 'draw' | 'cut';
 
 /**
  * A line or a filled shape drawn on the paper, as points on the unfolded sheet and the side of the paper it's

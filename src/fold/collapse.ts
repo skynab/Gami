@@ -1,5 +1,5 @@
 import { FoldError, fromFlat, toFlat, type FlatFace } from './fold';
-import { frontUp, overlapArea, sharedSegment, sideOf, split, sub, type Line } from './geometry2d';
+import { frontUp, joinedSegment, overlapArea, sideOf, split, sub, type Cut, type Line } from './geometry2d';
 import { LayerError, solveLayers, type LayerEdge } from './layers';
 import type { FoldFrame, Vec2 } from './types';
 
@@ -48,7 +48,7 @@ export function collapse(frame: FoldFrame, { creases, anchor, under }: CollapseO
     });
   }
   const old = faces.map((f) => fromFace(f.paper, f.world));
-  const edges = sharedEdges(faces);
+  const edges = sharedEdges(faces, frame.cuts);
 
   // Which crease, if any, each edge is on.
   const change = edges.map((e) => {
@@ -166,11 +166,11 @@ export function collapse(frame: FoldFrame, { creases, anchor, under }: CollapseO
 }
 
 /** Pairs of faces joined along an edge of the sheet, with the shared stretch in sheet coordinates. */
-function sharedEdges(faces: FlatFace[]): { f: number; g: number; pa: Vec2; pb: Vec2 }[] {
+function sharedEdges(faces: FlatFace[], cuts?: Cut[]): { f: number; g: number; pa: Vec2; pb: Vec2 }[] {
   const out: { f: number; g: number; pa: Vec2; pb: Vec2 }[] = [];
   for (let f = 0; f < faces.length; f++) {
     for (let g = f + 1; g < faces.length; g++) {
-      const shared = sharedSegment(faces[f].paper, faces[g].paper);
+      const shared = joinedSegment(faces[f].paper, faces[g].paper, cuts);
       if (shared) out.push({ f, g, pa: shared[0], pb: shared[1] });
     }
   }

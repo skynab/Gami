@@ -1,4 +1,5 @@
 import { collapse, type CreaseKind } from './collapse';
+import { cut } from './cut';
 import { fold, FoldError, placeLike, rotate, toFlat, turnOver, unfoldStep, type FoldKind } from './fold';
 import { inside, locate } from './select';
 export { locate } from './select';
@@ -147,7 +148,8 @@ export class Recipe {
     }
     const { frame, via } = unfoldStep(this.frames(), to);
     this.push({ title: step.title ?? 'Unfold', text: step.text, kind: 'unfold' }, frame, { op: 'unfold', ...(step.to !== undefined && { to }) });
-    if (via) this.steps.at(-1)!.via = via;
+    const cuts = this.steps.at(-1)!.frame.cuts;
+    if (via) this.steps.at(-1)!.via = cuts ? via.map((f) => (f.cuts ? f : { ...f, cuts })) : via;
     return this;
   }
 
@@ -339,6 +341,27 @@ export class Recipe {
     return this;
   }
 
+  /**
+   * Cuts with scissors from one point to another, through every layer the cut crosses (or the top `layers`, or
+   * the faces `only` picks, by their centre on the sheet). Paper either side of a cut is no longer joined there.
+   */
+  cut(from: At, to: At, step: { title: string; text?: string; layers?: number; only?: (centre: Vec2) => boolean }): this {
+    const test = step.only && recorder(step.only);
+    try {
+      const frame = cut(this.current, { from: this.where(from), to: this.where(to), layers: step.layers, only: test });
+      return this.push({ title: step.title, text: step.text, kind: 'cut' }, frame, {
+        op: 'cut',
+        from,
+        to,
+        ...(step.layers !== undefined && { layers: step.layers }),
+        ...(test && { only: test.faces() }),
+      });
+    } catch (e) {
+      if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
+      throw e;
+    }
+  }
+
   turnOver(text = 'Flip the paper over from left to right.'): this {
     return this.push({ title: 'Turn over', text, kind: 'turn-over' }, turnOver(this.current), { op: 'turnOver' });
   }
@@ -371,6 +394,9 @@ export class Recipe {
 
   private push({ title, text, kind }: Omit<Step, 'frame' | 'op'>, frame: FoldFrame, op: Op): this {
     this.shaping = undefined;
+    // Cuts stay in the paper from step to step (a fresh sheet has none).
+    const cuts = this.current.cuts;
+    if (cuts?.length && !frame.cuts && op.op !== 'newSheet') frame = { ...frame, cuts };
     const section = this.sectionName;
     this.sectionName = undefined;
     this.steps.push({ title, ...(text && { text }), kind, ...(section && { section }), frame, op });
