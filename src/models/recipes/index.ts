@@ -1,4 +1,5 @@
 import type { OrigamiModel } from '../../fold/types';
+import { findModel } from '../../gallery/catalog';
 import { folds as basics } from './basics';
 import { balloonRabbit } from './balloon-rabbit';
 import { boomerang } from './boomerang';
@@ -41,6 +42,14 @@ import { whale } from './whale';
 
 /**
  * Every built-in model, as code. `npm run models` turns these into public/models/<id>.fold and <id>.svg,
- * which the site loads. Not bundled into the site itself.
+ * which the site loads. Not bundled into the site itself. Each carries its gallery details from the catalog,
+ * so a copy opened in the Studio or shared keeps them.
  */
-export const RECIPES: (() => OrigamiModel)[] = [basics, foldsLesson, basesLesson, paperPlane, glider, bulldogDart, navyPlane, kingBee, dogFace, catFace, cup, samuraiHelmet, fortuneTeller, heart, cicada, jumpingFrog, ninjaStar, tulip, fox, crane, lily, swan, penguin, whale, crow, christmasTree, waterbomb, balloonRabbit, flappingBird, pinwheel, pajarita, butterfly, frog, dolphin, seal, masuBox, sword, boomerang, foldingGeometry];
+export const RECIPES: (() => OrigamiModel)[] = ([basics, foldsLesson, basesLesson, paperPlane, glider, bulldogDart, navyPlane, kingBee, dogFace, catFace, cup, samuraiHelmet, fortuneTeller, heart, cicada, jumpingFrog, ninjaStar, tulip, fox, crane, lily, swan, penguin, whale, crow, christmasTree, waterbomb, balloonRabbit, flappingBird, pinwheel, pajarita, butterfly, frog, dolphin, seal, masuBox, sword, boomerang, foldingGeometry] as (() => OrigamiModel)[]).map((make) => () => withAbout(make()));
+
+function withAbout(model: OrigamiModel): OrigamiModel {
+  const info = findModel(model.id);
+  if (!info) return model;
+  const { blurb, difficulty, category, minutes } = info;
+  return { ...model, about: { blurb, difficulty, category, minutes } };
+}

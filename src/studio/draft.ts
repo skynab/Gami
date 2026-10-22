@@ -46,7 +46,7 @@ interface DraftState {
   /** Drops every step from step `index` (0-based) on. */
   removeFrom(index: number): void;
   editStep(index: number, patch: Partial<Pick<Step, 'title' | 'text'>>): void;
-  setInfo(patch: Partial<Pick<OrigamiModel, 'id' | 'title'>>): void;
+  setInfo(patch: Partial<Pick<OrigamiModel, 'id' | 'title' | 'about' | 'card'>>): void;
   /** Changes the sheets (their colours, sizes, how many), laid out in a row. Only before the first step. */
   setSheets(sheets: Sheet[]): void;
   /** Opens a model from a file: it's new to the cloud. */

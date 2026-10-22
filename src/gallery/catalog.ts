@@ -3,9 +3,9 @@
  * src/models/recipes. Models without `steps` are listed as coming soon.
  */
 
-/** `lesson`: lessons rather than models (the basics, folds, bases and geometry), badged as such on their cards. */
-export type Category = 'lesson' | 'animal' | 'object' | 'toy' | 'modular' | 'flower';
-export type Difficulty = 1 | 2 | 3 | 4 | 5;
+import type { Category, Difficulty, Tool } from '../fold/types';
+export type { Category, Difficulty, Tool } from '../fold/types';
+
 export type Level = 'easy' | 'medium' | 'hard';
 
 export interface ModelInfo {
@@ -22,8 +22,6 @@ export interface ModelInfo {
   /** Tools beyond paper, shown on the card so nobody starts one without them: scissors for a cut, a pen for drawing. */
   needs?: Tool[];
 }
-
-export type Tool = 'scissors' | 'pen';
 
 export const CATEGORIES: { id: Category; label: string }[] = [
   { id: 'lesson', label: 'Lessons' },

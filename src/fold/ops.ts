@@ -6,7 +6,7 @@ import { place } from './place';
 import { anchorFor, centre, inside, locate, smallerSideMoves, topLayers } from './select';
 import { curl, radial, reparent, shape, type Bend } from './shape';
 import { sheetOf } from './sheets';
-import type { FoldFrame, Mark, OrigamiModel, Step, StepKind, Vec2 } from './types';
+import type { FoldFrame, Mark, OrigamiModel, Step, StepKind, Tool, Vec2 } from './types';
 
 /**
  * Fold operations: how each step was made, as plain data, so a model can be folded again from the start
@@ -337,9 +337,23 @@ export function opKind(op: Op): StepKind {
       return 'draw';
     case 'cut':
       return 'cut';
-    case 'together':
-      return op.ops.length ? opKind(op.ops[op.ops.length - 1]) : 'fold';
+    case 'together': {
+      // As its last fold or unfold, so a plain Unfold finds a fold followed by a turn; else as its last part.
+      const parts = op.ops.map(opKind);
+      return parts.findLast((k) => k === 'fold' || k === 'unfold') ?? parts[parts.length - 1] ?? 'fold';
+    }
   }
+}
+
+/** The tools beyond paper that steps need: scissors for a cut, a pen for drawing, parts of a `together` included. */
+export function toolsNeeded(steps: Step[]): Tool[] {
+  const kinds = new Set<StepKind>();
+  const add = (op: Op): void => void (op.op === 'together' ? op.ops.forEach(add) : kinds.add(opKind(op)));
+  for (const s of steps) {
+    if (s.op) add(s.op);
+    else if (s.kind) kinds.add(s.kind);
+  }
+  return [...(kinds.has('cut') ? (['scissors'] as const) : []), ...(kinds.has('draw') ? (['pen'] as const) : [])];
 }
 
 /** What a step does, for deciding what an Unfold opens: from its operation if it has one, else its label. */

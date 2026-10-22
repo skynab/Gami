@@ -1,5 +1,5 @@
 import { OPS_VERSION, parseMarks, parseOp, type Op } from './ops';
-import { STEP_KINDS, type FoldFrame, type Mark, type OrigamiModel, type Step, type StepKind } from './types';
+import { CATEGORIES, DIFFICULTIES, STEP_KINDS, type About, type FoldFrame, type Mark, type OrigamiModel, type Step, type StepKind } from './types';
 
 /**
  * Reading and writing .fold files (https://github.com/edemaine/fold). The start of the model is the file's
@@ -12,6 +12,9 @@ import { STEP_KINDS, type FoldFrame, type Mark, type OrigamiModel, type Step, ty
  * What a step draws on the paper is part of the step, like its frame (`gami:marks`: lines and fills as points
  * on the sheet, and the side they're on). It doesn't depend on the operations, so a file whose operations
  * can't be read still shows its drawings.
+ *
+ * How the gallery describes the model (`gami:about`: its blurb, difficulty, category, minutes and how its card
+ * shows it) travels with it too. Anything there that isn't understood is left out.
  */
 
 interface FoldFileFrame {
@@ -42,6 +45,7 @@ export interface FoldFile extends FoldFileFrame {
   'gami:sheets': OrigamiModel['sheets'];
   /** Files from before multi-sheet models had a single sheet. */
   'gami:sheet'?: OrigamiModel['sheets'][number];
+  'gami:about'?: About & { card?: OrigamiModel['card'] };
   /** The version of the operations in `gami:op`, when any step has one. */
   'gami:ops'?: number;
   file_frames: FoldFileFrame[];
@@ -55,6 +59,7 @@ export function toFoldFile(model: OrigamiModel): FoldFile {
     file_classes: ['diagrams'],
     'gami:id': model.id,
     'gami:sheets': model.sheets,
+    ...((model.about || model.card) && { 'gami:about': { ...model.about, ...(model.card && { card: model.card }) } }),
     ...(model.steps.some((s) => s.op) && { 'gami:ops': OPS_VERSION }),
     ...writeFrame(model.start),
     file_frames: model.steps.map((s) => ({
@@ -101,6 +106,7 @@ export function fromFoldFile(file: FoldFile, warnings: string[] = []): OrigamiMo
   return {
     id: file['gami:id'],
     title: file.file_title,
+    ...aboutOf(file['gami:about']),
     sheets,
     start: readFrame(file),
     steps: file.file_frames.map(
@@ -115,6 +121,22 @@ export function fromFoldFile(file: FoldFile, warnings: string[] = []): OrigamiMo
         ...opOf(f, k),
       }),
     ),
+  };
+}
+
+/** The gallery details in a file, keeping only what's well formed. */
+function aboutOf(x: unknown): Pick<OrigamiModel, 'about' | 'card'> {
+  if (typeof x !== 'object' || x === null) return {};
+  const o = x as Record<string, unknown>;
+  const about: About = {
+    ...(typeof o.blurb === 'string' && o.blurb.trim() && { blurb: o.blurb.slice(0, 500) }),
+    ...(DIFFICULTIES.includes(o.difficulty as About['difficulty'] & number) && { difficulty: o.difficulty as About['difficulty'] }),
+    ...(CATEGORIES.includes(o.category as About['category'] & string) && { category: o.category as About['category'] }),
+    ...(typeof o.minutes === 'number' && o.minutes > 0 && o.minutes <= 600 && { minutes: Math.round(o.minutes) }),
+  };
+  return {
+    ...(Object.keys(about).length && { about }),
+    ...((o.card === 'flat' || o.card === 'finished') && { card: o.card }),
   };
 }
 

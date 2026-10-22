@@ -1061,6 +1061,47 @@ kbd {
   stroke-width: 3px;
 }
 
+.fold-editor .mark {
+  fill: none;
+  stroke: #222;
+  stroke-width: 1.5px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.fold-editor .mark.fill {
+  fill: #222;
+}
+
+.fold-editor .mark.planned {
+  stroke: var(--accent);
+  stroke-width: 2.5px;
+}
+
+.fold-editor .mark.fill.planned {
+  fill: var(--accent);
+  fill-opacity: 0.5;
+}
+
+.fold-editor .face-picked {
+  fill: var(--accent);
+  fill-opacity: 0.3;
+  stroke: var(--accent);
+  stroke-width: 2px;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.fold-editor .anchor {
+  fill: var(--fg);
+  stroke: var(--bg);
+  stroke-width: 2px;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
 .fold-editor .snap {
   fill: var(--bg);
   stroke: var(--fg);
@@ -1162,6 +1203,34 @@ kbd {
   align-self: flex-start;
 }
 
+.studio-steps .about {
+  margin: 16px 0 0;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.studio-steps .about summary {
+  color: var(--muted);
+  font-size: 0.85em;
+  cursor: pointer;
+}
+
+.studio-steps .about[open] summary {
+  margin-block-end: 6px;
+}
+
+.about-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.about-row input,
+.about-row select {
+  min-width: 0;
+}
+
 .studio-steps ol {
   display: flex;
   flex-direction: column;
@@ -1254,6 +1323,7 @@ kbd {
   align-items: center;
   gap: 6px;
   margin: 0 6px;
+  white-space: nowrap;
 }
 
 .studio input:not([type]),

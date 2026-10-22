@@ -4,11 +4,10 @@ import { Link } from 'react-router';
 import { PaperIcon, PenIcon, ScissorsIcon } from '../app/icons';
 import { modelUrl } from '../models';
 import { readProgress } from '../state/progress';
-import { levelOf, type ModelInfo } from './catalog';
+import { levelOf, type Difficulty, type ModelInfo, type Tool } from './catalog';
 
 export function ModelCard({ model }: { model: ModelInfo }) {
   const { t } = useTranslation();
-  const level = t(`levels.${levelOf(model.difficulty)}`);
   const progress = model.steps ? readProgress(model.id) : null;
   const lesson = model.category === 'lesson';
   // The looping preview loads the first time the card is hovered or focused, and plays while it is.
@@ -51,33 +50,48 @@ export function ModelCard({ model }: { model: ModelInfo }) {
           <img src={modelUrl(model.id, 'preview.svg')} alt="" className={preview === 'on' ? 'card-preview playing' : 'card-preview'} />
         )}
         {badge && <span className={model.steps ? 'card-badge' : 'card-badge soon'}>{badge}</span>}
-        {model.needs?.length ? (
-          // Tools beyond paper, so nobody starts it without them.
-          <span className="card-needs">
-            {model.needs.map((tool) => {
-              const label = t(tool === 'scissors' ? 'card.needsScissors' : 'card.needsPen');
-              const Icon = tool === 'scissors' ? ScissorsIcon : PenIcon;
-              return (
-                <span key={tool} role="img" aria-label={label} title={label}>
-                  <Icon width={16} height={16} />
-                </span>
-              );
-            })}
-          </span>
-        ) : null}
+        <Needs tools={model.needs} />
       </div>
       <div className="card-body">
         <div className="card-title">
           <span>{model.title}</span>
-          <span className="dots" role="img" aria-label={t('card.difficulty', { level, n: model.difficulty })} title={level}>
-            {[1, 2, 3, 4, 5].map((n) => (
-              <span key={n} className={n <= model.difficulty ? 'on' : undefined} />
-            ))}
-          </span>
+          <Dots difficulty={model.difficulty} />
         </div>
         <p className="muted small">{model.blurb}</p>
         <p className="muted small">{details.join(' · ')}</p>
       </div>
     </Link>
+  );
+}
+
+/** Tools beyond paper, so nobody starts a model without them. */
+export function Needs({ tools }: { tools?: Tool[] }) {
+  const { t } = useTranslation();
+  if (!tools?.length) return null;
+  return (
+    <span className="card-needs">
+      {tools.map((tool) => {
+        const label = t(tool === 'scissors' ? 'card.needsScissors' : 'card.needsPen');
+        const Icon = tool === 'scissors' ? ScissorsIcon : PenIcon;
+        return (
+          <span key={tool} role="img" aria-label={label} title={label}>
+            <Icon width={16} height={16} />
+          </span>
+        );
+      })}
+    </span>
+  );
+}
+
+/** Difficulty as five dots. */
+export function Dots({ difficulty }: { difficulty: Difficulty }) {
+  const { t } = useTranslation();
+  const level = t(`levels.${levelOf(difficulty)}`);
+  return (
+    <span className="dots" role="img" aria-label={t('card.difficulty', { level, n: difficulty })} title={level}>
+      {[1, 2, 3, 4, 5].map((n) => (
+        <span key={n} className={n <= difficulty ? 'on' : undefined} />
+      ))}
+    </span>
   );
 }

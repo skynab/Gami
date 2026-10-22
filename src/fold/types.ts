@@ -88,7 +88,30 @@ export interface OrigamiModel {
   steps: Step[];
   /**
    * How the gallery card shows a model finished in 3D: as it was just before (the default), or finished,
-   * seen at a slant. Only used when building cards, so not kept in .fold files.
+   * seen at a slant.
    */
   card?: 'flat' | 'finished';
+  /** How the gallery describes it, kept in its file so a shared model carries it along. */
+  about?: About;
 }
+
+/** `lesson`: lessons rather than models (the basics, folds, bases and geometry), badged as such on their cards. */
+export const CATEGORIES = ['lesson', 'animal', 'object', 'toy', 'modular', 'flower'] as const;
+export type Category = (typeof CATEGORIES)[number];
+export const DIFFICULTIES = [1, 2, 3, 4, 5] as const;
+export type Difficulty = (typeof DIFFICULTIES)[number];
+
+/**
+ * A model's gallery details. The tools it needs aren't among them: they follow from its steps (`toolsNeeded`).
+ */
+export interface About {
+  /** A sentence for its card. */
+  blurb?: string;
+  difficulty?: Difficulty;
+  category?: Category;
+  /** About how long it takes to fold. */
+  minutes?: number;
+}
+
+/** Tools beyond paper: scissors for a cut, a pen for drawing. */
+export type Tool = 'scissors' | 'pen';

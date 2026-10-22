@@ -8,7 +8,9 @@ import { pose } from '../fold/pose';
 import { layOut, sheetOf } from '../fold/sheets';
 import { basics } from '../models/basics';
 import { applyOp, atOf } from '../fold/ops';
-import { anchorFor, cutsOnTable, project, topLayers } from './editor';
+import { anchorFor, cutsOnTable, isPicked, markAt, markOnTable, popRays, popSettings, project, toggleFace, topLayers } from './editor';
+import { fortuneTeller } from '../models/recipes/fortune-teller';
+import type { Op } from '../fold/ops';
 
 const square = basics.start;
 
@@ -112,5 +114,56 @@ describe('Studio helpers', () => {
       .along(table(-1, 0), table(1, 0), table(-0.25, -0.25), { title: 'Fold', only: ([u]) => u < 0 });
     const shown = new Set(along(cutsOnTable(r.build().steps[1].frame)).map((s) => JSON.stringify(s)));
     expect(shown).toEqual(new Set([JSON.stringify([[0, -0.5], [0, 0]]), JSON.stringify([[0, 0], [0, 0.5]])]));
+  });
+});
+
+describe('Studio tools for drawing, picking faces and popping up', () => {
+  const model = { id: 't', title: 't', sheets: basics.sheets, start: square, steps: [] };
+
+  it('draws on the side facing up, carried onto the sheet by the face under the first point', () => {
+    const front = markAt(square, [[0.1, 0.1], [0.2, 0.1]], false)!;
+    expect(front.side).toBe('front');
+    expect(front.points.map(([u, v]) => [u, v].map((x) => Math.round(x * 1e6) / 1e6))).toEqual([[0.1, 0.1], [0.2, 0.1]]);
+    const over = applyOp(model, { op: 'turnOver' }).frame;
+    const back = markAt(over, [[0.1, 0.1], [0.2, 0.1]], true);
+    expect(back?.side).toBe('back');
+    expect(back?.fill).toBe(true);
+    // Back where it was drawn on the table.
+    const drawn: Vec2[] = [[0.1, 0.1], [0.2, 0.1]];
+    expect(markOnTable(over, back!)!.every((p, i) => dist(p, drawn[i]) < 1e-9)).toBe(true);
+    expect(markAt(square, [[2, 2], [3, 3]], false)).toBeNull();
+  });
+
+  it('picks the face on top where clicked, and leaves it out when clicked again', () => {
+    const folded = applyOp(model, { op: 'fold', line: { line: { p: [0, 0], d: [1, 0] } } }).frame;
+    const spot: Vec2 = [0.1, -0.2];
+    const once = toggleFace(folded, [], spot);
+    expect(once).toHaveLength(1);
+    const picked = project(folded).filter((f) => isPicked(once, f.paper));
+    expect(picked).toHaveLength(1);
+    expect(picked[0].layer).toBe(Math.max(...project(folded).map((f) => f.layer)));
+    expect(toggleFace(folded, once, spot)).toEqual([]);
+    expect(toggleFace(folded, [], [3, 3])).toEqual([]);
+  });
+
+  it('pops up as the fortune teller does, and reads its settings back', () => {
+    const made = fortuneTeller().steps.at(-1)!.op as Extract<Op, { op: 'popUp' }>;
+    const s = popSettings(made.rays)!;
+    expect(s.count).toBe(8);
+    const again = popRays(s.count, s.azimuth, s.steep)!;
+    const turn = (x: number) => Math.abs(Math.atan2(Math.sin(x), Math.cos(x)));
+    for (const r of again) expect(made.rays.some((m) => turn(m.azimuth - r.azimuth) < 1e-9 && Math.abs(m.elevation - r.elevation) < 1e-9)).toBe(true);
+  });
+
+  it('keeps neighbouring pop-up creases as far apart as on the flat paper, or says it can’t', () => {
+    const dir = (r: { azimuth: number; elevation: number }) => [Math.cos(r.elevation) * Math.cos(r.azimuth), Math.sin(r.elevation), Math.cos(r.elevation) * Math.sin(r.azimuth)];
+    for (const count of [4, 6, 8]) {
+      const rays = popRays(count, 0.3, (50 * Math.PI) / 180)!;
+      for (let k = 0; k < count; k++) {
+        const [a, b] = [dir(rays[k]), dir(rays[(k + 1) % count])];
+        expect(a[0] * b[0] + a[1] * b[1] + a[2] * b[2]).toBeCloseTo(Math.cos((2 * Math.PI) / count), 9);
+      }
+    }
+    expect(popRays(5, 0, 1)).toBeNull();
   });
 });
