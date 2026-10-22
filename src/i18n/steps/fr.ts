@@ -1110,4 +1110,54 @@ export const fr: Record<string, string> = {
     "Ouvre les nageoires",
   "Lift the two flaps out from the sides, for the flippers. Your seal is done!":
     "Écarte les deux rabats des côtés, pour les nageoires. Ton phoque est fini !",
+  "With the paper sideways, bring the left edge over to the right edge and crease down the middle.":
+    "Papier à l’horizontale, amenez le bord gauche sur le bord droit et marquez un pli au milieu.",
+  "The corners meet on the centre crease in a wide point.":
+    "Les coins se rejoignent sur le pli central en une pointe large.",
+  "Bring the point down to the bottom of the triangle, leaving a flat top. (On A4 paper, fold it only halfway down.)":
+    "Rabattez la pointe jusqu’à la base du triangle, en laissant le haut plat. (Avec du papier A4, ne la pliez qu’à mi-chemin.)",
+  "Fold from the middle of the top edge, so the right half of the top lies along the centre crease.":
+    "Pliez depuis le milieu du bord supérieur, pour que la moitié droite de ce bord se pose sur le pli central.",
+  "Match the right side. The plane is now a wide triangle.":
+    "Faites comme à droite. L’avion est maintenant un large triangle.",
+  "Fold straight up and down, halfway between the middle and the right corner, so the corner meets the middle of the bottom edge.":
+    "Pliez à la verticale, à mi-chemin entre le milieu et le coin droit, pour que le coin rejoigne le milieu du bord inférieur.",
+  "Match the right side. The two corners meet at the middle.":
+    "Faites comme à droite. Les deux coins se rejoignent au milieu.",
+  "Fold from the nose down to the bottom right corner, making the right edge one straight line.":
+    "Pliez de la pointe jusqu’au coin inférieur droit, pour que le bord droit soit bien droit.",
+  "Match the right side, for a slim triangle.":
+    "Faites comme à droite, pour un triangle élancé.",
+  "Fold the top layers down along a line close to the bottom, for a narrow body and wide wings.":
+    "Rabattez les couches du dessus le long d’une ligne proche du bas, pour un fuselage étroit et de larges ailes.",
+  "Fold the top-left corner across":
+    "Pliez le coin supérieur gauche en travers",
+  "Bring the top-left corner down to the right edge, so the top edge lies along it.":
+    "Amenez le coin supérieur gauche sur le bord droit, pour que le bord supérieur se pose le long de celui-ci.",
+  "Fold the top-right corner across":
+    "Pliez le coin supérieur droit en travers",
+  "The same the other way: the top edge along the left edge. The creases cross in an X.":
+    "Pareil dans l’autre sens : le bord supérieur le long du bord gauche. Les plis se croisent en X.",
+  "Fold the top edge down so it lines up with the ends of the X. The fold runs through the middle of the X.":
+    "Rabattez le bord supérieur pour qu’il s’aligne sur les extrémités du X. Le pli passe par le centre du X.",
+  "Collapse the top into a triangle":
+    "Repliez le haut en triangle",
+  "Push the sides of the top square in along the middle fold, so the top folds down into a triangle on the sheet.":
+    "Rentrez les côtés du carré du haut le long du pli du milieu, pour que le haut se replie en triangle sur la feuille.",
+  "Fold the top flap only: bring the triangle’s right edge in to the centre line. Its corner pokes out below.":
+    "Pliez seulement le rabat du dessus : amenez le bord droit du triangle sur la ligne centrale. Son coin dépasse en bas.",
+  "And the left edge, top flap only. The two flaps make a kite.":
+    "Et le bord gauche, rabat du dessus seulement. Les deux rabats forment un cerf-volant.",
+  "Fold the whole top back, so the point meets the bottom edge on the other side. (On A4 paper, stop a little short of the edge.)":
+    "Pliez tout le haut vers l’arrière, pour que la pointe rejoigne le bord inférieur de l’autre côté. (Avec du papier A4, arrêtez un peu avant le bord.)",
+  "Fold the right tip up":
+    "Relevez la pointe droite",
+  "Fold the kite’s right tip up, so its point sticks out past the top edge.":
+    "Relevez la pointe droite du cerf-volant, pour qu’elle dépasse au-dessus du bord supérieur.",
+  "Fold the left tip up":
+    "Relevez la pointe gauche",
+  "And the left tip, beside it.":
+    "Et la pointe gauche, à côté.",
+  "Fold the top layers down along a line close to the bottom, for broad, square wings.":
+    "Rabattez les couches du dessus le long d’une ligne proche du bas, pour des ailes larges et carrées.",
 };

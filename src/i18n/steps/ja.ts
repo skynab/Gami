@@ -1110,4 +1110,54 @@ export const ja: Record<string, string> = {
     "ひれを開く",
   "Lift the two flaps out from the sides, for the flippers. Your seal is done!":
     "両側の二つのひだを外に起こして、ひれにします。アザラシのできあがり！",
+  "With the paper sideways, bring the left edge over to the right edge and crease down the middle.":
+    "紙を横向きに置き、左の辺を右の辺に合わせて、真ん中に折り筋をつけます。",
+  "The corners meet on the centre crease in a wide point.":
+    "角が中心の折り筋で合わさり、幅の広い先端になります。",
+  "Bring the point down to the bottom of the triangle, leaving a flat top. (On A4 paper, fold it only halfway down.)":
+    "先端を三角形の底まで折り下げ、上を平らにします。(A4の紙なら、半分の位置まで折ります。)",
+  "Fold from the middle of the top edge, so the right half of the top lies along the centre crease.":
+    "上の辺の真ん中から折り、上の辺の右半分を中心の折り筋に合わせます。",
+  "Match the right side. The plane is now a wide triangle.":
+    "右側と同じように折ります。幅の広い三角形になりました。",
+  "Fold straight up and down, halfway between the middle and the right corner, so the corner meets the middle of the bottom edge.":
+    "真ん中と右の角の中間で縦に折り、角を下の辺の真ん中に合わせます。",
+  "Match the right side. The two corners meet at the middle.":
+    "右側と同じように折ります。二つの角が真ん中で合わさります。",
+  "Fold from the nose down to the bottom right corner, making the right edge one straight line.":
+    "先端から右下の角まで折り、右の辺をまっすぐな線にします。",
+  "Match the right side, for a slim triangle.":
+    "右側と同じように折ると、細長い三角形になります。",
+  "Fold the top layers down along a line close to the bottom, for a narrow body and wide wings.":
+    "上の層を、下の辺に近い線で折り下げて、細い胴体と広い翼にします。",
+  "Fold the top-left corner across":
+    "左上の角を反対側へ折る",
+  "Bring the top-left corner down to the right edge, so the top edge lies along it.":
+    "左上の角を右の辺まで折り下げ、上の辺を右の辺に沿わせます。",
+  "Fold the top-right corner across":
+    "右上の角を反対側へ折る",
+  "The same the other way: the top edge along the left edge. The creases cross in an X.":
+    "反対側も同じように、上の辺を左の辺に沿わせます。折り筋がXの形に交わります。",
+  "Fold the top edge down so it lines up with the ends of the X. The fold runs through the middle of the X.":
+    "上の辺を、Xの端と同じ高さまで折り下げます。折り目はXの中心を通ります。",
+  "Collapse the top into a triangle":
+    "上を三角形にたたむ",
+  "Push the sides of the top square in along the middle fold, so the top folds down into a triangle on the sheet.":
+    "上の正方形の両側を、真ん中の折り目に沿って内側に押し込み、上の部分を紙の上の三角形にたたみます。",
+  "Fold the top flap only: bring the triangle’s right edge in to the centre line. Its corner pokes out below.":
+    "上のフラップだけを折ります。三角形の右の辺を中心線に合わせます。角が下にはみ出します。",
+  "And the left edge, top flap only. The two flaps make a kite.":
+    "左の辺も、上のフラップだけを折ります。二枚のフラップで凧の形になります。",
+  "Fold the whole top back, so the point meets the bottom edge on the other side. (On A4 paper, stop a little short of the edge.)":
+    "上の部分を全部うしろへ折り、先端を反対側の下の辺に合わせます。(A4の紙なら、辺の少し手前で止めます。)",
+  "Fold the right tip up":
+    "右の先を折り上げる",
+  "Fold the kite’s right tip up, so its point sticks out past the top edge.":
+    "凧の右の先を折り上げ、上の辺より上に突き出させます。",
+  "Fold the left tip up":
+    "左の先を折り上げる",
+  "And the left tip, beside it.":
+    "左の先も、その隣に折り上げます。",
+  "Fold the top layers down along a line close to the bottom, for broad, square wings.":
+    "上の層を、下の辺に近い線で折り下げて、広くて四角い翼にします。",
 };

@@ -1110,4 +1110,54 @@ export const es: Record<string, string> = {
     "Abre las aletas",
   "Lift the two flaps out from the sides, for the flippers. Your seal is done!":
     "Separa las dos solapas de los lados, para hacer las aletas. ¡Tu foca está lista!",
+  "With the paper sideways, bring the left edge over to the right edge and crease down the middle.":
+    "Con el papel en horizontal, lleva el borde izquierdo hasta el derecho y marca un pliegue por el centro.",
+  "The corners meet on the centre crease in a wide point.":
+    "Las esquinas se juntan en el pliegue central y forman una punta ancha.",
+  "Bring the point down to the bottom of the triangle, leaving a flat top. (On A4 paper, fold it only halfway down.)":
+    "Baja la punta hasta la base del triángulo, dejando la parte de arriba plana. (Con papel A4, dóblala solo hasta la mitad).",
+  "Fold from the middle of the top edge, so the right half of the top lies along the centre crease.":
+    "Dobla desde el centro del borde de arriba, para que la mitad derecha de ese borde quede sobre el pliegue central.",
+  "Match the right side. The plane is now a wide triangle.":
+    "Haz lo mismo que en el lado derecho. Ahora el avión es un triángulo ancho.",
+  "Fold straight up and down, halfway between the middle and the right corner, so the corner meets the middle of the bottom edge.":
+    "Dobla en vertical, a medio camino entre el centro y la esquina derecha, para que la esquina llegue al centro del borde de abajo.",
+  "Match the right side. The two corners meet at the middle.":
+    "Haz lo mismo que en el lado derecho. Las dos esquinas se juntan en el centro.",
+  "Fold from the nose down to the bottom right corner, making the right edge one straight line.":
+    "Dobla desde la punta hasta la esquina de abajo a la derecha, para que el borde derecho quede recto.",
+  "Match the right side, for a slim triangle.":
+    "Haz lo mismo que en el lado derecho, para un triángulo esbelto.",
+  "Fold the top layers down along a line close to the bottom, for a narrow body and wide wings.":
+    "Dobla las capas de arriba hacia abajo por una línea cerca del borde de abajo, para un cuerpo estrecho y alas anchas.",
+  "Fold the top-left corner across":
+    "Dobla la esquina de arriba a la izquierda hacia el otro lado",
+  "Bring the top-left corner down to the right edge, so the top edge lies along it.":
+    "Baja la esquina de arriba a la izquierda hasta el borde derecho, para que el borde de arriba quede sobre él.",
+  "Fold the top-right corner across":
+    "Dobla la esquina de arriba a la derecha hacia el otro lado",
+  "The same the other way: the top edge along the left edge. The creases cross in an X.":
+    "Lo mismo hacia el otro lado: el borde de arriba sobre el borde izquierdo. Los pliegues se cruzan en una X.",
+  "Fold the top edge down so it lines up with the ends of the X. The fold runs through the middle of the X.":
+    "Baja el borde de arriba hasta que coincida con los extremos de la X. El pliegue pasa por el centro de la X.",
+  "Collapse the top into a triangle":
+    "Pliega la parte de arriba en un triángulo",
+  "Push the sides of the top square in along the middle fold, so the top folds down into a triangle on the sheet.":
+    "Empuja los lados del cuadrado de arriba hacia dentro por el pliegue del medio, para que la parte de arriba se pliegue en un triángulo sobre la hoja.",
+  "Fold the top flap only: bring the triangle’s right edge in to the centre line. Its corner pokes out below.":
+    "Dobla solo la solapa de arriba: lleva el borde derecho del triángulo hasta la línea central. Su esquina sobresale por abajo.",
+  "And the left edge, top flap only. The two flaps make a kite.":
+    "Y el borde izquierdo, solo la solapa de arriba. Las dos solapas forman una cometa.",
+  "Fold the whole top back, so the point meets the bottom edge on the other side. (On A4 paper, stop a little short of the edge.)":
+    "Dobla toda la parte de arriba hacia atrás, para que la punta llegue al borde de abajo por el otro lado. (Con papel A4, para un poco antes del borde).",
+  "Fold the right tip up":
+    "Sube la punta derecha",
+  "Fold the kite’s right tip up, so its point sticks out past the top edge.":
+    "Sube la punta derecha de la cometa, para que sobresalga por encima del borde de arriba.",
+  "Fold the left tip up":
+    "Sube la punta izquierda",
+  "And the left tip, beside it.":
+    "Y la punta izquierda, a su lado.",
+  "Fold the top layers down along a line close to the bottom, for broad, square wings.":
+    "Dobla las capas de arriba hacia abajo por una línea cerca del borde de abajo, para unas alas anchas y cuadradas.",
 };

@@ -37,6 +37,8 @@ noted when it was written, and the model was folded from the common traditional 
 | `paper-plane` | Traditional (the classic dart) | None needed: nobody owns it | none recorded | Clear | 16 Oct 2026 |
 | `glider` | Unattributed: the common flat-nosed glider | Unknown: no designer found | none recorded | Unattributed | 18 Oct 2026 |
 | `bulldog-dart` | Unattributed: the dart with its point folded back | Unknown: no designer found | none recorded | Unattributed | 18 Oct 2026 |
+| `navy-plane` | Unattributed: Fold'N Fly's Navy Plane (design #35) names no designer | Unknown: no designer found | [Fold'N Fly: Navy Plane](https://www.foldnfly.com/35.html) | Unattributed | 21 Oct 2026 |
+| `king-bee` | Unattributed: Fold'N Fly's King Bee (design #22) names no designer | Unknown: no designer found | [Fold'N Fly: King Bee](https://www.foldnfly.com/22.html) | Unattributed | 21 Oct 2026 |
 | `dog-face` | Traditional | None needed: nobody owns it | none recorded | Clear | 18 Oct 2026 |
 | `cat-face` | Traditional | None needed: nobody owns it | none recorded | Clear | 18 Oct 2026 |
 | `cup` | Traditional | None needed: nobody owns it | none recorded | Clear | 16 Oct 2026 |
@@ -86,6 +88,15 @@ noted when it was written, and the model was folded from the common traditional 
   fox doesn't pass on to Gami. "Designer unknown" models (the heart) get credited if a designer comes
   forward.
 - **Folding geometry.** Mathematical facts and methods aren't anyone's to own; the lesson's text is Gami's.
+- **Fold'N Fly planes** (navy plane, king bee; checked 21 October 2026). Fold'N Fly's pages credit no designer
+  and give no licence for the designs, only a copyright notice for the site itself. Web searches turned up no
+  designer either, and Gilad's database covers origami rather than paper planes. So like the glider they're
+  Unattributed: fine to use, but credit and change them if a designer turns up. Gami follows only the fold
+  sequence, in its own words and pictures. Where the source has steps Gami leaves out, they're noted here:
+  the navy plane's last step (folding up two small tail flaps) isn't folded yet, and the king bee's optional
+  extras (wingtips turned up, aileron slits cut in the wings) are left out. The boomerang (Fold'N Fly #56) is
+  listed as coming soon. Its middle steps twist a strip into an L with pockets, which the fold engine can't
+  do yet.
 - **Coming soon.** The boat and the models listed on 21 October 2026 are gallery placeholders with no recipe
   yet. Each is credited "Traditional" on origami.me. When one gets a recipe, set its reference to what was
   actually followed and its date to when it shipped. Other traditional models on origami.me that aren't
