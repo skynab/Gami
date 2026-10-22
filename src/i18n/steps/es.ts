@@ -1428,4 +1428,52 @@ export const es: Record<string, string> = {
     "Base de rana",
   "The frog base is a square base with all four flaps squashed and then petal folded. The frog and the lily start from it. It takes the most steps of all the bases.":
     "La base de rana es una base preliminar con sus cuatro solapas aplastadas y luego con pliegue de pétalo. La rana y el lirio parten de ella. Es la base con más pasos.",
+  "White side up, fold in half side to side, and unfold.":
+    "Con la cara blanca hacia arriba, dobla por la mitad de lado a lado y desdobla.",
+  "And top to bottom, and unfold.":
+    "Y de arriba abajo, y desdobla.",
+  "Fold the bottom left corner to the middle, where the creases cross.":
+    "Lleva la esquina de abajo a la izquierda al centro, donde se cruzan los pliegues.",
+  "And the bottom right corner.":
+    "Y la esquina de abajo a la derecha.",
+  "And the top right corner.":
+    "Y la esquina de arriba a la derecha.",
+  "Fold the last corner in":
+    "Dobla la última esquina",
+  "And the top left corner. It’s a smaller square.":
+    "Y la esquina de arriba a la izquierda. Es un cuadrado más pequeño.",
+  "Turn it so its edges run straight up and down.":
+    "Gíralo para que sus bordes queden rectos, de arriba abajo.",
+  "Fold the top edge to the middle":
+    "Dobla el borde de arriba hasta el centro",
+  "Fold the top edge down to the middle, and unfold.":
+    "Baja el borde de arriba hasta el centro y desdobla.",
+  "Fold the bottom edge to the middle":
+    "Dobla el borde de abajo hasta el centro",
+  "And the bottom edge up to the middle, and unfold.":
+    "Y sube el borde de abajo hasta el centro, y desdobla.",
+  "Open the top flap":
+    "Abre la solapa de arriba",
+  "Unfold the top flap, back out past the top edge.":
+    "Desdobla la solapa de arriba hacia fuera, más allá del borde de arriba.",
+  "Open the bottom flap":
+    "Abre la solapa de abajo",
+  "And the bottom flap.":
+    "Y la solapa de abajo.",
+  "Fold the left edge in to the middle, and unfold.":
+    "Lleva el borde izquierdo hasta el centro y desdobla.",
+  "And the right edge, and unfold.":
+    "Y el borde derecho, y desdobla.",
+  "Raise the walls":
+    "Levanta las paredes",
+  "Stand the side walls up, and push each corner in so it folds flat against the end wall. The end walls stand up too, with their flaps.":
+    "Levanta las paredes de los lados y empuja cada esquina hacia dentro para que quede plana contra la pared del extremo. Las paredes de los extremos también se levantan, con sus solapas.",
+  "Lock the top end":
+    "Cierra el extremo de arriba",
+  "Fold the top flap over the end wall into the box, so its point lies on the floor and holds the corners in.":
+    "Dobla la solapa de arriba sobre la pared del extremo hacia dentro de la caja, para que su punta quede en el fondo y sujete las esquinas.",
+  "Lock the bottom end":
+    "Cierra el extremo de abajo",
+  "And the bottom flap. Your box is ready.":
+    "Y la solapa de abajo. Tu caja está lista.",
 };

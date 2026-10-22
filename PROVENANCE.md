@@ -73,7 +73,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `iris` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/iris](https://origami.me/iris/) | Clear | Coming soon, listed 21 Oct 2026 |
 | `pinwheel` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/pinwheel](https://origami.me/pinwheel/) | Clear | 21 Oct 2026 |
 | `fan` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/fan](https://origami.me/fan/) | Clear | Coming soon, listed 21 Oct 2026 |
-| `masu-box` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/box](https://origami.me/box/) | Clear | Coming soon, listed 21 Oct 2026 |
+| `masu-box` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/box](https://origami.me/box/) (the box; not its lids) | Clear | 22 Oct 2026 |
 | `christmas-tree` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/christmas-tree](https://origami.me/christmas-tree/) | Clear | 21 Oct 2026 |
 
 ### Notes

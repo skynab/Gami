@@ -78,7 +78,7 @@ export const es: Messages = {
     iris: { title: 'Iris', blurb: 'Tres pétalos arriba y tres abajo, desde la base de rana.' },
     pinwheel: { title: 'Molinillo', blurb: 'Un molino de cuatro aspas. Clávalo en un palo y sopla.' },
     fan: { title: 'Abanico', blurb: 'Pliega una hoja adelante y atrás y junta un extremo.' },
-    'masu-box': { title: 'Caja masu', blurb: 'Una caja cuadrada con tapa, con dos hojas.' },
+    'masu-box': { title: 'Caja masu', blurb: 'Una caja cuadrada de una sola hoja, con las esquinas sujetas por los extremos.' },
     'christmas-tree': { title: 'Árbol de Navidad', blurb: 'Un abeto en una maceta blanca, bonito en una tarjeta.' },
     heart: { title: 'Corazón', blurb: 'Un corazón sencillo, ideal para tarjetas.' },
     cicada: { title: 'Cigarra', blurb: 'Una cigarra tradicional japonesa, con las alas dobladas desde un rombo.' },

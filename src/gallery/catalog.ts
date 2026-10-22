@@ -78,6 +78,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'seal', title: 'Seal', blurb: 'A seal with its head up, flippers out and tail raised.', difficulty: 3, category: 'animal', steps: 20, minutes: 12, sheets: 1 },
   { id: 'frog', title: 'Frog', blurb: 'The classic frog from the frog base, legs and all.', difficulty: 4, category: 'animal', steps: 55, minutes: 20, sheets: 1 },
   { id: 'sword', title: 'Sword', blurb: 'A knight’s sword with a crossguard, from one long strip.', difficulty: 2, category: 'toy', steps: 14, minutes: 8, sheets: 1 },
+  { id: 'masu-box', title: 'Masu box', blurb: 'A square box from one sheet, its corners locked in by the ends.', difficulty: 2, category: 'object', steps: 22, minutes: 10, sheets: 1 },
   // Coming soon: listed, with no steps yet.
   { id: 'boomerang', title: 'Boomerang', blurb: 'A flat paper boomerang that flies out, turns and comes back.', difficulty: 4, category: 'toy', minutes: 15, sheets: 1, needs: ['scissors'] },
   { id: 'boat', title: 'Boat', blurb: 'The classic paper boat. It really floats, for a while.', difficulty: 2, category: 'object', minutes: 6, sheets: 1 },
@@ -85,7 +86,6 @@ export const MODELS: ModelInfo[] = [
   { id: 'pajarita', title: 'Pajarita', blurb: 'The little paper bird of Spain, from a square with its corners folded in.', difficulty: 2, category: 'animal', minutes: 8, sheets: 1 },
   { id: 'iris', title: 'Iris', blurb: 'Three petals up, three down, from the frog base.', difficulty: 4, category: 'flower', minutes: 20, sheets: 1 },
   { id: 'fan', title: 'Fan', blurb: 'Pleat a sheet back and forth, then pinch the end.', difficulty: 1, category: 'object', minutes: 3, sheets: 1 },
-  { id: 'masu-box', title: 'Masu box', blurb: 'A square box with a lid, from two sheets.', difficulty: 2, category: 'object', minutes: 12, sheets: 2 },
   // A lesson rather than a model, kept last: geometry by folding.
   { id: 'folding-geometry', title: 'Geometry by folding', blurb: 'The rules of mathematical folding, and an angle split in three.', difficulty: 1, category: 'math', steps: 33, minutes: 15, sheets: 1 },
 ];

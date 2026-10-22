@@ -145,4 +145,17 @@ describe('shape, combining bends', () => {
     expect(edge(0.5)[1]).toBeCloseTo(2 * h, 2);
     expect(problems(model)).toEqual([]);
   });
+
+  it('turns flat creases along the paper as plain bends do, from either side', () => {
+    // A crease at x = 0.3, the strip beyond it turned up a sixth of a turn: posed along the paper from the main
+    // part it lands where a plain bend puts it; posed from the strip, the strip stays and the rest turns instead.
+    const creased = new Recipe({ id: 'c', title: 'c', sheet: { size: [1, 1], front: '#fff', back: '#000' } }).crease(table(0.5, 0), table(0.1, 0), { title: 'Crease' }).current;
+    const bend = { line: { p: [0.3, 0] as [number, number], d: [0, -1] as [number, number] }, angle: Math.PI / 3 };
+    const plain = shape(creased, [bend]);
+    const chained = shape(creased, [bend], { chained: [-0.4, 0] });
+    for (const i of [0, 1, 2]) expect(at(chained, 0.5, 0.5)[i]).toBeCloseTo(at(plain, 0.5, 0.5)[i]);
+    const fromStrip = shape(creased, [bend], { chained: [0.45, 0] });
+    expect(at(fromStrip, 0.5, 0.5)).toEqual([expect.closeTo(0.5), expect.closeTo(0), expect.closeTo(0.5)]);
+    expect(at(fromStrip, -0.5, 0.5)[1]).toBeCloseTo(0.8 * Math.sin(Math.PI / 3));
+  });
 });

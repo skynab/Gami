@@ -78,7 +78,7 @@ export const ja: Messages = {
     iris: { title: 'あやめ', blurb: 'かえるの基本形から、上と下に花びら。' },
     pinwheel: { title: 'かざぐるま', blurb: '4枚羽根の風車。棒にとめて吹いてみよう。' },
     fan: { title: 'せんす', blurb: 'じゃばらに折って、はしをまとめるだけ。' },
-    'masu-box': { title: 'ます', blurb: '2枚で作る、ふたつきの四角い箱。' },
+    'masu-box': { title: 'ます', blurb: '1枚の紙で折る四角い箱。角は両端で留めます。' },
     'christmas-tree': { title: 'クリスマスツリー', blurb: '白い植木ばちに入ったもみの木。カードにぴったり。' },
     heart: { title: 'ハート', blurb: 'カードに添えたい、シンプルなハート。' },
     cicada: { title: 'せみ', blurb: 'ひし形から羽を折り出す、日本の伝統的なせみ。' },

@@ -1428,4 +1428,52 @@ export const fr: Record<string, string> = {
     "Base de la grenouille",
   "The frog base is a square base with all four flaps squashed and then petal folded. The frog and the lily start from it. It takes the most steps of all the bases.":
     "La base de la grenouille est une base préliminaire dont les quatre rabats sont écrasés, puis pliés en pétale. La grenouille et le lys en partent. C’est la base qui demande le plus d’étapes.",
+  "White side up, fold in half side to side, and unfold.":
+    "Face blanche dessus, pliez en deux d’un côté à l’autre, puis dépliez.",
+  "And top to bottom, and unfold.":
+    "Et de haut en bas, puis dépliez.",
+  "Fold the bottom left corner to the middle, where the creases cross.":
+    "Amenez le coin inférieur gauche au centre, là où les plis se croisent.",
+  "And the bottom right corner.":
+    "Et le coin inférieur droit.",
+  "And the top right corner.":
+    "Et le coin supérieur droit.",
+  "Fold the last corner in":
+    "Pliez le dernier coin",
+  "And the top left corner. It’s a smaller square.":
+    "Et le coin supérieur gauche. C’est un carré plus petit.",
+  "Turn it so its edges run straight up and down.":
+    "Tournez-le pour que ses bords soient bien droits, de haut en bas.",
+  "Fold the top edge to the middle":
+    "Pliez le bord supérieur au centre",
+  "Fold the top edge down to the middle, and unfold.":
+    "Rabattez le bord supérieur jusqu’au centre, puis dépliez.",
+  "Fold the bottom edge to the middle":
+    "Pliez le bord inférieur au centre",
+  "And the bottom edge up to the middle, and unfold.":
+    "Et remontez le bord inférieur jusqu’au centre, puis dépliez.",
+  "Open the top flap":
+    "Ouvrez le rabat du haut",
+  "Unfold the top flap, back out past the top edge.":
+    "Dépliez le rabat du haut, vers l’extérieur au-delà du bord supérieur.",
+  "Open the bottom flap":
+    "Ouvrez le rabat du bas",
+  "And the bottom flap.":
+    "Et le rabat du bas.",
+  "Fold the left edge in to the middle, and unfold.":
+    "Amenez le bord gauche au centre, puis dépliez.",
+  "And the right edge, and unfold.":
+    "Et le bord droit, puis dépliez.",
+  "Raise the walls":
+    "Montez les parois",
+  "Stand the side walls up, and push each corner in so it folds flat against the end wall. The end walls stand up too, with their flaps.":
+    "Redressez les parois des côtés et poussez chaque coin vers l’intérieur pour qu’il se plaque contre la paroi du bout. Les parois des bouts se redressent aussi, avec leurs rabats.",
+  "Lock the top end":
+    "Verrouillez le bout du haut",
+  "Fold the top flap over the end wall into the box, so its point lies on the floor and holds the corners in.":
+    "Rabattez le rabat du haut par-dessus la paroi dans la boîte, pour que sa pointe repose au fond et maintienne les coins.",
+  "Lock the bottom end":
+    "Verrouillez le bout du bas",
+  "And the bottom flap. Your box is ready.":
+    "Et le rabat du bas. Votre boîte est prête.",
 };

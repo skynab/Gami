@@ -250,14 +250,26 @@ function cornerPlacer(a: Bend, b: Bend): { diagonal: Line; place(at: Vec2): (p: 
 }
 
 /**
- * Folds opened along the paper, as a stack of pleats opens into a zigzag: from the face at `anchor` (a point on
- * the sheet), the paper is followed face by face, and each time it crosses a fold lying on one of the bends'
- * lines (on the table, in the flat state), the paper beyond opens that fold by the bend's angle, away from the
- * face it lay on. Unlike `shape`'s bends, which turn whatever lies beyond a line, this tells apart layers
- * stacked over the same line, so each pleat opens on its own. The bends' `only` and `layers` aren't used.
+ * The paper posed crease by crease, along the paper: from the face at `anchor` (a point on the sheet), the paper
+ * is followed face by face, and each time it crosses a crease lying on one of the bends' lines (on the table, in
+ * the flat state, and on faces the bend's `only` accepts), it turns there:
+ * - across a crease lying flat, the paper on the left of the bend's line turns up by the angle, as with plain
+ *   bends, but relative to the paper on the other side wherever that has gone, so creases can turn paper that
+ *   other creases have already turned (a box's walls, then its corners and flaps);
+ * - across a fold, where the paper lies doubled over, the fold opens by the angle, away from the face it lay on,
+ *   so pleats stacked over the same lines open one by one into a zigzag.
+ * Faces are cut along the bends' lines first (where `only` accepts them). Every crease's two sides must still
+ * meet afterwards, or the paper would stretch, and that's refused. The bends' `layers` aren't used.
  */
 function opened(frame: FoldFrame, bends: Bend[], anchor: Vec2): FoldFrame {
-  const faces = toFlat(frame);
+  let faces: FlatFace[] = toFlat(frame).map((f, i) => ({ ...f, parent: i }));
+  for (const b of bends) {
+    faces = faces.flatMap((f) => {
+      if (b.only && !b.only(f.paper)) return [f];
+      const { pos, neg } = split(f, b.line);
+      return [pos, neg].filter((q) => q !== null).map((q) => ({ ...q!, layer: f.layer, parent: f.parent }));
+    });
+  }
   const start = faces.findIndex((f) => inside(f.paper, anchor));
   if (start < 0) throw new FoldError('The anchor point isn’t on the paper.');
   const n = faces.length;
@@ -297,7 +309,15 @@ function opened(frame: FoldFrame, bends: Bend[], anchor: Vec2): FoldFrame {
     const w = placeLike(faces[f])(p);
     return [w[0], faces[f].layer * LAYER_GAP, w[1]];
   };
-  const onBend = (a: Vec2, b: Vec2) => bends.find((k) => Math.abs(sideOf(k.line, a)) < 1e-7 && Math.abs(sideOf(k.line, b)) < 1e-7);
+  const onBend = (a: Vec2, b: Vec2, u: number, w: number) =>
+    bends.find((k) => Math.abs(sideOf(k.line, a)) < 1e-7 && Math.abs(sideOf(k.line, b)) < 1e-7 && (!k.only || (k.only(faces[u].paper) && k.only(faces[w].paper))));
+  const invert = (m: M): M => {
+    // A rigid move's inverse: the rotation transposed, the shift undone.
+    const R = [m[0], m[4], m[8], m[1], m[5], m[9], m[2], m[6], m[10]];
+    const t = [m[3], m[7], m[11]];
+    const off = [0, 1, 2].map((r) => -(R[r * 3] * t[0] + R[r * 3 + 1] * t[1] + R[r * 3 + 2] * t[2]));
+    return [R[0], R[1], R[2], off[0], R[3], R[4], R[5], off[1], R[6], R[7], R[8], off[2]];
+  };
   const moved: (M | null)[] = faces.map(() => null);
   moved[start] = identity;
   const queue = [start];
@@ -306,9 +326,21 @@ function opened(frame: FoldFrame, bends: Bend[], anchor: Vec2): FoldFrame {
     for (const { other: w, shared } of joins[u]) {
       if (moved[w]) continue;
       const [a, b] = shared.map((q) => placeLike(faces[u])(q));
-      const bend = onBend(a, b);
+      const bend = onBend(a, b, u, w);
       if (!bend || !bend.angle) {
         moved[w] = moved[u];
+        queue.push(w);
+        continue;
+      }
+      const sides = [u, w].map((f) => Math.sign(sideOf(bend.line, centre(faces[f].world))));
+      if (sides[0] !== sides[1]) {
+        // A crease lying flat: the paper on the line's left turns up by the angle, relative to the other side.
+        const len2 = Math.hypot(bend.line.d[0], bend.line.d[1]);
+        const d2: Vec3 = [bend.line.d[0] / len2, 0, bend.line.d[1] / len2];
+        const p0: Vec3 = [bend.line.p[0], faces[u].layer * LAYER_GAP, bend.line.p[1]];
+        // `turn` lifts the left of the line, which is a right-handed turn about the line's direction, downwards.
+        const r = rotation(p0, d2, -bend.angle);
+        moved[w] = compose(moved[u]!, sides[1] > 0 ? r : invert(r));
         queue.push(w);
         continue;
       }
@@ -355,7 +387,7 @@ function opened(frame: FoldFrame, bends: Bend[], anchor: Vec2): FoldFrame {
       }
     }
   }
-  return { vertices_paper, vertices_coords, faces_vertices, faces_parent: faces.map((_, i) => i), faces_layer: faces.map((f) => f.layer) };
+  return { vertices_paper, vertices_coords, faces_vertices, faces_parent: faces.map((f) => f.parent), faces_layer: faces.map((f) => f.layer) };
 }
 
 function inside(poly: Vec2[], p: Vec2): boolean {

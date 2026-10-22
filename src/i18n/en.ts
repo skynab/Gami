@@ -80,7 +80,7 @@ export const en = {
     iris: { title: 'Iris', blurb: 'Three petals up, three down, from the frog base.' },
     pinwheel: { title: 'Pinwheel', blurb: 'A windmill with four sails. Pin it to a stick and blow.' },
     fan: { title: 'Fan', blurb: 'Pleat a sheet back and forth, then pinch the end.' },
-    'masu-box': { title: 'Masu box', blurb: 'A square box with a lid, from two sheets.' },
+    'masu-box': { title: 'Masu box', blurb: 'A square box from one sheet, its corners locked in by the ends.' },
     'christmas-tree': { title: 'Christmas tree', blurb: 'A fir tree in a white pot, nice on a card.' },
     heart: { title: 'Heart', blurb: 'A simple heart, nice for cards.' },
     cicada: { title: 'Cicada', blurb: 'A traditional Japanese cicada, its wings folded out from a diamond.' },

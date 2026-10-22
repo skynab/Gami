@@ -1428,4 +1428,52 @@ export const ja: Record<string, string> = {
     "カエルの基本形",
   "The frog base is a square base with all four flaps squashed and then petal folded. The frog and the lily start from it. It takes the most steps of all the bases.":
     "カエルの基本形は、正方基本形の四枚のフラップをすべてつぶし、花弁折りにしたものです。かえるとユリはここから折ります。基本形の中でいちばん手順が多い形です。",
+  "White side up, fold in half side to side, and unfold.":
+    "白い面を上にして、左右に半分に折り、開きます。",
+  "And top to bottom, and unfold.":
+    "上下にも半分に折り、開きます。",
+  "Fold the bottom left corner to the middle, where the creases cross.":
+    "左下の角を、折り筋が交わる中心に合わせて折ります。",
+  "And the bottom right corner.":
+    "右下の角も折ります。",
+  "And the top right corner.":
+    "右上の角も折ります。",
+  "Fold the last corner in":
+    "最後の角を折る",
+  "And the top left corner. It’s a smaller square.":
+    "左上の角も折ります。小さな正方形になりました。",
+  "Turn it so its edges run straight up and down.":
+    "辺がまっすぐ上下に向くように回します。",
+  "Fold the top edge to the middle":
+    "上の辺を中心に折る",
+  "Fold the top edge down to the middle, and unfold.":
+    "上の辺を中心まで折り下げ、開きます。",
+  "Fold the bottom edge to the middle":
+    "下の辺を中心に折る",
+  "And the bottom edge up to the middle, and unfold.":
+    "下の辺も中心まで折り上げ、開きます。",
+  "Open the top flap":
+    "上のフラップを開く",
+  "Unfold the top flap, back out past the top edge.":
+    "上のフラップを、上の辺より外側へ開きます。",
+  "Open the bottom flap":
+    "下のフラップを開く",
+  "And the bottom flap.":
+    "下のフラップも開きます。",
+  "Fold the left edge in to the middle, and unfold.":
+    "左の辺を中心まで折り、開きます。",
+  "And the right edge, and unfold.":
+    "右の辺も折り、開きます。",
+  "Raise the walls":
+    "壁を立てる",
+  "Stand the side walls up, and push each corner in so it folds flat against the end wall. The end walls stand up too, with their flaps.":
+    "左右の壁を立て、角を内側に押し込んで、端の壁にぴったり重ねます。端の壁もフラップごと立ち上がります。",
+  "Lock the top end":
+    "上の端を留める",
+  "Fold the top flap over the end wall into the box, so its point lies on the floor and holds the corners in.":
+    "上のフラップを端の壁にかぶせて箱の中へ折り込み、先を底につけて角を押さえます。",
+  "Lock the bottom end":
+    "下の端を留める",
+  "And the bottom flap. Your box is ready.":
+    "下のフラップも同じように折ります。箱のできあがりです。",
 };
