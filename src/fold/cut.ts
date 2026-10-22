@@ -50,7 +50,7 @@ export function cut(frame: FoldFrame, { from, to, layers, only }: CutOptions): F
 }
 
 /** The part of the segment a–b inside a convex polygon (or on its edge), if more than a point. */
-function clip(poly: Vec2[], a: Vec2, b: Vec2): [Vec2, Vec2] | null {
+export function clip(poly: Vec2[], a: Vec2, b: Vec2): [Vec2, Vec2] | null {
   const d = sub(b, a);
   let lo = 0;
   let hi = 1;

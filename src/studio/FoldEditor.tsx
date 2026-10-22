@@ -3,13 +3,14 @@ import { placeLike } from '../fold/fold';
 import { dist, signedArea, split, type Line } from '../fold/geometry2d';
 import { faceColour } from '../fold/sheets';
 import type { FoldFrame, OrigamiModel, Vec2 } from '../fold/types';
-import { frontUp, project, snapPoints, viewBox } from './editor';
+import { cutsOnTable, frontUp, project, snapPoints, viewBox } from './editor';
 
 /**
  * The paper seen from above, as you'd see it on the table. Click the dots to place a fold: the crease
  * shows as a line, the side that moves is shaded, and a dashed outline shows where it will land.
+ * Scissor cuts made so far show as solid lines.
  */
-export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kind, preview, extra = [], onPick }: {
+export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kind, preview, extra = [], cut = null, free = false, onPick }: {
   frame: FoldFrame;
   model: Pick<OrigamiModel, 'sheets'>;
   picks: Vec2[];
@@ -21,11 +22,16 @@ export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kin
   preview: FoldFrame | null;
   /** More creases to draw, such as the ones waiting in a collapse. */
   extra?: { line: Line; kind: string }[];
+  /** A cut about to be made, from one end to the other. */
+  cut?: [Vec2, Vec2] | null;
+  /** Picks can go anywhere, snapping to a dot only when one is close. */
+  free?: boolean;
   onPick(point: Vec2): void;
 }) {
   const svg = useRef<SVGSVGElement>(null);
   const faces = useMemo(() => project(frame).sort((a, b) => a.layer - b.layer), [frame]);
   const snaps = useMemo(() => snapPoints(frame), [frame]);
+  const cuts = useMemo(() => cutsOnTable(frame), [frame]);
   const box = useMemo(() => viewBox([...faces.flatMap((f) => f.world), ...(preview ? project(preview).flatMap((f) => f.world) : [])]), [faces, preview]);
   const unit = box[2] / 100;
 
@@ -56,6 +62,7 @@ export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kin
     let best: Vec2 | null = null;
     for (const s of snaps) if (dist(s, at) < 4 * unit && (!best || dist(s, at) < dist(best, at))) best = s;
     if (best) onPick(best);
+    else if (free) onPick(at);
   };
 
   const pts = (poly: Vec2[]) => poly.map((p) => p.join(',')).join(' ');
@@ -88,6 +95,10 @@ export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kin
           className={`crease ${kind}`}
         />
       )}
+      {cuts.map(([a, b], i) => (
+        <line key={i} x1={a[0]} y1={a[1]} x2={b[0]} y2={b[1]} className="cut" />
+      ))}
+      {cut && <line x1={cut[0][0]} y1={cut[0][1]} x2={cut[1][0]} y2={cut[1][1]} className="cut planned" />}
       {snaps.map((s, i) => (
         <circle key={i} cx={s[0]} cy={s[1]} r={1.1 * unit} className="snap" />
       ))}

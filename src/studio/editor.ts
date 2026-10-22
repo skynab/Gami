@@ -1,3 +1,5 @@
+import { clip } from '../fold/cut';
+import { placeLike } from '../fold/fold';
 import { lerp } from '../fold/geometry2d';
 export { frontUp } from '../fold/geometry2d';
 import { project } from '../fold/select';
@@ -17,6 +19,20 @@ export function snapPoints(frame: FoldFrame): Vec2[] {
     });
   }
   return [...seen.values()];
+}
+
+/** Where the paper's scissor cuts are on the table: each cut's stretch along every face it runs past. */
+export function cutsOnTable(frame: FoldFrame): [Vec2, Vec2][] {
+  if (!frame.cuts?.length) return [];
+  const out: [Vec2, Vec2][] = [];
+  for (const face of project(frame)) {
+    const toTable = placeLike(face);
+    for (const [a, b] of frame.cuts) {
+      const seg = clip(face.paper, a, b);
+      if (seg) out.push([toTable(seg[0]), toTable(seg[1])]);
+    }
+  }
+  return out;
 }
 
 /**

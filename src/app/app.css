@@ -1047,6 +1047,20 @@ kbd {
   stroke-dasharray: 2 4;
 }
 
+/* Scissor cuts: solid, the planned one in the accent colour, the ones already made in the text colour. */
+.fold-editor .cut {
+  stroke: var(--fg);
+  stroke-width: 2px;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.fold-editor .cut.planned {
+  stroke: var(--accent);
+  stroke-width: 3px;
+}
+
 .fold-editor .snap {
   fill: var(--bg);
   stroke: var(--fg);
