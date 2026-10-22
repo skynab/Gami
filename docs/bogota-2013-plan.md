@@ -15,7 +15,7 @@ New gallery models must be **open designs**:
 
 A diagram published free online is not the same as an open licence, so it doesn't qualify on its own.
 Check each candidate's status (Gilad's database lists a designer where one is known) before writing a
-recipe, and note the source in the decisions log.
+recipe, and record it in `PROVENANCE.md`.
 
 ## Open stand-ins for the seven
 

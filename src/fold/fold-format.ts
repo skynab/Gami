@@ -21,6 +21,8 @@ interface FoldFileFrame {
   'gami:vertices_paper': number[][];
   'gami:faces_parent'?: number[];
   'gami:faces_layer'?: number[];
+  /** Scissor cuts made so far, as segments on the sheet (see FoldFrame.cuts). */
+  'gami:cuts'?: number[][][];
   'gami:text'?: string;
   'gami:kind'?: StepKind;
   'gami:section'?: string;
@@ -126,6 +128,7 @@ function writeFrame(f: FoldFrame): FoldFileFrame {
     'gami:vertices_paper': f.vertices_paper.map((p) => p.map(round)),
     ...(f.faces_parent && { 'gami:faces_parent': f.faces_parent }),
     ...(f.faces_layer && { 'gami:faces_layer': f.faces_layer }),
+    ...(f.cuts?.length && { 'gami:cuts': f.cuts.map((c) => c.map((p) => p.map(round))) }),
   };
 }
 
@@ -140,5 +143,14 @@ function readFrame(f: FoldFileFrame): FoldFrame {
     faces_vertices: f.faces_vertices,
     ...(f['gami:faces_parent'] && { faces_parent: f['gami:faces_parent'] }),
     ...(f['gami:faces_layer'] && { faces_layer: f['gami:faces_layer'] }),
+    ...(cutsOf(f['gami:cuts']) && { cuts: cutsOf(f['gami:cuts']) }),
   };
+}
+
+/** Cuts read from a file: segments of two points each. Anything else is left out. */
+function cutsOf(x: unknown): FoldFrame['cuts'] | undefined {
+  if (!Array.isArray(x)) return undefined;
+  const point = (p: unknown): p is [number, number] => Array.isArray(p) && p.length === 2 && p.every((n) => typeof n === 'number' && Number.isFinite(n));
+  const cuts = x.filter((c): c is [[number, number], [number, number]] => Array.isArray(c) && c.length === 2 && c.every(point));
+  return cuts.length ? cuts : undefined;
 }

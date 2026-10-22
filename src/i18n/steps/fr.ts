@@ -868,4 +868,418 @@ export const fr: Record<string, string> = {
     "Dessinez les yeux, le nez et les moustaches. C’est fini !",
   "Draw two shut, smiling eyes and a little nose on the face. Done!":
     "Dessinez sur le visage deux yeux fermés et souriants, et un petit nez. C’est fini !",
+  "Start coloured side up, with a corner pointing towards you.":
+    "Commence face colorée vers le haut, un coin pointé vers toi.",
+  "Turn it over, white side up.":
+    "Retourne-le, face blanche vers le haut.",
+  "Fold the top left edge in":
+    "Rabats le bord en haut à gauche",
+  "Fold the top left edge in towards the middle crease, stopping a little short of it.":
+    "Rabats le bord en haut à gauche vers le pli du milieu, en t’arrêtant un peu avant.",
+  "Fold the top right edge in":
+    "Rabats le bord en haut à droite",
+  "The same on the right, leaving a narrow white strip between the two.":
+    "Pareil à droite, en laissant une fine bande blanche entre les deux.",
+  "Fold the left corner in a little way.":
+    "Rabats un peu le coin gauche vers l’intérieur.",
+  "And the right corner, to match.":
+    "Et le coin droit, pareil.",
+  "Fold the bottom point up, level with the lower ends of those folds.":
+    "Remonte la pointe du bas, au niveau du bas de ces plis.",
+  "Fold the left half over onto the right, along the middle crease.":
+    "Rabats la moitié gauche sur la droite, le long du pli du milieu.",
+  "Turn the head down":
+    "Rabats la tête",
+  "Open the top a little and turn the point down round the outside, for the head and beak. Done!":
+    "Ouvre un peu le haut et rabats la pointe par-dessus l’extérieur, pour la tête et le bec. C’est fini !",
+  "Start white side up, with a corner pointing towards you.":
+    "Commence face blanche vers le haut, un coin pointé vers toi.",
+  "Crease across":
+    "Marque un pli en travers",
+  "Fold the bottom corner to the top corner, then unfold.":
+    "Amène le coin du bas sur le coin du haut, puis déplie.",
+  "Crease the lower left edge":
+    "Marque le bord en bas à gauche",
+  "Fold the lower left edge to the middle crease, then unfold.":
+    "Rabats le bord en bas à gauche sur le pli du milieu, puis déplie.",
+  "Crease the lower right edge":
+    "Marque le bord en bas à droite",
+  "The same with the lower right edge.":
+    "Pareil avec le bord en bas à droite.",
+  "Crease the upper left edge":
+    "Marque le bord en haut à gauche",
+  "Now fold the upper left edge to the middle crease, and unfold.":
+    "Maintenant, rabats le bord en haut à gauche sur le pli du milieu, puis déplie.",
+  "Crease the upper right edge":
+    "Marque le bord en haut à droite",
+  "And the upper right edge.":
+    "Et le bord en haut à droite.",
+  "Collapse into a fish base":
+    "Plie en base du poisson",
+  "Push the left and right corners in along the creases, so the edges meet in the middle and each corner pinches up into a little flap. Lay both flaps upwards.":
+    "Pousse les coins gauche et droit vers l’intérieur le long des plis, pour que les bords se rejoignent au milieu et que chaque coin se pince en un petit rabat. Couche les deux rabats vers le haut.",
+  "Fold the top point behind":
+    "Rabats la pointe du haut derrière",
+  "Fold the top point back behind, level with the tips of the two flaps.":
+    "Rabats la pointe du haut derrière, au niveau des pointes des deux rabats.",
+  "Fold the left corner in a little, to straighten the side.":
+    "Rabats un peu le coin gauche, pour redresser le côté.",
+  "And the right corner.":
+    "Et le coin droit.",
+  "Fold the right half over onto the left.":
+    "Rabats la moitié droite sur la gauche.",
+  "Turn it a quarter turn, so the blunt end points left.":
+    "Tourne-le d’un quart de tour, le bout plat vers la gauche.",
+  "Turn the tail up":
+    "Relève la queue",
+  "Open the thin end a little and turn it up round the outside, for the tail.":
+    "Ouvre un peu le bout fin et relève-le par-dessus l’extérieur, pour la queue.",
+  "Open the fins":
+    "Ouvre les nageoires",
+  "Lift the two flaps out from the sides, for the fins. Your whale is done!":
+    "Écarte les deux rabats des côtés, pour les nageoires. Ta baleine est finie !",
+  "Make the feet":
+    "Fais les pattes",
+  "Push the point of each leg up between its layers so one sticks out to the left and one to the right, for the feet.":
+    "Pousse la pointe de chaque jambe vers le haut entre ses couches, pour que l’une sorte à gauche et l’autre à droite : ce sont les pattes.",
+  "Fold the top flap down":
+    "Rabats le rabat du haut",
+  "Fold the top flap down at the widest point, so its tip points to the bottom.":
+    "Rabats le rabat du haut vers le bas à l’endroit le plus large, pour que sa pointe soit en bas.",
+  "Make the head":
+    "Fais la tête",
+  "Push the top point down between its layers so it points forwards, for the head and beak. Your crow is done!":
+    "Pousse la pointe du haut entre ses couches pour qu’elle pointe vers l’avant : la tête et le bec. Ton corbeau est fini !",
+  "Fold the top left edge to the middle crease.":
+    "Rabats le bord en haut à gauche sur le pli du milieu.",
+  "And the top right edge. It’s a kite.":
+    "Et le bord en haut à droite. C’est un cerf-volant.",
+  "Fold the bottom corner up to the top corner. It’s all green now: a pentagon.":
+    "Remonte le coin du bas jusqu’au coin du haut. Tout est vert maintenant : un pentagone.",
+  "Fold the top left edge to the middle again.":
+    "Rabats encore le bord en haut à gauche sur le milieu.",
+  "And the top right edge.":
+    "Et le bord en haut à droite.",
+  "Fold the front layer’s point back down, level with where the side folds meet in the middle. It hangs below the tree.":
+    "Redescends la pointe de la couche de devant, au niveau où les plis des côtés se rejoignent au milieu. Elle pend sous le sapin.",
+  "Fold the bottom point up to the bottom of the tree, to square off the pot.":
+    "Remonte la pointe du bas jusqu’au bas du sapin, pour former le pot.",
+  "Turn it over. Your tree is done!":
+    "Retourne-le. Ton sapin est fini !",
+  "Fold the bottom left corner of the top flap up to the top point.":
+    "Remonte le coin en bas à gauche du rabat du dessus jusqu’à la pointe du haut.",
+  "And the bottom right corner. It’s a diamond.":
+    "Et le coin en bas à droite. C’est un losange.",
+  "Fold the diamond’s left corner in to the middle.":
+    "Rabats le coin gauche du losange jusqu’au milieu.",
+  "Fold the left point down":
+    "Rabats la pointe gauche",
+  "Fold the loose point at the top left down and out.":
+    "Rabats vers le bas et l’extérieur la pointe libre en haut à gauche.",
+  "Fold the right point down":
+    "Rabats la pointe droite",
+  "And the one at the top right.":
+    "Et celle en haut à droite.",
+  "Tuck in the left point":
+    "Glisse la pointe gauche",
+  "Tuck the point into the pocket of the flap below it.":
+    "Glisse la pointe dans la poche du rabat en dessous.",
+  "Tuck in the right point":
+    "Glisse la pointe droite",
+  "And the right point.":
+    "Et la pointe droite.",
+  "Turn it over, and do the same on this side.":
+    "Retourne-le et fais la même chose de ce côté.",
+  "And the last one. Now blow gently into the hole at the bottom, and the water bomb puffs up into a ball. Done!":
+    "Et la dernière. Souffle doucement dans le trou du bas : la bombe à eau se gonfle en boule. C’est fini !",
+  "Pull out the tail":
+    "Sors la queue",
+  "Hold the body, and pull the left lower point out and up between the wings. Flatten it at an angle. This is the tail.":
+    "Tiens le corps et tire la pointe en bas à gauche vers l’extérieur et le haut, entre les ailes. Aplatis-la en biais. C’est la queue.",
+  "Pull out the neck":
+    "Sors le cou",
+  "The same with the right point, for the neck.":
+    "Pareil avec la pointe droite, pour le cou.",
+  "Push the tip of the neck down between its layers for the head. Hold the base of the neck and pull the tail gently: the wings flap!":
+    "Pousse le bout du cou entre ses couches pour faire la tête. Tiens la base du cou et tire doucement la queue : les ailes battent !",
+  "Fold out an ear":
+    "Sors une oreille",
+  "Fold the loose point at the top left out a little to the side, for an ear.":
+    "Rabats un peu sur le côté la pointe libre en haut à gauche, pour une oreille.",
+  "Fold out the other ear":
+    "Sors l’autre oreille",
+  "And the other one. Blow gently into the hole at the bottom to puff up the rabbit, then open out the ears. Done!":
+    "Et l’autre. Souffle doucement dans le trou du bas pour gonfler le lapin, puis ouvre les oreilles. C’est fini !",
+  "Fold in half side to side, then unfold.":
+    "Plie en deux d’un côté à l’autre, puis déplie.",
+  "And top to bottom, then unfold.":
+    "Et de haut en bas, puis déplie.",
+  "Fold the left edge to the middle crease.":
+    "Rabats le bord gauche sur le pli du milieu.",
+  "Fold the top to the middle":
+    "Plie le haut jusqu’au milieu",
+  "Fold the top edge to the middle, then unfold.":
+    "Rabats le bord du haut jusqu’au milieu, puis déplie.",
+  "Fold the bottom to the middle":
+    "Plie le bas jusqu’au milieu",
+  "And the bottom edge, then unfold.":
+    "Et le bord du bas, puis déplie.",
+  "Squash the top":
+    "Aplatis le haut",
+  "Fold the top edge down to the middle, pulling the top left corner out to the side and the top right corner up. Flatten them into triangles.":
+    "Rabats le bord du haut jusqu’au milieu en tirant le coin en haut à gauche sur le côté et le coin en haut à droite vers le haut. Aplatis-les en triangles.",
+  "Squash the bottom":
+    "Aplatis le bas",
+  "The same at the bottom, the other way round: the bottom right corner out to the side and the bottom left one down. Pin the middle to a stick and blow: it spins!":
+    "Pareil en bas, dans l’autre sens : le coin en bas à droite sur le côté et celui en bas à gauche vers le bas. Fixe le milieu sur un bâton et souffle : il tourne !",
+  "White side up. Fold in half side to side, then unfold.":
+    "Face blanche vers le haut, plie en deux d’un côté à l’autre, puis déplie.",
+  "And the other corners.":
+    "Et les autres coins.",
+  "Turn the paper back over.":
+    "Retourne de nouveau le papier.",
+  "Fold the left side to the middle":
+    "Plie le côté gauche jusqu’au milieu",
+  "Fold the left edge to the middle, then unfold.":
+    "Rabats le bord gauche jusqu’au milieu, puis déplie.",
+  "Fold the right side to the middle":
+    "Plie le côté droit jusqu’au milieu",
+  "And the bottom edge.":
+    "Et le bord du bas.",
+  "Fold the left edge to the middle again, and leave it there.":
+    "Rabats encore le bord gauche jusqu’au milieu et laisse-le.",
+  "Fold the top edge down to the middle, pulling both top corners out to the sides. Flatten them into triangles.":
+    "Rabats le bord du haut jusqu’au milieu en tirant les deux coins du haut sur les côtés. Aplatis-les en triangles.",
+  "Push the bottom edge up to the middle, letting the bottom corners come down below it, and flatten them.":
+    "Remonte le bord du bas jusqu’au milieu en laissant les coins du bas descendre en dessous, et aplatis-les.",
+  "Fold the top part back behind, along the middle. It’s a wide triangle now.":
+    "Rabats la partie du haut derrière, le long du milieu. C’est maintenant un large triangle.",
+  "Narrow the left side":
+    "Affine le côté gauche",
+  "Fold the top left flap in, from its top corner to the middle of its bottom edge.":
+    "Rabats vers l’intérieur le rabat en haut à gauche, de son coin du haut au milieu de son bord du bas.",
+  "Narrow the right side":
+    "Affine le côté droit",
+  "And the top right flap.":
+    "Et le rabat en haut à droite.",
+  "Fold out the wings":
+    "Déplie les ailes",
+  "Fold the top half back to the left, on a slant just beside the body. The wings spread out on both sides.":
+    "Rabats la moitié du dessus vers la gauche, en biais juste à côté du corps. Les ailes s’ouvrent des deux côtés.",
+  "Lift the wings":
+    "Relève les ailes",
+  "Lift the wings a little, folding the butterfly gently in half along its body. Done!":
+    "Relève un peu les ailes en pliant doucement le papillon en deux le long du corps. C’est fini !",
+  "Turn it a quarter turn, so the two flaps point to the left.":
+    "Tourne-le d’un quart de tour, les deux rabats vers la gauche.",
+  "Fold the point in":
+    "Rabats la pointe",
+  "Fold the left point to the middle.":
+    "Rabats la pointe gauche jusqu’au milieu.",
+  "Fold it back out":
+    "Replie-la vers l’extérieur",
+  "Fold the point back to the left, a quarter of the way from the edge to the middle, so a little of it sticks out.":
+    "Replie la pointe vers la gauche, au quart de la distance entre le bord et le milieu, pour qu’elle dépasse un peu.",
+  "Cut the tail":
+    "Coupe la queue",
+  "With scissors, cut a short way along the middle crease from the right point. This makes the two flukes.":
+    "Avec des ciseaux, coupe un peu le long du pli du milieu depuis la pointe droite. Cela fait les deux lobes de la queue.",
+  "Fold the bottom half up onto the top half.":
+    "Remonte la moitié du bas sur la moitié du haut.",
+  "Fold up a fluke":
+    "Relève un lobe de la queue",
+  "Fold the top layer of the tail up on a slant, inside the cut.":
+    "Relève en biais la couche du dessus de la queue, à l’intérieur de la coupe.",
+  "Fold down the other fluke":
+    "Abaisse l’autre lobe de la queue",
+  "Fold the other half of the tail down on a slant, inside the cut.":
+    "Abaisse en biais l’autre moitié de la queue, à l’intérieur de la coupe.",
+  "Lift the two flaps out from the sides, for the fins. Your dolphin is done!":
+    "Écarte les deux rabats des côtés, pour les nageoires. Ton dauphin est fini !",
+  "Turn it a quarter turn, so the flaps point to the left.":
+    "Tourne-le d’un quart de tour, les rabats vers la gauche.",
+  "Raise the neck":
+    "Relève le cou",
+  "Open the left point a little and push it up between the layers, for the neck.":
+    "Ouvre un peu la pointe gauche et pousse-la vers le haut entre les couches, pour le cou.",
+  "Push the right point up between the layers, for the tail.":
+    "Pousse la pointe droite vers le haut entre les couches, pour la queue.",
+  "Push the tip of the neck forward between its layers, for the head.":
+    "Pousse le bout du cou vers l’avant entre ses couches, pour la tête.",
+  "Open the flippers":
+    "Ouvre les nageoires",
+  "Lift the two flaps out from the sides, for the flippers. Your seal is done!":
+    "Écarte les deux rabats des côtés, pour les nageoires. Ton phoque est fini !",
+  "With the paper sideways, bring the left edge over to the right edge and crease down the middle.":
+    "Papier à l’horizontale, amenez le bord gauche sur le bord droit et marquez un pli au milieu.",
+  "The corners meet on the centre crease in a wide point.":
+    "Les coins se rejoignent sur le pli central en une pointe large.",
+  "Bring the point down to the bottom of the triangle, leaving a flat top. (On A4 paper, fold it only halfway down.)":
+    "Rabattez la pointe jusqu’à la base du triangle, en laissant le haut plat. (Avec du papier A4, ne la pliez qu’à mi-chemin.)",
+  "Fold from the middle of the top edge, so the right half of the top lies along the centre crease.":
+    "Pliez depuis le milieu du bord supérieur, pour que la moitié droite de ce bord se pose sur le pli central.",
+  "Match the right side. The plane is now a wide triangle.":
+    "Faites comme à droite. L’avion est maintenant un large triangle.",
+  "Fold straight up and down, halfway between the middle and the right corner, so the corner meets the middle of the bottom edge.":
+    "Pliez à la verticale, à mi-chemin entre le milieu et le coin droit, pour que le coin rejoigne le milieu du bord inférieur.",
+  "Match the right side. The two corners meet at the middle.":
+    "Faites comme à droite. Les deux coins se rejoignent au milieu.",
+  "Fold from the nose down to the bottom right corner, making the right edge one straight line.":
+    "Pliez de la pointe jusqu’au coin inférieur droit, pour que le bord droit soit bien droit.",
+  "Match the right side, for a slim triangle.":
+    "Faites comme à droite, pour un triangle élancé.",
+  "Fold the top layers down along a line close to the bottom, for a narrow body and wide wings.":
+    "Rabattez les couches du dessus le long d’une ligne proche du bas, pour un fuselage étroit et de larges ailes.",
+  "Fold the top-left corner across":
+    "Pliez le coin supérieur gauche en travers",
+  "Bring the top-left corner down to the right edge, so the top edge lies along it.":
+    "Amenez le coin supérieur gauche sur le bord droit, pour que le bord supérieur se pose le long de celui-ci.",
+  "Fold the top-right corner across":
+    "Pliez le coin supérieur droit en travers",
+  "The same the other way: the top edge along the left edge. The creases cross in an X.":
+    "Pareil dans l’autre sens : le bord supérieur le long du bord gauche. Les plis se croisent en X.",
+  "Fold the top edge down so it lines up with the ends of the X. The fold runs through the middle of the X.":
+    "Rabattez le bord supérieur pour qu’il s’aligne sur les extrémités du X. Le pli passe par le centre du X.",
+  "Collapse the top into a triangle":
+    "Repliez le haut en triangle",
+  "Push the sides of the top square in along the middle fold, so the top folds down into a triangle on the sheet.":
+    "Rentrez les côtés du carré du haut le long du pli du milieu, pour que le haut se replie en triangle sur la feuille.",
+  "Fold the top flap only: bring the triangle’s right edge in to the centre line. Its corner pokes out below.":
+    "Pliez seulement le rabat du dessus : amenez le bord droit du triangle sur la ligne centrale. Son coin dépasse en bas.",
+  "And the left edge, top flap only. The two flaps make a kite.":
+    "Et le bord gauche, rabat du dessus seulement. Les deux rabats forment un cerf-volant.",
+  "Fold the whole top back, so the point meets the bottom edge on the other side. (On A4 paper, stop a little short of the edge.)":
+    "Pliez tout le haut vers l’arrière, pour que la pointe rejoigne le bord inférieur de l’autre côté. (Avec du papier A4, arrêtez un peu avant le bord.)",
+  "Fold the right tip up":
+    "Relevez la pointe droite",
+  "Fold the kite’s right tip up, so its point sticks out past the top edge.":
+    "Relevez la pointe droite du cerf-volant, pour qu’elle dépasse au-dessus du bord supérieur.",
+  "Fold the left tip up":
+    "Relevez la pointe gauche",
+  "And the left tip, beside it.":
+    "Et la pointe gauche, à côté.",
+  "Fold the top layers down along a line close to the bottom, for broad, square wings.":
+    "Rabattez les couches du dessus le long d’une ligne proche du bas, pour des ailes larges et carrées.",
+  "Squash a flap":
+    "Écrase un rabat",
+  "Lift the right flap upright, open it, and press it flat so its fold lies on the centre line.":
+    "Relève le rabat de droite, ouvre-le et aplatis-le pour que son pli tombe sur la ligne centrale.",
+  "Squash the next flap":
+    "Écrase le rabat suivant",
+  "Squash the right flap on this side the same way.":
+    "Écrase de la même façon le rabat de droite de ce côté.",
+  "Fold the top layer on the right over to the left, showing another flap.":
+    "Rabats la couche du dessus de droite vers la gauche, pour faire apparaître un autre rabat.",
+  "Squash the third flap":
+    "Écrase le troisième rabat",
+  "Squash it like the others.":
+    "Écrase-le comme les autres.",
+  "Fold the top right layer over to the left here too.":
+    "Ici aussi, rabats la couche du dessus de droite vers la gauche.",
+  "Squash the last flap":
+    "Écrase le dernier rabat",
+  "And squash the last flap.":
+    "Et écrase le dernier rabat.",
+  "Crease the lower edges":
+    "Marque les bords du bas",
+  "Fold the lower edges of the top layer in to the centre line, then unfold.":
+    "Plie les bords du bas de la couche du dessus vers la ligne centrale, puis déplie.",
+  "Open them out again, leaving the creases.":
+    "Ouvre-les à nouveau en gardant les plis.",
+  "Lift the bottom edge of the coloured layer up along the line between the creases’ tops, pushing its sides in to meet at the centre.":
+    "Soulève le bord du bas de la couche colorée le long de la ligne qui relie le haut des plis, en poussant les côtés vers l’intérieur pour qu’ils se rejoignent au centre.",
+  "Petal fold this side":
+    "Fais le pli pétale de ce côté",
+  "Make the same petal fold on this side.":
+    "Fais le même pli pétale de ce côté.",
+  "Turn the top flap on the right over to the left.":
+    "Rabats le rabat du dessus de droite vers la gauche.",
+  "Petal fold the third flap":
+    "Fais le pli pétale du troisième rabat",
+  "Petal fold this flap too.":
+    "Fais aussi le pli pétale de ce rabat.",
+  "Turn the top right flap over to the left.":
+    "Rabats le rabat du dessus à droite vers la gauche.",
+  "Petal fold the last flap":
+    "Fais le pli pétale du dernier rabat",
+  "And petal fold the last one. This is the frog base.":
+    "Et fais le pli pétale du dernier. Voici la base de la grenouille.",
+  "Narrow the bottom":
+    "Affine le bas",
+  "Fold the lower edges of the top layer in to the centre line.":
+    "Plie les bords du bas de la couche du dessus vers la ligne centrale.",
+  "Narrow this side":
+    "Affine ce côté",
+  "Fold these lower edges in to the centre line too.":
+    "Plie aussi ces bords du bas vers la ligne centrale.",
+  "Narrow the last edges":
+    "Affine les derniers bords",
+  "And fold in the last two lower edges.":
+    "Et replie les deux derniers bords du bas.",
+  "Lift a front leg":
+    "Relève une patte avant",
+  "Open the front left flap a little and reverse-fold its lower point up between its layers, so it points up beside the head.":
+    "Ouvre un peu le rabat avant gauche et fais un pli inversé pour remonter sa pointe entre ses couches, afin qu’elle pointe vers le haut à côté de la tête.",
+  "Lift the other front leg":
+    "Relève l’autre patte avant",
+  "The same with the front right flap.":
+    "Pareil avec le rabat avant droit.",
+  "Turn out a back leg":
+    "Sors une patte arrière",
+  "Reverse-fold the back left point out to the side, a little lower down.":
+    "Fais un pli inversé pour sortir la pointe arrière gauche sur le côté, un peu plus bas.",
+  "Turn out the other back leg":
+    "Sors l’autre patte arrière",
+  "And the back right point.":
+    "Et la pointe arrière droite.",
+  "Bend a front leg":
+    "Plie une patte avant",
+  "Reverse-fold the front left leg out sideways, halfway along.":
+    "Fais un pli inversé à mi-longueur de la patte avant gauche pour l’orienter sur le côté.",
+  "Bend the other front leg":
+    "Plie l’autre patte avant",
+  "Bend a back leg":
+    "Plie une patte arrière",
+  "Reverse-fold the back left leg down, about halfway along.":
+    "Fais un pli inversé vers le bas, à peu près à mi-longueur de la patte arrière gauche.",
+  "Bend the other back leg":
+    "Plie l’autre patte arrière",
+  "And the back right leg.":
+    "Et la patte arrière droite.",
+  "Shape a front foot":
+    "Forme un pied avant",
+  "Reverse-fold the tip of the front left leg up to make a foot.":
+    "Fais un pli inversé vers le haut au bout de la patte avant gauche pour former un pied.",
+  "Shape the other front foot":
+    "Forme l’autre pied avant",
+  "And the front right foot.":
+    "Et le pied avant droit.",
+  "Shape a back foot":
+    "Forme un pied arrière",
+  "Reverse-fold the tip of the back left leg out to the side.":
+    "Fais un pli inversé vers le côté au bout de la patte arrière gauche.",
+  "Shape the other back foot":
+    "Forme l’autre pied arrière",
+  "And the back right foot.":
+    "Et le pied arrière droit.",
+  "Fold the head":
+    "Plie la tête",
+  "Fold the tip of the head down behind. Your frog is finished.":
+    "Plie la pointe de la tête vers l’arrière. Ta grenouille est terminée.",
+  "Cut a slit in the wings":
+    "Coupez une fente dans les ailes",
+  "If you like, for tricks: with scissors, cut a short slit in from the back edge, through both wings at once.":
+    "Si vous voulez, pour des acrobaties : avec des ciseaux, coupez une courte fente depuis le bord arrière, à travers les deux ailes à la fois.",
+  "Cut another slit":
+    "Coupez une autre fente",
+  "Cut a second slit the same length, further out. The strip between the slits is an aileron.":
+    "Coupez une deuxième fente de la même longueur, plus loin vers l’extérieur. La bande entre les fentes est un aileron.",
+  "Fold up the wingtips":
+    "Relevez le bout des ailes",
+  "If you like, fold the tip of each wing straight up, on a line parallel to the body.":
+    "Si vous voulez, relevez le bout de chaque aile à la verticale, le long d’une ligne parallèle au fuselage.",
+  "Bend up the ailerons":
+    "Relevez les ailerons",
+  "Bend the strip between each wing’s slits up a little.":
+    "Relevez un peu la bande entre les fentes de chaque aile.",
 };

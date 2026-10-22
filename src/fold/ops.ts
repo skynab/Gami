@@ -1,4 +1,5 @@
 import { collapse, type CreaseKind } from './collapse';
+import { cut } from './cut';
 import { fold, FoldError, placeLike, rotate, toFlat, turnOver, unfoldStep, type FoldKind } from './fold';
 import { flipLine, lineEdgeOnto, lineOnto, lineThrough, sideOf, type Line } from './geometry2d';
 import { place } from './place';
@@ -74,6 +75,8 @@ export type Op =
   | { op: 'popUp'; centre: At; rays: { azimuth: number; elevation: number }[] }
   /** Draws on the paper, leaving it where it is: a face, say. */
   | { op: 'draw'; marks: Mark[] }
+  /** A scissor cut along a segment, through every layer it crosses, the top N, or the faces `only` picks. */
+  | { op: 'cut'; from: At; to: At; layers?: number; only?: Faces }
   /** Several operations shown as one step. */
   | { op: 'together'; ops: Op[] };
 
@@ -157,6 +160,14 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
       };
     case 'draw':
       return { op: 'draw', marks: parseMarks(o.marks, `${path}.marks`) };
+    case 'cut':
+      return {
+        op: 'cut',
+        from: at(o.from, `${path}.from`),
+        to: at(o.to, `${path}.to`),
+        ...opt(o, 'layers', count, path),
+        ...opt(o, 'only', (v, p) => faces(v, p, 0), path),
+      };
     case 'together':
       if (depth >= LIMITS.nesting) throw new OpError(`${path}: nested too deeply`);
       return { op: 'together', ops: list(o.ops, `${path}.ops`, (v, p) => parseOp(v, p, depth + 1)) };
@@ -320,6 +331,8 @@ export function opKind(op: Op): StepKind {
       return 'pose';
     case 'draw':
       return 'draw';
+    case 'cut':
+      return 'cut';
     case 'together':
       return op.ops.length ? opKind(op.ops[op.ops.length - 1]) : 'fold';
   }
@@ -423,7 +436,17 @@ interface Context {
 
 const radians = (degrees: number) => (degrees * Math.PI) / 180;
 
+/** Runs an operation, keeping the cuts made so far in the paper it makes (a fresh sheet has none). */
 function run(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; flat?: FoldFrame; marks?: Mark[] } {
+  const before = ctx.steps.length ? ctx.steps[ctx.steps.length - 1].frame : ctx.model.start;
+  const out = runOp(op, ctx);
+  const cuts = before.cuts;
+  if (!cuts?.length || op.op === 'newSheet') return out;
+  const keep = (f: FoldFrame): FoldFrame => (f.cuts ? f : { ...f, cuts });
+  return { ...out, frame: keep(out.frame), ...(out.via && { via: out.via.map(keep) }), ...(out.flat && { flat: keep(out.flat) }) };
+}
+
+function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; flat?: FoldFrame; marks?: Mark[] } {
   const frames = [ctx.model.start, ...ctx.steps.map((s) => s.frame)];
   const frame = frames[frames.length - 1];
   const where = (a: At, on = frame): Vec2 => ('table' in a ? a.table : locate(on, a.paper));
@@ -499,6 +522,8 @@ function run(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; flat?
       return { frame: radial(frame, where(op.centre), op.rays) };
     case 'draw':
       return { frame: { ...frame, faces_parent: undefined }, marks: op.marks };
+    case 'cut':
+      return { frame: cut(frame, { from: where(op.from), to: where(op.to), layers: op.layers, only: test(op.only) }) };
     case 'together': {
       const added: Step[] = [];
       for (const part of op.ops) {

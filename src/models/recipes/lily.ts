@@ -210,12 +210,13 @@ export function lily() {
   r.rotate(180, { title: 'Turn it round', text: 'Turn the model round, so the petals point up and the narrow part is at the bottom.' });
 
   // The petals' tips now lie on top of the short part, hinged at the waist. The narrowing folds caught slivers
-  // of them just past the waist, so each opens on a line a little beyond those: the top one furthest, each
-  // one under it less, so none passes through another, and the bottom one stays on the table.
+  // of them just past the waist, so each opens on a line well beyond those: the top one furthest, each one
+  // under it less, so none passes through another, and the bottom one stays on the table. Curled in eight
+  // bends, each petal stays clear of the stack by about a layer.
   const T = r.where(paper(0, 0));
   const tipEnd = r.where(paper(0.5, 0.5));
   const along = Math.sign(tipEnd[1] - T[1]);
-  const hinge = T[1] + along * (0.5 - (2 - Math.SQRT2) / 4 + 0.07);
+  const hinge = T[1] + along * (0.5 - (2 - Math.SQRT2) / 4 + 0.13);
   const order: string[] = [];
   for (const [u, v] of r.stackAt([T[0] + 0.01, (hinge + tipEnd[1]) / 2])) {
     const key = `${Math.sign(u)},${Math.sign(v)}`;
@@ -229,7 +230,7 @@ export function lily() {
         through: [table(T[0] - 1, hinge), table(T[0] + 1, hinge)] as [At, At],
         moving: at(tipEnd),
         degrees: 85 - 25 * i,
-        segments: 4,
+        segments: 8,
         only: (c: Vec2) => quarter(su, sv)(c) && inTip(c),
       };
     }),

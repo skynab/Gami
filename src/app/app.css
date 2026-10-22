@@ -916,6 +916,25 @@ kbd {
   background: var(--accent-soft);
 }
 
+.card-needs {
+  position: absolute;
+  inset-block-start: 10px;
+  inset-inline-end: 10px;
+  display: flex;
+  gap: 4px;
+}
+
+.card-needs > span {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--fg);
+  box-shadow: 0 0 0 1px var(--line);
+}
+
 .card-badge.soon {
   background: var(--surface);
   color: var(--muted);
@@ -1026,6 +1045,20 @@ kbd {
 .fold-editor .crease.flat {
   stroke-width: 1.5px;
   stroke-dasharray: 2 4;
+}
+
+/* Scissor cuts: solid, the planned one in the accent colour, the ones already made in the text colour. */
+.fold-editor .cut {
+  stroke: var(--fg);
+  stroke-width: 2px;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.fold-editor .cut.planned {
+  stroke: var(--accent);
+  stroke-width: 3px;
 }
 
 .fold-editor .snap {

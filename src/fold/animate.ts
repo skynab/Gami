@@ -1,7 +1,7 @@
 import { Matrix4, Quaternion, Vector3 } from 'three';
 import { box, cornerKeys, crossDepth, overlapping } from './cross3d';
 import { facePositions, framesOf, LAYER_GAP, normal, sphereAround } from './frames';
-import { overlapArea, sharedSegment } from './geometry2d';
+import { joinedSegment, overlapArea, type Cut } from './geometry2d';
 import { applyOp } from './ops';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from './types';
 
@@ -234,6 +234,7 @@ function moving(from: FoldFrame, to: FoldFrame, { yielding = false } = {}): Tran
     reps[i].faces.push(f);
     return { paper, before, after, motion: i };
   });
+  cutsOf.set(faces, to.cuts ?? from.cuts ?? []);
 
   // Moves with the same turn (stacked layers turning over together, say, which differ only by the gap
   // between layers) go the same way round and rise as high, so they never pass through each other. Only
@@ -604,8 +605,12 @@ function hingesFor(faces: FaceTrack[], reps: { q: Quaternion; t: Vector3; faces:
   return order.length > roots ? { parent, at, dir, angle, order, lift: 0, shift } : null;
 }
 
+/** The cuts in the paper a step's faces were made from (see `moving`): faces meeting along one aren't joined. */
+const cutsOf = new WeakMap<FaceTrack[], Cut[]>();
+
 /** Pairs of faces joined along an edge on the sheet, and that edge. */
 function sharedEdges(faces: FaceTrack[]): { i: number; j: number; shared: [Vec2, Vec2] }[] {
+  const cuts = cutsOf.get(faces);
   const out: { i: number; j: number; shared: [Vec2, Vec2] }[] = [];
   const bounds = faces.map((f) => {
     const us = f.paper.map((p) => p[0]);
@@ -616,7 +621,7 @@ function sharedEdges(faces: FaceTrack[]): { i: number; j: number; shared: [Vec2,
     for (let j = i + 1; j < faces.length; j++) {
       const [a, b] = [bounds[i], bounds[j]];
       if (a[2] < b[0] - 1e-9 || b[2] < a[0] - 1e-9 || a[3] < b[1] - 1e-9 || b[3] < a[1] - 1e-9) continue;
-      const shared = sharedSegment(faces[i].paper, faces[j].paper);
+      const shared = joinedSegment(faces[i].paper, faces[j].paper, cuts);
       if (shared) out.push({ i, j, shared: shared as [Vec2, Vec2] });
     }
   }
