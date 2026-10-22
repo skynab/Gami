@@ -33,7 +33,7 @@ export const es: Messages = {
     communityIntro: 'Hechos en el Estudio por creadores de Gami.',
   },
   levels: { easy: 'Fácil', medium: 'Medio', hard: 'Difícil' },
-  categories: { basics: 'Básicos', animal: 'Animales', object: 'Objetos', toy: 'Juguetes', modular: 'Modulares', flower: 'Flores', math: 'Matemáticas' },
+  categories: { lesson: 'Lecciones', animal: 'Animales', object: 'Objetos', toy: 'Juguetes', modular: 'Modulares', flower: 'Flores' },
   card: {
     soon: 'Próximamente',
     lesson: 'Lección',

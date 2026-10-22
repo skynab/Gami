@@ -33,7 +33,7 @@ export const fr: Messages = {
     communityIntro: 'Créés dans le Studio par des créateurs Gami.',
   },
   levels: { easy: 'Facile', medium: 'Moyen', hard: 'Difficile' },
-  categories: { basics: 'Bases', animal: 'Animaux', object: 'Objets', toy: 'Jouets', modular: 'Modulaires', flower: 'Fleurs', math: 'Maths' },
+  categories: { lesson: 'Leçons', animal: 'Animaux', object: 'Objets', toy: 'Jouets', modular: 'Modulaires', flower: 'Fleurs' },
   card: {
     soon: 'Bientôt',
     lesson: 'Leçon',

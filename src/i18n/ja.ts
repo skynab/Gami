@@ -33,7 +33,7 @@ export const ja: Messages = {
     communityIntro: 'Gamiのクリエイターがスタジオで作った作品です。',
   },
   levels: { easy: 'やさしい', medium: 'ふつう', hard: 'むずかしい' },
-  categories: { basics: '基本', animal: '動物', object: 'もの', toy: 'おもちゃ', modular: 'ユニット', flower: '花', math: '数学' },
+  categories: { lesson: 'レッスン', animal: '動物', object: 'もの', toy: 'おもちゃ', modular: 'ユニット', flower: '花' },
   card: {
     soon: '近日公開',
     lesson: 'レッスン',

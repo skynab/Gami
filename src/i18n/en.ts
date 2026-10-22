@@ -35,7 +35,7 @@ export const en = {
     communityIntro: 'Made in the Studio by Gami creators.',
   },
   levels: { easy: 'Easy', medium: 'Medium', hard: 'Hard' },
-  categories: { basics: 'Basics', animal: 'Animals', object: 'Objects', toy: 'Toys', modular: 'Modular', flower: 'Flowers', math: 'Math' },
+  categories: { lesson: 'Lessons', animal: 'Animals', object: 'Objects', toy: 'Toys', modular: 'Modular', flower: 'Flowers' },
   card: {
     soon: 'Coming soon',
     lesson: 'Lesson',

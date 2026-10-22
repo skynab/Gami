@@ -3,7 +3,8 @@
  * src/models/recipes. Models without `steps` are listed as coming soon.
  */
 
-export type Category = 'basics' | 'animal' | 'object' | 'toy' | 'modular' | 'flower' | 'math';
+/** `lesson`: lessons rather than models (the basics, folds, bases and geometry), badged as such on their cards. */
+export type Category = 'lesson' | 'animal' | 'object' | 'toy' | 'modular' | 'flower';
 export type Difficulty = 1 | 2 | 3 | 4 | 5;
 export type Level = 'easy' | 'medium' | 'hard';
 
@@ -20,20 +21,17 @@ export interface ModelInfo {
   sheets: number;
   /** Tools beyond paper, shown on the card so nobody starts one without them: scissors for a cut, a pen for drawing. */
   needs?: Tool[];
-  /** A lesson rather than a model, badged as one on its card. */
-  lesson?: boolean;
 }
 
 export type Tool = 'scissors' | 'pen';
 
 export const CATEGORIES: { id: Category; label: string }[] = [
-  { id: 'basics', label: 'Basics' },
+  { id: 'lesson', label: 'Lessons' },
   { id: 'animal', label: 'Animals' },
   { id: 'object', label: 'Objects' },
   { id: 'toy', label: 'Toys' },
   { id: 'modular', label: 'Modular' },
   { id: 'flower', label: 'Flowers' },
-  { id: 'math', label: 'Math' },
 ];
 
 export const LEVELS: { id: Level; label: string }[] = [
@@ -43,9 +41,9 @@ export const LEVELS: { id: Level; label: string }[] = [
 ];
 
 export const MODELS: ModelInfo[] = [
-  { id: 'basics', title: 'Folding basics', blurb: 'Start here: fold, unfold and turn the paper over.', difficulty: 1, category: 'basics', steps: 4, minutes: 2, sheets: 1 },
-  { id: 'folds-lesson', title: 'Common folds', blurb: 'Valley and mountain, reverse, squash, rabbit ear, pleat, crimp and petal folds, each on its own square.', difficulty: 2, category: 'basics', steps: 65, minutes: 25, sheets: 1, lesson: true },
-  { id: 'bases-lesson', title: 'Origami bases', blurb: 'The kite, square, water bomb, bird, fish and frog bases: where most models start.', difficulty: 2, category: 'basics', steps: 104, minutes: 30, sheets: 1, lesson: true },
+  { id: 'basics', title: 'Folding basics', blurb: 'Start here: fold, unfold and turn the paper over.', difficulty: 1, category: 'lesson', steps: 4, minutes: 2, sheets: 1 },
+  { id: 'folds-lesson', title: 'Common folds', blurb: 'Valley and mountain, reverse, squash, rabbit ear, pleat, crimp and petal folds, each on its own square.', difficulty: 2, category: 'lesson', steps: 65, minutes: 25, sheets: 1 },
+  { id: 'bases-lesson', title: 'Origami bases', blurb: 'The kite, square, water bomb, bird, fish and frog bases: where most models start.', difficulty: 2, category: 'lesson', steps: 104, minutes: 30, sheets: 1 },
   { id: 'paper-plane', title: 'Paper plane', blurb: 'The classic dart. Flies far and straight.', difficulty: 1, category: 'toy', steps: 13, minutes: 5, sheets: 1 },
   { id: 'glider', title: 'Glider', blurb: 'A flat-nosed plane with broad wings, for slow, long glides.', difficulty: 1, category: 'toy', steps: 12, minutes: 5, sheets: 1 },
   { id: 'bulldog-dart', title: 'Bulldog dart', blurb: 'The dart with its point folded back: a stubby nose for rough landings.', difficulty: 1, category: 'toy', steps: 14, minutes: 5, sheets: 1 },
@@ -87,7 +85,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'iris', title: 'Iris', blurb: 'Three petals up, three down, from the frog base.', difficulty: 4, category: 'flower', minutes: 20, sheets: 1 },
   { id: 'fan', title: 'Fan', blurb: 'Pleat a sheet back and forth, then pinch the end.', difficulty: 1, category: 'object', minutes: 3, sheets: 1 },
   // A lesson rather than a model, kept last: geometry by folding.
-  { id: 'folding-geometry', title: 'Geometry by folding', blurb: 'The rules of mathematical folding, and an angle split in three.', difficulty: 1, category: 'math', steps: 33, minutes: 15, sheets: 1 },
+  { id: 'folding-geometry', title: 'Geometry by folding', blurb: 'The rules of mathematical folding, and an angle split in three.', difficulty: 1, category: 'lesson', steps: 33, minutes: 15, sheets: 1 },
 ];
 
 export function levelOf(difficulty: Difficulty): Level {
