@@ -22,11 +22,12 @@ type Tool = 'onto' | 'through' | 'edges';
 type Layers = 'all' | 1 | 2 | 3;
 /**
  * What the picked line does: a plain fold, a reverse fold, a crease for a collapse, or lifting into 3D.
- * Or, for models of several sheets, moving one sheet (picking where its middle goes).
+ * Or a scissor cut (picking where it starts and ends), or, for models of several sheets, moving one sheet
+ * (picking where its middle goes).
  */
-type Action = 'fold' | 'reverse' | 'collapse' | 'lift' | 'move';
+type Action = 'fold' | 'reverse' | 'collapse' | 'lift' | 'cut' | 'move';
 
-const ACTIONS: Action[] = ['fold', 'reverse', 'collapse', 'lift', 'move'];
+const ACTIONS: Action[] = ['fold', 'reverse', 'collapse', 'lift', 'cut', 'move'];
 
 /** Sheet sizes to start from (names in `studio.sizes`). */
 const SIZES = [
@@ -81,14 +82,14 @@ export default function StudioEditor({ end, cloud = false }: {
   const [message, setMessage] = useState<string | null>(null);
   const file = useRef<HTMLInputElement>(null);
 
-  // Picks a fold line needs: two points, or for edge to edge, two along each edge. Each is kept as the point
-  // of the sheet picked, so the step follows the paper if an earlier one changes.
-  const needs = tool === 'edges' ? 4 : 2;
+  // Picks a fold line needs: two points, or for edge to edge, two along each edge (a cut needs its two ends).
+  // Each is kept as the point of the sheet picked, so the step follows the paper if an earlier one changes.
+  const needs = tool === 'edges' && action !== 'cut' ? 4 : 2;
   const spec = useMemo((): LineSpec | null => {
-    if (picks.length < needs) return null;
+    if (action === 'cut' || picks.length < needs) return null;
     const [a, b, c, d] = picks.map((p) => atOf(editFrame, p));
     return tool === 'onto' ? { onto: [a, b] } : tool === 'edges' ? { edgeOnto: [[a, b], [c, d]] } : { through: [a, b], moving: 'smaller' };
-  }, [picks, needs, tool, editFrame]);
+  }, [action, picks, needs, tool, editFrame]);
   const line = useMemo((): Line | null => {
     if (!spec) return null;
     try {
@@ -108,6 +109,11 @@ export default function StudioEditor({ end, cloud = false }: {
     const flip = flipped ? { flip: true } : {};
     if (action === 'move')
       return chosen === null ? null : { op: 'move', only: { sheet: chosen }, ...(picks[0] && { to: { table: picks[0] } }), degrees: turn, flip: overturn, under: underneath };
+    if (action === 'cut') {
+      if (picks.length < 2) return null;
+      const [from, to] = picks.map((p) => atOf(editFrame, p));
+      return { op: 'cut', from, to, ...(n !== undefined && { layers: n }), ...(inSheet && { only: inSheet }) };
+    }
     if (action === 'collapse')
       return creases.length ? { op: 'collapse', creases: creases.map((c) => c.op), anchor, ...(tuck !== null && { under: { sheet: tuck } }) } : null;
     if (!spec || !line) return null;
@@ -120,7 +126,7 @@ export default function StudioEditor({ end, cloud = false }: {
       op: 'shape',
       bends: [{ line: spec, ...flip, degrees: angle, ...(segments > 1 && { segments }), ...(n !== undefined && { layers: n }), ...(inSheet && { only: inSheet }) }],
     };
-  }, [action, chosen, picks, turn, overturn, underneath, creases, tuck, spec, line, flipped, kind, n, reverseKind, angle, segments]);
+  }, [action, chosen, picks, editFrame, turn, overturn, underneath, creases, tuck, spec, line, flipped, kind, n, reverseKind, angle, segments]);
 
   // For a lift, `onFlat` is the preview with its faces matched to the flat state the lines are picked on.
   const result = useMemo((): { frame: FoldFrame; onFlat?: FoldFrame; via?: FoldFrame[] } | { error: string } | null => {
@@ -256,6 +262,15 @@ export default function StudioEditor({ end, cloud = false }: {
       setLayers(b.layers ? (Math.min(3, b.layers) as Layers) : 'all');
       limits(b.only);
       pick(b.line, shapingBase(m) ?? paperBefore, b.flip);
+    } else if (made.op === 'cut') {
+      setAction('cut');
+      setLayers(made.layers ? (Math.min(3, made.layers) as Layers) : 'all');
+      limits(made.only);
+      try {
+        setPicks([where(made.from, paperBefore), where(made.to, paperBefore)]);
+      } catch (e) {
+        if (!(e instanceof FoldError)) throw e;
+      }
     } else if (made.op === 'move') {
       setAction('move');
       limits(made.only);
@@ -274,7 +289,8 @@ export default function StudioEditor({ end, cloud = false }: {
     else if (action === 'collapse') {
       add({ title: t('studio.steps.collapse'), kind: 'fold', ...made });
       setCreases([]);
-    } else if (action === 'move') add({ title: t('studio.steps.move'), kind: 'assemble', ...made });
+    } else if (action === 'cut') add({ title: t('studio.steps.cut'), kind: 'cut', ...made });
+    else if (action === 'move') add({ title: t('studio.steps.move'), kind: 'assemble', ...made });
     else add({ title: segments > 1 ? t('studio.steps.curl') : t('studio.steps.lift'), kind: 'pose', ...made });
   };
 
@@ -360,6 +376,8 @@ export default function StudioEditor({ end, cloud = false }: {
           ? t('studio.hints.move')
           : t('studio.hints.moveWhere')
         : null
+      : action === 'cut' && picks.length < needs
+        ? t('studio.hints.cutEnds')
       : action === 'collapse' && creases.length && picks.length < needs
         ? t('studio.hints.creases', { count: creases.length })
         : picks.length < needs
@@ -400,6 +418,8 @@ export default function StudioEditor({ end, cloud = false }: {
             kind={action === 'fold' ? kind : action === 'collapse' && creaseKind === 'mountain' ? 'mountain' : 'valley'}
             preview={result && 'frame' in result ? (result.onFlat ?? result.frame) : null}
             extra={creases}
+            cut={action === 'cut' && picks.length === 2 ? [picks[0], picks[1]] : null}
+            free={action === 'cut'}
             onPick={(p) => setPicks((prev) => (action === 'move' || prev.length >= needs ? [p] : [...prev, p]))}
           />
           {(status || hint) && <div className={status ? 'badge error' : 'badge'}>{status ?? hint}</div>}
@@ -521,7 +541,7 @@ export default function StudioEditor({ end, cloud = false }: {
               </label>
             </>
           )}
-          {action !== 'move' && (
+          {action !== 'move' && action !== 'cut' && (
           <div className="segmented" role="group" aria-label={t('studio.foldLine')}>
             <button type="button" aria-pressed={tool === 'onto'} onClick={() => (setTool('onto'), startOver())}>
               {t('studio.pointToPoint')}
@@ -611,7 +631,7 @@ export default function StudioEditor({ end, cloud = false }: {
             </select>
           </label>
           )}
-          {action !== 'move' && (
+          {action !== 'move' && action !== 'cut' && (
           <button type="button" className="secondary" disabled={!line} onClick={() => setFlipped(!flipped)} title={t('studio.flipTitle')}>
             {t('studio.flipSide')}
           </button>

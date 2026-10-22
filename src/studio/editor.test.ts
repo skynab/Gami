@@ -2,12 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { collapse } from '../fold/collapse';
 import { fold, toFlat } from '../fold/fold';
 import { dist, lineEdgeOnto, lineOnto, lineThrough, sideOf, type Line } from '../fold/geometry2d';
-import { paper, Recipe } from '../fold/recipe';
+import { paper, Recipe, table } from '../fold/recipe';
 import type { Vec2 } from '../fold/types';
 import { pose } from '../fold/pose';
 import { layOut, sheetOf } from '../fold/sheets';
 import { basics } from '../models/basics';
-import { anchorFor, project, topLayers } from './editor';
+import { applyOp, atOf } from '../fold/ops';
+import { anchorFor, cutsOnTable, project, topLayers } from './editor';
 
 const square = basics.start;
 
@@ -96,5 +97,20 @@ describe('Studio helpers', () => {
   it('draws lifted steps from above', () => {
     const up = pose(square, { line: lineThrough([-1, 0], [1, 0]), angle: Math.PI / 2 });
     expect(project(up)).toHaveLength(2);
+  });
+  it('cuts from picked ends and shows where the cuts are', () => {
+    const model = { ...basics, steps: [] };
+    // Picked as the Studio does: the ends on the sheet, so the cut follows the paper.
+    const op = { op: 'cut' as const, from: atOf(square, [0, -0.5]), to: atOf(square, [0, 0]) };
+    const { frame } = applyOp(model, op);
+    expect(frame.cuts).toEqual([[[0, -0.5], [0, 0]]]);
+    const along = (segs: [Vec2, Vec2][]) => segs.map((s) => s.map((p) => p.map((x) => +x.toFixed(9) + 0)).sort((a, b) => a[1] - b[1]));
+    expect(new Set(along(cutsOnTable(frame)).map((s) => JSON.stringify(s)))).toEqual(new Set([JSON.stringify([[0, -0.5], [0, 0]])]));
+    // The top left quarter folded down: its side of the cut now runs from the centre to the bottom edge.
+    const r = new Recipe({ id: 'c', title: 'c', sheet: { size: [1, 1], front: '#fff', back: '#000' } })
+      .cut(table(0, -0.5), table(0, 0), { title: 'Cut' })
+      .along(table(-1, 0), table(1, 0), table(-0.25, -0.25), { title: 'Fold', only: ([u]) => u < 0 });
+    const shown = new Set(along(cutsOnTable(r.build().steps[1].frame)).map((s) => JSON.stringify(s)));
+    expect(shown).toEqual(new Set([JSON.stringify([[0, -0.5], [0, 0]]), JSON.stringify([[0, 0], [0, 0.5]])]));
   });
 });

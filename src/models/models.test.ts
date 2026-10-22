@@ -11,9 +11,10 @@ const models = RECIPES.map((make) => make());
 const file = (name: string) => readFileSync(new URL(`../../public/models/${name}`, import.meta.url), 'utf8');
 
 describe.each(models.map((m) => [m.id, m] as const))('%s', (id, model) => {
+  // Animating every step of the biggest models (the frog's 55) takes a few seconds; the later tests reuse it.
   it('folds without stretching, tearing or tangling', () => {
     expect(problems(model)).toEqual([]);
-  });
+  }, 30_000);
 
   it('has a title on every step', () => {
     for (const s of model.steps) expect(s.title.trim()).not.toBe('');
@@ -34,6 +35,14 @@ describe.each(models.map((m) => [m.id, m] as const))('%s', (id, model) => {
     expect(status.every((s) => s === 'replayed')).toBe(true);
     // Compared as the file keeps them, to 1e-9.
     expect(toFoldFile(again)).toEqual(toFoldFile(read));
+  });
+
+  it('says in the gallery which tools it needs: scissors for a cut, a pen for drawing', () => {
+    const needs = [
+      ...(model.steps.some((s) => s.kind === 'cut') ? ['scissors'] : []),
+      ...(model.steps.some((s) => s.kind === 'draw') ? ['pen'] : []),
+    ];
+    expect(MODELS.find((m) => m.id === id)?.needs ?? []).toEqual(needs);
   });
 
   it('is listed in the gallery with the right number of steps', () => {

@@ -18,7 +18,7 @@ site's source code, or any other model in the gallery.
 ## Other models in the gallery
 
 The other gallery models aren't Gami's designs, so this licence doesn't cover them. They are traditional
-(crane, cup, lily and others), or follow freely published instructions, credited where they come from
-(see `PLAN.md`). New gallery models must be traditional, openly licensed, or Gami's own.
+(crane, cup, lily and others), or follow freely published instructions, recorded with where they come from
+(see `PROVENANCE.md`). New gallery models must be traditional, openly licensed, or Gami's own.
 
 When you add a design of Gami's own, add it to the table above.

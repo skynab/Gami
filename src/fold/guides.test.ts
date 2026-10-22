@@ -39,7 +39,7 @@ describe('fold guides', () => {
         // Drawing on the paper doesn't fold it.
         if (model.steps[k - 1].kind === 'draw') continue;
         const g = guidesFor(fs[k - 1], fs[k]);
-        expect(g.arrows.length + g.creases.length, `${model.id} step ${k}`).toBeGreaterThan(0);
+        expect(g.arrows.length + g.creases.length + g.cuts.length, `${model.id} step ${k}`).toBeGreaterThan(0);
       }
     }
     // Every step of every model is animated here, which takes a few seconds.

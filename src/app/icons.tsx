@@ -91,3 +91,16 @@ export const ReplayIcon = icon(
     <path d="M10.5 9.5v5l4-2.5z" />
   </>,
 );
+export const ScissorsIcon = icon(
+  <>
+    <circle cx="6" cy="6.5" r="2.6" />
+    <circle cx="6" cy="17.5" r="2.6" />
+    <path d="M8.2 8l11.3 9M8.2 16l11.3-9" />
+  </>,
+);
+export const PenIcon = icon(
+  <>
+    <path d="M15.5 4.5l4 4L9 19l-5 1 1-5z" />
+    <path d="M13.5 6.5l4 4" />
+  </>,
+);

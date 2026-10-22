@@ -14,7 +14,7 @@ import {
 } from 'three';
 import { affine, poseAt, stepTransition, transition, type Transition } from '../fold/animate';
 import { framesOf, normal } from '../fold/frames';
-import { sharedSegment } from '../fold/geometry2d';
+import { joinedSegment, type Cut } from '../fold/geometry2d';
 import { MARK_COLOUR, MARK_WIDTH, marksUpTo, onFace } from '../fold/marks';
 import { sheetOf } from '../fold/sheets';
 import type { OrigamiModel, Vec2, Vec3 } from '../fold/types';
@@ -132,7 +132,9 @@ function build(t: Transition, model: OrigamiModel, k: number): Built {
   const { sheets } = model;
   const bySheet = sheets.map(() => [] as number[]);
   t.faces.forEach((f, i) => bySheet[sheetOf(sheets, f.paper)].push(i));
-  const parts = bySheet.map((faces) => buildPart(t, faces));
+  // Faces either side of a scissor cut aren't joined: no bend is drawn between them.
+  const cuts = (k ? model.steps[k - 1].frame : model.start).cuts;
+  const parts = bySheet.map((faces) => buildPart(t, faces, cuts));
   const marks = buildMarks(t, model, k);
   return {
     parts: parts.map((p) => p.part),
@@ -216,7 +218,7 @@ function buildMarks(t: Transition, model: OrigamiModel, k: number): { geometry: 
   };
 }
 
-function buildPart(t: Transition, faceIndices: number[]): { part: Part; update(pose: ReturnType<typeof poseAt>): void; dispose(): void } {
+function buildPart(t: Transition, faceIndices: number[], cuts?: Cut[]): { part: Part; update(pose: ReturnType<typeof poseAt>): void; dispose(): void } {
   const tracks = faceIndices.map((i) => t.faces[i]);
   const corners = tracks.reduce((n, f) => n + f.paper.length, 0);
   const positions = new Float32Array(corners * 3);
@@ -247,7 +249,7 @@ function buildPart(t: Transition, faceIndices: number[]): { part: Part; update(p
     for (let b = a + 1; b < tracks.length; b++) {
       const [p, q] = [boxes[a], boxes[b]];
       if (p[0] > q[2] + 1e-7 || q[0] > p[2] + 1e-7 || p[1] > q[3] + 1e-7 || q[1] > p[3] + 1e-7) continue;
-      const ends = sharedSegment(tracks[a].paper, tracks[b].paper);
+      const ends = joinedSegment(tracks[a].paper, tracks[b].paper, cuts);
       if (ends) joins.push({ a, b, ends });
     }
   }

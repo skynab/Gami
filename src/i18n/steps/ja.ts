@@ -868,4 +868,418 @@ export const ja: Record<string, string> = {
     "目と鼻とひげをかきます。できあがり！",
   "Draw two shut, smiling eyes and a little nose on the face. Done!":
     "顔に、にっこり閉じた目を二つと小さな鼻をかきます。できあがり！",
+  "Start coloured side up, with a corner pointing towards you.":
+    "色の面を上にして、角を手前に向けて置きます。",
+  "Turn it over, white side up.":
+    "裏返して、白い面を上にします。",
+  "Fold the top left edge in":
+    "左上のふちを内側に折る",
+  "Fold the top left edge in towards the middle crease, stopping a little short of it.":
+    "左上のふちを中心の折り目に向かって折ります。折り目の少し手前で止めます。",
+  "Fold the top right edge in":
+    "右上のふちを内側に折る",
+  "The same on the right, leaving a narrow white strip between the two.":
+    "右も同じように折り、二つのあいだに白い細い帯を残します。",
+  "Fold the left corner in a little way.":
+    "左の角を少しだけ内側に折ります。",
+  "And the right corner, to match.":
+    "右の角も同じように折ります。",
+  "Fold the bottom point up, level with the lower ends of those folds.":
+    "下の角を、いま折ったところの下のはしの高さまで折り上げます。",
+  "Fold the left half over onto the right, along the middle crease.":
+    "中心の折り目で、左半分を右半分に重ねるように折ります。",
+  "Turn the head down":
+    "頭を折り下げる",
+  "Open the top a little and turn the point down round the outside, for the head and beak. Done!":
+    "上を少し開いて、先を外側にかぶせるように折り下げ、頭とくちばしにします。できあがり！",
+  "Start white side up, with a corner pointing towards you.":
+    "白い面を上にして、角を手前に向けて置きます。",
+  "Crease across":
+    "横に折り目をつける",
+  "Fold the bottom corner to the top corner, then unfold.":
+    "下の角を上の角に合わせて折り、開きます。",
+  "Crease the lower left edge":
+    "左下のふちに折り目をつける",
+  "Fold the lower left edge to the middle crease, then unfold.":
+    "左下のふちを中心の折り目に合わせて折り、開きます。",
+  "Crease the lower right edge":
+    "右下のふちに折り目をつける",
+  "The same with the lower right edge.":
+    "右下のふちも同じようにします。",
+  "Crease the upper left edge":
+    "左上のふちに折り目をつける",
+  "Now fold the upper left edge to the middle crease, and unfold.":
+    "次に左上のふちを中心の折り目に合わせて折り、開きます。",
+  "Crease the upper right edge":
+    "右上のふちに折り目をつける",
+  "And the upper right edge.":
+    "右上のふちも同じようにします。",
+  "Collapse into a fish base":
+    "さかなの基本形にたたむ",
+  "Push the left and right corners in along the creases, so the edges meet in the middle and each corner pinches up into a little flap. Lay both flaps upwards.":
+    "折り目にそって左右の角を内側に押しこみ、ふちを中心で合わせます。それぞれの角は小さなひだになって立ち上がるので、両方とも上向きにたおします。",
+  "Fold the top point behind":
+    "上の角をうしろに折る",
+  "Fold the top point back behind, level with the tips of the two flaps.":
+    "上の角を、二つのひだの先と同じ高さでうしろに折ります。",
+  "Fold the left corner in a little, to straighten the side.":
+    "左の角を少し内側に折って、横をまっすぐにします。",
+  "And the right corner.":
+    "右の角も折ります。",
+  "Fold the right half over onto the left.":
+    "右半分を左半分に重ねるように折ります。",
+  "Turn it a quarter turn, so the blunt end points left.":
+    "直角に回して、平らな方のはしを左に向けます。",
+  "Turn the tail up":
+    "しっぽを上げる",
+  "Open the thin end a little and turn it up round the outside, for the tail.":
+    "細い方のはしを少し開いて、外側にかぶせるように折り上げ、しっぽにします。",
+  "Open the fins":
+    "ひれを開く",
+  "Lift the two flaps out from the sides, for the fins. Your whale is done!":
+    "両側の二つのひだを外に起こして、ひれにします。くじらのできあがり！",
+  "Make the feet":
+    "足を作る",
+  "Push the point of each leg up between its layers so one sticks out to the left and one to the right, for the feet.":
+    "それぞれの足の先を、重なりのあいだに押しこみながら折り上げ、一つは左、一つは右に出して足にします。",
+  "Fold the top flap down":
+    "上のひだを折り下げる",
+  "Fold the top flap down at the widest point, so its tip points to the bottom.":
+    "上のひだを、いちばん幅の広いところで折り下げ、先を下に向けます。",
+  "Make the head":
+    "頭を作る",
+  "Push the top point down between its layers so it points forwards, for the head and beak. Your crow is done!":
+    "上の先を重なりのあいだに押しこんで前に向け、頭とくちばしにします。カラスのできあがり！",
+  "Fold the top left edge to the middle crease.":
+    "左上のふちを中心の折り目に合わせて折ります。",
+  "And the top right edge. It’s a kite.":
+    "右上のふちも折ります。たこの形になります。",
+  "Fold the bottom corner up to the top corner. It’s all green now: a pentagon.":
+    "下の角を上の角まで折り上げます。全部緑の五角形になります。",
+  "Fold the top left edge to the middle again.":
+    "もう一度、左上のふちを中心に合わせて折ります。",
+  "And the top right edge.":
+    "右上のふちも折ります。",
+  "Fold the front layer’s point back down, level with where the side folds meet in the middle. It hangs below the tree.":
+    "手前の一枚の先を、両側の折り目が中心で出会う高さで折り下げます。木の下にたれ下がります。",
+  "Fold the bottom point up to the bottom of the tree, to square off the pot.":
+    "下の先を木の下のはしまで折り上げて、植木ばちの形にします。",
+  "Turn it over. Your tree is done!":
+    "裏返します。ツリーのできあがり！",
+  "Fold the bottom left corner of the top flap up to the top point.":
+    "上のひだの左下の角を、上の先まで折り上げます。",
+  "And the bottom right corner. It’s a diamond.":
+    "右下の角も折り上げます。ひし形になります。",
+  "Fold the diamond’s left corner in to the middle.":
+    "ひし形の左の角を中心まで折ります。",
+  "Fold the left point down":
+    "左の先を折り下げる",
+  "Fold the loose point at the top left down and out.":
+    "左上のはなれている先を、外側に折り下げます。",
+  "Fold the right point down":
+    "右の先を折り下げる",
+  "And the one at the top right.":
+    "右上の先も同じようにします。",
+  "Tuck in the left point":
+    "左の先を差しこむ",
+  "Tuck the point into the pocket of the flap below it.":
+    "先を、下にあるひだのすきまに差しこみます。",
+  "Tuck in the right point":
+    "右の先を差しこむ",
+  "And the right point.":
+    "右の先も差しこみます。",
+  "Turn it over, and do the same on this side.":
+    "裏返して、こちら側も同じように折ります。",
+  "And the last one. Now blow gently into the hole at the bottom, and the water bomb puffs up into a ball. Done!":
+    "最後の一つも差しこみます。下の穴にそっと息を吹きこむと、水風船がふくらんで玉になります。できあがり！",
+  "Pull out the tail":
+    "しっぽを引き出す",
+  "Hold the body, and pull the left lower point out and up between the wings. Flatten it at an angle. This is the tail.":
+    "胴を持って、左下の先を羽のあいだから外へ斜め上に引き出し、ななめのまま平らにします。これがしっぽです。",
+  "Pull out the neck":
+    "首を引き出す",
+  "The same with the right point, for the neck.":
+    "右の先も同じようにして、首にします。",
+  "Push the tip of the neck down between its layers for the head. Hold the base of the neck and pull the tail gently: the wings flap!":
+    "首の先を重なりのあいだに押しこんで、頭にします。首のつけねを持って、しっぽをそっと引くと、羽がぱたぱた動きます！",
+  "Fold out an ear":
+    "耳を折り出す",
+  "Fold the loose point at the top left out a little to the side, for an ear.":
+    "左上のはなれている先を、少し横に折り出して耳にします。",
+  "Fold out the other ear":
+    "もう一つの耳を折り出す",
+  "And the other one. Blow gently into the hole at the bottom to puff up the rabbit, then open out the ears. Done!":
+    "もう一つも折ります。下の穴にそっと息を吹きこんでうさぎをふくらませ、耳を開きます。できあがり！",
+  "Fold in half side to side, then unfold.":
+    "左右に半分に折って、開きます。",
+  "And top to bottom, then unfold.":
+    "上下にも半分に折って、開きます。",
+  "Fold the left edge to the middle crease.":
+    "左のふちを中心の折り目に合わせて折ります。",
+  "Fold the top to the middle":
+    "上を中心まで折る",
+  "Fold the top edge to the middle, then unfold.":
+    "上のふちを中心に合わせて折り、開きます。",
+  "Fold the bottom to the middle":
+    "下を中心まで折る",
+  "And the bottom edge, then unfold.":
+    "下のふちも折って、開きます。",
+  "Squash the top":
+    "上をつぶし折りする",
+  "Fold the top edge down to the middle, pulling the top left corner out to the side and the top right corner up. Flatten them into triangles.":
+    "上のふちを中心まで折り下げながら、左上の角を横に、右上の角を上に引き出し、三角形にしてつぶします。",
+  "Squash the bottom":
+    "下をつぶし折りする",
+  "The same at the bottom, the other way round: the bottom right corner out to the side and the bottom left one down. Pin the middle to a stick and blow: it spins!":
+    "下も逆向きに同じようにします。右下の角を横に、左下の角を下に引き出します。まん中を棒にとめて吹くと、くるくる回ります！",
+  "White side up. Fold in half side to side, then unfold.":
+    "白い面を上にして、左右に半分に折り、開きます。",
+  "And the other corners.":
+    "反対の角どうしも折ります。",
+  "Turn the paper back over.":
+    "紙をもう一度裏返します。",
+  "Fold the left side to the middle":
+    "左側を中心まで折る",
+  "Fold the left edge to the middle, then unfold.":
+    "左のふちを中心に合わせて折り、開きます。",
+  "Fold the right side to the middle":
+    "右側を中心まで折る",
+  "And the bottom edge.":
+    "下のふちも同じようにします。",
+  "Fold the left edge to the middle again, and leave it there.":
+    "もう一度左のふちを中心に合わせて折り、そのままにします。",
+  "Fold the top edge down to the middle, pulling both top corners out to the sides. Flatten them into triangles.":
+    "上のふちを中心まで折り下げながら、上の両方の角を横に引き出し、三角形にしてつぶします。",
+  "Push the bottom edge up to the middle, letting the bottom corners come down below it, and flatten them.":
+    "下のふちを中心まで押し上げ、下の角がその下に出てくるようにして、つぶします。",
+  "Fold the top part back behind, along the middle. It’s a wide triangle now.":
+    "上の部分を中心の線でうしろに折ります。横に広い三角形になります。",
+  "Narrow the left side":
+    "左側を細くする",
+  "Fold the top left flap in, from its top corner to the middle of its bottom edge.":
+    "左上のひだを、上の角から下のふちのまん中までの線で内側に折ります。",
+  "Narrow the right side":
+    "右側を細くする",
+  "And the top right flap.":
+    "右上のひだも折ります。",
+  "Fold out the wings":
+    "羽を折り出す",
+  "Fold the top half back to the left, on a slant just beside the body. The wings spread out on both sides.":
+    "上の半分を、胴のすぐ横のななめの線で左に折りもどします。羽が両側に広がります。",
+  "Lift the wings":
+    "羽を持ち上げる",
+  "Lift the wings a little, folding the butterfly gently in half along its body. Done!":
+    "胴にそってちょうをそっと半分に折るように、羽を少し持ち上げます。できあがり！",
+  "Turn it a quarter turn, so the two flaps point to the left.":
+    "直角に回して、二つのひだを左に向けます。",
+  "Fold the point in":
+    "先を内側に折る",
+  "Fold the left point to the middle.":
+    "左の先を中心まで折ります。",
+  "Fold it back out":
+    "折り返す",
+  "Fold the point back to the left, a quarter of the way from the edge to the middle, so a little of it sticks out.":
+    "先を、ふちから中心までの四分の一のところで左に折り返し、少しはみ出させます。",
+  "Cut the tail":
+    "しっぽを切る",
+  "With scissors, cut a short way along the middle crease from the right point. This makes the two flukes.":
+    "はさみで、右の先から中心の折り目にそって少しだけ切ります。これが尾びれの二つの先になります。",
+  "Fold the bottom half up onto the top half.":
+    "下半分を上半分に重ねるように折り上げます。",
+  "Fold up a fluke":
+    "尾びれを折り上げる",
+  "Fold the top layer of the tail up on a slant, inside the cut.":
+    "しっぽの上の一枚を、切れ目の中でななめに折り上げます。",
+  "Fold down the other fluke":
+    "もう一つの尾びれを折り下げる",
+  "Fold the other half of the tail down on a slant, inside the cut.":
+    "しっぽのもう半分を、切れ目の中でななめに折り下げます。",
+  "Lift the two flaps out from the sides, for the fins. Your dolphin is done!":
+    "両側の二つのひだを外に起こして、ひれにします。イルカのできあがり！",
+  "Turn it a quarter turn, so the flaps point to the left.":
+    "直角に回して、ひだを左に向けます。",
+  "Raise the neck":
+    "首を上げる",
+  "Open the left point a little and push it up between the layers, for the neck.":
+    "左の先を少し開いて、重なりのあいだに押し上げ、首にします。",
+  "Push the right point up between the layers, for the tail.":
+    "右の先を重なりのあいだに押し上げ、しっぽにします。",
+  "Push the tip of the neck forward between its layers, for the head.":
+    "首の先を重なりのあいだに押しこんで前に向け、頭にします。",
+  "Open the flippers":
+    "ひれを開く",
+  "Lift the two flaps out from the sides, for the flippers. Your seal is done!":
+    "両側の二つのひだを外に起こして、ひれにします。アザラシのできあがり！",
+  "With the paper sideways, bring the left edge over to the right edge and crease down the middle.":
+    "紙を横向きに置き、左の辺を右の辺に合わせて、真ん中に折り筋をつけます。",
+  "The corners meet on the centre crease in a wide point.":
+    "角が中心の折り筋で合わさり、幅の広い先端になります。",
+  "Bring the point down to the bottom of the triangle, leaving a flat top. (On A4 paper, fold it only halfway down.)":
+    "先端を三角形の底まで折り下げ、上を平らにします。(A4の紙なら、半分の位置まで折ります。)",
+  "Fold from the middle of the top edge, so the right half of the top lies along the centre crease.":
+    "上の辺の真ん中から折り、上の辺の右半分を中心の折り筋に合わせます。",
+  "Match the right side. The plane is now a wide triangle.":
+    "右側と同じように折ります。幅の広い三角形になりました。",
+  "Fold straight up and down, halfway between the middle and the right corner, so the corner meets the middle of the bottom edge.":
+    "真ん中と右の角の中間で縦に折り、角を下の辺の真ん中に合わせます。",
+  "Match the right side. The two corners meet at the middle.":
+    "右側と同じように折ります。二つの角が真ん中で合わさります。",
+  "Fold from the nose down to the bottom right corner, making the right edge one straight line.":
+    "先端から右下の角まで折り、右の辺をまっすぐな線にします。",
+  "Match the right side, for a slim triangle.":
+    "右側と同じように折ると、細長い三角形になります。",
+  "Fold the top layers down along a line close to the bottom, for a narrow body and wide wings.":
+    "上の層を、下の辺に近い線で折り下げて、細い胴体と広い翼にします。",
+  "Fold the top-left corner across":
+    "左上の角を反対側へ折る",
+  "Bring the top-left corner down to the right edge, so the top edge lies along it.":
+    "左上の角を右の辺まで折り下げ、上の辺を右の辺に沿わせます。",
+  "Fold the top-right corner across":
+    "右上の角を反対側へ折る",
+  "The same the other way: the top edge along the left edge. The creases cross in an X.":
+    "反対側も同じように、上の辺を左の辺に沿わせます。折り筋がXの形に交わります。",
+  "Fold the top edge down so it lines up with the ends of the X. The fold runs through the middle of the X.":
+    "上の辺を、Xの端と同じ高さまで折り下げます。折り目はXの中心を通ります。",
+  "Collapse the top into a triangle":
+    "上を三角形にたたむ",
+  "Push the sides of the top square in along the middle fold, so the top folds down into a triangle on the sheet.":
+    "上の正方形の両側を、真ん中の折り目に沿って内側に押し込み、上の部分を紙の上の三角形にたたみます。",
+  "Fold the top flap only: bring the triangle’s right edge in to the centre line. Its corner pokes out below.":
+    "上のフラップだけを折ります。三角形の右の辺を中心線に合わせます。角が下にはみ出します。",
+  "And the left edge, top flap only. The two flaps make a kite.":
+    "左の辺も、上のフラップだけを折ります。二枚のフラップで凧の形になります。",
+  "Fold the whole top back, so the point meets the bottom edge on the other side. (On A4 paper, stop a little short of the edge.)":
+    "上の部分を全部うしろへ折り、先端を反対側の下の辺に合わせます。(A4の紙なら、辺の少し手前で止めます。)",
+  "Fold the right tip up":
+    "右の先を折り上げる",
+  "Fold the kite’s right tip up, so its point sticks out past the top edge.":
+    "凧の右の先を折り上げ、上の辺より上に突き出させます。",
+  "Fold the left tip up":
+    "左の先を折り上げる",
+  "And the left tip, beside it.":
+    "左の先も、その隣に折り上げます。",
+  "Fold the top layers down along a line close to the bottom, for broad, square wings.":
+    "上の層を、下の辺に近い線で折り下げて、広くて四角い翼にします。",
+  "Squash a flap":
+    "フラップをつぶす",
+  "Lift the right flap upright, open it, and press it flat so its fold lies on the centre line.":
+    "右のフラップを立てて開き、折り目が中心線に重なるように平らにつぶします。",
+  "Squash the next flap":
+    "次のフラップをつぶす",
+  "Squash the right flap on this side the same way.":
+    "こちら側の右のフラップも同じようにつぶします。",
+  "Fold the top layer on the right over to the left, showing another flap.":
+    "右の一番上の層を左へ折り、別のフラップを出します。",
+  "Squash the third flap":
+    "三つ目のフラップをつぶす",
+  "Squash it like the others.":
+    "ほかと同じようにつぶします。",
+  "Fold the top right layer over to the left here too.":
+    "こちらでも右の一番上の層を左へ折ります。",
+  "Squash the last flap":
+    "最後のフラップをつぶす",
+  "And squash the last flap.":
+    "最後のフラップもつぶします。",
+  "Crease the lower edges":
+    "下の辺に折り筋をつける",
+  "Fold the lower edges of the top layer in to the centre line, then unfold.":
+    "一番上の層の下の辺を中心線まで折り、開きます。",
+  "Open them out again, leaving the creases.":
+    "折り筋を残して開きます。",
+  "Lift the bottom edge of the coloured layer up along the line between the creases’ tops, pushing its sides in to meet at the centre.":
+    "色の層の下の辺を、折り筋の上端を結ぶ線で持ち上げ、両側を内側へ押して中心で合わせます。",
+  "Petal fold this side":
+    "こちら側も花弁折り",
+  "Make the same petal fold on this side.":
+    "こちら側も同じように花弁折りをします。",
+  "Turn the top flap on the right over to the left.":
+    "右の一番上のフラップを左へめくります。",
+  "Petal fold the third flap":
+    "三つ目のフラップを花弁折り",
+  "Petal fold this flap too.":
+    "このフラップも花弁折りをします。",
+  "Turn the top right flap over to the left.":
+    "右上のフラップを左へめくります。",
+  "Petal fold the last flap":
+    "最後のフラップを花弁折り",
+  "And petal fold the last one. This is the frog base.":
+    "最後のフラップも花弁折りをします。これでカエルの基本形です。",
+  "Narrow the bottom":
+    "下を細くする",
+  "Fold the lower edges of the top layer in to the centre line.":
+    "一番上の層の下の辺を中心線まで折ります。",
+  "Narrow this side":
+    "こちら側も細くする",
+  "Fold these lower edges in to the centre line too.":
+    "この下の辺も中心線まで折ります。",
+  "Narrow the last edges":
+    "最後の辺を細くする",
+  "And fold in the last two lower edges.":
+    "最後の二つの下の辺も内側へ折ります。",
+  "Lift a front leg":
+    "前足を上げる",
+  "Open the front left flap a little and reverse-fold its lower point up between its layers, so it points up beside the head.":
+    "左前のフラップを少し開き、下の角を層の間に中割り折りで上げて、頭の横で上を向くようにします。",
+  "Lift the other front leg":
+    "もう一方の前足を上げる",
+  "The same with the front right flap.":
+    "右前のフラップも同じようにします。",
+  "Turn out a back leg":
+    "後ろ足を出す",
+  "Reverse-fold the back left point out to the side, a little lower down.":
+    "左後ろの角を、少し下のところで中割り折りして横へ出します。",
+  "Turn out the other back leg":
+    "もう一方の後ろ足を出す",
+  "And the back right point.":
+    "右後ろの角も同じようにします。",
+  "Bend a front leg":
+    "前足を曲げる",
+  "Reverse-fold the front left leg out sideways, halfway along.":
+    "左前足の途中で中割り折りをして、横へ向けます。",
+  "Bend the other front leg":
+    "もう一方の前足を曲げる",
+  "Bend a back leg":
+    "後ろ足を曲げる",
+  "Reverse-fold the back left leg down, about halfway along.":
+    "左後ろ足のほぼ途中で中割り折りをして、下へ向けます。",
+  "Bend the other back leg":
+    "もう一方の後ろ足を曲げる",
+  "And the back right leg.":
+    "右後ろ足も同じようにします。",
+  "Shape a front foot":
+    "前足の先を作る",
+  "Reverse-fold the tip of the front left leg up to make a foot.":
+    "左前足の先を中割り折りで上へ曲げて、足先を作ります。",
+  "Shape the other front foot":
+    "もう一方の前足の先を作る",
+  "And the front right foot.":
+    "右前足の先も同じようにします。",
+  "Shape a back foot":
+    "後ろ足の先を作る",
+  "Reverse-fold the tip of the back left leg out to the side.":
+    "左後ろ足の先を中割り折りで横へ曲げます。",
+  "Shape the other back foot":
+    "もう一方の後ろ足の先を作る",
+  "And the back right foot.":
+    "右後ろ足の先も同じようにします。",
+  "Fold the head":
+    "頭を折る",
+  "Fold the tip of the head down behind. Your frog is finished.":
+    "頭の先を後ろへ折り下げます。カエルの完成です。",
+  "Cut a slit in the wings":
+    "翼に切り込みを入れる",
+  "If you like, for tricks: with scissors, cut a short slit in from the back edge, through both wings at once.":
+    "好みで、宙返り用に:はさみで、うしろの辺から短い切り込みを入れます。両方の翼をいっしょに切ります。",
+  "Cut another slit":
+    "もう一つ切り込みを入れる",
+  "Cut a second slit the same length, further out. The strip between the slits is an aileron.":
+    "同じ長さの切り込みを、もう少し外側にも入れます。切り込みの間の帯が補助翼になります。",
+  "Fold up the wingtips":
+    "翼の先を折り上げる",
+  "If you like, fold the tip of each wing straight up, on a line parallel to the body.":
+    "好みで、それぞれの翼の先を、胴体と平行な線でまっすぐ上に折ります。",
+  "Bend up the ailerons":
+    "補助翼を上げる",
+  "Bend the strip between each wing’s slits up a little.":
+    "それぞれの翼の切り込みの間の帯を、少し上に曲げます。",
 };
