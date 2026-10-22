@@ -71,4 +71,78 @@ describe('shape, combining bends', () => {
       ]),
     ).toThrow(FoldError);
   });
+
+  it('raises walls together, pinching the corners into ears', () => {
+    // A tray: four walls round a middle square, each standing straight up about its own line. Where two meet,
+    // the corner square folds along its diagonal into an ear standing out from the corner.
+    const walls = (degrees: number) =>
+      [
+        [table(0.3, -1), table(0.3, 1), table(0.45, 0)],
+        [table(-0.3, -1), table(-0.3, 1), table(-0.45, 0)],
+        [table(-1, 0.3), table(1, 0.3), table(0, 0.45)],
+        [table(-1, -0.3), table(1, -0.3), table(0, -0.45)],
+      ].map(([a, b, moving]) => ({ through: [a, b] as [typeof a, typeof a], moving, degrees }));
+    const tray = new Recipe({ id: 'tray', title: 'Tray', sheet: { size: [1, 1], front: '#fff', back: '#000' } })
+      .shape({ title: 'Raise the walls' }, walls(90), { corners: true })
+      .build();
+    const f = tray.steps[0].frame;
+    // The walls stand straight up, 0.2 high, and each corner's ear stands out diagonally at the top.
+    expect(at(f, 0.5, 0.3)).toEqual([expect.closeTo(0.3), expect.closeTo(0.2), expect.closeTo(0.3)]);
+    expect(at(f, 0.5, 0.5)).toEqual([expect.closeTo(0.3 + 0.2 * Math.SQRT1_2), expect.closeTo(0.2), expect.closeTo(0.3 + 0.2 * Math.SQRT1_2)]);
+    // The middle stays on the table, and nothing stretches, on the way up or at the end.
+    expect(at(f, 0.3, 0.3)).toEqual([expect.closeTo(0.3), 0, expect.closeTo(0.3)]);
+    expect(problems(tray)).toEqual([]);
+    // Without corners, the same walls would stretch the paper where they meet.
+    expect(() => new Recipe({ id: 'tray', title: 'Tray', sheet: { size: [1, 1], front: '#fff', back: '#000' } }).shape({ title: 'Raise' }, walls(90))).toThrow(FoldError);
+  });
+
+  it('keeps raised corners in .fold files', async () => {
+    const { fromFoldFile, toFoldFile } = await import('./fold-format');
+    const { replay } = await import('./ops');
+    const tray = new Recipe({ id: 'tray', title: 'Tray', sheet: { size: [1, 1], front: '#fff', back: '#000' } })
+      .shape(
+        { title: 'Raise the walls' },
+        [
+          { through: [table(0.3, -1), table(0.3, 1)], moving: table(0.45, 0), degrees: 60 },
+          { through: [table(-1, 0.3), table(1, 0.3)], moving: table(0, 0.45), degrees: 60 },
+        ],
+        { corners: true },
+      )
+      .build();
+    const back = fromFoldFile(JSON.parse(JSON.stringify(toFoldFile(tray))));
+    expect(back.steps[0].op).toMatchObject({ op: 'shape', corners: true });
+    const again = replay(back);
+    expect(again.status.every((s) => s === 'replayed')).toBe(true);
+    expect(toFoldFile(again.model)).toEqual(toFoldFile(back));
+  });
+
+  it('opens stacked pleats one by one, along the paper', () => {
+    // A strip pleated into four panels lies in a stack, its folds on two lines. Opened along the paper from the
+    // first panel, each fold opens a sixth of a turn: the panels zigzag up, each one 60° off the one before.
+    const r = new Recipe({ id: 'pleats', title: 'Pleats', sheet: { size: [1, 0.25], front: '#fff', back: '#000' } }).collapse(
+      { title: 'Pleat' },
+      [
+        { through: [table(-0.25, -1), table(-0.25, 1)], kind: 'valley' },
+        { through: [table(0, -1), table(0, 1)], kind: 'mountain' },
+        { through: [table(0.25, -1), table(0.25, 1)], kind: 'valley' },
+      ],
+      paper(-0.4, 0),
+    );
+    const model = r
+      .shape(
+        { title: 'Open the pleats' },
+        [-0.25, -0.5].map((x) => ({ through: [table(x, -1), table(x, 1)] as [ReturnType<typeof table>, ReturnType<typeof table>], moving: table(-0.4, 0), degrees: 60 })),
+        { chained: paper(-0.4, 0) },
+      )
+      .build();
+    const f = model.steps.at(-1)!.frame;
+    const edge = (u: number) => f.vertices_coords.find((_, i) => Math.abs(f.vertices_paper[i][0] - u) < 1e-9 && Math.abs(f.vertices_paper[i][1] + 0.125) < 1e-9)!;
+    const h = 0.25 * Math.sin(Math.PI / 3);
+    // The first panel flat, the second rising back at 60°, the third level again, the fourth rising again.
+    expect(edge(-0.25)[1]).toBeCloseTo(0, 2);
+    expect(edge(0)).toEqual([expect.closeTo(-0.375, 2), expect.closeTo(h, 2), expect.closeTo(-0.125)]);
+    expect(edge(0.25)[1]).toBeCloseTo(h, 2);
+    expect(edge(0.5)[1]).toBeCloseTo(2 * h, 2);
+    expect(problems(model)).toEqual([]);
+  });
 });

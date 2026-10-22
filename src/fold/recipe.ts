@@ -53,7 +53,7 @@ export class Recipe {
   private start: FoldFrame;
   private steps: Step[] = [];
   /** After 3D shaping: the flat state it started from, and its bends so far. */
-  private shaping?: { base: FoldFrame; bends: Bend[] };
+  private shaping?: { base: FoldFrame; bends: Bend[]; corners: boolean; chained?: Vec2 };
   /** The section the next step starts, from `section()`. */
   private sectionName?: string;
 
@@ -314,8 +314,20 @@ export class Recipe {
    * Shapes the paper in 3D: opening flaps partway, curling petals. Lines are drawn on the last flat state,
    * and a later shaping step adds its bends to the earlier ones'. Nothing can be folded flat afterwards.
    */
-  shape(step: { title: string; text?: string }, bends: ShapeBend[]): this {
+  shape(
+    step: { title: string; text?: string },
+    bends: ShapeBend[],
+    /**
+     * `corners`: bends whose lines cross are walls rising together, the corners between them pinching into ears.
+     * `chained`: the bends open folds along the paper from the face at this point of the sheet, each fold on a
+     * bend's line opening by its angle, so stacked pleats open one by one into a zigzag.
+     */
+    { corners = false, chained }: { corners?: boolean; chained?: At } = {},
+  ): this {
     const base = this.shaping?.base ?? this.current;
+    const anyCorners = corners || !!this.shaping?.corners;
+    if (chained && !('paper' in chained)) throw new FoldError(`${this.info.id}: a chained shape's anchor must be a point on the sheet.`);
+    const anchor = chained ? chained.paper : this.shaping?.chained;
     const tests = bends.map((b) => b.only && recorder(b.only));
     const added = bends.flatMap((b, k): Bend[] => {
       const test = tests[k];
@@ -336,7 +348,8 @@ export class Recipe {
     const bendsSoFar = [...(this.shaping?.bends ?? []), ...added];
     try {
       // Shaped again from the flat state: each face's parent is the face of the last step it lies within.
-      const frame = this.shaping ? reparent(this.current, shape(base, bendsSoFar)) : shape(base, bendsSoFar);
+      const shaped = shape(base, bendsSoFar, { corners: anyCorners, ...(anchor && { chained: anchor }) });
+      const frame = this.shaping ? reparent(this.current, shaped) : shaped;
       this.push({ title: step.title, text: step.text, kind: 'pose' }, frame, {
         op: 'shape',
         bends: bends.map((b, k) => ({
@@ -347,12 +360,14 @@ export class Recipe {
           ...(b.layers !== undefined && { layers: b.layers }),
           ...(tests[k] && { only: tests[k].faces() }),
         })),
+        ...(corners && { corners: true }),
+        ...(chained && { chained }),
       });
     } catch (e) {
       if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
       throw e;
     }
-    this.shaping = { base, bends: bendsSoFar };
+    this.shaping = { base, bends: bendsSoFar, corners: anyCorners, ...(anchor && { chained: anchor }) };
     return this;
   }
 

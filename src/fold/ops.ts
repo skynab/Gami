@@ -71,7 +71,9 @@ export type Op =
   | { op: 'move'; only: Faces; to?: At; degrees?: number; flip?: boolean; under?: boolean }
   | { op: 'newSheet' }
   /** Bends in 3D. Lines are found on the flat state before a run of shaping steps; each adds to the run's bends. */
-  | { op: 'shape'; bends: ShapeBend[] }
+  /** `corners`: bends whose lines cross are walls rising together, their corners pinching into ears. */
+  /** `chained`: the bends open folds along the paper from the face at this point of the sheet (stacked pleats). */
+  | { op: 'shape'; bends: ShapeBend[]; corners?: boolean; chained?: { paper: Vec2 } }
   | { op: 'popUp'; centre: At; rays: { azimuth: number; elevation: number }[] }
   /** Draws on the paper, leaving it where it is: a face, say. */
   | { op: 'draw'; marks: Mark[] }
@@ -148,6 +150,8 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
             ...opt(r, 'only', (v, q) => faces(v, q, 0), p),
           };
         }),
+        ...opt(o, 'corners', bool, path),
+        ...opt(o, 'chained', paperAt, path),
       };
     case 'popUp':
       return {
@@ -512,10 +516,10 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
       if (first > 0 && !ctx.steps[first - 1].op && ctx.steps[first - 1].kind === 'pose')
         throw new OpError('Can’t add to a 3D step that has no operation saved.');
       const base = frames[first];
-      const bends = [...ctx.steps.slice(first).map((s) => s.op as Extract<Op, { op: 'shape' }>), op].flatMap((o) =>
-        o.bends.flatMap((b) => bendsOf(b, base, ctx.model.sheets)),
-      );
-      const shaped = shape(base, bends);
+      const run = [...ctx.steps.slice(first).map((s) => s.op as Extract<Op, { op: 'shape' }>), op];
+      const bends = run.flatMap((o) => o.bends.flatMap((b) => bendsOf(b, base, ctx.model.sheets)));
+      const chained = run.findLast((o) => o.chained)?.chained;
+      const shaped = shape(base, bends, { corners: run.some((o) => o.corners), ...(chained && { chained: chained.paper }) });
       return { frame: first < ctx.steps.length ? reparent(frame, shaped) : shaped, flat: shaped };
     }
     case 'popUp':
