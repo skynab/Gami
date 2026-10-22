@@ -263,6 +263,54 @@ export class Recipe {
   }
 
   /**
+   * A swivel fold: a flap swings round flat on the table about a point on its hinge, `degrees` anticlockwise as
+   * seen from above. The wedge of paper the flap swings across folds into a pleat: a new crease where the hinge
+   * ends up, and one halfway back to the old hinge, the other way (the gusset). The flap keeps its own hinge,
+   * folded as it was, so it stays folded over and turns by `degrees`. `hinge` is another point on the flap's
+   * hinge as it is now; the pivot is usually where the hinge meets an edge of the paper. `flap` picks the
+   * flap's paper (by faces' centres on the sheet), which isn't creased; `only` limits the pleat to some of the
+   * rest. Recorded as a collapse, so it replays and opens in the Studio like one.
+   */
+  swivel(
+    step: { title: string; text?: string },
+    { pivot, hinge, degrees, anchor, flap, only }: { pivot: At; hinge: At; degrees: number; anchor: At; flap: (centre: Vec2) => boolean; only?: (centre: Vec2) => boolean },
+  ): this {
+    const pleated = (c: Vec2) => !flap(c) && (!only || only(c));
+    const p = this.where(pivot);
+    const h = this.where(hinge);
+    // Anticlockwise seen from above, with z pointing towards you on the table.
+    const turned = (deg: number): At => {
+      const a = (deg * Math.PI) / 180;
+      const [x, z] = [h[0] - p[0], h[1] - p[1]];
+      return table(p[0] + x * Math.cos(a) + z * Math.sin(a), p[1] - x * Math.sin(a) + z * Math.cos(a));
+    };
+    const at = table(...p);
+    // The new hinge and the gusset fold opposite ways; which way round depends on the layers, so try both.
+    let error: unknown;
+    const before = this.current;
+    for (const [hingeKind, gussetKind] of [['valley', 'mountain'], ['mountain', 'valley']] as const) {
+      try {
+        this.collapse(
+          { ...step, kind: 'fold' },
+          [
+            { through: [at, turned(degrees)], kind: hingeKind, only: pleated },
+            { through: [at, turned(degrees / 2)], kind: gussetKind, only: pleated },
+          ],
+          anchor,
+        );
+        // Creases that cross no paper but the flap leave it where it was: that's no swivel.
+        if (this.steps.at(-1)!.frame.vertices_coords.length !== before.vertices_coords.length) return this;
+        this.steps.pop();
+        throw new FoldError(`${this.info.id}, step ${this.steps.length + 1} (${step.title}): there's no paper for the flap to swing across that way.`);
+      } catch (e) {
+        if (!(e instanceof FoldError)) throw e;
+        error = e;
+      }
+    }
+    throw error;
+  }
+
+  /**
    * Shapes the paper in 3D: opening flaps partway, curling petals. Lines are drawn on the last flat state,
    * and a later shaping step adds its bends to the earlier ones'. Nothing can be folded flat afterwards.
    */

@@ -38,6 +38,7 @@ export default defineConfig({
   build: { chunkSizeWarningLimit: 1200 },
   test: {
     environment: 'node',
-    exclude: ['e2e/**', 'node_modules/**'],
+    // Worktrees of other sessions live under .claude/worktrees, with their own copies of everything.
+    exclude: ['e2e/**', 'node_modules/**', '.claude/**'],
   },
 });
