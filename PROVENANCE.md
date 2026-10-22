@@ -69,7 +69,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `dolphin` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/dolphin](https://origami.me/dolphin/) | Clear | 21 Oct 2026 |
 | `crow` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/crow](https://origami.me/crow/) | Clear | 21 Oct 2026 |
 | `butterfly` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/butterfly](https://origami.me/butterfly/) | Clear | 21 Oct 2026 |
-| `pajarita` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/pajarita](https://origami.me/pajarita/) | Clear | Coming soon, listed 21 Oct 2026 |
+| `pajarita` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/pajarita](https://origami.me/pajarita/) | Clear | 22 Oct 2026 |
 | `iris` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/iris](https://origami.me/iris/) | Clear | Coming soon, listed 21 Oct 2026 |
 | `pinwheel` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/pinwheel](https://origami.me/pinwheel/) | Clear | 21 Oct 2026 |
 | `fan` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/fan](https://origami.me/fan/) | Clear | Coming soon, listed 21 Oct 2026 |

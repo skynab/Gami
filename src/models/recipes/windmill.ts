@@ -15,7 +15,7 @@ import type { Vec2 } from '../../fold/types';
  */
 export type Pull = 'side' | 'end';
 
-type Crease = { through: [Vec2, Vec2]; kind: CreaseKind; only: (c: Vec2) => boolean };
+export type Crease = { through: [Vec2, Vec2]; kind: CreaseKind; only: (c: Vec2) => boolean };
 const eps = 1e-9;
 
 /** The creases for the top-left corner (u < 0) pulled out `pull`. */
@@ -34,15 +34,26 @@ function leftCorner(pull: Pull): Crease[] {
   ];
 }
 
-/** Squashes the top (`end` −1) or bottom (`end` 1) end, its left and right corners pulled as given. */
-export function squashEnd(r: Recipe, end: -1 | 1, left: Pull, right: Pull, step: { title: string; text: string }): Recipe {
+/**
+ * The creases for one corner of an end, on the sheet as it was before the cupboard fold: the left (`side` −1) or
+ * right (1) corner of the top (`end` −1) or bottom (1) end, pulled out `pull`.
+ */
+export function cornerCreases(side: -1 | 1, end: -1 | 1, pull: Pull): Crease[] {
   // Mirror the left corner's creases for the right, then turn them upside down for the bottom.
-  const map = (sx: number, sz: number) => (c: Crease): { through: [At, At]; kind: CreaseKind; only: (c: Vec2) => boolean } => ({
-    through: c.through.map(([u, v]) => paper(sx * u, sz * v)) as [At, At],
+  const [sx, sz] = [-side, -end];
+  return leftCorner(pull).map((c) => ({
+    through: c.through.map(([u, v]) => [sx * u, sz * v]) as [Vec2, Vec2],
     kind: c.kind,
     only: ([u, v]) => c.only([sx * u, sz * v]),
-  });
-  const sz = end < 0 ? 1 : -1;
-  const creases = [...leftCorner(left).map(map(1, sz)), ...leftCorner(right).map(map(-1, sz))];
+  }));
+}
+
+/** Squashes the top (`end` −1) or bottom (`end` 1) end, its left and right corners pulled as given. */
+export function squashEnd(r: Recipe, end: -1 | 1, left: Pull, right: Pull, step: { title: string; text: string }): Recipe {
+  const creases = [...cornerCreases(-1, end, left), ...cornerCreases(1, end, right)].map((c) => ({
+    through: c.through.map(([u, v]) => paper(u, v)) as [At, At],
+    kind: c.kind,
+    only: c.only,
+  }));
   return r.collapse({ ...step, kind: 'fold' }, creases, paper(0, -end * 0.1));
 }

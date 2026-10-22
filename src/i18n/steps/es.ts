@@ -1476,4 +1476,38 @@ export const es: Record<string, string> = {
     "Cierra el extremo de abajo",
   "And the bottom flap. Your box is ready.":
     "Y la solapa de abajo. Tu caja está lista.",
+  "White side up, fold corner to corner, and unfold.":
+    "Con la cara blanca hacia arriba, dobla de esquina a esquina y desdobla.",
+  "And the other way, and unfold.":
+    "Y en el otro sentido, y desdobla.",
+  "Open the corners":
+    "Abre las esquinas",
+  "Unfold the four corners from underneath, so the whole sheet lies open, coloured side up.":
+    "Desdobla las cuatro esquinas de abajo, para que toda la hoja quede abierta con la cara de color hacia arriba.",
+  "Fold the right edge in to the middle crease.":
+    "Lleva el borde derecho hasta el pliegue del centro.",
+  "Swivel the bottom right":
+    "Gira la parte de abajo a la derecha",
+  "Lift the bottom of the folded flap and swing its corner out to the right, as the bottom edge folds up to the middle crease. Flatten it into a triangle.":
+    "Levanta la parte de abajo de la solapa doblada y gira su esquina hacia la derecha, mientras el borde de abajo sube hasta el pliegue del centro. Aplánala en un triángulo.",
+  "Fold the top left corner behind":
+    "Dobla la esquina de arriba a la izquierda hacia atrás",
+  "Mountain-fold the top left corner behind, along the crease from the middle of the left edge to the middle of the top.":
+    "Dobla en montaña la esquina de arriba a la izquierda hacia atrás, por el pliegue que va del centro del borde izquierdo al centro del de arriba.",
+  "Swivel the bottom left":
+    "Gira la parte de abajo a la izquierda",
+  "Fold the left edge in to the middle crease, letting the bottom left corner swing down into a point below the bottom edge. Flatten it.":
+    "Lleva el borde izquierdo hasta el pliegue del centro, dejando que la esquina de abajo a la izquierda baje y forme una punta por debajo del borde de abajo. Aplánala.",
+  "Swivel the top right":
+    "Gira la parte de arriba a la derecha",
+  "Lift the top of the right flap, push its top right corner in and swing it out to the right, as the top edge folds down to the middle crease. Flatten it.":
+    "Levanta la parte de arriba de la solapa derecha, empuja su esquina de arriba a la derecha hacia dentro y gírala hacia la derecha, mientras el borde de arriba baja hasta el pliegue del centro. Aplánala.",
+  "Fold the top left corner down to the bottom right corner, along the diagonal. The coloured square folds in half on top, into the head. Your pajarita is finished.":
+    "Lleva la esquina de arriba a la izquierda hasta la de abajo a la derecha, por la diagonal. El cuadrado de color se dobla por la mitad encima y forma la cabeza. Tu pajarita está terminada.",
+  "Fold the corners to the middle":
+    "Dobla las esquinas hacia el centro",
+  "Fold each corner of the square to the middle.":
+    "Lleva cada esquina del cuadrado al centro.",
+  "Unfold them again, leaving the creases.":
+    "Desdóblalas de nuevo, dejando los pliegues.",
 };

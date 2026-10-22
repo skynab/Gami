@@ -1476,4 +1476,38 @@ export const fr: Record<string, string> = {
     "Verrouillez le bout du bas",
   "And the bottom flap. Your box is ready.":
     "Et le rabat du bas. Votre boîte est prête.",
+  "White side up, fold corner to corner, and unfold.":
+    "Face blanche dessus, pliez d’un coin à l’autre, puis dépliez.",
+  "And the other way, and unfold.":
+    "Et dans l’autre sens, puis dépliez.",
+  "Open the corners":
+    "Ouvrez les coins",
+  "Unfold the four corners from underneath, so the whole sheet lies open, coloured side up.":
+    "Dépliez les quatre coins de dessous, pour que toute la feuille soit ouverte, face colorée dessus.",
+  "Fold the right edge in to the middle crease.":
+    "Amenez le bord droit jusqu’au pli du milieu.",
+  "Swivel the bottom right":
+    "Pivotez le bas à droite",
+  "Lift the bottom of the folded flap and swing its corner out to the right, as the bottom edge folds up to the middle crease. Flatten it into a triangle.":
+    "Soulevez le bas du rabat plié et faites pivoter son coin vers la droite, tandis que le bord inférieur remonte jusqu’au pli du milieu. Aplatissez-le en triangle.",
+  "Fold the top left corner behind":
+    "Pliez le coin supérieur gauche derrière",
+  "Mountain-fold the top left corner behind, along the crease from the middle of the left edge to the middle of the top.":
+    "Pliez en montagne le coin supérieur gauche derrière, le long du pli qui va du milieu du bord gauche au milieu du haut.",
+  "Swivel the bottom left":
+    "Pivotez le bas à gauche",
+  "Fold the left edge in to the middle crease, letting the bottom left corner swing down into a point below the bottom edge. Flatten it.":
+    "Amenez le bord gauche jusqu’au pli du milieu, en laissant le coin inférieur gauche descendre en une pointe sous le bord inférieur. Aplatissez-le.",
+  "Swivel the top right":
+    "Pivotez le haut à droite",
+  "Lift the top of the right flap, push its top right corner in and swing it out to the right, as the top edge folds down to the middle crease. Flatten it.":
+    "Soulevez le haut du rabat droit, rentrez son coin supérieur droit et faites-le pivoter vers la droite, tandis que le bord supérieur descend jusqu’au pli du milieu. Aplatissez-le.",
+  "Fold the top left corner down to the bottom right corner, along the diagonal. The coloured square folds in half on top, into the head. Your pajarita is finished.":
+    "Amenez le coin supérieur gauche sur le coin inférieur droit, le long de la diagonale. Le carré coloré se plie en deux par-dessus et forme la tête. Votre pajarita est finie.",
+  "Fold the corners to the middle":
+    "Pliez les coins vers le centre",
+  "Fold each corner of the square to the middle.":
+    "Amenez chaque coin du carré au centre.",
+  "Unfold them again, leaving the creases.":
+    "Dépliez-les à nouveau, en gardant les plis.",
 };

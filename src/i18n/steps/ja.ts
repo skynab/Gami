@@ -1476,4 +1476,38 @@ export const ja: Record<string, string> = {
     "下の端を留める",
   "And the bottom flap. Your box is ready.":
     "下のフラップも同じように折ります。箱のできあがりです。",
+  "White side up, fold corner to corner, and unfold.":
+    "白い面を上にして、角と角を合わせて折り、開きます。",
+  "And the other way, and unfold.":
+    "反対の角どうしも折り、開きます。",
+  "Open the corners":
+    "角を開く",
+  "Unfold the four corners from underneath, so the whole sheet lies open, coloured side up.":
+    "下にある四つの角を開いて、紙全体を色の面を上にして広げます。",
+  "Fold the right edge in to the middle crease.":
+    "右の辺を中心の折り筋まで折ります。",
+  "Swivel the bottom right":
+    "右下を回す",
+  "Lift the bottom of the folded flap and swing its corner out to the right, as the bottom edge folds up to the middle crease. Flatten it into a triangle.":
+    "折ったフラップの下の部分を持ち上げ、下の辺が中心の折り筋まで上がるのに合わせて、角を右へ回し出します。三角形につぶします。",
+  "Fold the top left corner behind":
+    "左上の角をうしろへ折る",
+  "Mountain-fold the top left corner behind, along the crease from the middle of the left edge to the middle of the top.":
+    "左上の角を、左の辺の真ん中から上の辺の真ん中へ通る折り筋で、うしろへ山折りします。",
+  "Swivel the bottom left":
+    "左下を回す",
+  "Fold the left edge in to the middle crease, letting the bottom left corner swing down into a point below the bottom edge. Flatten it.":
+    "左の辺を中心の折り筋まで折り、左下の角を下の辺より下へ回して先をつくります。つぶします。",
+  "Swivel the top right":
+    "右上を回す",
+  "Lift the top of the right flap, push its top right corner in and swing it out to the right, as the top edge folds down to the middle crease. Flatten it.":
+    "右のフラップの上の部分を持ち上げ、右上の角を内側に押し込んで右へ回し、上の辺を中心の折り筋まで折り下げます。つぶします。",
+  "Fold the top left corner down to the bottom right corner, along the diagonal. The coloured square folds in half on top, into the head. Your pajarita is finished.":
+    "左上の角を右下の角に合わせて、対角線で折ります。色のついた正方形が上で半分に折れて、頭になります。パハリータのできあがりです。",
+  "Fold the corners to the middle":
+    "角を中心に折る",
+  "Fold each corner of the square to the middle.":
+    "正方形のそれぞれの角を中心に合わせて折ります。",
+  "Unfold them again, leaving the creases.":
+    "もう一度開いて、折り筋を残します。",
 };
