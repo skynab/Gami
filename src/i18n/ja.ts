@@ -50,6 +50,7 @@ export const ja: Messages = {
   },
   models: {
     basics: { title: '折り方の基本', blurb: 'まずはここから。折る、開く、裏返す。' },
+    'bases-lesson': { title: '折り紙の基本形', blurb: '凧、正方、風船、鶴、さかな、カエルの基本形。たいていの作品はここから始まります。' },
     'paper-plane': { title: '紙飛行機', blurb: '定番のダーツ型。まっすぐ遠くまで飛びます。' },
     glider: { title: 'グライダー', blurb: '平らな機首と広い翼で、ゆっくり長く飛びます。' },
     'bulldog-dart': { title: 'ブルドッグダート', blurb: '先を折り返したダート。ずんぐりした機首で着地に強い。' },

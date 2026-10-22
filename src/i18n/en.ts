@@ -52,6 +52,7 @@ export const en = {
   },
   models: {
     basics: { title: 'Folding basics', blurb: 'Start here: fold, unfold and turn the paper over.' },
+    'bases-lesson': { title: 'Origami bases', blurb: 'The kite, square, water bomb, bird, fish and frog bases: where most models start.' },
     'paper-plane': { title: 'Paper plane', blurb: 'The classic dart. Flies far and straight.' },
     glider: { title: 'Glider', blurb: 'A flat-nosed plane with broad wings, for slow, long glides.' },
     'bulldog-dart': { title: 'Bulldog dart', blurb: 'The dart with its point folded back: a stubby nose for rough landings.' },

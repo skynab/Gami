@@ -1282,4 +1282,40 @@ export const es: Record<string, string> = {
     "Sube los alerones",
   "Bend the strip between each wing’s slits up a little.":
     "Dobla un poco hacia arriba la tira entre las ranuras de cada ala.",
+  "Kite base":
+    "Base de cometa",
+  "A base is a simple shape that many models start from. The kite base is the simplest: two edges folded to a diagonal. The swan and the fox start from it. Begin by turning the square so a corner points at you.":
+    "Una base es una forma sencilla de la que parten muchos modelos. La base de cometa es la más sencilla: dos bordes doblados hasta una diagonal. El cisne y el zorro parten de ella. Empieza girando el cuadrado para que una esquina apunte hacia ti.",
+  "Open it out":
+    "Ábrelo",
+  "Open the paper out flat. Each base leaves its own pattern of creases.":
+    "Abre el papel del todo. Cada base deja su propio dibujo de pliegues.",
+  "Square base":
+    "Base preliminar",
+  "The square base, also called the preliminary base: a small square of four flaps, with the paper’s corners together at one end. The crane and the frog start from it.":
+    "La base cuadrada, también llamada base preliminar: un cuadrado pequeño de cuatro solapas, con las esquinas del papel juntas en un extremo. La grulla y la rana parten de ella.",
+  "Open it out. The square base’s creases: both diagonals and both middle lines.":
+    "Ábrelo. Los pliegues de la base preliminar: las dos diagonales y las dos líneas del medio.",
+  "Water bomb base":
+    "Base de bomba de agua",
+  "The water bomb base is the square base turned inside out: the same creases, folded the other way, make a triangle. The water bomb and the balloon rabbit start from it.":
+    "La base de bomba de agua es la base preliminar del revés: los mismos pliegues, doblados al contrario, forman un triángulo. La bomba de agua y el conejo globo parten de ella.",
+  "Open it out. Compare the creases with the square base’s: the same lines, folded the opposite way.":
+    "Ábrelo. Compara los pliegues con los de la base preliminar: las mismas líneas, dobladas al contrario.",
+  "Bird base":
+    "Base de pájaro",
+  "The bird base is a square base with a petal fold on each side, making four long points. The crane, the flapping bird and the crow start from it.":
+    "La base de pájaro es una base preliminar con un pliegue de pétalo en cada lado, que forma cuatro puntas largas. La grulla, el pájaro que aletea y el cuervo parten de ella.",
+  "Open it out to see the bird base’s creases, the start of many birds.":
+    "Ábrelo para ver los pliegues de la base de pájaro, el comienzo de muchas aves.",
+  "Fish base":
+    "Base de pez",
+  "The fish base comes from a kite folded at both ends, with two little flaps pinched up at the sides. The whale, the dolphin and the seal start from it.":
+    "La base de pez sale de una cometa doblada por los dos extremos, con dos pequeñas solapas levantadas a los lados. La ballena, el delfín y la foca parten de ella.",
+  "Open it out. The fish base is two kite bases, one from each end.":
+    "Ábrelo. La base de pez son dos bases de cometa, una desde cada extremo.",
+  "Frog base":
+    "Base de rana",
+  "The frog base is a square base with all four flaps squashed and then petal folded. The frog and the lily start from it. It takes the most steps of all the bases.":
+    "La base de rana es una base preliminar con sus cuatro solapas aplastadas y luego con pliegue de pétalo. La rana y el lirio parten de ella. Es la base con más pasos.",
 };
