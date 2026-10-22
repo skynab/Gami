@@ -1160,4 +1160,110 @@ export const es: Record<string, string> = {
     "Y la punta izquierda, a su lado.",
   "Fold the top layers down along a line close to the bottom, for broad, square wings.":
     "Dobla las capas de arriba hacia abajo por una línea cerca del borde de abajo, para unas alas anchas y cuadradas.",
+  "Squash a flap":
+    "Aplasta una solapa",
+  "Lift the right flap upright, open it, and press it flat so its fold lies on the centre line.":
+    "Levanta la solapa derecha, ábrela y aplánala para que su doblez quede sobre la línea central.",
+  "Squash the next flap":
+    "Aplasta la siguiente solapa",
+  "Squash the right flap on this side the same way.":
+    "Aplasta igual la solapa derecha de este lado.",
+  "Fold the top layer on the right over to the left, showing another flap.":
+    "Pasa la capa de arriba de la derecha hacia la izquierda, para que aparezca otra solapa.",
+  "Squash the third flap":
+    "Aplasta la tercera solapa",
+  "Squash it like the others.":
+    "Aplástala como las otras.",
+  "Fold the top right layer over to the left here too.":
+    "Pasa también aquí la capa de arriba de la derecha hacia la izquierda.",
+  "Squash the last flap":
+    "Aplasta la última solapa",
+  "And squash the last flap.":
+    "Y aplasta la última solapa.",
+  "Crease the lower edges":
+    "Marca los bordes de abajo",
+  "Fold the lower edges of the top layer in to the centre line, then unfold.":
+    "Dobla los bordes de abajo de la capa superior hasta la línea central y desdóblalos.",
+  "Open them out again, leaving the creases.":
+    "Ábrelos de nuevo, dejando los pliegues.",
+  "Lift the bottom edge of the coloured layer up along the line between the creases’ tops, pushing its sides in to meet at the centre.":
+    "Levanta el borde de abajo de la capa de color por la línea entre los extremos de los pliegues, empujando los lados hacia dentro para que se junten en el centro.",
+  "Petal fold this side":
+    "Haz el pliegue de pétalo en este lado",
+  "Make the same petal fold on this side.":
+    "Haz el mismo pliegue de pétalo en este lado.",
+  "Turn the top flap on the right over to the left.":
+    "Pasa la solapa de arriba de la derecha hacia la izquierda.",
+  "Petal fold the third flap":
+    "Haz el pliegue de pétalo en la tercera solapa",
+  "Petal fold this flap too.":
+    "Haz también el pliegue de pétalo en esta solapa.",
+  "Turn the top right flap over to the left.":
+    "Pasa la solapa de arriba a la derecha hacia la izquierda.",
+  "Petal fold the last flap":
+    "Haz el pliegue de pétalo en la última solapa",
+  "And petal fold the last one. This is the frog base.":
+    "Y haz el pliegue de pétalo en la última. Esta es la base de rana.",
+  "Narrow the bottom":
+    "Estrecha la parte de abajo",
+  "Fold the lower edges of the top layer in to the centre line.":
+    "Dobla los bordes de abajo de la capa superior hasta la línea central.",
+  "Narrow this side":
+    "Estrecha este lado",
+  "Fold these lower edges in to the centre line too.":
+    "Dobla también estos bordes de abajo hasta la línea central.",
+  "Narrow the last edges":
+    "Estrecha los últimos bordes",
+  "And fold in the last two lower edges.":
+    "Y dobla hacia dentro los dos últimos bordes de abajo.",
+  "Lift a front leg":
+    "Levanta una pata delantera",
+  "Open the front left flap a little and reverse-fold its lower point up between its layers, so it points up beside the head.":
+    "Abre un poco la solapa delantera izquierda y haz un pliegue invertido para subir su punta entre sus capas, de modo que apunte hacia arriba junto a la cabeza.",
+  "Lift the other front leg":
+    "Levanta la otra pata delantera",
+  "The same with the front right flap.":
+    "Lo mismo con la solapa delantera derecha.",
+  "Turn out a back leg":
+    "Saca una pata trasera",
+  "Reverse-fold the back left point out to the side, a little lower down.":
+    "Haz un pliegue invertido para sacar hacia el lado la punta trasera izquierda, un poco más abajo.",
+  "Turn out the other back leg":
+    "Saca la otra pata trasera",
+  "And the back right point.":
+    "Y la punta trasera derecha.",
+  "Bend a front leg":
+    "Dobla una pata delantera",
+  "Reverse-fold the front left leg out sideways, halfway along.":
+    "Haz un pliegue invertido a mitad de la pata delantera izquierda para llevarla hacia el lado.",
+  "Bend the other front leg":
+    "Dobla la otra pata delantera",
+  "Bend a back leg":
+    "Dobla una pata trasera",
+  "Reverse-fold the back left leg down, about halfway along.":
+    "Haz un pliegue invertido más o menos a mitad de la pata trasera izquierda para llevarla hacia abajo.",
+  "Bend the other back leg":
+    "Dobla la otra pata trasera",
+  "And the back right leg.":
+    "Y la pata trasera derecha.",
+  "Shape a front foot":
+    "Forma un pie delantero",
+  "Reverse-fold the tip of the front left leg up to make a foot.":
+    "Haz un pliegue invertido hacia arriba en la punta de la pata delantera izquierda para formar el pie.",
+  "Shape the other front foot":
+    "Forma el otro pie delantero",
+  "And the front right foot.":
+    "Y el pie delantero derecho.",
+  "Shape a back foot":
+    "Forma un pie trasero",
+  "Reverse-fold the tip of the back left leg out to the side.":
+    "Haz un pliegue invertido hacia el lado en la punta de la pata trasera izquierda.",
+  "Shape the other back foot":
+    "Forma el otro pie trasero",
+  "And the back right foot.":
+    "Y el pie trasero derecho.",
+  "Fold the head":
+    "Dobla la cabeza",
+  "Fold the tip of the head down behind. Your frog is finished.":
+    "Dobla la punta de la cabeza hacia atrás. Tu rana está terminada.",
 };

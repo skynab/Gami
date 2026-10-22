@@ -3,14 +3,11 @@ import { paper, Recipe, table, type At } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 
 /**
- * The bird base, as the crane folds it: square base, then a petal fold on each side. Shared by the crane and
- * the crow. Returns where its points are, and tests picking out its flaps by their centres on the sheet.
- *
- * The sheet's quarters each become one flap of the square base: the front flap is the quarter u > 0, v < 0,
- * the back flap u < 0, v > 0, and the two inner flaps are the other quarters, each folded along its diagonal.
+ * The square base: creased in diagonals and halves, collapsed, and turned so the loose corners point towards
+ * you. The start of the bird base and the frog base.
  */
-export function birdBase(r: Recipe) {
-  r.crease(paper(-0.5, -0.5), paper(0.5, 0.5), { title: 'Fold in half diagonally', text: 'Bring one corner to the opposite corner, then unfold.' })
+export function squareBase(r: Recipe): Recipe {
+  return r.crease(paper(-0.5, -0.5), paper(0.5, 0.5), { title: 'Fold in half diagonally', text: 'Bring one corner to the opposite corner, then unfold.' })
     .crease(paper(0.5, -0.5), paper(-0.5, 0.5), { title: 'Fold the other diagonal', text: 'The two creases cross at the centre.' })
     .crease(paper(-0.5, 0), paper(0.5, 0), { title: 'Fold in half', text: 'Edge to edge this time, then unfold.' })
     .crease(paper(0, -0.5), paper(0, 0.5), { title: 'Fold in half the other way', text: 'Now the paper has eight creases from the centre.' })
@@ -27,6 +24,17 @@ export function birdBase(r: Recipe) {
       paper(-0.4, -0.1),
     )
     .rotate(135, { title: 'Open end towards you', text: 'Turn the square so the loose corners point towards you.' });
+}
+
+/**
+ * The bird base, as the crane folds it: square base, then a petal fold on each side. Shared by the crane and
+ * the crow. Returns where its points are, and tests picking out its flaps by their centres on the sheet.
+ *
+ * The sheet's quarters each become one flap of the square base: the front flap is the quarter u > 0, v < 0,
+ * the back flap u < 0, v > 0, and the two inner flaps are the other quarters, each folded along its diagonal.
+ */
+export function birdBase(r: Recipe) {
+  squareBase(r);
 
   // The square base as a diamond: closed point T (the sheet's centre) at the top, open corners B at the bottom.
   const T = r.where(paper(0, 0));

@@ -1160,4 +1160,110 @@ export const fr: Record<string, string> = {
     "Et la pointe gauche, à côté.",
   "Fold the top layers down along a line close to the bottom, for broad, square wings.":
     "Rabattez les couches du dessus le long d’une ligne proche du bas, pour des ailes larges et carrées.",
+  "Squash a flap":
+    "Écrase un rabat",
+  "Lift the right flap upright, open it, and press it flat so its fold lies on the centre line.":
+    "Relève le rabat de droite, ouvre-le et aplatis-le pour que son pli tombe sur la ligne centrale.",
+  "Squash the next flap":
+    "Écrase le rabat suivant",
+  "Squash the right flap on this side the same way.":
+    "Écrase de la même façon le rabat de droite de ce côté.",
+  "Fold the top layer on the right over to the left, showing another flap.":
+    "Rabats la couche du dessus de droite vers la gauche, pour faire apparaître un autre rabat.",
+  "Squash the third flap":
+    "Écrase le troisième rabat",
+  "Squash it like the others.":
+    "Écrase-le comme les autres.",
+  "Fold the top right layer over to the left here too.":
+    "Ici aussi, rabats la couche du dessus de droite vers la gauche.",
+  "Squash the last flap":
+    "Écrase le dernier rabat",
+  "And squash the last flap.":
+    "Et écrase le dernier rabat.",
+  "Crease the lower edges":
+    "Marque les bords du bas",
+  "Fold the lower edges of the top layer in to the centre line, then unfold.":
+    "Plie les bords du bas de la couche du dessus vers la ligne centrale, puis déplie.",
+  "Open them out again, leaving the creases.":
+    "Ouvre-les à nouveau en gardant les plis.",
+  "Lift the bottom edge of the coloured layer up along the line between the creases’ tops, pushing its sides in to meet at the centre.":
+    "Soulève le bord du bas de la couche colorée le long de la ligne qui relie le haut des plis, en poussant les côtés vers l’intérieur pour qu’ils se rejoignent au centre.",
+  "Petal fold this side":
+    "Fais le pli pétale de ce côté",
+  "Make the same petal fold on this side.":
+    "Fais le même pli pétale de ce côté.",
+  "Turn the top flap on the right over to the left.":
+    "Rabats le rabat du dessus de droite vers la gauche.",
+  "Petal fold the third flap":
+    "Fais le pli pétale du troisième rabat",
+  "Petal fold this flap too.":
+    "Fais aussi le pli pétale de ce rabat.",
+  "Turn the top right flap over to the left.":
+    "Rabats le rabat du dessus à droite vers la gauche.",
+  "Petal fold the last flap":
+    "Fais le pli pétale du dernier rabat",
+  "And petal fold the last one. This is the frog base.":
+    "Et fais le pli pétale du dernier. Voici la base de la grenouille.",
+  "Narrow the bottom":
+    "Affine le bas",
+  "Fold the lower edges of the top layer in to the centre line.":
+    "Plie les bords du bas de la couche du dessus vers la ligne centrale.",
+  "Narrow this side":
+    "Affine ce côté",
+  "Fold these lower edges in to the centre line too.":
+    "Plie aussi ces bords du bas vers la ligne centrale.",
+  "Narrow the last edges":
+    "Affine les derniers bords",
+  "And fold in the last two lower edges.":
+    "Et replie les deux derniers bords du bas.",
+  "Lift a front leg":
+    "Relève une patte avant",
+  "Open the front left flap a little and reverse-fold its lower point up between its layers, so it points up beside the head.":
+    "Ouvre un peu le rabat avant gauche et fais un pli inversé pour remonter sa pointe entre ses couches, afin qu’elle pointe vers le haut à côté de la tête.",
+  "Lift the other front leg":
+    "Relève l’autre patte avant",
+  "The same with the front right flap.":
+    "Pareil avec le rabat avant droit.",
+  "Turn out a back leg":
+    "Sors une patte arrière",
+  "Reverse-fold the back left point out to the side, a little lower down.":
+    "Fais un pli inversé pour sortir la pointe arrière gauche sur le côté, un peu plus bas.",
+  "Turn out the other back leg":
+    "Sors l’autre patte arrière",
+  "And the back right point.":
+    "Et la pointe arrière droite.",
+  "Bend a front leg":
+    "Plie une patte avant",
+  "Reverse-fold the front left leg out sideways, halfway along.":
+    "Fais un pli inversé à mi-longueur de la patte avant gauche pour l’orienter sur le côté.",
+  "Bend the other front leg":
+    "Plie l’autre patte avant",
+  "Bend a back leg":
+    "Plie une patte arrière",
+  "Reverse-fold the back left leg down, about halfway along.":
+    "Fais un pli inversé vers le bas, à peu près à mi-longueur de la patte arrière gauche.",
+  "Bend the other back leg":
+    "Plie l’autre patte arrière",
+  "And the back right leg.":
+    "Et la patte arrière droite.",
+  "Shape a front foot":
+    "Forme un pied avant",
+  "Reverse-fold the tip of the front left leg up to make a foot.":
+    "Fais un pli inversé vers le haut au bout de la patte avant gauche pour former un pied.",
+  "Shape the other front foot":
+    "Forme l’autre pied avant",
+  "And the front right foot.":
+    "Et le pied avant droit.",
+  "Shape a back foot":
+    "Forme un pied arrière",
+  "Reverse-fold the tip of the back left leg out to the side.":
+    "Fais un pli inversé vers le côté au bout de la patte arrière gauche.",
+  "Shape the other back foot":
+    "Forme l’autre pied arrière",
+  "And the back right foot.":
+    "Et le pied arrière droit.",
+  "Fold the head":
+    "Plie la tête",
+  "Fold the tip of the head down behind. Your frog is finished.":
+    "Plie la pointe de la tête vers l’arrière. Ta grenouille est terminée.",
 };

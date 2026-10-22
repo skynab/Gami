@@ -1160,4 +1160,110 @@ export const ja: Record<string, string> = {
     "左の先も、その隣に折り上げます。",
   "Fold the top layers down along a line close to the bottom, for broad, square wings.":
     "上の層を、下の辺に近い線で折り下げて、広くて四角い翼にします。",
+  "Squash a flap":
+    "フラップをつぶす",
+  "Lift the right flap upright, open it, and press it flat so its fold lies on the centre line.":
+    "右のフラップを立てて開き、折り目が中心線に重なるように平らにつぶします。",
+  "Squash the next flap":
+    "次のフラップをつぶす",
+  "Squash the right flap on this side the same way.":
+    "こちら側の右のフラップも同じようにつぶします。",
+  "Fold the top layer on the right over to the left, showing another flap.":
+    "右の一番上の層を左へ折り、別のフラップを出します。",
+  "Squash the third flap":
+    "三つ目のフラップをつぶす",
+  "Squash it like the others.":
+    "ほかと同じようにつぶします。",
+  "Fold the top right layer over to the left here too.":
+    "こちらでも右の一番上の層を左へ折ります。",
+  "Squash the last flap":
+    "最後のフラップをつぶす",
+  "And squash the last flap.":
+    "最後のフラップもつぶします。",
+  "Crease the lower edges":
+    "下の辺に折り筋をつける",
+  "Fold the lower edges of the top layer in to the centre line, then unfold.":
+    "一番上の層の下の辺を中心線まで折り、開きます。",
+  "Open them out again, leaving the creases.":
+    "折り筋を残して開きます。",
+  "Lift the bottom edge of the coloured layer up along the line between the creases’ tops, pushing its sides in to meet at the centre.":
+    "色の層の下の辺を、折り筋の上端を結ぶ線で持ち上げ、両側を内側へ押して中心で合わせます。",
+  "Petal fold this side":
+    "こちら側も花弁折り",
+  "Make the same petal fold on this side.":
+    "こちら側も同じように花弁折りをします。",
+  "Turn the top flap on the right over to the left.":
+    "右の一番上のフラップを左へめくります。",
+  "Petal fold the third flap":
+    "三つ目のフラップを花弁折り",
+  "Petal fold this flap too.":
+    "このフラップも花弁折りをします。",
+  "Turn the top right flap over to the left.":
+    "右上のフラップを左へめくります。",
+  "Petal fold the last flap":
+    "最後のフラップを花弁折り",
+  "And petal fold the last one. This is the frog base.":
+    "最後のフラップも花弁折りをします。これでカエルの基本形です。",
+  "Narrow the bottom":
+    "下を細くする",
+  "Fold the lower edges of the top layer in to the centre line.":
+    "一番上の層の下の辺を中心線まで折ります。",
+  "Narrow this side":
+    "こちら側も細くする",
+  "Fold these lower edges in to the centre line too.":
+    "この下の辺も中心線まで折ります。",
+  "Narrow the last edges":
+    "最後の辺を細くする",
+  "And fold in the last two lower edges.":
+    "最後の二つの下の辺も内側へ折ります。",
+  "Lift a front leg":
+    "前足を上げる",
+  "Open the front left flap a little and reverse-fold its lower point up between its layers, so it points up beside the head.":
+    "左前のフラップを少し開き、下の角を層の間に中割り折りで上げて、頭の横で上を向くようにします。",
+  "Lift the other front leg":
+    "もう一方の前足を上げる",
+  "The same with the front right flap.":
+    "右前のフラップも同じようにします。",
+  "Turn out a back leg":
+    "後ろ足を出す",
+  "Reverse-fold the back left point out to the side, a little lower down.":
+    "左後ろの角を、少し下のところで中割り折りして横へ出します。",
+  "Turn out the other back leg":
+    "もう一方の後ろ足を出す",
+  "And the back right point.":
+    "右後ろの角も同じようにします。",
+  "Bend a front leg":
+    "前足を曲げる",
+  "Reverse-fold the front left leg out sideways, halfway along.":
+    "左前足の途中で中割り折りをして、横へ向けます。",
+  "Bend the other front leg":
+    "もう一方の前足を曲げる",
+  "Bend a back leg":
+    "後ろ足を曲げる",
+  "Reverse-fold the back left leg down, about halfway along.":
+    "左後ろ足のほぼ途中で中割り折りをして、下へ向けます。",
+  "Bend the other back leg":
+    "もう一方の後ろ足を曲げる",
+  "And the back right leg.":
+    "右後ろ足も同じようにします。",
+  "Shape a front foot":
+    "前足の先を作る",
+  "Reverse-fold the tip of the front left leg up to make a foot.":
+    "左前足の先を中割り折りで上へ曲げて、足先を作ります。",
+  "Shape the other front foot":
+    "もう一方の前足の先を作る",
+  "And the front right foot.":
+    "右前足の先も同じようにします。",
+  "Shape a back foot":
+    "後ろ足の先を作る",
+  "Reverse-fold the tip of the back left leg out to the side.":
+    "左後ろ足の先を中割り折りで横へ曲げます。",
+  "Shape the other back foot":
+    "もう一方の後ろ足の先を作る",
+  "And the back right foot.":
+    "右後ろ足の先も同じようにします。",
+  "Fold the head":
+    "頭を折る",
+  "Fold the tip of the head down behind. Your frog is finished.":
+    "頭の先を後ろへ折り下げます。カエルの完成です。",
 };

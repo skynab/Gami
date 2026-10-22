@@ -11,9 +11,10 @@ const models = RECIPES.map((make) => make());
 const file = (name: string) => readFileSync(new URL(`../../public/models/${name}`, import.meta.url), 'utf8');
 
 describe.each(models.map((m) => [m.id, m] as const))('%s', (id, model) => {
+  // Animating every step of the biggest models (the frog's 55) takes a few seconds; the later tests reuse it.
   it('folds without stretching, tearing or tangling', () => {
     expect(problems(model)).toEqual([]);
-  });
+  }, 30_000);
 
   it('has a title on every step', () => {
     for (const s of model.steps) expect(s.title.trim()).not.toBe('');
