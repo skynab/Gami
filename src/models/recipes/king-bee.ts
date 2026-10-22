@@ -22,7 +22,7 @@ export function kingBee() {
   const plane = new Recipe({
     id: 'king-bee',
     title: 'King bee',
-    sheet: { size: [w, h], front: '#2b2b2b', back: '#f2c230' },
+    sheet: { size: [w, h], front: '#f6f3ec', back: '#f2c230' },
   })
     .crease(paper(l, top), table(r, base), {
       title: 'Fold the top-left corner across',
