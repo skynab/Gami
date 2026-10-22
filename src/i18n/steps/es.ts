@@ -1096,4 +1096,18 @@ export const es: Record<string, string> = {
     "Dobla hacia abajo en diagonal la otra mitad de la cola, dentro del corte.",
   "Lift the two flaps out from the sides, for the fins. Your dolphin is done!":
     "Separa las dos solapas de los lados, para hacer las aletas. ¡Tu delfín está listo!",
+  "Turn it a quarter turn, so the flaps point to the left.":
+    "Gíralo un cuarto de vuelta, para que las solapas apunten a la izquierda.",
+  "Raise the neck":
+    "Levanta el cuello",
+  "Open the left point a little and push it up between the layers, for the neck.":
+    "Abre un poco la punta izquierda y empújala hacia arriba entre las capas, para hacer el cuello.",
+  "Push the right point up between the layers, for the tail.":
+    "Empuja la punta derecha hacia arriba entre las capas, para hacer la cola.",
+  "Push the tip of the neck forward between its layers, for the head.":
+    "Empuja la punta del cuello hacia delante entre sus capas, para hacer la cabeza.",
+  "Open the flippers":
+    "Abre las aletas",
+  "Lift the two flaps out from the sides, for the flippers. Your seal is done!":
+    "Separa las dos solapas de los lados, para hacer las aletas. ¡Tu foca está lista!",
 };

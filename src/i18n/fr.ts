@@ -84,6 +84,7 @@ export const fr: Messages = {
     crane: { title: 'Grue', blurb: 'Le symbole traditionnel de paix et de chance.' },
     'folding-geometry': { title: 'La géométrie par pliage', blurb: 'Les règles du pliage mathématique, et un angle partagé en trois.' },
     swan: { title: 'Cygne', blurb: 'Un cerf-volant affiné, avec un cou qui se dresse.' },
+    seal: { title: 'Phoque', blurb: 'Un phoque la tête haute, nageoires écartées et queue relevée.' },
     sword: { title: 'Épée', blurb: 'Une épée de chevalier avec sa garde, dans une seule longue bande.' },
     lily: { title: 'Lys', blurb: 'Quatre pétales recourbés à partir de la base de la grenouille.' },
   },

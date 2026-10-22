@@ -1096,4 +1096,18 @@ export const fr: Record<string, string> = {
     "Abaisse en biais l’autre moitié de la queue, à l’intérieur de la coupe.",
   "Lift the two flaps out from the sides, for the fins. Your dolphin is done!":
     "Écarte les deux rabats des côtés, pour les nageoires. Ton dauphin est fini !",
+  "Turn it a quarter turn, so the flaps point to the left.":
+    "Tourne-le d’un quart de tour, les rabats vers la gauche.",
+  "Raise the neck":
+    "Relève le cou",
+  "Open the left point a little and push it up between the layers, for the neck.":
+    "Ouvre un peu la pointe gauche et pousse-la vers le haut entre les couches, pour le cou.",
+  "Push the right point up between the layers, for the tail.":
+    "Pousse la pointe droite vers le haut entre les couches, pour la queue.",
+  "Push the tip of the neck forward between its layers, for the head.":
+    "Pousse le bout du cou vers l’avant entre ses couches, pour la tête.",
+  "Open the flippers":
+    "Ouvre les nageoires",
+  "Lift the two flaps out from the sides, for the flippers. Your seal is done!":
+    "Écarte les deux rabats des côtés, pour les nageoires. Ton phoque est fini !",
 };

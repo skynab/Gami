@@ -69,6 +69,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'pinwheel', title: 'Pinwheel', blurb: 'A windmill with four sails. Pin it to a stick and blow.', difficulty: 2, category: 'toy', steps: 12, minutes: 6, sheets: 1 },
   { id: 'butterfly', title: 'Butterfly', blurb: 'Wings folded out from a squashed square, lifted for flight.', difficulty: 3, category: 'animal', steps: 28, minutes: 10, sheets: 1 },
   { id: 'dolphin', title: 'Dolphin', blurb: 'A traditional dolphin, leaping.', difficulty: 3, category: 'animal', steps: 24, minutes: 12, sheets: 1, needs: ['scissors'] },
+  { id: 'seal', title: 'Seal', blurb: 'A seal with its head up, flippers out and tail raised.', difficulty: 3, category: 'animal', steps: 20, minutes: 12, sheets: 1 },
   { id: 'sword', title: 'Sword', blurb: 'A knight’s sword with a crossguard, from one long strip.', difficulty: 2, category: 'toy', steps: 14, minutes: 8, sheets: 1 },
   // Coming soon: listed, with no steps yet.
   { id: 'boat', title: 'Boat', blurb: 'The classic paper boat. It really floats, for a while.', difficulty: 2, category: 'object', minutes: 6, sheets: 1 },

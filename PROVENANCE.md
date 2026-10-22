@@ -53,6 +53,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `lily` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/lily](https://origami.me/lily/) | Clear | 17 Oct 2026 |
 | `sword` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 18 Oct 2026 |
 | `folding-geometry` | Mathematics: the Huzita–Hatori axioms and Hisashi Abe's angle trisection, after Robert Geretschläger's *Geometric Origami* | None needed: nobody owns it | the book, for the ideas only | Clear | 18 Oct 2026 |
+| `seal` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/seal](https://origami.me/seal/) | Clear | 22 Oct 2026 |
 | `boat` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/traditional-boat](https://origami.me/traditional-boat/) | Clear | Coming soon |
 | `waterbomb` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/waterbomb](https://origami.me/waterbomb/) | Clear | 21 Oct 2026 |
 | `balloon-rabbit` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/balloon-rabbit](https://origami.me/balloon-rabbit/) | Clear | 21 Oct 2026 |

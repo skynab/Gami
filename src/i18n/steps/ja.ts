@@ -1096,4 +1096,18 @@ export const ja: Record<string, string> = {
     "しっぽのもう半分を、切れ目の中でななめに折り下げます。",
   "Lift the two flaps out from the sides, for the fins. Your dolphin is done!":
     "両側の二つのひだを外に起こして、ひれにします。イルカのできあがり！",
+  "Turn it a quarter turn, so the flaps point to the left.":
+    "直角に回して、ひだを左に向けます。",
+  "Raise the neck":
+    "首を上げる",
+  "Open the left point a little and push it up between the layers, for the neck.":
+    "左の先を少し開いて、重なりのあいだに押し上げ、首にします。",
+  "Push the right point up between the layers, for the tail.":
+    "右の先を重なりのあいだに押し上げ、しっぽにします。",
+  "Push the tip of the neck forward between its layers, for the head.":
+    "首の先を重なりのあいだに押しこんで前に向け、頭にします。",
+  "Open the flippers":
+    "ひれを開く",
+  "Lift the two flaps out from the sides, for the flippers. Your seal is done!":
+    "両側の二つのひだを外に起こして、ひれにします。アザラシのできあがり！",
 };

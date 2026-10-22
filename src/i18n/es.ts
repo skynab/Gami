@@ -84,6 +84,7 @@ export const es: Messages = {
     crane: { title: 'Grulla', blurb: 'El símbolo tradicional de la paz y la buena suerte.' },
     'folding-geometry': { title: 'Geometría plegando', blurb: 'Las reglas del plegado matemático, y un ángulo dividido en tres.' },
     swan: { title: 'Cisne', blurb: 'Una cometa estrecha con un cuello que se levanta.' },
+    seal: { title: 'Foca', blurb: 'Una foca con la cabeza alta, las aletas abiertas y la cola levantada.' },
     sword: { title: 'Espada', blurb: 'Una espada de caballero con guarda, de una sola tira larga.' },
     lily: { title: 'Lirio', blurb: 'Cuatro pétalos rizados a partir de la base de rana.' },
   },

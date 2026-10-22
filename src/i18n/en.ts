@@ -86,6 +86,7 @@ export const en = {
     crane: { title: 'Crane', blurb: 'The traditional symbol of peace and luck.' },
     'folding-geometry': { title: 'Geometry by folding', blurb: 'The rules of mathematical folding, and an angle split in three.' },
     swan: { title: 'Swan', blurb: 'A kite folded narrow, with a neck that stands up.' },
+    seal: { title: 'Seal', blurb: 'A seal with its head up, flippers out and tail raised.' },
     sword: { title: 'Sword', blurb: 'A knight’s sword with a crossguard, from one long strip.' },
     lily: { title: 'Lily', blurb: 'Four curled petals from the frog base.' },
   },
