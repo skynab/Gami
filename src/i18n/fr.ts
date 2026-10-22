@@ -50,6 +50,7 @@ export const fr: Messages = {
   },
   models: {
     basics: { title: 'Les bases', blurb: 'Commencez ici : plier, déplier et retourner la feuille.' },
+    'folds-lesson': { title: 'Les plis courants', blurb: 'Vallée et montagne, plis inversés, écrasé, oreille de lapin, plissé, double pli inversé et pli pétale, chacun sur son propre carré.' },
     'paper-plane': { title: 'Avion en papier', blurb: 'La fléchette classique. Vole loin et droit.' },
     glider: { title: 'Planeur', blurb: 'Un avion au nez plat et aux ailes larges, pour planer lentement et longtemps.' },
     'bulldog-dart': { title: 'Fléchette bouledogue', blurb: 'La fléchette à la pointe repliée : un nez camus pour les atterrissages brutaux.' },

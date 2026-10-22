@@ -52,6 +52,7 @@ export const en = {
   },
   models: {
     basics: { title: 'Folding basics', blurb: 'Start here: fold, unfold and turn the paper over.' },
+    'folds-lesson': { title: 'Common folds', blurb: 'Valley and mountain, reverse, squash, rabbit ear, pleat, crimp and petal folds, each on its own square.' },
     'paper-plane': { title: 'Paper plane', blurb: 'The classic dart. Flies far and straight.' },
     glider: { title: 'Glider', blurb: 'A flat-nosed plane with broad wings, for slow, long glides.' },
     'bulldog-dart': { title: 'Bulldog dart', blurb: 'The dart with its point folded back: a stubby nose for rough landings.' },

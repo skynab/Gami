@@ -20,6 +20,8 @@ export interface ModelInfo {
   sheets: number;
   /** Tools beyond paper, shown on the card so nobody starts one without them: scissors for a cut, a pen for drawing. */
   needs?: Tool[];
+  /** A lesson rather than a model, badged as one on its card. */
+  lesson?: boolean;
 }
 
 export type Tool = 'scissors' | 'pen';
@@ -42,6 +44,7 @@ export const LEVELS: { id: Level; label: string }[] = [
 
 export const MODELS: ModelInfo[] = [
   { id: 'basics', title: 'Folding basics', blurb: 'Start here: fold, unfold and turn the paper over.', difficulty: 1, category: 'basics', steps: 4, minutes: 2, sheets: 1 },
+  { id: 'folds-lesson', title: 'Common folds', blurb: 'Valley and mountain, reverse, squash, rabbit ear, pleat, crimp and petal folds, each on its own square.', difficulty: 2, category: 'basics', steps: 65, minutes: 25, sheets: 1, lesson: true },
   { id: 'paper-plane', title: 'Paper plane', blurb: 'The classic dart. Flies far and straight.', difficulty: 1, category: 'toy', steps: 13, minutes: 5, sheets: 1 },
   { id: 'glider', title: 'Glider', blurb: 'A flat-nosed plane with broad wings, for slow, long glides.', difficulty: 1, category: 'toy', steps: 12, minutes: 5, sheets: 1 },
   { id: 'bulldog-dart', title: 'Bulldog dart', blurb: 'The dart with its point folded back: a stubby nose for rough landings.', difficulty: 1, category: 'toy', steps: 14, minutes: 5, sheets: 1 },

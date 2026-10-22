@@ -1282,4 +1282,114 @@ export const es: Record<string, string> = {
     "Sube los alerones",
   "Bend the strip between each wing’s slits up a little.":
     "Dobla un poco hacia arriba la tira entre las ranuras de cada ala.",
+  "Valley fold":
+    "Pliegue valle",
+  "Nearly every fold is a valley fold or a mountain fold. For a valley fold, fold the paper towards you: bring the bottom edge up to the top edge.":
+    "Casi todos los pliegues son pliegues valle o pliegues montaña. Para un pliegue valle, dobla el papel hacia ti: lleva el borde de abajo hasta el de arriba.",
+  "Valley and mountain folds":
+    "Pliegues valle y montaña",
+  "Open it. The crease dips down into the paper, like a valley.":
+    "Ábrelo. El pliegue se hunde en el papel, como un valle.",
+  "Mountain fold":
+    "Pliegue montaña",
+  "Now fold the left half behind, away from you, onto the back of the right half. This is a mountain fold.":
+    "Ahora dobla la mitad izquierda hacia atrás, alejándola de ti, sobre el dorso de la mitad derecha. Esto es un pliegue montaña.",
+  "Open it up":
+    "Ábrelo del todo",
+  "Open it. This crease stands up like a ridge. Turn the paper over and it would look like a valley: a mountain fold is just a valley fold seen from the other side.":
+    "Ábrelo. Este pliegue sobresale como una cresta. Si le dieras la vuelta al papel, parecería un valle: un pliegue montaña es solo un pliegue valle visto desde el otro lado.",
+  "Inside reverse fold":
+    "Pliegue invertido interior",
+  "An inside reverse fold turns a point back on itself, tucking it in between its own layers. It makes necks, heads, tails and legs.":
+    "Un pliegue invertido interior dobla una punta sobre sí misma y la mete entre sus propias capas. Sirve para cuellos, cabezas, colas y patas.",
+  "Fold the bottom corner up to the top corner. It’s a triangle.":
+    "Lleva la esquina de abajo hasta la de arriba. Es un triángulo.",
+  "Crease the point":
+    "Marca la punta",
+  "Fold the right point up along a slanting line, through both layers, and crease it well.":
+    "Dobla la punta derecha hacia arriba por una línea inclinada, a través de las dos capas, y marca bien el pliegue.",
+  "Fold it back down. The crease shows where the reverse fold goes.":
+    "Vuelve a bajarla. El pliegue marca dónde va el pliegue invertido.",
+  "Open the layers a little and push the point up between them along the crease, so it turns back on itself. Flatten it.":
+    "Separa un poco las capas y empuja la punta hacia arriba entre ellas siguiendo el pliegue, para que se dé la vuelta sobre sí misma. Aplánalo.",
+  "Open it out to see the creases: the reverse fold left a pair of creases, mirrored across the middle one.":
+    "Ábrelo para ver los pliegues: el pliegue invertido dejó una pareja de pliegues, simétricos respecto al del centro.",
+  "Outside reverse fold":
+    "Pliegue invertido exterior",
+  "An outside reverse fold also turns a point back, but this time the paper wraps round the outside of the point instead of going inside it. It often makes heads that hang down.":
+    "Un pliegue invertido exterior también dobla una punta hacia atrás, pero esta vez el papel envuelve la punta por fuera en lugar de meterse dentro. Suele formar cabezas que cuelgan.",
+  "Fold the right point back over the triangle along a line leaning to the left, through both layers, and crease it well.":
+    "Dobla la punta derecha hacia atrás sobre el triángulo por una línea inclinada hacia la izquierda, a través de las dos capas, y marca bien el pliegue.",
+  "Fold it back again.":
+    "Vuelve a desdoblarla.",
+  "Open the point’s layers and wrap them round the outside of the triangle, so the point turns down past the folded bottom edge. Flatten it.":
+    "Separa las capas de la punta y envuélvelas por fuera del triángulo, para que la punta baje más allá del borde doblado de abajo. Aplánalo.",
+  "Open it out. Again a mirrored pair of creases, but folded the opposite way to the inside reverse fold’s.":
+    "Ábrelo. Otra vez una pareja de pliegues simétricos, pero doblados al revés que los del pliegue invertido interior.",
+  "Squash fold":
+    "Pliegue aplastado",
+  "In a squash fold you open a flap and press it flat into a new shape, usually a square or a diamond. It starts many bases.":
+    "En un pliegue aplastado abres una solapa y la aplastas hasta darle una forma nueva, casi siempre un cuadrado o un rombo. Con él empiezan muchas bases.",
+  "Fold in half again":
+    "Dobla otra vez por la mitad",
+  "Fold the right corner over to the left corner.":
+    "Lleva la esquina derecha hasta la esquina izquierda.",
+  "Stand the top flap straight up and open its pocket. Press it down flat so it spreads evenly over the centre line, into a diamond.":
+    "Levanta la solapa de arriba hasta dejarla vertical y abre su bolsillo. Aplástala para que se reparta por igual a los dos lados de la línea central, formando un rombo.",
+  "Open it out. A squash fold leaves a fan of creases round a point.":
+    "Ábrelo. Un pliegue aplastado deja un abanico de pliegues alrededor de un punto.",
+  "Rabbit ear":
+    "Oreja de conejo",
+  "A rabbit ear folds two edges of a triangle in at once, so the corner between them stands up as a thin flap. It makes legs and fins, and narrows a point.":
+    "Una oreja de conejo dobla a la vez dos bordes de un triángulo, de modo que la esquina entre ellos se levanta como una solapa fina. Sirve para patas y aletas, y para afinar una punta.",
+  "Fold the left edge down":
+    "Dobla el borde izquierdo hacia abajo",
+  "Fold the left slanting edge down onto the bottom edge.":
+    "Lleva el borde inclinado de la izquierda sobre el borde de abajo.",
+  "Open it again.":
+    "Vuelve a abrirlo.",
+  "Fold the right edge down":
+    "Dobla el borde derecho hacia abajo",
+  "And the right slanting edge onto the bottom edge.":
+    "Y el borde inclinado de la derecha sobre el borde de abajo.",
+  "Open it again. The two creases cross on the middle line.":
+    "Vuelve a abrirlo. Los dos pliegues se cruzan en la línea del centro.",
+  "Fold the left corner over to the right corner.":
+    "Lleva la esquina izquierda hasta la esquina derecha.",
+  "Fold both slanting edges down to the bottom edge at the same time, along their creases. The top corner pinches up into a flap. Lay it down to the right, and the right half of the triangle folds behind along the middle crease.":
+    "Dobla a la vez los dos bordes inclinados hasta el borde de abajo, siguiendo sus pliegues. La esquina de arriba se levanta como una solapa. Túmbala hacia la derecha, y la mitad derecha del triángulo se dobla hacia atrás por el pliegue del centro.",
+  "Open it out. Four creases meet at one point in the middle of the triangle.":
+    "Ábrelo. Cuatro pliegues se juntan en un punto en medio del triángulo.",
+  "Pleat":
+    "Plisado",
+  "A pleat is a valley fold and a mountain fold next to each other, making a step in the paper, like a folded fan. Pleats make stripes, tails and springs.":
+    "Un plisado es un pliegue valle y un pliegue montaña uno junto al otro, que forman un escalón en el papel, como un abanico. Los plisados hacen rayas, colas y muelles.",
+  "Fold the bottom edge up to the middle of the square.":
+    "Lleva el borde de abajo hasta la mitad del cuadrado.",
+  "Fold it back down":
+    "Vuelve a bajarlo",
+  "Fold the edge back down to the bottom fold, folding just the top layer. The zig-zag is a pleat.":
+    "Dobla el borde otra vez hacia abajo hasta el doblez de abajo, solo la capa de arriba. El zigzag es un plisado.",
+  "Open it out: a valley crease and a mountain crease side by side.":
+    "Ábrelo: un pliegue valle y un pliegue montaña uno junto al otro.",
+  "Crimp":
+    "Doble pliegue invertido",
+  "A crimp is two reverse folds next to each other: a pleat folded through both layers of a point at once, so the point bends. It makes knees, necks and beaks.":
+    "Un doble pliegue invertido son dos pliegues invertidos seguidos: un plisado que atraviesa a la vez las dos capas de una punta, para que la punta se doble. Sirve para rodillas, cuellos y picos.",
+  "Crease near the middle":
+    "Marca un pliegue cerca del centro",
+  "Fold the right half over along a nearly upright line just right of the middle, through both layers.":
+    "Dobla la mitad derecha por una línea casi vertical justo a la derecha del centro, a través de las dos capas.",
+  "Crease beside it":
+    "Marca otro al lado",
+  "Fold it over again along a second line just to the right, leaning a little further right.":
+    "Vuelve a doblarla por una segunda línea justo a la derecha, un poco más inclinada hacia la derecha.",
+  "Pinch a pleat into both layers along the two creases at once, so the point tilts up. Each layer gets the same pleat, mirrored, with the pleat tucked between them.":
+    "Forma a la vez un plisado en las dos capas siguiendo los dos pliegues, para que la punta se incline hacia arriba. Cada capa lleva el mismo plisado, en espejo, y el plisado queda metido entre ellas.",
+  "Open it out: on each layer, the two creases are a pleat.":
+    "Ábrelo: en cada capa, los dos pliegues forman un plisado.",
+  "A petal fold lifts one layer of a point up while its sides fold in to meet in the middle, making a long, thin diamond. Two of them turn a square base into a bird base. First, fold a square base.":
+    "Un pliegue de pétalo levanta una capa de una punta mientras sus lados se doblan hacia dentro hasta juntarse en el centro, formando un rombo largo y estrecho. Dos de ellos convierten una base preliminar en una base de pájaro. Primero, dobla una base preliminar.",
+  "Open it out to see the creases the petal fold left behind.":
+    "Ábrelo para ver los pliegues que ha dejado el pliegue de pétalo.",
 };
