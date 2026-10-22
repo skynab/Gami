@@ -1266,4 +1266,20 @@ export const es: Record<string, string> = {
     "Dobla la cabeza",
   "Fold the tip of the head down behind. Your frog is finished.":
     "Dobla la punta de la cabeza hacia atrás. Tu rana está terminada.",
+  "Cut a slit in the wings":
+    "Corta una ranura en las alas",
+  "If you like, for tricks: with scissors, cut a short slit in from the back edge, through both wings at once.":
+    "Si quieres, para hacer acrobacias: con tijeras, corta una ranura corta desde el borde de atrás, a través de las dos alas a la vez.",
+  "Cut another slit":
+    "Corta otra ranura",
+  "Cut a second slit the same length, further out. The strip between the slits is an aileron.":
+    "Corta una segunda ranura del mismo largo, más hacia fuera. La tira entre las ranuras es un alerón.",
+  "Fold up the wingtips":
+    "Dobla hacia arriba las puntas de las alas",
+  "If you like, fold the tip of each wing straight up, on a line parallel to the body.":
+    "Si quieres, dobla la punta de cada ala hacia arriba, recta, por una línea paralela al cuerpo.",
+  "Bend up the ailerons":
+    "Sube los alerones",
+  "Bend the strip between each wing’s slits up a little.":
+    "Dobla un poco hacia arriba la tira entre las ranuras de cada ala.",
 };

@@ -1266,4 +1266,20 @@ export const fr: Record<string, string> = {
     "Plie la tête",
   "Fold the tip of the head down behind. Your frog is finished.":
     "Plie la pointe de la tête vers l’arrière. Ta grenouille est terminée.",
+  "Cut a slit in the wings":
+    "Coupez une fente dans les ailes",
+  "If you like, for tricks: with scissors, cut a short slit in from the back edge, through both wings at once.":
+    "Si vous voulez, pour des acrobaties : avec des ciseaux, coupez une courte fente depuis le bord arrière, à travers les deux ailes à la fois.",
+  "Cut another slit":
+    "Coupez une autre fente",
+  "Cut a second slit the same length, further out. The strip between the slits is an aileron.":
+    "Coupez une deuxième fente de la même longueur, plus loin vers l’extérieur. La bande entre les fentes est un aileron.",
+  "Fold up the wingtips":
+    "Relevez le bout des ailes",
+  "If you like, fold the tip of each wing straight up, on a line parallel to the body.":
+    "Si vous voulez, relevez le bout de chaque aile à la verticale, le long d’une ligne parallèle au fuselage.",
+  "Bend up the ailerons":
+    "Relevez les ailerons",
+  "Bend the strip between each wing’s slits up a little.":
+    "Relevez un peu la bande entre les fentes de chaque aile.",
 };

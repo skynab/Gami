@@ -1266,4 +1266,20 @@ export const ja: Record<string, string> = {
     "頭を折る",
   "Fold the tip of the head down behind. Your frog is finished.":
     "頭の先を後ろへ折り下げます。カエルの完成です。",
+  "Cut a slit in the wings":
+    "翼に切り込みを入れる",
+  "If you like, for tricks: with scissors, cut a short slit in from the back edge, through both wings at once.":
+    "好みで、宙返り用に:はさみで、うしろの辺から短い切り込みを入れます。両方の翼をいっしょに切ります。",
+  "Cut another slit":
+    "もう一つ切り込みを入れる",
+  "Cut a second slit the same length, further out. The strip between the slits is an aileron.":
+    "同じ長さの切り込みを、もう少し外側にも入れます。切り込みの間の帯が補助翼になります。",
+  "Fold up the wingtips":
+    "翼の先を折り上げる",
+  "If you like, fold the tip of each wing straight up, on a line parallel to the body.":
+    "好みで、それぞれの翼の先を、胴体と平行な線でまっすぐ上に折ります。",
+  "Bend up the ailerons":
+    "補助翼を上げる",
+  "Bend the strip between each wing’s slits up a little.":
+    "それぞれの翼の切り込みの間の帯を、少し上に曲げます。",
 };

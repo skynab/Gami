@@ -1,5 +1,5 @@
 import { checkNoTear, FoldError, toFlat, type FlatFace } from './fold';
-import { sideOf, split, type Line } from './geometry2d';
+import { sideOf, split, type Cut, type Line } from './geometry2d';
 import { LAYER_GAP } from './frames';
 import type { FoldFrame, Vec2, Vec3 } from './types';
 
@@ -76,7 +76,10 @@ export function shape(frame: FoldFrame, bends: Bend[]): FoldFrame {
         vertices_coords.push(at);
         index.set(key, v);
       } else if (Math.hypot(...vertices_coords[v].map((c, n) => c - at[n])) > 1e-6) {
-        throw new FoldError('Those bends cross on the paper, so they’d stretch it. Shape one part at a time.');
+        // On a scissor cut, the paper either side is free to part: the pieces get a corner each.
+        if (!onCut(q, frame.cuts)) throw new FoldError('Those bends cross on the paper, so they’d stretch it. Shape one part at a time.');
+        v = vertices_paper.push(q) - 1;
+        vertices_coords.push(at);
       }
       return v;
     }),
@@ -252,3 +255,14 @@ export function radial(frame: FoldFrame, centre: Vec2, rays: Ray[]): FoldFrame {
 }
 
 const centreOf = (pts: Vec2[]): Vec2 => [pts.reduce((s, p) => s + p[0], 0) / pts.length, pts.reduce((s, p) => s + p[1], 0) / pts.length];
+
+/** Whether a point on the sheet lies on one of its scissor cuts. */
+function onCut(q: Vec2, cuts: Cut[] | undefined): boolean {
+  return (cuts ?? []).some(([a, b]) => {
+    const d: Vec2 = [b[0] - a[0], b[1] - a[1]];
+    const len2 = d[0] * d[0] + d[1] * d[1];
+    const t = ((q[0] - a[0]) * d[0] + (q[1] - a[1]) * d[1]) / len2;
+    if (t < -1e-9 || t > 1 + 1e-9) return false;
+    return Math.hypot(a[0] + d[0] * t - q[0], a[1] + d[1] * t - q[1]) < 1e-7;
+  });
+}

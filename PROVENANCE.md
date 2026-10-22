@@ -92,9 +92,11 @@ noted when it was written, and the model was folded from the common traditional 
   and give no licence for the designs, only a copyright notice for the site itself. Web searches turned up no
   designer either, and Gilad's database covers origami rather than paper planes. So like the glider they're
   Unattributed: fine to use, but credit and change them if a designer turns up. Gami follows only the fold
-  sequence, in its own words and pictures. Where the source has steps Gami leaves out, they're noted here:
-  the navy plane's last step (folding up two small tail flaps) isn't folded yet, and the king bee's optional
-  extras (wingtips turned up, aileron slits cut in the wings) are left out. The boomerang (Fold'N Fly #56) is
+  sequence, in its own words and pictures. The king bee includes its optional extras (aileron slits cut in
+  the wings and bent up, wingtips turned up), so its card shows scissors. The navy plane leaves out its last
+  step, two small tail flaps folded up: each flap runs across the wing's fold into the body, so standing it
+  up would stretch the paper where its crease meets that fold (real paper gives a little there; the engine's
+  doesn't). The boomerang (Fold'N Fly #56) is
   listed as coming soon. Its middle steps twist a strip into an L with pockets, which the fold engine can't
   do yet.
 - **Coming soon.** The boat and the models listed on 21 October 2026 are gallery placeholders with no recipe

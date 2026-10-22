@@ -57,4 +57,23 @@ describe('scissor cuts', () => {
     // One layer cut: one stretch of cut on the sheet.
     expect(model.steps[1].frame.cuts).toHaveLength(1);
   });
+
+  it('bends the flap between two slits up on its own', () => {
+    // Two slits in from the bottom edge, and the strip between them bent up like an aileron: its corners on
+    // the edge part from the paper beside it, which stays flat.
+    const model = square()
+      .cut(table(-0.1, 0.5), table(-0.1, 0.3), { title: 'Slit' })
+      .cut(table(0.1, 0.5), table(0.1, 0.3), { title: 'Slit' })
+      .shape({ title: 'Bend up' }, [{ through: [table(-1, 0.3), table(1, 0.3)], moving: table(0, 0.5), degrees: 30, only: ([u]) => Math.abs(u) < 0.1 }])
+      .build();
+    const f = model.steps.at(-1)!.frame;
+    // The heights a point of the sheet is at: two, where a slit parts the paper.
+    const heights = (u: number, v: number) => f.vertices_coords.filter((_, i) => Math.hypot(f.vertices_paper[i][0] - u, f.vertices_paper[i][1] - v) < 1e-9).map((p) => p[1]);
+    for (const u of [-0.1, 0.1]) {
+      expect(Math.max(...heights(u, 0.5))).toBeCloseTo(0.2 * Math.sin(Math.PI / 6));
+      expect(Math.min(...heights(u, 0.5))).toBeCloseTo(0);
+    }
+    expect(heights(0.5, 0.5)).toEqual([0]);
+    expect(problems(model)).toEqual([]);
+  });
 });
