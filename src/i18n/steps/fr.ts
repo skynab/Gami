@@ -1392,4 +1392,40 @@ export const fr: Record<string, string> = {
     "Un pli pétale soulève une couche d’une pointe pendant que ses côtés se replient pour se rejoindre au milieu, ce qui donne un losange long et fin. Deux plis pétale transforment une base préliminaire en base de l’oiseau. D’abord, pliez une base préliminaire.",
   "Open it out to see the creases the petal fold left behind.":
     "Dépliez pour voir les plis laissés par le pli pétale.",
+  "Kite base":
+    "Base du cerf-volant",
+  "A base is a simple shape that many models start from. The kite base is the simplest: two edges folded to a diagonal. The swan and the fox start from it. Begin by turning the square so a corner points at you.":
+    "Une base est une forme simple d’où partent beaucoup de modèles. La base du cerf-volant est la plus simple : deux bords pliés sur une diagonale. Le cygne et le renard en partent. Commence par tourner le carré pour qu’un coin pointe vers toi.",
+  "Open it out":
+    "Déplie tout",
+  "Open the paper out flat. Each base leaves its own pattern of creases.":
+    "Déplie la feuille à plat. Chaque base laisse son propre motif de plis.",
+  "Square base":
+    "Base préliminaire",
+  "The square base, also called the preliminary base: a small square of four flaps, with the paper’s corners together at one end. The crane and the frog start from it.":
+    "La base carrée, aussi appelée base préliminaire : un petit carré de quatre rabats, les coins de la feuille réunis à un bout. La grue et la grenouille en partent.",
+  "Open it out. The square base’s creases: both diagonals and both middle lines.":
+    "Déplie tout. Les plis de la base préliminaire : les deux diagonales et les deux médianes.",
+  "Water bomb base":
+    "Base de la bombe à eau",
+  "The water bomb base is the square base turned inside out: the same creases, folded the other way, make a triangle. The water bomb and the balloon rabbit start from it.":
+    "La base de la bombe à eau est la base préliminaire retournée : les mêmes plis, pliés dans l’autre sens, forment un triangle. La bombe à eau et le lapin ballon en partent.",
+  "Open it out. Compare the creases with the square base’s: the same lines, folded the opposite way.":
+    "Déplie tout. Compare les plis avec ceux de la base préliminaire : les mêmes lignes, pliées dans l’autre sens.",
+  "Bird base":
+    "Base de l’oiseau",
+  "The bird base is a square base with a petal fold on each side, making four long points. The crane, the flapping bird and the crow start from it.":
+    "La base de l’oiseau est une base préliminaire avec un pli pétale de chaque côté, qui donne quatre longues pointes. La grue, l’oiseau qui bat des ailes et le corbeau en partent.",
+  "Open it out to see the bird base’s creases, the start of many birds.":
+    "Déplie tout pour voir les plis de la base de l’oiseau, le début de bien des oiseaux.",
+  "Fish base":
+    "Base du poisson",
+  "The fish base comes from a kite folded at both ends, with two little flaps pinched up at the sides. The whale, the dolphin and the seal start from it.":
+    "La base du poisson vient d’un cerf-volant plié aux deux bouts, avec deux petits rabats pincés sur les côtés. La baleine, le dauphin et le phoque en partent.",
+  "Open it out. The fish base is two kite bases, one from each end.":
+    "Déplie tout. La base du poisson, ce sont deux bases du cerf-volant, une à chaque bout.",
+  "Frog base":
+    "Base de la grenouille",
+  "The frog base is a square base with all four flaps squashed and then petal folded. The frog and the lily start from it. It takes the most steps of all the bases.":
+    "La base de la grenouille est une base préliminaire dont les quatre rabats sont écrasés, puis pliés en pétale. La grenouille et le lys en partent. C’est la base qui demande le plus d’étapes.",
 };

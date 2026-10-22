@@ -1392,4 +1392,40 @@ export const ja: Record<string, string> = {
     "花弁折りは、角の一枚を持ち上げながら両側を折り込んで真ん中で合わせ、細長いひし形にします。これを二回すると、正方基本形が鶴の基本形になります。まず正方基本形を折ります。",
   "Open it out to see the creases the petal fold left behind.":
     "開いて、花弁折りが残した折り目を見てみましょう。",
+  "Kite base":
+    "凧の基本形",
+  "A base is a simple shape that many models start from. The kite base is the simplest: two edges folded to a diagonal. The swan and the fox start from it. Begin by turning the square so a corner points at you.":
+    "基本形とは、たくさんの作品の出発点になる簡単な形です。凧の基本形はいちばん簡単で、左右の辺を対角線に合わせて折るだけです。白鳥とキツネはここから折ります。まず、角が手前に向くように正方形を回します。",
+  "Open it out":
+    "広げる",
+  "Open the paper out flat. Each base leaves its own pattern of creases.":
+    "紙を平らに広げます。基本形ごとに、それぞれの折り筋の模様が残ります。",
+  "Square base":
+    "正方基本形",
+  "The square base, also called the preliminary base: a small square of four flaps, with the paper’s corners together at one end. The crane and the frog start from it.":
+    "正方基本形（プレリミナリーベース）は、四枚のフラップがある小さな正方形で、紙の角が一方の端に集まります。鶴とかえるはここから折ります。",
+  "Open it out. The square base’s creases: both diagonals and both middle lines.":
+    "広げます。正方基本形の折り筋は、二本の対角線と二本の中心線です。",
+  "Water bomb base":
+    "風船の基本形",
+  "The water bomb base is the square base turned inside out: the same creases, folded the other way, make a triangle. The water bomb and the balloon rabbit start from it.":
+    "風船の基本形は、正方基本形を裏返したような形です。同じ折り筋を逆向きに折ると三角形になります。水風船と風船うさぎはここから折ります。",
+  "Open it out. Compare the creases with the square base’s: the same lines, folded the opposite way.":
+    "広げます。正方基本形の折り筋と比べてみましょう。同じ線が、逆向きに折られています。",
+  "Bird base":
+    "鶴の基本形",
+  "The bird base is a square base with a petal fold on each side, making four long points. The crane, the flapping bird and the crow start from it.":
+    "鶴の基本形は、正方基本形の両面を花弁折りにしたもので、四つの長い角ができます。鶴、はばたく鳥、カラスはここから折ります。",
+  "Open it out to see the bird base’s creases, the start of many birds.":
+    "広げて、鶴の基本形の折り筋を見てみましょう。たくさんの鳥がここから生まれます。",
+  "Fish base":
+    "さかなの基本形",
+  "The fish base comes from a kite folded at both ends, with two little flaps pinched up at the sides. The whale, the dolphin and the seal start from it.":
+    "さかなの基本形は、両端から凧の形に折り、左右に小さなフラップをつまみ上げた形です。くじら、イルカ、アザラシはここから折ります。",
+  "Open it out. The fish base is two kite bases, one from each end.":
+    "広げます。さかなの基本形は、両端から折った二つの凧の基本形です。",
+  "Frog base":
+    "カエルの基本形",
+  "The frog base is a square base with all four flaps squashed and then petal folded. The frog and the lily start from it. It takes the most steps of all the bases.":
+    "カエルの基本形は、正方基本形の四枚のフラップをすべてつぶし、花弁折りにしたものです。かえるとユリはここから折ります。基本形の中でいちばん手順が多い形です。",
 };
