@@ -1282,4 +1282,114 @@ export const ja: Record<string, string> = {
     "補助翼を上げる",
   "Bend the strip between each wing’s slits up a little.":
     "それぞれの翼の切り込みの間の帯を、少し上に曲げます。",
+  "Valley fold":
+    "谷折り",
+  "Nearly every fold is a valley fold or a mountain fold. For a valley fold, fold the paper towards you: bring the bottom edge up to the top edge.":
+    "折り方のほとんどは谷折りか山折りです。谷折りは紙を手前に折ります。下の辺を上の辺に合わせて折りましょう。",
+  "Valley and mountain folds":
+    "谷折りと山折り",
+  "Open it. The crease dips down into the paper, like a valley.":
+    "開きます。折り目が谷のように紙にへこんでいます。",
+  "Mountain fold":
+    "山折り",
+  "Now fold the left half behind, away from you, onto the back of the right half. This is a mountain fold.":
+    "今度は左半分を向こう側へ折り、右半分の裏に重ねます。これが山折りです。",
+  "Open it up":
+    "すべて開く",
+  "Open it. This crease stands up like a ridge. Turn the paper over and it would look like a valley: a mountain fold is just a valley fold seen from the other side.":
+    "開きます。この折り目は尾根のように盛り上がっています。紙を裏返すと谷に見えます。山折りは、反対側から見た谷折りなのです。",
+  "Inside reverse fold":
+    "中割り折り",
+  "An inside reverse fold turns a point back on itself, tucking it in between its own layers. It makes necks, heads, tails and legs.":
+    "中割り折りは、角を自分の層の間に折り込んで向きを反対にします。首、頭、しっぽ、脚に使います。",
+  "Fold the bottom corner up to the top corner. It’s a triangle.":
+    "下の角を上の角に合わせて折ります。三角形になります。",
+  "Crease the point":
+    "角に折り目をつける",
+  "Fold the right point up along a slanting line, through both layers, and crease it well.":
+    "右の角を斜めの線で、二枚いっしょに上へ折り、しっかり折り目をつけます。",
+  "Fold it back down. The crease shows where the reverse fold goes.":
+    "元に戻します。この折り目が中割り折りの位置になります。",
+  "Open the layers a little and push the point up between them along the crease, so it turns back on itself. Flatten it.":
+    "層を少し開き、折り目に沿って角を層の間へ押し上げ、向きを反対にします。平らに整えます。",
+  "Open it out to see the creases: the reverse fold left a pair of creases, mirrored across the middle one.":
+    "開いて折り目を見てみましょう。中割り折りは、真ん中の折り目をはさんで対称な一組の折り目を残します。",
+  "Outside reverse fold":
+    "かぶせ折り",
+  "An outside reverse fold also turns a point back, but this time the paper wraps round the outside of the point instead of going inside it. It often makes heads that hang down.":
+    "かぶせ折りも角の向きを反対にしますが、今度は紙を内側に入れず、角の外側にかぶせます。下向きの頭によく使います。",
+  "Fold the right point back over the triangle along a line leaning to the left, through both layers, and crease it well.":
+    "右の角を、左に傾いた線で三角形の上へ二枚いっしょに折り返し、しっかり折り目をつけます。",
+  "Fold it back again.":
+    "元に戻します。",
+  "Open the point’s layers and wrap them round the outside of the triangle, so the point turns down past the folded bottom edge. Flatten it.":
+    "角の層を開いて三角形の外側にかぶせ、角が下の折り山より下に向くようにします。平らに整えます。",
+  "Open it out. Again a mirrored pair of creases, but folded the opposite way to the inside reverse fold’s.":
+    "開きます。ここでも対称な一組の折り目ですが、中割り折りとは山と谷が逆です。",
+  "Squash fold":
+    "つぶし折り",
+  "In a squash fold you open a flap and press it flat into a new shape, usually a square or a diamond. It starts many bases.":
+    "つぶし折りは、ふくろを開いて押しつぶし、新しい形にします。たいていは正方形かひし形です。多くの基本形がここから始まります。",
+  "Fold in half again":
+    "もう一度半分に折る",
+  "Fold the right corner over to the left corner.":
+    "右の角を左の角に合わせて折ります。",
+  "Stand the top flap straight up and open its pocket. Press it down flat so it spreads evenly over the centre line, into a diamond.":
+    "上のふくろを垂直に立てて開きます。中心線の両側に均等に広がるように押しつぶすと、ひし形になります。",
+  "Open it out. A squash fold leaves a fan of creases round a point.":
+    "開きます。つぶし折りは、一点のまわりに扇のような折り目を残します。",
+  "Rabbit ear":
+    "うさぎの耳折り",
+  "A rabbit ear folds two edges of a triangle in at once, so the corner between them stands up as a thin flap. It makes legs and fins, and narrows a point.":
+    "うさぎの耳折りは、三角形の二つの辺を同時に折り込み、その間の角を細いひだとして立てます。脚やひれに使い、角を細くします。",
+  "Fold the left edge down":
+    "左の辺を下へ折る",
+  "Fold the left slanting edge down onto the bottom edge.":
+    "左の斜めの辺を下の辺に合わせて折ります。",
+  "Open it again.":
+    "もう一度開きます。",
+  "Fold the right edge down":
+    "右の辺を下へ折る",
+  "And the right slanting edge onto the bottom edge.":
+    "右の斜めの辺も下の辺に合わせて折ります。",
+  "Open it again. The two creases cross on the middle line.":
+    "もう一度開きます。二本の折り目は真ん中の線の上で交わります。",
+  "Fold the left corner over to the right corner.":
+    "左の角を右の角に合わせて折ります。",
+  "Fold both slanting edges down to the bottom edge at the same time, along their creases. The top corner pinches up into a flap. Lay it down to the right, and the right half of the triangle folds behind along the middle crease.":
+    "折り目に沿って、二つの斜めの辺を同時に下の辺まで折ります。上の角がつまみ上げられてひだになります。右に倒すと、三角形の右半分が真ん中の折り目で後ろに折れます。",
+  "Open it out. Four creases meet at one point in the middle of the triangle.":
+    "開きます。三角形の真ん中の一点に四本の折り目が集まっています。",
+  "Pleat":
+    "段折り",
+  "A pleat is a valley fold and a mountain fold next to each other, making a step in the paper, like a folded fan. Pleats make stripes, tails and springs.":
+    "段折りは、谷折りと山折りを並べて、扇のように紙に段をつけます。しま模様、しっぽ、ばねに使います。",
+  "Fold the bottom edge up to the middle of the square.":
+    "下の辺を正方形の真ん中まで折り上げます。",
+  "Fold it back down":
+    "折り下げる",
+  "Fold the edge back down to the bottom fold, folding just the top layer. The zig-zag is a pleat.":
+    "上の一枚だけを、下の折り山まで折り下げます。このジグザグが段折りです。",
+  "Open it out: a valley crease and a mountain crease side by side.":
+    "開きます。谷折りと山折りの折り目が並んでいます。",
+  "Crimp":
+    "中割り段折り",
+  "A crimp is two reverse folds next to each other: a pleat folded through both layers of a point at once, so the point bends. It makes knees, necks and beaks.":
+    "中割り段折りは、中割り折りを二つ並べたものです。角の二枚の層に同時に段折りをして、角を曲げます。ひざ、首、くちばしに使います。",
+  "Crease near the middle":
+    "真ん中の近くに折り目をつける",
+  "Fold the right half over along a nearly upright line just right of the middle, through both layers.":
+    "真ん中のすぐ右で、ほぼ垂直な線に沿って右半分を二枚いっしょに折ります。",
+  "Crease beside it":
+    "そのとなりに折り目をつける",
+  "Fold it over again along a second line just to the right, leaning a little further right.":
+    "すぐ右の二本目の線で、もう少し右に傾けて、もう一度折ります。",
+  "Pinch a pleat into both layers along the two creases at once, so the point tilts up. Each layer gets the same pleat, mirrored, with the pleat tucked between them.":
+    "二本の折り目に沿って二枚の層に同時に段折りをつまむと、角が上を向きます。どちらの層も鏡に映したように同じ段折りになり、段は層の間に収まります。",
+  "Open it out: on each layer, the two creases are a pleat.":
+    "開きます。どちらの層でも、二本の折り目が段折りになっています。",
+  "A petal fold lifts one layer of a point up while its sides fold in to meet in the middle, making a long, thin diamond. Two of them turn a square base into a bird base. First, fold a square base.":
+    "花弁折りは、角の一枚を持ち上げながら両側を折り込んで真ん中で合わせ、細長いひし形にします。これを二回すると、正方基本形が鶴の基本形になります。まず正方基本形を折ります。",
+  "Open it out to see the creases the petal fold left behind.":
+    "開いて、花弁折りが残した折り目を見てみましょう。",
 };

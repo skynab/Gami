@@ -29,13 +29,24 @@ export function squareBase(r: Recipe): Recipe {
 /**
  * The bird base, as the crane folds it: square base, then a petal fold on each side. Shared by the crane and
  * the crow. Returns where its points are, and tests picking out its flaps by their centres on the sheet.
+ */
+export function birdBase(r: Recipe) {
+  squareBase(r);
+  const base = squareBaseFlaps(r);
+  base.petal(false);
+  r.turnOver('Turn the paper over.');
+  base.petal(true);
+  return base;
+}
+
+/**
+ * A square base's points and flaps, and its petal fold: `petal(false)` on the front flap, `petal(true)` on the
+ * back one once the paper is turned over. For a square base just folded by `squareBase`.
  *
  * The sheet's quarters each become one flap of the square base: the front flap is the quarter u > 0, v < 0,
  * the back flap u < 0, v > 0, and the two inner flaps are the other quarters, each folded along its diagonal.
  */
-export function birdBase(r: Recipe) {
-  squareBase(r);
-
+export function squareBaseFlaps(r: Recipe) {
   // The square base as a diamond: closed point T (the sheet's centre) at the top, open corners B at the bottom.
   const T = r.where(paper(0, 0));
   const B = r.where(paper(0.5, 0.5));
@@ -55,7 +66,7 @@ export function birdBase(r: Recipe) {
   const innerBack = ([u, v]: Vec2) => (u > 0 && v > 0 && v > u) || (u < 0 && v < 0 && v > u);
 
   /** Kite folds, top triangle, unfold, then the petal fold, for whichever flap is on top. */
-  const petal = (flap: (c: Vec2) => boolean, inner: (c: Vec2) => boolean, seam: (c: Vec2) => boolean, second: boolean) => {
+  const petalFold = (flap: (c: Vec2) => boolean, inner: (c: Vec2) => boolean, seam: (c: Vec2) => boolean, second: boolean) => {
     const left = r.where(paper(...(second ? ([0, 0.5] as Vec2) : ([0.5, 0] as Vec2))));
     const right = r.where(paper(...(second ? ([-0.5, 0] as Vec2) : ([0, -0.5] as Vec2))));
     const before = r.mark();
@@ -95,9 +106,10 @@ export function birdBase(r: Recipe) {
   };
 
   // The seams lie along the sheet's middle lines, far from the centre.
-  petal(front, innerFront, ([u, v]) => u > 0.3 || v < -0.3, false);
-  r.turnOver('Turn the paper over.');
-  petal(back, innerBack, ([u, v]) => v > 0.3 || u < -0.3, true);
+  const petal = (second: boolean) =>
+    second
+      ? petalFold(back, innerBack, ([u, v]) => v > 0.3 || u < -0.3, true)
+      : petalFold(front, innerFront, ([u, v]) => u > 0.3 || v < -0.3, false);
 
-  return { T, B, P, K, K2, side, up, front, back, innerFront, innerBack };
+  return { T, B, P, K, K2, side, up, front, back, innerFront, innerBack, petal };
 }

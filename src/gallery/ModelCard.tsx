@@ -10,7 +10,7 @@ export function ModelCard({ model }: { model: ModelInfo }) {
   const { t } = useTranslation();
   const level = t(`levels.${levelOf(model.difficulty)}`);
   const progress = model.steps ? readProgress(model.id) : null;
-  const lesson = model.category === 'math';
+  const lesson = model.category === 'math' || model.lesson;
   // The looping preview loads the first time the card is hovered or focused, and plays while it is.
   const [preview, setPreview] = useState<'off' | 'on' | 'loaded'>('off');
   const show = () => setPreview('on');

@@ -1282,4 +1282,114 @@ export const fr: Record<string, string> = {
     "Relevez les ailerons",
   "Bend the strip between each wing’s slits up a little.":
     "Relevez un peu la bande entre les fentes de chaque aile.",
+  "Valley fold":
+    "Pli vallée",
+  "Nearly every fold is a valley fold or a mountain fold. For a valley fold, fold the paper towards you: bring the bottom edge up to the top edge.":
+    "Presque tous les plis sont des plis vallée ou des plis montagne. Pour un pli vallée, pliez la feuille vers vous : amenez le bord du bas sur le bord du haut.",
+  "Valley and mountain folds":
+    "Plis vallée et montagne",
+  "Open it. The crease dips down into the paper, like a valley.":
+    "Dépliez. Le pli s’enfonce dans la feuille, comme une vallée.",
+  "Mountain fold":
+    "Pli montagne",
+  "Now fold the left half behind, away from you, onto the back of the right half. This is a mountain fold.":
+    "Maintenant, pliez la moitié gauche en arrière, loin de vous, contre le dos de la moitié droite. C’est un pli montagne.",
+  "Open it up":
+    "Dépliez tout",
+  "Open it. This crease stands up like a ridge. Turn the paper over and it would look like a valley: a mountain fold is just a valley fold seen from the other side.":
+    "Dépliez. Ce pli se dresse comme une crête. Retournez la feuille et il ressemblerait à une vallée : un pli montagne n’est qu’un pli vallée vu de l’autre côté.",
+  "Inside reverse fold":
+    "Pli inversé intérieur",
+  "An inside reverse fold turns a point back on itself, tucking it in between its own layers. It makes necks, heads, tails and legs.":
+    "Un pli inversé intérieur retourne une pointe sur elle-même en la glissant entre ses propres couches. Il fait les cous, les têtes, les queues et les pattes.",
+  "Fold the bottom corner up to the top corner. It’s a triangle.":
+    "Amenez le coin du bas sur le coin du haut. C’est un triangle.",
+  "Crease the point":
+    "Marquez la pointe",
+  "Fold the right point up along a slanting line, through both layers, and crease it well.":
+    "Pliez la pointe droite vers le haut le long d’une ligne en biais, à travers les deux couches, et marquez bien le pli.",
+  "Fold it back down. The crease shows where the reverse fold goes.":
+    "Rabattez-la vers le bas. Le pli montre où ira le pli inversé.",
+  "Open the layers a little and push the point up between them along the crease, so it turns back on itself. Flatten it.":
+    "Écartez un peu les couches et poussez la pointe vers le haut entre elles, le long du pli, pour qu’elle se retourne sur elle-même. Aplatissez.",
+  "Open it out to see the creases: the reverse fold left a pair of creases, mirrored across the middle one.":
+    "Dépliez pour voir les plis : le pli inversé a laissé une paire de plis, symétriques par rapport à celui du milieu.",
+  "Outside reverse fold":
+    "Pli inversé extérieur",
+  "An outside reverse fold also turns a point back, but this time the paper wraps round the outside of the point instead of going inside it. It often makes heads that hang down.":
+    "Un pli inversé extérieur retourne aussi une pointe, mais cette fois la feuille enveloppe la pointe par l’extérieur au lieu d’y entrer. Il fait souvent des têtes qui pendent.",
+  "Fold the right point back over the triangle along a line leaning to the left, through both layers, and crease it well.":
+    "Pliez la pointe droite en arrière par-dessus le triangle le long d’une ligne penchée vers la gauche, à travers les deux couches, et marquez bien le pli.",
+  "Fold it back again.":
+    "Rabattez-la de nouveau.",
+  "Open the point’s layers and wrap them round the outside of the triangle, so the point turns down past the folded bottom edge. Flatten it.":
+    "Écartez les couches de la pointe et enveloppez-les autour de l’extérieur du triangle, pour que la pointe descende au-delà du bord plié du bas. Aplatissez.",
+  "Open it out. Again a mirrored pair of creases, but folded the opposite way to the inside reverse fold’s.":
+    "Dépliez. De nouveau une paire de plis symétriques, mais pliés dans l’autre sens que ceux du pli inversé intérieur.",
+  "Squash fold":
+    "Pli écrasé",
+  "In a squash fold you open a flap and press it flat into a new shape, usually a square or a diamond. It starts many bases.":
+    "Dans un pli écrasé, on ouvre un rabat et on l’aplatit en une nouvelle forme, le plus souvent un carré ou un losange. Beaucoup de bases commencent ainsi.",
+  "Fold in half again":
+    "Pliez encore en deux",
+  "Fold the right corner over to the left corner.":
+    "Amenez le coin droit sur le coin gauche.",
+  "Stand the top flap straight up and open its pocket. Press it down flat so it spreads evenly over the centre line, into a diamond.":
+    "Redressez le rabat du dessus à la verticale et ouvrez sa poche. Aplatissez-le pour qu’il se répartisse également des deux côtés de la ligne du milieu, en losange.",
+  "Open it out. A squash fold leaves a fan of creases round a point.":
+    "Dépliez. Un pli écrasé laisse un éventail de plis autour d’un point.",
+  "Rabbit ear":
+    "Oreille de lapin",
+  "A rabbit ear folds two edges of a triangle in at once, so the corner between them stands up as a thin flap. It makes legs and fins, and narrows a point.":
+    "Une oreille de lapin replie à la fois deux bords d’un triangle, si bien que le coin entre eux se dresse en un rabat étroit. Elle fait les pattes et les nageoires, et affine une pointe.",
+  "Fold the left edge down":
+    "Pliez le bord gauche vers le bas",
+  "Fold the left slanting edge down onto the bottom edge.":
+    "Amenez le bord gauche en biais sur le bord du bas.",
+  "Open it again.":
+    "Dépliez-le de nouveau.",
+  "Fold the right edge down":
+    "Pliez le bord droit vers le bas",
+  "And the right slanting edge onto the bottom edge.":
+    "Et le bord droit en biais sur le bord du bas.",
+  "Open it again. The two creases cross on the middle line.":
+    "Dépliez-le de nouveau. Les deux plis se croisent sur la ligne du milieu.",
+  "Fold the left corner over to the right corner.":
+    "Amenez le coin gauche sur le coin droit.",
+  "Fold both slanting edges down to the bottom edge at the same time, along their creases. The top corner pinches up into a flap. Lay it down to the right, and the right half of the triangle folds behind along the middle crease.":
+    "Rabattez en même temps les deux bords en biais sur le bord du bas, le long de leurs plis. Le coin du haut se pince en un rabat. Couchez-le vers la droite, et la moitié droite du triangle se replie derrière le long du pli du milieu.",
+  "Open it out. Four creases meet at one point in the middle of the triangle.":
+    "Dépliez. Quatre plis se rejoignent en un point au milieu du triangle.",
+  "Pleat":
+    "Plissé",
+  "A pleat is a valley fold and a mountain fold next to each other, making a step in the paper, like a folded fan. Pleats make stripes, tails and springs.":
+    "Un plissé, c’est un pli vallée et un pli montagne côte à côte, qui forment une marche dans la feuille, comme un éventail. Les plissés font des rayures, des queues et des ressorts.",
+  "Fold the bottom edge up to the middle of the square.":
+    "Amenez le bord du bas jusqu’au milieu du carré.",
+  "Fold it back down":
+    "Rabattez-le vers le bas",
+  "Fold the edge back down to the bottom fold, folding just the top layer. The zig-zag is a pleat.":
+    "Rabattez le bord vers le bas jusqu’au pli du bas, seulement la couche du dessus. Ce zigzag est un plissé.",
+  "Open it out: a valley crease and a mountain crease side by side.":
+    "Dépliez : un pli vallée et un pli montagne côte à côte.",
+  "Crimp":
+    "Double pli inversé",
+  "A crimp is two reverse folds next to each other: a pleat folded through both layers of a point at once, so the point bends. It makes knees, necks and beaks.":
+    "Un double pli inversé, ce sont deux plis inversés côte à côte : un plissé fait à travers les deux couches d’une pointe à la fois, pour que la pointe se plie. Il fait les genoux, les cous et les becs.",
+  "Crease near the middle":
+    "Marquez un pli près du milieu",
+  "Fold the right half over along a nearly upright line just right of the middle, through both layers.":
+    "Pliez la moitié droite le long d’une ligne presque verticale juste à droite du milieu, à travers les deux couches.",
+  "Crease beside it":
+    "Marquez-en un à côté",
+  "Fold it over again along a second line just to the right, leaning a little further right.":
+    "Pliez-la encore le long d’une deuxième ligne juste à droite, un peu plus penchée vers la droite.",
+  "Pinch a pleat into both layers along the two creases at once, so the point tilts up. Each layer gets the same pleat, mirrored, with the pleat tucked between them.":
+    "Pincez un plissé dans les deux couches le long des deux plis à la fois, pour que la pointe se relève. Chaque couche reçoit le même plissé, en miroir, et le plissé se range entre elles.",
+  "Open it out: on each layer, the two creases are a pleat.":
+    "Dépliez : sur chaque couche, les deux plis forment un plissé.",
+  "A petal fold lifts one layer of a point up while its sides fold in to meet in the middle, making a long, thin diamond. Two of them turn a square base into a bird base. First, fold a square base.":
+    "Un pli pétale soulève une couche d’une pointe pendant que ses côtés se replient pour se rejoindre au milieu, ce qui donne un losange long et fin. Deux plis pétale transforment une base préliminaire en base de l’oiseau. D’abord, pliez une base préliminaire.",
+  "Open it out to see the creases the petal fold left behind.":
+    "Dépliez pour voir les plis laissés par le pli pétale.",
 };
