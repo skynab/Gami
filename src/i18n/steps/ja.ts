@@ -1510,4 +1510,32 @@ export const ja: Record<string, string> = {
     "正方形のそれぞれの角を中心に合わせて折ります。",
   "Unfold them again, leaving the creases.":
     "もう一度開いて、折り筋を残します。",
+  "Start with half a sheet of letter paper, cut across the middle, white side up and long side across. Fold the top edge down to the bottom edge, and unfold.":
+    "レターサイズの紙を真ん中で切った半分を使います。白い面を上にして、長い辺を横にします。上の辺を下の辺に合わせて折り、開きます。",
+  "Bring the top edge down to the centre crease.":
+    "上の辺を中心の折り筋まで折り下げます。",
+  "And the bottom edge up to meet it.":
+    "下の辺も折り上げて、上の辺と合わせます。",
+  "Fold the strip in half":
+    "帯を半分に折る",
+  "Fold the top half down onto the bottom half, along the centre crease, so the edges you folded are inside.":
+    "中心の折り筋で、上半分を下半分に重ねて折ります。折った辺が内側になります。",
+  "Fold it into an L":
+    "L字に折る",
+  "Fold the left half of the strip down at 45°, on a line across the middle, so it points straight down. Press the corner flat.":
+    "帯の左半分を、真ん中を横切る線で45°下に折り、まっすぐ下を向かせます。角をしっかり押さえます。",
+  "Fold a corner behind":
+    "角を後ろに折る",
+  "Fold the top corner of the right-hand tip behind, so its edge meets the middle of the tip.":
+    "右の先端の上の角を後ろに折ります。角の辺が先端の真ん中に来るようにします。",
+  "Fold the bottom corner behind the same way. The tip comes to a point.":
+    "下の角も同じように後ろに折ります。先端がとがります。",
+  "The other tip":
+    "もう一方の先端",
+  "Do the same at the bottom tip: fold its right corner behind.":
+    "下の先端も同じように、右の角を後ろに折ります。",
+  "And its other corner":
+    "もう一つの角も",
+  "And the left corner. Press the boomerang flat, and check it lies flat on the table.":
+    "左の角も入れます。ブーメランを平らに押さえ、テーブルの上で平らになるか確かめます。",
 };

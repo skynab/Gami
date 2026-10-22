@@ -39,6 +39,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `bulldog-dart` | Unattributed: the dart with its point folded back | Unknown: no designer found | none recorded | Unattributed | 18 Oct 2026 |
 | `navy-plane` | Unattributed: Fold'N Fly's Navy Plane (design #35) names no designer | Unknown: no designer found | [Fold'N Fly: Navy Plane](https://www.foldnfly.com/35.html) | Unattributed | 21 Oct 2026 |
 | `king-bee` | Unattributed: Fold'N Fly's King Bee (design #22) names no designer | Unknown: no designer found | [Fold'N Fly: King Bee](https://www.foldnfly.com/22.html) | Unattributed | 21 Oct 2026 |
+| `boomerang` | Unattributed: Fold'N Fly's Boomerang (design #56) names no designer | Unknown: no designer found | [Fold'N Fly: Boomerang](https://www.foldnfly.com/56.html) | Unattributed | 22 Oct 2026 |
 | `dog-face` | Traditional | None needed: nobody owns it | none recorded | Clear | 18 Oct 2026 |
 | `cat-face` | Traditional | None needed: nobody owns it | none recorded | Clear | 18 Oct 2026 |
 | `cup` | Traditional | None needed: nobody owns it | none recorded | Clear | 16 Oct 2026 |
@@ -98,9 +99,13 @@ noted when it was written, and the model was folded from the common traditional 
   the wings and bent up, wingtips turned up), so its card shows scissors. The navy plane leaves out its last
   step, two small tail flaps folded up: each flap runs across the wing's fold into the body, so standing it
   up would stretch the paper where its crease meets that fold (real paper gives a little there; the engine's
-  doesn't). The boomerang (Fold'N Fly #56) is
-  listed as coming soon. Its middle steps twist a strip into an L with pockets, which the fold engine can't
-  do yet.
+  doesn't). The boomerang (Fold'N Fly #56,
+  checked 22 October 2026: no designer, no licence) ends in the same L, with the same strip and tips, but gets
+  there differently. Fold'N Fly twists the open strip until its sides stand up as walls, then folds the walls
+  down into each other's pockets. Rigid paper can't twist, so Gami folds the strip in half first and turns it
+  with one 45° fold. Fold'N Fly tucks the tips' corners in between the layers; the engine's reverse fold
+  moves a corner four layers thick as one piece, so Gami folds them behind instead. Gami's version starts on the half sheet, so its card shows no scissors (the first step
+  says to cut letter paper in half).
 - **Coming soon.** The boat and the models listed on 21 October 2026 are gallery placeholders with no recipe
   yet. Each is credited "Traditional" on origami.me. When one gets a recipe, set its reference to what was
   actually followed and its date to when it shipped. Other traditional models on origami.me that aren't

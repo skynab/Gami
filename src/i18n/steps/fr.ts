@@ -1510,4 +1510,32 @@ export const fr: Record<string, string> = {
     "Amenez chaque coin du carré au centre.",
   "Unfold them again, leaving the creases.":
     "Dépliez-les à nouveau, en gardant les plis.",
+  "Start with half a sheet of letter paper, cut across the middle, white side up and long side across. Fold the top edge down to the bottom edge, and unfold.":
+    "Prenez une demi-feuille de papier lettre, coupée au milieu, face blanche vers le haut et le grand côté à l’horizontale. Amenez le bord du haut sur le bord du bas, puis dépliez.",
+  "Bring the top edge down to the centre crease.":
+    "Amenez le bord du haut sur le pli central.",
+  "And the bottom edge up to meet it.":
+    "Puis le bord du bas, jusqu’à le rejoindre.",
+  "Fold the strip in half":
+    "Plier la bande en deux",
+  "Fold the top half down onto the bottom half, along the centre crease, so the edges you folded are inside.":
+    "Rabattez la moitié du haut sur celle du bas, le long du pli central, pour que les bords repliés soient à l’intérieur.",
+  "Fold it into an L":
+    "Plier en L",
+  "Fold the left half of the strip down at 45°, on a line across the middle, so it points straight down. Press the corner flat.":
+    "Rabattez la moitié gauche de la bande vers le bas à 45°, sur une ligne qui traverse le milieu, pour qu’elle pointe droit vers le bas. Aplatissez bien le coin.",
+  "Fold a corner behind":
+    "Plier un coin derrière",
+  "Fold the top corner of the right-hand tip behind, so its edge meets the middle of the tip.":
+    "Pliez derrière le coin du haut de la pointe de droite, pour que son bord arrive au milieu de la pointe.",
+  "Fold the bottom corner behind the same way. The tip comes to a point.":
+    "Pliez le coin du bas derrière de la même façon. La pointe devient pointue.",
+  "The other tip":
+    "L’autre pointe",
+  "Do the same at the bottom tip: fold its right corner behind.":
+    "Faites de même avec la pointe du bas : pliez son coin droit derrière.",
+  "And its other corner":
+    "Et son autre coin",
+  "And the left corner. Press the boomerang flat, and check it lies flat on the table.":
+    "Puis le coin gauche. Aplatissez le boomerang et vérifiez qu’il repose bien à plat sur la table.",
 };

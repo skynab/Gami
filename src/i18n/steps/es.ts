@@ -1510,4 +1510,32 @@ export const es: Record<string, string> = {
     "Lleva cada esquina del cuadrado al centro.",
   "Unfold them again, leaving the creases.":
     "Desdóblalas de nuevo, dejando los pliegues.",
+  "Start with half a sheet of letter paper, cut across the middle, white side up and long side across. Fold the top edge down to the bottom edge, and unfold.":
+    "Empieza con media hoja de papel carta, cortada por la mitad, con la cara blanca hacia arriba y el lado largo en horizontal. Lleva el borde de arriba hasta el de abajo y desdobla.",
+  "Bring the top edge down to the centre crease.":
+    "Lleva el borde de arriba hasta el pliegue central.",
+  "And the bottom edge up to meet it.":
+    "Y el borde de abajo hacia arriba, hasta que se junten.",
+  "Fold the strip in half":
+    "Dobla la tira por la mitad",
+  "Fold the top half down onto the bottom half, along the centre crease, so the edges you folded are inside.":
+    "Dobla la mitad de arriba sobre la de abajo, por el pliegue central, para que los bordes doblados queden dentro.",
+  "Fold it into an L":
+    "Dóblala en forma de L",
+  "Fold the left half of the strip down at 45°, on a line across the middle, so it points straight down. Press the corner flat.":
+    "Dobla la mitad izquierda de la tira hacia abajo a 45°, por una línea que cruza el centro, para que apunte recto hacia abajo. Aplana bien la esquina.",
+  "Fold a corner behind":
+    "Dobla una esquina hacia atrás",
+  "Fold the top corner of the right-hand tip behind, so its edge meets the middle of the tip.":
+    "Dobla hacia atrás la esquina de arriba de la punta derecha, para que su borde llegue al centro de la punta.",
+  "Fold the bottom corner behind the same way. The tip comes to a point.":
+    "Dobla la esquina de abajo hacia atrás de la misma forma. La punta queda en pico.",
+  "The other tip":
+    "La otra punta",
+  "Do the same at the bottom tip: fold its right corner behind.":
+    "Haz lo mismo en la punta de abajo: dobla su esquina derecha hacia atrás.",
+  "And its other corner":
+    "Y su otra esquina",
+  "And the left corner. Press the boomerang flat, and check it lies flat on the table.":
+    "Y la esquina izquierda. Aplana el bumerán y comprueba que quede plano sobre la mesa.",
 };

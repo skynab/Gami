@@ -1,6 +1,7 @@
 import type { OrigamiModel } from '../../fold/types';
 import { folds as basics } from './basics';
 import { balloonRabbit } from './balloon-rabbit';
+import { boomerang } from './boomerang';
 import { bulldogDart } from './bulldog-dart';
 import { butterfly } from './butterfly';
 import { catFace } from './cat-face';
@@ -42,4 +43,4 @@ import { whale } from './whale';
  * Every built-in model, as code. `npm run models` turns these into public/models/<id>.fold and <id>.svg,
  * which the site loads. Not bundled into the site itself.
  */
-export const RECIPES: (() => OrigamiModel)[] = [basics, foldsLesson, basesLesson, paperPlane, glider, bulldogDart, navyPlane, kingBee, dogFace, catFace, cup, samuraiHelmet, fortuneTeller, heart, cicada, jumpingFrog, ninjaStar, tulip, fox, crane, lily, swan, penguin, whale, crow, christmasTree, waterbomb, balloonRabbit, flappingBird, pinwheel, pajarita, butterfly, frog, dolphin, seal, masuBox, sword, foldingGeometry];
+export const RECIPES: (() => OrigamiModel)[] = [basics, foldsLesson, basesLesson, paperPlane, glider, bulldogDart, navyPlane, kingBee, dogFace, catFace, cup, samuraiHelmet, fortuneTeller, heart, cicada, jumpingFrog, ninjaStar, tulip, fox, crane, lily, swan, penguin, whale, crow, christmasTree, waterbomb, balloonRabbit, flappingBird, pinwheel, pajarita, butterfly, frog, dolphin, seal, masuBox, sword, boomerang, foldingGeometry];
