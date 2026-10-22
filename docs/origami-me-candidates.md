@@ -5,7 +5,7 @@ Origami.me credits about 65 models to [Traditional](https://origami.me/author/tr
 diagrams, photos and videos are still under copyright, so Gami follows only the order of folds.
 
 Eleven are in the gallery already, and the boat plus 16 more are listed as coming soon (see `PROVENANCE.md`).
-These are the rest, kept here for later. Before writing a recipe, add its row to `PROVENANCE.md` (the
+These are the rest, kept here for later; each was checked on its own page as credited "Traditional" (22 October 2026). Before writing a recipe, add its row to `PROVENANCE.md` (the
 `record-model-licence` skill walks through it).
 
 | Model | Link | Why not listed yet |
@@ -35,7 +35,6 @@ These are the rest, kept here for later. Before writing a recipe, add its row to
 | Kusudama chrysanthemum | [kusudama-chrysanthemum](https://origami.me/kusudama-chrysanthemum/) | Many units glued together |
 | Leaf | [leaf](https://origami.me/leaf/) | Pleats; good candidate |
 | Lucky star | [star](https://origami.me/star/) | A woven strip, then pushed in |
-| Cube | [cube](https://origami.me/cube/) | Modular, 3D assembly |
 | Sanbo box | [sanbou-box](https://origami.me/sanbou-box/) | After the masu box |
 | Star box | [star-box](https://origami.me/star-box/) | 3D opening |
 | Candy box | [candy-box](https://origami.me/candy-box/) | 3D opening |
@@ -44,7 +43,15 @@ These are the rest, kept here for later. Before writing a recipe, add its row to
 | Lazy Susan | [lazy-susan](https://origami.me/lazy-susan/) | Modular |
 | Wallet | [wallet](https://origami.me/wallet/) | Rectangle; good candidate |
 | Envelope | [paper-envelope](https://origami.me/paper-envelope/) | Good candidate |
-| Corner bookmark | [bookmark](https://origami.me/bookmark/) | Very easy; good candidate |
 | Kimono | [kimono](https://origami.me/kimono/) | Good candidate |
 | Happi coat | [happi](https://origami.me/happi/) | Close to the kimono |
 | Necktie | [necktie](https://origami.me/necktie/) | Good candidate |
+
+## Not open
+
+Linked from origami.me's Traditional page but credited to a designer on their own pages, so not usable:
+
+| Model | Link | Designer |
+|---|---|---|
+| Cube | [cube](https://origami.me/cube/) | Mitsunobu Sonobe |
+| Corner bookmark | [bookmark](https://origami.me/bookmark/) | Nick Robinson |
