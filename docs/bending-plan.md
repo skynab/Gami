@@ -328,8 +328,16 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      the step solving everything together, and a short pass keeping layers apart after settling all left it at
      about 1 cm (on `wip/balloon`). And however much air it's asked for, it stops at a pillow about 9 cm tall:
      the cube needs its hexagon outline drawn in to a square belt, which a solver nudging the paper can't find.
+   - **Where the air goes** (on `wip/balloon`). Followed in from the hole (the sheet's middle), the pocket the air
+     fills lies between layers 9 and 14, the water bomb base's inner walls; the flaps outside and the corners tucked
+     inside rest on them. Pushing only those walls keeps the paper within 0.2% and fills it to 20 cm, but it opens
+     like a clamshell about the hole's end: the paper at the far tip slides apart, which the tucks' friction stops
+     in real paper. Holding points that lie together on the outline from parting stops that, and then it barely
+     fills (5 cm): with its outline held, the paper can only bulge by bending. Drawing the outline in to a square
+     belt with goals mangles it.
    - **Next.** Build the blown-up shape first (where each of the flat water bomb's faces goes on the cube) and let
-     the solver settle it, as for the boat.
+     the solver settle it, as for the boat. A real balloon, blown up and looked at face by face, would settle where
+     the hole, the tucked corners and the outline end up.
 
 8. **The iris, later.** It needs paper that bends and then lies flat again (a "relax to flat" mode, or using the
    solver to find the crease pattern real paper takes). Revisit once 1–7 are done.
