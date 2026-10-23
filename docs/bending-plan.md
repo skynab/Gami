@@ -265,9 +265,19 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      and the triangles to them cut through it, so the fan with no goals at all ended 41% stretched. They now go
      out past the fold, square to it, by half the layers it goes round, so folds round folds nest. Two layers
      next to each other have nothing between them and are left as they were.
-   - **Next.** Let a crease goal's angle vary along the crease (the fan's pleats closed at the pinch and open at
-     the far end), and give the fan and the boat their openings as crease angles. Points pinned by the anchor
-     shouldn't be pushed out past a fold (the fan's flap), or the paper next to them can never settle.
+   - **Crease goals on fine meshes.** A crease turning a flap got only part of the way once the mesh was fine: half
+     a right angle on a strip meshed at a twentieth of its length, a third at a fortieth. Solving everything
+     together moved no point further than a quarter of the shortest edge at a time, so the flap's far edge, with a
+     long way to go in small triangles, couldn't keep up. It may now move 1.5% of the paper's size if that's more:
+     the flap turns all the way at any mesh, and the finest got quicker (12 s, from 22). 3% did too, but left the
+     taco less exact.
+   - **Angles along a crease.** Tried: a crease goal with an angle at each end (a fan's pleat, closed at its pinch,
+     open at its far end). It works as code, but paper can only change its angle along a straight crease by
+     curving beside it, so the crease curves: a strip two triangles wide can't, and settled on about the average
+     angle. Set aside until a fan's pleats are meshed finely enough to curve (a few thousand triangles in its 34
+     layers, minutes to solve), which is the fan's real cost.
+   - **Next.** Give the boat its opening as crease angles. Points pinned by the anchor shouldn't be pushed out past
+     a fold (the fan's flap), or the paper next to them can never settle.
 
 8. **The iris, later.** It needs paper that bends and then lies flat again (a "relax to flat" mode, or using the
    solver to find the crease pattern real paper takes). Revisit once 1–7 are done.

@@ -62,8 +62,9 @@ const DAMPING = 1e-5;
 /** The same, setting edge lengths alone (`keepLengths`), where nothing else needs to outweigh. */
 const LENGTH_DAMPING = 1e-4;
 const CG_ITERATIONS = 200;
-/** How far a point may move in one solve, as a share of the shortest edge. */
+/** How far a point may move in one solve, as a share of the shortest edge, or of the paper's size. */
 const REACH = 0.25;
+const REACH_SHEET = 0.015;
 /** How often, in iterations, everything is solved together. */
 const SUBSTEP = 20;
 /** How often, in iterations, to look again for points near other paper. */
@@ -135,8 +136,12 @@ export function solve(problem: BendProblem): BendResult {
   for (const g of problem.goals ?? []) held[g.vertex] = 0;
 
   const lengths = edges.map(([a, b]) => len(sub(rest[b], rest[a])));
-  // How far a point may move in one step of solving everything together: a share of the shortest edge.
-  const reach = REACH * Math.min(...lengths);
+  // How far a point may move in one step of solving everything together: a share of the paper's size, or of the
+  // shortest edge if that's more. Not of the shortest edge alone: finer meshes would then move too little to keep
+  // up, and a crease turning a flap would get only part of the way (half of a right angle, at a twentieth of the
+  // sheet).
+  const extent = Math.max(...[0, 1, 2].map((i) => Math.max(...rest.map((q) => q[i])) - Math.min(...rest.map((q) => q[i]))));
+  const reach = Math.max(REACH * Math.min(...lengths), REACH_SHEET * extent);
   const hingeKey = (a: number, b: number) => (a < b ? `${a},${b}` : `${b},${a}`);
   const creaseOf = new Map((problem.creases ?? []).map((c) => [hingeKey(...c.edge), c]));
   const holdOf = new Map((problem.hinges ?? []).map((h) => [hingeKey(...h.edge), h.compliance]));

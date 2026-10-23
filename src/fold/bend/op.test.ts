@@ -51,6 +51,20 @@ describe('the bend operation', () => {
     for (const h of onCrease) expect(Math.abs(hingeAngle(frame.vertices_coords, h))).toBeCloseTo(Math.PI / 2, 1);
   });
 
+  it('turns a flap all the way on a fine mesh', { timeout: 20000 }, () => {
+    // A narrow strip meshed at a twentieth of its length: the flap's far edge has far to go for the size of its
+    // triangles, and once got only half way.
+    const model = new Recipe({ id: 'fine', title: 'Fine', sheet: { ...sheet, size: [0.2, 1] } })
+      .crease(paper(-0.1, 0), paper(0.1, 0), { title: 'Crease down the middle' })
+      .bend({ title: 'Stand the right half up' }, { flex: ([u]) => u > 0, anchor: [-0.05, 0], goals: [{ crease: [[0, -0.5], [0, 0.5]], degrees: 90 }], mesh: 0.05 })
+      .build();
+    const { frame } = model.steps.at(-1)!;
+    const tris = frame.faces_vertices as [number, number, number][];
+    const onCrease = topology(tris).hinges.filter((h) => Math.abs(frame.vertices_paper[h.a][0]) < 1e-9 && Math.abs(frame.vertices_paper[h.b][0]) < 1e-9);
+    expect(onCrease.length).toBeGreaterThan(10);
+    for (const h of onCrease) expect(Math.abs(hingeAngle(frame.vertices_coords, h))).toBeCloseTo(Math.PI / 2, 1);
+  });
+
   it('replays from its file to the same frames', () => {
     const model = bent(60, [0.2, 0.4, 0.3]).build();
     const file = fromFoldFile(JSON.parse(JSON.stringify(toFoldFile(model))));
