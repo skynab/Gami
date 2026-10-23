@@ -198,6 +198,26 @@ describe('bending a frame', () => {
     });
   });
 
+  it('keeps the sheet’s shape where folds wrap round other layers, held beside one', { timeout: 20000 }, () => {
+    // Folded twice, the second fold round the first's two layers: its points start out past the fold, a little off
+    // the sheet's shape. With nothing asked of it, the paper takes the sheet's shape back before anything moves.
+    const folded = new Recipe({ id: 'twice', title: 'Twice', sheet: { size: [1, 1], front: '#c33', back: '#eee' } })
+      .onto(paper(0.5, 0.5), table(-0.5, 0.5), { title: 'Fold in half' })
+      .onto(table(-0.5, 0.5), table(0, 0.5), { title: 'Fold the left quarter over' })
+      .build()
+      .steps.at(-1)!.frame;
+    const still = bendFrame(folded, { flex: folded.faces_vertices.map((_, f) => f), anchor: [-0.27, 0.1], goals: [], mesh: 0.125 });
+    // Within the 1% the model checks allow on the way, and closely at the end, after the last pass.
+    const strain = (frame: FoldFrame) =>
+      Math.max(...frame.faces_vertices.flatMap((t) => [0, 1, 2].map((e) => {
+        const [a, b] = [t[e], t[(e + 1) % 3]];
+        const want = dist(frame.vertices_paper[a], frame.vertices_paper[b]);
+        return Math.abs(dist(frame.vertices_coords[a], frame.vertices_coords[b]) - want) / want;
+      })));
+    for (const frame of still.via) expect(strain(frame)).toBeLessThan(1e-2);
+    expect(strain(still.frame)).toBeLessThan(2e-3);
+  });
+
   it('round-trips through a .fold file', () => {
     const model: OrigamiModel = {
       id: 'taco',

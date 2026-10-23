@@ -189,6 +189,14 @@ export function bendFrame(frame: FoldFrame, options: BendOptions): { via: FoldFr
   if (held < 0) throw new Error(`A bend's anchor at (${options.anchor}) isn't on the paper.`);
   const pinned = new Set(triangles[held]);
   if (!flexible.has(parent[held])) triangles.forEach((t, k) => parent[k] === parent[held] && t.forEach((v) => pinned.add(v)));
+  // Held where its face is, not out past a fold it's on (see meshFrame): held there, the paper beside it couldn't
+  // take its shape back.
+  const face = frame.faces_vertices[parent[held]];
+  const place = affine(
+    face.map((v) => frame.vertices_paper[v]),
+    facePositions(frame)[parent[held]],
+  );
+  for (const v of pinned) points[v] = place(paper[v]);
 
   // Within a face that bends, the paper bends; within one that doesn't, it holds; between faces, creases give.
   const parentOf = new Map<string, number[]>();
@@ -221,6 +229,7 @@ export function bendFrame(frame: FoldFrame, options: BendOptions): { via: FoldFr
 
   const { frames, strain } = solve({
     points,
+    sheet: paper,
     triangles,
     pinned: [...pinned],
     goals,

@@ -276,8 +276,23 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      curving beside it, so the crease curves: a strip two triangles wide can't, and settled on about the average
      angle. Set aside until a fan's pleats are meshed finely enough to curve (a few thousand triangles in its 34
      layers, minutes to solve), which is the fan's real cost.
-   - **Next.** Give the boat its opening as crease angles. Points pinned by the anchor shouldn't be pushed out past
-     a fold (the fan's flap), or the paper next to them can never settle.
+   - **Paper that starts a little off its shape** (October 2026, working on the boat). With no goals at all, the
+     boat's 13-layer diamond ended 9% stretched, and a sheet folded twice 2% on the way. Three causes, all fixed:
+     edge lengths were taken from where the mesh starts (folds pushed out round the layers inside them) rather
+     than from the sheet, so the distortion stayed for good; points the anchor holds were pushed out too, so the
+     paper beside them couldn't take its shape back; and layers were kept a full gap apart even where the mesh
+     starts them closer (by a fold, which a coarse mesh can't round off), so keeping them apart and keeping edge
+     lengths fought without end. Now lengths come from the sheet, held points sit on their face, each pair of
+     paper near each other is kept no further apart than it was first seen (down to a quarter of a gap), and the
+     paper settles into shape before anything moves. The boat with no goals stays within 0.03%, and its frames
+     cross by at most 1.2 mm, where folds start a hair inside one another.
+   - **Speed.** Keeping layers apart was most of the time: every pair near each other, every iteration. Each now
+     checks how far apart they are first, in plain numbers, and the search looks only at points in each
+     triangle's box, without sorting: the twice-folded sheet went from 19 s to 8 s, and the bending tests from 25 s
+     to 10 s, though settling each stage now takes up to 800 passes rather than 400.
+   - **Next.** The boat's goals as points still fail with these fixes (18% stretch): they move in straight lines
+     through a 13-layer stack. Give its opening as crease angles, which means working out which of the small
+     diamond's creases open, and by how much, as the hull spreads.
 
 8. **The iris, later.** It needs paper that bends and then lies flat again (a "relax to flat" mode, or using the
    solver to find the crease pattern real paper takes). Revisit once 1–7 are done.

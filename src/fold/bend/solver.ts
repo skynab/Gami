@@ -21,6 +21,11 @@ export interface BendProblem {
   triangles: Tri[];
   /** The paper as it lies unbent, for edge lengths and fold angles at rest. Leave out to use `points`. */
   rest?: Vec3[];
+  /**
+   * Each point on the sheet, for edge lengths at rest in place of `rest`'s: where the points start can be a little
+   * off the paper's shape (folds wrapped round the layers inside them), and the paper keeps the sheet's.
+   */
+  sheet?: [number, number][];
   /** Points held where they start. */
   pinned?: number[];
   /** Points taken from where they start to `to`, a share more each stage. */
@@ -53,7 +58,7 @@ const SETTLED = 1e-4;
 const POLISH = 2400;
 /** The same at the end of each stage but the last, whose frames are only passed through. */
 const STAGE_SETTLED = 2e-3;
-const STAGE_POLISH = 400;
+const STAGE_POLISH = 800;
 /**
  * Solving constraints together (`together`): the least compliance any has (exact ones included, as flat paper has
  * more edges than ways to move in its plane, so they aren't all independent), and how far each solve goes.
@@ -135,7 +140,8 @@ export function solve(problem: BendProblem): BendResult {
   const held = [...w];
   for (const g of problem.goals ?? []) held[g.vertex] = 0;
 
-  const lengths = edges.map(([a, b]) => len(sub(rest[b], rest[a])));
+  const sheet = problem.sheet;
+  const lengths = edges.map(([a, b]) => (sheet ? Math.hypot(sheet[b][0] - sheet[a][0], sheet[b][1] - sheet[a][1]) : len(sub(rest[b], rest[a]))));
   // How far a point may move in one step of solving everything together: a share of the paper's size, or of the
   // shortest edge if that's more. Not of the shortest edge alone: finer meshes would then move too little to keep
   // up, and a crease turning a flap would get only part of the way (half of a right angle, at a twentieth of the
@@ -182,7 +188,7 @@ export function solve(problem: BendProblem): BendResult {
         lEnd[k] = project([a, b], [scale(n, -1), n], dl - lengths[k], lEnd[k], 0, mass);
       });
       if (it % SEARCH_EVERY === 0) findPairs();
-      for (const pair of pairs) separate(p, w, problem.triangles, pair, thickness);
+      for (const pair of pairs) separate(p, w, problem.triangles, pair);
       ground();
     }
   };
@@ -191,8 +197,15 @@ export function solve(problem: BendProblem): BendResult {
   let pairs: Pair[] = [];
   // The side of each triangle a point was first seen on, kept for good: a point pushed through stays wrong side
   // otherwise, as the next search would take where it ended up as where it belongs.
-  const sides = new Map<string, number>();
+  const sides = new Map<number, number>();
   const findPairs = () => (pairs = thickness > 0 ? nearPairs(p, problem.triangles, thickness, sides) : []);
+  if (sheet) {
+    // Paper starting a little off the sheet's shape takes it back before anything moves, so the first frame
+    // doesn't move it as well; the creases and goals start from there.
+    settle(STAGE_POLISH, STAGE_SETTLED);
+    hinges.forEach((h, k) => (startAngles[k] = hingeAngle(p, h)));
+    (problem.goals ?? []).forEach((g, k) => (goalStarts[k] = [...p[g.vertex]] as Vec3));
+  }
   for (let s = 1; s <= stages; s++) {
     const share = s / stages;
     const goalAt = (problem.goals ?? []).map((g, k): Vec3 => {
@@ -229,7 +242,7 @@ export function solve(problem: BendProblem): BendResult {
         const dl = len(d);
         if (dl > 1e-12) lGoal[k] = project([g.vertex], [scale(d, 1 / dl)], dl, lGoal[k], g.compliance ?? DEFAULTS.goal);
       });
-      for (const pair of pairs) separate(p, w, problem.triangles, pair, thickness);
+      for (const pair of pairs) separate(p, w, problem.triangles, pair);
       ground();
       // Now and then, a step solving everything together carries corrections right across the paper, as a crease
       // turning a whole flap: one at a time, they reach only a few triangles further each pass.
@@ -245,7 +258,7 @@ export function solve(problem: BendProblem): BendResult {
           for (let i = 0; i < 3; i++) rows.add([g.vertex], [AXES[i]], p[g.vertex][i] - goalAt[k][i], g.compliance ?? DEFAULTS.goal);
         });
         together(p, w, rows, reach);
-        for (const pair of pairs) separate(p, w, problem.triangles, pair, thickness);
+        for (const pair of pairs) separate(p, w, problem.triangles, pair);
         ground();
       }
     }
@@ -253,7 +266,7 @@ export function solve(problem: BendProblem): BendResult {
     // points give a little (holding them, flat paper can't lift to meet them), but not at the last stage.
     if (stretch === 0) {
       keepLengths(p, s === stages ? held : w, edges, lengths, 5, 1e-3);
-      for (const pair of pairs) separate(p, w, problem.triangles, pair, thickness);
+      for (const pair of pairs) separate(p, w, problem.triangles, pair);
       ground();
       if (s < stages) settle(STAGE_POLISH, STAGE_SETTLED, held);
     }
@@ -389,6 +402,11 @@ interface Pair {
   v: number;
   t: number;
   side: number;
+  /**
+   * How far apart they're kept: the layers' gap, or less if they were first seen closer (a point by a fold, where
+   * the mesh can't round the paper off), so they aren't pushed further apart than the paper there can go.
+   */
+  gap: number;
 }
 
 /**
@@ -396,7 +414,7 @@ interface Pair {
  * over the triangle or nearly (they slide between searches). Each keeps the side it was first seen on (in `sides`). Plain search for now; a spatial hash
  * when meshes grow.
  */
-function nearPairs(p: Vec3[], triangles: Tri[], thickness: number, sides: Map<string, number>): Pair[] {
+function nearPairs(p: Vec3[], triangles: Tri[], thickness: number, sides: Map<number, number>): Pair[] {
   const out: Pair[] = [];
   const reach = 4 * thickness;
   // Points by cell of a grid about a triangle's size, so each triangle looks only at the points near it. A point
@@ -418,20 +436,27 @@ function nearPairs(p: Vec3[], triangles: Tri[], thickness: number, sides: Map<st
     const nl = len(n);
     if (nl < 1e-15) return;
     const u = scale(n, 1 / nl);
-    const lo = [0, 1, 2].map((i) => index(Math.min(a[i], b[i], c[i]) - grow));
-    const hi = [0, 1, 2].map((i) => index(Math.max(a[i], b[i], c[i]) + grow));
-    const near: number[] = [];
-    for (let i = lo[0]; i <= hi[0]; i++) for (let j = lo[1]; j <= hi[1]; j++) for (let k = lo[2]; k <= hi[2]; k++) near.push(...(grid.get(key(i, j, k)) ?? []));
-    // In order, as looking through every point would find them.
-    near.sort((x, y) => x - y);
-    for (const v of near) {
-      if (v === tri[0] || v === tri[1] || v === tri[2]) continue;
-      const d = dot(sub(p[v], a), u);
-      if (Math.abs(d) > reach || !over(p[v], a, b, c, u, reach)) continue;
-      const key = `${v},${t}`;
-      if (!sides.has(key)) sides.set(key, d >= 0 ? 1 : -1);
-      out.push({ v, t, side: sides.get(key)! });
-    }
+    const min = [0, 1, 2].map((i) => Math.min(a[i], b[i], c[i]) - grow);
+    const max = [0, 1, 2].map((i) => Math.max(a[i], b[i], c[i]) + grow);
+    const lo = min.map(index);
+    const hi = max.map(index);
+    // Cell by cell, in a fixed order (each point is in one), so the same paper finds the same pairs in turn.
+    for (let i = lo[0]; i <= hi[0]; i++)
+      for (let j = lo[1]; j <= hi[1]; j++)
+        for (let k = lo[2]; k <= hi[2]; k++)
+          for (const v of grid.get(key(i, j, k)) ?? []) {
+            if (v === tri[0] || v === tri[1] || v === tri[2]) continue;
+            const q = p[v];
+            // In the triangle's box first: a cell holds points well away from it too.
+            if (q[0] < min[0] || q[0] > max[0] || q[1] < min[1] || q[1] > max[1] || q[2] < min[2] || q[2] > max[2]) continue;
+            const d = (q[0] - a[0]) * u[0] + (q[1] - a[1]) * u[1] + (q[2] - a[2]) * u[2];
+            if (Math.abs(d) > reach || !over(q, a, b, c, u, reach)) continue;
+            const id = v * triangles.length + t;
+            // Kept as the side it's on times the gap it keeps.
+            let seen = sides.get(id);
+            if (seen === undefined) sides.set(id, (seen = (d >= 0 ? 1 : -1) * Math.min(thickness, Math.max(Math.abs(d), thickness / 4))));
+            out.push({ v, t, side: Math.sign(seen), gap: Math.abs(seen) });
+          }
   });
   return out;
 }
@@ -450,29 +475,34 @@ function over(q: Vec3, a: Vec3, b: Vec3, c: Vec3, u: Vec3, margin = 0): boolean 
   return (s1 >= -m && s2 >= -m && s3 >= -m) || (s1 <= m && s2 <= m && s3 <= m);
 }
 
-/** Keeps a point at least the gap from a triangle, on the side it started on, moving both apart. */
-function separate(p: Vec3[], w: number[], triangles: Tri[], { v, t, side }: Pair, thickness: number) {
+/** Keeps a point at least its gap (Pair.gap) from a triangle, on the side it started on, moving both apart. */
+function separate(p: Vec3[], w: number[], triangles: Tri[], { v, t, side, gap: keep }: Pair) {
+  // Run for every pair near each other, every iteration, and nearly all are already a gap apart: so in plain
+  // numbers, and how far apart they are first.
   const tri = triangles[t];
-  const [a, b, c] = tri.map((i) => p[i]);
-  const n = cross(sub(b, a), sub(c, a));
-  const nl = len(n);
+  const [a, b, c] = [p[tri[0]], p[tri[1]], p[tri[2]]];
+  const [e1x, e1y, e1z] = [b[0] - a[0], b[1] - a[1], b[2] - a[2]];
+  const [e2x, e2y, e2z] = [c[0] - a[0], c[1] - a[1], c[2] - a[2]];
+  let [nx, ny, nz] = [e1y * e2z - e1z * e2y, e1z * e2x - e1x * e2z, e1x * e2y - e1y * e2x];
+  const nl = Math.sqrt(nx * nx + ny * ny + nz * nz);
   if (nl < 1e-15) return;
-  const u = scale(n, side / nl);
-  if (!over(p[v], a, b, c, u)) return;
-  const gap = dot(sub(p[v], a), u) - thickness;
+  [nx, ny, nz] = [(nx * side) / nl, (ny * side) / nl, (nz * side) / nl];
+  const q = p[v];
+  const gap = (q[0] - a[0]) * nx + (q[1] - a[1]) * ny + (q[2] - a[2]) * nz - keep;
   if (gap >= 0) return;
+  const u: Vec3 = [nx, ny, nz];
+  if (!over(q, a, b, c, u)) return;
   // The point moves out along the normal; the triangle's corners move the other way, sharing it equally.
-  const ids = [v, ...tri];
-  const grads: Vec3[] = [u, scale(u, -1 / 3), scale(u, -1 / 3), scale(u, -1 / 3)];
-  let denom = 0;
-  for (let k = 0; k < 4; k++) denom += w[ids[k]] * dot(grads[k], grads[k]);
+  const denom = w[v] + (w[tri[0]] + w[tri[1]] + w[tri[2]]) / 9;
   if (denom < 1e-18) return;
   const dl = -gap / denom;
-  for (let k = 0; k < 4; k++) {
-    const q = p[ids[k]];
-    const m = w[ids[k]] * dl;
-    q[0] += m * grads[k][0];
-    q[1] += m * grads[k][1];
-    q[2] += m * grads[k][2];
+  q[0] += w[v] * dl * nx;
+  q[1] += w[v] * dl * ny;
+  q[2] += w[v] * dl * nz;
+  for (const i of tri) {
+    const m = (-w[i] * dl) / 3;
+    p[i][0] += m * nx;
+    p[i][1] += m * ny;
+    p[i][2] += m * nz;
   }
 }
