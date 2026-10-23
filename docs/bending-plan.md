@@ -321,7 +321,15 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      water bomb then stays within 0.2% and crosses by at most 3.4 mm, where folds start a hair inside one another.
    - **Where it stands.** Blown up to 0.027 (a cube 0.3 across, from the flat outline's length), with creases free
      to turn, it puffs into a lens 16.5 cm tall, stretched 2% and with paper up to 1.9 cm through paper; about
-     two minutes to solve. `scripts/balloon-lab.ts` tries it.
+     two minutes to solve (8 s at a mesh of 0.07). `scripts/balloon-lab.ts` tries it.
+   - **Why it crosses itself.** At the deepest crossing every corner that lies over the other triangle is on its
+     proper side: the triangles interlock edge first, and once they have, keeping them apart only stretches the
+     paper. Edge-against-edge contacts (sides from layers too), searching for contacts every iteration, capping
+     the step solving everything together, and a short pass keeping layers apart after settling all left it at
+     about 1 cm (on `wip/balloon`). And however much air it's asked for, it stops at a pillow about 9 cm tall:
+     the cube needs its hexagon outline drawn in to a square belt, which a solver nudging the paper can't find.
+   - **Next.** Build the blown-up shape first (where each of the flat water bomb's faces goes on the cube) and let
+     the solver settle it, as for the boat.
 
 8. **The iris, later.** It needs paper that bends and then lies flat again (a "relax to flat" mode, or using the
    solver to find the crease pattern real paper takes). Revisit once 1–7 are done.
