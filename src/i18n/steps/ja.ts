@@ -1564,4 +1564,12 @@ export const ja: Record<string, string> = {
     "頭を折り下ろす",
   "Fold the top left corner down onto the bottom corner. That’s the head, and your fish is done!":
     "左上の角を下の角に合わせて折り下ろします。これが頭です。魚の完成です!",
+  "Fold the bottom left corner towards the middle, stopping a little short of it.":
+    "左下の角を中心に向かって折りますが、中心の少し手前で止めます。",
+  "And the bottom right corner, leaving the same small gap.":
+    "右下の角も、同じだけすき間を残して折ります。",
+  "And the top left corner. The corners leave a small square gap in the middle.":
+    "左上の角も折ります。中心に小さな四角いすき間が残ります。",
+  "And the bottom flap. Your lid is ready: turn it over and put it on the box.":
+    "下のふたも折ります。ふたのできあがり。裏返して、ますにかぶせます。",
 };

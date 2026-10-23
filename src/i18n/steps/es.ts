@@ -1564,4 +1564,12 @@ export const es: Record<string, string> = {
     "Dobla la cabeza hacia abajo",
   "Fold the top left corner down onto the bottom corner. That’s the head, and your fish is done!":
     "Dobla la esquina superior izquierda hasta la esquina de abajo. Esa es la cabeza, ¡y tu pez está terminado!",
+  "Fold the bottom left corner towards the middle, stopping a little short of it.":
+    "Dobla la esquina inferior izquierda hacia el centro, sin llegar del todo.",
+  "And the bottom right corner, leaving the same small gap.":
+    "Y la esquina inferior derecha, dejando el mismo pequeño espacio.",
+  "And the top left corner. The corners leave a small square gap in the middle.":
+    "Y la esquina superior izquierda. Las esquinas dejan un pequeño hueco cuadrado en el centro.",
+  "And the bottom flap. Your lid is ready: turn it over and put it on the box.":
+    "Y la solapa de abajo. Tu tapa está lista: dale la vuelta y ponla sobre la caja.",
 };

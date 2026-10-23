@@ -8,22 +8,65 @@ import { moved } from './waterbomb-base';
  * side walls raised with the corners pushed in, and each end folded over into the box to lock it.
  */
 export function masuBox() {
-  const r = new Recipe({ id: 'masu-box', title: 'Masu box', card: 'finished', sheet: { size: [1, 1], front: '#2f6f8f', back: '#f6f3ec' } })
+  return masu({
+    id: 'masu-box',
+    title: 'Masu box',
+    front: '#2f6f8f',
+    gap: 0,
+    corners: [
+      'Fold the bottom left corner to the middle, where the creases cross.',
+      'And the bottom right corner.',
+      'And the top right corner.',
+      'And the top left corner. It’s a smaller square.',
+    ],
+    done: 'And the bottom flap. Your box is ready.',
+  }).build();
+}
+
+/**
+ * Its lid, as origami.me/box folds it: the same box, but with the corners stopping a little short of the middle,
+ * so it comes out a little bigger and slides over the box. It ends open side up, like the box: turned over, its
+ * floor's outside lies one layer's thickness from the points folded in on it, too close for the viewer to keep
+ * apart.
+ */
+export function masuLid() {
+  return masu({
+    id: 'masu-lid',
+    title: 'Masu box lid',
+    front: '#b8573e',
+    // A small gap between each corner and the middle: on a 15 cm sheet, about 3 mm.
+    gap: 0.02,
+    corners: [
+      'Fold the bottom left corner towards the middle, stopping a little short of it.',
+      'And the bottom right corner, leaving the same small gap.',
+      'And the top right corner.',
+      'And the top left corner. The corners leave a small square gap in the middle.',
+    ],
+    done: 'And the bottom flap. Your lid is ready: turn it over and put it on the box.',
+  }).build();
+}
+
+/** The box with its corners folded `gap` short of the middle (0 for the box itself). */
+function masu({ id, title, front, gap, corners: cornerTexts, done }: { id: string; title: string; front: string; gap: number; corners: [string, string, string, string]; done: string }) {
+  const r = new Recipe({ id, title, card: 'finished', sheet: { size: [1, 1], front, back: '#f6f3ec' } })
     .crease(paper(-0.5, 0), paper(0.5, 0), { title: 'Fold in half', text: 'White side up, fold in half side to side, and unfold.' })
     .crease(paper(0, -0.5), paper(0, 0.5), { title: 'Fold in half the other way', text: 'And top to bottom, and unfold.' });
   // Each corner folded in; the paper each fold moved, to open some of them again.
   const corner: Record<string, (c: Vec2) => boolean> = {};
+  // Each lands on the diagonal `gap` short of the middle.
+  const short = gap * Math.SQRT2;
   for (const [u, v, title, text] of [
-    [-0.5, 0.5, 'Fold a corner to the middle', 'Fold the bottom left corner to the middle, where the creases cross.'],
-    [0.5, 0.5, 'Fold the next corner in', 'And the bottom right corner.'],
-    [0.5, -0.5, 'Fold the next corner in', 'And the top right corner.'],
-    [-0.5, -0.5, 'Fold the last corner in', 'And the top left corner. It’s a smaller square.'],
+    [-0.5, 0.5, 'Fold a corner to the middle', cornerTexts[0]],
+    [0.5, 0.5, 'Fold the next corner in', cornerTexts[1]],
+    [0.5, -0.5, 'Fold the next corner in', cornerTexts[2]],
+    [-0.5, -0.5, 'Fold the last corner in', cornerTexts[3]],
   ] as const) {
-    corner[`${u},${v}`] = moved(r, () => r.onto(paper(u, v), paper(0, 0), { title, text }));
+    corner[`${u},${v}`] = moved(r, () => r.onto(paper(u, v), paper(u * short, v * short), { title, text }));
   }
   r.rotate(45, { title: 'Turn it', text: 'Turn it so its edges run straight up and down.' });
-  // The smaller square's half side: its edges at x and z = ±e, the middle creases to come at ±e/2.
-  const e = Math.SQRT1_2 / 2;
+  // The smaller square's half side: its edges at x and z = ±e, the middle creases to come at ±e/2. Each edge is
+  // the crease halfway between a corner, √½ out, and where it lands, `gap` out.
+  const e = (Math.SQRT1_2 + gap) / 2;
   r.crease(table(0, -e), table(0, 0), { title: 'Fold the top edge to the middle', text: 'Fold the top edge down to the middle, and unfold.' })
     .crease(table(0, e), table(0, 0), { title: 'Fold the bottom edge to the middle', text: 'And the bottom edge up to the middle, and unfold.' });
   // The flaps along the top and bottom edges (from the sheet's corners at (½, −½) and (−½, ½)) open back out.
@@ -80,6 +123,6 @@ export function masuBox() {
     { chained: floor },
   )
     .shape({ title: 'Lock the top end', text: 'Fold the top flap over the end wall into the box, so its point lies on the floor and holds the corners in.' }, lock(-1))
-    .shape({ title: 'Lock the bottom end', text: 'And the bottom flap. Your box is ready.' }, lock(1));
-  return r.build();
+    .shape({ title: 'Lock the bottom end', text: done }, lock(1));
+  return r;
 }

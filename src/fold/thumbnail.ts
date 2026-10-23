@@ -1,5 +1,5 @@
 import { placeLike, toFlat } from './fold';
-import { normal } from './frames';
+import { facePositions, normal } from './frames';
 import { frontUp } from './geometry2d';
 import { MARK_COLOUR, MARK_WIDTH, marksUpTo, onFace, type Mark } from './marks';
 import { faceColour } from './sheets';
@@ -106,18 +106,31 @@ function slanted(model: OrigamiModel, frame: FoldFrame, size: number): string {
   const toViewer: Vec3 = [0, Math.sin(SLANT), Math.cos(SLANT)];
   const up: Vec3 = [0, Math.cos(SLANT), -Math.sin(SLANT)];
   const dot = (a: Vec3, b: Vec3) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-  const faces = frame.faces_vertices.map((face) => {
-    const world = face.map((v) => frame.vertices_coords[v]);
+  // Where each face is drawn, flat-lying layers lifted by their gaps as the viewer draws them.
+  const placed = facePositions(frame);
+  const faces = frame.faces_vertices.map((face, f) => {
+    const world = placed[f];
     const n = normal(world);
+    const front = dot(n, toViewer) > 0;
+    // The face's plane, its normal turned towards the viewer, and how far along that normal the plane lies.
+    const facing: Vec3 = front ? n : [-n[0], -n[1], -n[2]];
     return {
       paper: face.map((v) => frame.vertices_paper[v]),
       screen: world.map((p): Vec2 => [p[0], -dot(p, up)]),
       depth: world.reduce((s, p) => s + dot(p, toViewer), 0) / world.length,
-      front: dot(n, toViewer) > 0,
+      facing,
+      offset: dot(facing, world[0]),
+      front,
       light: Math.abs(dot(n, [0.3, 0.9, 0.3])),
     };
   });
-  faces.sort((a, b) => a.depth - b.depth);
+  // Farthest first. Layers lying flat a hair apart go by which is higher, as their centres can lie anywhere: a big
+  // floor face's centre may be nearer than a small flap's lying on it.
+  const stacked = 0.01;
+  const flat = (f: (typeof faces)[number]) => Math.abs(f.facing[1]) > 0.999;
+  faces.sort((a, b) =>
+    flat(a) && flat(b) && dot(a.facing, b.facing) > 0.999 && Math.abs(a.offset - b.offset) < stacked ? a.offset - b.offset : a.depth - b.depth,
+  );
   const pts = faces.flatMap((f) => f.screen);
   const xs = pts.map((p) => p[0]);
   const ys = pts.map((p) => p[1]);

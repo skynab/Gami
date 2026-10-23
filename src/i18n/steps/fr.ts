@@ -1564,4 +1564,12 @@ export const fr: Record<string, string> = {
     "Pliez la tête vers le bas",
   "Fold the top left corner down onto the bottom corner. That’s the head, and your fish is done!":
     "Rabattez le coin supérieur gauche sur le coin du bas. C’est la tête, et votre poisson est fini !",
+  "Fold the bottom left corner towards the middle, stopping a little short of it.":
+    "Pliez le coin inférieur gauche vers le centre, en vous arrêtant un peu avant.",
+  "And the bottom right corner, leaving the same small gap.":
+    "Puis le coin inférieur droit, en laissant le même petit écart.",
+  "And the top left corner. The corners leave a small square gap in the middle.":
+    "Puis le coin supérieur gauche. Les coins laissent un petit carré vide au centre.",
+  "And the bottom flap. Your lid is ready: turn it over and put it on the box.":
+    "Puis le rabat du bas. Votre couvercle est prêt : retournez-le et posez-le sur la boîte.",
 };
