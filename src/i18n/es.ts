@@ -320,6 +320,7 @@ export const es: Messages = {
       turnOver: 'Dar la vuelta',
       rotate: 'Girar un cuarto de vuelta',
       popUp: 'Ábrelo',
+      bend: 'Cúrvalo',
       draw: 'Dibujar',
       newSheet: 'Toma una hoja nueva',
       together: 'Varios movimientos a la vez',

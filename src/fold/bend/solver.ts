@@ -9,6 +9,10 @@ import { topology, type Hinge, type Tri } from './mesh';
  * Each constraint C(p) = 0 (or ≥ 0) moves the points it involves along its gradient by
  * Δλ = (−C − α̃λ) / (Σ w|∇C|² + α̃), where α̃ is its compliance (0 for exact, larger for softer) and λ its
  * accumulated multiplier.
+ *
+ * One constraint at a time finds where paper buckles and curls, which solving them all at once (linearised) can't
+ * see from flat paper. But each pass carries a correction only a few triangles further, so now and then everything
+ * is also solved together (`together`), and each stage ends by setting every edge's length at once (`keepLengths`).
  */
 
 export interface BendProblem {
@@ -42,13 +46,28 @@ export interface BendResult {
 }
 
 const DEFAULTS = { stretch: 0, bend: 1e-2, goal: 0, crease: 0, stages: 12, iterations: 120 };
-/** The last pass on edge lengths stops once every edge is within this share of its length, or after 20 times the iterations. */
+/** The last pass on edge lengths stops once every edge is within this share of its length, or after this many passes. */
 const SETTLED = 1e-4;
-/** Damping and iterations for solving all edge lengths at once (`keepLengths`). */
-const DAMPING = 1e-4;
+const POLISH = 2400;
+/**
+ * Solving constraints together (`together`): the least compliance any has (exact ones included, as flat paper has
+ * more edges than ways to move in its plane, so they aren't all independent), and how far each solve goes.
+ */
+const DAMPING = 1e-5;
+/** The same, setting edge lengths alone (`keepLengths`), where nothing else needs to outweigh. */
+const LENGTH_DAMPING = 1e-4;
 const CG_ITERATIONS = 200;
+/** How far a point may move in one solve, as a share of the shortest edge. */
+const REACH = 0.25;
+/** How often, in iterations, everything is solved together. */
+const SUBSTEP = 20;
 /** How often, in iterations, to look again for points near other paper. */
 const SEARCH_EVERY = 10;
+const AXES: Vec3[] = [
+  [1, 0, 0],
+  [0, 1, 0],
+  [0, 0, 1],
+];
 
 const sub = (a: Vec3, b: Vec3): Vec3 => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
 const dot = (a: Vec3, b: Vec3) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
@@ -105,6 +124,8 @@ export function solve(problem: BendProblem): BendResult {
   for (const g of problem.goals ?? []) held[g.vertex] = 0;
 
   const lengths = edges.map(([a, b]) => len(sub(rest[b], rest[a])));
+  // How far a point may move in one step of solving everything together: a share of the shortest edge.
+  const reach = REACH * Math.min(...lengths);
   const hingeKey = (a: number, b: number) => (a < b ? `${a},${b}` : `${b},${a}`);
   const creaseOf = new Map((problem.creases ?? []).map((c) => [hingeKey(...c.edge), c]));
   const holdOf = new Map((problem.hinges ?? []).map((h) => [hingeKey(...h.edge), h.compliance]));
@@ -112,7 +133,7 @@ export function solve(problem: BendProblem): BendResult {
   const startAngles = hinges.map((h) => hingeAngle(p, h));
   const goalStarts = (problem.goals ?? []).map((g) => [...p[g.vertex]] as Vec3);
 
-  /** Moves the points by one constraint's correction; returns the new multiplier. */
+  /** Moves the points by one constraint's correction (as XPBD does, one at a time); returns the new multiplier. */
   const project = (ids: number[], grads: Vec3[], c: number, lambda: number, compliance: number): number => {
     let denom = compliance;
     for (let k = 0; k < ids.length; k++) denom += w[ids[k]] * dot(grads[k], grads[k]);
@@ -171,10 +192,27 @@ export function solve(problem: BendProblem): BendResult {
         if (dl > 1e-12) lGoal[k] = project([g.vertex], [scale(d, 1 / dl)], dl, lGoal[k], g.compliance ?? DEFAULTS.goal);
       });
       for (const pair of pairs) separate(p, w, problem.triangles, pair, thickness);
+      // Now and then, a step solving everything together carries corrections right across the paper, as a crease
+      // turning a whole flap: one at a time, they reach only a few triangles further each pass.
+      if ((it + 1) % SUBSTEP === 0) {
+        const rows = new Rows(DAMPING);
+        edges.forEach(([a, b], k) => {
+          const d = sub(p[b], p[a]);
+          const dl = len(d);
+          if (dl > 1e-12) rows.add([a, b], [scale(d, -1 / dl), scale(d, 1 / dl)], dl - lengths[k], stretch);
+        });
+        hinges.forEach((h, k) => rows.add([h.a, h.b, h.c, h.d], hingeGradient(p, h), wrap(hingeAngle(p, h) - targets[k].angle), targets[k].compliance));
+        (problem.goals ?? []).forEach((g, k) => {
+          for (let i = 0; i < 3; i++) rows.add([g.vertex], [AXES[i]], p[g.vertex][i] - goalAt[k][i], g.compliance ?? DEFAULTS.goal);
+        });
+        together(p, w, rows, reach);
+        for (const pair of pairs) separate(p, w, problem.triangles, pair, thickness);
+      }
     }
-    // Each stage's paper is kept as a frame, so it mustn't look stretched.
+    // Each stage's paper is kept as a frame, so it mustn't look stretched. Setting its lengths may let the goals'
+    // points give a little (holding them, flat paper can't lift to meet them), but not at the last stage.
     if (stretch === 0) {
-      keepLengths(p, held, edges, lengths, 3, 1e-3);
+      keepLengths(p, s === stages ? held : w, edges, lengths, 5, 1e-3);
       for (const pair of pairs) separate(p, w, problem.triangles, pair, thickness);
     }
     frames.push(p.map((q) => [...q] as Vec3));
@@ -185,7 +223,7 @@ export function solve(problem: BendProblem): BendResult {
   keepLengths(p, held, edges, lengths, 10, SETTLED / 10);
   const lEnd = edges.map(() => 0);
   const strainNow = () => Math.max(0, ...edges.map(([a, b], k) => Math.abs(len(sub(p[b], p[a])) - lengths[k]) / lengths[k]));
-  for (let it = 0; it < 20 * iterations && strainNow() > SETTLED; it++) {
+  for (let it = 0; it < POLISH && strainNow() > SETTLED; it++) {
     edges.forEach(([a, b], k) => {
       const d = sub(p[b], p[a]);
       const dl = len(d);
@@ -204,75 +242,117 @@ export function solve(problem: BendProblem): BendResult {
 
 /**
  * Brings every edge to its length at once, moving the points as little as it can (Goldenthal et al., "Efficient
- * simulation of inextensible cloth", 2007): a few Newton steps, each solving for every edge's correction together
- * by conjugate gradients. Corrections nudged along one edge at a time take many passes to cross a large mesh;
- * this takes a handful.
- *
- * Flat paper has more edges than ways to move within its plane, so the edges' corrections aren't all independent:
- * the solve is damped, and stops after a fixed number of iterations, each step only closing most of the gap.
+ * simulation of inextensible cloth", 2007): a few steps of solving them together (`together`).
  */
 function keepLengths(p: Vec3[], w: number[], edges: [number, number][], lengths: number[], steps: number, settled: number) {
-  const m = edges.length;
+  for (let step = 0; step < steps; step++) {
+    const rows = new Rows(LENGTH_DAMPING);
+    let worst = 0;
+    edges.forEach(([a, b], k) => {
+      // (|d|² − L²) / 2L: about the change in length, and smooth through it.
+      const d = sub(p[b], p[a]);
+      const c = (dot(d, d) - lengths[k] * lengths[k]) / (2 * lengths[k]);
+      worst = Math.max(worst, Math.abs(c) / lengths[k]);
+      rows.add([a, b], [scale(d, -1 / lengths[k]), scale(d, 1 / lengths[k])], c, 0);
+    });
+    if (worst <= settled) return;
+    together(p, w, rows);
+  }
+}
+
+/** Constraints for solving together: each one's points, its gradient at each, its value, and its compliance. */
+class Rows {
+  /** The least compliance a constraint is given. */
+  constructor(private floor: number) {}
+  start: number[] = [0];
+  ids: number[] = [];
+  grads: number[] = [];
+  c: number[] = [];
+  alpha: number[] = [];
+  add(ids: number[], grads: Vec3[], c: number, compliance: number) {
+    for (let k = 0; k < ids.length; k++) {
+      this.ids.push(ids[k]);
+      this.grads.push(grads[k][0], grads[k][1], grads[k][2]);
+    }
+    this.start.push(this.ids.length);
+    this.c.push(c);
+    this.alpha.push(Math.max(compliance, this.floor));
+  }
+}
+
+/**
+ * One step towards every constraint at once, moving the points as little as it can: (J W Jᵀ + α) Δλ = −C, solved by
+ * conjugate gradients, then each point moved by W Jᵀ Δλ. Repeated, this settles where Σ C² / α is least: exact
+ * constraints met, and softer ones (bending) giving way first. Nudging one constraint at a time instead carries a
+ * correction only a few triangles further each pass, so turning a whole flap by its crease, or straightening a long
+ * strip, takes many passes; this takes a handful. (For edges alone, see Goldenthal et al., "Efficient simulation
+ * of inextensible cloth", 2007.)
+ */
+function together(p: Vec3[], w: number[], rows: Rows, reach = Infinity) {
+  const m = rows.c.length;
   const n = p.length;
-  const dirs = new Float64Array(3 * m);
-  const c = new Float64Array(m);
+  const { start, ids, grads, alpha } = rows;
   const g = new Float64Array(3 * n);
-  const lambda = new Float64Array(m);
-  const res = new Float64Array(m);
-  const dir = new Float64Array(m);
-  const ad = new Float64Array(m);
-  // Moving the points by the edges' corrections: each point by its share of the edges at it, into g.
+  // The points moved by corrections x: each by its share of the constraints on it, into g.
   const moves = (x: Float64Array) => {
     g.fill(0);
-    for (let k = 0; k < m; k++) {
-      const [a, b] = edges[k];
-      for (let i = 0; i < 3; i++) {
-        g[3 * b + i] += x[k] * dirs[3 * k + i] * w[b];
-        g[3 * a + i] -= x[k] * dirs[3 * k + i] * w[a];
+    for (let r = 0; r < m; r++) {
+      for (let j = start[r]; j < start[r + 1]; j++) {
+        const v = ids[j];
+        const k = x[r] * w[v];
+        g[3 * v] += k * grads[3 * j];
+        g[3 * v + 1] += k * grads[3 * j + 1];
+        g[3 * v + 2] += k * grads[3 * j + 2];
       }
     }
   };
-  for (let step = 0; step < steps; step++) {
-    // Each edge's constraint (|d|² − L²) / 2L, about its change in length, and its direction scaled by 1 / L.
-    let worst = 0;
-    for (let k = 0; k < m; k++) {
-      const [a, b] = edges[k];
-      const d = sub(p[b], p[a]);
-      for (let i = 0; i < 3; i++) dirs[3 * k + i] = d[i] / lengths[k];
-      c[k] = (dot(d, d) - lengths[k] * lengths[k]) / (2 * lengths[k]);
-      worst = Math.max(worst, Math.abs(c[k]) / lengths[k]);
-    }
-    if (worst <= settled) return;
-    // Solve (J W Jᵀ) λ = C for the corrections, only as closely as this step needs: the next step tidies up.
-    lambda.fill(0);
-    res.set(c);
-    dir.set(c);
-    let rr = 0;
-    for (let k = 0; k < m; k++) rr += res[k] * res[k];
-    const stop = rr * 1e-8;
-    for (let it = 0; it < CG_ITERATIONS && rr > stop; it++) {
-      moves(dir);
-      let dAd = 0;
-      for (let k = 0; k < m; k++) {
-        const [a, b] = edges[k];
-        let x = DAMPING * dir[k];
-        for (let i = 0; i < 3; i++) x += (g[3 * b + i] - g[3 * a + i]) * dirs[3 * k + i];
-        ad[k] = x;
-        dAd += dir[k] * x;
-      }
-      const alpha = rr / dAd;
-      let next = 0;
-      for (let k = 0; k < m; k++) {
-        lambda[k] += alpha * dir[k];
-        res[k] -= alpha * ad[k];
-        next += res[k] * res[k];
-      }
-      for (let k = 0; k < m; k++) dir[k] = res[k] + (next / rr) * dir[k];
-      rr = next;
-    }
-    moves(lambda);
-    for (let v = 0; v < n; v++) for (let i = 0; i < 3; i++) p[v][i] -= g[3 * v + i];
+  // Each constraint scaled by its own stiffness (Jacobi preconditioning): a fold angle's gradient is hundreds of
+  // times an edge's, and unscaled, the first iterations would see to the fold angles and leave the edges stretched.
+  const diag = new Float64Array(m);
+  for (let r = 0; r < m; r++) {
+    let d = alpha[r];
+    for (let j = start[r]; j < start[r + 1]; j++) d += w[ids[j]] * (grads[3 * j] ** 2 + grads[3 * j + 1] ** 2 + grads[3 * j + 2] ** 2);
+    diag[r] = d;
   }
+  const lambda = new Float64Array(m);
+  const res = Float64Array.from(rows.c, (c) => -c);
+  const z = res.map((x, r) => x / diag[r]);
+  const dir = Float64Array.from(z);
+  const ad = new Float64Array(m);
+  let rr = 0;
+  for (let r = 0; r < m; r++) rr += res[r] * z[r];
+  // Only as closely as this step needs: the next one tidies up.
+  const stop = rr * 1e-8;
+  for (let it = 0; it < CG_ITERATIONS && rr > stop; it++) {
+    moves(dir);
+    let dAd = 0;
+    for (let r = 0; r < m; r++) {
+      let x = alpha[r] * dir[r];
+      for (let j = start[r]; j < start[r + 1]; j++) {
+        const v = ids[j];
+        x += g[3 * v] * grads[3 * j] + g[3 * v + 1] * grads[3 * j + 1] + g[3 * v + 2] * grads[3 * j + 2];
+      }
+      ad[r] = x;
+      dAd += dir[r] * x;
+    }
+    const step = rr / dAd;
+    let next = 0;
+    for (let r = 0; r < m; r++) {
+      lambda[r] += step * dir[r];
+      res[r] -= step * ad[r];
+      z[r] = res[r] / diag[r];
+      next += res[r] * z[r];
+    }
+    for (let r = 0; r < m; r++) dir[r] = z[r] + (next / rr) * dir[r];
+    rr = next;
+  }
+  moves(lambda);
+  // Far from where they're met, the constraints' gradients say little about where that is: no point goes further
+  // than `reach` in one step.
+  let far = 0;
+  for (let v = 0; v < n; v++) far = Math.max(far, Math.hypot(g[3 * v], g[3 * v + 1], g[3 * v + 2]));
+  const k = far > reach ? reach / far : 1;
+  for (let v = 0; v < n; v++) for (let i = 0; i < 3; i++) p[v][i] += k * g[3 * v + i];
 }
 
 /** A point near a triangle it isn't part of, and which side of it the point is on. */

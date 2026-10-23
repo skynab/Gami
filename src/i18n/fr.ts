@@ -320,6 +320,7 @@ export const fr: Messages = {
       turnOver: 'Retourner',
       rotate: 'Tourner d’un quart de tour',
       popUp: 'Ouvrez-le',
+      bend: 'Courbez-le',
       draw: 'Dessiner',
       newSheet: 'Prenez une nouvelle feuille',
       together: 'Plusieurs gestes à la fois',

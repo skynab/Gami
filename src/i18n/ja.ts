@@ -320,6 +320,7 @@ export const ja: Messages = {
       turnOver: '裏返す',
       rotate: '90度回す',
       popUp: '開く',
+      bend: '曲げる',
       draw: '描く',
       newSheet: '新しい紙を用意する',
       together: '一度にいくつかの操作',

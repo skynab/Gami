@@ -142,6 +142,8 @@ export function stepFor(o: Op, t: TFunction): { title: string; kind: StepKind } 
       return { title: o.bends.some((b) => (b.segments ?? 1) > 1) ? t('studio.steps.curl') : t('studio.steps.lift'), kind: 'pose' };
     case 'popUp':
       return { title: t('studio.steps.popUp'), kind: 'pose' };
+    case 'bend':
+      return { title: t('studio.steps.bend'), kind: 'pose' };
     case 'draw':
       return { title: t('studio.steps.draw'), kind: 'draw' };
     case 'unfold':

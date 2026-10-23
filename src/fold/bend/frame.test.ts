@@ -147,6 +147,19 @@ describe('bending a frame', () => {
     }
   });
 
+  it('never looks stretched on the way', () => {
+    // Every in-between frame is played, so each keeps its triangles' shapes too: within 2%.
+    for (const frame of bent.via) {
+      for (const t of frame.faces_vertices) {
+        for (let e = 0; e < 3; e++) {
+          const [a, b] = [t[e], t[(e + 1) % 3]];
+          const want = dist(frame.vertices_paper[a], frame.vertices_paper[b]);
+          expect(Math.abs(dist(frame.vertices_coords[a], frame.vertices_coords[b]) - want) / want).toBeLessThan(2e-2);
+        }
+      }
+    }
+  });
+
   it('marks every edge inside the sheet soft, and points the first frame back at the sheet', () => {
     const { frame, via } = bent;
     expect(frame.soft).toHaveLength(topology(frame.faces_vertices as [number, number, number][]).hinges.length);

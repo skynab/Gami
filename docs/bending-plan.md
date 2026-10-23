@@ -147,6 +147,27 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      at 0.02% strain, in about 2 s, most of it the brute-force collision search.
    - **Anchors and goals** are by point on the sheet: the anchor holds the triangle there (its whole face, if
      rigid); a goal must be at a corner of a face.
+3. **The operation.** `bend` in `ops.ts` (types, `parseOp`, replay), `Recipe.bend`, in-between frames. Done when a
+   test model with a bend step replays from its file to the same frames.
+
+   **Done.** `{ op: 'bend', flex, anchor: { paper }, goals, mesh? }`, goals being `{ point: { paper }, to }` or
+   `{ crease: [from, to], degrees }` (valley positive). It's a pose step ("Bend it" in the Studio); `Recipe.bend`
+   makes it through `applyOp`, so the model and its file agree exactly, and it replays from the file to the same
+   frames. A mesh finer than 0.02 is refused (too slow to solve). Any step after a bend but drawing is refused, by
+   replay and by recipes. What it found:
+   - **Creases turning flaps.** A crease goal turned a bending flap only halfway: one constraint at a time, the turn
+     crosses the flap a few triangles per pass (600 iterations reached 77°, 2000 reached 87°). Solving every
+     constraint at once instead (damped Gauss–Newton by conjugate gradients) can't find buckling from flat paper,
+     as lifting doesn't change lengths to first order: the arch flattened and stretched. What works is both:
+     one at a time, with everything solved together every 20 iterations. That step needed its moves capped (a
+     quarter of the shortest edge) or it blew up, a Jacobi preconditioner (fold angles' gradients are hundreds of
+     times edges'), and less damping than setting lengths alone (1e-5 against 1e-4) so stretching costs far more
+     than bending. The crease now reaches 90° exactly, the flap staying flat.
+   - **In-between frames.** Setting lengths at a stage's end while holding the goals' points left early frames up
+     to 17% stretched (flat paper can't lift to meet them). Letting those points give at every stage but the last
+     keeps every frame within 1%, most within 0.1%; the test holds them to 2%.
+   - The arch's end now lands within 5 mm of its goal on a 1-long strip (was 2), as the last pass on lengths lets
+     it give a little; holding it there instead leaves the strip stretched 6%.
 2. **Mesh and frames.** Triangulate the `flex` faces of a frame (and the rest coarsely), run the solver from the
    frame's 3D positions (`facePositions`, with layer gaps), write the result back as a frame with `gami:soft`
    and `faces_parent`. Done when a flat sheet bent by two handles round-trips through a `.fold` file.

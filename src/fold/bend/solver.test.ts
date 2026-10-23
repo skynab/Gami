@@ -80,7 +80,8 @@ describe('solving', () => {
     // The middle rises well clear of the table, and the right end reaches its goal.
     const top = Math.max(...final.map((q) => q[1]));
     expect(top).toBeGreaterThan(0.15);
-    expect(Math.abs(final[at(20)(20, 2)][0] - 0.14)).toBeLessThan(2e-3);
+    // (The last pass on lengths lets it give a little: within half a percent of the strip's length.)
+    expect(Math.abs(final[at(20)(20, 2)][0] - 0.14)).toBeLessThan(5e-3);
     // Each stage is kept, rising in turn.
     expect(frames).toHaveLength(12);
     expect(Math.max(...frames[1].map((q) => q[1]))).toBeLessThan(top);

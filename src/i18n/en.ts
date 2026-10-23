@@ -323,6 +323,7 @@ export const en = {
       turnOver: 'Turn over',
       rotate: 'Rotate a quarter turn',
       popUp: 'Pop it open',
+      bend: 'Bend it',
       draw: 'Draw',
       newSheet: 'Take a fresh sheet',
       together: 'Several moves at once',

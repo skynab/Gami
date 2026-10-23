@@ -122,6 +122,11 @@ export interface BendOptions {
   anchor: Vec2;
   /** Points on the sheet (corners of faces) taken to positions in 3D. */
   goals: { paper: Vec2; to: Vec3 }[];
+  /**
+   * Creases (between two points on the sheet, along edges of faces) taken to a fold angle: valley folds positive
+   * (the front sides turning towards each other), mountain folds negative, 0 flat.
+   */
+  creases?: { from: Vec2; to: Vec2; degrees: number }[];
   /** The longest edge of a triangle of bending paper, on the sheet. Defaults to a twelfth of the sheet's size. */
   mesh?: number;
   /** How readily creases between faces give (soft mesh edges bend more readily still). */
@@ -165,9 +170,10 @@ export function bendFrame(frame: FoldFrame, options: BendOptions): { via: FoldFr
       parentOf.set(key, [...(parentOf.get(key) ?? []), parent[k]]);
     }
   });
+  const meshHinges = topology(triangles).hinges;
   const soft: [number, number][] = [];
   const hinges: { edge: [number, number]; compliance: number }[] = [];
-  for (const { a, b } of topology(triangles).hinges) {
+  for (const { a, b } of meshHinges) {
     const [f, g] = parentOf.get(edgeKey(a, b))!;
     const edge: [number, number] = a < b ? [a, b] : [b, a];
     if (f !== g) hinges.push({ edge, compliance: options.creaseCompliance ?? CREASE_COMPLIANCE });
@@ -175,11 +181,19 @@ export function bendFrame(frame: FoldFrame, options: BendOptions): { via: FoldFr
     else hinges.push({ edge, compliance: 0 });
   }
 
+  // The solver's fold angle turns the other way from a valley fold, with triangles wound as the sheet's faces are.
+  const creases = (options.creases ?? []).flatMap(({ from, to, degrees }) => {
+    const found = meshHinges.filter(({ a, b }) => onSegment(paper[a], from, to, true) !== null && onSegment(paper[b], from, to, true) !== null);
+    if (!found.length) throw new Error(`A bend's crease from (${from}) to (${to}) isn't along an edge of a face.`);
+    return found.map(({ a, b }) => ({ edge: [a, b] as [number, number], degrees: -degrees }));
+  });
+
   const { frames, strain } = solve({
     points,
     triangles,
     pinned: [...pinned],
     goals,
+    creases,
     hinges,
     thickness: LAYER_GAP,
     ...(options.stages && { stages: options.stages }),

@@ -8,7 +8,7 @@ import { place } from './place';
 import { radial, reparent, shape, type Bend, type Ray } from './shape';
 import { startFrame } from './sheets';
 import { frontUp, sideOf } from './geometry2d';
-import { lastFold, lineOf, type At, type Faces, type LineSpec, type Op } from './ops';
+import { applyOp, lastFold, lineOf, type At, type BendGoal, type Faces, type LineSpec, type Op } from './ops';
 import type { FoldFrame, Mark, OrigamiModel, Sheet, Step, Vec2 } from './types';
 
 /**
@@ -395,6 +395,31 @@ export class Recipe {
   }
 
   /**
+   * Bends the paper (see docs/bending-plan.md): the faces `flex` picks (by their centre on the sheet) bend, the rest
+   * stay rigid, the paper at `anchor` stays put, and the goals take points of the sheet (corners of faces) to
+   * places in 3D and creases to fold angles. The step plays through the stages the paper went through. Nothing can
+   * be folded after.
+   */
+  bend(
+    step: { title: string; text?: string },
+    bend: { flex: (centre: Vec2) => boolean; anchor: Vec2; goals: BendGoal[]; mesh?: number },
+  ): this {
+    const test = recorder(bend.flex);
+    for (const face of this.current.faces_vertices) test(face.map((v) => this.current.vertices_paper[v]));
+    const op: Op = { op: 'bend', flex: test.faces(), anchor: { paper: bend.anchor }, goals: bend.goals, ...(bend.mesh !== undefined && { mesh: bend.mesh }) };
+    try {
+      // Made as replaying makes it, so the model and its file agree exactly.
+      const { frame, via } = applyOp(this.build(), op);
+      this.push({ ...step, kind: 'pose' }, frame, op);
+      if (via) this.steps.at(-1)!.via = via;
+      return this;
+    } catch (e) {
+      if (e instanceof Error) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
+      throw e;
+    }
+  }
+
+  /**
    * Draws on the paper where it lies now, as a face drawn on at the end: lines through points on the table, or
    * shapes filled in. Each mark goes on whatever paper is on top under its first point, on the side facing up,
    * and moves with it from then on.
@@ -466,6 +491,8 @@ export class Recipe {
   }
 
   private push({ title, text, kind }: Omit<Step, 'frame' | 'op'>, frame: FoldFrame, op: Op): this {
+    // The fold engine works on flat faces: bent paper (its mesh of triangles) can be drawn on, but not folded again yet.
+    if (this.current.soft && op.op !== 'draw') throw new FoldError(`${this.info.id}, step ${this.steps.length + 1} (${title}): paper that has bent can’t be folded any further.`);
     this.shaping = undefined;
     // Cuts stay in the paper from step to step (a fresh sheet has none).
     const cuts = this.current.cuts;

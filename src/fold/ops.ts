@@ -6,7 +6,8 @@ import { place } from './place';
 import { anchorFor, centre, inside, locate, smallerSideMoves, topLayers } from './select';
 import { curl, radial, reparent, shape, type Bend } from './shape';
 import { sheetOf } from './sheets';
-import type { FoldFrame, Mark, OrigamiModel, Step, StepKind, Tool, Vec2 } from './types';
+import { bendFrame } from './bend/frame';
+import type { FoldFrame, Mark, OrigamiModel, Step, StepKind, Tool, Vec2, Vec3 } from './types';
 
 /**
  * Fold operations: how each step was made, as plain data, so a model can be folded again from the start
@@ -52,6 +53,12 @@ export interface ShapeBend {
   only?: Faces;
 }
 
+/**
+ * Where a bend takes the paper (see docs/bending-plan.md): a point on the sheet (a corner of a face) to a position in
+ * 3D, or the crease between two points on the sheet to a fold angle, valley folds positive.
+ */
+export type BendGoal = { point: { paper: Vec2 }; to: Vec3 } | { crease: [Vec2, Vec2]; degrees: number };
+
 export type { Mark } from './types';
 
 export type Op =
@@ -75,6 +82,11 @@ export type Op =
   /** `chained`: the bends open folds along the paper from the face at this point of the sheet (stacked pleats). */
   /** `ride`: with `chained`, faces held flat on whatever lies beneath them, moving with it (a rim folded in). */
   | { op: 'shape'; bends: ShapeBend[]; corners?: boolean; chained?: { paper: Vec2 }; ride?: Faces }
+  /**
+   * Bends the paper of the faces `flex` picks, the rest staying rigid, holding the paper at `anchor` still and taking
+   * it to its goals. `mesh`: the longest edge of the triangles the bending paper is cut into, on the sheet.
+   */
+  | { op: 'bend'; flex: Faces; anchor: { paper: Vec2 }; goals: BendGoal[]; mesh?: number }
   | { op: 'popUp'; centre: At; rays: { azimuth: number; elevation: number }[] }
   /** Draws on the paper, leaving it where it is: a face, say. */
   | { op: 'draw'; marks: Mark[] }
@@ -154,6 +166,20 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
         ...opt(o, 'corners', bool, path),
         ...opt(o, 'chained', paperAt, path),
         ...opt(o, 'ride', (v, p) => faces(v, p, 0), path),
+      };
+    case 'bend':
+      return {
+        op: 'bend',
+        flex: faces(o.flex, `${path}.flex`, 0),
+        anchor: paperAt(o.anchor, `${path}.anchor`),
+        goals: list(o.goals, `${path}.goals`, (g, p) => {
+          const r = record(g, p);
+          if ('point' in r) return { point: paperAt(r.point, `${p}.point`), to: vec3(r.to, `${p}.to`) };
+          if ('crease' in r) return { crease: pair(r.crease, `${p}.crease`, vec2), degrees: between(num(r.degrees, `${p}.degrees`), `${p}.degrees`, -180, 180) };
+          throw new OpError(`${p}: expected { point, to } or { crease, degrees }`);
+        }),
+        // Not so fine that meshing it takes too long.
+        ...opt(o, 'mesh', (v, p) => between(num(v, p), p, 0.02, 10), path),
       };
     case 'popUp':
       return {
@@ -245,6 +271,11 @@ function list<T>(x: unknown, path: string, check: Check<T>, max = LIMITS.list): 
   return x.map((v, i) => check(v, `${path}[${i}]`));
 }
 
+const vec3: Check<Vec3> = (x, path) => {
+  if (!Array.isArray(x) || x.length !== 3) throw new OpError(`${path}: expected [x, y, z]`);
+  return [num(x[0], `${path}[0]`), num(x[1], `${path}[1]`), num(x[2], `${path}[2]`)];
+};
+
 const vec2: Check<Vec2> = (x, path) => {
   if (!Array.isArray(x) || x.length !== 2) throw new OpError(`${path}: expected [x, y]`);
   return [num(x[0], `${path}[0]`), num(x[1], `${path}[1]`)];
@@ -334,6 +365,7 @@ export function opKind(op: Op): StepKind {
       return 'assemble';
     case 'shape':
     case 'popUp':
+    case 'bend':
       return 'pose';
     case 'draw':
       return 'draw';
@@ -474,6 +506,8 @@ const radians = (degrees: number) => (degrees * Math.PI) / 180;
 /** Runs an operation, keeping the cuts made so far in the paper it makes (a fresh sheet has none). */
 function run(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; flat?: FoldFrame; marks?: Mark[] } {
   const before = ctx.steps.length ? ctx.steps[ctx.steps.length - 1].frame : ctx.model.start;
+  // The fold engine works on flat faces: bent paper (its mesh of triangles) can be drawn on, but not folded again yet.
+  if (before.soft && op.op !== 'draw') throw new OpError('Paper that has bent can’t be folded any further.');
   const out = runOp(op, ctx);
   const cuts = before.cuts;
   if (!cuts?.length || op.op === 'newSheet') return out;
@@ -559,6 +593,19 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
     }
     case 'popUp':
       return { frame: radial(frame, where(op.centre), op.rays) };
+    case 'bend': {
+      const test = select(op.flex, { frame, sheets: ctx.model.sheets });
+      const flex = frame.faces_vertices.flatMap((face, f) => (test(face.map((v) => frame.vertices_paper[v])) ? [f] : []));
+      if (!flex.length) throw new OpError('Nothing to bend: no faces were picked.');
+      const { frame: bent, via } = bendFrame(frame, {
+        flex,
+        anchor: op.anchor.paper,
+        goals: op.goals.flatMap((g) => ('point' in g ? [{ paper: g.point.paper, to: g.to }] : [])),
+        creases: op.goals.flatMap((g) => ('crease' in g ? [{ from: g.crease[0], to: g.crease[1], degrees: g.degrees }] : [])),
+        ...(op.mesh !== undefined && { mesh: op.mesh }),
+      });
+      return { frame: bent, via };
+    }
     case 'draw':
       return { frame: { ...frame, faces_parent: undefined }, marks: op.marks };
     case 'cut':
