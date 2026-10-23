@@ -1,4 +1,4 @@
-import { FoldError, fromFlat, placeLike, toFlat, type FlatFace } from './fold';
+import { FoldError, fromFlat, toFlat, unplaceLike, type FlatFace } from './fold';
 import { cross, dot, split, sub, type Cut, type Line } from './geometry2d';
 import type { FoldFrame, Vec2 } from './types';
 
@@ -40,7 +40,7 @@ export function cut(frame: FoldFrame, { from, to, layers, only }: CutOptions): F
       return;
     }
     // The stretch of the cut in this face, on the sheet.
-    const toSheet = placeLike({ ...f, paper: f.world, world: f.paper });
+    const toSheet = unplaceLike(f);
     cuts.push([toSheet(seg[0]), toSheet(seg[1])]);
     const { pos, neg } = split(f, line);
     if (pos) pieces.push({ ...pos, layer: f.layer, parent: i });

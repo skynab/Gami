@@ -80,13 +80,11 @@ function petal(r: Recipe, d: Vec2, kites: Step, step: Step) {
   return r.collapse({ ...step, kind: 'petal' }, creases, paper(...at(1)(-0.3, 0.05)));
 }
 
-/** Turns the faces in the given halves over the centre line, from right to left, like a page. */
-function page(r: Recipe, only: (c: Vec2) => boolean, step: Step) {
-  const T = r.where(paper(0, 0));
-  return r.along(table(T[0], -2), table(T[0], 2), table(T[0] + 0.1, T[1] + 0.3), { ...step, only });
-}
-
-const quarter = (su: number, sv: number) => ([u, v]: Vec2) => Math.sign(u) === su && Math.sign(v) === sv;
+/** The quarter of the sheet (su, sv): the one whose corner is at (su/2, sv/2). */
+export const quarter = (su: number, sv: number) => ([u, v]: Vec2) => Math.sign(u) === su && Math.sign(v) === sv;
+/** The quarter's half nearer the u = 0 midline (a) or the v = 0 one (b): one page of the frog base each. */
+export const halfA = (su: number, sv: number) => (c: Vec2) => quarter(su, sv)(c) && Math.abs(c[0]) < Math.abs(c[1]);
+export const halfB = (su: number, sv: number) => (c: Vec2) => quarter(su, sv)(c) && Math.abs(c[0]) > Math.abs(c[1]);
 
 /**
  * Folds the frog base. It's a long diamond: the sheet's centre T at the top, the corners at the bottom point
@@ -101,10 +99,10 @@ export function frogBase(r: Recipe) {
   });
   r.turnOver('Turn the paper over.');
   squash(r, [0, 1], { title: 'Squash the next flap', text: 'Squash the right flap on this side the same way.' });
-  page(r, ([u, v]) => u > 0 && v > 0 && u < v, { title: 'Turn a page', text: 'Fold the top layer on the right over to the left, showing another flap.' });
+  pageTurn(r, halfA(1, 1), false, { title: 'Turn a page', text: 'Fold the top layer on the right over to the left, showing another flap.' });
   squash(r, [1, 0], { title: 'Squash the third flap', text: 'Squash it like the others.' });
   r.turnOver('Turn over.');
-  page(r, ([u, v]) => u < 0 && v < 0 && u > v, { title: 'Turn a page', text: 'Fold the top right layer over to the left here too.' });
+  pageTurn(r, halfA(-1, -1), false, { title: 'Turn a page', text: 'Fold the top right layer over to the left here too.' });
   squash(r, [-1, 0], { title: 'Squash the last flap', text: 'And squash the last flap.' });
 
   const kites = { title: 'Crease the lower edges', text: 'Fold the lower edges of the top layer in to the centre line, then unfold.' };
@@ -114,12 +112,59 @@ export function frogBase(r: Recipe) {
   });
   r.turnOver('Turn over.');
   petal(r, [1, 0], kites, { title: 'Petal fold this side', text: 'Make the same petal fold on this side.' });
-  page(r, quarter(1, -1), { title: 'Turn a page', text: 'Turn the top flap on the right over to the left.' });
+  pageTurn(r, quarter(1, -1), false, { title: 'Turn a page', text: 'Turn the top flap on the right over to the left.' });
   petal(r, [0, -1], kites, { title: 'Petal fold the third flap', text: 'Petal fold this flap too.' });
   r.turnOver('Turn over.');
-  page(r, quarter(-1, 1), { title: 'Turn a page', text: 'Turn the top right flap over to the left.' });
+  pageTurn(r, quarter(-1, 1), false, { title: 'Turn a page', text: 'Turn the top right flap over to the left.' });
   petal(r, [0, 1], kites, { title: 'Petal fold the last flap', text: 'And petal fold the last one. This is the frog base.' });
 
   const T = r.where(paper(0, 0));
   return { T, B: [T[0], T[1] + Math.SQRT1_2] as Vec2, quarter };
+}
+
+// ——— Working on the frog base's long diamond (the lily narrows it, as the iris does) ———
+
+/**
+ * The long diamond where it lies now, with its top point T (the sheet's centre) up: its side corners and its
+ * bottom point.
+ */
+export function diamond(r: Recipe) {
+  const T = r.where(paper(0, 0));
+  const w = (2 - Math.SQRT2) / 4;
+  return { T, left: [T[0] - w, T[1] + 0.5 - w] as Vec2, right: [T[0] + w, T[1] + 0.5 - w] as Vec2, bottom: [T[0], T[1] + Math.SQRT1_2] as Vec2 };
+}
+
+/** The page (half of a quarter of the sheet) a face belongs to, by its centre, as a test for the whole page. */
+export const pageOf = ([u, v]: Vec2) => (Math.abs(u) < Math.abs(v) ? halfA : halfB)(Math.sign(u), Math.sign(v));
+
+/** The pages on the left or right of the diamond, top first: what lies just beside the centre line, which every page covers. */
+export function pages(r: Recipe, side: 'left' | 'right') {
+  const { T } = diamond(r);
+  const seen: Vec2[] = [];
+  for (const c of r.stackAt([T[0] + (side === 'left' ? -0.01 : 0.01), T[1] + 0.25])) if (!seen.some((s) => pageOf(s)(c))) seen.push(c);
+  return seen.map(pageOf);
+}
+
+/** Turns the paper picked out by `only` over the centre line, like a page, towards the right or the left. */
+export function pageTurn(r: Recipe, only: (c: Vec2) => boolean, toRight: boolean, step: Step) {
+  const T = r.where(paper(0, 0));
+  const base = r.where(paper(0, 0.5));
+  const from: Vec2 = [T[0] + (toRight ? -0.2 : 0.2), (T[1] + base[1]) / 2];
+  return r.along(table(...T), table(T[0], base[1]), table(...from), { ...step, only });
+}
+
+/** Narrows the top: the top page's outer edge on each side folds to the centre line, from the top point. */
+export function narrow(r: Recipe, step: Step) {
+  const [leftPage, rightPage] = [pages(r, 'left')[0], pages(r, 'right')[0]];
+  return r.together(step, (r) => {
+    const { T, left, right, bottom } = diamond(r);
+    r.edgeOnto([table(...T), table(...left)], [table(...T), table(...bottom)], { title: '', only: leftPage });
+    r.edgeOnto([table(...T), table(...right)], [table(...T), table(...bottom)], { title: '', only: rightPage });
+  });
+}
+
+/** Turns the top two pages on the right over to the left. */
+export function flipTwo(r: Recipe, step: Step) {
+  const [a, b] = pages(r, 'right');
+  return pageTurn(r, (c) => a(c) || b(c), false, step);
 }

@@ -1,5 +1,6 @@
 import { clip } from '../fold/cut';
-import { placeLike } from '../fold/fold';
+import { placeLike, unplaceLike } from '../fold/fold';
+import { roundCoord } from '../fold/fold-format';
 import { frontUp, lerp } from '../fold/geometry2d';
 export { frontUp } from '../fold/geometry2d';
 import { centre, inside, locate, project } from '../fold/select';
@@ -39,8 +40,6 @@ export function cutsOnTable(frame: FoldFrame): [Vec2, Vec2][] {
 /** The frame to unfold back to: the one before the latest fold or collapse made since the last unfold. */
 export { lastFold as unfoldTarget } from '../fold/ops';
 
-// Rounded as .fold files round coordinates, as recipes round what they record.
-const round = (x: number) => Math.round(x * 1e9) / 1e9 || 0;
 
 /** The face seen from above at a point on the table: the top one there. */
 export function faceAt(frame: FoldFrame, spot: Vec2) {
@@ -55,9 +54,9 @@ export function faceAt(frame: FoldFrame, spot: Vec2) {
 export function markAt(frame: FoldFrame, points: Vec2[], fill: boolean): Mark | null {
   const face = points.length ? faceAt(frame, points[0]) : null;
   if (!face) return null;
-  // The face's map from table back to sheet: the same construction with the roles swapped.
-  const toSheet = placeLike({ ...face, paper: face.world, world: face.paper });
-  return { side: frontUp(face.world, face.paper) ? 'front' : 'back', points: points.map((p) => toSheet(p).map(round) as Vec2), ...(fill && { fill: true }) };
+  // Rounded as .fold files round coordinates, as recipes round what they record.
+  const toSheet = unplaceLike(face);
+  return { side: frontUp(face.world, face.paper) ? 'front' : 'back', points: points.map((p) => toSheet(p).map(roundCoord) as Vec2), ...(fill && { fill: true }) };
 }
 
 /** Where a mark's points are on the table now, or null if any of them isn't on the paper. */
@@ -78,7 +77,7 @@ export function toggleFace(frame: FoldFrame, picked: Vec2[][], spot: Vec2): Vec2
   if (!face) return picked;
   const c = centre(face.paper);
   const had = picked.filter((poly) => inside(poly, c));
-  return had.length ? picked.filter((poly) => !had.includes(poly)) : [...picked, face.paper.map((p) => p.map(round) as Vec2)];
+  return had.length ? picked.filter((poly) => !had.includes(poly)) : [...picked, face.paper.map((p) => p.map(roundCoord) as Vec2)];
 }
 
 /** Whether a face (by its corners on the sheet) is among the picked outlines, as `inPaper` decides it. */

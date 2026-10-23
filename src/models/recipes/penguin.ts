@@ -1,4 +1,5 @@
 import { Recipe, table } from '../../fold/recipe';
+import { normalize } from '../../fold/geometry2d';
 import type { Vec2 } from '../../fold/types';
 
 /**
@@ -18,7 +19,7 @@ export function penguin() {
   // The top left edge folds onto the line x = −gap, about the line bisecting the two, which crosses the lower
   // left edge (z = x + h) at the kite's side corner.
   const pivot: Vec2 = [-gap, -h + gap];
-  const along = norm([-Math.SQRT1_2, Math.SQRT1_2 + 1]);
+  const along = normalize([-Math.SQRT1_2, Math.SQRT1_2 + 1]);
   const s = (pivot[1] - pivot[0] - h) / (along[0] - along[1]);
   const corner: Vec2 = [pivot[0] + s * along[0], pivot[1] + s * along[1]];
   // The side corner's fold: from a point up the kite's edge to one down the lower edge.
@@ -63,9 +64,4 @@ export function penguin() {
     r.sheetAt([0.1, 0.1]),
   );
   return r.build();
-}
-
-function norm(v: Vec2): Vec2 {
-  const l = Math.hypot(v[0], v[1]);
-  return [v[0] / l, v[1] / l];
 }

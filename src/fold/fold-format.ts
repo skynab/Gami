@@ -141,21 +141,21 @@ function aboutOf(x: unknown): Pick<OrigamiModel, 'about' | 'card'> {
 }
 
 /** Coordinates rounded to 1e-9: enough for any sheet, and keeps files small and diffs readable. */
-const round = (x: number) => Math.round(x * 1e9) / 1e9 || 0;
+export const roundCoord = (x: number) => Math.round(x * 1e9) / 1e9 || 0;
 
 function writeFrame(f: FoldFrame): FoldFileFrame {
   return {
-    vertices_coords: f.vertices_coords.map((p) => p.map(round)),
+    vertices_coords: f.vertices_coords.map((p) => p.map(roundCoord)),
     faces_vertices: f.faces_vertices,
-    'gami:vertices_paper': f.vertices_paper.map((p) => p.map(round)),
+    'gami:vertices_paper': f.vertices_paper.map((p) => p.map(roundCoord)),
     ...(f.faces_parent && { 'gami:faces_parent': f.faces_parent }),
     ...(f.faces_layer && { 'gami:faces_layer': f.faces_layer }),
-    ...(f.cuts?.length && { 'gami:cuts': f.cuts.map((c) => c.map((p) => p.map(round))) }),
+    ...(f.cuts?.length && { 'gami:cuts': f.cuts.map((c) => c.map((p) => p.map(roundCoord))) }),
   };
 }
 
 function writeMark(m: Mark): Mark {
-  return { side: m.side, points: m.points.map(([u, v]) => [round(u), round(v)]), ...(m.fill && { fill: true }) };
+  return { side: m.side, points: m.points.map(([u, v]) => [roundCoord(u), roundCoord(v)]), ...(m.fill && { fill: true }) };
 }
 
 function readFrame(f: FoldFileFrame): FoldFrame {

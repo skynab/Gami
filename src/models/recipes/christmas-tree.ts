@@ -1,4 +1,4 @@
-import { locate, Recipe, table } from '../../fold/recipe';
+import { Recipe, table } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 
 /**
@@ -16,8 +16,7 @@ export function christmasTree() {
     .edgeOnto([top, table(-h, 0)], [top, table(0, h)], { title: 'Fold the top left edge in', text: 'Fold the top left edge to the middle crease.' })
     .edgeOnto([top, table(h, 0)], [top, table(0, h)], { title: 'Fold the top right edge in', text: 'And the top right edge. It’s a kite.' });
   // The lower half of the sheet, before it folds up: it becomes the pot.
-  const flat = r.current;
-  const lower = (c: Vec2) => locate(flat, c)[1] > 1e-9;
+  const lower = r.lying(([, z]) => z > 1e-9);
   r.along(table(-1, 0), table(1, 0), table(0, h), {
     title: 'Fold the bottom up',
     text: 'Fold the bottom corner up to the top corner. It’s all green now: a pentagon.',
@@ -29,8 +28,8 @@ export function christmasTree() {
   // The layer that came up from the bottom folds back down, level with where the sides' corners now meet in
   // the middle (each top edge's end, √2 − 1 out, lands 1 − (√2 − 1) below the top), so it hangs below the tree.
   const meet = -h + 2 - Math.SQRT2;
-  const narrowed = r.current;
-  const hanging = (c: Vec2) => lower(c) && locate(narrowed, c)[1] < meet;
+  const above = r.lying(([, z]) => z < meet);
+  const hanging = (c: Vec2) => lower(c) && above(c);
   r.along(table(-1, meet), table(1, meet), top, {
     title: 'Fold the front flap down',
     text: 'Fold the front layer’s point back down, level with where the side folds meet in the middle. It hangs below the tree.',

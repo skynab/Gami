@@ -207,6 +207,11 @@ export function unfoldStep(frames: FoldFrame[], target: number): { frame: FoldFr
   return { frame: unfoldTo(frames, target), ...(via.length && { via }) };
 }
 
+/** Maps table points back to the sheet the way `face` is placed: `placeLike` with the roles swapped. */
+export function unplaceLike(face: FlatFace): (p: Vec2) => Vec2 {
+  return placeLike({ ...face, paper: face.world, world: face.paper });
+}
+
 /** Maps sheet points to the table the way `face` is placed. */
 export function placeLike(face: FlatFace): (p: Vec2) => Vec2 {
   const [q0, q1, q2] = widest(face.paper);

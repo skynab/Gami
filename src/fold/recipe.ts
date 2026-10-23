@@ -1,6 +1,7 @@
 import { collapse, type CreaseKind } from './collapse';
 import { cut } from './cut';
-import { fold, FoldError, placeLike, rotate, toFlat, turnOver, unfoldStep, type FoldKind } from './fold';
+import { fold, FoldError, rotate, toFlat, turnOver, unfoldStep, unplaceLike, type FoldKind } from './fold';
+import { roundCoord } from './fold-format';
 import { inside, locate } from './select';
 export { locate } from './select';
 import { place } from './place';
@@ -82,9 +83,17 @@ export class Recipe {
       .filter((f) => only([avg(f.paper, 0), avg(f.paper, 1)]) && inside(f.world, spot))
       .sort((a, b) => b.layer - a.layer);
     if (!faces.length) throw new FoldError(`${this.info.id}: no paper at (${spot.join(', ')}).`);
-    const f = faces[0];
-    // The face's map from table back to sheet: the same construction with the roles swapped.
-    return paper(...placeLike({ ...f, paper: f.world, world: f.paper })(spot));
+    return paper(...unplaceLike(faces[0])(spot));
+  }
+
+  /**
+   * A test on faces' centres on the sheet picking the paper that lies, right now, where `here` (a test on a
+   * point on the table) says: "the half below the middle", say. It remembers where the paper is now, so it
+   * picks the same paper after later folds move it.
+   */
+  lying(here: (at: Vec2) => boolean): (centre: Vec2) => boolean {
+    const now = this.current;
+    return (centre) => here(locate(now, centre));
   }
 
   /** Where a point is on the table right now (or, once shaping has started, in the flat state it started from). */
@@ -391,11 +400,8 @@ export class Recipe {
       const points = 'line' in m ? m.line : m.fill;
       const f = faces.find((face) => inside(face.world, points[0]));
       if (!f) throw new FoldError(`${this.info.id}: no paper to draw on at (${points[0].join(', ')}).`);
-      // The face's map from table back to sheet: the same construction with the roles swapped.
-      const toSheet = placeLike({ ...f, paper: f.world, world: f.paper });
       // Rounded as .fold files round coordinates, so the model and its file agree exactly.
-      const round = (x: number) => Math.round(x * 1e9) / 1e9 || 0;
-      const onSheet = points.map((p) => toSheet(p).map(round) as Vec2);
+      const onSheet = points.map((p) => unplaceLike(f)(p).map(roundCoord) as Vec2);
       return { side: frontUp(f.world, f.paper) ? 'front' : 'back', points: onSheet, ...('fill' in m && { fill: true }) };
     });
     this.push({ ...step, kind: 'draw' }, { ...this.current, faces_parent: undefined }, { op: 'draw', marks: drawn });
@@ -484,6 +490,5 @@ function recorder(only: (centre: Vec2) => boolean): ((poly: Vec2[]) => boolean) 
     return yes;
   };
   // Rounded as .fold files round coordinates: each face's centre stays well inside its outline.
-  const round = (x: number) => Math.round(x * 1e9) / 1e9 || 0;
-  return Object.assign(test, { faces: (): Faces => ({ inPaper: [...picked.values()].map((poly) => poly.map((p) => p.map(round) as Vec2)) }) });
+  return Object.assign(test, { faces: (): Faces => ({ inPaper: [...picked.values()].map((poly) => poly.map((p) => p.map(roundCoord) as Vec2)) }) });
 }

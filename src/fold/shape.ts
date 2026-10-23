@@ -1,6 +1,7 @@
 import { checkNoTear, FoldError, placeLike, toFlat, type FlatFace } from './fold';
 import { joinedSegment, sideOf, split, type Cut, type Line } from './geometry2d';
 import { LAYER_GAP } from './frames';
+import { centre } from './select';
 import type { FoldFrame, Vec2, Vec3 } from './types';
 
 /**
@@ -270,7 +271,7 @@ function opened(frame: FoldFrame, bends: Bend[], anchor: Vec2): FoldFrame {
       return [pos, neg].filter((q) => q !== null).map((q) => ({ ...q!, layer: f.layer, parent: f.parent }));
     });
   }
-  const start = faces.findIndex((f) => inside(f.paper, anchor));
+  const start = faces.findIndex((f) => contains(f.paper, anchor));
   if (start < 0) throw new FoldError('The anchor point isn’t on the paper.');
   const n = faces.length;
   // Faces joined along an edge, and that edge on the sheet.
@@ -390,14 +391,6 @@ function opened(frame: FoldFrame, bends: Bend[], anchor: Vec2): FoldFrame {
   return { vertices_paper, vertices_coords, faces_vertices, faces_parent: faces.map((f) => f.parent), faces_layer: faces.map((f) => f.layer) };
 }
 
-function inside(poly: Vec2[], p: Vec2): boolean {
-  return contains(poly, p);
-}
-
-function centre(pts: Vec2[]): Vec2 {
-  return [pts.reduce((s, p) => s + p[0], 0) / pts.length, pts.reduce((s, p) => s + p[1], 0) / pts.length];
-}
-
 /**
  * A curl: one bend's turn spread over `segments` bends, from its line out to the farthest paper it turns,
  * so the flap rolls over evenly instead of folding at the line.
@@ -457,13 +450,13 @@ export interface Ray {
 }
 
 /**
- * Pops a flat model up about a point, as a fortune teller opens: creases run out from `centre` along `rays`
+ * Pops a flat model up about a point, as a fortune teller opens: creases run out from `apex` along `rays`
  * (in order round the point), each rising by its elevation, and the paper between each pair turns as one
  * piece. Every sector must keep its angle, or the paper would stretch. Stacked layers keep their gaps
  * straight up: the popped surface never stands past upright, so copies of it raised by different amounts
  * never cross, where gaps measured off each sector would cross in its valleys.
  */
-export function radial(frame: FoldFrame, centre: Vec2, rays: Ray[]): FoldFrame {
+export function radial(frame: FoldFrame, apex: Vec2, rays: Ray[]): FoldFrame {
   const dir = ({ azimuth, elevation }: Ray): Vec3 => [Math.cos(elevation) * Math.cos(azimuth), Math.sin(elevation), Math.cos(elevation) * Math.sin(azimuth)];
   const n = rays.length;
   for (let k = 0; k < n; k++) {
@@ -477,15 +470,15 @@ export function radial(frame: FoldFrame, centre: Vec2, rays: Ray[]): FoldFrame {
   // Cut every face along each ray's line, so each piece lies in one sector.
   let pieces: (FlatFace & { source: number })[] = toFlat(frame).map((f, i) => ({ ...f, parent: i, source: i }));
   for (const r of rays) {
-    const line = { p: centre, d: [Math.cos(r.azimuth), Math.sin(r.azimuth)] as Vec2 };
+    const line = { p: apex, d: [Math.cos(r.azimuth), Math.sin(r.azimuth)] as Vec2 };
     pieces = pieces.flatMap((p) => {
       const { pos, neg } = split(p, line);
       return [pos, neg].filter((q) => q !== null).map((q) => ({ ...q!, layer: p.layer, parent: p.parent, source: p.source }));
     });
   }
   const sectorOf = (pts: Vec2[]) => {
-    const c = centreOf(pts);
-    const ang = Math.atan2(c[1] - centre[1], c[0] - centre[0]);
+    const c = centre(pts);
+    const ang = Math.atan2(c[1] - apex[1], c[0] - apex[0]);
     for (let k = 0; k < n; k++) {
       const a = rays[k].azimuth;
       const span = (((rays[(k + 1) % n].azimuth - a) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
@@ -505,17 +498,16 @@ export function radial(frame: FoldFrame, centre: Vec2, rays: Ray[]): FoldFrame {
     const rise = p.layer * LAYER_GAP;
     // Each piece has its own corners, as stacked layers sit at different heights.
     return p.world.map((w, j) => {
-      const [x, z] = [w[0] - centre[0], w[1] - centre[1]];
+      const [x, z] = [w[0] - apex[0], w[1] - apex[1]];
       const a = (x * ub[1] - z * ub[0]) / det;
       const b = (ua[0] * z - ua[1] * x) / det;
       vertices_paper.push(p.paper[j]);
-      return vertices_coords.push([0, 1, 2].map((c) => (c === 0 ? centre[0] : c === 2 ? centre[1] : 0) + a * da[c] + b * db[c] + rise * up[c]) as Vec3) - 1;
+      return vertices_coords.push([0, 1, 2].map((c) => (c === 0 ? apex[0] : c === 2 ? apex[1] : 0) + a * da[c] + b * db[c] + rise * up[c]) as Vec3) - 1;
     });
   });
   return { vertices_paper, vertices_coords, faces_vertices, faces_parent: pieces.map((p) => p.parent) };
 }
 
-const centreOf = (pts: Vec2[]): Vec2 => [pts.reduce((s, p) => s + p[0], 0) / pts.length, pts.reduce((s, p) => s + p[1], 0) / pts.length];
 
 /** Whether a point on the sheet lies on one of its scissor cuts. */
 function onCut(q: Vec2, cuts: Cut[] | undefined): boolean {

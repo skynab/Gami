@@ -1,4 +1,5 @@
 import { paper, Recipe, table } from '../../fold/recipe';
+import { normalize } from '../../fold/geometry2d';
 import type { Vec2 } from '../../fold/types';
 import { birdBase } from './bird-base';
 
@@ -38,17 +39,12 @@ export function crow() {
   // The head: the top point, the front flap's tip, turned forwards and a little down between its layers.
   const tip = r.where(paper(0.5, -0.5));
   const base: Vec2 = [tip[0], tip[1] + 0.17];
-  const toward = norm([-1, 0.35]);
-  const line = norm([toward[0], toward[1] - 1]);
+  const toward = normalize([-1, 0.35]);
+  const line = normalize([toward[0], toward[1] - 1]);
   r.collapse(
     { title: 'Make the head', text: 'Push the top point down between its layers so it points forwards, for the head and beak. Your crow is done!', kind: 'reverse' },
     [{ through: [table(...base), table(base[0] + line[0], base[1] + line[1])], kind: 'inside', only: front }],
     paper(-0.3, 0.3),
   );
   return r.build();
-}
-
-function norm(v: Vec2): Vec2 {
-  const l = Math.hypot(v[0], v[1]);
-  return [v[0] / l, v[1] / l];
 }

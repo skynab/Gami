@@ -1,4 +1,4 @@
-import { locate, paper, Recipe, table, type At } from '../../fold/recipe';
+import { paper, Recipe, table, type At } from '../../fold/recipe';
 import type { OrigamiModel, Vec2 } from '../../fold/types';
 
 /** The classic dart, from a sheet shaped like A4 (1 : 1.41). */
@@ -63,8 +63,7 @@ export function finishPlane(
 ): OrigamiModel {
   // Each half of the plane: the paper on that side of the centre crease before it folds in half. That's the
   // sheet's own half unless an earlier fold took paper across the middle (as the navy plane's sides do).
-  const flat = plane.current;
-  const right = (c: Vec2) => locate(flat, c)[0] > 0;
+  const right = plane.lying(([x]) => x > 0);
   const left = (c: Vec2) => !right(c);
   plane
     .along(table(0, -1), table(0, 1), table(-0.1, 0), {
@@ -80,8 +79,8 @@ export function finishPlane(
   const fold: [At, At] = [table(-1, wingLine), table(1, wingLine)];
   // Each wing: the part of its half of the sheet beyond the line, before it folds down.
   const wingOf = (half: (c: Vec2) => boolean) => {
-    const before = plane.current;
-    return (c: Vec2) => half(c) && locate(before, c)[1] < wingLine;
+    const beyond = plane.lying(([, z]) => z < wingLine);
+    return (c: Vec2) => half(c) && beyond(c);
   };
   const firstWing = wingOf(right);
   plane.along(...fold, table(0, wingLine - 0.1), {

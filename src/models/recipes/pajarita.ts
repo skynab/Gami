@@ -1,5 +1,5 @@
 import type { CreaseKind } from '../../fold/collapse';
-import { placeLike, toFlat } from '../../fold/fold';
+import { toFlat, unplaceLike } from '../../fold/fold';
 import { locate, paper, Recipe, table, type At } from '../../fold/recipe';
 import { inside } from '../../fold/select';
 import type { Vec2 } from '../../fold/types';
@@ -53,7 +53,7 @@ export function pajarita() {
   const toWindmill = (c: Vec2): Vec2 => locate(square, c);
   const fromWindmill = (spot: Vec2): At => {
     const face = toFlat(square).find((f) => inside(f.world, spot))!;
-    return paper(...placeLike({ ...face, paper: face.world, world: face.paper })(spot));
+    return paper(...unplaceLike(face)(spot));
   };
   const onSquare = (c: Crease) => ({
     through: c.through.map(fromWindmill) as [At, At],

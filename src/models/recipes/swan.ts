@@ -1,4 +1,4 @@
-import { locate, paper, Recipe, table } from '../../fold/recipe';
+import { paper, Recipe, table } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 
 /**
@@ -22,9 +22,9 @@ export function swan() {
   r.edgeOnto([bottom, corner(-1)], [bottom, top], { title: 'Fold the edges in again', text: 'Fold the long lower left edge to the centre crease, making it narrower.' })
     .edgeOnto([bottom, corner(1)], [bottom, top], { title: 'And the right edge', text: 'The same on the right.' });
   // The neck: the half below the middle, folded up over the body. Its pieces are kept for the head fold.
-  const below = r.build().steps.at(-1)!.frame;
+  const below = r.lying(([, z]) => z > 0);
   r.onto(bottom, top, { title: 'Fold the point up', text: 'Fold the narrow point up to the top. This will be the neck.' });
-  const neck = r.pieces((c) => locate(below, c)[1] > 0);
+  const neck = r.pieces(below);
   const inNeck = (c: Vec2) => neck.some((poly) => inside(poly, c));
   r.along(table(-1, -0.45), table(1, -0.45), top, { title: 'Fold the tip down', text: 'Fold the tip of the neck back down a little way, for the head.', only: inNeck })
     .along(top, table(0, 0), table(-0.2, -0.1), { title: 'Fold in half', text: 'Fold the left half over onto the right, along the centre crease, so the neck is inside.' })

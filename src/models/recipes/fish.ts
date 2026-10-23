@@ -1,6 +1,5 @@
 import { sideOf, lineThrough } from '../../fold/geometry2d';
 import { Recipe, table } from '../../fold/recipe';
-import { locate } from '../../fold/select';
 import type { Vec2 } from '../../fold/types';
 
 /**
@@ -39,12 +38,9 @@ export function fish() {
       text: 'Fold the bottom point of the top layer up, so it pokes out a little above the long edge.',
       layers: 1,
     });
-  // The flap the next fold makes is the paper below its crease, found on the sheet while it's still in place.
-  const [s1, s2] = [r.sheetAt(from(half, 0.05)), r.sheetAt(from(half, 0.3))].map((a) => ('paper' in a ? a.paper : a.table));
-  const below = r.sheetAt([0, h - 0.02]);
-  const sB = 'paper' in below ? below.paper : below.table;
-  const side = (p: Vec2) => (s2[0] - s1[0]) * (p[1] - s1[1]) - (s2[1] - s1[1]) * (p[0] - s1[0]);
-  const flap = (centre: Vec2) => Math.sign(side(centre)) === Math.sign(side(sB));
+  // The flap the next fold makes: the paper below its crease, while it's still in place.
+  const belly = lineThrough(P, from(half, 1));
+  const flap = r.lying((at) => sideOf(belly, at) * sideOf(belly, [0, h]) > 0);
 
   r.edgeOnto([table(...P), table(0, h)], [table(...P), table(-P[0], c)], {
     title: 'Fold the lower edge up',
@@ -59,10 +55,8 @@ export function fish() {
   // The tail: the left corner folds to the right about a line through P, standing straight up…
   const up: Vec2 = [P[0] - 0.3 * Math.sin(Math.PI / 8), P[1] - 0.3 * Math.cos(Math.PI / 8)];
   // (its paper is what lies left of that line now, through both layers)
-  const flat = r.build().steps.at(-1)!.frame;
   const crease = lineThrough(P, up);
-  const leftSide = sideOf(crease, [-h, 0]);
-  const tail = (centre: Vec2) => Math.sign(sideOf(crease, locate(flat, centre))) === Math.sign(leftSide);
+  const tail = r.lying((at) => sideOf(crease, at) * sideOf(crease, [-h, 0]) > 0);
   r.along(table(...P), table(...up), table(-h + 0.02, 0.01), {
     title: 'Fold the left corner up',
     text: 'Fold the left corner over to the right so it points straight up. This makes the tail.',
@@ -78,8 +72,7 @@ export function fish() {
     .turnOver('Turn the fish over from left to right.');
 
   // The head: the top left corner (the right corner before turning over) down onto the lowest point.
-  const now = r.build().steps.at(-1)!.frame.vertices_coords;
-  const low = now.reduce((a, b) => (b[2] > a[2] ? b : a));
+  const low = r.current.vertices_coords.reduce((a, b) => (b[2] > a[2] ? b : a));
   const lowest: Vec2 = [low[0], low[2]];
   return r
     .onto(table(-h, 0), table(...lowest), {

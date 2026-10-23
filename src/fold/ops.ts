@@ -1,6 +1,6 @@
 import { collapse, CREASE_KINDS, type CreaseKind } from './collapse';
 import { cut } from './cut';
-import { fold, FoldError, placeLike, rotate, toFlat, turnOver, unfoldStep, FOLD_KINDS, type FoldKind } from './fold';
+import { fold, FoldError, unplaceLike, rotate, toFlat, turnOver, unfoldStep, FOLD_KINDS, type FoldKind } from './fold';
 import { flipLine, lineEdgeOnto, lineOnto, lineThrough, sideOf, type Line } from './geometry2d';
 import { place } from './place';
 import { anchorFor, centre, inside, locate, smallerSideMoves, topLayers } from './select';
@@ -458,8 +458,7 @@ export function atOf(frame: FoldFrame, spot: Vec2): At {
   }
   if (!faces.length) return { table: spot };
   const top = faces.reduce((a, b) => (b.layer > a.layer ? b : a));
-  // The face's map from table back to sheet: the same construction with the roles swapped.
-  return { paper: placeLike({ ...top, paper: top.world, world: top.paper })(spot) };
+  return { paper: unplaceLike(top)(spot) };
 }
 
 interface Context {
