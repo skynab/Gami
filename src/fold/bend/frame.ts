@@ -199,6 +199,7 @@ export function bendFrame(frame: FoldFrame, options: BendOptions): { via: FoldFr
     creases,
     hinges,
     thickness: LAYER_GAP,
+    floor: 0,
     ...(options.stages && { stages: options.stages }),
   });
   const write = (coords: Vec3[], first: boolean): FoldFrame => ({

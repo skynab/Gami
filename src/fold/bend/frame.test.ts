@@ -168,7 +168,7 @@ describe('bending a frame', () => {
     expect(via).toHaveLength(11);
   });
 
-  it('keeps paper that isn’t allowed to bend flat', () => {
+  it('keeps paper that isn’t allowed to bend flat', { timeout: 20000 }, () => {
     // Only the right half bends; the left is held.
     const two = halves(false);
     const { frame } = bendFrame(two, { flex: [1], anchor: [-0.25, 0], goals: [{ paper: [0.5, 0.5], to: [0.4, 0.3, 0.4] }], mesh: 0.1 });

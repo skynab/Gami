@@ -550,8 +550,9 @@ function touching(faces: FaceTrack[], a: number, b: number): boolean {
   return m[a * faces.length + b] === 1;
 }
 
-/** Whether two faces move as one through a transition, so they can't pass through each other. */
+/** Whether two faces move as one through a transition, so they can't pass through each other. Bending paper never does. */
 export function together(t: Transition, a: number, b: number): boolean {
+  if (t.blend) return false;
   return t.faces[a].motion === t.faces[b].motion && (!t.makeWay || t.makeWay.lifted[a] === t.makeWay.lifted[b]);
 }
 

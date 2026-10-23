@@ -190,6 +190,24 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      in-between frames, as a bent frame's faces point back at the last of them, not the step before.
 5. **Checks.** Strain check, tolerances, crossings at in-between frames. Done when the test model passes `problems`
    and its crossings stay within a layer.
+
+   **Done** (`validate.ts`: `bendStrain`; `solver.ts`: `floor`, `settle`). What it found:
+   - **Tolerances.** A bend step's frames (its in-between ones too) may stretch by 1% (`BENT_STRAIN`), and the paper
+     between them, as it plays, by 5% (`BENT_PLAY_STRAIN`). `problems` reports the worst once per step, not each
+     triangle, and holds bent paper to the table like any other.
+   - **Crossings.** A bend's triangles share one motion, so `crossings` took them as moving together and never
+     compared them. Bending paper now never counts as moving together; triangles joined at a corner are still
+     left alone. A test lays the bent half through the other to check it's found.
+   - **The table.** The solver let paper sink up to 7 mm below the table in its early stages. It now takes a
+     `floor` (the table, for `bendFrame`) that points are put back onto wherever layers are kept apart.
+   - **Stacked paper.** A second test model lifts the top layer of a sheet folded in half by its corner. It
+     stretched 9% mid-way and passed 2.7 mm (four layers) into the layer below: setting every edge's length at
+     once at a stage's end moves paper into other paper and under the table, and pushing it back out stretches it
+     again. Without layers or the table it stayed within 0.7%. Each stage but the last now ends by settling the
+     edges one at a time with layers kept apart and the table under them (`settle`, as the last pass already did),
+     the goals' points held: 0.8% at worst, no crossings, and a step that plays smoothly to its last frame (letting
+     the goals give there left one triangle swinging 5.7% in the last stretch). It costs about a third more time;
+     that test model, 238 triangles, takes about 3 s.
 6. **The fan.** Its last step, the spread, as a bend. Done when it's in the gallery, the file is under budget, and
    the full test suite is no slower than a few seconds more.
 7. **The boat.** Pulling the diamond's points apart, as a bend from the small diamond. Done as for the fan.

@@ -33,6 +33,8 @@ export interface BendProblem {
   compliance?: { stretch?: number; bend?: number };
   /** The gap layers keep between them. Leave out for no collisions. */
   thickness?: number;
+  /** A height no point goes below (the table). Leave out for none. */
+  floor?: number;
   /** How many stages the goals ramp over, each kept as a frame, and the iterations in each. */
   stages?: number;
   iterations?: number;
@@ -49,6 +51,9 @@ const DEFAULTS = { stretch: 0, bend: 1e-2, goal: 0, crease: 0, stages: 12, itera
 /** The last pass on edge lengths stops once every edge is within this share of its length, or after this many passes. */
 const SETTLED = 1e-4;
 const POLISH = 2400;
+/** The same at the end of each stage but the last, whose frames are only passed through. */
+const STAGE_SETTLED = 2e-3;
+const STAGE_POLISH = 400;
 /**
  * Solving constraints together (`together`): the least compliance any has (exact ones included, as flat paper has
  * more edges than ways to move in its plane, so they aren't all independent), and how far each solve goes.
@@ -115,6 +120,12 @@ export function solve(problem: BendProblem): BendResult {
   const stages = problem.stages ?? DEFAULTS.stages;
   const iterations = problem.iterations ?? DEFAULTS.iterations;
   const thickness = problem.thickness ?? 0;
+  const { floor } = problem;
+  /** Points under the floor back up onto it, as layers are kept apart. */
+  const ground = () => {
+    if (floor === undefined) return;
+    for (let v = 0; v < p.length; v++) if (w[v] && p[v][1] < floor) p[v][1] = floor;
+  };
 
   // Pinned points don't move (inverse mass 0); the rest move freely.
   const w = p.map(() => 1);
@@ -134,19 +145,41 @@ export function solve(problem: BendProblem): BendResult {
   const goalStarts = (problem.goals ?? []).map((g) => [...p[g.vertex]] as Vec3);
 
   /** Moves the points by one constraint's correction (as XPBD does, one at a time); returns the new multiplier. */
-  const project = (ids: number[], grads: Vec3[], c: number, lambda: number, compliance: number): number => {
+  const project = (ids: number[], grads: Vec3[], c: number, lambda: number, compliance: number, mass = w): number => {
     let denom = compliance;
-    for (let k = 0; k < ids.length; k++) denom += w[ids[k]] * dot(grads[k], grads[k]);
+    for (let k = 0; k < ids.length; k++) denom += mass[ids[k]] * dot(grads[k], grads[k]);
     if (denom < 1e-18) return lambda;
     const dl = (-c - compliance * lambda) / denom;
     for (let k = 0; k < ids.length; k++) {
       const q = p[ids[k]];
-      const m = w[ids[k]] * dl;
+      const m = mass[ids[k]] * dl;
       q[0] += m * grads[k][0];
       q[1] += m * grads[k][1];
       q[2] += m * grads[k][2];
     }
     return lambda + dl;
+  };
+
+  const strainNow = () => Math.max(0, ...edges.map(([a, b], k) => Math.abs(len(sub(p[b], p[a])) - lengths[k]) / lengths[k]));
+  /**
+   * Edges set right one at a time, with layers kept apart and off the table, until every edge is within `settled`
+   * of its length or `passes` are done: setting them all at once moves paper into other paper, and pushing it back
+   * out stretches it again.
+   */
+  const settle = (passes: number, settled: number, mass = w) => {
+    const lEnd = edges.map(() => 0);
+    for (let it = 0; it < passes && strainNow() > settled; it++) {
+      edges.forEach(([a, b], k) => {
+        const d = sub(p[b], p[a]);
+        const dl = len(d);
+        if (dl < 1e-12) return;
+        const n = scale(d, 1 / dl);
+        lEnd[k] = project([a, b], [scale(n, -1), n], dl - lengths[k], lEnd[k], 0, mass);
+      });
+      if (it % SEARCH_EVERY === 0) findPairs();
+      for (const pair of pairs) separate(p, w, problem.triangles, pair, thickness);
+      ground();
+    }
   };
 
   const frames: Vec3[][] = [];
@@ -192,6 +225,7 @@ export function solve(problem: BendProblem): BendResult {
         if (dl > 1e-12) lGoal[k] = project([g.vertex], [scale(d, 1 / dl)], dl, lGoal[k], g.compliance ?? DEFAULTS.goal);
       });
       for (const pair of pairs) separate(p, w, problem.triangles, pair, thickness);
+      ground();
       // Now and then, a step solving everything together carries corrections right across the paper, as a crease
       // turning a whole flap: one at a time, they reach only a few triangles further each pass.
       if ((it + 1) % SUBSTEP === 0) {
@@ -207,6 +241,7 @@ export function solve(problem: BendProblem): BendResult {
         });
         together(p, w, rows, reach);
         for (const pair of pairs) separate(p, w, problem.triangles, pair, thickness);
+        ground();
       }
     }
     // Each stage's paper is kept as a frame, so it mustn't look stretched. Setting its lengths may let the goals'
@@ -214,6 +249,8 @@ export function solve(problem: BendProblem): BendResult {
     if (stretch === 0) {
       keepLengths(p, s === stages ? held : w, edges, lengths, 5, 1e-3);
       for (const pair of pairs) separate(p, w, problem.triangles, pair, thickness);
+      ground();
+      if (s < stages) settle(STAGE_POLISH, STAGE_SETTLED, held);
     }
     frames.push(p.map((q) => [...q] as Vec3));
   }
@@ -221,20 +258,7 @@ export function solve(problem: BendProblem): BendResult {
   // A last pass on the edges alone, so every triangle keeps its shape as closely as it can: all of them at once,
   // then one at a time with layers kept apart, until they settle.
   keepLengths(p, held, edges, lengths, 10, SETTLED / 10);
-  const lEnd = edges.map(() => 0);
-  const strainNow = () => Math.max(0, ...edges.map(([a, b], k) => Math.abs(len(sub(p[b], p[a])) - lengths[k]) / lengths[k]));
-  for (let it = 0; it < POLISH && strainNow() > SETTLED; it++) {
-    edges.forEach(([a, b], k) => {
-      const d = sub(p[b], p[a]);
-      const dl = len(d);
-      if (dl < 1e-12) return;
-      const n = scale(d, 1 / dl);
-      lEnd[k] = project([a, b], [scale(n, -1), n], dl - lengths[k], lEnd[k], 0);
-    });
-    // Layers still keep apart while the edges settle.
-    if (it % SEARCH_EVERY === 0) findPairs();
-    for (const pair of pairs) separate(p, w, problem.triangles, pair, thickness);
-  }
+  settle(POLISH, SETTLED);
   frames[frames.length - 1] = p.map((q) => [...q] as Vec3);
   const strain = strainNow();
   return { frames, strain };
