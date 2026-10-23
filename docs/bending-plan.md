@@ -244,6 +244,31 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
    - **Next.** As for the fan: the solver doesn't find a shape this far from a flat stack. Both need the shape
      built first (here, the hull's sides and the sail as rigid panels opened about the diamond's creases), with
      the solver settling it and the frames on the way.
+   **Why the solver got lost** (October 2026, after the fan's and boat's first tries). A benchmark with a known
+   answer settled it: a strip pleated into a stack, opened into a zigzag. No bending is needed, so any stretch or
+   crossing is the solver's.
+   - **Goals on points drag paper through paper.** Opened by goals on the panels' corners, four panels stretched
+     25% and passed 2.4 cm through each other, with or without contacts. Each goal's point moves in a straight
+     line, stage by stage, but a pleat opening carries its far crease up and over the panels before it: the
+     straight line goes through them. The fan's and boat's goals did the same.
+   - **Goals on creases don't.** Opened by crease goals instead (each crease turning a little more each stage),
+     eight panels open with 0.1% stretch, no crossings, in about 4 s, and nudging the angles changes nothing. A
+     test keeps it so. Motions where paper swings round (pleats opening, a hull spreading) are best given as crease
+     angles, with goals on points only where the paper goes more or less straight.
+   - **Tried and dropped.** Goals that only lead (soft until the last stage) left the paper behind until the last
+     stage, which then did everything at once; solving straight to the end that way is chaotic (one part in ten
+     million on a goal swung the stretch from 0.4% to 23%). Building the frames on the way by turning each
+     triangle about the edge it hangs from (exact on its own) inherits that. Forgetting which side of a triangle a
+     point is on once it leaves it (for paper unwrapping round a fold) made things worse; sides stay for good.
+   - **Folds round other layers wrap.** The mesh put the points joining two layers halfway between them; where
+     layers lie between (every strip of the fan folds at the same edge), those points all met inside the stack
+     and the triangles to them cut through it, so the fan with no goals at all ended 41% stretched. They now go
+     out past the fold, square to it, by half the layers it goes round, so folds round folds nest. Two layers
+     next to each other have nothing between them and are left as they were.
+   - **Next.** Let a crease goal's angle vary along the crease (the fan's pleats closed at the pinch and open at
+     the far end), and give the fan and the boat their openings as crease angles. Points pinned by the anchor
+     shouldn't be pushed out past a fold (the fan's flap), or the paper next to them can never settle.
+
 8. **The iris, later.** It needs paper that bends and then lies flat again (a "relax to flat" mode, or using the
    solver to find the crease pattern real paper takes). Revisit once 1–7 are done.
 

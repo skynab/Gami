@@ -6,6 +6,7 @@ import { signedArea } from '../geometry2d';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from '../types';
 import { bendFrame, meshFrame, type FrameMesh } from './frame';
 import { topology } from './mesh';
+import { paper, Recipe, table } from '../recipe';
 
 const crane = fromFoldFile(JSON.parse(readFileSync(new URL('../../../public/models/crane.fold', import.meta.url), 'utf8')));
 
@@ -119,6 +120,26 @@ describe('meshing a frame', () => {
     expect(outline(cut)).toBeCloseTo(6, 9);
     // The middle line's five points, twice over.
     expect(cut.paper.length - joined.paper.length).toBe(5);
+  });
+
+  it('wraps a fold round the layers inside it, and leaves one round none where it is', () => {
+    // Folded in half (right over left), then the stack's left quarter folded over onto it: the second fold joins
+    // the bottom layer to the top one, round the two between them.
+    const folded = new Recipe({ id: 'twice', title: 'Twice', sheet: { size: [1, 1], front: '#c33', back: '#eee' } })
+      .onto(paper(0.5, 0.5), table(-0.5, 0.5), { title: 'Fold in half' })
+      .onto(table(-0.5, 0.5), table(0, 0.5), { title: 'Fold the left quarter over' })
+      .build()
+      .steps.at(-1)!.frame;
+    const mesh = meshFrame(folded, [], 0.25);
+    const xs = (u: number) => mesh.paper.flatMap((q, v) => (Math.abs(q[0] - u) < 1e-9 ? [mesh.points[v][0]] : []));
+    const outer = xs(-0.25);
+    expect(outer.length).toBeGreaterThan(0);
+    // Out past the stack's edge (it lies to the right of x = −0.25) by half the three gaps it goes round.
+    for (const x of outer) expect(x).toBeCloseTo(-0.25 - 1.5 * LAYER_GAP, 9);
+    // The first fold has nothing between its two layers: its points stay on the edge.
+    const inner = xs(0);
+    expect(inner.length).toBeGreaterThan(0);
+    for (const x of inner) expect(Math.abs(x + 0.25) < 1e-9 || Math.abs(x) < 1e-9 || Math.abs(x + 0.5) < 1e-9).toBe(true);
   });
 });
 

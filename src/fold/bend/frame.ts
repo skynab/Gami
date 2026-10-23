@@ -60,6 +60,8 @@ export function meshFrame(frame: FoldFrame, flex: number[], size: number, rigidS
     const [a, b] = [find(i), find(j)];
     if (a !== b) root[Math.max(a, b)] = Math.min(a, b);
   };
+  // Along the crease each joined point is on, across the table.
+  const along: (Vec3 | undefined)[] = [];
   for (let f = 0; f < polys.length; f++) {
     for (let g = f + 1; g < polys.length; g++) {
       const shared = sharedSegment(polys[f], polys[g]);
@@ -73,9 +75,12 @@ export function meshFrame(frame: FoldFrame, flex: number[], size: number, rigidS
       for (let k = 0; k + 1 < on.length; k++) {
         const [i, j] = [on[k].i, on[k + 1].i];
         if (!joinedAlong(local[f].paper[i], local[f].paper[j], frame.cuts)) continue;
+        const [pi, pj] = [local[f].points[i], local[f].points[j]];
         for (const x of [i, j]) {
           const y = partner(x);
-          if (y >= 0) join(offsets[f] + x, offsets[g] + y);
+          if (y < 0) continue;
+          join(offsets[f] + x, offsets[g] + y);
+          along[offsets[f] + x] = [pj[0] - pi[0], 0, pj[2] - pi[2]];
         }
       }
     }
@@ -96,19 +101,42 @@ export function meshFrame(frame: FoldFrame, flex: number[], size: number, rigidS
   };
   const triangles: Tri[] = [];
   const parent: number[] = [];
+  // Where each point's faces put it, which way is out of each face there, and along the crease it's on, if any.
+  const from: { at: Vec3; out: Vec3 }[][] = [];
+  const crease: (Vec3 | undefined)[] = [];
   local.forEach((l, f) => {
     const ids = l.paper.map((_, i) => id(f, i));
+    const middle = l.points.reduce((m, q) => [m[0] + q[0] / l.points.length, 0, m[2] + q[2] / l.points.length] as Vec3, [0, 0, 0] as Vec3);
     ids.forEach((k, i) => {
-      // Faces stacked apart meet a hair apart along a crease: they meet halfway.
       for (let c = 0; c < 3; c++) sums[k].p[c] += l.points[i][c];
       sums[k].n++;
+      (from[k] ??= []).push({ at: l.points[i], out: [l.points[i][0] - middle[0], 0, l.points[i][2] - middle[2]] });
+      crease[k] ??= along[offsets[f] + i];
     });
     for (const [a, b, c] of earClip(l.paper)) {
       triangles.push([ids[a], ids[b], ids[c]]);
       parent.push(f);
     }
   });
-  const points = sums.map(({ p, n }): Vec3 => [p[0] / n, p[1] / n, p[2] / n]);
+  // Faces stacked apart meet a hair apart along a crease: they meet halfway. Where they're folded together (both
+  // on one side of it), the paper wraps round the layers between them, so the point goes out past the fold by
+  // half the stack: folds round folds nest, rather than all meeting inside the stack and cutting through it. Two
+  // layers next to each other have nothing between them to wrap round.
+  const points = sums.map(({ p, n }, k): Vec3 => {
+    const q: Vec3 = [p[0] / n, p[1] / n, p[2] / n];
+    const ys = from[k].map((x) => x.at[1]);
+    const spread = Math.max(...ys) - Math.min(...ys);
+    const c = crease[k];
+    if (spread < 1.5 * LAYER_GAP || !c) return q;
+    // Square to the crease, away from the faces.
+    const cl = Math.hypot(c[0], c[2]);
+    const across: Vec3 = [-c[2] / cl, 0, c[0] / cl];
+    const away = from[k].reduce((s, x) => s + Math.sign(x.out[0] * across[0] + x.out[2] * across[2]), 0);
+    // Faces either side of the point (a crease lying open) pull out both ways, and stay where they meet.
+    if (Math.abs(away) < from[k].length) return q;
+    const out = (Math.sign(away) * spread) / 2;
+    return [q[0] + across[0] * out, q[1], q[2] + across[2] * out];
+  });
 
   const flexible = new Set(flex);
   refine(paper, points, triangles, parent, (f) => (flexible.has(f) ? size : rigidSize));
