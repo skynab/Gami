@@ -210,6 +210,24 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      that test model, 238 triangles, takes about 3 s.
 6. **The fan.** Its last step, the spread, as a bend. Done when it's in the gallery, the file is under budget, and
    the full test suite is no slower than a few seconds more.
+
+   **Started; not reachable yet.** What the first try found (on `wip/fan`):
+   - **The shape.** Folded in half, the stack is 34 layers: each strip's two halves are far apart in it (the
+     first pleat's are the bottom and top layers), joined only along the half fold. Spread, the bottom half of the
+     stack fans to one side and the top half to the other, each a quarter circle; a strip's halves stay closed at
+     the middle, where the flap locks them, and open to nearly flat at the outer edges. A quarter circle of radius
+     0.5 gives each strip a chord of 0.052 at its far end, against its width of 0.0875, so the far ends zigzag
+     by 0.07; nearer the pinch the pleats close up, which twists every strip.
+   - **The flap.** The recipe's flap wraps the stack's side along its whole length, so the half of the stack
+     fanning towards it would pass through it. origami.me folds the flap's corners in first so it holds near the
+     pinch; the recipe's corner folds may need to take more of it.
+   - **The solver.** Goals on each crease's far end (both halves), the flap held: at mesh 0.1 (1660 triangles, 859
+     points) it took 64 s and ended 100% stretched with paper deep through paper. Straight from 34 layers a
+     hair apart to the spread, it doesn't find the shape. Points near other paper are now found through a grid
+     (the same pairs, in the same order, as looking at every point), which deep stacks needed anyway.
+   - **Next.** Rather than solving from the flat stack, build the spread shape directly (each half strip a ruled
+     surface from the pinch to its place on the arc) and let the solver only settle it and the frames on the
+     way; and see where the time goes at this size.
 7. **The boat.** Pulling the diamond's points apart, as a bend from the small diamond. Done as for the fan.
 8. **The iris, later.** It needs paper that bends and then lies flat again (a "relax to flat" mode, or using the
    solver to find the crease pattern real paper takes). Revisit once 1–7 are done.

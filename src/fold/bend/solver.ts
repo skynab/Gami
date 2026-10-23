@@ -394,13 +394,32 @@ interface Pair {
 function nearPairs(p: Vec3[], triangles: Tri[], thickness: number, sides: Map<string, number>): Pair[] {
   const out: Pair[] = [];
   const reach = 4 * thickness;
+  // Points by cell of a grid about a triangle's size, so each triangle looks only at the points near it. A point
+  // that counts lies within its triangle's box grown by the reach (by √2 of it, beyond a corner).
+  const cell = Math.max(2 * reach, ...triangles.slice(0, 64).map((tri) => Math.max(...[0, 1, 2].map((i) => Math.abs(p[tri[0]][i] - p[tri[1]][i]) + Math.abs(p[tri[1]][i] - p[tri[2]][i])))));
+  const index = (x: number) => Math.floor(x / cell);
+  const key = (i: number, j: number, k: number) => `${i},${j},${k}`;
+  const grid = new Map<string, number[]>();
+  p.forEach((q, v) => {
+    const at = key(index(q[0]), index(q[1]), index(q[2]));
+    const list = grid.get(at);
+    if (list) list.push(v);
+    else grid.set(at, [v]);
+  });
+  const grow = 1.5 * reach;
   triangles.forEach((tri, t) => {
     const [a, b, c] = tri.map((i) => p[i]);
     const n = cross(sub(b, a), sub(c, a));
     const nl = len(n);
     if (nl < 1e-15) return;
     const u = scale(n, 1 / nl);
-    for (let v = 0; v < p.length; v++) {
+    const lo = [0, 1, 2].map((i) => index(Math.min(a[i], b[i], c[i]) - grow));
+    const hi = [0, 1, 2].map((i) => index(Math.max(a[i], b[i], c[i]) + grow));
+    const near: number[] = [];
+    for (let i = lo[0]; i <= hi[0]; i++) for (let j = lo[1]; j <= hi[1]; j++) for (let k = lo[2]; k <= hi[2]; k++) near.push(...(grid.get(key(i, j, k)) ?? []));
+    // In order, as looking through every point would find them.
+    near.sort((x, y) => x - y);
+    for (const v of near) {
       if (v === tri[0] || v === tri[1] || v === tri[2]) continue;
       const d = dot(sub(p[v], a), u);
       if (Math.abs(d) > reach || !over(p[v], a, b, c, u, reach)) continue;
