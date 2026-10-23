@@ -5,6 +5,7 @@ import { replay } from '../fold/ops';
 import { previewSvg, thumbnailSvg } from '../fold/thumbnail';
 import { problems } from '../fold/validate';
 import { MODELS } from '../gallery/catalog';
+import { paperRatio } from '../gallery/ModelCard';
 import { RECIPES } from './recipes';
 
 const models = RECIPES.map((make) => make());
@@ -43,6 +44,13 @@ describe.each(models.map((m) => [m.id, m] as const))('%s', (id, model) => {
       ...(model.steps.some((s) => s.kind === 'draw') ? ['pen'] : []),
     ];
     expect(MODELS.find((m) => m.id === id)?.needs ?? []).toEqual(needs);
+  });
+
+  it('says in the gallery when it starts from a rectangle rather than a square', () => {
+    const ratio = paperRatio(model.sheets);
+    const listed = MODELS.find((m) => m.id === id)?.paper;
+    if (ratio < 1 + 1e-9) expect(listed).toBeUndefined();
+    else expect(listed).toBeCloseTo(ratio, 2);
   });
 
   it('is listed in the gallery with the right number of steps', () => {

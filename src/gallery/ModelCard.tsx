@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import { PaperIcon, PenIcon, ScissorsIcon } from '../app/icons';
 import { modelUrl } from '../models';
 import { readProgress } from '../state/progress';
+import type { Sheet } from '../fold/types';
 import { levelOf, type Difficulty, type ModelInfo, type Tool } from './catalog';
 
 export function ModelCard({ model }: { model: ModelInfo }) {
@@ -50,7 +51,7 @@ export function ModelCard({ model }: { model: ModelInfo }) {
           <img src={modelUrl(model.id, 'preview.svg')} alt="" className={preview === 'on' ? 'card-preview playing' : 'card-preview'} />
         )}
         {badge && <span className={model.steps ? 'card-badge' : 'card-badge soon'}>{badge}</span>}
-        <Needs tools={model.needs} />
+        <Needs tools={model.needs} paper={model.paper} />
       </div>
       <div className="card-body">
         <div className="card-title">
@@ -64,13 +65,38 @@ export function ModelCard({ model }: { model: ModelInfo }) {
   );
 }
 
-/** Tools beyond paper, so nobody starts a model without them. */
-export function Needs({ tools }: { tools?: Tool[] }) {
+/** How much longer than wide a model's paper is (1 for squares): its longest sheet's long side over its short side. */
+export function paperRatio(sheets: Sheet[]): number {
+  return Math.max(1, ...sheets.map(({ size: [w, h] }) => Math.max(w, h) / Math.min(w, h)));
+}
+
+/**
+ * What a model needs beyond a square of paper, so nobody starts it without: a rectangle (drawn to its shape, and
+ * named when it's A4 or US Letter), scissors, a pen.
+ */
+export function Needs({ tools, paper }: { tools?: Tool[]; paper?: number }) {
   const { t } = useTranslation();
-  if (!tools?.length) return null;
+  const rectangle = paper !== undefined && paper > 1 + 1e-6;
+  if (!tools?.length && !rectangle) return null;
+  const paperLabel = !rectangle
+    ? ''
+    : Math.abs(paper - Math.SQRT2) < 0.03
+      ? t('card.paperA4')
+      : Math.abs(paper - 11 / 8.5) < 0.02
+        ? t('card.paperLetter')
+        : t('card.paperRatio', { ratio: +paper.toFixed(2) });
+  // The sheet stood upright, its long side 16 units in a 24-unit box.
+  const [w, h] = rectangle ? [16 / paper, 16] : [0, 0];
   return (
     <span className="card-needs">
-      {tools.map((tool) => {
+      {rectangle && (
+        <span role="img" aria-label={paperLabel} title={paperLabel}>
+          <svg viewBox="0 0 24 24" width={16} height={16} aria-hidden="true">
+            <rect x={12 - w / 2} y={12 - h / 2} width={w} height={h} rx={0.8} fill="none" stroke="currentColor" strokeWidth={1.8} />
+          </svg>
+        </span>
+      )}
+      {(tools ?? []).map((tool) => {
         const label = t(tool === 'scissors' ? 'card.needsScissors' : 'card.needsPen');
         const Icon = tool === 'scissors' ? ScissorsIcon : PenIcon;
         return (

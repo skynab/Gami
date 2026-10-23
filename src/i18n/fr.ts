@@ -47,6 +47,9 @@ export const fr: Messages = {
     difficulty: '{{level}}, difficulté {{n}} sur 5',
     needsScissors: 'Il faut des ciseaux',
     needsPen: 'Il faut un stylo',
+    paperA4: 'Demande du papier A4',
+    paperLetter: 'Demande du papier format Lettre US',
+    paperRatio: 'Demande un rectangle de papier {{ratio}} fois plus long que large',
   },
   models: {
     basics: { title: 'Les bases', blurb: 'Commencez ici : plier, déplier et retourner la feuille.' },

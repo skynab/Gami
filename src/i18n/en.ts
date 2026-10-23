@@ -49,6 +49,9 @@ export const en = {
     difficulty: '{{level}}, difficulty {{n}} of 5',
     needsScissors: 'Needs scissors',
     needsPen: 'Needs a pen',
+    paperA4: 'Needs A4 paper',
+    paperLetter: 'Needs US Letter paper',
+    paperRatio: 'Needs a rectangle of paper {{ratio}} times as long as it is wide',
   },
   models: {
     basics: { title: 'Folding basics', blurb: 'Start here: fold, unfold and turn the paper over.' },

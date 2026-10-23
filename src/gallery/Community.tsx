@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import { publishedModels, type SavedModel } from '../cloud/models';
 import { toolsNeeded } from '../fold/ops';
 import { thumbnailSvg } from '../fold/thumbnail';
-import { Dots, Needs } from './ModelCard';
+import { Dots, Needs, paperRatio } from './ModelCard';
 
 /**
  * Models made by creators and published by an admin. Loaded separately from the gallery (and only on sites
@@ -46,7 +46,7 @@ function CommunityCard({ saved }: { saved: SavedModel }) {
     <Link to={`/m/${saved.id}`} className="card">
       <div className="card-thumb">
         <img src={src} alt="" />
-        <Needs tools={tools} />
+        <Needs tools={tools} paper={paperRatio(saved.model.sheets)} />
       </div>
       <div className="card-body">
         <div className="card-title">

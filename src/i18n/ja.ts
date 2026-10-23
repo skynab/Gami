@@ -47,6 +47,9 @@ export const ja: Messages = {
     difficulty: '{{level}}、難易度 5段階中{{n}}',
     needsScissors: 'はさみが必要',
     needsPen: 'ペンが必要',
+    paperA4: 'A4の紙を使います',
+    paperLetter: 'レターサイズの紙を使います',
+    paperRatio: '縦が横の{{ratio}}倍の長方形の紙を使います',
   },
   models: {
     basics: { title: '折り方の基本', blurb: 'まずはここから。折る、開く、裏返す。' },

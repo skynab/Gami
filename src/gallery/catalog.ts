@@ -19,6 +19,11 @@ export interface ModelInfo {
   minutes: number;
   /** Number of sheets of paper. The ninja star uses two. */
   sheets: number;
+  /**
+   * When it starts from a rectangle rather than a square: its long side over its short side (√2 for A4). Shown on
+   * the card, so nobody reaches for a square.
+   */
+  paper?: number;
   /** Tools beyond paper, shown on the card so nobody starts one without them: scissors for a cut, a pen for drawing. */
   needs?: Tool[];
 }
@@ -42,11 +47,11 @@ export const MODELS: ModelInfo[] = [
   { id: 'basics', title: 'Folding basics', blurb: 'Start here: fold, unfold and turn the paper over.', difficulty: 1, category: 'lesson', steps: 4, minutes: 2, sheets: 1 },
   { id: 'folds-lesson', title: 'Common folds', blurb: 'Valley and mountain, reverse, squash, rabbit ear, pleat, crimp and petal folds, each on its own square.', difficulty: 2, category: 'lesson', steps: 65, minutes: 25, sheets: 1 },
   { id: 'bases-lesson', title: 'Origami bases', blurb: 'The kite, square, water bomb, bird, fish and frog bases: where most models start.', difficulty: 2, category: 'lesson', steps: 104, minutes: 30, sheets: 1 },
-  { id: 'paper-plane', title: 'Paper plane', blurb: 'The classic dart. Flies far and straight.', difficulty: 1, category: 'toy', steps: 13, minutes: 5, sheets: 1 },
-  { id: 'glider', title: 'Glider', blurb: 'A flat-nosed plane with broad wings, for slow, long glides.', difficulty: 1, category: 'toy', steps: 12, minutes: 5, sheets: 1 },
-  { id: 'bulldog-dart', title: 'Bulldog dart', blurb: 'The dart with its point folded back: a stubby nose for rough landings.', difficulty: 1, category: 'toy', steps: 14, minutes: 5, sheets: 1 },
-  { id: 'navy-plane', title: 'Navy plane', blurb: 'A slim delta-winged jet, built for speed.', difficulty: 2, category: 'toy', steps: 19, minutes: 8, sheets: 1 },
-  { id: 'king-bee', title: 'King bee', blurb: 'A stubby acrobat with two feelers, that wiggles through the air like a bee.', difficulty: 2, category: 'toy', steps: 23, minutes: 10, sheets: 1, needs: ['scissors'] },
+  { id: 'paper-plane', title: 'Paper plane', blurb: 'The classic dart. Flies far and straight.', difficulty: 1, category: 'toy', steps: 13, minutes: 5, sheets: 1, paper: 1.43 },
+  { id: 'glider', title: 'Glider', blurb: 'A flat-nosed plane with broad wings, for slow, long glides.', difficulty: 1, category: 'toy', steps: 12, minutes: 5, sheets: 1, paper: 1.43 },
+  { id: 'bulldog-dart', title: 'Bulldog dart', blurb: 'The dart with its point folded back: a stubby nose for rough landings.', difficulty: 1, category: 'toy', steps: 14, minutes: 5, sheets: 1, paper: 1.43 },
+  { id: 'navy-plane', title: 'Navy plane', blurb: 'A slim delta-winged jet, built for speed.', difficulty: 2, category: 'toy', steps: 19, minutes: 8, sheets: 1, paper: 1.3 },
+  { id: 'king-bee', title: 'King bee', blurb: 'A stubby acrobat with two feelers, that wiggles through the air like a bee.', difficulty: 2, category: 'toy', steps: 23, minutes: 10, sheets: 1, paper: 1.3, needs: ['scissors'] },
   { id: 'dog-face', title: 'Dog face', blurb: 'A first fold: a triangle with floppy ears.', difficulty: 1, category: 'animal', steps: 11, minutes: 2, sheets: 1, needs: ['pen'] },
   { id: 'cat-face', title: 'Cat face', blurb: 'A first fold: a triangle with pointed ears.', difficulty: 1, category: 'animal', steps: 7, minutes: 2, sheets: 1, needs: ['pen'] },
   { id: 'cup', title: 'Cup', blurb: 'A cup that holds water, for a while.', difficulty: 1, category: 'object', steps: 7, minutes: 4, sheets: 1 },
@@ -54,7 +59,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'fortune-teller', title: 'Fortune teller', blurb: 'Pick a colour, pick a number.', difficulty: 2, category: 'toy', steps: 19, minutes: 8, sheets: 1 },
   { id: 'heart', title: 'Heart', blurb: 'A simple heart, nice for cards.', difficulty: 2, category: 'object', steps: 20, minutes: 5, sheets: 1 },
   { id: 'cicada', title: 'Cicada', blurb: 'A traditional Japanese cicada, its wings folded out from a diamond.', difficulty: 2, category: 'animal', steps: 10, minutes: 5, sheets: 1 },
-  { id: 'jumping-frog', title: 'Jumping frog', blurb: 'From half a square of paper. Press its back and watch it hop.', difficulty: 2, category: 'animal', steps: 23, minutes: 10, sheets: 1 },
+  { id: 'jumping-frog', title: 'Jumping frog', blurb: 'From half a square of paper. Press its back and watch it hop.', difficulty: 2, category: 'animal', steps: 23, minutes: 10, sheets: 1, paper: 2 },
   { id: 'ninja-star', title: 'Ninja star', blurb: 'Two sheets locked into a spinning shuriken.', difficulty: 2, category: 'modular', steps: 17, minutes: 10, sheets: 2 },
   { id: 'tulip', title: 'Tulip', blurb: 'A blossom and a stem from two squares.', difficulty: 3, category: 'flower', steps: 15, minutes: 10, sheets: 2 },
   { id: 'fox', title: 'Fox', blurb: 'A sitting fox with big ears and a bushy tail.', difficulty: 2, category: 'animal', steps: 14, minutes: 5, sheets: 1, needs: ['pen'] },
@@ -73,12 +78,12 @@ export const MODELS: ModelInfo[] = [
   { id: 'dolphin', title: 'Dolphin', blurb: 'A traditional dolphin, leaping.', difficulty: 3, category: 'animal', steps: 24, minutes: 12, sheets: 1, needs: ['scissors'] },
   { id: 'seal', title: 'Seal', blurb: 'A seal with its head up, flippers out and tail raised.', difficulty: 3, category: 'animal', steps: 20, minutes: 12, sheets: 1 },
   { id: 'frog', title: 'Frog', blurb: 'The classic frog from the frog base, legs and all.', difficulty: 4, category: 'animal', steps: 55, minutes: 20, sheets: 1 },
-  { id: 'sword', title: 'Sword', blurb: 'A knight’s sword with a crossguard, from one long strip.', difficulty: 2, category: 'toy', steps: 14, minutes: 8, sheets: 1 },
+  { id: 'sword', title: 'Sword', blurb: 'A knight’s sword with a crossguard, from one long strip.', difficulty: 2, category: 'toy', steps: 14, minutes: 8, sheets: 1, paper: 4 },
   { id: 'masu-box', title: 'Masu box', blurb: 'A square box from one sheet, its corners locked in by the ends.', difficulty: 2, category: 'object', steps: 22, minutes: 10, sheets: 1 },
-  { id: 'envelope', title: 'Envelope', blurb: 'A letter envelope from a sheet of printer paper, its top flap tucked in. No glue.', difficulty: 2, category: 'object', steps: 27, minutes: 8, sheets: 1 },
+  { id: 'envelope', title: 'Envelope', blurb: 'A letter envelope from a sheet of printer paper, its top flap tucked in. No glue.', difficulty: 2, category: 'object', steps: 27, minutes: 8, sheets: 1, paper: 1.41 },
   { id: 'masu-lid', title: 'Masu box lid', blurb: 'A lid for the masu box: the same folds, the corners stopping just short of the middle.', difficulty: 2, category: 'object', steps: 22, minutes: 10, sheets: 1 },
   { id: 'pajarita', title: 'Pajarita', blurb: 'The little paper bird of Spain, from a square with its corners folded in.', difficulty: 2, category: 'animal', steps: 19, minutes: 10, sheets: 1 },
-  { id: 'boomerang', title: 'Boomerang', blurb: 'A flat paper boomerang that flies out, turns and comes back.', difficulty: 3, category: 'toy', steps: 10, minutes: 10, sheets: 1 },
+  { id: 'boomerang', title: 'Boomerang', blurb: 'A flat paper boomerang that flies out, turns and comes back.', difficulty: 3, category: 'toy', steps: 10, minutes: 10, sheets: 1, paper: 1.54 },
   { id: 'fish', title: 'Fish', blurb: 'A very easy fish, all triangles.', difficulty: 1, category: 'animal', steps: 9, minutes: 3, sheets: 1 },
   // Coming soon: listed, with no steps yet.
   { id: 'boat', title: 'Boat', blurb: 'The classic paper boat. It really floats, for a while.', difficulty: 2, category: 'object', minutes: 6, sheets: 1 },
