@@ -159,3 +159,38 @@ describe('shape, combining bends', () => {
     expect(at(fromStrip, -0.5, 0.5)[1]).toBeCloseTo(0.8 * Math.sin(Math.PI / 3));
   });
 });
+
+describe('shape, riding layers', () => {
+  // A strip folded in from the right edge lies across the line x = 0.1, where the paper beyond turns up into a wall.
+  const folded = () =>
+    new Recipe({ id: 't', title: 't', sheet: { size: [1, 1], front: '#fff', back: '#000' } }).along(table(0.25, -1), table(0.25, 1), table(0.45, 0), {
+      title: 'Fold the strip in',
+    });
+  const wall = { through: [table(0.1, -1), table(0.1, 1)] as [ReturnType<typeof table>, ReturnType<typeof table>], moving: table(0.2, 0), degrees: 90 };
+
+  it('moves each piece of a riding layer with the face it lies on', () => {
+    const model = folded()
+      .shape({ title: 'Raise the wall' }, [wall], { chained: paper(-0.3, 0), ride: ([u]) => u > 0.25 })
+      .build();
+    const frame = model.steps.at(-1)!.frame;
+    // The strip lies from x = 0.25 (its fold, paper u = 0.25) back to x = 0 (its edge, u = 0.5). Its paper over the
+    // floor (u past 0.4) stays down; its paper over the wall stands up with it, its fold at the wall's top.
+    const strip = (lo: number, hi: number) => frame.vertices_coords.filter((_, v) => frame.vertices_paper[v][0] > lo && frame.vertices_paper[v][0] < hi);
+    expect(Math.max(...strip(0.41, 0.51).map((p) => p[1]))).toBeLessThan(0.01);
+    expect(Math.min(...strip(0.24, 0.26).map((p) => p[1]))).toBeCloseTo(0.15, 2);
+    expect(problems(model)).toEqual([]);
+  });
+
+  it('keeps riding layers in .fold files, so the step folds again the same', async () => {
+    const { fromFoldFile, toFoldFile } = await import('./fold-format');
+    const { replay } = await import('./ops');
+    const model = folded()
+      .shape({ title: 'Raise the wall' }, [wall], { chained: paper(-0.3, 0), ride: ([u]) => u > 0.25 })
+      .build();
+    const read = fromFoldFile(JSON.parse(JSON.stringify(toFoldFile(model))));
+    expect(read.steps.at(-1)!.op).toMatchObject({ op: 'shape', ride: { inPaper: expect.any(Array) } });
+    const again = replay(read);
+    expect(again.error).toBeUndefined();
+    expect(toFoldFile(again.model)).toEqual(toFoldFile(read));
+  });
+});

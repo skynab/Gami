@@ -54,7 +54,7 @@ export class Recipe {
   private start: FoldFrame;
   private steps: Step[] = [];
   /** After 3D shaping: the flat state it started from, and its bends so far. */
-  private shaping?: { base: FoldFrame; bends: Bend[]; corners: boolean; chained?: Vec2 };
+  private shaping?: { base: FoldFrame; bends: Bend[]; corners: boolean; chained?: Vec2; ride?: (paper: Vec2[]) => boolean };
   /** The section the next step starts, from `section()`. */
   private sectionName?: string;
 
@@ -329,13 +329,17 @@ export class Recipe {
      * `corners`: bends whose lines cross are walls rising together, the corners between them pinching into ears.
      * `chained`: the bends open folds along the paper from the face at this point of the sheet, each fold on a
      * bend's line opening by its angle, so stacked pleats open one by one into a zigzag.
+     * `ride`: with `chained`, the faces (by their centre on the sheet) held flat on whatever lies beneath them,
+     * moving with it rather than crease by crease: a rim folded in onto a wall, a flap lying on the floor.
      */
-    { corners = false, chained }: { corners?: boolean; chained?: At } = {},
+    { corners = false, chained, ride }: { corners?: boolean; chained?: At; ride?: (centre: Vec2) => boolean } = {},
   ): this {
     const base = this.shaping?.base ?? this.current;
     const anyCorners = corners || !!this.shaping?.corners;
     if (chained && !('paper' in chained)) throw new FoldError(`${this.info.id}: a chained shape's anchor must be a point on the sheet.`);
     const anchor = chained ? chained.paper : this.shaping?.chained;
+    const rideTest = ride && recorder(ride);
+    const riding = rideTest ?? this.shaping?.ride;
     const tests = bends.map((b) => b.only && recorder(b.only));
     const added = bends.flatMap((b, k): Bend[] => {
       const test = tests[k];
@@ -356,7 +360,7 @@ export class Recipe {
     const bendsSoFar = [...(this.shaping?.bends ?? []), ...added];
     try {
       // Shaped again from the flat state: each face's parent is the face of the last step it lies within.
-      const shaped = shape(base, bendsSoFar, { corners: anyCorners, ...(anchor && { chained: anchor }) });
+      const shaped = shape(base, bendsSoFar, { corners: anyCorners, ...(anchor && { chained: anchor }), ...(riding && { ride: riding }) });
       const frame = this.shaping ? reparent(this.current, shaped) : shaped;
       this.push({ title: step.title, text: step.text, kind: 'pose' }, frame, {
         op: 'shape',
@@ -370,12 +374,13 @@ export class Recipe {
         })),
         ...(corners && { corners: true }),
         ...(chained && { chained }),
+        ...(rideTest && { ride: rideTest.faces() }),
       });
     } catch (e) {
       if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
       throw e;
     }
-    this.shaping = { base, bends: bendsSoFar, corners: anyCorners, ...(anchor && { chained: anchor }) };
+    this.shaping = { base, bends: bendsSoFar, corners: anyCorners, ...(anchor && { chained: anchor }), ...(riding && { ride: riding }) };
     return this;
   }
 

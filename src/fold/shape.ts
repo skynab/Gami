@@ -28,9 +28,18 @@ export interface Bend {
 export function shape(
   frame: FoldFrame,
   bends: Bend[],
-  { corners = false, chained }: { corners?: boolean; chained?: Vec2 } = {},
+  {
+    corners = false,
+    chained,
+    ride,
+  }: {
+    corners?: boolean;
+    chained?: Vec2;
+    /** With `chained`: faces (by their corners on the sheet) held flat on whatever lies beneath, moving with it. */
+    ride?: (paper: Vec2[]) => boolean;
+  } = {},
 ): FoldFrame {
-  if (chained) return opened(frame, bends, chained);
+  if (chained) return opened(frame, bends, chained, ride);
   const faces = toFlat(frame);
   // Which of the flat state's faces each bend turns (before cutting them along the bend lines).
   const turns = bends.map((b) => {
@@ -262,16 +271,20 @@ function cornerPlacer(a: Bend, b: Bend): { diagonal: Line; place(at: Vec2): (p: 
  * Faces are cut along the bends' lines first (where `only` accepts them). Every crease's two sides must still
  * meet afterwards, or the paper would stretch, and that's refused. The bends' `layers` aren't used.
  */
-function opened(frame: FoldFrame, bends: Bend[], anchor: Vec2): FoldFrame {
+function opened(frame: FoldFrame, bends: Bend[], anchor: Vec2, ride?: (paper: Vec2[]) => boolean): FoldFrame {
   let faces: FlatFace[] = toFlat(frame).map((f, i) => ({ ...f, parent: i }));
   for (const b of bends) {
     faces = faces.flatMap((f) => {
-      if (b.only && !b.only(f.paper)) return [f];
+      // A riding face is cut along every bend line, so each piece lies on one face it can ride on.
+      if (b.only && !b.only(f.paper) && !(ride && ride(f.paper))) return [f];
       const { pos, neg } = split(f, b.line);
       return [pos, neg].filter((q) => q !== null).map((q) => ({ ...q!, layer: f.layer, parent: f.parent }));
     });
   }
-  const start = faces.findIndex((f) => contains(f.paper, anchor));
+  // Riding faces (a rim folded in onto a wall, a flap lying on the floor) aren't walked: each moves with the face
+  // it lies on, found once the rest have moved.
+  const riding = faces.map((f) => !!ride && ride(f.paper));
+  const start = faces.findIndex((f, i) => !riding[i] && contains(f.paper, anchor));
   if (start < 0) throw new FoldError('The anchor point isn’t on the paper.');
   const n = faces.length;
   // Faces joined along an edge, and that edge on the sheet.
@@ -325,7 +338,7 @@ function opened(frame: FoldFrame, bends: Bend[], anchor: Vec2): FoldFrame {
   while (queue.length) {
     const u = queue.shift()!;
     for (const { other: w, shared } of joins[u]) {
-      if (moved[w]) continue;
+      if (moved[w] || riding[w]) continue;
       const [a, b] = shared.map((q) => placeLike(faces[u])(q));
       const bend = onBend(a, b, u, w);
       if (!bend || !bend.angle) {
@@ -363,6 +376,18 @@ function opened(frame: FoldFrame, bends: Bend[], anchor: Vec2): FoldFrame {
       queue.push(w);
     }
   }
+  for (let i = 0; i < n; i++) {
+    if (!riding[i]) continue;
+    // The face it lies on: the highest walked face below it, under its middle.
+    const c = centre(faces[i].world);
+    let under = -1;
+    for (let j = 0; j < n; j++) {
+      if (riding[j] || !moved[j] || faces[j].layer >= faces[i].layer || !contains(faces[j].world, c)) continue;
+      if (under < 0 || faces[j].layer > faces[under].layer) under = j;
+    }
+    if (under < 0) throw new FoldError('A riding layer has nothing beneath it to ride on.');
+    moved[i] = moved[under];
+  }
   const index = new Map<string, number>();
   const vertices_paper: Vec2[] = [];
   const vertices_coords: Vec3[] = [];
@@ -377,12 +402,15 @@ function opened(frame: FoldFrame, bends: Bend[], anchor: Vec2): FoldFrame {
       return vertices_coords.push(at) - 1;
     }),
   );
-  // Each fold's two sides must still meet where they're joined.
+  // Each fold's two sides must still meet where they're joined. A riding face lies a few layers off the face it
+  // rides on wherever that turns over a fold, so it may end up that much off its neighbours there.
+  const RIDING_SLACK = 6;
   for (let i = 0; i < n; i++) {
     for (const { other: j, shared } of joins[i]) {
       for (const q of shared) {
         const [p1, p2] = [apply(moved[i] ?? identity, flatAt(i, q)), apply(moved[j] ?? identity, flatAt(j, q))];
-        if (Math.hypot(p1[0] - p2[0], p1[1] - p2[1], p1[2] - p2[2]) > LAYER_GAP * Math.abs(faces[i].layer - faces[j].layer) + 1e-6) {
+        const slack = riding[i] || riding[j] ? RIDING_SLACK : 0;
+        if (Math.hypot(p1[0] - p2[0], p1[1] - p2[1], p1[2] - p2[2]) > LAYER_GAP * (Math.abs(faces[i].layer - faces[j].layer) + slack) + 1e-6) {
           throw new FoldError('Those folds can’t all open together without stretching the paper.');
         }
       }
