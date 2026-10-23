@@ -290,9 +290,19 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      checks how far apart they are first, in plain numbers, and the search looks only at points in each
      triangle's box, without sorting: the twice-folded sheet went from 19 s to 8 s, and the bending tests from 25 s
      to 10 s, though settling each stage now takes up to 800 passes rather than 400.
-   - **Next.** The boat's goals as points still fail with these fixes (18% stretch): they move in straight lines
-     through a 13-layer stack. Give its opening as crease angles, which means working out which of the small
-     diamond's creases open, and by how much, as the hull spreads.
+   - **The boat's shape** (from origami.me's photos of the last step and the finished boat). The bow and stern
+     are the small diamond's side corners, (∓0.25, ±0.25) on the sheet, not the flaps at its top; the sail is its
+     top, with the sheet's middle at its tip; the striped brims end up inside the hull. The side corners are
+     already as far apart as the paper lets them be (0.5, along the sheet's diagonals), so pulling the ends out
+     keeps them taut while the bottom opens. The diamond's faces are triangles cut along its slit (top corner to
+     bottom), each pair folded together along a line from a side corner to the bottom one (where the bottom point
+     was folded up), and front and back join along its top edges, which meet at the sail. So the hull opens like
+     a hat unsquashed, its edge dipping to the sail in the middle, as the photo shows.
+   - **Tried.** Turning the front wall's bottom corner up about the bow–stern line, with goals that turn a point
+     about a line (on `wip/boat`, as a patch): one way round passes through the paper at once, the other jams at
+     about 35°, as nothing in the paper folds along that line.
+   - **Next.** Work out where each of the diamond's 28 faces goes in the finished boat (a paper model would settle
+     it), then give the opening as those faces' crease angles.
 
 8. **The iris, later.** It needs paper that bends and then lies flat again (a "relax to flat" mode, or using the
    solver to find the crease pattern real paper takes). Revisit once 1–7 are done.
