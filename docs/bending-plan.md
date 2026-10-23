@@ -229,6 +229,21 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      surface from the pinch to its place on the arc) and let the solver only settle it and the frames on the
      way; and see where the time goes at this size.
 7. **The boat.** Pulling the diamond's points apart, as a bend from the small diamond. Done as for the fan.
+
+   **Started; not reachable yet.** What the first try found (on `wip/boat`):
+   - **The branch.** Its recipe and collapse change still apply to `dev`, and the boat folds to the small diamond
+     (28 faces, 13 layers) with no `problems`. But its two diamond squashes pass paper through paper: the first
+     by 14 cm, the second by 1.7 cm. They need the staged and hinged playing other squashes have before the boat
+     can go in the gallery, whatever happens to its last step.
+   - **Which points.** One corner of the small diamond holds the sheet's centre (the sail's tip) and the four hat
+     corners (±0.5, ±0.5), the bow and stern. origami.me opens the bottom and pulls the ends out; the bend pulled
+     the (−0.5, ·) corners one way and the (0.5, ·) the other, along the diamond, with the sail held.
+   - **The solver.** At mesh 0.08 (1400 triangles), 37 s to solve. The in-between frames stay within about 2%, but
+     the last, where the goals are held, stretches 11%, and paper goes up to 1.9 cm through paper on the way.
+     Pulling the ends 0.2 or 0.4 apart did no better, and pulling across the diamond was worse (22%).
+   - **Next.** As for the fan: the solver doesn't find a shape this far from a flat stack. Both need the shape
+     built first (here, the hull's sides and the sail as rigid panels opened about the diamond's creases), with
+     the solver settling it and the frames on the way.
 8. **The iris, later.** It needs paper that bends and then lies flat again (a "relax to flat" mode, or using the
    solver to find the crease pattern real paper takes). Revisit once 1–7 are done.
 
