@@ -24,7 +24,7 @@ describe('paper passing through paper', () => {
   });
 
   it('keeps the simple models clean', () => {
-    for (const id of ['basics', 'paper-plane', 'cup', 'fortune-teller', 'sword']) expect(deep(byId(id)), id).toEqual([]);
+    for (const id of ['basics', 'paper-plane', 'cup', 'fortune-teller', 'sword', 'fish']) expect(deep(byId(id)), id).toEqual([]);
   });
 
   it('turns stacked layers over together, the same way round', () => {

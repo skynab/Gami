@@ -1538,4 +1538,30 @@ export const ja: Record<string, string> = {
     "もう一つの角も",
   "And the left corner. Press the boomerang flat, and check it lies flat on the table.":
     "左の角も入れます。ブーメランを平らに押さえ、テーブルの上で平らになるか確かめます。",
+  "Fold the top corner down onto the bottom corner, making a triangle.":
+    "上の角を下の角に合わせて折り、三角形にします。",
+  "Fold the top point up":
+    "上の先を折り上げる",
+  "Fold the bottom point of the top layer up, so it pokes out a little above the long edge.":
+    "一番上の紙の下の角を折り上げて、長い辺から少しはみ出すようにします。",
+  "Fold the lower edge up":
+    "下の辺を折り上げる",
+  "Fold the lower left edge up onto the crease you just made.":
+    "左下の辺を、いまつけた折り目に合わせて折り上げます。",
+  "Fold the flap back down":
+    "フラップを折り下ろす",
+  "Fold most of that flap back down again, a little above its crease, so it sticks out underneath.":
+    "そのフラップの大部分を、折り目の少し上でもう一度折り下ろし、下から少しはみ出させます。",
+  "Fold the left corner over to the right so it points straight up. This makes the tail.":
+    "左の角を右へ折って、まっすぐ上を向くようにします。これが尾びれになります。",
+  "Fold the tail’s tip to the left":
+    "尾びれの先を左へ折る",
+  "Fold the top of the tail back over to the left. How far sets the size of the tail.":
+    "尾びれの先を左へ折り返します。折る量で尾びれの大きさが決まります。",
+  "Turn the fish over from left to right.":
+    "魚を左から右へ裏返します。",
+  "Fold the head down":
+    "頭を折り下ろす",
+  "Fold the top left corner down onto the bottom corner. That’s the head, and your fish is done!":
+    "左上の角を下の角に合わせて折り下ろします。これが頭です。魚の完成です!",
 };

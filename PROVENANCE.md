@@ -66,7 +66,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `frog` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/traditional-frog](https://origami.me/traditional-frog/) | Clear | 21 Oct 2026 |
 | `penguin` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/penguin](https://origami.me/penguin/) | Clear | 21 Oct 2026 |
 | `whale` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/whale](https://origami.me/whale/) | Clear | 21 Oct 2026 |
-| `fish` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/fish](https://origami.me/fish/) | Clear | Coming soon, listed 21 Oct 2026 |
+| `fish` | Traditional (origami.me: "Traditional"; Gilad's database lists simple fish as "Traditional") | None needed: nobody owns it | [origami.me/fish](https://origami.me/fish/), for the order of folds; Gami chose its own reference points, as origami.me gives none | Clear | 22 Oct 2026 |
 | `dolphin` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/dolphin](https://origami.me/dolphin/) | Clear | 21 Oct 2026 |
 | `crow` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/crow](https://origami.me/crow/) | Clear | 21 Oct 2026 |
 | `butterfly` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/butterfly](https://origami.me/butterfly/) | Clear | 21 Oct 2026 |

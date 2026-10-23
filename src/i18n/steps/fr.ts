@@ -1538,4 +1538,30 @@ export const fr: Record<string, string> = {
     "Et son autre coin",
   "And the left corner. Press the boomerang flat, and check it lies flat on the table.":
     "Puis le coin gauche. Aplatissez le boomerang et vérifiez qu’il repose bien à plat sur la table.",
+  "Fold the top corner down onto the bottom corner, making a triangle.":
+    "Rabattez le coin du haut sur le coin du bas pour former un triangle.",
+  "Fold the top point up":
+    "Pliez la pointe vers le haut",
+  "Fold the bottom point of the top layer up, so it pokes out a little above the long edge.":
+    "Pliez vers le haut la pointe du bas de la couche du dessus, pour qu’elle dépasse un peu au-dessus du grand bord.",
+  "Fold the lower edge up":
+    "Pliez le bord inférieur vers le haut",
+  "Fold the lower left edge up onto the crease you just made.":
+    "Pliez le bord inférieur gauche vers le haut, sur le pli que vous venez de faire.",
+  "Fold the flap back down":
+    "Redescendez le rabat",
+  "Fold most of that flap back down again, a little above its crease, so it sticks out underneath.":
+    "Repliez presque tout ce rabat vers le bas, un peu au-dessus de son pli, pour qu’il dépasse en dessous.",
+  "Fold the left corner over to the right so it points straight up. This makes the tail.":
+    "Pliez le coin gauche vers la droite pour qu’il pointe droit vers le haut. C’est la queue.",
+  "Fold the tail’s tip to the left":
+    "Pliez le bout de la queue vers la gauche",
+  "Fold the top of the tail back over to the left. How far sets the size of the tail.":
+    "Repliez le haut de la queue vers la gauche. La quantité pliée fixe la taille de la queue.",
+  "Turn the fish over from left to right.":
+    "Retournez le poisson de gauche à droite.",
+  "Fold the head down":
+    "Pliez la tête vers le bas",
+  "Fold the top left corner down onto the bottom corner. That’s the head, and your fish is done!":
+    "Rabattez le coin supérieur gauche sur le coin du bas. C’est la tête, et votre poisson est fini !",
 };

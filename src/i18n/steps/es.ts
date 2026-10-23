@@ -1538,4 +1538,30 @@ export const es: Record<string, string> = {
     "Y su otra esquina",
   "And the left corner. Press the boomerang flat, and check it lies flat on the table.":
     "Y la esquina izquierda. Aplana el bumerán y comprueba que quede plano sobre la mesa.",
+  "Fold the top corner down onto the bottom corner, making a triangle.":
+    "Lleva la esquina de arriba a la de abajo y forma un triángulo.",
+  "Fold the top point up":
+    "Dobla la punta hacia arriba",
+  "Fold the bottom point of the top layer up, so it pokes out a little above the long edge.":
+    "Dobla hacia arriba la punta de abajo de la capa superior, de modo que sobresalga un poco por encima del borde largo.",
+  "Fold the lower edge up":
+    "Dobla el borde inferior hacia arriba",
+  "Fold the lower left edge up onto the crease you just made.":
+    "Dobla el borde inferior izquierdo hacia arriba, hasta el pliegue que acabas de hacer.",
+  "Fold the flap back down":
+    "Baja de nuevo la solapa",
+  "Fold most of that flap back down again, a little above its crease, so it sticks out underneath.":
+    "Vuelve a doblar hacia abajo casi toda la solapa, un poco por encima de su pliegue, para que asome por debajo.",
+  "Fold the left corner over to the right so it points straight up. This makes the tail.":
+    "Dobla la esquina izquierda hacia la derecha para que apunte recto hacia arriba. Esta es la cola.",
+  "Fold the tail’s tip to the left":
+    "Dobla la punta de la cola a la izquierda",
+  "Fold the top of the tail back over to the left. How far sets the size of the tail.":
+    "Dobla la parte de arriba de la cola hacia la izquierda. Cuánto dobles decide el tamaño de la cola.",
+  "Turn the fish over from left to right.":
+    "Da la vuelta al pez de izquierda a derecha.",
+  "Fold the head down":
+    "Dobla la cabeza hacia abajo",
+  "Fold the top left corner down onto the bottom corner. That’s the head, and your fish is done!":
+    "Dobla la esquina superior izquierda hasta la esquina de abajo. Esa es la cabeza, ¡y tu pez está terminado!",
 };
