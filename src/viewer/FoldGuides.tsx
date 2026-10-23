@@ -27,7 +27,7 @@ export function FoldGuides({ model, color }: { model: OrigamiModel; color: strin
   if (!show || !total || step > total) return null;
   let g = cache.get(step);
   if (!g) {
-    g = guidesFor(frames[step - 1], frames[step]);
+    g = guidesFor(frames[step - 1], frames[step], model.steps[step - 1].via);
     cache.set(step, g);
   }
 

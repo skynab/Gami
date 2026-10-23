@@ -1,4 +1,4 @@
-import { move, transition, type Motion } from './animate';
+import { move, poseAt, transition, transitionVia, type Motion } from './animate';
 import { sharedSegment } from './geometry2d';
 import type { FoldFrame, Vec2, Vec3 } from './types';
 
@@ -38,7 +38,9 @@ const MIN_ARROW = 0.05;
 /** At most this many arrows, for the parts that move furthest. */
 const MAX_ARROWS = 2;
 
-export function guidesFor(from: FoldFrame, to: FoldFrame): Guides {
+/** `via`: the frames the step passes through on its way, if any (a bend's). */
+export function guidesFor(from: FoldFrame, to: FoldFrame, via: FoldFrame[] = []): Guides {
+  if (to.soft?.length) return bendGuides(from, to, via);
   const t = transition(from, to);
   const still = (m: Motion) => !m.angle && m.shift.lengthSq() < 1e-12 && !m.lift;
 
@@ -93,6 +95,25 @@ export function guidesFor(from: FoldFrame, to: FoldFrame): Guides {
   }
 
   return { creases: mergeCollinear(creases), arrows, cuts: mergeCollinear(cuts.map((c) => ({ ...c, valley: true }))).map(({ a, b }) => ({ a, b })) };
+}
+
+/**
+ * Paper that bends has no one crease to draw, nor parts moving as one: an arrow follows the corner that goes
+ * furthest, through where it is halfway.
+ */
+function bendGuides(from: FoldFrame, to: FoldFrame, via: FoldFrame[]): Guides {
+  const t = transitionVia([from, ...via, to]);
+  const half = poseAt(t, 0.5);
+  let best: ArrowGuide & { d: number } = { from: [0, 0, 0], via: [0, 0, 0], to: [0, 0, 0], d: 0 };
+  t.faces.forEach((f, i) =>
+    f.before.forEach((p, c) => {
+      const q = f.after[c];
+      const d = Math.hypot(q[0] - p[0], q[1] - p[1], q[2] - p[2]);
+      if (d > best.d) best = { from: p, via: half[i][c], to: q, d };
+    }),
+  );
+  const { d, ...arrow } = best;
+  return { creases: [], arrows: d > MIN_ARROW ? [arrow] : [], cuts: [] };
 }
 
 /** Whether a point lies on a polygon's outline. */

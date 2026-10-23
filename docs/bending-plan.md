@@ -168,13 +168,26 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      keeps every frame within 1%, most within 0.1%; the test holds them to 2%.
    - The arch's end now lands within 5 mm of its goal on a 1-long strip (was 2), as the last pass on lengths lets
      it give a little; holding it there instead leaves the strip stretched 6%.
-2. **Mesh and frames.** Triangulate the `flex` faces of a frame (and the rest coarsely), run the solver from the
-   frame's 3D positions (`facePositions`, with layer gaps), write the result back as a frame with `gami:soft`
-   and `faces_parent`. Done when a flat sheet bent by two handles round-trips through a `.fold` file.
-3. **The operation.** `bend` in `ops.ts` (types, `parseOp`, replay), `Recipe.bend`, in-between frames. Done when a
-   test model with a bend step replays from its file to the same frames.
 4. **Drawing and animation.** Soft edges in the viewer and cards; bent steps play through their in-between frames.
    Done when the test model plays smoothly in the viewer with no visible mesh lines.
+
+   **Done** (`animate.ts`: `blended`; `FoldedPaper.tsx`; `thumbnail.ts`; `guides.ts`). What it found:
+   - **Playing between frames.** The usual way, each triangle's own screw motion, tore the mesh apart mid-stretch
+     (corners up to 3 mm apart on a 1-long sheet) and took over a second to work out, as every triangle became a
+     part of its own and was tried for passing through paper. A step into a frame with soft edges instead moves
+     each triangle by its own screw motion and puts every corner where the triangles sharing it place it on
+     average, so the mesh stays joined; it takes milliseconds. Moving corners in straight lines shrank triangles
+     that turn a lot (10%); turning each about its middle, 5.6%; screws, 3.8%, all of it one small triangle by the
+     pulled corner that turns 53° in the last stretch, where the solver lets the goals' points give. The test
+     holds it to 5%; checking strain (step 5) will say whether the last stage needs more frames.
+   - **Seams, not creases.** Rigid faces are meshed too, so their seams showed as lines. `gami:soft` now marks
+     every edge between triangles cut from one face, rigid or bending; rigid ones are still held exactly.
+   - **Drawing.** Soft edges get no line, no rounded join between layers, and normals averaged round each vertex
+     across them, so bent paper shades smoothly. Cards seen at a slant outline bent triangles in their own colour
+     to close the hairline seams, and line only their other edges.
+   - **Guides.** A bend has no single crease or part moving as one: the step's guide is one arrow along the
+     path of the corner that goes furthest, through where it is halfway. The viewer passes guides the step's
+     in-between frames, as a bent frame's faces point back at the last of them, not the step before.
 5. **Checks.** Strain check, tolerances, crossings at in-between frames. Done when the test model passes `problems`
    and its crossings stay within a layer.
 6. **The fan.** Its last step, the spread, as a bend. Done when it's in the gallery, the file is under budget, and

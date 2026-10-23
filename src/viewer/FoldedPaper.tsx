@@ -14,10 +14,10 @@ import {
 } from 'three';
 import { affine, poseAt, stepTransition, transition, type Transition } from '../fold/animate';
 import { framesOf, normal } from '../fold/frames';
-import { joinedSegment, type Cut } from '../fold/geometry2d';
+import { joinedSegment } from '../fold/geometry2d';
 import { MARK_COLOUR, MARK_WIDTH, marksUpTo, onFace } from '../fold/marks';
 import { sheetOf } from '../fold/sheets';
-import type { OrigamiModel, Vec2, Vec3 } from '../fold/types';
+import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from '../fold/types';
 import { usePlayback } from '../state/playback';
 
 /**
@@ -26,6 +26,8 @@ import { usePlayback } from '../state/playback';
  * Stacked layers are drawn a little apart, so where a fold joins two of them a rounded bend closes the gap, in
  * the colour of the paper's outside there: seen from the side, it shows which layers are one piece.
  * Marks drawn on the paper ride on their faces, and a step that draws them draws them stroke by stroke.
+ * Paper that bends is many small triangles: the edges between them (soft) get no lines, and it's shaded smoothly
+ * across them.
  * Geometry is rebuilt when the step changes (folds add faces) and updated in place on every frame.
  */
 export function FoldedPaper({ model, edgeColor }: { model: OrigamiModel; edgeColor: string }) {
@@ -132,9 +134,9 @@ function build(t: Transition, model: OrigamiModel, k: number): Built {
   const { sheets } = model;
   const bySheet = sheets.map(() => [] as number[]);
   t.faces.forEach((f, i) => bySheet[sheetOf(sheets, f.paper)].push(i));
-  // Faces either side of a scissor cut aren't joined: no bend is drawn between them.
-  const cuts = (k ? model.steps[k - 1].frame : model.start).cuts;
-  const parts = bySheet.map((faces) => buildPart(t, faces, cuts));
+  // Faces either side of a scissor cut aren't joined: no bend is drawn between them. The step's faces are its frame's.
+  const frame = k ? model.steps[k - 1].frame : model.start;
+  const parts = bySheet.map((faces) => buildPart(t, faces, frame));
   const marks = buildMarks(t, model, k);
   return {
     parts: parts.map((p) => p.part),
@@ -218,14 +220,16 @@ function buildMarks(t: Transition, model: OrigamiModel, k: number): { geometry: 
   };
 }
 
-function buildPart(t: Transition, faceIndices: number[], cuts?: Cut[]): { part: Part; update(pose: ReturnType<typeof poseAt>): void; dispose(): void } {
+function buildPart(t: Transition, faceIndices: number[], frame: FoldFrame): { part: Part; update(pose: ReturnType<typeof poseAt>): void; dispose(): void } {
+  const { cuts } = frame;
   const tracks = faceIndices.map((i) => t.faces[i]);
   const corners = tracks.reduce((n, f) => n + f.paper.length, 0);
   const positions = new Float32Array(corners * 3);
   const normals = new Float32Array(corners * 3);
   const uvs = new Float32Array(corners * 2);
   const index: number[] = [];
-  const edgePositions = new Float32Array(corners * 6);
+  const { lines, smooth, softly } = softness(frame, faceIndices);
+  const edgePositions = new Float32Array(lines.length * 6);
 
   let base = 0;
   for (const f of tracks) {
@@ -249,6 +253,8 @@ function buildPart(t: Transition, faceIndices: number[], cuts?: Cut[]): { part: 
     for (let b = a + 1; b < tracks.length; b++) {
       const [p, q] = [boxes[a], boxes[b]];
       if (p[0] > q[2] + 1e-7 || q[0] > p[2] + 1e-7 || p[1] > q[3] + 1e-7 || q[1] > p[3] + 1e-7) continue;
+      // Triangles of bending paper meet edge to edge, with no gap to close.
+      if (softly(a, b)) continue;
       const ends = joinedSegment(tracks[a].paper, tracks[b].paper, cuts);
       if (ends) joins.push({ a, b, ends });
     }
@@ -329,18 +335,20 @@ function buildPart(t: Transition, faceIndices: number[], cuts?: Cut[]): { part: 
     part: { surface, edges, bends },
     update(pose) {
       let c = 0;
-      let e = 0;
-      for (const points of faceIndices.map((i) => pose[i])) {
-        const n = normal(points);
-        points.forEach((p, i) => {
+      const faceNormals = faceIndices.map((i) => normal(pose[i]));
+      faceIndices.forEach((i, a) => {
+        pose[i].forEach((p) => {
+          const group = smooth[c];
           positions.set(p, c * 3);
-          normals.set(n, c * 3);
+          normals.set(group ? unit(group.reduce((n, b) => add(n, faceNormals[b]), [0, 0, 0] as Vec3)) : faceNormals[a], c * 3);
           c++;
-          edgePositions.set(p, e);
-          edgePositions.set(points[(i + 1) % points.length], e + 3);
-          e += 6;
         });
-      }
+      });
+      lines.forEach(([a, i], e) => {
+        const points = pose[faceIndices[a]];
+        edgePositions.set(points[i], e * 6);
+        edgePositions.set(points[(i + 1) % points.length], e * 6 + 3);
+      });
       surface.attributes.position.needsUpdate = true;
       surface.attributes.normal.needsUpdate = true;
       edges.attributes.position.needsUpdate = true;
@@ -352,6 +360,53 @@ function buildPart(t: Transition, faceIndices: number[], cuts?: Cut[]): { part: 
       for (const g of bends) g.dispose();
     },
   };
+}
+
+/**
+ * For one sheet's faces (indices into `frame`'s): the face edges to draw as lines, as [face, corner] (soft edges
+ * have none); for each corner, in order, the faces whose normals it's shaded with when bending paper meets it
+ * smoothly there (undefined for a plain corner); and whether two faces meet along a soft edge.
+ */
+function softness(frame: FoldFrame, faceIndices: number[]) {
+  const key = (u: number, v: number) => (u < v ? `${u} ${v}` : `${v} ${u}`);
+  const soft = new Set((frame.soft ?? []).map(([u, v]) => key(u, v)));
+  const corners = (a: number) => frame.faces_vertices[faceIndices[a]];
+  const lines: [number, number][] = [];
+  // The faces on each soft edge.
+  const across = new Map<string, number[]>();
+  faceIndices.forEach((_, a) =>
+    corners(a).forEach((u, c, vs) => {
+      const k = key(u, vs[(c + 1) % vs.length]);
+      if (!soft.has(k)) lines.push([a, c]);
+      else across.set(k, [...(across.get(k) ?? []), a]);
+    }),
+  );
+  // Faces meeting smoothly at each vertex: joined round it, soft edge by soft edge.
+  const parent = new Map<string, string>();
+  const find = (x: string): string => {
+    const p = parent.get(x) ?? x;
+    if (p === x) return x;
+    const r = find(p);
+    parent.set(x, r);
+    return r;
+  };
+  for (const [k, faces] of across) {
+    const [u, v] = k.split(' ');
+    for (const b of faces.slice(1)) for (const w of [u, v]) parent.set(find(`${w}:${faces[0]}`), find(`${w}:${b}`));
+  }
+  const groups = new Map<string, number[]>();
+  faceIndices.forEach((_, a) => corners(a).forEach((u) => {
+    const r = find(`${u}:${a}`);
+    groups.set(r, [...(groups.get(r) ?? []), a]);
+  }));
+  const smooth = faceIndices.flatMap((_, a) =>
+    corners(a).map((u) => {
+      const group = groups.get(find(`${u}:${a}`))!;
+      return group.length > 1 ? group : undefined;
+    }),
+  );
+  const pairs = new Set([...across.values()].flatMap((faces) => faces.flatMap((a) => faces.map((b) => `${a} ${b}`))));
+  return { lines, smooth, softly: (a: number, b: number) => pairs.has(`${a} ${b}`) };
 }
 
 const add = (a: Vec3, b: Vec3): Vec3 => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];

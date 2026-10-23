@@ -6,8 +6,8 @@ import { solve } from './solver';
 
 /**
  * Bending a frame (see docs/bending-plan.md): its faces cut into small triangles on the sheet, the solver run from
- * where they are in 3D, and the result written back as frames of triangles. Edges between triangles of paper
- * that bends are soft (`FoldFrame.soft`); every triangle points back at the face it came from.
+ * where they are in 3D, and the result written back as frames of triangles. Edges between triangles cut from
+ * one face are soft (`FoldFrame.soft`); every triangle points back at the face it came from.
  */
 
 /** A frame's faces as one mesh of triangles, joined where the faces are. */
@@ -177,8 +177,11 @@ export function bendFrame(frame: FoldFrame, options: BendOptions): { via: FoldFr
     const [f, g] = parentOf.get(edgeKey(a, b))!;
     const edge: [number, number] = a < b ? [a, b] : [b, a];
     if (f !== g) hinges.push({ edge, compliance: options.creaseCompliance ?? CREASE_COMPLIANCE });
-    else if (flexible.has(f)) soft.push(edge);
-    else hinges.push({ edge, compliance: 0 });
+    else {
+      // Cut from one face, so a seam of the mesh rather than a crease: soft, whether it bends or holds.
+      soft.push(edge);
+      if (!flexible.has(f)) hinges.push({ edge, compliance: 0 });
+    }
   }
 
   // The solver's fold angle turns the other way from a valley fold, with triangles wound as the sheet's faces are.

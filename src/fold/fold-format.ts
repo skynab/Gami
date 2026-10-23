@@ -26,7 +26,7 @@ interface FoldFileFrame {
   'gami:faces_layer'?: number[];
   /** Scissor cuts made so far, as segments on the sheet (see FoldFrame.cuts). */
   'gami:cuts'?: number[][][];
-  /** Edges between triangles of paper that bends (see FoldFrame.soft). */
+  /** Seams between triangles of bent paper cut from one face (see FoldFrame.soft). */
   'gami:soft'?: number[][];
   'gami:text'?: string;
   'gami:kind'?: StepKind;

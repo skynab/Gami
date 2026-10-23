@@ -73,6 +73,13 @@ export interface Transition {
    */
   makeWay?: { lifted: boolean[]; pivot: Vec3; axis: Vec3; angle: number };
   /**
+   * Into paper that bends (a frame with soft edges): each face makes its own screw motion from where it was to
+   * where it ends up (`moves`), then every corner is put where the faces sharing its vertex (`vertices`,
+   * the end frame's) place it on average, so the small triangles of bending paper stay joined. The frames a
+   * bend passes through are close together, so they barely disagree.
+   */
+  blend?: { moves: Motion[]; vertices: number[][] };
+  /**
    * When each face finishes its move (0–1): faces ending lower in the stack land first, so paper settles
    * bottom layer first, as it does by hand, instead of a lower layer coming down through upper ones.
    */
@@ -108,6 +115,7 @@ function transitionStaged(from: FoldFrame, to: FoldFrame, makeWay: boolean, stag
 }
 
 function workOut(from: FoldFrame, to: FoldFrame, makeWay: boolean, stages: number): Transition {
+  if (to.soft?.length) return blended(from, to);
   const t = moving(from, to);
   if (!makeWay) return t;
   const made = withWayMade(t);
@@ -130,6 +138,47 @@ function workOut(from: FoldFrame, to: FoldFrame, makeWay: boolean, stages: numbe
     }
   }
   return best;
+}
+
+/** Into a bent frame (see Transition.blend), all as one motion. */
+function blended(from: FoldFrame, to: FoldFrame): Transition {
+  const fromPositions = facePositions(from);
+  const toPositions = facePositions(to);
+  const faces = to.faces_vertices.map((face, f): FaceTrack => {
+    const parent = to.faces_parent?.[f] ?? f;
+    const paper = face.map((v) => to.vertices_paper[v]);
+    const toWorld = affine(from.faces_vertices[parent].map((v) => from.vertices_paper[v]), fromPositions[parent]);
+    return { paper, before: paper.map(toWorld), after: toPositions[f], motion: 0 };
+  });
+  cutsOf.set(faces, to.cuts ?? from.cuts ?? []);
+  const still: Motion = { axis: new Vector3(0, 1, 0), angle: 0, pivot: new Vector3(), shift: new Vector3(), lift: 0 };
+  const moves = faces.map((f) => {
+    const { q, t } = rigid(f.paper, f.before, f.after);
+    return screwsFor(q, t)[0];
+  });
+  return { faces, motions: [still], blend: { moves, vertices: to.faces_vertices } };
+}
+
+function blendedPose(t: Transition, s: number): Vec3[][] {
+  const { moves, vertices } = t.blend!;
+  const sum = new Map<number, { p: Vec3; n: number }>();
+  t.faces.forEach((f, i) =>
+    f.before.forEach((p, c) => {
+      const out = move(moves[i], p, s);
+      const e = sum.get(vertices[i][c]);
+      if (!e) sum.set(vertices[i][c], { p: out, n: 1 });
+      else {
+        e.p = [e.p[0] + out[0], e.p[1] + out[1], e.p[2] + out[2]];
+        e.n++;
+      }
+    }),
+  );
+  return vertices.map((face) =>
+    face.map((v) => {
+      const { p, n } = sum.get(v)!;
+      return [p[0] / n, p[1] / n, p[2] / n] as Vec3;
+    }),
+  );
 }
 
 /**
@@ -483,6 +532,7 @@ export function poseAt(t: Transition, s: number): Vec3[][] {
     });
   }
   if (t.hinges) return hingedPose(t, s);
+  if (t.blend) return blendedPose(t, s);
   return t.faces.map((f, i) => f.before.map((p) => move(t.motions[f.motion], p, landed(t, i, s))));
 }
 

@@ -108,6 +108,9 @@ function slanted(model: OrigamiModel, frame: FoldFrame, size: number): string {
   const dot = (a: Vec3, b: Vec3) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
   // Where each face is drawn, flat-lying layers lifted by their gaps as the viewer draws them.
   const placed = facePositions(frame);
+  // Edges between triangles of paper that bends get no line.
+  const key = (u: number, v: number) => (u < v ? `${u} ${v}` : `${v} ${u}`);
+  const soft = new Set((frame.soft ?? []).map(([u, v]) => key(u, v)));
   const faces = frame.faces_vertices.map((face, f) => {
     const world = placed[f];
     const n = normal(world);
@@ -116,6 +119,7 @@ function slanted(model: OrigamiModel, frame: FoldFrame, size: number): string {
     const facing: Vec3 = front ? n : [-n[0], -n[1], -n[2]];
     return {
       paper: face.map((v) => frame.vertices_paper[v]),
+      softly: face.map((u, c) => soft.has(key(u, face[(c + 1) % face.length]))),
       screen: world.map((p): Vec2 => [p[0], -dot(p, up)]),
       depth: world.reduce((s, p) => s + dot(p, toViewer), 0) / world.length,
       facing,
@@ -143,7 +147,12 @@ function slanted(model: OrigamiModel, frame: FoldFrame, size: number): string {
   const polys = faces
     .map((f) => {
       const fill = shade(faceColour(model, f.paper, f.front), 0.78 + 0.22 * f.light);
-      return `<polygon points="${f.screen.map((p) => p.map((n) => +n.toFixed(4)).join(',')).join(' ')}" fill="${fill}"/>`;
+      const at = (p: Vec2) => p.map((n) => +n.toFixed(4)).join(',');
+      const points = f.screen.map(at).join(' ');
+      if (!f.softly.some(Boolean)) return `<polygon points="${points}" fill="${fill}"/>`;
+      // Outlined in its own colour, closing the hairline seams between triangles, then lined on its other edges.
+      const d = f.screen.flatMap((p, c) => (f.softly[c] ? [] : [`M${at(p)}L${at(f.screen[(c + 1) % f.screen.length])}`])).join('');
+      return `<polygon points="${points}" fill="${fill}" stroke="${fill}" stroke-opacity="1"/>${d && `<path d="${d}" fill="none"/>`}`;
     })
     .join('');
   return (

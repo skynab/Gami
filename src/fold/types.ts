@@ -32,8 +32,8 @@ export interface FoldFrame {
    */
   cuts?: [Vec2, Vec2][];
   /**
-   * Edges between triangles of paper that bends (see docs/bending-plan.md), as pairs of vertices: drawn without
-   * crease lines, and shaded smoothly across.
+   * Edges between triangles of bent paper cut from one face (see docs/bending-plan.md), as pairs of vertices:
+   * seams of the mesh rather than creases, so drawn without lines, and shaded smoothly across.
    */
   soft?: [number, number][];
 }
