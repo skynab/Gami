@@ -114,6 +114,20 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
 1. **Solver spike** (`src/fold/bend/`, nothing else touched). XPBD on a hand-built mesh: a strip bent into an arc
    by moving its ends, and a square twisted by its corners. Tests: edge lengths within tolerance, no layer passes
    through another, the same result every run. Done when both shapes look right and the tests pass.
+
+   **Done** (`src/fold/bend/`). What it found:
+   - **Stiffness.** Edges exact (compliance 0), bending soft (1e-2), 12 stages of 120 iterations. On their own,
+     the stages leave long strips a little stretched (each pass carries a correction only a few edges along), so
+     a last pass on the edges alone runs until every edge is within 0.01% (or 20 × the iterations). The arch, a
+     1 × 0.2 strip of 160 triangles brought in to 0.64 of its length, ends within 0.2% strain; the quarter twist
+     within 1%. Over-relaxing the edges was tried and made it worse.
+   - **Collisions.** A sheet pushed hard onto another holds a gap at every stage only with all three of: each
+     point–triangle pair keeps the side it was **first** seen on (taking it afresh lets a point that got pushed
+     through stay through); pairs are looked for again every 10 iterations, during the last pass too; and the
+     search reaches a few gaps **beyond** each triangle's edges, as points slide onto triangles between searches.
+     Separation runs last in each iteration. The search is still brute force; deep stacks will need the hash.
+   - **Speed.** The tests' meshes (up to ~200 triangles) solve in well under a second each.
+   - **Not yet tried:** deep stacks (the fan's sixteen layers), and creases with goals on a real crease pattern.
 2. **Mesh and frames.** Triangulate the `flex` faces of a frame (and the rest coarsely), run the solver from the
    frame's 3D positions (`facePositions`, with layer gaps), write the result back as a frame with `gami:soft`
    and `faces_parent`. Done when a flat sheet bent by two handles round-trips through a `.fold` file.
