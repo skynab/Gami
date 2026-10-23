@@ -1572,4 +1572,50 @@ export const es: Record<string, string> = {
     "Y la esquina superior izquierda. Las esquinas dejan un pequeño hueco cuadrado en el centro.",
   "And the bottom flap. Your lid is ready: turn it over and put it on the box.":
     "Y la solapa de abajo. Tu tapa está lista: dale la vuelta y ponla sobre la caja.",
+  "Crease a strip at the bottom":
+    "Marca una tira abajo",
+  "Crease the bottom":
+    "Marca la parte de abajo",
+  "Crease the left side":
+    "Marca el lado izquierdo",
+  "Crease the right side":
+    "Marca el lado derecho",
+  "Crease the top corner":
+    "Marca la esquina de arriba",
+  "Crease the top":
+    "Marca la parte de arriba",
+  "Fold a narrow strip up along the bottom edge, and unfold.":
+    "Dobla una tira estrecha hacia arriba a lo largo del borde inferior y desdobla.",
+  "Fold the bottom edge up along the narrow crease.":
+    "Dobla el borde inferior hacia arriba por el pliegue estrecho.",
+  "Fold the bottom edge up to the inner corners of the slanted flaps at the top, and unfold.":
+    "Dobla el borde inferior hacia arriba hasta las esquinas interiores de las solapas inclinadas de arriba y desdobla.",
+  "Fold the bottom up on that crease again.":
+    "Vuelve a doblar la parte de abajo por ese pliegue.",
+  "Fold the corner down":
+    "Dobla la esquina hacia abajo",
+  "Fold the left edge to the middle crease, and unfold.":
+    "Dobla el borde izquierdo hasta el pliegue central y desdobla.",
+  "Fold the side in along its crease.":
+    "Dobla el lado hacia dentro por su pliegue.",
+  "Fold the side in":
+    "Dobla el lado hacia dentro",
+  "Fold the strip up":
+    "Dobla la tira hacia arriba",
+  "Fold the top corner down on a line through where the side crease meets the top crease, and unfold.":
+    "Dobla la esquina de arriba hacia abajo por una línea que pase por donde se cruzan el pliegue lateral y el de arriba, y desdobla.",
+  "Fold the top corner down to the top crease.":
+    "Dobla la esquina de arriba hasta el pliegue de arriba.",
+  "Fold the top edge down to the middle crease, and unfold.":
+    "Dobla el borde superior hasta el pliegue central y desdobla.",
+  "Fold the top flap down along its crease and tuck it into the pocket. Your envelope is ready.":
+    "Dobla la solapa de arriba por su pliegue y métela en el bolsillo. Tu sobre está listo.",
+  "Inside colour up, fold in half side to side, and unfold.":
+    "Con el color del interior hacia arriba, dobla por la mitad de lado a lado y desdobla.",
+  "Swing the side’s inner top corner out and down, and flatten the top along the crease from before.":
+    "Gira la esquina interior de arriba del lado hacia fuera y hacia abajo, y aplana la parte de arriba por el pliegue de antes.",
+  "Swivel the corner out":
+    "Saca la esquina",
+  "Tuck the top in":
+    "Mete la parte de arriba",
 };

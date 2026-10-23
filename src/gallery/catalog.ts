@@ -75,6 +75,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'frog', title: 'Frog', blurb: 'The classic frog from the frog base, legs and all.', difficulty: 4, category: 'animal', steps: 55, minutes: 20, sheets: 1 },
   { id: 'sword', title: 'Sword', blurb: 'A knight’s sword with a crossguard, from one long strip.', difficulty: 2, category: 'toy', steps: 14, minutes: 8, sheets: 1 },
   { id: 'masu-box', title: 'Masu box', blurb: 'A square box from one sheet, its corners locked in by the ends.', difficulty: 2, category: 'object', steps: 22, minutes: 10, sheets: 1 },
+  { id: 'envelope', title: 'Envelope', blurb: 'A letter envelope from a sheet of printer paper, its top flap tucked in. No glue.', difficulty: 2, category: 'object', steps: 27, minutes: 8, sheets: 1 },
   { id: 'masu-lid', title: 'Masu box lid', blurb: 'A lid for the masu box: the same folds, the corners stopping just short of the middle.', difficulty: 2, category: 'object', steps: 22, minutes: 10, sheets: 1 },
   { id: 'pajarita', title: 'Pajarita', blurb: 'The little paper bird of Spain, from a square with its corners folded in.', difficulty: 2, category: 'animal', steps: 19, minutes: 10, sheets: 1 },
   { id: 'boomerang', title: 'Boomerang', blurb: 'A flat paper boomerang that flies out, turns and comes back.', difficulty: 3, category: 'toy', steps: 10, minutes: 10, sheets: 1 },

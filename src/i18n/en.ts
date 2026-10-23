@@ -81,6 +81,7 @@ export const en = {
     pinwheel: { title: 'Pinwheel', blurb: 'A windmill with four sails. Pin it to a stick and blow.' },
     fan: { title: 'Fan', blurb: 'Pleat a sheet back and forth, then pinch the end.' },
     'masu-box': { title: 'Masu box', blurb: 'A square box from one sheet, its corners locked in by the ends.' },
+    envelope: { title: 'Envelope', blurb: 'A letter envelope from a sheet of printer paper, its top flap tucked in. No glue.' },
     'masu-lid': { title: 'Masu box lid', blurb: 'A lid for the masu box: the same folds, the corners stopping just short of the middle.' },
     'christmas-tree': { title: 'Christmas tree', blurb: 'A fir tree in a white pot, nice on a card.' },
     heart: { title: 'Heart', blurb: 'A simple heart, nice for cards.' },

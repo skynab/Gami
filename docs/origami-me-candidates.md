@@ -42,7 +42,6 @@ These are the rest, kept here for later; each was checked on its own page as cre
 | Vase | [vase](https://origami.me/vase/) | 3D opening |
 | Lazy Susan | [lazy-susan](https://origami.me/lazy-susan/) | Modular |
 | Wallet | [wallet](https://origami.me/wallet/) | Rectangle; good candidate |
-| Envelope | [paper-envelope](https://origami.me/paper-envelope/) | Good candidate |
 | Kimono | [kimono](https://origami.me/kimono/) | Good candidate |
 | Happi coat | [happi](https://origami.me/happi/) | Close to the kimono |
 | Necktie | [necktie](https://origami.me/necktie/) | Good candidate |

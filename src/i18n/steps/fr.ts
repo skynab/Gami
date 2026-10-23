@@ -1572,4 +1572,50 @@ export const fr: Record<string, string> = {
     "Puis le coin supérieur gauche. Les coins laissent un petit carré vide au centre.",
   "And the bottom flap. Your lid is ready: turn it over and put it on the box.":
     "Puis le rabat du bas. Votre couvercle est prêt : retournez-le et posez-le sur la boîte.",
+  "Crease a strip at the bottom":
+    "Marquez une bande en bas",
+  "Crease the bottom":
+    "Marquez le bas",
+  "Crease the left side":
+    "Marquez le côté gauche",
+  "Crease the right side":
+    "Marquez le côté droit",
+  "Crease the top corner":
+    "Marquez le coin du haut",
+  "Crease the top":
+    "Marquez le haut",
+  "Fold a narrow strip up along the bottom edge, and unfold.":
+    "Pliez une bande étroite vers le haut le long du bord inférieur, puis dépliez.",
+  "Fold the bottom edge up along the narrow crease.":
+    "Pliez le bord inférieur vers le haut sur le pli étroit.",
+  "Fold the bottom edge up to the inner corners of the slanted flaps at the top, and unfold.":
+    "Pliez le bord inférieur vers le haut jusqu’aux coins intérieurs des rabats inclinés du haut, puis dépliez.",
+  "Fold the bottom up on that crease again.":
+    "Repliez le bas vers le haut sur ce pli.",
+  "Fold the corner down":
+    "Rabattez le coin",
+  "Fold the left edge to the middle crease, and unfold.":
+    "Pliez le bord gauche jusqu’au pli du milieu, puis dépliez.",
+  "Fold the side in along its crease.":
+    "Rabattez le côté sur son pli.",
+  "Fold the side in":
+    "Rabattez le côté",
+  "Fold the strip up":
+    "Pliez la bande vers le haut",
+  "Fold the top corner down on a line through where the side crease meets the top crease, and unfold.":
+    "Rabattez le coin du haut sur une ligne passant par le croisement du pli du côté et du pli du haut, puis dépliez.",
+  "Fold the top corner down to the top crease.":
+    "Rabattez le coin du haut jusqu’au pli du haut.",
+  "Fold the top edge down to the middle crease, and unfold.":
+    "Pliez le bord supérieur jusqu’au pli du milieu, puis dépliez.",
+  "Fold the top flap down along its crease and tuck it into the pocket. Your envelope is ready.":
+    "Rabattez le rabat du haut sur son pli et glissez-le dans la poche. Votre enveloppe est prête.",
+  "Inside colour up, fold in half side to side, and unfold.":
+    "Couleur de l’intérieur vers le haut, pliez en deux de gauche à droite, puis dépliez.",
+  "Swing the side’s inner top corner out and down, and flatten the top along the crease from before.":
+    "Faites pivoter le coin intérieur du haut du côté vers l’extérieur et vers le bas, puis aplatissez le haut sur le pli d’avant.",
+  "Swivel the corner out":
+    "Sortez le coin",
+  "Tuck the top in":
+    "Glissez le haut",
 };

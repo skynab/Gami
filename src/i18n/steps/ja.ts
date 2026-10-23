@@ -1572,4 +1572,50 @@ export const ja: Record<string, string> = {
     "左上の角も折ります。中心に小さな四角いすき間が残ります。",
   "And the bottom flap. Your lid is ready: turn it over and put it on the box.":
     "下のふたも折ります。ふたのできあがり。裏返して、ますにかぶせます。",
+  "Crease a strip at the bottom":
+    "下に細い帯の折り目をつける",
+  "Crease the bottom":
+    "下の折り目をつける",
+  "Crease the left side":
+    "左側の折り目をつける",
+  "Crease the right side":
+    "右側の折り目をつける",
+  "Crease the top corner":
+    "上の角の折り目をつける",
+  "Crease the top":
+    "上の折り目をつける",
+  "Fold a narrow strip up along the bottom edge, and unfold.":
+    "下の辺に沿って細い帯を折り上げ、開きます。",
+  "Fold the bottom edge up along the narrow crease.":
+    "下の辺を細い折り目で折り上げます。",
+  "Fold the bottom edge up to the inner corners of the slanted flaps at the top, and unfold.":
+    "下の辺を、上の斜めのフラップの内側の角まで折り上げ、開きます。",
+  "Fold the bottom up on that crease again.":
+    "その折り目でもう一度下を折り上げます。",
+  "Fold the corner down":
+    "角を折り下げる",
+  "Fold the left edge to the middle crease, and unfold.":
+    "左の辺を真ん中の折り目まで折り、開きます。",
+  "Fold the side in along its crease.":
+    "横を折り目で内側に折ります。",
+  "Fold the side in":
+    "横を内側に折る",
+  "Fold the strip up":
+    "帯を折り上げる",
+  "Fold the top corner down on a line through where the side crease meets the top crease, and unfold.":
+    "横の折り目と上の折り目が交わる点を通る線で上の角を折り下げ、開きます。",
+  "Fold the top corner down to the top crease.":
+    "上の角を上の折り目まで折り下げます。",
+  "Fold the top edge down to the middle crease, and unfold.":
+    "上の辺を真ん中の折り目まで折り下げ、開きます。",
+  "Fold the top flap down along its crease and tuck it into the pocket. Your envelope is ready.":
+    "上のフラップを折り目で折り下げ、ポケットに差し込みます。封筒のできあがり。",
+  "Inside colour up, fold in half side to side, and unfold.":
+    "内側にしたい色を上にして、左右に半分に折り、開きます。",
+  "Swing the side’s inner top corner out and down, and flatten the top along the crease from before.":
+    "横の内側の上の角を外へ下へと開き、さっきの折り目で上を平らにします。",
+  "Swivel the corner out":
+    "角を開く",
+  "Tuck the top in":
+    "上を差し込む",
 };

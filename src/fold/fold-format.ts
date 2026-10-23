@@ -61,13 +61,15 @@ export function toFoldFile(model: OrigamiModel): FoldFile {
     'gami:sheets': model.sheets,
     ...((model.about || model.card) && { 'gami:about': { ...model.about, ...(model.card && { card: model.card }) } }),
     ...(model.steps.some((s) => s.op) && { 'gami:ops': OPS_VERSION }),
-    ...writeFrame(model.start),
+    // The start is kept exactly, as everything replayed from the file starts from it: a sheet's corners can be
+    // irrational (an A4 sheet's are at ±√2/2), and rounded they'd put every later step a hair out.
+    ...writeFrame(model.start, (x) => x),
     file_frames: model.steps.map((s) => ({
       frame_title: s.title,
       ...(s.text && { 'gami:text': s.text }),
       ...(s.kind && { 'gami:kind': s.kind }),
       ...(s.section && { 'gami:section': s.section }),
-      ...(s.via?.length && { 'gami:via': s.via.map(writeFrame) }),
+      ...(s.via?.length && { 'gami:via': s.via.map((v) => writeFrame(v)) }),
       ...(s.marks?.length && { 'gami:marks': s.marks.map(writeMark) }),
       ...(s.op && { 'gami:op': s.op }),
       ...writeFrame(s.frame),
@@ -143,14 +145,14 @@ function aboutOf(x: unknown): Pick<OrigamiModel, 'about' | 'card'> {
 /** Coordinates rounded to 1e-9: enough for any sheet, and keeps files small and diffs readable. */
 export const roundCoord = (x: number) => Math.round(x * 1e9) / 1e9 || 0;
 
-function writeFrame(f: FoldFrame): FoldFileFrame {
+function writeFrame(f: FoldFrame, round: (x: number) => number = roundCoord): FoldFileFrame {
   return {
-    vertices_coords: f.vertices_coords.map((p) => p.map(roundCoord)),
+    vertices_coords: f.vertices_coords.map((p) => p.map(round)),
     faces_vertices: f.faces_vertices,
-    'gami:vertices_paper': f.vertices_paper.map((p) => p.map(roundCoord)),
+    'gami:vertices_paper': f.vertices_paper.map((p) => p.map(round)),
     ...(f.faces_parent && { 'gami:faces_parent': f.faces_parent }),
     ...(f.faces_layer && { 'gami:faces_layer': f.faces_layer }),
-    ...(f.cuts?.length && { 'gami:cuts': f.cuts.map((c) => c.map((p) => p.map(roundCoord))) }),
+    ...(f.cuts?.length && { 'gami:cuts': f.cuts.map((c) => c.map((p) => p.map(round))) }),
   };
 }
 

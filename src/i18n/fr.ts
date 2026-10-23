@@ -79,6 +79,7 @@ export const fr: Messages = {
     pinwheel: { title: 'Moulin à vent', blurb: 'Un moulin à quatre ailes. Pique-le sur un bâton et souffle.' },
     fan: { title: 'Éventail', blurb: 'Plisse une feuille en accordéon, puis pince un bout.' },
     'masu-box': { title: 'Boîte masu', blurb: 'Une boîte carrée d’une seule feuille, ses coins tenus par les bouts.' },
+    envelope: { title: 'Enveloppe', blurb: 'Une enveloppe à lettre dans une feuille de papier d’imprimante, le rabat du haut glissé dedans. Sans colle.' },
     'masu-lid': { title: 'Couvercle de boîte masu', blurb: 'Un couvercle pour la boîte masu : les mêmes plis, les coins s’arrêtant juste avant le centre.' },
     'christmas-tree': { title: 'Sapin de Noël', blurb: 'Un sapin dans un pot blanc, joli sur une carte.' },
     heart: { title: 'Cœur', blurb: 'Un cœur tout simple, idéal pour les cartes.' },

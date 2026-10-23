@@ -79,6 +79,7 @@ export const ja: Messages = {
     pinwheel: { title: 'かざぐるま', blurb: '4枚羽根の風車。棒にとめて吹いてみよう。' },
     fan: { title: 'せんす', blurb: 'じゃばらに折って、はしをまとめるだけ。' },
     'masu-box': { title: 'ます', blurb: '1枚の紙で折る四角い箱。角は両端で留めます。' },
+    envelope: { title: '封筒', blurb: 'コピー用紙1枚で折る手紙の封筒。上のフラップを差し込んで閉じます。のりは使いません。' },
     'masu-lid': { title: 'ますのふた', blurb: 'ますにかぶせるふた。折り方は同じで、角を中心の少し手前で止めます。' },
     'christmas-tree': { title: 'クリスマスツリー', blurb: '白い植木ばちに入ったもみの木。カードにぴったり。' },
     heart: { title: 'ハート', blurb: 'カードに添えたい、シンプルなハート。' },
