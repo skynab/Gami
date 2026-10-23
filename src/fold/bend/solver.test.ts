@@ -75,8 +75,8 @@ describe('solving', () => {
   it('arches a strip brought in at one end, keeping every triangle its shape', () => {
     const { frames, strain } = arch();
     const final = frames.at(-1)!;
-    // Within 0.2% of their length: on a 15 cm sheet, a third of a millimetre.
-    expect(strain).toBeLessThan(2e-3);
+    // Within 0.02% of their length: on a 15 cm sheet, a thirtieth of a millimetre.
+    expect(strain).toBeLessThan(2e-4);
     // The middle rises well clear of the table, and the right end reaches its goal.
     const top = Math.max(...final.map((q) => q[1]));
     expect(top).toBeGreaterThan(0.15);
@@ -105,7 +105,7 @@ describe('solving', () => {
     });
     const final = frames.at(-1)!;
     const end = ends(nx).map((v) => final[v]);
-    expect(strain).toBeLessThan(1e-2);
+    expect(strain).toBeLessThan(5e-3);
     // The far end stands up (its width now runs up and down), and the paper stays one piece in between.
     expect(Math.max(...end.map((q) => q[1])) - Math.min(...end.map((q) => q[1]))).toBeGreaterThan(0.18);
     expect(Math.max(...end.map((q) => Math.abs(q[2])))).toBeLessThan(0.02);

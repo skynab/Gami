@@ -31,6 +31,11 @@ export interface FoldFrame {
    * they may share its ends. Kept from frame to frame once made.
    */
   cuts?: [Vec2, Vec2][];
+  /**
+   * Edges between triangles of paper that bends (see docs/bending-plan.md), as pairs of vertices: drawn without
+   * crease lines, and shaded smoothly across.
+   */
+  soft?: [number, number][];
 }
 
 export const STEP_KINDS = ['fold', 'unfold', 'turn-over', 'rotate', 'squash', 'reverse', 'petal', 'sink', 'assemble', 'pose', 'draw', 'cut'] as const;

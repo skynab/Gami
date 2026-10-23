@@ -26,6 +26,8 @@ interface FoldFileFrame {
   'gami:faces_layer'?: number[];
   /** Scissor cuts made so far, as segments on the sheet (see FoldFrame.cuts). */
   'gami:cuts'?: number[][][];
+  /** Edges between triangles of paper that bends (see FoldFrame.soft). */
+  'gami:soft'?: number[][];
   'gami:text'?: string;
   'gami:kind'?: StepKind;
   'gami:section'?: string;
@@ -153,6 +155,7 @@ function writeFrame(f: FoldFrame, round: (x: number) => number = roundCoord): Fo
     ...(f.faces_parent && { 'gami:faces_parent': f.faces_parent }),
     ...(f.faces_layer && { 'gami:faces_layer': f.faces_layer }),
     ...(f.cuts?.length && { 'gami:cuts': f.cuts.map((c) => c.map((p) => p.map(round))) }),
+    ...(f.soft?.length && { 'gami:soft': f.soft }),
   };
 }
 
@@ -168,7 +171,16 @@ function readFrame(f: FoldFileFrame): FoldFrame {
     ...(f['gami:faces_parent'] && { faces_parent: f['gami:faces_parent'] }),
     ...(f['gami:faces_layer'] && { faces_layer: f['gami:faces_layer'] }),
     ...(cutsOf(f['gami:cuts']) && { cuts: cutsOf(f['gami:cuts']) }),
+    ...(softOf(f['gami:soft'], f.vertices_coords.length) && { soft: softOf(f['gami:soft'], f.vertices_coords.length) }),
   };
+}
+
+/** Soft edges read from a file: pairs of the frame's vertices. Anything else is left out. */
+function softOf(x: unknown, vertices: number): FoldFrame['soft'] | undefined {
+  if (!Array.isArray(x)) return undefined;
+  const vertex = (v: unknown) => Number.isInteger(v) && (v as number) >= 0 && (v as number) < vertices;
+  const soft = x.filter((e): e is [number, number] => Array.isArray(e) && e.length === 2 && e.every(vertex));
+  return soft.length ? soft : undefined;
 }
 
 /** Cuts read from a file: segments of two points each. Anything else is left out. */

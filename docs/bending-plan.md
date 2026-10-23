@@ -131,6 +131,25 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
 2. **Mesh and frames.** Triangulate the `flex` faces of a frame (and the rest coarsely), run the solver from the
    frame's 3D positions (`facePositions`, with layer gaps), write the result back as a frame with `gami:soft`
    and `faces_parent`. Done when a flat sheet bent by two handles round-trips through a `.fold` file.
+
+   **Done** (`bend/frame.ts`: `meshFrame`, `bendFrame`). What it found:
+   - **Meshing.** Each face is cut into triangles on the sheet, its outline taking every frame vertex along its
+     edges so neighbours match point for point, then split across longest edges (Rivara) until none is longer
+     than the mesh size (3 × that outside `flex`). Faces are joined where they share an edge that isn't cut.
+     Stacked faces meet a hair apart along creases; their shared points meet halfway.
+   - **Stiffness by edge.** Inside a bending face, soft (`gami:soft`); inside a rigid one, exact; between faces,
+     a crease that gives a little (compliance 1e-3, held at the angle it starts at).
+   - **Stretch.** Nudging one edge at a time left a sheet 12% stretched at each stage's end and 0.25% at the end,
+     worse on finer meshes. So each stage ends by setting every edge's length at once (a few damped Newton steps
+     solved by conjugate gradients, Goldenthal et al. 2007), holding pinned and goal points. A flat mesh has more
+     edges than in-plane freedoms, so the solve is singular unless damped. With goals solved last in each
+     iteration, the taco (a 1 × 1 sheet curled about a diagonal, 512 triangles) reaches its corners within 1e-3
+     at 0.02% strain, in about 2 s, most of it the brute-force collision search.
+   - **Anchors and goals** are by point on the sheet: the anchor holds the triangle there (its whole face, if
+     rigid); a goal must be at a corner of a face.
+2. **Mesh and frames.** Triangulate the `flex` faces of a frame (and the rest coarsely), run the solver from the
+   frame's 3D positions (`facePositions`, with layer gaps), write the result back as a frame with `gami:soft`
+   and `faces_parent`. Done when a flat sheet bent by two handles round-trips through a `.fold` file.
 3. **The operation.** `bend` in `ops.ts` (types, `parseOp`, replay), `Recipe.bend`, in-between frames. Done when a
    test model with a bend step replays from its file to the same frames.
 4. **Drawing and animation.** Soft edges in the viewer and cards; bent steps play through their in-between frames.
