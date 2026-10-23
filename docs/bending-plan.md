@@ -301,6 +301,12 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
    - **Tried.** Turning the front wall's bottom corner up about the bow–stern line, with goals that turn a point
      about a line (on `wip/boat`, as a patch): one way round passes through the paper at once, the other jams at
      about 35°, as nothing in the paper folds along that line.
+   - **Third try** (after the solver's fixes for deep stacks). The photos show the boat's walls teal, the paper's
+     colour hidden inside the small diamond, so the walls come from inner layers: the last step turns the diamond
+     partly inside out. The hat's corners, together at the diamond's top, are likeliest the bow and stern: each
+     brim's fold runs straight between two of them, 1.0 long, and would be the gunwale, the striped brim lining the
+     hull. Pulled that far apart (0.96 and 0.8), the paper crumples: 4–5% stretched, up to 3.5 cm through itself.
+     Step 13's squash, played backwards part way, isn't boat-shaped either (it's staged, a flap lifted then moved).
    - **Next.** Work out where each of the diamond's 28 faces goes in the finished boat (a paper model would settle
      it), then give the opening as those faces' crease angles.
 
