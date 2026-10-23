@@ -1618,4 +1618,42 @@ export const fr: Record<string, string> = {
     "Sortez le coin",
   "Tuck the top in":
     "Glissez le haut",
+  "And the bottom edge to its crease.":
+    "Puis le bord inférieur jusqu’à son pli.",
+  "And the bottom edge up, leaving the same gap.":
+    "Puis le bord inférieur vers le haut, en laissant le même écart.",
+  "And the bottom flap, over the top one. Your shallow lid is ready.":
+    "Puis le rabat du bas, par-dessus celui du haut. Votre couvercle plat est prêt.",
+  "And the left edge to its crease.":
+    "Puis le bord gauche jusqu’à son pli.",
+  "And the left edge.":
+    "Puis le bord gauche.",
+  "And the right edge to its crease.":
+    "Puis le bord droit jusqu’à son pli.",
+  "Crease the bottom edge again":
+    "Marquez de nouveau le bord inférieur",
+  "Crease the bottom edge":
+    "Marquez le bord inférieur",
+  "Crease the left edge again":
+    "Marquez de nouveau le bord gauche",
+  "Crease the left edge":
+    "Marquez le bord gauche",
+  "Crease the right edge again":
+    "Marquez de nouveau le bord droit",
+  "Crease the right edge":
+    "Marquez le bord droit",
+  "Crease the top edge again":
+    "Marquez de nouveau le bord supérieur",
+  "Crease the top edge":
+    "Marquez le bord supérieur",
+  "Fold the left edge in along the crease nearest it.":
+    "Rabattez le bord gauche vers l’intérieur sur le pli le plus proche.",
+  "Fold the left edge in":
+    "Rabattez le bord gauche",
+  "Fold the right edge in":
+    "Rabattez le bord droit",
+  "Fold the top edge down to the crease you just made, and unfold.":
+    "Pliez le bord supérieur jusqu’au pli que vous venez de faire, puis dépliez.",
+  "Fold the top edge down towards the middle, stopping a little short, and unfold.":
+    "Pliez le bord supérieur vers le centre en vous arrêtant un peu avant, puis dépliez.",
 };

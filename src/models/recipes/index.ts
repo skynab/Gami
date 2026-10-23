@@ -27,7 +27,7 @@ import { basesLesson } from './bases-lesson';
 import { foldingGeometry } from './folding-geometry';
 import { foldsLesson } from './folds-lesson';
 import { kingBee } from './king-bee';
-import { masuBox, masuLid } from './masu-box';
+import { masuBox, masuLid, masuShallowLid } from './masu-box';
 import { envelope } from './envelope';
 import { navyPlane } from './navy-plane';
 import { ninjaStar } from './ninja-star';
@@ -47,7 +47,7 @@ import { fish } from './fish';
  * which the site loads. Not bundled into the site itself. Each carries its gallery details from the catalog,
  * so a copy opened in the Studio or shared keeps them.
  */
-export const RECIPES: (() => OrigamiModel)[] = ([basics, foldsLesson, basesLesson, paperPlane, glider, bulldogDart, navyPlane, kingBee, dogFace, catFace, cup, samuraiHelmet, fortuneTeller, heart, cicada, jumpingFrog, ninjaStar, tulip, fox, crane, lily, swan, penguin, whale, crow, christmasTree, waterbomb, balloonRabbit, flappingBird, pinwheel, pajarita, butterfly, frog, dolphin, seal, masuBox, masuLid, envelope, sword, boomerang, fish, foldingGeometry] as (() => OrigamiModel)[]).map((make) => () => withAbout(make()));
+export const RECIPES: (() => OrigamiModel)[] = ([basics, foldsLesson, basesLesson, paperPlane, glider, bulldogDart, navyPlane, kingBee, dogFace, catFace, cup, samuraiHelmet, fortuneTeller, heart, cicada, jumpingFrog, ninjaStar, tulip, fox, crane, lily, swan, penguin, whale, crow, christmasTree, waterbomb, balloonRabbit, flappingBird, pinwheel, pajarita, butterfly, frog, dolphin, seal, masuBox, masuLid, masuShallowLid, envelope, sword, boomerang, fish, foldingGeometry] as (() => OrigamiModel)[]).map((make) => () => withAbout(make()));
 
 function withAbout(model: OrigamiModel): OrigamiModel {
   const info = findModel(model.id);

@@ -46,6 +46,61 @@ export function masuLid() {
   }).build();
 }
 
+/**
+ * The shallow lid, as origami.me/box folds it: the corners to the middle as for the box, then each edge creased
+ * to a point a little short of the middle (a larger floor) and again to that crease (low walls), the side edges
+ * folded in along those, and the box's collapse on the new creases. The end flaps are longer than the floor is
+ * wide, so they cross on it.
+ */
+export function masuShallowLid() {
+  const r = new Recipe({ id: 'masu-shallow-lid', title: 'Shallow masu lid', card: 'finished', sheet: { size: [1, 1], front: '#6a8f3b', back: '#f6f3ec' } })
+    .crease(paper(-0.5, 0), paper(0.5, 0), { title: 'Fold in half', text: 'White side up, fold in half side to side, and unfold.' })
+    .crease(paper(0, -0.5), paper(0, 0.5), { title: 'Fold in half the other way', text: 'And top to bottom, and unfold.' });
+  const corner: Record<string, (c: Vec2) => boolean> = {};
+  for (const [u, v, title, text] of [
+    [-0.5, 0.5, 'Fold a corner to the middle', 'Fold the bottom left corner to the middle, where the creases cross.'],
+    [0.5, 0.5, 'Fold the next corner in', 'And the bottom right corner.'],
+    [0.5, -0.5, 'Fold the next corner in', 'And the top right corner.'],
+    [-0.5, -0.5, 'Fold the last corner in', 'And the top left corner. It’s a smaller square.'],
+  ] as const) {
+    corner[`${u},${v}`] = moved(r, () => r.onto(paper(u, v), paper(0, 0), { title, text }));
+  }
+  r.rotate(45, { title: 'Turn it', text: 'Turn it so its edges run straight up and down.' });
+  // The square's edges at ±e. Each is creased to a point `gap` short of the middle (on a 15 cm sheet, about
+  // 4 mm, as origami.me suggests), the floor's edge at ±f; then to that crease, the walls' top at ±w.
+  const e = Math.SQRT1_2 / 2;
+  const gap = 0.027;
+  const f = (e + gap) / 2;
+  const w = (e + f) / 2;
+  const sides = [
+    [[0, -e], [0, -1], 'top', 'Fold the top edge down towards the middle, stopping a little short, and unfold.'],
+    [[0, e], [0, 1], 'bottom', 'And the bottom edge up, leaving the same gap.'],
+    [[-e, 0], [-1, 0], 'left', 'And the left edge.'],
+    [[e, 0], [1, 0], 'right', 'And the right edge.'],
+  ] as const;
+  for (const [edge, out, name, text] of sides) {
+    r.crease(table(edge[0], edge[1]), table(out[0] * gap, out[1] * gap), { title: `Crease the ${name} edge`, text });
+  }
+  for (const [edge, out, name] of sides) {
+    r.crease(table(edge[0], edge[1]), table(out[0] * f, out[1] * f), {
+      title: `Crease the ${name} edge again`,
+      text: name === 'top' ? 'Fold the top edge down to the crease you just made, and unfold.' : `And the ${name} edge to its crease.`,
+    });
+  }
+  // The top and bottom corner flaps open back out, and the side edges fold in along their outer creases: each lands
+  // right over its wall. Those rims, and everything else beyond the walls' tops, ride on what they lie on as the
+  // walls rise (see `shape`'s `ride`).
+  const rims = r.lying(([x]) => Math.abs(x) > w);
+  r.along(table(-1, -e), table(1, -e), table(0, -0.1), { title: 'Open the top flap', text: 'Unfold the top flap, back out past the top edge.', only: corner['0.5,-0.5'] })
+    .along(table(-1, e), table(1, e), table(0, 0.1), { title: 'Open the bottom flap', text: 'And the bottom flap.', only: corner['-0.5,0.5'] })
+    .along(table(-w, -1), table(-w, 1), table(-e + 0.01, 0), { title: 'Fold the left edge in', text: 'Fold the left edge in along the crease nearest it.' })
+    .along(table(w, -1), table(w, 1), table(e - 0.01, 0), { title: 'Fold the right edge in', text: 'And the right edge.' });
+  // The side corner flaps lie flat on the walls and floor too.
+  const side = (c: Vec2) => corner['-0.5,-0.5'](c) || corner['0.5,0.5'](c);
+  pose(r, f, w, 'And the bottom flap, over the top one. Your shallow lid is ready.', (c) => rims(c) || side(c));
+  return r.build();
+}
+
 /** The box with its corners folded `gap` short of the middle (0 for the box itself). */
 function masu({ id, title, front, gap, corners: cornerTexts, done }: { id: string; title: string; front: string; gap: number; corners: [string, string, string, string]; done: string }) {
   const r = new Recipe({ id, title, card: 'finished', sheet: { size: [1, 1], front, back: '#f6f3ec' } })
@@ -76,14 +131,21 @@ function masu({ id, title, front, gap, corners: cornerTexts, done }: { id: strin
   r.crease(table(-e, 0), table(0, 0), { title: 'Fold the left edge to the middle', text: 'Fold the left edge in to the middle, and unfold.' })
     .crease(table(e, 0), table(0, 0), { title: 'Fold the right edge to the middle', text: 'And the right edge, and unfold.' });
 
-  // The box, posed crease by crease from the floor (see `shape`'s `chained`), in three moves as origami.me does:
-  // the walls up with the corners pushed in, then each end flap folded over into the box. On the flat paper: the
-  // floor is |x|, |z| < h; the side walls are x out to ±e, the end walls z out to ±e; past the end walls are the
-  // opened flaps, out to ±2e. Each corner square (between a side wall and an end wall) folds along its diagonal:
-  // its half by the end wall turns right over onto the end wall's inside, and its half by the side wall turns in to
-  // lie on it. The end flap's outer triangles, joined to the corners, come over onto the flap with them; when the
-  // flap folds over the end wall into the box they tuck under it, over the corners, and its point lies on the floor.
-  const h = e / 2;
+  pose(r, e / 2, e, done);
+  return r;
+}
+
+/**
+ * The box posed crease by crease from the floor (see `shape`'s `chained`), in three moves as origami.me does: the
+ * walls up with the corners pushed in, then each end flap folded over into the box. On the flat paper: the floor is
+ * |x|, |z| < h; the side walls are x out to ±e, the end walls z out to ±e; past the end walls are the opened flaps.
+ * Each corner square (between a side wall and an end wall) folds along its diagonal: its half by the end wall turns
+ * right over onto the end wall's inside, and its half by the side wall turns in to lie on it. The end flap's outer
+ * triangles, joined to the corners, come over onto the flap with them; when the flap folds over the end wall into
+ * the box they tuck under it, over the corners, and it turns down onto the floor a wall's height below the wall's
+ * top.
+ */
+function pose(r: Recipe, h: number, e: number, done: string, ride?: (centre: Vec2) => boolean) {
   const flat = r.current;
   const where = (c: Vec2) => locate(flat, c);
   type B = { through: [At, At]; moving: At; degrees: number; only: (c: Vec2) => boolean };
@@ -108,21 +170,28 @@ function masu({ id, title, front, gap, corners: cornerTexts, done }: { id: strin
       );
     }
   }
+  // Over the end wall's top, then down onto the floor a wall's height (e − h) further on.
   const lock = (t: number): B[] => [
     bend([-1, t * e], [1, t * e], [0, t * 2 * e], 180, (x) => Math.abs(x) < h),
-    bend([-1, t * 3 * h], [1, t * 3 * h], [0, t * 2 * e], -90, (x) => Math.abs(x) < h),
-    ...[-1, 1].map((s) => bend([-1, t * e], [1, t * e], [(s * (h + e)) / 2, t * 2 * e], 180, (x) => s * x > h && s * x < e)),
+    bend([-1, t * (2 * e - h)], [1, t * (2 * e - h)], [0, t * 2 * e], -90, (x) => Math.abs(x) < h),
+    // The end flap's sides, folded in onto it as the walls rose, go with it: over the wall, and where the flap is
+    // long enough to reach (the shallow lid's), down onto the floor.
+    ...[-1, 1].flatMap((s) => [
+      bend([-1, t * e], [1, t * e], [(s * (h + e)) / 2, t * 2 * e], 180, (x) => s * x > h && s * x < e),
+      // Folded over onto the flap, they turn the other way round for the same turn.
+      ...(ride ? [bend([-1, t * (2 * e - h)], [1, t * (2 * e - h)], [(s * (h + e)) / 2, t * 2 * e], 90, (x) => s * x > h && s * x < e)] : []),
+    ]),
   ];
   const floor = paper(0.05, 0.05);
-  r.shape(
-    {
-      title: 'Raise the walls',
-      text: 'Stand the side walls up, and push each corner in so it folds flat against the end wall. The end walls stand up too, with their flaps.',
-    },
-    walls,
-    { chained: floor },
-  )
+  return r
+    .shape(
+      {
+        title: 'Raise the walls',
+        text: 'Stand the side walls up, and push each corner in so it folds flat against the end wall. The end walls stand up too, with their flaps.',
+      },
+      walls,
+      { chained: floor, ...(ride && { ride }) },
+    )
     .shape({ title: 'Lock the top end', text: 'Fold the top flap over the end wall into the box, so its point lies on the floor and holds the corners in.' }, lock(-1))
     .shape({ title: 'Lock the bottom end', text: done }, lock(1));
-  return r;
 }

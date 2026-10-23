@@ -84,6 +84,7 @@ export const es: Messages = {
     'masu-box': { title: 'Caja masu', blurb: 'Una caja cuadrada de una sola hoja, con las esquinas sujetas por los extremos.' },
     envelope: { title: 'Sobre', blurb: 'Un sobre para cartas con una hoja de papel de impresora, con la solapa de arriba metida. Sin pegamento.' },
     'masu-lid': { title: 'Tapa de la caja masu', blurb: 'Una tapa para la caja masu: los mismos pliegues, con las esquinas un poco antes del centro.' },
+    'masu-shallow-lid': { title: 'Tapa baja de caja masu', blurb: 'Una tapa baja para la caja masu, más limpia y fácil de quitar. Requiere más cuidado al doblarla.' },
     'christmas-tree': { title: 'Árbol de Navidad', blurb: 'Un abeto en una maceta blanca, bonito en una tarjeta.' },
     heart: { title: 'Corazón', blurb: 'Un corazón sencillo, ideal para tarjetas.' },
     cicada: { title: 'Cigarra', blurb: 'Una cigarra tradicional japonesa, con las alas dobladas desde un rombo.' },

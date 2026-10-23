@@ -1618,4 +1618,42 @@ export const es: Record<string, string> = {
     "Saca la esquina",
   "Tuck the top in":
     "Mete la parte de arriba",
+  "And the bottom edge to its crease.":
+    "Y el borde inferior hasta su pliegue.",
+  "And the bottom edge up, leaving the same gap.":
+    "Y el borde inferior hacia arriba, dejando el mismo espacio.",
+  "And the bottom flap, over the top one. Your shallow lid is ready.":
+    "Y la solapa de abajo, por encima de la de arriba. Tu tapa baja está lista.",
+  "And the left edge to its crease.":
+    "Y el borde izquierdo hasta su pliegue.",
+  "And the left edge.":
+    "Y el borde izquierdo.",
+  "And the right edge to its crease.":
+    "Y el borde derecho hasta su pliegue.",
+  "Crease the bottom edge again":
+    "Marca otra vez el borde inferior",
+  "Crease the bottom edge":
+    "Marca el borde inferior",
+  "Crease the left edge again":
+    "Marca otra vez el borde izquierdo",
+  "Crease the left edge":
+    "Marca el borde izquierdo",
+  "Crease the right edge again":
+    "Marca otra vez el borde derecho",
+  "Crease the right edge":
+    "Marca el borde derecho",
+  "Crease the top edge again":
+    "Marca otra vez el borde superior",
+  "Crease the top edge":
+    "Marca el borde superior",
+  "Fold the left edge in along the crease nearest it.":
+    "Dobla el borde izquierdo hacia dentro por el pliegue más cercano.",
+  "Fold the left edge in":
+    "Dobla el borde izquierdo hacia dentro",
+  "Fold the right edge in":
+    "Dobla el borde derecho hacia dentro",
+  "Fold the top edge down to the crease you just made, and unfold.":
+    "Dobla el borde superior hasta el pliegue que acabas de hacer y desdobla.",
+  "Fold the top edge down towards the middle, stopping a little short, and unfold.":
+    "Dobla el borde superior hacia el centro, quedándote un poco antes, y desdobla.",
 };

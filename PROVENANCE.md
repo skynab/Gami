@@ -75,6 +75,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `pinwheel` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/pinwheel](https://origami.me/pinwheel/) | Clear | 21 Oct 2026 |
 | `fan` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/fan](https://origami.me/fan/) | Clear | Coming soon, listed 21 Oct 2026 |
 | `masu-box` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/box](https://origami.me/box/) (the box) | Clear | 22 Oct 2026 |
+| `masu-shallow-lid` | Traditional (origami.me: "Traditional"; the masu box's crease pattern with a larger floor and lower walls) | None needed: nobody owns it | [origami.me/box](https://origami.me/box/) (its shallow lid) | Clear | 22 Oct 2026 |
 | `envelope` | Traditional (origami.me: "Traditional"; Gilad's database lists over a hundred envelopes and letter-folds as "Traditional", among many by named designers) | None needed: nobody owns it | [origami.me/paper-envelope](https://origami.me/paper-envelope/), for the order of folds | Clear | 22 Oct 2026 |
 | `masu-lid` | Traditional (origami.me: "Traditional"; the masu box with its corners folded short of the middle) | None needed: nobody owns it | [origami.me/box](https://origami.me/box/) (its classic lid) | Clear | 22 Oct 2026 |
 | `christmas-tree` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/christmas-tree](https://origami.me/christmas-tree/) | Clear | 21 Oct 2026 |

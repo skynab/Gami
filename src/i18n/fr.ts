@@ -84,6 +84,7 @@ export const fr: Messages = {
     'masu-box': { title: 'Boîte masu', blurb: 'Une boîte carrée d’une seule feuille, ses coins tenus par les bouts.' },
     envelope: { title: 'Enveloppe', blurb: 'Une enveloppe à lettre dans une feuille de papier d’imprimante, le rabat du haut glissé dedans. Sans colle.' },
     'masu-lid': { title: 'Couvercle de boîte masu', blurb: 'Un couvercle pour la boîte masu : les mêmes plis, les coins s’arrêtant juste avant le centre.' },
+    'masu-shallow-lid': { title: 'Couvercle plat de boîte masu', blurb: 'Un couvercle bas pour la boîte masu, plus net et plus facile à enlever. Il demande plus de soin.' },
     'christmas-tree': { title: 'Sapin de Noël', blurb: 'Un sapin dans un pot blanc, joli sur une carte.' },
     heart: { title: 'Cœur', blurb: 'Un cœur tout simple, idéal pour les cartes.' },
     cicada: { title: 'Cigale', blurb: 'Une cigale traditionnelle japonaise, ses ailes pliées à partir d’un losange.' },

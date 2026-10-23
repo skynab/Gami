@@ -1618,4 +1618,42 @@ export const ja: Record<string, string> = {
     "角を開く",
   "Tuck the top in":
     "上を差し込む",
+  "And the bottom edge to its crease.":
+    "下の辺もその折り目まで折ります。",
+  "And the bottom edge up, leaving the same gap.":
+    "下の辺も、同じだけすき間を残して折り上げます。",
+  "And the bottom flap, over the top one. Your shallow lid is ready.":
+    "下のフラップも、上のフラップに重ねて入れます。浅いふたのできあがり。",
+  "And the left edge to its crease.":
+    "左の辺もその折り目まで折ります。",
+  "And the left edge.":
+    "左の辺も折ります。",
+  "And the right edge to its crease.":
+    "右の辺もその折り目まで折ります。",
+  "Crease the bottom edge again":
+    "下の辺にもう一度折り目をつける",
+  "Crease the bottom edge":
+    "下の辺に折り目をつける",
+  "Crease the left edge again":
+    "左の辺にもう一度折り目をつける",
+  "Crease the left edge":
+    "左の辺に折り目をつける",
+  "Crease the right edge again":
+    "右の辺にもう一度折り目をつける",
+  "Crease the right edge":
+    "右の辺に折り目をつける",
+  "Crease the top edge again":
+    "上の辺にもう一度折り目をつける",
+  "Crease the top edge":
+    "上の辺に折り目をつける",
+  "Fold the left edge in along the crease nearest it.":
+    "左の辺を、いちばん近い折り目で内側に折ります。",
+  "Fold the left edge in":
+    "左の辺を内側に折る",
+  "Fold the right edge in":
+    "右の辺を内側に折る",
+  "Fold the top edge down to the crease you just made, and unfold.":
+    "上の辺を、いまつけた折り目まで折り下げ、開きます。",
+  "Fold the top edge down towards the middle, stopping a little short, and unfold.":
+    "上の辺を中心に向かって折り下げますが、少し手前で止め、開きます。",
 };
