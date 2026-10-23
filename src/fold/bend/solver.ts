@@ -38,8 +38,20 @@ export interface BendProblem {
   compliance?: { stretch?: number; bend?: number };
   /** The gap layers keep between them. Leave out for no collisions. */
   thickness?: number;
+  /**
+   * Which side of a triangle a point belongs on (1 the way its corners wind, −1 the other), where that's known
+   * better than from where they start: paper stacked flat is in layers, though the mesh may start a point a hair
+   * through the layer it lies on (folds pushed out round the layers inside them). Undefined to go by where it is.
+   */
+  side?: (point: number, triangle: number) => number | undefined;
   /** A height no point goes below (the table). Leave out for none. */
   floor?: number;
+  /**
+   * Air blown in (a water bomb puffed up): the paper encloses at least `volume` round `centre` by the last stage, a
+   * share more each stage, pushing each triangle out on its `outward` side (1 the way its corners wind, −1 the other
+   * way, 0 not pushed). The volume is what the triangles' outward sides face away from the centre.
+   */
+  inflate?: { centre: Vec3; outward: number[]; volume: number };
   /** How many stages the goals ramp over, each kept as a frame, and the iterations in each. */
   stages?: number;
   iterations?: number;
@@ -114,6 +126,53 @@ export function hingeGradient(p: Vec3[], h: Hinge): [Vec3, Vec3, Vec3, Vec3] {
   return [ga, gb, gc, gd];
 }
 
+/** The volume the paper encloses round `centre`, its triangles' outward sides facing out (see BendProblem.inflate). */
+export function enclosed(p: Vec3[], triangles: Tri[], { centre: c, outward }: { centre: Vec3; outward: number[] }): number {
+  let v = 0;
+  triangles.forEach(([a, b, d], t) => {
+    if (outward[t]) v += (outward[t] * dot(sub(p[a], c), cross(sub(p[b], c), sub(p[d], c)))) / 6;
+  });
+  return v;
+}
+
+/** The volume enclosed, and how it changes as each point moves: each triangle's tetrahedron with the centre, by its corners. */
+function airPush(p: Vec3[], triangles: Tri[], air: { centre: Vec3; outward: number[] }): { volume: number; push: Vec3[] } {
+  const c = air.centre;
+  const push: Vec3[] = p.map(() => [0, 0, 0]);
+  triangles.forEach(([a, b, d], t) => {
+    const s = air.outward[t];
+    if (!s) return;
+    const [pa, pb, pd] = [sub(p[a], c), sub(p[b], c), sub(p[d], c)];
+    for (const [i, x] of [[a, cross(pb, pd)], [b, cross(pd, pa)], [d, cross(pa, pb)]] as [number, Vec3][]) {
+      push[i][0] += (s * x[0]) / 6;
+      push[i][1] += (s * x[1]) / 6;
+      push[i][2] += (s * x[2]) / 6;
+    }
+  });
+  return { volume: enclosed(p, triangles, air), push };
+}
+
+/**
+ * Pushes the paper out, as air blown in does, until it encloses at least `target` (one constraint on every point),
+ * no point further than `most` at a time: so the layers kept apart see it coming, and none is pushed through another.
+ */
+function inflate(p: Vec3[], w: number[], triangles: Tri[], air: { centre: Vec3; outward: number[] }, target: number, most: number) {
+  const { volume: v, push: g } = airPush(p, triangles, air);
+  if (v >= target) return;
+  let denom = 0;
+  for (let i = 0; i < p.length; i++) denom += w[i] * dot(g[i], g[i]);
+  if (denom < 1e-18) return;
+  let dl = (target - v) / denom;
+  const furthest = Math.max(...g.map((x, i) => w[i] * len(x)));
+  if (furthest * dl > most) dl = most / furthest;
+  for (let i = 0; i < p.length; i++) {
+    const m = w[i] * dl;
+    p[i][0] += m * g[i][0];
+    p[i][1] += m * g[i][1];
+    p[i][2] += m * g[i][2];
+  }
+}
+
 /** An angle brought into (−π, π]. */
 const wrap = (x: number) => x - 2 * Math.PI * Math.round(x / (2 * Math.PI));
 
@@ -173,9 +232,10 @@ export function solve(problem: BendProblem): BendResult {
 
   const strainNow = () => Math.max(0, ...edges.map(([a, b], k) => Math.abs(len(sub(p[b], p[a])) - lengths[k]) / lengths[k]));
   /**
-   * Edges set right one at a time, with layers kept apart and off the table, until every edge is within `settled`
-   * of its length or `passes` are done: setting them all at once moves paper into other paper, and pushing it back
-   * out stretches it again.
+   * Edges set right one at a time, off the table, until every edge is within `settled` of its length or `passes`
+   * are done. Layers aren't kept apart here: with no creases held, pushing each pair apart in turn ratchets a deep
+   * stack upward off the table (the water bomb's 24 layers rose from 1.4 cm to 4.7 cm). The stages keep them apart,
+   * with the creases holding.
    */
   const settle = (passes: number, settled: number, mass = w) => {
     const lEnd = edges.map(() => 0);
@@ -187,8 +247,6 @@ export function solve(problem: BendProblem): BendResult {
         const n = scale(d, 1 / dl);
         lEnd[k] = project([a, b], [scale(n, -1), n], dl - lengths[k], lEnd[k], 0, mass);
       });
-      if (it % SEARCH_EVERY === 0) findPairs();
-      for (const pair of pairs) separate(p, w, problem.triangles, pair);
       ground();
     }
   };
@@ -198,7 +256,7 @@ export function solve(problem: BendProblem): BendResult {
   // The side of each triangle a point was first seen on, kept for good: a point pushed through stays wrong side
   // otherwise, as the next search would take where it ended up as where it belongs.
   const sides = new Map<number, number>();
-  const findPairs = () => (pairs = thickness > 0 ? nearPairs(p, problem.triangles, thickness, sides) : []);
+  const findPairs = () => (pairs = thickness > 0 ? nearPairs(p, problem.triangles, thickness, sides, problem.side) : []);
   if (sheet) {
     // Paper starting a little off the sheet's shape takes it back before anything moves, so the first frame
     // doesn't move it as well; the creases and goals start from there.
@@ -242,6 +300,7 @@ export function solve(problem: BendProblem): BendResult {
         const dl = len(d);
         if (dl > 1e-12) lGoal[k] = project([g.vertex], [scale(d, 1 / dl)], dl, lGoal[k], g.compliance ?? DEFAULTS.goal);
       });
+      if (problem.inflate) inflate(p, w, problem.triangles, problem.inflate, problem.inflate.volume * share, thickness / 2 || Infinity);
       for (const pair of pairs) separate(p, w, problem.triangles, pair);
       ground();
       // Now and then, a step solving everything together carries corrections right across the paper, as a crease
@@ -257,6 +316,15 @@ export function solve(problem: BendProblem): BendResult {
         (problem.goals ?? []).forEach((g, k) => {
           for (let i = 0; i < 3; i++) rows.add([g.vertex], [AXES[i]], p[g.vertex][i] - goalAt[k][i], g.compliance ?? DEFAULTS.goal);
         });
+        // Air blown in pushes as part of it too: otherwise solving the rest together would undo the push each time.
+        if (problem.inflate) {
+          const air = airPush(p, problem.triangles, problem.inflate);
+          const target = problem.inflate.volume * share;
+          if (air.volume < target) {
+            const ids = air.push.flatMap((x, i) => (x[0] || x[1] || x[2] ? [i] : []));
+            rows.add(ids, ids.map((i) => air.push[i]), air.volume - target, 0);
+          }
+        }
         together(p, w, rows, reach);
         for (const pair of pairs) separate(p, w, problem.triangles, pair);
         ground();
@@ -414,7 +482,7 @@ interface Pair {
  * over the triangle or nearly (they slide between searches). Each keeps the side it was first seen on (in `sides`). Plain search for now; a spatial hash
  * when meshes grow.
  */
-function nearPairs(p: Vec3[], triangles: Tri[], thickness: number, sides: Map<number, number>): Pair[] {
+function nearPairs(p: Vec3[], triangles: Tri[], thickness: number, sides: Map<number, number>, known?: BendProblem['side']): Pair[] {
   const out: Pair[] = [];
   const reach = 4 * thickness;
   // Points by cell of a grid about a triangle's size, so each triangle looks only at the points near it. A point
@@ -454,7 +522,7 @@ function nearPairs(p: Vec3[], triangles: Tri[], thickness: number, sides: Map<nu
             const id = v * triangles.length + t;
             // Kept as the side it's on times the gap it keeps.
             let seen = sides.get(id);
-            if (seen === undefined) sides.set(id, (seen = (d >= 0 ? 1 : -1) * Math.min(thickness, Math.max(Math.abs(d), thickness / 4))));
+            if (seen === undefined) sides.set(id, (seen = (known?.(v, t) ?? (d >= 0 ? 1 : -1)) * Math.min(thickness, Math.max(Math.abs(d), thickness / 4))));
             out.push({ v, t, side: Math.sign(seen), gap: Math.abs(seen) });
           }
   });

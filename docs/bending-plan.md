@@ -304,6 +304,25 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
    - **Next.** Work out where each of the diamond's 28 faces goes in the finished boat (a paper model would settle
      it), then give the opening as those faces' crease angles.
 
+   **The paper balloon** (October 2026). The gallery's water bomb ends flat, with "blow into the hole" in words;
+   blowing it up is a bend of its own (Kids Web Japan's balloon, the same model, ends as a rounded cube with a crease
+   round its middle, where the flat outline was).
+   - **Air.** `bendFrame` takes `inflate`, a volume: the paper must enclose at least that much round its middle by
+     the last stage, a share more each stage, as one constraint pushing every point out along its triangles'
+     normals (also in each step solving everything together, or that undoes it). Only the skin is pushed: for
+     paper lying flat in layers, a triangle that's the top or bottom layer where it lies. Pushing every layer out
+     sent the flaps tucked into pockets out through the paper over them. Blown up, the paper ignores the table and
+     each frame is lifted back onto it, so it puffs out both ways, as it does in your hands.
+   - **Sides by layer.** For paper lying flat in layers, which side of a triangle a point belongs on now comes from
+     the layers of the faces they're on, not where the mesh happens to start them.
+   - **Settling without keeping layers apart.** With no creases held, pushing each pair of layers apart in turn,
+     pass after pass, ratcheted the water bomb's 24 layers upward off the table (1.4 cm to 4.7 cm, with nothing
+     asked of it). Settling now only sets edges; the stages keep layers apart, creases holding. With no air, the
+     water bomb then stays within 0.2% and crosses by at most 3.4 mm, where folds start a hair inside one another.
+   - **Where it stands.** Blown up to 0.027 (a cube 0.3 across, from the flat outline's length), with creases free
+     to turn, it puffs into a lens 16.5 cm tall, stretched 2% and with paper up to 1.9 cm through paper; about
+     two minutes to solve. `scripts/balloon-lab.ts` tries it.
+
 8. **The iris, later.** It needs paper that bends and then lies flat again (a "relax to flat" mode, or using the
    solver to find the crease pattern real paper takes). Revisit once 1–7 are done.
 

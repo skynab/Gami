@@ -218,6 +218,27 @@ describe('bending a frame', () => {
     expect(strain(still.frame)).toBeLessThan(2e-3);
   });
 
+  it('puffs up paper with air blown in, resting on the table', { timeout: 30000 }, () => {
+    // Folded in half: blown in between its layers, both puff out and the whole lifts to rest on the table.
+    const folded = new Recipe({ id: 'puffed', title: 'Puffed', sheet: { size: [1, 1], front: '#c33', back: '#eee' } })
+      .onto(paper(0.5, 0.5), table(-0.5, 0.5), { title: 'Fold in half' })
+      .build()
+      .steps.at(-1)!.frame;
+    const puffed = bendFrame(folded, { flex: folded.faces_vertices.map((_, f) => f), anchor: [-0.25, 0], goals: [], mesh: 0.125, inflate: 0.01 });
+    const { frame } = puffed;
+    const ys = frame.vertices_coords.map((q) => q[1]);
+    expect(Math.min(...ys)).toBeCloseTo(0, 9);
+    // Well off the table, both layers out.
+    expect(Math.max(...ys)).toBeGreaterThan(0.05);
+    for (const t of frame.faces_vertices) {
+      for (let e = 0; e < 3; e++) {
+        const [a, b] = [t[e], t[(e + 1) % 3]];
+        const want = dist(frame.vertices_paper[a], frame.vertices_paper[b]);
+        expect(Math.abs(dist(frame.vertices_coords[a], frame.vertices_coords[b]) - want) / want).toBeLessThan(1e-2);
+      }
+    }
+  });
+
   it('round-trips through a .fold file', () => {
     const model: OrigamiModel = {
       id: 'taco',

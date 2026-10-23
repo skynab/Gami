@@ -161,6 +161,11 @@ export interface BendOptions {
   creaseCompliance?: number;
   /** How many stages the goals ramp over: the step's in-between frames, and its last. */
   stages?: number;
+  /**
+   * Air blown in (a water bomb puffed up): the volume the paper encloses by the end. Each triangle is pushed out
+   * away from the middle of the stack it starts in, as the layers either side of the air are.
+   */
+  inflate?: number;
 }
 
 const CREASE_COMPLIANCE = 1e-3;
@@ -236,7 +241,11 @@ export function bendFrame(frame: FoldFrame, options: BendOptions): { via: FoldFr
     creases,
     hinges,
     thickness: LAYER_GAP,
-    floor: 0,
+    // Paper blown up puffs out both ways from the middle: it rises off the table as it does (below), rather
+    // than its bottom being held flat on it.
+    ...(!options.inflate && { floor: 0 }),
+    ...(stacked(frame) && { side: sidesByLayer(frame, points, triangles, parent) }),
+    ...(options.inflate && { inflate: inflation(frame, points, triangles, parent, options.inflate) }),
     ...(options.stages && { stages: options.stages }),
   });
   const write = (coords: Vec3[], first: boolean): FoldFrame => ({
@@ -247,8 +256,93 @@ export function bendFrame(frame: FoldFrame, options: BendOptions): { via: FoldFr
     ...(frame.cuts?.length && { cuts: frame.cuts }),
     ...(soft.length && { soft }),
   });
+  // Resting on the table: blown up, each frame is lifted until its lowest point is on it.
+  if (options.inflate) for (const f of frames) {
+    const low = Math.min(...f.map((q) => q[1]));
+    for (const q of f) q[1] -= low;
+  }
   const all = frames.map((f, k) => write(f, k === 0));
   return { via: all.slice(0, -1), frame: all[all.length - 1], strain };
+}
+
+/** Whether a frame lies flat, its faces in layers. */
+const stacked = (frame: FoldFrame) => !!frame.faces_layer && frame.vertices_coords.every((q) => Math.abs(q[1]) < 1e-9);
+
+/**
+ * For paper lying flat in layers: which side of a triangle a point belongs on, by the layers of the faces they're
+ * on (see BendProblem.side), where every face the point is on is above the triangle's, or every one below.
+ */
+function sidesByLayer(frame: FoldFrame, points: Vec3[], triangles: Tri[], parent: number[]): (v: number, t: number) => number | undefined {
+  const layer = frame.faces_layer!;
+  const lo = points.map(() => Infinity);
+  const hi = points.map(() => -Infinity);
+  triangles.forEach((t, k) => {
+    for (const v of t) {
+      lo[v] = Math.min(lo[v], layer[parent[k]]);
+      hi[v] = Math.max(hi[v], layer[parent[k]]);
+    }
+  });
+  // Which way each triangle's corners wind, seen from above.
+  const up = triangles.map(([a, b, c]) => {
+    const [pa, pb, pc] = [points[a], points[b], points[c]];
+    return Math.sign((pb[2] - pa[2]) * (pc[0] - pa[0]) - (pb[0] - pa[0]) * (pc[2] - pa[2]));
+  });
+  return (v, t) => {
+    const at = layer[parent[t]];
+    if (!up[t] || (lo[v] <= at && hi[v] >= at)) return undefined;
+    return up[t] * (lo[v] > at ? 1 : -1);
+  };
+}
+
+/**
+ * Where air blown into paper pushes it (see BendOptions.inflate): out from the middle of the stack, round the middle
+ * of the paper. Paper lying flat in layers is pushed only where it's the outside, the top layer or the bottom one
+ * there: the air pushes the skin out, and the layers inside (flaps tucked into pockets) come along, rather than
+ * being pushed out through it. A triangle lying in the middle, or standing on edge, isn't pushed.
+ */
+function inflation(frame: FoldFrame, points: Vec3[], triangles: Tri[], parent: number[], volume: number): { centre: Vec3; outward: number[]; volume: number } {
+  const ys = points.map((q) => q[1]);
+  const middle = (Math.min(...ys) + Math.max(...ys)) / 2;
+  const centre: Vec3 = [0, middle, 0];
+  for (const q of points) {
+    centre[0] += q[0] / points.length;
+    centre[2] += q[2] / points.length;
+  }
+  const outside = stacked(frame) ? outsideOf(frame, triangles, points, parent) : undefined;
+  const outward = triangles.map(([a, b, c], t) => {
+    const [pa, pb, pc] = [points[a], points[b], points[c]];
+    // The triangle's normal's height, the way its corners wind, and which side of the middle it lies.
+    const ny = (pb[2] - pa[2]) * (pc[0] - pa[0]) - (pb[0] - pa[0]) * (pc[2] - pa[2]);
+    const above = (pa[1] + pb[1] + pc[1]) / 3 - middle;
+    if (Math.abs(ny) < 1e-12 || Math.abs(above) < 1e-9) return 0;
+    if (outside && !outside(t)) return 0;
+    return Math.sign(ny) * Math.sign(above);
+  });
+  return { centre, outward, volume };
+}
+
+/** For paper lying flat in layers: whether each triangle is the top or bottom layer where it lies. */
+function outsideOf(frame: FoldFrame, triangles: Tri[], points: Vec3[], parent: number[]): (t: number) => boolean {
+  const layer = frame.faces_layer!;
+  const placed = facePositions(frame).map((face) => face.map((q): Vec2 => [q[0], q[2]]));
+  return (t) => {
+    const [a, b, c] = triangles[t].map((v) => points[v]);
+    const at: Vec2 = [(a[0] + b[0] + c[0]) / 3, (a[2] + b[2] + c[2]) / 3];
+    const here = placed.flatMap((poly, f) => (inPolygon(at, poly) ? [layer[f]] : []));
+    const mine = layer[parent[t]];
+    return !here.length || mine >= Math.max(...here) || mine <= Math.min(...here);
+  };
+}
+
+/** Whether a point is inside a polygon (even–odd). */
+function inPolygon([x, y]: Vec2, poly: Vec2[]): boolean {
+  let inside = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [xi, yi] = poly[i];
+    const [xj, yj] = poly[j];
+    if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
 }
 
 /** Splits triangles in two across their longest edge until none is longer than its face allows (Rivara's method). */
