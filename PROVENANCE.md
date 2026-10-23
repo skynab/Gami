@@ -113,7 +113,7 @@ noted when it was written, and the model was folded from the common traditional 
 
 ## Adding a model
 
-1. Check the designer in [Gilad's origami database](https://www.giladorigami.com/origami-database) and in
+1. Check the designer in [Gilad's origami database](https://www.giladorigami.com/origami-database/fish) (search results are at `/origami-database/<name>`; the bare page says "Not Found" but its search box works) and in
    the tutorial you plan to follow. A free diagram is not an open licence.
 2. Add a row: designer (or "Traditional" with where that's stated), the licence, the reference you follow, the status, the
    date.

@@ -12,7 +12,7 @@ model with steps has no row. Gallery models must be traditional, openly licensed
 ## Steps
 
 1. **Find the designer.** Look the model up in Gilad's origami database
-   (https://www.giladorigami.com/origami-database) and on the tutorial you'll follow. Note exactly what each
+   (search results are at https://www.giladorigami.com/origami-database/<model name>, e.g. `/origami-database/fish`; the bare `/origami-database` page shows "404 Not Found", though its search box works) and on the tutorial you'll follow. Note exactly what each
    says ("Traditional", "Unknown", or a name).
 2. **Find the licence.**
    - Traditional, no known designer: nobody owns the design. Licence: `None needed: nobody owns it`.
