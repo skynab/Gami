@@ -118,3 +118,11 @@ export const AutoThemeIcon = icon(
     <path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor" />
   </>,
 );
+/** "More": three dots, for showing controls tucked away on narrow screens. */
+export const MoreIcon = icon(
+  <>
+    <circle cx="5" cy="12" r="1.4" fill="currentColor" />
+    <circle cx="12" cy="12" r="1.4" fill="currentColor" />
+    <circle cx="19" cy="12" r="1.4" fill="currentColor" />
+  </>,
+);

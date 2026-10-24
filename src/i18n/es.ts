@@ -145,6 +145,7 @@ export const es: Messages = {
     speed: 'Velocidad {{speed}}×',
     speedTitle: 'Velocidad del plegado (S)',
     view: 'Vista',
+    viewControls: 'Controles de vista',
     viewTitle: 'Vista {{view}} ({{key}})',
     lock: 'Bloquear vista',
     lockTitle: 'Bloquear vista: arrastrar mueve en lugar de girar (L)',

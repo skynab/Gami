@@ -8,6 +8,7 @@ import {
   HalfStepIcon,
   KeyboardIcon,
   LockIcon,
+  MoreIcon,
   NextIcon,
   PauseIcon,
   PrevIcon,
@@ -48,6 +49,8 @@ export function ModelViewer({ progressKey, title, load, notice }: {
   const [data, setData] = useState<OrigamiModel | null>(null);
   const [failed, setFailed] = useState(false);
   const [help, setHelp] = useState(false);
+  // Narrow screens hide the view controls (Free, Top, …) until asked for.
+  const [viewsOpen, setViewsOpen] = useState(false);
   const view = useViewer((s) => s.view);
   const locked = useViewer((s) => s.locked);
   const guides = useViewer((s) => s.guides);
@@ -222,7 +225,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
       {help && <ShortcutsDialog onClose={() => setHelp(false)} />}
 
       <footer className="bottombar playback">
-        <div className="group">
+        <div className="group transport">
           <button type="button" className="icon" aria-label={t('viewer.first')} title={t('viewer.firstTitle')} disabled={step <= 1} onClick={() => goTo(1)}>
             <FirstIcon />
           </button>
@@ -246,11 +249,23 @@ export function ModelViewer({ progressKey, title, load, notice }: {
           >
             {speed}×
           </button>
+          {/* Narrow screens only (app.css): the view controls are tucked away behind this. */}
+          <button
+            type="button"
+            className="icon views-toggle"
+            aria-label={t('viewer.viewControls')}
+            title={t('viewer.viewControls')}
+            aria-expanded={viewsOpen}
+            aria-controls="view-controls"
+            onClick={() => setViewsOpen((open) => !open)}
+          >
+            <MoreIcon />
+          </button>
         </div>
 
         <Scrubber sections={data?.steps.flatMap((st, i) => (st.section ? [{ step: i + 1, name: say(st.section) }] : [])) ?? []} />
 
-        <div className="group">
+        <div className="group view-controls" id="view-controls" data-open={viewsOpen || undefined}>
           <div className="segmented" role="group" aria-label={t('viewer.view')}>
             {VIEWS.map((v, i) => (
               <button key={v.id} type="button" aria-pressed={view === v.id} title={t('viewer.viewTitle', { view: t(`views.${v.id}`), key: i + 1 })} onClick={() => setView(v.id)}>

@@ -75,10 +75,10 @@ export function crane() {
   const beforeWing = r.current;
   const backWing = (c: Vec2) => back(c) && locate(beforeWing, c)[1] < top;
   wing(back, [-0.5, 0.5], 'Fold the other wing down', 'Fold the other wing down to match.');
-  // Lying on its side, the crane spreads its wings by standing the top one up.
+  // Lying on its side, the crane spreads its wings flat: the top one swings right over, to lie opposite the other.
   return r
     .shape({ title: 'Spread the wings', text: 'Lift the wings out to the sides and gently pull them apart to puff out the body. Done!' }, [
-      { through: [table(-2, top), table(2, top)], moving: paper(-0.5, 0.5), degrees: 95, only: backWing },
+      { through: [table(-2, top), table(2, top)], moving: paper(-0.5, 0.5), degrees: 180, only: backWing },
     ])
     .build();
 }

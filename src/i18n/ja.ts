@@ -145,6 +145,7 @@ export const ja: Messages = {
     speed: '速さ {{speed}}×',
     speedTitle: '折る速さ (S)',
     view: '視点',
+    viewControls: '視点の操作',
     viewTitle: '{{view}} ({{key}})',
     lock: '視点を固定',
     lockTitle: '視点を固定: ドラッグで回転せず移動 (L)',
