@@ -12,6 +12,8 @@ export const en = {
     signIn: 'Sign in',
     sending: 'Sending…',
     language: 'Language',
+    theme: 'Theme',
+    themes: { system: 'Auto', light: 'Light', dark: 'Dark' },
   },
   donate: {
     button: 'Donate',
