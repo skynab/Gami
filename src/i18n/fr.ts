@@ -68,6 +68,7 @@ export const fr: Messages = {
     boomerang: { title: 'Boomerang', blurb: 'Un boomerang en papier plat qui s’envole, tourne et revient.' },
     boat: { title: 'Bateau', blurb: 'Le bateau en papier classique. Il flotte vraiment, un moment.' },
     waterbomb: { title: 'Bombe à eau', blurb: 'Un ballon en papier. Souffle dans le trou et il se gonfle.' },
+    balloon: { title: 'Ballon', blurb: 'La bombe à eau, gonflée. Expérimental : le papier se gonfle en coussin, pas encore en cube.' },
     'balloon-rabbit': { title: 'Lapin ballon', blurb: 'Une bombe à eau aux longues oreilles, gonflée toute ronde.' },
     'flapping-bird': { title: 'Oiseau qui bat des ailes', blurb: 'Tire sa queue et ses ailes battent.' },
     frog: { title: 'Grenouille', blurb: 'La grenouille classique, de la base grenouille jusqu’aux pattes.' },

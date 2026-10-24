@@ -1656,4 +1656,8 @@ export const fr: Record<string, string> = {
     "Pliez le bord supérieur jusqu’au pli que vous venez de faire, puis dépliez.",
   "Fold the top edge down towards the middle, stopping a little short, and unfold.":
     "Pliez le bord supérieur vers le centre en vous arrêtant un peu avant, puis dépliez.",
+  "Blow it up":
+    "Gonflez-le",
+  "Blow gently into the hole at the bottom, and the balloon puffs up. Done!":
+    "Soufflez doucement dans le trou du bas, et le ballon se gonfle. C’est fini !",
 };

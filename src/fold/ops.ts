@@ -85,8 +85,9 @@ export type Op =
   /**
    * Bends the paper of the faces `flex` picks, the rest staying rigid, holding the paper at `anchor` still and taking
    * it to its goals. `mesh`: the longest edge of the triangles the bending paper is cut into, on the sheet.
+   * `inflate`: air blown in, the volume the paper encloses by the end (a balloon puffed up).
    */
-  | { op: 'bend'; flex: Faces; anchor: { paper: Vec2 }; goals: BendGoal[]; mesh?: number }
+  | { op: 'bend'; flex: Faces; anchor: { paper: Vec2 }; goals: BendGoal[]; mesh?: number; inflate?: number }
   | { op: 'popUp'; centre: At; rays: { azimuth: number; elevation: number }[] }
   /** Draws on the paper, leaving it where it is: a face, say. */
   | { op: 'draw'; marks: Mark[] }
@@ -180,6 +181,7 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
         }),
         // Not so fine that meshing it takes too long.
         ...opt(o, 'mesh', (v, p) => between(num(v, p), p, 0.02, 10), path),
+        ...opt(o, 'inflate', (v, p) => between(num(v, p), p, 0, 10), path),
       };
     case 'popUp':
       return {
@@ -603,6 +605,7 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
         goals: op.goals.flatMap((g) => ('point' in g ? [{ paper: g.point.paper, to: g.to }] : [])),
         creases: op.goals.flatMap((g) => ('crease' in g ? [{ from: g.crease[0], to: g.crease[1], degrees: g.degrees }] : [])),
         ...(op.mesh !== undefined && { mesh: op.mesh }),
+        ...(op.inflate && { inflate: op.inflate }),
       });
       return { frame: bent, via };
     }

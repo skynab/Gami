@@ -38,10 +38,11 @@ describe('fold guides', () => {
         if (fs[k].faces_vertices.length < fs[k - 1].faces_vertices.length) continue;
         // Drawing on the paper doesn't fold it.
         if (model.steps[k - 1].kind === 'draw') continue;
-        const g = guidesFor(fs[k - 1], fs[k]);
+        // A bend passes through frames on its way, which its faces point back at.
+        const g = guidesFor(fs[k - 1], fs[k], model.steps[k - 1].via);
         expect(g.arrows.length + g.creases.length + g.cuts.length, `${model.id} step ${k}`).toBeGreaterThan(0);
       }
     }
-    // Every step of every model is animated here, which takes a few seconds.
-  }, 30_000);
+    // Every step of every model is animated here, which takes a few seconds (more under a full run).
+  }, 60_000);
 });

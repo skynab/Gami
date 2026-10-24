@@ -68,6 +68,7 @@ export const es: Messages = {
     boomerang: { title: 'Bumerán', blurb: 'Un bumerán de papel plano que sale volando, gira y vuelve.' },
     boat: { title: 'Barco', blurb: 'El clásico barco de papel. Flota de verdad, un rato.' },
     waterbomb: { title: 'Bomba de agua', blurb: 'Un globo de papel. Sopla por el agujero y se infla.' },
+    balloon: { title: 'Globo', blurb: 'La bomba de agua, inflada. Experimental: el papel se infla como una almohada, aún no como un cubo.' },
     'balloon-rabbit': { title: 'Conejo globo', blurb: 'Una bomba de agua con orejas largas, inflada y redonda.' },
     'flapping-bird': { title: 'Pájaro que aletea', blurb: 'Tira de la cola y mueve las alas.' },
     frog: { title: 'Rana', blurb: 'La rana clásica desde la base de rana, con todas sus patas.' },

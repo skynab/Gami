@@ -68,6 +68,7 @@ export const ja: Messages = {
     boomerang: { title: 'ブーメラン', blurb: '飛んでいって向きを変え、戻ってくる平たい紙のブーメラン。' },
     boat: { title: 'ふね', blurb: '定番の紙のふね。しばらくは水に浮かびます。' },
     waterbomb: { title: '水風船', blurb: '紙の風船。穴に息を吹きこむとふくらみます。' },
+    balloon: { title: '紙風船', blurb: 'ふくらませた水風船。試作中：まだ立方体ではなく、まくらのようにふくらみます。' },
     'balloon-rabbit': { title: '風船うさぎ', blurb: '長い耳のついた水風船。ふくらませて丸く。' },
     'flapping-bird': { title: 'はばたく鳥', blurb: 'しっぽを引くと羽がぱたぱた動きます。' },
     frog: { title: 'かえる', blurb: 'かえるの基本形から作る定番のかえる。足もしっかり。' },

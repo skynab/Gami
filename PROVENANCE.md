@@ -61,6 +61,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `seal` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/seal](https://origami.me/seal/) | Clear | 22 Oct 2026 |
 | `boat` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/traditional-boat](https://origami.me/traditional-boat/) | Clear | Coming soon |
 | `waterbomb` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/waterbomb](https://origami.me/waterbomb/) | Clear | 21 Oct 2026 |
+| `balloon` | Traditional (Gilad's database lists the paper balloon as "Traditional" in many books; Kids Web Japan names no designer) | None needed: nobody owns it | [Kids Web Japan: Balloon](https://web-japan.org/kidsweb/virtual/origami/exploring02g.html), for the last step (blowing it up); the folds are the water bomb's | Clear | 23 Oct 2026 |
 | `balloon-rabbit` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/balloon-rabbit](https://origami.me/balloon-rabbit/) | Clear | 21 Oct 2026 |
 | `flapping-bird` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/bird](https://origami.me/bird/) | Clear | 21 Oct 2026 |
 | `frog` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/traditional-frog](https://origami.me/traditional-frog/) | Clear | 21 Oct 2026 |

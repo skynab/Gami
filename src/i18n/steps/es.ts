@@ -1656,4 +1656,8 @@ export const es: Record<string, string> = {
     "Dobla el borde superior hasta el pliegue que acabas de hacer y desdobla.",
   "Fold the top edge down towards the middle, stopping a little short, and unfold.":
     "Dobla el borde superior hacia el centro, quedándote un poco antes, y desdobla.",
+  "Blow it up":
+    "Ínflalo",
+  "Blow gently into the hole at the bottom, and the balloon puffs up. Done!":
+    "Sopla suavemente por el agujero de abajo y el globo se infla. ¡Listo!",
 };

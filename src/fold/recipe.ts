@@ -402,11 +402,11 @@ export class Recipe {
    */
   bend(
     step: { title: string; text?: string },
-    bend: { flex: (centre: Vec2) => boolean; anchor: Vec2; goals: BendGoal[]; mesh?: number },
+    bend: { flex: (centre: Vec2) => boolean; anchor: Vec2; goals: BendGoal[]; mesh?: number; inflate?: number },
   ): this {
     const test = recorder(bend.flex);
     for (const face of this.current.faces_vertices) test(face.map((v) => this.current.vertices_paper[v]));
-    const op: Op = { op: 'bend', flex: test.faces(), anchor: { paper: bend.anchor }, goals: bend.goals, ...(bend.mesh !== undefined && { mesh: bend.mesh }) };
+    const op: Op = { op: 'bend', flex: test.faces(), anchor: { paper: bend.anchor }, goals: bend.goals, ...(bend.mesh !== undefined && { mesh: bend.mesh }), ...(bend.inflate && { inflate: bend.inflate }) };
     try {
       // Made as replaying makes it, so the model and its file agree exactly.
       const { frame, via } = applyOp(this.build(), op);

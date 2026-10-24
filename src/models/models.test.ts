@@ -27,7 +27,8 @@ describe.each(models.map((m) => [m.id, m] as const))('%s', (id, model) => {
     expect(file(`${id}-preview.svg`)).toBe(previewSvg(model));
   });
 
-  it('folds again from its .fold file exactly as its recipe did', () => {
+  // Replaying a bend solves it again, which takes seconds.
+  it('folds again from its .fold file exactly as its recipe did', { timeout: 60_000 }, () => {
     const warnings: string[] = [];
     const read = fromFoldFile(JSON.parse(JSON.stringify(toFoldFile(model))), warnings);
     expect(warnings).toEqual([]);

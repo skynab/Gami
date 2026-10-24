@@ -70,6 +70,7 @@ export const en = {
     boomerang: { title: 'Boomerang', blurb: 'A flat paper boomerang that flies out, turns and comes back.' },
     boat: { title: 'Boat', blurb: 'The classic paper boat. It really floats, for a while.' },
     waterbomb: { title: 'Water bomb', blurb: 'A paper balloon. Blow into the hole and it puffs up.' },
+    balloon: { title: 'Balloon', blurb: 'The water bomb, blown up. Experimental: the paper puffs into a pillow, not yet a cube.' },
     'balloon-rabbit': { title: 'Balloon rabbit', blurb: 'A water bomb with long ears, puffed up round.' },
     'flapping-bird': { title: 'Flapping bird', blurb: 'Pull its tail and the wings flap.' },
     frog: { title: 'Frog', blurb: 'The classic frog from the frog base, legs and all.' },

@@ -1656,4 +1656,8 @@ export const ja: Record<string, string> = {
     "上の辺を、いまつけた折り目まで折り下げ、開きます。",
   "Fold the top edge down towards the middle, stopping a little short, and unfold.":
     "上の辺を中心に向かって折り下げますが、少し手前で止め、開きます。",
+  "Blow it up":
+    "ふくらませる",
+  "Blow gently into the hole at the bottom, and the balloon puffs up. Done!":
+    "下の穴にそっと息を吹きこむと、風船がふくらみます。できあがり！",
 };
