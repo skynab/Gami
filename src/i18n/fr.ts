@@ -145,6 +145,7 @@ export const fr: Messages = {
     speed: 'Vitesse {{speed}}×',
     speedTitle: 'Vitesse de pliage (S)',
     view: 'Vue',
+    viewControls: 'Commandes de vue',
     viewTitle: 'Vue {{view}} ({{key}})',
     lock: 'Verrouiller la vue',
     lockTitle: 'Verrouiller la vue : glisser déplace au lieu de tourner (L)',

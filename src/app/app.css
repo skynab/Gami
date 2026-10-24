@@ -1402,6 +1402,48 @@ kbd {
   justify-content: center;
 }
 
+/* Only on narrow screens: the button that shows and hides the view controls. */
+.views-toggle {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .views-toggle {
+    display: grid;
+  }
+
+  .view-controls:not([data-open]) {
+    display: none;
+  }
+
+  /* The step buttons, about half as big again and sharing the row, so they're easy to hit with a thumb. */
+  .playback .transport {
+    width: 100%;
+    flex-wrap: nowrap;
+    gap: 0;
+  }
+
+  .transport .icon {
+    flex: 1 1 0;
+    width: auto;
+    max-width: 63px;
+    height: 60px;
+  }
+
+  .transport .icon svg {
+    width: 33px;
+    height: 33px;
+  }
+
+  .transport .icon.speed {
+    font-size: 19px;
+  }
+
+  .views-toggle[aria-expanded='true'] {
+    background: var(--surface);
+  }
+}
+
 .secondary:disabled {
   opacity: 0.45;
   cursor: default;

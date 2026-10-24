@@ -147,6 +147,7 @@ export const en = {
     speed: 'Speed {{speed}}×',
     speedTitle: 'Folding speed (S)',
     view: 'View',
+    viewControls: 'View controls',
     viewTitle: '{{view}} view ({{key}})',
     lock: 'Lock view',
     lockTitle: 'Lock view: drag pans instead of rotating (L)',
