@@ -1,11 +1,12 @@
-# Builds the site and publishes it to GitHub Pages at https://<owner>.github.io/<repo>/.
-# Turn it on once in the repo: Settings → Pages → Source: GitHub Actions.
+# Builds main and publishes it to GitHub Pages at https://<owner>.github.io/<repo>/.
+# Turn it on once in the repo: Settings → Pages → Source: GitHub Actions. main isn't the default branch, so
+# also allow it under Settings → Environments → github-pages → Deployment branches.
 # Accounts are optional: set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY under Settings → Secrets and variables → Actions → Variables.
 name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [dev]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
