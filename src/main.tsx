@@ -2,6 +2,7 @@ import { lazy, StrictMode, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import './app/app.css';
+import './app/theme';
 import './i18n';
 import { useAuth } from './auth/store';
 import { Gallery } from './routes/Gallery';

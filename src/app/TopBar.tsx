@@ -1,8 +1,11 @@
 import type { ReactNode } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { LANGUAGES, setLanguage, type Language } from '../i18n';
 import { DonateButton } from './Donate';
+import { AutoThemeIcon, MoonIcon, SunIcon } from './icons';
+import { getTheme, setTheme, THEMES } from './theme';
 
 /** The 52px bar at the top of every page. Pages fill the start, middle and end slots. */
 export function TopBar({ start, center, end }: { start?: ReactNode; center?: ReactNode; end?: ReactNode }) {
@@ -12,10 +15,34 @@ export function TopBar({ start, center, end }: { start?: ReactNode; center?: Rea
       {center && <div className="topbar-center">{center}</div>}
       <div className="topbar-end">
         {end}
+        <ThemeButton />
         <LanguageMenu />
         <DonateButton />
       </div>
     </header>
+  );
+}
+
+/** Light, dark, or whatever the device uses: one small button that steps through them. */
+function ThemeButton() {
+  const { t } = useTranslation();
+  const [theme, choose] = useState(getTheme);
+  const Icon = { system: AutoThemeIcon, light: SunIcon, dark: MoonIcon }[theme];
+  const label = `${t('common.theme')}: ${t(`common.themes.${theme}`)}`;
+  return (
+    <button
+      type="button"
+      className="icon"
+      aria-label={label}
+      title={label}
+      onClick={() => {
+        const next = THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length];
+        setTheme(next);
+        choose(next);
+      }}
+    >
+      <Icon />
+    </button>
   );
 }
 

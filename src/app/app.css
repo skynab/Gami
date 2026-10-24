@@ -16,8 +16,9 @@
   color-scheme: light dark;
 }
 
+/* Dark: when the device is dark, unless light was chosen in the menu, or when dark was chosen (theme.ts). */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #16171a;
     --fg: #ececf1;
     --muted: #9c9ca8;
@@ -30,6 +31,25 @@
     --danger: #ff8a80;
     --canvas-bg: #0e0f11;
   }
+}
+
+:root[data-theme="dark"] {
+  --bg: #16171a;
+  --fg: #ececf1;
+  --muted: #9c9ca8;
+  --line: #2a2b31;
+  --surface: #222328;
+  --surface-hover: #2c2d33;
+  --accent: #8b85ff;
+  --accent-fg: #0f0f14;
+  --accent-soft: #2a2950;
+  --danger: #ff8a80;
+  --canvas-bg: #0e0f11;
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
 }
 
 *,
@@ -426,6 +446,26 @@ a {
 }
 
 @media (max-width: 480px) {
+  /* Phones: no keyboard to take shortcuts from, and the bar needs the room. */
+  .shortcuts-button {
+    display: none;
+  }
+
+  .topbar {
+    gap: 8px;
+  }
+
+  .topbar-end {
+    gap: 4px;
+    /* The controls keep their size; the page title gives way (it ends in …). */
+    flex: none;
+  }
+
+  .topbar .icon {
+    width: 36px;
+    height: 36px;
+  }
+
   .donate-button span {
     display: none;
   }
@@ -1353,6 +1393,13 @@ kbd {
 .bottombar .group {
   flex-wrap: wrap;
   gap: 6px;
+}
+
+/* Learning a fold: when the bar wraps onto several lines (narrow screens), each line is centred. On one line the
+   scrubber takes up the spare room, so nothing moves. */
+.playback,
+.playback .group {
+  justify-content: center;
 }
 
 .secondary:disabled {

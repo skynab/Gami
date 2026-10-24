@@ -10,6 +10,8 @@ export const fr: Messages = {
     signIn: 'Se connecter',
     sending: 'Envoi…',
     language: 'Langue',
+    theme: 'Thème',
+    themes: { system: 'Auto', light: 'Clair', dark: 'Sombre' },
   },
   donate: {
     button: 'Faire un don',

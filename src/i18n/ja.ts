@@ -10,6 +10,8 @@ export const ja: Messages = {
     signIn: 'ログイン',
     sending: '送信中…',
     language: '言語',
+    theme: 'テーマ',
+    themes: { system: '自動', light: 'ライト', dark: 'ダーク' },
   },
   donate: {
     button: '寄付',

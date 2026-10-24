@@ -10,6 +10,8 @@ export const es: Messages = {
     signIn: 'Iniciar sesión',
     sending: 'Enviando…',
     language: 'Idioma',
+    theme: 'Tema',
+    themes: { system: 'Auto', light: 'Claro', dark: 'Oscuro' },
   },
   donate: {
     button: 'Donar',

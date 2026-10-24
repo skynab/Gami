@@ -148,7 +148,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
         }
         center={total > 0 && <span>{t('viewer.stepOf', { step, total })}</span>}
         end={
-          <button type="button" className="icon" aria-label={t('viewer.shortcuts')} title={t('viewer.shortcutsTitle')} onClick={() => setHelp(true)}>
+          <button type="button" className="icon shortcuts-button" aria-label={t('viewer.shortcuts')} title={t('viewer.shortcutsTitle')} onClick={() => setHelp(true)}>
             <KeyboardIcon />
           </button>
         }
@@ -221,7 +221,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
 
       {help && <ShortcutsDialog onClose={() => setHelp(false)} />}
 
-      <footer className="bottombar">
+      <footer className="bottombar playback">
         <div className="group">
           <button type="button" className="icon" aria-label={t('viewer.first')} title={t('viewer.firstTitle')} disabled={step <= 1} onClick={() => goTo(1)}>
             <FirstIcon />
