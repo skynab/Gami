@@ -1,12 +1,14 @@
 import { collapse, type CreaseKind } from './collapse';
-import { fold, FoldError, placeLike, rotate, toFlat, turnOver, unfoldStep, type FoldKind } from './fold';
+import { cut } from './cut';
+import { fold, FoldError, rotate, toFlat, turnOver, unfoldStep, unplaceLike, type FoldKind } from './fold';
+import { roundCoord } from './fold-format';
 import { inside, locate } from './select';
 export { locate } from './select';
 import { place } from './place';
 import { radial, reparent, shape, type Bend, type Ray } from './shape';
 import { startFrame } from './sheets';
 import { frontUp, sideOf } from './geometry2d';
-import { lineOf, type At, type Faces, type LineSpec, type Op } from './ops';
+import { applyOp, lastFold, lineOf, type At, type BendGoal, type Faces, type LineSpec, type Op } from './ops';
 import type { FoldFrame, Mark, OrigamiModel, Sheet, Step, Vec2 } from './types';
 
 /**
@@ -52,7 +54,7 @@ export class Recipe {
   private start: FoldFrame;
   private steps: Step[] = [];
   /** After 3D shaping: the flat state it started from, and its bends so far. */
-  private shaping?: { base: FoldFrame; bends: Bend[] };
+  private shaping?: { base: FoldFrame; bends: Bend[]; corners: boolean; chained?: Vec2; ride?: (paper: Vec2[]) => boolean };
   /** The section the next step starts, from `section()`. */
   private sectionName?: string;
 
@@ -81,9 +83,17 @@ export class Recipe {
       .filter((f) => only([avg(f.paper, 0), avg(f.paper, 1)]) && inside(f.world, spot))
       .sort((a, b) => b.layer - a.layer);
     if (!faces.length) throw new FoldError(`${this.info.id}: no paper at (${spot.join(', ')}).`);
-    const f = faces[0];
-    // The face's map from table back to sheet: the same construction with the roles swapped.
-    return paper(...placeLike({ ...f, paper: f.world, world: f.paper })(spot));
+    return paper(...unplaceLike(faces[0])(spot));
+  }
+
+  /**
+   * A test on faces' centres on the sheet picking the paper that lies, right now, where `here` (a test on a
+   * point on the table) says: "the half below the middle", say. It remembers where the paper is now, so it
+   * picks the same paper after later folds move it.
+   */
+  lying(here: (at: Vec2) => boolean): (centre: Vec2) => boolean {
+    const now = this.current;
+    return (centre) => here(locate(now, centre));
   }
 
   /** Where a point is on the table right now (or, once shaping has started, in the flat state it started from). */
@@ -140,14 +150,14 @@ export class Recipe {
   unfold(step: { title?: string; text?: string; to?: number } = {}): this {
     let to = step.to;
     if (to === undefined) {
-      const lastUnfold = this.steps.findLastIndex((s) => s.kind === 'unfold');
-      const lastFold = this.steps.findLastIndex((s) => s.kind === 'fold');
-      if (lastFold <= lastUnfold) throw new FoldError(`${this.info.id}: nothing to unfold at step ${this.steps.length + 1}`);
-      to = lastFold;
+      const last = lastFold(this.steps);
+      if (last === null) throw new FoldError(`${this.info.id}: nothing to unfold at step ${this.steps.length + 1}`);
+      to = last;
     }
     const { frame, via } = unfoldStep(this.frames(), to);
     this.push({ title: step.title ?? 'Unfold', text: step.text, kind: 'unfold' }, frame, { op: 'unfold', ...(step.to !== undefined && { to }) });
-    if (via) this.steps.at(-1)!.via = via;
+    const cuts = this.steps.at(-1)!.frame.cuts;
+    if (via) this.steps.at(-1)!.via = cuts ? via.map((f) => (f.cuts ? f : { ...f, cuts })) : via;
     return this;
   }
 
@@ -261,11 +271,75 @@ export class Recipe {
   }
 
   /**
+   * A swivel fold: a flap swings round flat on the table about a point on its hinge, `degrees` anticlockwise as
+   * seen from above. The wedge of paper the flap swings across folds into a pleat: a new crease where the hinge
+   * ends up, and one halfway back to the old hinge, the other way (the gusset). The flap keeps its own hinge,
+   * folded as it was, so it stays folded over and turns by `degrees`. `hinge` is another point on the flap's
+   * hinge as it is now; the pivot is usually where the hinge meets an edge of the paper. `flap` picks the
+   * flap's paper (by faces' centres on the sheet), which isn't creased; `only` limits the pleat to some of the
+   * rest. Recorded as a collapse, so it replays and opens in the Studio like one.
+   */
+  swivel(
+    step: { title: string; text?: string },
+    { pivot, hinge, degrees, anchor, flap, only }: { pivot: At; hinge: At; degrees: number; anchor: At; flap: (centre: Vec2) => boolean; only?: (centre: Vec2) => boolean },
+  ): this {
+    const pleated = (c: Vec2) => !flap(c) && (!only || only(c));
+    const p = this.where(pivot);
+    const h = this.where(hinge);
+    // Anticlockwise seen from above, with z pointing towards you on the table.
+    const turned = (deg: number): At => {
+      const a = (deg * Math.PI) / 180;
+      const [x, z] = [h[0] - p[0], h[1] - p[1]];
+      return table(p[0] + x * Math.cos(a) + z * Math.sin(a), p[1] - x * Math.sin(a) + z * Math.cos(a));
+    };
+    const at = table(...p);
+    // The new hinge and the gusset fold opposite ways; which way round depends on the layers, so try both.
+    let error: unknown;
+    const before = this.current;
+    for (const [hingeKind, gussetKind] of [['valley', 'mountain'], ['mountain', 'valley']] as const) {
+      try {
+        this.collapse(
+          { ...step, kind: 'fold' },
+          [
+            { through: [at, turned(degrees)], kind: hingeKind, only: pleated },
+            { through: [at, turned(degrees / 2)], kind: gussetKind, only: pleated },
+          ],
+          anchor,
+        );
+        // Creases that cross no paper but the flap leave it where it was: that's no swivel.
+        if (this.steps.at(-1)!.frame.vertices_coords.length !== before.vertices_coords.length) return this;
+        this.steps.pop();
+        throw new FoldError(`${this.info.id}, step ${this.steps.length + 1} (${step.title}): there's no paper for the flap to swing across that way.`);
+      } catch (e) {
+        if (!(e instanceof FoldError)) throw e;
+        error = e;
+      }
+    }
+    throw error;
+  }
+
+  /**
    * Shapes the paper in 3D: opening flaps partway, curling petals. Lines are drawn on the last flat state,
    * and a later shaping step adds its bends to the earlier ones'. Nothing can be folded flat afterwards.
    */
-  shape(step: { title: string; text?: string }, bends: ShapeBend[]): this {
+  shape(
+    step: { title: string; text?: string },
+    bends: ShapeBend[],
+    /**
+     * `corners`: bends whose lines cross are walls rising together, the corners between them pinching into ears.
+     * `chained`: the bends open folds along the paper from the face at this point of the sheet, each fold on a
+     * bend's line opening by its angle, so stacked pleats open one by one into a zigzag.
+     * `ride`: with `chained`, the faces (by their centre on the sheet) held flat on whatever lies beneath them,
+     * moving with it rather than crease by crease: a rim folded in onto a wall, a flap lying on the floor.
+     */
+    { corners = false, chained, ride }: { corners?: boolean; chained?: At; ride?: (centre: Vec2) => boolean } = {},
+  ): this {
     const base = this.shaping?.base ?? this.current;
+    const anyCorners = corners || !!this.shaping?.corners;
+    if (chained && !('paper' in chained)) throw new FoldError(`${this.info.id}: a chained shape's anchor must be a point on the sheet.`);
+    const anchor = chained ? chained.paper : this.shaping?.chained;
+    const rideTest = ride && recorder(ride);
+    const riding = rideTest ?? this.shaping?.ride;
     const tests = bends.map((b) => b.only && recorder(b.only));
     const added = bends.flatMap((b, k): Bend[] => {
       const test = tests[k];
@@ -286,7 +360,8 @@ export class Recipe {
     const bendsSoFar = [...(this.shaping?.bends ?? []), ...added];
     try {
       // Shaped again from the flat state: each face's parent is the face of the last step it lies within.
-      const frame = this.shaping ? reparent(this.current, shape(base, bendsSoFar)) : shape(base, bendsSoFar);
+      const shaped = shape(base, bendsSoFar, { corners: anyCorners, ...(anchor && { chained: anchor }), ...(riding && { ride: riding }) });
+      const frame = this.shaping ? reparent(this.current, shaped) : shaped;
       this.push({ title: step.title, text: step.text, kind: 'pose' }, frame, {
         op: 'shape',
         bends: bends.map((b, k) => ({
@@ -297,12 +372,15 @@ export class Recipe {
           ...(b.layers !== undefined && { layers: b.layers }),
           ...(tests[k] && { only: tests[k].faces() }),
         })),
+        ...(corners && { corners: true }),
+        ...(chained && { chained }),
+        ...(rideTest && { ride: rideTest.faces() }),
       });
     } catch (e) {
       if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
       throw e;
     }
-    this.shaping = { base, bends: bendsSoFar };
+    this.shaping = { base, bends: bendsSoFar, corners: anyCorners, ...(anchor && { chained: anchor }), ...(riding && { ride: riding }) };
     return this;
   }
 
@@ -312,6 +390,31 @@ export class Recipe {
       return this.push({ ...step, kind: 'pose' }, radial(this.current, this.where(centre), rays), { op: 'popUp', centre, rays });
     } catch (e) {
       if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
+      throw e;
+    }
+  }
+
+  /**
+   * Bends the paper (see docs/bending-plan.md): the faces `flex` picks (by their centre on the sheet) bend, the rest
+   * stay rigid, the paper at `anchor` stays put, and the goals take points of the sheet (corners of faces) to
+   * places in 3D and creases to fold angles. The step plays through the stages the paper went through. Nothing can
+   * be folded after.
+   */
+  bend(
+    step: { title: string; text?: string },
+    bend: { flex: (centre: Vec2) => boolean; anchor: Vec2; goals: BendGoal[]; mesh?: number; inflate?: number },
+  ): this {
+    const test = recorder(bend.flex);
+    for (const face of this.current.faces_vertices) test(face.map((v) => this.current.vertices_paper[v]));
+    const op: Op = { op: 'bend', flex: test.faces(), anchor: { paper: bend.anchor }, goals: bend.goals, ...(bend.mesh !== undefined && { mesh: bend.mesh }), ...(bend.inflate && { inflate: bend.inflate }) };
+    try {
+      // Made as replaying makes it, so the model and its file agree exactly.
+      const { frame, via } = applyOp(this.build(), op);
+      this.push({ ...step, kind: 'pose' }, frame, op);
+      if (via) this.steps.at(-1)!.via = via;
+      return this;
+    } catch (e) {
+      if (e instanceof Error) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
       throw e;
     }
   }
@@ -327,16 +430,34 @@ export class Recipe {
       const points = 'line' in m ? m.line : m.fill;
       const f = faces.find((face) => inside(face.world, points[0]));
       if (!f) throw new FoldError(`${this.info.id}: no paper to draw on at (${points[0].join(', ')}).`);
-      // The face's map from table back to sheet: the same construction with the roles swapped.
-      const toSheet = placeLike({ ...f, paper: f.world, world: f.paper });
       // Rounded as .fold files round coordinates, so the model and its file agree exactly.
-      const round = (x: number) => Math.round(x * 1e9) / 1e9 || 0;
-      const onSheet = points.map((p) => toSheet(p).map(round) as Vec2);
+      const onSheet = points.map((p) => unplaceLike(f)(p).map(roundCoord) as Vec2);
       return { side: frontUp(f.world, f.paper) ? 'front' : 'back', points: onSheet, ...('fill' in m && { fill: true }) };
     });
     this.push({ ...step, kind: 'draw' }, { ...this.current, faces_parent: undefined }, { op: 'draw', marks: drawn });
     this.steps.at(-1)!.marks = drawn;
     return this;
+  }
+
+  /**
+   * Cuts with scissors from one point to another, through every layer the cut crosses (or the top `layers`, or
+   * the faces `only` picks, by their centre on the sheet). Paper either side of a cut is no longer joined there.
+   */
+  cut(from: At, to: At, step: { title: string; text?: string; layers?: number; only?: (centre: Vec2) => boolean }): this {
+    const test = step.only && recorder(step.only);
+    try {
+      const frame = cut(this.current, { from: this.where(from), to: this.where(to), layers: step.layers, only: test });
+      return this.push({ title: step.title, text: step.text, kind: 'cut' }, frame, {
+        op: 'cut',
+        from,
+        to,
+        ...(step.layers !== undefined && { layers: step.layers }),
+        ...(test && { only: test.faces() }),
+      });
+    } catch (e) {
+      if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
+      throw e;
+    }
   }
 
   turnOver(text = 'Flip the paper over from left to right.'): this {
@@ -370,7 +491,12 @@ export class Recipe {
   }
 
   private push({ title, text, kind }: Omit<Step, 'frame' | 'op'>, frame: FoldFrame, op: Op): this {
+    // The fold engine works on flat faces: bent paper (its mesh of triangles) can be drawn on, but not folded again yet.
+    if (this.current.soft && op.op !== 'draw') throw new FoldError(`${this.info.id}, step ${this.steps.length + 1} (${title}): paper that has bent can’t be folded any further.`);
     this.shaping = undefined;
+    // Cuts stay in the paper from step to step (a fresh sheet has none).
+    const cuts = this.current.cuts;
+    if (cuts?.length && !frame.cuts && op.op !== 'newSheet') frame = { ...frame, cuts };
     const section = this.sectionName;
     this.sectionName = undefined;
     this.steps.push({ title, ...(text && { text }), kind, ...(section && { section }), frame, op });
@@ -396,6 +522,5 @@ function recorder(only: (centre: Vec2) => boolean): ((poly: Vec2[]) => boolean) 
     return yes;
   };
   // Rounded as .fold files round coordinates: each face's centre stays well inside its outline.
-  const round = (x: number) => Math.round(x * 1e9) / 1e9 || 0;
-  return Object.assign(test, { faces: (): Faces => ({ inPaper: [...picked.values()].map((poly) => poly.map((p) => p.map(round) as Vec2)) }) });
+  return Object.assign(test, { faces: (): Faces => ({ inPaper: [...picked.values()].map((poly) => poly.map((p) => p.map(roundCoord) as Vec2)) }) });
 }

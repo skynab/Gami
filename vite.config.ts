@@ -3,7 +3,11 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
+// Where the site is served from. `/` for most hosts and app wrappers; GitHub Pages sets BASE_PATH=/Gami/.
+const base = (process.env.BASE_PATH ?? '/').replace(/\/?$/, '/');
+
 export default defineConfig({
+  base,
   plugins: [
     react(),
     // Installable and usable offline: the app, the 3D viewer and every built-in model are cached on first visit.
@@ -17,8 +21,8 @@ export default defineConfig({
         theme_color: '#4f46e5',
         background_color: '#ffffff',
         display: 'standalone',
-        start_url: '/',
-        scope: '/',
+        start_url: base,
+        scope: base,
         icons: [
           { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },
           { src: 'icon-512.png', sizes: '512x512', type: 'image/png' },
@@ -30,7 +34,7 @@ export default defineConfig({
         // The 3D viewer chunk is about 1 MB.
         maximumFileSizeToCacheInBytes: 2 * 1024 * 1024,
         // Deep links (/learn/crane) load the app shell when offline.
-        navigateFallback: '/index.html',
+        navigateFallback: `${base}index.html`,
       },
     }),
   ],
@@ -38,6 +42,7 @@ export default defineConfig({
   build: { chunkSizeWarningLimit: 1200 },
   test: {
     environment: 'node',
-    exclude: ['e2e/**', 'node_modules/**'],
+    // Worktrees of other sessions live under .claude/worktrees, with their own copies of everything.
+    exclude: ['e2e/**', 'node_modules/**', '.claude/**'],
   },
 });

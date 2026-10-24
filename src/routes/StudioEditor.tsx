@@ -1,44 +1,31 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TopBar } from '../app/TopBar';
-import type { CreaseKind } from '../fold/collapse';
-import { FoldError, type FoldKind } from '../fold/fold';
+import { FoldError } from '../fold/fold';
 import { fromFoldFile, toFoldFile } from '../fold/fold-format';
-import type { Line } from '../fold/geometry2d';
-import { applyOp, atOf, lineOf, NoStillError, OpError, shapingBase, type At, type Faces, type LineSpec, type Op } from '../fold/ops';
-import { locate } from '../fold/select';
-import type { FoldFrame, OrigamiModel, Sheet, Step, Vec2 } from '../fold/types';
+import { applyOp, OpError, type Op } from '../fold/ops';
+import { marksUpTo } from '../fold/marks';
+import type { Step } from '../fold/types';
 import { useDraft } from '../studio/draft';
 import { unfoldTarget } from '../studio/editor';
 import { canInsert, canRemove, canReplace, insertStep, lastFixed, removeStep, replaceStep } from '../studio/steps';
 import { CloudPanel } from '../studio/CloudPanel';
 import { FoldEditor } from '../studio/FoldEditor';
+import { AboutPanel, SheetsPanel } from '../studio/panels';
+import { ToolBar } from '../studio/ToolBar';
+import { FACE_ACTIONS, stepFor, withParts } from '../studio/tools';
+import { useTools } from '../studio/useTools';
 import { usePlayback } from '../state/playback';
 import { useViewer } from '../state/viewer';
 
 const Stage = lazy(() => import('../viewer/Stage'));
 
-type Tool = 'onto' | 'through' | 'edges';
-type Layers = 'all' | 1 | 2 | 3;
-/**
- * What the picked line does: a plain fold, a reverse fold, a crease for a collapse, or lifting into 3D.
- * Or, for models of several sheets, moving one sheet (picking where its middle goes).
- */
-type Action = 'fold' | 'reverse' | 'collapse' | 'lift' | 'move';
-
-const ACTIONS: Action[] = ['fold', 'reverse', 'collapse', 'lift', 'move'];
-
-/** Sheet sizes to start from (names in `studio.sizes`). */
-const SIZES = [
-  { id: 'square', size: [1, 1] },
-  { id: 'half', size: [0.5, 1] },
-  { id: 'a4', size: [1, Math.SQRT2] },
-] as const;
-const sizeOf = (s: Sheet) => SIZES.find((o) => o.size[0] === s.size[0] && o.size[1] === s.size[1])?.id ?? 'other';
-
 /**
  * The Studio editor: fold a model step by step and export it as a .fold file. Creators reach it through
  * /studio (signed in); in development builds it's also at /studio/dev without signing in.
+ *
+ * This holds the model's steps and where the next one goes (at the end, in place of one, or before one, and
+ * any parts held for a step made of several); the tools for making it are in studio/useTools.ts.
  */
 export default function StudioEditor({ end, cloud = false }: {
   end?: React.ReactNode;
@@ -53,109 +40,20 @@ export default function StudioEditor({ end, cloud = false }: {
   // Changing a step in the middle, or adding one before it: the tools then work on the paper before it.
   const [at, setAt] = useState<{ index: number; mode: 'edit' | 'insert' } | null>(null);
   const editing = at && at.index < model.steps.length ? at : null;
-  const before = useMemo(() => (editing ? { ...model, steps: model.steps.slice(0, editing.index) } : model), [model, editing]);
-  const frame = before.steps.at(-1)?.frame ?? before.start;
-
-  const [tool, setTool] = useState<Tool>('onto');
-  const [action, setAction] = useState<Action>('fold');
-  const [kind, setKind] = useState<FoldKind>('valley');
-  const [reverseKind, setReverseKind] = useState<'inside' | 'outside'>('inside');
-  const [creaseKind, setCreaseKind] = useState<'valley' | 'mountain' | 'flat'>('valley');
-  const [creases, setCreases] = useState<{ line: Line; kind: CreaseKind; op: CreaseOp }[]>([]);
-  const [angle, setAngle] = useState(90);
-  const [segments, setSegments] = useState(1);
-  // After a lift, another lift adds to its bends, picking lines on the flat state the lifts started from.
-  const base = useMemo(() => shapingBase(before), [before]);
-  const editFrame = base ?? frame;
-  const [layers, setLayers] = useState<Layers>('all');
-  // Models of several sheets: which one the next step works on (or all), and for a move, how it's put down.
-  const [sheet, setSheet] = useState<number | 'all'>('all');
-  const [turn, setTurn] = useState(0);
-  const [overturn, setOverturn] = useState(false);
-  const [underneath, setUnderneath] = useState(false);
-  const [tuck, setTuck] = useState<number | null>(null);
-  const many = model.sheets.length > 1;
-  const chosen = many && sheet !== 'all' && sheet < model.sheets.length ? sheet : null;
-  const [picks, setPicks] = useState<Vec2[]>([]);
-  const [flipped, setFlipped] = useState(false);
+  const start = useMemo(() => (editing ? { ...model, steps: model.steps.slice(0, editing.index) } : model), [model, editing]);
+  // Parts kept for a step that does several things at once: the tools work on the paper after them.
+  const [held, setHeld] = useState<Op[]>([]);
+  const before = useMemo(() => {
+    try {
+      return withParts(start, held);
+    } catch {
+      return start;
+    }
+  }, [start, held]);
+  const tools = useTools(before);
+  const { s } = tools;
   const [message, setMessage] = useState<string | null>(null);
   const file = useRef<HTMLInputElement>(null);
-
-  // Picks a fold line needs: two points, or for edge to edge, two along each edge. Each is kept as the point
-  // of the sheet picked, so the step follows the paper if an earlier one changes.
-  const needs = tool === 'edges' ? 4 : 2;
-  const spec = useMemo((): LineSpec | null => {
-    if (picks.length < needs) return null;
-    const [a, b, c, d] = picks.map((p) => atOf(editFrame, p));
-    return tool === 'onto' ? { onto: [a, b] } : tool === 'edges' ? { edgeOnto: [[a, b], [c, d]] } : { through: [a, b], moving: 'smaller' };
-  }, [picks, needs, tool, editFrame]);
-  const line = useMemo((): Line | null => {
-    if (!spec) return null;
-    try {
-      return lineOf(spec, editFrame, flipped);
-    } catch (e) {
-      if (e instanceof FoldError) return null;
-      throw e;
-    }
-  }, [spec, editFrame, flipped]);
-
-  const n = layers === 'all' ? undefined : layers;
-
-  // The step the tools describe now, if they describe one.
-  const op = useMemo((): Op | null => {
-    const inSheet: Faces | undefined = chosen === null ? undefined : { sheet: chosen };
-    const anchor = { auto: true as const, ...(inSheet && { among: inSheet }) };
-    const flip = flipped ? { flip: true } : {};
-    if (action === 'move')
-      return chosen === null ? null : { op: 'move', only: { sheet: chosen }, ...(picks[0] && { to: { table: picks[0] } }), degrees: turn, flip: overturn, under: underneath };
-    if (action === 'collapse')
-      return creases.length ? { op: 'collapse', creases: creases.map((c) => c.op), anchor, ...(tuck !== null && { under: { sheet: tuck } }) } : null;
-    if (!spec || !line) return null;
-    if (action === 'fold') return { op: 'fold', line: spec, ...flip, kind, ...(n !== undefined && { layers: n }), ...(inSheet && { only: inSheet }) };
-    if (action === 'reverse') {
-      const only = creaseFaces(n, chosen);
-      return { op: 'collapse', creases: [{ line: spec, ...flip, kind: reverseKind, ...(only && { only }) }], anchor };
-    }
-    return {
-      op: 'shape',
-      bends: [{ line: spec, ...flip, degrees: angle, ...(segments > 1 && { segments }), ...(n !== undefined && { layers: n }), ...(inSheet && { only: inSheet }) }],
-    };
-  }, [action, chosen, picks, turn, overturn, underneath, creases, tuck, spec, line, flipped, kind, n, reverseKind, angle, segments]);
-
-  // For a lift, `onFlat` is the preview with its faces matched to the flat state the lines are picked on.
-  const result = useMemo((): { frame: FoldFrame; onFlat?: FoldFrame; via?: FoldFrame[] } | { error: string } | null => {
-    if (action === 'move' && chosen === null) return { error: t('studio.errors.chooseSheet') };
-    if (!op) return null;
-    if (action === 'lift' && !base && frame.vertices_coords.some((p) => Math.abs(p[1]) > 1e-6)) return { error: t('studio.errors.shaped') };
-    try {
-      const { frame: next, flat, via } = applyOp(before, op);
-      return { frame: next, ...(flat && { onFlat: flat }), ...(via && { via }) };
-    } catch (e) {
-      if (e instanceof NoStillError) return { error: t('studio.errors.noStill') };
-      if (e instanceof FoldError || e instanceof OpError) return { error: e.message };
-      throw e;
-    }
-  }, [op, action, chosen, base, frame, before, t]);
-  const preview = result && 'frame' in result ? result.frame : null;
-
-  const startOver = () => {
-    setPicks([]);
-    setFlipped(false);
-  };
-
-  const switchAction = (a: Action) => {
-    setAction(a);
-    setCreases([]);
-    startOver();
-  };
-
-  /** Collapse mode: keeps the picked line as one of the creases that change. */
-  const addCrease = () => {
-    if (!spec || !line) return;
-    const only = creaseFaces(n, chosen);
-    setCreases((cs) => [...cs, { line, kind: creaseKind, op: { line: spec, ...(flipped && { flip: true }), kind: creaseKind, ...(only && { only }) } }]);
-    startOver();
-  };
 
   const add = (step: Step) => {
     if (editing?.mode === 'edit') {
@@ -168,132 +66,97 @@ export default function StudioEditor({ end, cloud = false }: {
       change(insertStep(model, editing.index, step));
       setAt({ index: editing.index + 1, mode: 'insert' });
     } else addStep(step);
-    startOver();
+    setHeld([]);
+    tools.reset();
     setMessage(null);
   };
 
+  /** Adds a step made by `o` on the paper before any held parts. */
+  const addOp = (o: Op) => {
+    try {
+      const { frame: next, via, marks: drawn } = applyOp(start, o);
+      add({ ...stepFor(o, t), frame: next, ...(via && { via }), ...(drawn && { marks: drawn }), op: o });
+    } catch (e) {
+      if (!(e instanceof FoldError || e instanceof OpError)) throw e;
+      setMessage(e.message);
+    }
+  };
+
+  /** Ends a step made of the held parts and `last`, if any: one step that does them all at once. */
+  const finish = (last?: Op) => {
+    const ops = last ? [...held, last] : held;
+    if (ops.length) addOp(ops.length === 1 ? ops[0] : { op: 'together', ops });
+  };
+
   const undo = () => {
+    if (held.length) return setHeld((h) => h.slice(0, -1));
     undoDraft();
     setAt(null);
+  };
+
+  const cancel = () => {
+    setAt(null);
+    setHeld([]);
+    tools.reset();
   };
 
   /** Starts changing step `i`, with the tools set as it was made where they can be. */
   const startEdit = (i: number) => {
     setAt({ index: i, mode: 'edit' });
-    loadTools(model.steps[i].op, { ...model, steps: model.steps.slice(0, i) });
+    const made = model.steps[i].op;
+    const m = { ...model, steps: model.steps.slice(0, i) };
+    // A step made of several parts opens with all but the last held, and the tools set to the last.
+    let parts = made?.op === 'together' ? made.ops.slice(0, -1) : [];
+    let withHeld = m;
+    try {
+      withHeld = withParts(m, parts);
+    } catch {
+      parts = [];
+    }
+    setHeld(parts);
+    tools.load(made?.op === 'together' ? (parts.length ? made.ops.at(-1) : made.ops[0]) : made, withHeld);
     setMessage(null);
     usePlayback.getState().goTo(i);
   };
 
   const startInsert = (i: number) => {
     setAt({ index: i, mode: 'insert' });
-    setCreases([]);
-    startOver();
+    setHeld([]);
+    tools.reset();
     setMessage(null);
     usePlayback.getState().goTo(i);
   };
 
   const remove = (i: number) => {
     change(removeStep(model, i));
-    setAt(null);
-    startOver();
-  };
-
-  /** Sets the tools from a step's operation, on the model before it. Anything the tools can't show is left as it is. */
-  const loadTools = (made: Op | undefined, m: OrigamiModel) => {
-    setCreases([]);
-    setPicks([]);
-    setFlipped(false);
-    if (!made) return;
-    const paperBefore = m.steps.at(-1)?.frame ?? m.start;
-    const where = (a: At, on: FoldFrame): Vec2 => ('table' in a ? a.table : locate(on, a.paper));
-    // A fold line as the tool and points that pick it.
-    const pick = (spec: LineSpec, on: FoldFrame, flip?: boolean) => {
-      try {
-        if ('onto' in spec) (setTool('onto'), setPicks(spec.onto.map((a) => where(a, on))));
-        else if ('edgeOnto' in spec) (setTool('edges'), setPicks(spec.edgeOnto.flat().map((a) => where(a, on))));
-        else if ('through' in spec && spec.moving === 'smaller') (setTool('through'), setPicks(spec.through.map((a) => where(a, on))));
-        else return;
-        setFlipped(!!flip);
-      } catch (e) {
-        if (!(e instanceof FoldError)) throw e;
-      }
-    };
-    // Which sheet and how many layers a step works on.
-    const limits = (f?: Faces, layersToo = false) => {
-      const parts = !f ? [] : 'all' in f ? f.all : [f];
-      const one = parts.find((g) => 'sheet' in g);
-      const top = parts.find((g) => 'top' in g);
-      setSheet(one && 'sheet' in one ? one.sheet : 'all');
-      if (layersToo) setLayers(top && 'top' in top ? (Math.min(3, top.top) as Layers) : 'all');
-    };
-    if (made.op === 'fold') {
-      setAction('fold');
-      setKind(made.kind ?? 'valley');
-      setLayers(made.layers ? (Math.min(3, made.layers) as Layers) : 'all');
-      limits(made.only);
-      pick(made.line, paperBefore, made.flip);
-    } else if (made.op === 'collapse' && made.creases.length === 1 && (made.creases[0].kind === 'inside' || made.creases[0].kind === 'outside')) {
-      const c = made.creases[0];
-      setAction('reverse');
-      setReverseKind(c.kind as 'inside' | 'outside');
-      limits(c.only, true);
-      pick(c.line, paperBefore, c.flip);
-    } else if (made.op === 'collapse') {
-      setAction('collapse');
-      try {
-        setCreases(made.creases.map((c) => ({ line: lineOf(c.line, paperBefore, c.flip), kind: c.kind, op: c })));
-      } catch (e) {
-        if (!(e instanceof FoldError)) throw e;
-      }
-      setTuck(made.under && 'sheet' in made.under ? made.under.sheet : null);
-      if ('auto' in made.anchor) limits(made.anchor.among);
-    } else if (made.op === 'shape' && made.bends.length === 1) {
-      const b = made.bends[0];
-      setAction('lift');
-      setAngle(b.degrees);
-      setSegments(b.segments ?? 1);
-      setLayers(b.layers ? (Math.min(3, b.layers) as Layers) : 'all');
-      limits(b.only);
-      pick(b.line, shapingBase(m) ?? paperBefore, b.flip);
-    } else if (made.op === 'move') {
-      setAction('move');
-      limits(made.only);
-      setTurn(made.degrees ?? 0);
-      setOverturn(!!made.flip);
-      setUnderneath(!!made.under);
-      if (made.to && 'table' in made.to) setPicks([made.to.table]);
-    }
+    cancel();
   };
 
   const apply = () => {
-    if (!result || !('frame' in result) || !op) return;
-    const made = { frame: result.frame, ...(result.via && { via: result.via }), op };
-    if (action === 'fold') add({ title: t(`studio.steps.${kind}`), kind: 'fold', ...made });
-    else if (action === 'reverse') add({ title: t(`studio.steps.${reverseKind}`), kind: 'reverse', ...made });
-    else if (action === 'collapse') {
-      add({ title: t('studio.steps.collapse'), kind: 'fold', ...made });
-      setCreases([]);
-    } else if (action === 'move') add({ title: t('studio.steps.move'), kind: 'assemble', ...made });
-    else add({ title: segments > 1 ? t('studio.steps.curl') : t('studio.steps.lift'), kind: 'pose', ...made });
+    if (!tools.preview || !tools.op) return;
+    finish(tools.op);
   };
 
-  /** Adds a step that needs no picks. */
-  const now = (step: Omit<Step, 'frame'> & { op: Op }) => {
+  /** Keeps the step the tools describe as a part of the next step, and clears them for the next part. */
+  const hold = () => {
+    if (!tools.preview || !tools.op) return;
+    setHeld((h) => [...h, tools.op!]);
+    tools.reset();
+  };
+
+  /** Adds a step that needs no picks, or with parts held, adds it to them. */
+  const now = (o: Op) => {
     try {
-      const { frame: next, via, marks } = applyOp(before, step.op);
-      add({ ...step, frame: next, ...(via && { via }), ...(marks && { marks }) });
+      applyOp(before, o);
     } catch (e) {
-      if (!(e instanceof FoldError)) throw e;
-      setMessage(e.message);
+      if (!(e instanceof FoldError || e instanceof OpError)) throw e;
+      return setMessage(e.message);
     }
+    if (held.length) setHeld((h) => [...h, o]);
+    else addOp(o);
   };
 
-  const target = unfoldTarget(before.steps);
   const fixed = lastFixed(model);
-  const doUnfold = () => target !== null && now({ title: t('studio.steps.unfold'), kind: 'unfold', op: { op: 'unfold' } });
-  const doTurnOver = () => now({ title: t('studio.steps.turnOver'), kind: 'turn-over', op: { op: 'turnOver' } });
-  const doRotate = () => now({ title: t('studio.steps.rotate'), kind: 'rotate', op: { op: 'rotate', degrees: 90 } });
 
   // The preview plays the newest step whenever one is added or removed.
   const total = model.steps.length;
@@ -309,20 +172,16 @@ export default function StudioEditor({ end, cloud = false }: {
     const onKey = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement || e.target instanceof HTMLSelectElement) return;
       if (e.key === 'Enter') {
-        if (action === 'collapse' && line) addCrease();
+        if (s.action === 'collapse' && tools.line) tools.addCrease();
         else apply();
       } else if (e.key === 'Escape') {
-        if (!picks.length && editing) setAt(null);
-        startOver();
+        if (s.pickMode !== 'points') tools.set({ pickMode: 'points' });
+        else if (!s.picks.length && editing) cancel();
+        tools.startOver();
       }
-      else if (e.key === 'f' || e.key === 'F') setFlipped((f) => !f);
-      else if (e.key === 'v' || e.key === 'V') {
-        setKind('valley');
-        setCreaseKind('valley');
-      } else if (e.key === 'm' || e.key === 'M') {
-        setKind('mountain');
-        setCreaseKind('mountain');
-      }
+      else if (e.key === 'f' || e.key === 'F') tools.update((prev) => ({ flipped: !prev.flipped }));
+      else if (e.key === 'v' || e.key === 'V') tools.set({ kind: 'valley', creaseKind: 'valley' });
+      else if (e.key === 'm' || e.key === 'M') tools.set({ kind: 'mountain', creaseKind: 'mountain' });
       else if ((e.ctrlKey || e.metaKey) && e.key === 'z') undo();
       else return;
       e.preventDefault();
@@ -344,29 +203,16 @@ export default function StudioEditor({ end, cloud = false }: {
     if (!f) return;
     try {
       replace(fromFoldFile(JSON.parse(await f.text())));
-      setAt(null);
-      startOver();
+      cancel();
       setMessage(null);
     } catch (e) {
       setMessage(t('studio.openFailed', { error: (e as Error).message }));
     }
   };
 
-  const status = message ?? (result && 'error' in result ? result.error : null);
-  const hint =
-    action === 'move'
-      ? preview
-        ? picks.length
-          ? t('studio.hints.move')
-          : t('studio.hints.moveWhere')
-        : null
-      : action === 'collapse' && creases.length && picks.length < needs
-        ? t('studio.hints.creases', { count: creases.length })
-        : picks.length < needs
-          ? t(`studio.hints.${tool}`)
-          : action === 'collapse' || preview
-            ? t(`studio.hints.${action}`)
-            : null;
+  const status = message ?? tools.error;
+  const onPaper = useMemo(() => marksUpTo(before, before.steps.length).map((m) => m.mark), [before]);
+  const { result } = tools;
 
   return (
     <div className="app">
@@ -382,7 +228,7 @@ export default function StudioEditor({ end, cloud = false }: {
             <button type="button" className="secondary" onClick={exportFile}>
               {t('studio.export')}
             </button>
-            <button type="button" className="secondary" onClick={() => confirm(t('studio.newConfirm')) && (clear(), setAt(null), startOver())}>
+            <button type="button" className="secondary" onClick={() => confirm(t('studio.newConfirm')) && (clear(), cancel())}>
               {t('studio.new')}
             </button>
           </>
@@ -392,17 +238,25 @@ export default function StudioEditor({ end, cloud = false }: {
       <main className="studio">
         <section className="studio-editor">
           <FoldEditor
-            frame={editFrame}
+            frame={tools.editFrame}
             model={model}
-            picks={picks}
-            labels={tool === 'edges' ? ['A', 'A', 'B', 'B'] : undefined}
-            line={line}
-            kind={action === 'fold' ? kind : action === 'collapse' && creaseKind === 'mountain' ? 'mountain' : 'valley'}
+            picks={s.picks}
+            labels={s.action === 'draw' ? [''] : s.action === 'popUp' ? ['O', '1'] : s.tool === 'edges' ? ['A', 'A', 'B', 'B'] : undefined}
+            line={tools.line}
+            kind={s.action === 'fold' ? s.kind : s.action === 'collapse' && s.creaseKind === 'mountain' ? 'mountain' : 'valley'}
             preview={result && 'frame' in result ? (result.onFlat ?? result.frame) : null}
-            extra={creases}
-            onPick={(p) => setPicks((prev) => (action === 'move' || prev.length >= needs ? [p] : [...prev, p]))}
+            extra={s.action === 'lift' ? s.bends.map((b) => ({ line: b.line, kind: 'valley' })) : s.creases}
+            // A cut about to be made, or the way a pop-up's first crease points.
+            cut={(s.action === 'cut' || s.action === 'popUp') && s.picks.length === 2 ? [s.picks[0], s.picks[1]] : null}
+            free={s.action === 'cut' || s.action === 'draw' || s.action === 'popUp' || s.pickMode === 'anchor'}
+            marks={onPaper}
+            drawing={s.action === 'draw' ? [...s.marks.map((m) => ({ points: m.table, fill: !!m.mark.fill })), { points: s.picks, fill: s.fill }] : []}
+            faces={FACE_ACTIONS.includes(s.action) && (s.pickMode === 'faces' || s.picked.length) ? s.picked : null}
+            anchor={tools.anchor?.spot ?? null}
+            onPick={tools.pick}
+            onFace={s.pickMode === 'faces' ? tools.pickFace : undefined}
           />
-          {(status || hint) && <div className={status ? 'badge error' : 'badge'}>{status ?? hint}</div>}
+          {(status || tools.hint) && <div className={status ? 'badge error' : 'badge'}>{status ?? tools.hint}</div>}
         </section>
 
         <aside className="studio-side">
@@ -421,12 +275,24 @@ export default function StudioEditor({ end, cloud = false }: {
               <span>{t('studio.fileName')}</span>
               <input value={model.id} onChange={(e) => setInfo({ id: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-') })} />
             </label>
-            <SheetsPanel sheets={model.sheets} locked={model.steps.length > 0} onChange={(next) => (setSheets(next), setSheet('all'))} />
+            <AboutPanel model={model} onChange={setInfo} />
+            <SheetsPanel sheets={model.sheets} locked={model.steps.length > 0} onChange={(next) => (setSheets(next), tools.set({ sheet: 'all' }))} />
             {editing && (
               <div className="studio-note">
                 <span>{editing.mode === 'edit' ? t('studio.changing', { n: editing.index + 1 }) : t('studio.inserting', { n: editing.index + 1 })}</span>
-                <button type="button" className="link small" onClick={() => (setAt(null), startOver())}>
+                <button type="button" className="link small" onClick={cancel}>
                   {t('studio.cancel')}
+                </button>
+              </div>
+            )}
+            {held.length > 0 && (
+              <div className="studio-note">
+                <span>{t('studio.held', { count: held.length })}</span>
+                <button type="button" className="link small" onClick={() => finish()} title={t('studio.finishTitle')}>
+                  {t('studio.finish')}
+                </button>
+                <button type="button" className="link small" onClick={() => setHeld([])}>
+                  {t('studio.drop')}
                 </button>
               </div>
             )}
@@ -436,14 +302,14 @@ export default function StudioEditor({ end, cloud = false }: {
                 <button type="button" className="link small" onClick={() => startEdit(problem.step - 1)}>
                   {t('studio.fixStep')}
                 </button>
-                <button type="button" className="link small" onClick={() => (removeFrom(problem.step - 1), setAt(null))}>
+                <button type="button" className="link small" onClick={() => (removeFrom(problem.step - 1), cancel())}>
                   {t('studio.removeFrom', { n: problem.step })}
                 </button>
               </div>
             )}
             {fixed >= 0 && model.steps.length > 0 && <p className="muted small">{t('studio.fixed', { n: fixed + 1 })}</p>}
             <ol>
-              {model.steps.map((s, i) => (
+              {model.steps.map((step, i) => (
                 <li key={i} className={[editing?.index === i && editing.mode, problem && i >= problem.step - 1 && 'stale'].filter(Boolean).join(' ') || undefined}>
                   <div className="step-head">
                     <button type="button" className="link small" onClick={() => usePlayback.getState().goTo(i + 1)}>
@@ -461,12 +327,12 @@ export default function StudioEditor({ end, cloud = false }: {
                       </button>
                     </span>
                   </div>
-                  <input aria-label={t('studio.stepTitle', { n: i + 1 })} value={s.title} onChange={(e) => editStep(i, { title: e.target.value })} />
+                  <input aria-label={t('studio.stepTitle', { n: i + 1 })} value={step.title} onChange={(e) => editStep(i, { title: e.target.value })} />
                   <textarea
                     aria-label={t('studio.stepText', { n: i + 1 })}
                     placeholder={t('studio.instructions')}
                     rows={2}
-                    value={s.text ?? ''}
+                    value={step.text ?? ''}
                     onChange={(e) => editStep(i, { text: e.target.value || undefined })}
                   />
                 </li>
@@ -477,234 +343,16 @@ export default function StudioEditor({ end, cloud = false }: {
         </aside>
       </main>
 
-      <footer className="bottombar">
-        <div className="group">
-          <div className="segmented" role="group" aria-label={t('studio.actions.action')}>
-            {ACTIONS.filter((a) => a !== 'move' || many).map((a) => (
-              <button key={a} type="button" aria-pressed={action === a} title={t(`studio.actions.${a}Title`)} onClick={() => switchAction(a)}>
-                {t(`studio.actions.${a}`)}
-              </button>
-            ))}
-          </div>
-          {many && (
-            <label className="field inline" title={t('studio.sheetTitle')}>
-              <span>{t('studio.sheet')}</span>
-              <select value={String(sheet)} onChange={(e) => setSheet(e.target.value === 'all' ? 'all' : Number(e.target.value))}>
-                <option value="all">{action === 'move' ? t('studio.choose') : t('studio.all')}</option>
-                {model.sheets.map((_, i) => (
-                  <option key={i} value={i}>
-                    {t('studio.sheetN', { n: i + 1 })}
-                  </option>
-                ))}
-              </select>
-            </label>
-          )}
-          {action === 'move' && (
-            <>
-              <label className="field inline">
-                <span>{t('studio.turn')}</span>
-                <select value={turn} onChange={(e) => setTurn(Number(e.target.value))}>
-                  {[0, 45, 90, 135, 180, -135, -90, -45].map((d) => (
-                    <option key={d} value={d}>
-                      {d === 0 ? t('studio.none') : t(d > 0 ? 'studio.anticlockwise' : 'studio.clockwise', { deg: Math.abs(d) })}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label className="field inline">
-                <input type="checkbox" checked={overturn} onChange={(e) => setOverturn(e.target.checked)} />
-                <span>{t('studio.turnOver')}</span>
-              </label>
-              <label className="field inline">
-                <input type="checkbox" checked={underneath} onChange={(e) => setUnderneath(e.target.checked)} />
-                <span>{t('studio.underneath')}</span>
-              </label>
-            </>
-          )}
-          {action !== 'move' && (
-          <div className="segmented" role="group" aria-label={t('studio.foldLine')}>
-            <button type="button" aria-pressed={tool === 'onto'} onClick={() => (setTool('onto'), startOver())}>
-              {t('studio.pointToPoint')}
-            </button>
-            <button type="button" aria-pressed={tool === 'through'} onClick={() => (setTool('through'), startOver())}>
-              {t('studio.throughTwo')}
-            </button>
-            <button type="button" aria-pressed={tool === 'edges'} title={t('studio.edgeToEdgeTitle')} onClick={() => (setTool('edges'), startOver())}>
-              {t('studio.edgeToEdge')}
-            </button>
-          </div>
-          )}
-          {action === 'fold' && (
-            <div className="segmented" role="group" aria-label={t('studio.foldType')}>
-              <button type="button" aria-pressed={kind === 'valley'} title={t('studio.valleyTitle')} onClick={() => setKind('valley')}>
-                {t('studio.valley')}
-              </button>
-              <button type="button" aria-pressed={kind === 'mountain'} title={t('studio.mountainTitle')} onClick={() => setKind('mountain')}>
-                {t('studio.mountain')}
-              </button>
-            </div>
-          )}
-          {action === 'reverse' && (
-            <div className="segmented" role="group" aria-label={t('studio.reverseFold')}>
-              <button type="button" aria-pressed={reverseKind === 'inside'} title={t('studio.insideTitle')} onClick={() => setReverseKind('inside')}>
-                {t('studio.inside')}
-              </button>
-              <button type="button" aria-pressed={reverseKind === 'outside'} title={t('studio.outsideTitle')} onClick={() => setReverseKind('outside')}>
-                {t('studio.outside')}
-              </button>
-            </div>
-          )}
-          {action === 'collapse' && (
-            <div className="segmented" role="group" aria-label={t('studio.crease')}>
-              <button type="button" aria-pressed={creaseKind === 'valley'} title={t('studio.creaseValley')} onClick={() => setCreaseKind('valley')}>
-                {t('studio.valley')}
-              </button>
-              <button type="button" aria-pressed={creaseKind === 'mountain'} title={t('studio.creaseMountain')} onClick={() => setCreaseKind('mountain')}>
-                {t('studio.mountain')}
-              </button>
-              <button type="button" aria-pressed={creaseKind === 'flat'} title={t('studio.openTitle')} onClick={() => setCreaseKind('flat')}>
-                {t('studio.openCrease')}
-              </button>
-            </div>
-          )}
-          {action === 'collapse' && many && (
-            <label className="field inline" title={t('studio.slideUnderTitle')}>
-              <span>{t('studio.slideUnder')}</span>
-              <select value={tuck === null ? '' : String(tuck)} onChange={(e) => setTuck(e.target.value === '' ? null : Number(e.target.value))}>
-                <option value="">{t('studio.nothing')}</option>
-                {model.sheets.map((_, i) => (
-                  <option key={i} value={i}>
-                    {t('studio.sheetN', { n: i + 1 })}
-                  </option>
-                ))}
-              </select>
-            </label>
-          )}
-          {action === 'lift' && (
-            <label className="field inline">
-              <span>{t('studio.angle')}</span>
-              <input type="range" min={10} max={170} step={5} value={angle} onChange={(e) => setAngle(Number(e.target.value))} />
-              <span className="angle">{angle}°</span>
-            </label>
-          )}
-          {action === 'lift' && (
-            <label className="field inline" title={t('studio.curlTitle')}>
-              <span>{t('studio.curl')}</span>
-              <select value={segments} onChange={(e) => setSegments(Number(e.target.value))}>
-                <option value={1}>{t('studio.curls.none')}</option>
-                <option value={3}>{t('studio.curls.gentle')}</option>
-                <option value={6}>{t('studio.curls.smooth')}</option>
-                <option value={10}>{t('studio.curls.smoother')}</option>
-              </select>
-            </label>
-          )}
-          {action !== 'move' && (
-          <label className="field inline">
-            <span>{t('studio.layers')}</span>
-            <select value={String(layers)} onChange={(e) => setLayers(e.target.value === 'all' ? 'all' : (Number(e.target.value) as Layers))}>
-              <option value="all">{t('studio.all')}</option>
-              {[1, 2, 3].map((k) => (
-                <option key={k} value={k}>
-                  {t('studio.topN', { n: k })}
-                </option>
-              ))}
-            </select>
-          </label>
-          )}
-          {action !== 'move' && (
-          <button type="button" className="secondary" disabled={!line} onClick={() => setFlipped(!flipped)} title={t('studio.flipTitle')}>
-            {t('studio.flipSide')}
-          </button>
-          )}
-          {action === 'collapse' && (
-            <>
-              <button type="button" className="secondary" disabled={!line} onClick={addCrease} title={t('studio.addCreaseTitle')}>
-                {t('studio.addCrease')}
-              </button>
-              <button type="button" className="secondary" disabled={!creases.length} onClick={() => setCreases([])}>
-                {t('studio.clearCreases')}
-              </button>
-            </>
-          )}
-          <button
-            type="button"
-            className="primary"
-            disabled={!preview}
-            onClick={apply}
-            title={action === 'collapse' ? t('studio.collapseTitle') : t('studio.applyTitle')}
-          >
-            {t(`studio.apply.${action}`)}
-          </button>
-        </div>
-        <div className="group">
-          <button type="button" className="secondary" onClick={doTurnOver}>
-            {t('studio.turnOverButton')}
-          </button>
-          <button type="button" className="secondary" onClick={doRotate}>
-            {t('studio.rotate')}
-          </button>
-          <button type="button" className="secondary" disabled={target === null} onClick={doUnfold}>
-            {t('studio.unfold')}
-          </button>
-          <button type="button" className="secondary" disabled={!canUndo} onClick={undo} title={t('studio.undoTitle')}>
-            {t('studio.undo')}
-          </button>
-        </div>
-      </footer>
+      <ToolBar
+        tools={tools}
+        sheets={model.sheets.length}
+        canUndo={canUndo || held.length > 0}
+        unfoldable={unfoldTarget(before.steps) !== null}
+        onHold={hold}
+        onApply={apply}
+        onNow={now}
+        onUndo={undo}
+      />
     </div>
-  );
-}
-
-type CreaseOp = Extract<Op, { op: 'collapse' }>['creases'][number];
-
-/** Both selectors, when there are two (either one alone otherwise). */
-function allOf(a?: Faces, b?: Faces): Faces | undefined {
-  return a && b ? { all: [a, b] } : (a ?? b);
-}
-
-/** What a compound fold's crease folds: the top N layers on its moving side, of one sheet. */
-function creaseFaces(n: number | undefined, sheet: number | null): Faces | undefined {
-  return allOf(n === undefined ? undefined : { top: n }, sheet === null ? undefined : { sheet });
-}
-
-/** The sheets a model starts from: their colours and size, and adding or removing sheets (before the first step). */
-function SheetsPanel({ sheets, locked, onChange }: { sheets: Sheet[]; locked: boolean; onChange(sheets: Sheet[]): void }) {
-  const { t } = useTranslation();
-  const edit = (i: number, patch: Partial<Sheet>) => onChange(sheets.map((s, j) => (j === i ? { ...s, ...patch } : s)));
-  return (
-    <fieldset className="sheets" disabled={locked}>
-      <legend>{sheets.length === 1 ? t('studio.paper') : t('studio.paperSheets', { count: sheets.length })}</legend>
-      {sheets.map((s, i) => (
-        <div key={i} className="sheet-row">
-          {sheets.length > 1 && <span className="small">{t('studio.sheetN', { n: i + 1 })}</span>}
-          <input type="color" value={s.front} onChange={(e) => edit(i, { front: e.target.value })} title={t('studio.front')} aria-label={t('studio.frontColour', { n: i + 1 })} />
-          <input type="color" value={s.back} onChange={(e) => edit(i, { back: e.target.value })} title={t('studio.back')} aria-label={t('studio.backColour', { n: i + 1 })} />
-          <select
-            value={sizeOf(s)}
-            onChange={(e) => edit(i, { size: [...SIZES.find((o) => o.id === e.target.value)!.size] as [number, number] })}
-            aria-label={t('studio.size', { n: i + 1 })}
-          >
-            {sizeOf(s) === 'other' && <option value="other">{`${s.size[0]} × ${s.size[1]}`}</option>}
-            {SIZES.map((o) => (
-              <option key={o.id} value={o.id}>
-                {t(`studio.sizes.${o.id}`)}
-              </option>
-            ))}
-          </select>
-          {sheets.length > 1 && !locked && (
-            <button type="button" className="link small" onClick={() => onChange(sheets.filter((_, j) => j !== i))}>
-              {t('studio.remove')}
-            </button>
-          )}
-        </div>
-      ))}
-      {locked ? (
-        <p className="muted small">{t('studio.paperSet')}</p>
-      ) : (
-        <button type="button" className="link small" onClick={() => onChange([...sheets, { ...sheets.at(-1)!, origin: undefined }])}>
-          {t('studio.addSheet')}
-        </button>
-      )}
-    </fieldset>
   );
 }

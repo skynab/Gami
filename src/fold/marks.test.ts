@@ -38,6 +38,15 @@ describe('marks drawn on the paper', () => {
     expect(marksUpTo(model, 2).map((m) => m.step)).toEqual([2, 2]);
   });
 
+  it('are left behind with the old paper when a fresh sheet is taken', () => {
+    const model = drawn();
+    const fresh = { title: 'Fresh sheet', frame: model.start, op: { op: 'newSheet' as const } };
+    const again = { ...model.steps[1], title: 'Draw again' };
+    const steps = [...model.steps, fresh, again];
+    expect(marksUpTo({ steps }, 3)).toEqual([]);
+    expect(marksUpTo({ steps }, 4).map((m) => m.step)).toEqual([4, 4]);
+  });
+
   it('go through a .fold file and back', () => {
     const model = drawn();
     const warnings: string[] = [];

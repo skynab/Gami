@@ -24,7 +24,7 @@ describe('paper passing through paper', () => {
   });
 
   it('keeps the simple models clean', () => {
-    for (const id of ['basics', 'paper-plane', 'cup', 'fortune-teller', 'sword']) expect(deep(byId(id)), id).toEqual([]);
+    for (const id of ['basics', 'paper-plane', 'cup', 'fortune-teller', 'sword', 'fish']) expect(deep(byId(id)), id).toEqual([]);
   });
 
   it('turns stacked layers over together, the same way round', () => {
@@ -70,6 +70,17 @@ describe('paper passing through paper', () => {
     for (const id of ['heart', 'jumping-frog', 'tulip', 'crane']) expect(deep(byId(id)), id).toEqual([]);
   });
 
+  it('folds each plane’s wings down without passing through the body', () => {
+    // A wing is all the paper on its side of the centre crease, including any an earlier fold took across the
+    // middle (the navy plane's sides), so it doesn't fold down through paper left behind.
+    for (const id of ['paper-plane', 'glider', 'bulldog-dart', 'navy-plane', 'king-bee']) {
+      const model = byId(id);
+      const wings = model.steps.flatMap((s, i) => (s.title === 'Fold the wing down' || s.title === 'Fold the other wing to match' ? [i + 1] : []));
+      expect(wings, id).toHaveLength(2);
+      expect(deep(model).filter((c) => wings.includes(c.step)), id).toEqual([]);
+    }
+  });
+
   it('stands a flap up before squashing it', () => {
     // The fox's squash and the lily's squash-and-petal folds play in stages: the flap lifts about its hinge
     // first, then each part goes to its place.
@@ -83,13 +94,15 @@ describe('paper passing through paper', () => {
   });
 
   it('opens the lily’s petals clear of the narrowing folds', () => {
-    // The tips open on a line past the slivers the narrowing caught, top one furthest; layers bend at their
-    // own heights, so the petals only graze the stack by a layer or two.
+    // The tips open on a line well past the slivers the narrowing caught, top one furthest, curled in many
+    // small bends; layers bend at their own heights, so the petals only graze the stack by about a layer.
     const lily = byId('lily');
     const last = lily.steps.length;
     expect(lily.steps[last - 1].kind).toBe('pose');
     const opening = crossings(lily).filter((c) => c.step === last);
-    expect(Math.max(0, ...opening.map((c) => c.depth))).toBeLessThan(0.015);
+    expect(Math.max(0, ...opening.map((c) => c.depth))).toBeLessThan(0.002);
+    // And nothing in the whole lily goes deeper than a few layers.
+    expect(deep(lily)).toEqual([]);
   });
 
   it('unfolds several folds one at a time, and keeps that in .fold files', () => {

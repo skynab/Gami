@@ -1,4 +1,4 @@
-import { locate, paper, Recipe, table, type At } from '../../fold/recipe';
+import { paper, Recipe, table, type At } from '../../fold/recipe';
 import type { OrigamiModel, Vec2 } from '../../fold/types';
 
 /** The classic dart, from a sheet shaped like A4 (1 : 1.41). */
@@ -39,11 +39,32 @@ export function paperPlane() {
   return finishPlane(plane, 0.13, 'Fold the top layers down so the wing’s edge meets the bottom of the plane.');
 }
 
+/** Where a plane's wings are, for the steps a plane adds to its finish (see `finishPlane`). */
+export interface Wings {
+  /** On its side, the keel's height on the table, and the line each wing folds down along. */
+  keel: number;
+  wingLine: number;
+  /** The paper of the wing folded first (the one underneath) and of the other. */
+  firstWing: (c: Vec2) => boolean;
+  secondWing: (c: Vec2) => boolean;
+}
+
 /**
  * How a plane ends, from its nose folds: in half behind, turned on its side, a wing folded down each side along
  * a line `body` up from the keel (`wingText` saying how), then the wings opened out and the plane turned over.
+ * `beforeOpen` adds steps with both wings down (flat), and `afterOpen` with them open (3D: bends on the flat
+ * state with both wings down, added to the wings' own).
  */
-export function finishPlane(plane: Recipe, body: number, wingText: string): OrigamiModel {
+export function finishPlane(
+  plane: Recipe,
+  body: number,
+  wingText: string,
+  more: { beforeOpen?(plane: Recipe, wings: Wings): void; afterOpen?(plane: Recipe, wings: Wings): void } = {},
+): OrigamiModel {
+  // Each half of the plane: the paper on that side of the centre crease before it folds in half. That's the
+  // sheet's own half unless an earlier fold took paper across the middle (as the navy plane's sides do).
+  const right = plane.lying(([x]) => x > 0);
+  const left = (c: Vec2) => !right(c);
   plane
     .along(table(0, -1), table(0, 1), table(-0.1, 0), {
       title: 'Fold in half behind',
@@ -58,29 +79,33 @@ export function finishPlane(plane: Recipe, body: number, wingText: string): Orig
   const fold: [At, At] = [table(-1, wingLine), table(1, wingLine)];
   // Each wing: the part of its half of the sheet beyond the line, before it folds down.
   const wingOf = (half: (c: Vec2) => boolean) => {
-    const before = plane.current;
-    return (c: Vec2) => half(c) && locate(before, c)[1] < wingLine;
+    const beyond = plane.lying(([, z]) => z < wingLine);
+    return (c: Vec2) => half(c) && beyond(c);
   };
-  const firstWing = wingOf(([u]) => u > 0);
+  const firstWing = wingOf(right);
   plane.along(...fold, table(0, wingLine - 0.1), {
     title: 'Fold the wing down',
     text: wingText,
-    only: ([u]) => u > 0,
+    only: right,
   });
   plane.turnOver();
-  const secondWing = wingOf(([u]) => u < 0);
-  return plane
-    .along(...fold, table(0, wingLine - 0.1), {
-      title: 'Fold the other wing to match',
-      text: 'Line it up with the first wing.',
-      only: ([u]) => u < 0,
-    })
+  const secondWing = wingOf(left);
+  const wings: Wings = { keel, wingLine, firstWing, secondWing };
+  plane.along(...fold, table(0, wingLine - 0.1), {
+    title: 'Fold the other wing to match',
+    text: 'Line it up with the first wing.',
+    only: left,
+  });
+  more.beforeOpen?.(plane, wings);
+  plane
     // The first wing, underneath, stays on the table; the body stands up off it, and the other wing swings
     // right over to lie out flat on the far side: the plane upside down, its keel pointing up.
     .shape({ title: 'Open the wings', text: 'Open both wings out flat on either side of the body, at right angles to it.' }, [
       { through: fold, moving: table(0, keel), degrees: 90, only: (c) => !firstWing(c) },
       { through: fold, moving: table(0, keel), degrees: 90, only: secondWing },
-    ])
+    ]);
+  more.afterOpen?.(plane, wings);
+  return plane
     .turnOver('Turn the plane over, so it stands on its keel with its wings level on top. It’s ready to fly!')
     .build();
 }

@@ -1,8 +1,12 @@
-import { lerp } from '../fold/geometry2d';
+import { clip } from '../fold/cut';
+import { placeLike, unplaceLike } from '../fold/fold';
+import { roundCoord } from '../fold/fold-format';
+import { frontUp, lerp } from '../fold/geometry2d';
 export { frontUp } from '../fold/geometry2d';
-import { project } from '../fold/select';
+import { centre, inside, locate, project } from '../fold/select';
+import type { Ray } from '../fold/shape';
 export { anchorFor, project, smallerSideMoves, topLayers } from '../fold/select';
-import type { FoldFrame, Step, Vec2 } from '../fold/types';
+import type { FoldFrame, Mark, Vec2 } from '../fold/types';
 
 /** Helpers for the Studio's fold editor that don't need React. */
 
@@ -19,14 +23,97 @@ export function snapPoints(frame: FoldFrame): Vec2[] {
   return [...seen.values()];
 }
 
+/** Where the paper's scissor cuts are on the table: each cut's stretch along every face it runs past. */
+export function cutsOnTable(frame: FoldFrame): [Vec2, Vec2][] {
+  if (!frame.cuts?.length) return [];
+  const out: [Vec2, Vec2][] = [];
+  for (const face of project(frame)) {
+    const toTable = placeLike(face);
+    for (const [a, b] of frame.cuts) {
+      const seg = clip(face.paper, a, b);
+      if (seg) out.push([toTable(seg[0]), toTable(seg[1])]);
+    }
+  }
+  return out;
+}
+
+/** The frame to unfold back to: the one before the latest fold or collapse made since the last unfold. */
+export { lastFold as unfoldTarget } from '../fold/ops';
+
+
+/** The face seen from above at a point on the table: the top one there. */
+export function faceAt(frame: FoldFrame, spot: Vec2) {
+  const under = project(frame).filter((f) => inside(f.world, spot));
+  return under.length ? under.reduce((a, b) => (b.layer > a.layer ? b : a)) : null;
+}
+
 /**
- * The frame to unfold back to: the one before the latest fold made since the last unfold.
- * Frame k is the paper after step k, so the frame before step i (0-based) is frame i.
+ * A mark drawn through points picked on the table, as a recipe's `draw` makes one: on the paper on top under
+ * its first point, on the side facing up, with every point carried onto the sheet by that face. Null off the paper.
  */
-export function unfoldTarget(steps: Step[]): number | null {
-  const lastUnfold = steps.findLastIndex((s) => s.kind === 'unfold');
-  const lastFold = steps.findLastIndex((s) => s.kind === 'fold');
-  return lastFold > lastUnfold ? lastFold : null;
+export function markAt(frame: FoldFrame, points: Vec2[], fill: boolean): Mark | null {
+  const face = points.length ? faceAt(frame, points[0]) : null;
+  if (!face) return null;
+  // Rounded as .fold files round coordinates, as recipes round what they record.
+  const toSheet = unplaceLike(face);
+  return { side: frontUp(face.world, face.paper) ? 'front' : 'back', points: points.map((p) => toSheet(p).map(roundCoord) as Vec2), ...(fill && { fill: true }) };
+}
+
+/** Where a mark's points are on the table now, or null if any of them isn't on the paper. */
+export function markOnTable(frame: FoldFrame, mark: Mark): Vec2[] | null {
+  try {
+    return mark.points.map((p) => locate(frame, p));
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Faces picked by clicking, as outlines on the sheet: clicking the face on top at a spot adds its outline, or
+ * takes away the outline that face is already in.
+ */
+export function toggleFace(frame: FoldFrame, picked: Vec2[][], spot: Vec2): Vec2[][] {
+  const face = faceAt(frame, spot);
+  if (!face) return picked;
+  const c = centre(face.paper);
+  const had = picked.filter((poly) => inside(poly, c));
+  return had.length ? picked.filter((poly) => !had.includes(poly)) : [...picked, face.paper.map((p) => p.map(roundCoord) as Vec2)];
+}
+
+/** Whether a face (by its corners on the sheet) is among the picked outlines, as `inPaper` decides it. */
+export function isPicked(picked: Vec2[][], paper: Vec2[]): boolean {
+  const c = centre(paper);
+  return picked.some((poly) => inside(poly, c));
+}
+
+/**
+ * Creases for popping a model up from a point (`popUp`), as the fortune teller opens: `count` of them evenly
+ * round, the first pointing along `azimuth` and every other one rising by `steep`; those between rise just
+ * enough that no paper stretches. Null when no rise for those between would do. Angles in radians.
+ */
+export function popRays(count: number, azimuth: number, steep: number): Ray[] | null {
+  const gap = (2 * Math.PI) / count;
+  // Neighbours stay `gap` apart in 3D: a·cos(e) + b·sin(e) = cos(gap).
+  const a = Math.cos(steep) * Math.cos(gap);
+  const b = Math.sin(steep);
+  const gentle = Math.atan2(b, a) - Math.acos(Math.cos(gap) / Math.hypot(a, b));
+  if (count % 2 || !Number.isFinite(gentle)) return null;
+  return Array.from({ length: count }, (_, k) => ({ azimuth: azimuth + k * gap, elevation: k % 2 ? gentle : steep }));
+}
+
+/** The settings `popRays` would make these creases from (starting from either of the first two), if it could. */
+export function popSettings(rays: Ray[]): { count: number; azimuth: number; steep: number } | null {
+  const turn = (x: number) => Math.abs(Math.atan2(Math.sin(x), Math.cos(x)));
+  for (const start of [0, 1]) {
+    const first = rays[start];
+    const made = first && popRays(rays.length, first.azimuth, first.elevation);
+    const same = made?.every((r, k) => {
+      const ray = rays[(k + start) % rays.length];
+      return turn(r.azimuth - ray.azimuth) < 1e-6 && Math.abs(r.elevation - ray.elevation) < 1e-6;
+    });
+    if (same) return { count: rays.length, azimuth: first.azimuth, steep: first.elevation };
+  }
+  return null;
 }
 
 /** A square box (x, z, size, size) centred on some points, with room to spare. */

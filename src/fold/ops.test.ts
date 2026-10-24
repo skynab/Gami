@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { basics } from '../models/basics';
 import { paperPlane } from '../models/recipes/paper-plane';
 import { fromFoldFile, toFoldFile } from './fold-format';
-import { OpError, OPS_VERSION, parseOp, replay, type Op } from './ops';
+import { applyOp, lastFold, OpError, opKind, OPS_VERSION, parseOp, replay, toolsNeeded, type Op } from './ops';
+import { unfoldStep } from './fold';
 import { paper, Recipe, table } from './recipe';
 import type { FoldFrame, OrigamiModel, Vec2 } from './types';
 
@@ -227,5 +228,73 @@ describe('.fold files with operations', () => {
     expect(read.steps.every((s) => !s.op)).toBe(true);
     expect(warnings).toHaveLength(1);
     expect(read.steps).toHaveLength(paperPlane().steps.length);
+  });
+});
+
+describe('what a plain Unfold opens', () => {
+  /** A fold, then a step the Studio labels a reverse fold (a collapse), made from operations. */
+  function foldThenReverse(): OrigamiModel {
+    let model: OrigamiModel = { id: 't', title: 't', sheets: basics.sheets, start: basics.start, steps: [] };
+    const add = (kind: 'fold' | 'reverse', op: Op) => {
+      model = { ...model, steps: [...model.steps, { title: kind, kind, frame: applyOp(model, op).frame, op }] };
+    };
+    add('fold', { op: 'fold', line: { line: { p: [0, 0], d: [1, 0] } } });
+    add('reverse', {
+      op: 'collapse',
+      creases: [{ line: { line: { p: [0.1, 0], d: [0, 1] } }, kind: 'valley' }],
+      anchor: { auto: true },
+    });
+    return model;
+  }
+
+  it('opens a reverse fold, going by its operation rather than its label', () => {
+    const model = foldThenReverse();
+    expect(lastFold(model.steps)).toBe(1);
+    const frames = [model.start, ...model.steps.map((s) => s.frame)];
+    expect(applyOp(model, { op: 'unfold' }).frame).toEqual(unfoldStep(frames, 1).frame);
+  });
+
+  it('still goes by the label for steps with no operation', () => {
+    const model = foldThenReverse();
+    const steps = model.steps.map(({ op: _, ...s }) => s);
+    expect(lastFold(steps)).toBe(0);
+    expect(lastFold([...model.steps, { ...model.steps[0], kind: 'unfold', op: { op: 'unfold' } }])).toBeNull();
+  });
+});
+
+describe('gallery details and tools in .fold files', () => {
+  it('keeps a model’s gallery details, and drops what isn’t understood', () => {
+    const model: OrigamiModel = { ...basics, card: 'finished', about: { blurb: 'Hi', difficulty: 3, category: 'toy', minutes: 7 } };
+    const read = fromFoldFile(JSON.parse(JSON.stringify(toFoldFile(model))));
+    expect(read.about).toEqual(model.about);
+    expect(read.card).toBe('finished');
+    const file = { ...toFoldFile(basics), 'gami:about': { blurb: 4, difficulty: 9, category: 'boat', minutes: -1, card: 'round' } };
+    const odd = fromFoldFile(JSON.parse(JSON.stringify(file)));
+    expect(odd.about).toBeUndefined();
+    expect(odd.card).toBeUndefined();
+    expect(toFoldFile(basics)['gami:about']).toBeUndefined();
+  });
+
+  it('needs scissors for a cut and a pen for drawing, inside steps made together too', () => {
+    const cut: Op = { op: 'cut', from: { table: [0, 0] }, to: { table: [0, 0.1] } };
+    const draw: Op = { op: 'draw', marks: [] };
+    const step = (op: Op) => ({ title: '', frame: basics.start, op });
+    expect(toolsNeeded([step({ op: 'together', ops: [{ op: 'turnOver' }, cut] })])).toEqual(['scissors']);
+    expect(toolsNeeded([step(draw), step(cut)])).toEqual(['scissors', 'pen']);
+    expect(toolsNeeded([{ title: '', frame: basics.start, kind: 'draw' }])).toEqual(['pen']);
+    expect(toolsNeeded(basics.steps)).toEqual([]);
+  });
+});
+
+describe('steps made of several parts', () => {
+  it('act as their last fold or unfold, so a plain Unfold opens a fold followed by a turn', () => {
+    const fold: Op = { op: 'fold', line: { line: { p: [0, 0], d: [1, 0] } } };
+    expect(opKind({ op: 'together', ops: [fold, { op: 'rotate', degrees: 90 }] })).toBe('fold');
+    expect(opKind({ op: 'together', ops: [{ op: 'turnOver' }, { op: 'rotate', degrees: 90 }] })).toBe('rotate');
+    let model: OrigamiModel = { id: 't', title: 't', sheets: basics.sheets, start: basics.start, steps: [] };
+    const op: Op = { op: 'together', ops: [fold, { op: 'rotate', degrees: 90 }] };
+    model = { ...model, steps: [{ title: '', frame: applyOp(model, op).frame, op }] };
+    expect(lastFold(model.steps)).toBe(0);
+    expect(() => applyOp(model, { op: 'unfold' })).not.toThrow();
   });
 });

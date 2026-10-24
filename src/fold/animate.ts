@@ -1,7 +1,7 @@
 import { Matrix4, Quaternion, Vector3 } from 'three';
 import { box, cornerKeys, crossDepth, overlapping } from './cross3d';
 import { facePositions, framesOf, LAYER_GAP, normal, sphereAround } from './frames';
-import { overlapArea, sharedSegment } from './geometry2d';
+import { joinedSegment, overlapArea, type Cut } from './geometry2d';
 import { applyOp } from './ops';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from './types';
 
@@ -73,6 +73,13 @@ export interface Transition {
    */
   makeWay?: { lifted: boolean[]; pivot: Vec3; axis: Vec3; angle: number };
   /**
+   * Into paper that bends (a frame with soft edges): each face makes its own screw motion from where it was to
+   * where it ends up (`moves`), then every corner is put where the faces sharing its vertex (`vertices`,
+   * the end frame's) place it on average, so the small triangles of bending paper stay joined. The frames a
+   * bend passes through are close together, so they barely disagree.
+   */
+  blend?: { moves: Motion[]; vertices: number[][] };
+  /**
    * When each face finishes its move (0–1): faces ending lower in the stack land first, so paper settles
    * bottom layer first, as it does by hand, instead of a lower layer coming down through upper ones.
    */
@@ -108,6 +115,7 @@ function transitionStaged(from: FoldFrame, to: FoldFrame, makeWay: boolean, stag
 }
 
 function workOut(from: FoldFrame, to: FoldFrame, makeWay: boolean, stages: number): Transition {
+  if (to.soft?.length) return blended(from, to);
   const t = moving(from, to);
   if (!makeWay) return t;
   const made = withWayMade(t);
@@ -130,6 +138,47 @@ function workOut(from: FoldFrame, to: FoldFrame, makeWay: boolean, stages: numbe
     }
   }
   return best;
+}
+
+/** Into a bent frame (see Transition.blend), all as one motion. */
+function blended(from: FoldFrame, to: FoldFrame): Transition {
+  const fromPositions = facePositions(from);
+  const toPositions = facePositions(to);
+  const faces = to.faces_vertices.map((face, f): FaceTrack => {
+    const parent = to.faces_parent?.[f] ?? f;
+    const paper = face.map((v) => to.vertices_paper[v]);
+    const toWorld = affine(from.faces_vertices[parent].map((v) => from.vertices_paper[v]), fromPositions[parent]);
+    return { paper, before: paper.map(toWorld), after: toPositions[f], motion: 0 };
+  });
+  cutsOf.set(faces, to.cuts ?? from.cuts ?? []);
+  const still: Motion = { axis: new Vector3(0, 1, 0), angle: 0, pivot: new Vector3(), shift: new Vector3(), lift: 0 };
+  const moves = faces.map((f) => {
+    const { q, t } = rigid(f.paper, f.before, f.after);
+    return screwsFor(q, t)[0];
+  });
+  return { faces, motions: [still], blend: { moves, vertices: to.faces_vertices } };
+}
+
+function blendedPose(t: Transition, s: number): Vec3[][] {
+  const { moves, vertices } = t.blend!;
+  const sum = new Map<number, { p: Vec3; n: number }>();
+  t.faces.forEach((f, i) =>
+    f.before.forEach((p, c) => {
+      const out = move(moves[i], p, s);
+      const e = sum.get(vertices[i][c]);
+      if (!e) sum.set(vertices[i][c], { p: out, n: 1 });
+      else {
+        e.p = [e.p[0] + out[0], e.p[1] + out[1], e.p[2] + out[2]];
+        e.n++;
+      }
+    }),
+  );
+  return vertices.map((face) =>
+    face.map((v) => {
+      const { p, n } = sum.get(v)!;
+      return [p[0] / n, p[1] / n, p[2] / n] as Vec3;
+    }),
+  );
 }
 
 /**
@@ -234,6 +283,7 @@ function moving(from: FoldFrame, to: FoldFrame, { yielding = false } = {}): Tran
     reps[i].faces.push(f);
     return { paper, before, after, motion: i };
   });
+  cutsOf.set(faces, to.cuts ?? from.cuts ?? []);
 
   // Moves with the same turn (stacked layers turning over together, say, which differ only by the gap
   // between layers) go the same way round and rise as high, so they never pass through each other. Only
@@ -482,6 +532,7 @@ export function poseAt(t: Transition, s: number): Vec3[][] {
     });
   }
   if (t.hinges) return hingedPose(t, s);
+  if (t.blend) return blendedPose(t, s);
   return t.faces.map((f, i) => f.before.map((p) => move(t.motions[f.motion], p, landed(t, i, s))));
 }
 
@@ -499,8 +550,9 @@ function touching(faces: FaceTrack[], a: number, b: number): boolean {
   return m[a * faces.length + b] === 1;
 }
 
-/** Whether two faces move as one through a transition, so they can't pass through each other. */
+/** Whether two faces move as one through a transition, so they can't pass through each other. Bending paper never does. */
 export function together(t: Transition, a: number, b: number): boolean {
+  if (t.blend) return false;
   return t.faces[a].motion === t.faces[b].motion && (!t.makeWay || t.makeWay.lifted[a] === t.makeWay.lifted[b]);
 }
 
@@ -604,8 +656,12 @@ function hingesFor(faces: FaceTrack[], reps: { q: Quaternion; t: Vector3; faces:
   return order.length > roots ? { parent, at, dir, angle, order, lift: 0, shift } : null;
 }
 
+/** The cuts in the paper a step's faces were made from (see `moving`): faces meeting along one aren't joined. */
+const cutsOf = new WeakMap<FaceTrack[], Cut[]>();
+
 /** Pairs of faces joined along an edge on the sheet, and that edge. */
 function sharedEdges(faces: FaceTrack[]): { i: number; j: number; shared: [Vec2, Vec2] }[] {
+  const cuts = cutsOf.get(faces);
   const out: { i: number; j: number; shared: [Vec2, Vec2] }[] = [];
   const bounds = faces.map((f) => {
     const us = f.paper.map((p) => p[0]);
@@ -616,7 +672,7 @@ function sharedEdges(faces: FaceTrack[]): { i: number; j: number; shared: [Vec2,
     for (let j = i + 1; j < faces.length; j++) {
       const [a, b] = [bounds[i], bounds[j]];
       if (a[2] < b[0] - 1e-9 || b[2] < a[0] - 1e-9 || a[3] < b[1] - 1e-9 || b[3] < a[1] - 1e-9) continue;
-      const shared = sharedSegment(faces[i].paper, faces[j].paper);
+      const shared = joinedSegment(faces[i].paper, faces[j].paper, cuts);
       if (shared) out.push({ i, j, shared: shared as [Vec2, Vec2] });
     }
   }

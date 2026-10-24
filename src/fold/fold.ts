@@ -1,16 +1,20 @@
 import {
+  joinedAlong,
   overlapArea,
   reflect,
   segmentsOverlap,
+  sharedSegment,
   sideOf,
   signedArea,
   split,
   sub,
+  type Cut,
   type Line,
   type Piece,
 } from './geometry2d';
 import { facePositions } from './frames';
 import type { FoldFrame, Vec2, Vec3 } from './types';
+import type { CreaseKind } from './collapse';
 
 /**
  * The fold engine: works out the paper after a fold, for models that lie flat on the table between steps.
@@ -24,7 +28,8 @@ export interface FlatFace extends Piece {
   parent: number;
 }
 
-export type FoldKind = 'valley' | 'mountain';
+export const FOLD_KINDS = ['valley', 'mountain'] as const satisfies readonly CreaseKind[];
+export type FoldKind = (typeof FOLD_KINDS)[number];
 
 export interface FoldOptions {
   line: Line;
@@ -52,20 +57,25 @@ export function toFlat(frame: FoldFrame): FlatFace[] {
   });
 }
 
-/** Writes faces back out as a frame, sharing vertices between faces that meet at the same paper point. */
+/**
+ * Writes faces back out as a frame, sharing vertices between faces that meet at the same paper point in the
+ * same place. (Only cut paper has one paper point in two places: either side of a cut that's come apart.)
+ */
 export function fromFlat(faces: FlatFace[]): FoldFrame {
   const layers = compact(faces);
-  const index = new Map<string, number>();
+  const index = new Map<string, number[]>();
   const vertices_paper: Vec2[] = [];
   const vertices_coords: Vec3[] = [];
   const faces_vertices = faces.map((f) =>
     f.paper.map((p, i) => {
       const key = `${p[0].toFixed(7)},${p[1].toFixed(7)}`;
-      let v = index.get(key);
+      const [x, z] = f.world[i];
+      const same = index.get(key) ?? [];
+      let v = same.find((w) => Math.abs(vertices_coords[w][0] - x) < 1e-6 && Math.abs(vertices_coords[w][2] - z) < 1e-6);
       if (v === undefined) {
         v = vertices_paper.push(p) - 1;
-        vertices_coords.push([f.world[i][0], 0, f.world[i][1]]);
-        index.set(key, v);
+        vertices_coords.push([x, 0, z]);
+        index.set(key, [...same, v]);
       }
       return v;
     }),
@@ -100,7 +110,7 @@ export function fold(frame: FoldFrame, { line, kind, layers, only }: FoldOptions
 
   const moving = pieces.filter((p) => p.moves);
   if (!moving.length) throw new FoldError('Nothing is on the folding side of that line.');
-  if (layers !== undefined || only) checkNoTear(pieces, line);
+  if (layers !== undefined || only) checkNoTear(pieces, line, frame.cuts);
 
   // New stacking. Turning a pile over reverses it: in a valley fold the old top lands lowest of the
   // folded part, on top of everything else; in a mountain fold the old top ends up lowest of all.
@@ -197,6 +207,11 @@ export function unfoldStep(frames: FoldFrame[], target: number): { frame: FoldFr
   return { frame: unfoldTo(frames, target), ...(via.length && { via }) };
 }
 
+/** Maps table points back to the sheet the way `face` is placed: `placeLike` with the roles swapped. */
+export function unplaceLike(face: FlatFace): (p: Vec2) => Vec2 {
+  return placeLike({ ...face, paper: face.world, world: face.paper });
+}
+
 /** Maps sheet points to the table the way `face` is placed. */
 export function placeLike(face: FlatFace): (p: Vec2) => Vec2 {
   const [q0, q1, q2] = widest(face.paper);
@@ -225,7 +240,7 @@ function widest(paper: Vec2[]): [Vec2, Vec2, Vec2] {
 }
 
 /** Moving and still parts may only be joined along the fold line, or the paper would tear. */
-export function checkNoTear(pieces: (FlatFace & { moves: boolean })[], line: Line) {
+export function checkNoTear(pieces: (FlatFace & { moves: boolean })[], line: Line, cuts?: Cut[]) {
   const onLine = (x: Vec2) => Math.abs(sideOf(line, x)) < 1e-7;
   for (const m of pieces.filter((p) => p.moves)) {
     for (const s of pieces.filter((p) => !p.moves)) {
@@ -233,7 +248,8 @@ export function checkNoTear(pieces: (FlatFace & { moves: boolean })[], line: Lin
         const i1 = (i + 1) % m.paper.length;
         if (onLine(m.world[i]) && onLine(m.world[i1])) continue;
         for (let j = 0; j < s.paper.length; j++) {
-          if (segmentsOverlap(m.paper[i], m.paper[i1], s.paper[j], s.paper[(j + 1) % s.paper.length])) {
+          const shared = segmentsOverlap(m.paper[i], m.paper[i1], s.paper[j], s.paper[(j + 1) % s.paper.length]) && sharedSegment([m.paper[i], m.paper[i1]], [s.paper[j], s.paper[(j + 1) % s.paper.length]]);
+          if (shared && joinedAlong(shared[0], shared[1], cuts)) {
             throw new FoldError('Those layers are joined to the ones below, so folding only them would tear the paper. Try more layers.');
           }
         }

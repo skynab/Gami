@@ -1,5 +1,5 @@
 import { OPS_VERSION, parseMarks, parseOp, type Op } from './ops';
-import type { FoldFrame, Mark, OrigamiModel, Step, StepKind } from './types';
+import { CATEGORIES, DIFFICULTIES, STEP_KINDS, type About, type FoldFrame, type Mark, type OrigamiModel, type Step, type StepKind } from './types';
 
 /**
  * Reading and writing .fold files (https://github.com/edemaine/fold). The start of the model is the file's
@@ -12,6 +12,9 @@ import type { FoldFrame, Mark, OrigamiModel, Step, StepKind } from './types';
  * What a step draws on the paper is part of the step, like its frame (`gami:marks`: lines and fills as points
  * on the sheet, and the side they're on). It doesn't depend on the operations, so a file whose operations
  * can't be read still shows its drawings.
+ *
+ * How the gallery describes the model (`gami:about`: its blurb, difficulty, category, minutes and how its card
+ * shows it) travels with it too. Anything there that isn't understood is left out.
  */
 
 interface FoldFileFrame {
@@ -21,6 +24,10 @@ interface FoldFileFrame {
   'gami:vertices_paper': number[][];
   'gami:faces_parent'?: number[];
   'gami:faces_layer'?: number[];
+  /** Scissor cuts made so far, as segments on the sheet (see FoldFrame.cuts). */
+  'gami:cuts'?: number[][][];
+  /** Seams between triangles of bent paper cut from one face (see FoldFrame.soft). */
+  'gami:soft'?: number[][];
   'gami:text'?: string;
   'gami:kind'?: StepKind;
   'gami:section'?: string;
@@ -40,6 +47,7 @@ export interface FoldFile extends FoldFileFrame {
   'gami:sheets': OrigamiModel['sheets'];
   /** Files from before multi-sheet models had a single sheet. */
   'gami:sheet'?: OrigamiModel['sheets'][number];
+  'gami:about'?: About & { card?: OrigamiModel['card'] };
   /** The version of the operations in `gami:op`, when any step has one. */
   'gami:ops'?: number;
   file_frames: FoldFileFrame[];
@@ -53,14 +61,17 @@ export function toFoldFile(model: OrigamiModel): FoldFile {
     file_classes: ['diagrams'],
     'gami:id': model.id,
     'gami:sheets': model.sheets,
+    ...((model.about || model.card) && { 'gami:about': { ...model.about, ...(model.card && { card: model.card }) } }),
     ...(model.steps.some((s) => s.op) && { 'gami:ops': OPS_VERSION }),
-    ...writeFrame(model.start),
+    // The start is kept exactly, as everything replayed from the file starts from it: a sheet's corners can be
+    // irrational (an A4 sheet's are at ±√2/2), and rounded they'd put every later step a hair out.
+    ...writeFrame(model.start, (x) => x),
     file_frames: model.steps.map((s) => ({
       frame_title: s.title,
       ...(s.text && { 'gami:text': s.text }),
       ...(s.kind && { 'gami:kind': s.kind }),
       ...(s.section && { 'gami:section': s.section }),
-      ...(s.via?.length && { 'gami:via': s.via.map(writeFrame) }),
+      ...(s.via?.length && { 'gami:via': s.via.map((v) => writeFrame(v)) }),
       ...(s.marks?.length && { 'gami:marks': s.marks.map(writeMark) }),
       ...(s.op && { 'gami:op': s.op }),
       ...writeFrame(s.frame),
@@ -99,13 +110,14 @@ export function fromFoldFile(file: FoldFile, warnings: string[] = []): OrigamiMo
   return {
     id: file['gami:id'],
     title: file.file_title,
+    ...aboutOf(file['gami:about']),
     sheets,
     start: readFrame(file),
     steps: file.file_frames.map(
       (f, k): Step => ({
         title: f.frame_title ?? '',
         ...(f['gami:text'] && { text: f['gami:text'] }),
-        ...(f['gami:kind'] && { kind: f['gami:kind'] }),
+        ...(STEP_KINDS.includes(f['gami:kind']!) && { kind: f['gami:kind'] }),
         ...(f['gami:section'] && { section: f['gami:section'] }),
         ...(f['gami:via'] && { via: f['gami:via'].map(readFrame) }),
         frame: readFrame(f),
@@ -116,21 +128,39 @@ export function fromFoldFile(file: FoldFile, warnings: string[] = []): OrigamiMo
   };
 }
 
-/** Coordinates rounded to 1e-9: enough for any sheet, and keeps files small and diffs readable. */
-const round = (x: number) => Math.round(x * 1e9) / 1e9 || 0;
+/** The gallery details in a file, keeping only what's well formed. */
+function aboutOf(x: unknown): Pick<OrigamiModel, 'about' | 'card'> {
+  if (typeof x !== 'object' || x === null) return {};
+  const o = x as Record<string, unknown>;
+  const about: About = {
+    ...(typeof o.blurb === 'string' && o.blurb.trim() && { blurb: o.blurb.slice(0, 500) }),
+    ...(DIFFICULTIES.includes(o.difficulty as About['difficulty'] & number) && { difficulty: o.difficulty as About['difficulty'] }),
+    ...(CATEGORIES.includes(o.category as About['category'] & string) && { category: o.category as About['category'] }),
+    ...(typeof o.minutes === 'number' && o.minutes > 0 && o.minutes <= 600 && { minutes: Math.round(o.minutes) }),
+  };
+  return {
+    ...(Object.keys(about).length && { about }),
+    ...((o.card === 'flat' || o.card === 'finished') && { card: o.card }),
+  };
+}
 
-function writeFrame(f: FoldFrame): FoldFileFrame {
+/** Coordinates rounded to 1e-9: enough for any sheet, and keeps files small and diffs readable. */
+export const roundCoord = (x: number) => Math.round(x * 1e9) / 1e9 || 0;
+
+function writeFrame(f: FoldFrame, round: (x: number) => number = roundCoord): FoldFileFrame {
   return {
     vertices_coords: f.vertices_coords.map((p) => p.map(round)),
     faces_vertices: f.faces_vertices,
     'gami:vertices_paper': f.vertices_paper.map((p) => p.map(round)),
     ...(f.faces_parent && { 'gami:faces_parent': f.faces_parent }),
     ...(f.faces_layer && { 'gami:faces_layer': f.faces_layer }),
+    ...(f.cuts?.length && { 'gami:cuts': f.cuts.map((c) => c.map((p) => p.map(round))) }),
+    ...(f.soft?.length && { 'gami:soft': f.soft }),
   };
 }
 
 function writeMark(m: Mark): Mark {
-  return { side: m.side, points: m.points.map(([u, v]) => [round(u), round(v)]), ...(m.fill && { fill: true }) };
+  return { side: m.side, points: m.points.map(([u, v]) => [roundCoord(u), roundCoord(v)]), ...(m.fill && { fill: true }) };
 }
 
 function readFrame(f: FoldFileFrame): FoldFrame {
@@ -140,5 +170,23 @@ function readFrame(f: FoldFileFrame): FoldFrame {
     faces_vertices: f.faces_vertices,
     ...(f['gami:faces_parent'] && { faces_parent: f['gami:faces_parent'] }),
     ...(f['gami:faces_layer'] && { faces_layer: f['gami:faces_layer'] }),
+    ...(cutsOf(f['gami:cuts']) && { cuts: cutsOf(f['gami:cuts']) }),
+    ...(softOf(f['gami:soft'], f.vertices_coords.length) && { soft: softOf(f['gami:soft'], f.vertices_coords.length) }),
   };
+}
+
+/** Soft edges read from a file: pairs of the frame's vertices. Anything else is left out. */
+function softOf(x: unknown, vertices: number): FoldFrame['soft'] | undefined {
+  if (!Array.isArray(x)) return undefined;
+  const vertex = (v: unknown) => Number.isInteger(v) && (v as number) >= 0 && (v as number) < vertices;
+  const soft = x.filter((e): e is [number, number] => Array.isArray(e) && e.length === 2 && e.every(vertex));
+  return soft.length ? soft : undefined;
+}
+
+/** Cuts read from a file: segments of two points each. Anything else is left out. */
+function cutsOf(x: unknown): FoldFrame['cuts'] | undefined {
+  if (!Array.isArray(x)) return undefined;
+  const point = (p: unknown): p is [number, number] => Array.isArray(p) && p.length === 2 && p.every((n) => typeof n === 'number' && Number.isFinite(n));
+  const cuts = x.filter((c): c is [[number, number], [number, number]] => Array.isArray(c) && c.length === 2 && c.every(point));
+  return cuts.length ? cuts : undefined;
 }

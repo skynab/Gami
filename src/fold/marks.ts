@@ -1,4 +1,5 @@
 import { signedArea } from './geometry2d';
+import type { Op } from './ops';
 import type { Mark, OrigamiModel, Vec2 } from './types';
 export type { Mark } from './types';
 
@@ -13,9 +14,15 @@ export type { Mark } from './types';
 export const MARK_WIDTH = 0.007;
 export const MARK_COLOUR = '#2b2a33';
 
-/** The marks drawn by each of the first `k` steps, in order, with the step that drew them (1 for the first step). */
-export function marksUpTo(model: OrigamiModel, k: number): { step: number; mark: Mark }[] {
-  return model.steps.slice(0, k).flatMap((s, i) => (s.marks ?? []).map((mark) => ({ step: i + 1, mark })));
+/**
+ * The marks drawn by each of the first `k` steps, in order, with the step that drew them (1 for the first step).
+ * A fresh sheet starts clean, so marks drawn before the last one are left out.
+ */
+export function marksUpTo(model: Pick<OrigamiModel, 'steps'>, k: number): { step: number; mark: Mark }[] {
+  const steps = model.steps.slice(0, k);
+  const fresh = (op?: Op): boolean => op?.op === 'newSheet' || (op?.op === 'together' && op.ops.some(fresh));
+  const from = steps.findLastIndex((s) => fresh(s.op)) + 1;
+  return steps.slice(from).flatMap((s, i) => (s.marks ?? []).map((mark) => ({ step: from + i + 1, mark })));
 }
 
 /**

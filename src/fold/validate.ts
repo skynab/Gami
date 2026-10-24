@@ -7,7 +7,8 @@ import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from './types';
 /**
  * Checks a model is physically sensible, step by step. Returns what's wrong, or an empty list.
  * The paper must never stretch or lose area, stacked faces must be in a definite order,
- * and animating each step must keep faces their shape and above the table.
+ * and animating each step must keep faces their shape and above the table. Bent paper keeps its shape to
+ * within what the solver reaches (`BENT_STRAIN`, `BENT_PLAY_STRAIN`), checked step by step by `bendStrain`.
  */
 export function problems(model: OrigamiModel): string[] {
   const out: string[] = [];
@@ -18,7 +19,14 @@ export function problems(model: OrigamiModel): string[] {
     const where = k ? `step ${k}` : 'start';
     if (Math.abs(sheetArea(frame) - area) > 1e-6) out.push(`${where}: paper area changed`);
     if (k && frame.faces_parent?.some((p) => p >= frames[k - 1].faces_vertices.length)) out.push(`${where}: face parent out of range`);
+    const bent = !!frame.soft?.length;
+    if (k && bent && model.steps[k - 1].op?.op === 'bend') {
+      const { still, playing } = bendStrain(model, k);
+      if (still > BENT_STRAIN) out.push(`${where}: bent paper stretches by ${percent(still)}`);
+      if (playing > BENT_PLAY_STRAIN) out.push(`${where}: bent paper stretches by ${percent(playing)} while animating`);
+    }
     frame.faces_vertices.forEach((face, f) => {
+      if (bent) return;
       const world = face.map((v) => frame.vertices_coords[v]);
       const sheet = face.map((v) => frame.vertices_paper[v]);
       if (!sameShape(world, sheet)) out.push(`${where}: face ${f} is stretched`);
@@ -37,7 +45,7 @@ export function problems(model: OrigamiModel): string[] {
       const t = stepTransition(model, k);
       for (const s of [0.25, 0.5, 0.75]) {
         poseAt(t, s).forEach((pts, f) => {
-          if (!sameShape(pts, t.faces[f].paper)) out.push(`${where}: face ${f} stretches while animating`);
+          if (!bent && !sameShape(pts, t.faces[f].paper)) out.push(`${where}: face ${f} stretches while animating`);
           if (pts.some((p) => p[1] < -1e-6)) out.push(`${where}: face ${f} goes through the table while animating`);
         });
       }
@@ -45,6 +53,42 @@ export function problems(model: OrigamiModel): string[] {
   });
   return [...new Set(out)];
 }
+
+/** How far bent paper may stretch, at most: in its frames, and while a bent step plays between them. */
+export const BENT_STRAIN = 0.01;
+export const BENT_PLAY_STRAIN = 0.05;
+
+/** Samples taken through a bent step, for its strain while playing. */
+const BEND_SAMPLES = 96;
+
+/**
+ * How far bent paper stretches in step k, as a fraction of an edge's length on the sheet, at most: in the step's
+ * frame and the frames it passes through (`still`), and between them while it plays (`playing`).
+ */
+export function bendStrain(model: OrigamiModel, k: number): { still: number; playing: number } {
+  const step = model.steps[k - 1];
+  const frames = [...(step.via ?? []), step.frame];
+  const still = Math.max(...frames.map((f) => strainOf(f.faces_vertices.map((face) => face.map((v) => f.vertices_coords[v])), f.faces_vertices.map((face) => face.map((v) => f.vertices_paper[v])))));
+  const t = stepTransition(model, k);
+  const paper = t.faces.map((f) => f.paper);
+  let playing = 0;
+  for (let i = 1; i < BEND_SAMPLES; i++) playing = Math.max(playing, strainOf(poseAt(t, i / BEND_SAMPLES), paper));
+  return { still, playing };
+}
+
+function strainOf(world: Vec3[][], sheet: Vec2[][]): number {
+  let worst = 0;
+  world.forEach((pts, f) =>
+    pts.forEach((p, i) => {
+      const j = (i + 1) % pts.length;
+      const [q, a, b] = [pts[j], sheet[f][i], sheet[f][j]];
+      worst = Math.max(worst, Math.abs(Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]) / Math.hypot(a[0] - b[0], a[1] - b[1]) - 1));
+    }),
+  );
+  return worst;
+}
+
+const percent = (x: number) => `${(100 * x).toFixed(1)}%`;
 
 function sameShape(world: Vec3[], sheet: Vec2[]): boolean {
   for (let i = 0; i < world.length; i++) {

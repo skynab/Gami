@@ -1,4 +1,4 @@
-import { move, transition, type Motion } from './animate';
+import { move, poseAt, transition, transitionVia, type Motion } from './animate';
 import { sharedSegment } from './geometry2d';
 import type { FoldFrame, Vec2, Vec3 } from './types';
 
@@ -21,9 +21,16 @@ export interface ArrowGuide {
   to: Vec3;
 }
 
+/** A scissor cut the step makes, drawn on the paper where it goes. */
+export interface CutGuide {
+  a: Vec3;
+  b: Vec3;
+}
+
 export interface Guides {
   creases: CreaseGuide[];
   arrows: ArrowGuide[];
+  cuts: CutGuide[];
 }
 
 /** Shortest arrow worth drawing, in sheet widths. */
@@ -31,7 +38,9 @@ const MIN_ARROW = 0.05;
 /** At most this many arrows, for the parts that move furthest. */
 const MAX_ARROWS = 2;
 
-export function guidesFor(from: FoldFrame, to: FoldFrame): Guides {
+/** `via`: the frames the step passes through on its way, if any (a bend's). */
+export function guidesFor(from: FoldFrame, to: FoldFrame, via: FoldFrame[] = []): Guides {
+  if (to.soft?.length) return bendGuides(from, to, via);
   const t = transition(from, to);
   const still = (m: Motion) => !m.angle && m.shift.lengthSq() < 1e-12 && !m.lift;
 
@@ -73,7 +82,50 @@ export function guidesFor(from: FoldFrame, to: FoldFrame): Guides {
     .slice(0, MAX_ARROWS)
     .map(({ from, via, to }) => ({ from, via, to }));
 
-  return { creases: mergeCollinear(creases), arrows };
+  // Cuts: those this step adds, placed on a face they cross (on its edge, as cutting splits faces along them).
+  const known = new Set((from.cuts ?? []).map((c) => c.map((p) => p.map((x) => x.toFixed(6)).join(',')).join('|')));
+  const cuts: CutGuide[] = [];
+  for (const c of to.cuts ?? []) {
+    if (known.has(c.map((p) => p.map((x) => x.toFixed(6)).join(',')).join('|'))) continue;
+    const face = t.faces.find((f) => onBoundary(f.paper, c[0]) && onBoundary(f.paper, c[1]));
+    if (face) {
+      const place = placer(face.paper, face.before);
+      cuts.push({ a: place(c[0]), b: place(c[1]) });
+    }
+  }
+
+  return { creases: mergeCollinear(creases), arrows, cuts: mergeCollinear(cuts.map((c) => ({ ...c, valley: true }))).map(({ a, b }) => ({ a, b })) };
+}
+
+/**
+ * Paper that bends has no one crease to draw, nor parts moving as one: an arrow follows the corner that goes
+ * furthest, through where it is halfway.
+ */
+function bendGuides(from: FoldFrame, to: FoldFrame, via: FoldFrame[]): Guides {
+  const t = transitionVia([from, ...via, to]);
+  const half = poseAt(t, 0.5);
+  let best: ArrowGuide & { d: number } = { from: [0, 0, 0], via: [0, 0, 0], to: [0, 0, 0], d: 0 };
+  t.faces.forEach((f, i) =>
+    f.before.forEach((p, c) => {
+      const q = f.after[c];
+      const d = Math.hypot(q[0] - p[0], q[1] - p[1], q[2] - p[2]);
+      if (d > best.d) best = { from: p, via: half[i][c], to: q, d };
+    }),
+  );
+  const { d, ...arrow } = best;
+  return { creases: [], arrows: d > MIN_ARROW ? [arrow] : [], cuts: [] };
+}
+
+/** Whether a point lies on a polygon's outline. */
+function onBoundary(poly: Vec2[], p: Vec2): boolean {
+  return poly.some((a, i) => {
+    const b = poly[(i + 1) % poly.length];
+    const cross = (b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0]);
+    const len = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    if (Math.abs(cross) > 1e-7 * Math.max(1, len)) return false;
+    const t = ((p[0] - a[0]) * (b[0] - a[0]) + (p[1] - a[1]) * (b[1] - a[1])) / (len * len);
+    return t > -1e-7 && t < 1 + 1e-7;
+  });
 }
 
 /** Maps sheet points onto a face's position in 3D, from its corners on the sheet and in space. */
