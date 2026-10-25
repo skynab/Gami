@@ -11,8 +11,11 @@ import { FoldedPaper } from './FoldedPaper';
 import { FoldGuides } from './FoldGuides';
 import { ViewCube } from './ViewCube';
 
-/** The 3D viewport: the paper on a table, lit softly, with a view cube in the corner. Loaded on demand. */
-export default function Stage({ model }: { model: OrigamiModel }) {
+/**
+ * The 3D viewport: the paper on a table, lit softly, with a view cube in the corner. Loaded on demand.
+ * `onTap`: a click or tap in the view that isn't on the view cube, and isn't the end of a drag turning the camera.
+ */
+export default function Stage({ model, onTap }: { model: OrigamiModel; onTap?: () => void }) {
   const colors = useThemeColors();
   // The camera frames whichever step is showing, worked out when the step is reached, so the camera only
   // moves when the step changes.
@@ -33,6 +36,8 @@ export default function Stage({ model }: { model: OrigamiModel }) {
       dpr={[1, 2]}
       camera={{ fov: 35, near: 0.01, far: 100, position: [0, 2, 2] }}
       fallback={<NoWebGL />}
+      // A "miss" is a click that hit nothing clickable (only the view cube is) and moved under 2px since going down.
+      onPointerMissed={(e) => e.type === 'click' && onTap?.()}
     >
       <hemisphereLight args={['#ffffff', '#dcd8e6', 2.2]} />
       <directionalLight position={[2, 4, 3]} intensity={1.8} />
