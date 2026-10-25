@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState, type PointerEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { PaperIcon, PenIcon, ScissorsIcon } from '../app/icons';
@@ -11,10 +11,22 @@ export function ModelCard({ model }: { model: ModelInfo }) {
   const { t } = useTranslation();
   const progress = model.steps ? readProgress(model.id) : null;
   const lesson = model.category === 'lesson';
-  // The looping preview loads the first time the card is hovered or focused, and plays while it is.
+  // The looping preview loads the first time the card is hovered or focused, and plays while it is. Touch screens
+  // can't hover (a finger scrolling past would start it), so there it plays while the card is mid-screen instead.
   const [preview, setPreview] = useState<'off' | 'on' | 'loaded'>('off');
   const show = () => setPreview('on');
   const hide = () => setPreview((p) => (p === 'off' ? 'off' : 'loaded'));
+  const hover = (e: PointerEvent, then: () => void) => e.pointerType !== 'touch' && then();
+  const card = useRef<HTMLAnchorElement>(null);
+  useEffect(() => {
+    if (!model.steps || !card.current || !matchMedia('(hover: none)').matches) return;
+    // A thin line across the middle of the screen, so one card at a time crosses it.
+    const seen = new IntersectionObserver(([entry]) => (entry.isIntersecting ? show() : hide()), {
+      rootMargin: '-49.5% 0px -49.5% 0px',
+    });
+    seen.observe(card.current);
+    return () => seen.disconnect();
+  }, [model.steps]);
   const badge = !model.steps
     ? t('card.soon')
     : progress?.done
@@ -33,9 +45,10 @@ export function ModelCard({ model }: { model: ModelInfo }) {
   return (
     <Link
       to={`/learn/${model.id}`}
+      ref={card}
       className={lesson ? 'card lesson' : 'card'}
-      onPointerEnter={show}
-      onPointerLeave={hide}
+      onPointerEnter={(e) => hover(e, show)}
+      onPointerLeave={(e) => hover(e, hide)}
       onFocus={show}
       onBlur={hide}
     >

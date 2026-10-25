@@ -896,9 +896,12 @@ kbd {
   transition: translate 0.15s, box-shadow 0.15s;
 }
 
-.card:hover {
-  translate: 0 -2px;
-  box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
+/* Only where there's real hover: on touch screens it would stick after a tap. */
+@media (hover: hover) {
+  .card:hover {
+    translate: 0 -2px;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
+  }
 }
 
 .card-thumb {
@@ -916,7 +919,8 @@ kbd {
   filter: drop-shadow(0 4px 6px rgb(0 0 0 / 0.12));
 }
 
-/* The looping preview sits over the finished model, shown while the card is hovered or focused. */
+/* The looping preview sits over the finished model, shown while the card is hovered or focused (or mid-screen, on
+   touch screens). */
 .card-thumb .card-preview {
   position: absolute;
   inset: 0;
