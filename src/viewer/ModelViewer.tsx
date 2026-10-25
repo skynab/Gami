@@ -63,7 +63,8 @@ export function ModelViewer({ progressKey, title, load, notice }: {
   const nextSpeed = () => setSpeed(SPEEDS[(SPEEDS.indexOf(speed) + 1) % SPEEDS.length]);
 
   // The step in the address when the page opened, or where this person left off. After that, the address follows playback.
-  const startStep = useRef(Number(params.get('step')) || readProgress(progressKey)?.step || 1);
+  const linked = Number(params.get('step') || NaN);
+  const startStep = useRef(Number.isFinite(linked) ? linked : readProgress(progressKey)?.step || 1);
   const loader = useRef(load);
   loader.current = load;
 
@@ -98,7 +99,8 @@ export function ModelViewer({ progressKey, title, load, notice }: {
   }, [progressKey]);
 
   useEffect(() => {
-    if (total) saveProgress(progressKey, step, total);
+    // Not step 0, the paper before any fold: a look back there shouldn't lose someone's place.
+    if (total && step > 0) saveProgress(progressKey, step, total);
   }, [progressKey, step, total]);
 
   useEffect(() => {
@@ -149,7 +151,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
             <span className="page-title">{name}</span>
           </>
         }
-        center={total > 0 && <span>{t('viewer.stepOf', { step, total })}</span>}
+        center={total > 0 && <span>{step === 0 ? t('viewer.start') : t('viewer.stepOf', { step, total })}</span>}
         end={
           <button type="button" className="icon shortcuts-button" aria-label={t('viewer.shortcuts')} title={t('viewer.shortcutsTitle')} onClick={() => setHelp(true)}>
             <KeyboardIcon />
@@ -203,6 +205,12 @@ export function ModelViewer({ progressKey, title, load, notice }: {
             )}
           </section>
         )}
+        {total > 0 && step === 0 && (
+          <section className="step-card" aria-label={t('viewer.instructions')} aria-live="polite">
+            <h2>{t('viewer.start')}</h2>
+            <p className="muted small">{t('viewer.startText')}</p>
+          </section>
+        )}
         {none && failed && (
           <section className="step-card" aria-label={t('viewer.instructions')}>
             <h2>{t('viewer.failed')}</h2>
@@ -228,7 +236,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
       <footer className="bottombar playback">
         <div className="group transport">
           <FirstButton />
-          <button type="button" className="icon" aria-label={t('viewer.prev')} title={t('viewer.prevTitle')} disabled={step <= 1} onClick={() => goTo(step - 1)}>
+          <button type="button" className="icon" aria-label={t('viewer.prev')} title={t('viewer.prevTitle')} disabled={step <= 0} onClick={() => goTo(step - 1)}>
             <PrevIcon />
           </button>
           <button type="button" className="icon" aria-label={t('viewer.replay')} title={t('viewer.replayTitle')} disabled={!total} onClick={replay}>
@@ -447,7 +455,7 @@ function Scrubber({ sections }: { sections: { step: number; name: string }[] }) 
         list="step-ticks"
         disabled={!total}
         aria-label={t('viewer.progress')}
-        aria-valuetext={t('viewer.stepOf', { step, total })}
+        aria-valuetext={step === 0 ? t('viewer.start') : t('viewer.stepOf', { step, total })}
         onChange={(e) => usePlayback.getState().scrub(Number(e.target.value))}
       />
       {/* A tick where each step ends. */}

@@ -118,6 +118,8 @@ export const en = {
   viewer: {
     allModels: 'All models',
     stepOf: 'Step {{step}} of {{total}}',
+    start: 'Start',
+    startText: 'Your paper, before the first fold. Press next step to begin.',
     shortcuts: 'Keyboard shortcuts',
     shortcutsTitle: 'Keyboard shortcuts (?)',
     stage: '{{name}} in 3D. Drag to turn it, scroll or pinch to zoom.',

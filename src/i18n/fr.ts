@@ -116,6 +116,8 @@ export const fr: Messages = {
   viewer: {
     allModels: 'Tous les modèles',
     stepOf: 'Étape {{step}} sur {{total}}',
+    start: 'Début',
+    startText: 'Votre feuille, avant le premier pli. Appuyez sur l’étape suivante pour commencer.',
     shortcuts: 'Raccourcis clavier',
     shortcutsTitle: 'Raccourcis clavier (?)',
     stage: '{{name}} en 3D. Faites glisser pour le tourner, défilez ou pincez pour zoomer.',

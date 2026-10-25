@@ -116,6 +116,8 @@ export const ja: Messages = {
   viewer: {
     allModels: '作品一覧',
     stepOf: '{{total}}手順中 {{step}}',
+    start: 'スタート',
+    startText: '最初の折りの前の紙です。「次の手順」で始めましょう。',
     shortcuts: 'キーボードショートカット',
     shortcutsTitle: 'キーボードショートカット (?)',
     stage: '{{name}}の3D表示。ドラッグで回転、スクロールかピンチで拡大縮小。',

@@ -116,6 +116,8 @@ export const es: Messages = {
   viewer: {
     allModels: 'Todos los modelos',
     stepOf: 'Paso {{step}} de {{total}}',
+    start: 'Inicio',
+    startText: 'Tu papel, antes del primer pliegue. Pulsa el paso siguiente para empezar.',
     shortcuts: 'Atajos de teclado',
     shortcutsTitle: 'Atajos de teclado (?)',
     stage: '{{name}} en 3D. Arrastra para girarlo; desplaza o pellizca para acercar.',
