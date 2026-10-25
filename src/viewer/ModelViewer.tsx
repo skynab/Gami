@@ -6,6 +6,8 @@ import {
   FirstIcon,
   GuidesIcon,
   HalfStepIcon,
+  HideIcon,
+  InstructionsIcon,
   KeyboardIcon,
   LockIcon,
   MoreIcon,
@@ -54,7 +56,8 @@ export function ModelViewer({ progressKey, title, load, notice }: {
   const view = useViewer((s) => s.view);
   const locked = useViewer((s) => s.locked);
   const guides = useViewer((s) => s.guides);
-  const { setView, toggleLock, toggleGuides, resetCamera } = useViewer.getState();
+  const instructions = useViewer((s) => s.instructions);
+  const { setView, toggleLock, toggleGuides, toggleInstructions, resetCamera } = useViewer.getState();
   const step = usePlayback((s) => s.step);
   const total = usePlayback((s) => s.total);
   const speed = usePlayback((s) => s.speed);
@@ -125,6 +128,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
       else if (e.key === '0') resetCamera();
       else if (e.key === 'l' || e.key === 'L') toggleLock();
       else if (e.key === 'g' || e.key === 'G') toggleGuides();
+      else if (e.key === 'i' || e.key === 'I') toggleInstructions();
       else if (e.key === 's' || e.key === 'S') nextSpeed();
       else if (e.key === '?') setHelp(true);
       else return;
@@ -139,6 +143,17 @@ export function ModelViewer({ progressKey, title, load, notice }: {
   const say = useStepText();
   const name = title || data?.title || '';
   const none = data !== null && total === 0;
+  const hideButton = (
+    <button
+      type="button"
+      className="icon small-icon"
+      aria-label={t('viewer.hideInstructions')}
+      title={t('viewer.hideInstructionsTitle')}
+      onClick={toggleInstructions}
+    >
+      <HideIcon width={18} height={18} />
+    </button>
+  );
 
   return (
     <div className="app">
@@ -168,7 +183,19 @@ export function ModelViewer({ progressKey, title, load, notice }: {
         )}
         {locked && <div className="badge">{t('viewer.locked')}</div>}
         {notice && <div className="viewer-notice">{notice}</div>}
-        {current && (
+        {/* Hidden, the step card leaves a button in its corner to bring it back. */}
+        {!instructions && (current || (total > 0 && step === 0)) && (
+          <button
+            type="button"
+            className="secondary step-card-show"
+            title={t('viewer.showInstructionsTitle')}
+            onClick={toggleInstructions}
+          >
+            <InstructionsIcon width={18} height={18} />
+            {t('viewer.showInstructions')}
+          </button>
+        )}
+        {instructions && current && (
           <section className="step-card" aria-label={t('viewer.instructions')} aria-live="polite">
             <div className="step-card-head">
               <h2>
@@ -185,6 +212,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
                 >
                   <GuidesIcon width={18} height={18} />
                 </button>
+                {hideButton}
               </div>
             </div>
             {current.text && <p className="muted small">{say(current.text)}</p>}
@@ -205,9 +233,12 @@ export function ModelViewer({ progressKey, title, load, notice }: {
             )}
           </section>
         )}
-        {total > 0 && step === 0 && (
+        {instructions && total > 0 && step === 0 && (
           <section className="step-card" aria-label={t('viewer.instructions')} aria-live="polite">
-            <h2>{t('viewer.start')}</h2>
+            <div className="step-card-head">
+              <h2>{t('viewer.start')}</h2>
+              <div className="step-card-actions">{hideButton}</div>
+            </div>
             <p className="muted small">{t('viewer.startText')}</p>
           </section>
         )}
@@ -408,6 +439,7 @@ const SHORTCUTS: [string, string][] = [
   ['H', 'half'],
   ['S', 'speed'],
   ['G', 'guides'],
+  ['I', 'instructions'],
   ['1 – 4', 'views'],
   ['L', 'lock'],
   ['0', 'reset'],

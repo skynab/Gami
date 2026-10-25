@@ -14,6 +14,8 @@ interface ViewerState {
   locked: boolean;
   /** Show each step's crease and arrow. */
   guides: boolean;
+  /** Show the step card. Kept from model to model, so hiding it once is enough. */
+  instructions: boolean;
   command: CameraCommand;
 
   setView(view: View): void;
@@ -21,6 +23,7 @@ interface ViewerState {
   resetCamera(): void;
   toggleLock(): void;
   toggleGuides(): void;
+  toggleInstructions(): void;
   /** The user rotated the camera by hand, so it's no longer at a preset. */
   leftPreset(): void;
   /** Back to the starting view, for a newly opened model. */
@@ -33,6 +36,7 @@ export const useViewer = create<ViewerState>()((set) => ({
   view: 'free',
   locked: false,
   guides: true,
+  instructions: true,
   command: { kind: 'reset', id: 0 },
 
   setView: (view) => set({ view, command: { kind: 'view', view, id: nextId++ } }),
@@ -40,6 +44,7 @@ export const useViewer = create<ViewerState>()((set) => ({
   resetCamera: () => set({ view: 'free', command: { kind: 'reset', id: nextId++ } }),
   toggleLock: () => set((s) => ({ locked: !s.locked })),
   toggleGuides: () => set((s) => ({ guides: !s.guides })),
+  toggleInstructions: () => set((s) => ({ instructions: !s.instructions })),
   leftPreset: () => set((s) => (s.view === 'free' ? s : { view: 'free' })),
   init: () => set({ view: 'free', locked: false, command: { kind: 'reset', id: nextId++ } }),
 }));

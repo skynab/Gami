@@ -757,6 +757,21 @@ kbd {
   gap: 2px;
 }
 
+/* Where the step card was, once it's hidden: brings it back. */
+.step-card-show {
+  position: absolute;
+  inset-block-end: 16px;
+  inset-inline-start: 16px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.12);
+}
+
+@media (max-width: 560px) {
+  .step-card-show {
+    inset-block-end: 12px;
+    inset-inline-start: 12px;
+  }
+}
+
 .small-icon {
   width: 32px;
   height: 32px;
