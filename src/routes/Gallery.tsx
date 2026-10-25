@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useEffect, useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { SearchIcon, StudioIcon } from '../app/icons';
@@ -12,12 +12,48 @@ import { readHideFolded, readProgress, saveHideFolded } from '../state/progress'
 // Community models need the database, so they're only loaded on sites with accounts.
 const Community = accountsEnabled ? lazy(() => import('../gallery/Community')) : null;
 
+/** Where the gallery was left: its filters and how far down it was scrolled. */
+interface Place {
+  query: string;
+  level: Level | null;
+  category: Category | null;
+  scroll: number;
+}
+
+// Kept for this tab only, so coming back from a model lands where it was, but a new visit starts at the top.
+const PLACE_KEY = 'gami.gallery';
+
+function readPlace(): Partial<Place> {
+  try {
+    return JSON.parse(sessionStorage.getItem(PLACE_KEY) ?? '{}') as Partial<Place>;
+  } catch {
+    return {};
+  }
+}
+
+function savePlace(change: Partial<Place>) {
+  try {
+    sessionStorage.setItem(PLACE_KEY, JSON.stringify({ ...readPlace(), ...change }));
+  } catch {
+    // Nothing to do: the gallery just starts at the top next time.
+  }
+}
+
 export function Gallery() {
   const { t } = useTranslation();
-  const [query, setQuery] = useState('');
-  const [level, setLevel] = useState<Level | null>(null);
-  const [category, setCategory] = useState<Category | null>(null);
+  const [place] = useState(readPlace);
+  const [query, setQuery] = useState(place.query ?? '');
+  const [level, setLevel] = useState<Level | null>(place.level ?? null);
+  const [category, setCategory] = useState<Category | null>(place.category ?? null);
   const [hideFolded, setHideFolded] = useState(readHideFolded);
+  useEffect(() => savePlace({ query, level, category }), [query, level, category]);
+  // Before the first paint, so the page doesn't flash at the top first.
+  useLayoutEffect(() => {
+    if (place.scroll) window.scrollTo(0, place.scroll);
+    const onScroll = () => savePlace({ scroll: window.scrollY });
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [place]);
   const named = MODELS.map((m) => ({ ...m, title: t(`models.${m.id}.title`, { defaultValue: m.title }), blurb: t(`models.${m.id}.blurb`, { defaultValue: m.blurb }) }));
   const models = filterModels(named, { query, level, category }).filter((m) => !hideFolded || !readProgress(m.id)?.done);
   const toggleHideFolded = () => {
