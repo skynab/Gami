@@ -226,9 +226,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
 
       <footer className="bottombar playback">
         <div className="group transport">
-          <button type="button" className="icon" aria-label={t('viewer.first')} title={t('viewer.firstTitle')} disabled={step <= 1} onClick={() => goTo(1)}>
-            <FirstIcon />
-          </button>
+          <FirstButton />
           <button type="button" className="icon" aria-label={t('viewer.prev')} title={t('viewer.prevTitle')} disabled={step <= 1} onClick={() => goTo(step - 1)}>
             <PrevIcon />
           </button>
@@ -342,6 +340,52 @@ function NextButton() {
       }}
     >
       {playing ? <PauseIcon /> : <NextIcon />}
+    </button>
+  );
+}
+
+/** How long to hold the first-step button before it goes back to the start. */
+const HOLD_TO_START_MS = 700;
+
+/**
+ * Back to the first step, but only once held down (filling up as it is), so a stray tap doesn't lose someone's
+ * place. From the keyboard it goes straight there: Enter or Space on it, or Home, are hard to press by accident.
+ */
+function FirstButton() {
+  const { t } = useTranslation();
+  const step = usePlayback((s) => s.step);
+  const [holding, setHolding] = useState(false);
+  const timer = useRef(0);
+  const release = () => {
+    clearTimeout(timer.current);
+    setHolding(false);
+  };
+  useEffect(() => () => clearTimeout(timer.current), []);
+  return (
+    <button
+      type="button"
+      className={holding ? 'icon hold to-start holding' : 'icon hold to-start'}
+      style={{ '--hold-ms': `${HOLD_TO_START_MS}ms` } as CSSProperties}
+      aria-label={t('viewer.first')}
+      title={t('viewer.firstTitle')}
+      disabled={step <= 1}
+      onPointerDown={(e) => {
+        if (e.button !== 0) return;
+        clearTimeout(timer.current);
+        setHolding(true);
+        timer.current = window.setTimeout(() => {
+          setHolding(false);
+          usePlayback.getState().goTo(1);
+        }, HOLD_TO_START_MS);
+      }}
+      onPointerUp={release}
+      onPointerLeave={release}
+      onPointerCancel={release}
+      onContextMenu={(e) => e.preventDefault()}
+      // A click from the keyboard has no pointer behind it (detail 0).
+      onClick={(e) => e.detail === 0 && usePlayback.getState().goTo(1)}
+    >
+      <FirstIcon />
     </button>
   );
 }

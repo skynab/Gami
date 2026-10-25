@@ -134,7 +134,7 @@ export const fr: Messages = {
     soon: 'Instructions bientôt disponibles',
     soonText: 'Les étapes de ce modèle ne sont pas encore prêtes. En attendant, essayez <0>{{model}}</0>.',
     first: 'Première étape',
-    firstTitle: 'Première étape (Début)',
+    firstTitle: 'Première étape : appui long (Début)',
     prev: 'Étape précédente',
     prevTitle: 'Étape précédente (←)',
     pause: 'Pause',

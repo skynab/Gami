@@ -134,7 +134,7 @@ export const ja: Messages = {
     soon: '手順は近日公開',
     soonText: 'この作品の手順はまだ準備中です。それまで<0>{{model}}</0>を折ってみませんか。',
     first: '最初の手順',
-    firstTitle: '最初の手順 (Home)',
+    firstTitle: '最初の手順：長押し (Home)',
     prev: '前の手順',
     prevTitle: '前の手順 (←)',
     pause: '一時停止',

@@ -726,6 +726,32 @@ kbd {
   -webkit-touch-callout: none;
 }
 
+/* The first-step button fills up from the bottom while it's held, and goes back to the start once full. */
+.icon.to-start {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.icon.to-start::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--accent-soft);
+  transform: scaleY(0);
+  transform-origin: bottom;
+}
+
+.icon.to-start.holding {
+  color: var(--accent);
+}
+
+.icon.to-start.holding::before {
+  transform: scaleY(1);
+  transition: transform var(--hold-ms) linear;
+}
+
 .step-card-actions {
   display: flex;
   gap: 2px;

@@ -134,7 +134,7 @@ export const es: Messages = {
     soon: 'Instrucciones próximamente',
     soonText: 'Los pasos de este modelo aún no están listos. Mientras tanto, prueba <0>{{model}}</0>.',
     first: 'Primer paso',
-    firstTitle: 'Primer paso (Inicio)',
+    firstTitle: 'Primer paso: mantén pulsado (Inicio)',
     prev: 'Paso anterior',
     prevTitle: 'Paso anterior (←)',
     pause: 'Pausa',

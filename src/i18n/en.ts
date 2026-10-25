@@ -136,7 +136,7 @@ export const en = {
     soon: 'Instructions coming soon',
     soonText: 'The steps for this model aren’t ready yet. Try <0>{{model}}</0> in the meantime.',
     first: 'First step',
-    firstTitle: 'First step (Home)',
+    firstTitle: 'First step: press and hold (Home)',
     prev: 'Previous step',
     prevTitle: 'Previous step (←)',
     pause: 'Pause',
