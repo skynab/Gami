@@ -1,21 +1,79 @@
 /** The built-in models' step titles and instructions in Japanese, by their English text. */
 export const ja: Record<string, string> = {
+  "Stepping through":
+    "手順の進め方",
+  "Welcome to Gami":
+    "Gamiへようこそ",
+  "Each step shows one fold. Press Next step (›) or → to go on.":
+    "手順ごとに一回ずつ折ります。次の手順（›）か→で進みます。",
+  "Going back":
+    "前に戻る",
+  "Previous step (‹) or ← goes back, all the way to the flat sheet before the first fold.":
+    "前の手順（‹）か←で戻ります。最初に折る前の平らな紙まで戻れます。",
+  "Watch it again":
+    "もう一度見る",
+  "Replay (R) plays this step again. Play half a step (H) stops halfway, so you can see how the paper moves.":
+    "この手順をもう一度（R）で手順を再生し直します。半分だけ進める（H）は途中で止まるので、紙の動きがよくわかります。",
+  "Play by itself":
+    "自動で再生",
+  "Press and hold Next step to play on through the steps. Press it again, press Space or click the model to pause.":
+    "次の手順を長押しすると、手順を続けて再生します。もう一度押すか、Spaceを押すか、モデルをクリックすると一時停止します。",
+  "Speed":
+    "速さ",
+  "The 1× button (S) changes how fast the paper folds.":
+    "1×ボタン（S）で折る速さを変えられます。",
+  "Finding your way":
+    "位置を知る",
+  "Sections":
+    "セクション",
+  "Purple diamonds on the bar mark where each part starts, like this one. Click one to jump there.":
+    "バーの紫のひし形は、この手順のように各パートの始まりを示します。クリックするとそこへ移動します。",
+  "The progress bar":
+    "進行バー",
+  "Drag along the bar to move the paper by hand, as slowly as you like. Each tick is a step.":
+    "バーに沿ってドラッグすると、好きなだけゆっくり紙を動かせます。目盛りは手順ごとにあります。",
+  "Back to the first step":
+    "最初の手順に戻る",
+  "Press and hold First step (⏮) until it fills up to go back to step 1. A quick tap does nothing, so you can’t lose your place by accident.":
+    "最初の手順（⏮）を色が満ちるまで長押しすると、手順1に戻ります。軽く押すだけでは何も起きないので、うっかり位置を失うことはありません。",
+  "Looking around":
+    "見回す",
+  "Drag the model to turn it. Scroll or pinch to zoom, and right-drag or drag with two fingers to move it.":
+    "モデルをドラッグすると回転します。スクロールかピンチで拡大縮小、右ドラッグか二本指のドラッグで移動します。",
+  "Set views":
+    "決まった視点",
+  "Free, Top, Front and Side (1 to 4) look from set angles. On a phone they’re behind the ⋯ button.":
+    "自由・上・正面・横（1〜4）は決まった角度から見ます。スマホでは⋯ボタンの中にあります。",
+  "The view cube":
+    "ビューキューブ",
+  "Click a face, edge or corner of the cube in the top right to look from there. Hold it down to make it bigger and easier to pick.":
+    "右上のキューブの面・辺・角をクリックすると、その方向から見られます。長押しすると大きくなり、選びやすくなります。",
+  "Lock and reset":
+    "固定とリセット",
+  "Lock view (L) holds the angle still, so dragging moves the paper instead. Reset view (0) puts the camera back.":
+    "視点を固定（L）すると角度が固定され、ドラッグで紙を動かせます。視点をリセット（0）でカメラを元に戻します。",
+  "Reading the steps":
+    "図の見方",
+  "Fold lines and arrows":
+    "折り線と矢印",
+  "A dashed line is a valley fold, a dotted one a mountain fold, and the arrow shows where the paper goes. The button on this card (G) hides them.":
+    "破線は谷折り、点線は山折りで、矢印は紙の動く先を示します。このカードのボタン（G）で隠せます。",
+  "Hide the instructions":
+    "説明を隠す",
+  "The ˅ on this card hides it, to see more of the model. Show instructions (I) brings it back.":
+    "このカードの˅で隠すと、モデルが広く見えます。説明を表示（I）で戻ります。",
+  "Pick up where you left off":
+    "続きから再開",
+  "Gami remembers your step in every model and marks the ones you finish. Press ? for every keyboard shortcut.":
+    "Gamiはモデルごとに手順を覚えていて、折り終えたものに印をつけます。?ですべてのキーボードショートカットを表示します。",
   "Fold in half diagonally":
     "対角線で半分に折る",
-  "Bring the top-left corner down to meet the bottom-right corner, then press the crease flat.":
-    "左上の角を右下の角に合わせて折り、折り目をしっかりつけます。",
   "Unfold":
     "開く",
-  "Open the paper back up. The diagonal crease stays as a guide for later.":
-    "紙を開きます。対角線の折り目が、あとで目印になります。",
   "Turn over":
     "裏返す",
-  "Flip the paper from left to right, so the white side faces up.":
-    "紙を左から右へ裏返して、白い面を上にします。",
   "Fold in half":
     "半分に折る",
-  "Bring the bottom edge up to the top edge and crease. The fold crosses the diagonal at the centre.":
-    "下の辺を上の辺に合わせて折ります。折り目は中心で対角線と交わります。",
   "Fold in half lengthwise":
     "縦半分に折る",
   "Bring the left edge over to the right edge and crease down the middle.":

@@ -33,7 +33,7 @@ noted when it was written, and the model was folded from the common traditional 
 
 | Model | Designer | Licence | Reference | Status | Added |
 |---|---|---|---|---|---|
-| `basics` | Not a design: fold, unfold, turn over | None needed: nobody owns it | none | Clear | 16 Oct 2026 |
+| `basics` | Not a design: a tour of the app, folding a plain square | None needed: nobody owns it | none | Clear | 16 Oct 2026 |
 | `paper-plane` | Traditional (the classic dart) | None needed: nobody owns it | none recorded | Clear | 16 Oct 2026 |
 | `glider` | Unattributed: the common flat-nosed glider | Unknown: no designer found | none recorded | Unattributed | 18 Oct 2026 |
 | `bulldog-dart` | Unattributed: the dart with its point folded back | Unknown: no designer found | none recorded | Unattributed | 18 Oct 2026 |

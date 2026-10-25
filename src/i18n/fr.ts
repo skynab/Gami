@@ -55,7 +55,7 @@ export const fr: Messages = {
     paperRatio: 'Demande un rectangle de papier {{ratio}} fois plus long que large',
   },
   models: {
-    basics: { title: 'Les bases', blurb: 'Commencez ici : plier, déplier et retourner la feuille.' },
+    basics: { title: 'Les bases', blurb: 'Commencez ici : avancer, lancer la lecture, tourner et lire chaque pli.' },
     'folds-lesson': { title: 'Les plis courants', blurb: 'Vallée et montagne, plis inversés, écrasé, oreille de lapin, plissé, double pli inversé et pli pétale, chacun sur son propre carré.' },
     'bases-lesson': { title: 'Les bases de l’origami', blurb: 'Les bases du cerf-volant, préliminaire, de la bombe à eau, de l’oiseau, du poisson et de la grenouille : le départ de presque tous les modèles.' },
     'paper-plane': { title: 'Avion en papier', blurb: 'La fléchette classique. Vole loin et droit.' },

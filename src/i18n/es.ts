@@ -55,7 +55,7 @@ export const es: Messages = {
     paperRatio: 'Necesita un rectángulo de papel {{ratio}} veces más largo que ancho',
   },
   models: {
-    basics: { title: 'Lo básico', blurb: 'Empieza aquí: plegar, desplegar y dar la vuelta al papel.' },
+    basics: { title: 'Lo básico', blurb: 'Empieza aquí: cómo avanzar, reproducir, girar y leer cada pliegue.' },
     'folds-lesson': { title: 'Pliegues comunes', blurb: 'Valle y montaña, pliegues invertidos, aplastado, oreja de conejo, plisado, doble pliegue invertido y pétalo, cada uno en su propio cuadrado.' },
     'bases-lesson': { title: 'Bases de origami', blurb: 'Las bases de cometa, preliminar, bomba de agua, pájaro, pez y rana: de ahí parten casi todos los modelos.' },
     'paper-plane': { title: 'Avión de papel', blurb: 'El clásico dardo. Vuela lejos y recto.' },

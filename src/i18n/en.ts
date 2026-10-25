@@ -57,7 +57,7 @@ export const en = {
     paperRatio: 'Needs a rectangle of paper {{ratio}} times as long as it is wide',
   },
   models: {
-    basics: { title: 'Folding basics', blurb: 'Start here: fold, unfold and turn the paper over.' },
+    basics: { title: 'Basics', blurb: 'Start here: how to step through, play, turn and read each fold.' },
     'folds-lesson': { title: 'Common folds', blurb: 'Valley and mountain, reverse, squash, rabbit ear, pleat, crimp and petal folds, each on its own square.' },
     'bases-lesson': { title: 'Origami bases', blurb: 'The kite, square, water bomb, bird, fish and frog bases: where most models start.' },
     'paper-plane': { title: 'Paper plane', blurb: 'The classic dart. Flies far and straight.' },
