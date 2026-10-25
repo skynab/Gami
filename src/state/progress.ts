@@ -29,3 +29,20 @@ export function saveProgress(id: string, step: number, total: number) {
     // Nothing to do: progress is a convenience.
   }
 }
+
+/** Whether the gallery leaves out the models already folded to the end. */
+export function readHideFolded(): boolean {
+  try {
+    return localStorage.getItem('gami.hideFolded') === '1';
+  } catch {
+    return false;
+  }
+}
+
+export function saveHideFolded(hide: boolean) {
+  try {
+    localStorage.setItem('gami.hideFolded', hide ? '1' : '0');
+  } catch {
+    // Nothing to do: the gallery just shows everything next time.
+  }
+}

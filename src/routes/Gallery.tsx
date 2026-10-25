@@ -7,6 +7,7 @@ import { AccountButton } from '../auth/AccountButton';
 import { accountsEnabled } from '../auth/store';
 import { CATEGORIES, filterModels, LEVELS, MODELS, type Category, type Level } from '../gallery/catalog';
 import { ModelCard } from '../gallery/ModelCard';
+import { readHideFolded, readProgress, saveHideFolded } from '../state/progress';
 
 // Community models need the database, so they're only loaded on sites with accounts.
 const Community = accountsEnabled ? lazy(() => import('../gallery/Community')) : null;
@@ -16,8 +17,13 @@ export function Gallery() {
   const [query, setQuery] = useState('');
   const [level, setLevel] = useState<Level | null>(null);
   const [category, setCategory] = useState<Category | null>(null);
+  const [hideFolded, setHideFolded] = useState(readHideFolded);
   const named = MODELS.map((m) => ({ ...m, title: t(`models.${m.id}.title`, { defaultValue: m.title }), blurb: t(`models.${m.id}.blurb`, { defaultValue: m.blurb }) }));
-  const models = filterModels(named, { query, level, category });
+  const models = filterModels(named, { query, level, category }).filter((m) => !hideFolded || !readProgress(m.id)?.done);
+  const toggleHideFolded = () => {
+    setHideFolded(!hideFolded);
+    saveHideFolded(!hideFolded);
+  };
 
   return (
     <div className="page">
@@ -65,6 +71,9 @@ export function Gallery() {
               </button>
             ))}
           </div>
+          <button type="button" className="chip" aria-pressed={hideFolded} onClick={toggleHideFolded}>
+            {t('gallery.hideFolded')}
+          </button>
         </div>
 
         {models.length > 0 ? (

@@ -101,7 +101,7 @@ export interface OrigamiModel {
 }
 
 /** `lesson`: lessons rather than models (the basics, folds, bases and geometry), badged as such on their cards. */
-export const CATEGORIES = ['lesson', 'animal', 'object', 'toy', 'modular', 'flower'] as const;
+export const CATEGORIES = ['lesson', 'animal', 'object', 'toy', 'plane', 'modular', 'flower'] as const;
 export type Category = (typeof CATEGORIES)[number];
 export const DIFFICULTIES = [1, 2, 3, 4, 5] as const;
 export type Difficulty = (typeof DIFFICULTIES)[number];
