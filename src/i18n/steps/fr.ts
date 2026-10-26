@@ -1,21 +1,79 @@
 /** The built-in models' step titles and instructions in French, by their English text. */
 export const fr: Record<string, string> = {
+  "Stepping through":
+    "Étape par étape",
+  "Welcome to Gami":
+    "Bienvenue dans Gami",
+  "Each step shows one fold. Press Next step (›) or → to go on.":
+    "Chaque étape montre un pli. Appuyez sur Étape suivante (›) ou → pour continuer.",
+  "Going back":
+    "Revenir en arrière",
+  "Previous step (‹) or ← goes back, all the way to the flat sheet before the first fold.":
+    "Étape précédente (‹) ou ← revient en arrière, jusqu’à la feuille à plat avant le premier pli.",
+  "Watch it again":
+    "Revoir l’étape",
+  "Replay (R) plays this step again. Play half a step (H) stops halfway, so you can see how the paper moves.":
+    "Rejouer cette étape (R) la rejoue. Jouer une demi-étape (H) s’arrête à mi-chemin, pour bien voir comment la feuille bouge.",
+  "Play by itself":
+    "Lecture automatique",
+  "Press and hold Next step to play on through the steps. Press it again, press Space or click the model to pause.":
+    "Maintenez Étape suivante appuyé pour enchaîner les étapes. Appuyez de nouveau, appuyez sur Espace ou cliquez sur le modèle pour mettre en pause.",
+  "Speed":
+    "Vitesse",
+  "The 1× button (S) changes how fast the paper folds.":
+    "Le bouton 1× (S) change la vitesse de pliage.",
+  "Finding your way":
+    "Se repérer",
+  "Sections":
+    "Parties",
+  "Purple diamonds on the bar mark where each part starts, like this one. Click one to jump there.":
+    "Les losanges violets sur la barre marquent le début de chaque partie, comme celle-ci. Cliquez sur l’un d’eux pour y aller.",
+  "The progress bar":
+    "La barre de progression",
+  "Drag along the bar to move the paper by hand, as slowly as you like. Each tick is a step.":
+    "Faites glisser le long de la barre pour plier à la main, aussi lentement que vous voulez. Chaque graduation est une étape.",
+  "Back to the first step":
+    "Revenir à la première étape",
+  "Press and hold First step (⏮) until it fills up to go back to step 1. A quick tap does nothing, so you can’t lose your place by accident.":
+    "Maintenez Première étape (⏮) appuyé jusqu’à ce qu’il se remplisse pour revenir à l’étape 1. Un appui rapide ne fait rien : impossible de perdre votre place par erreur.",
+  "Looking around":
+    "Regarder autour",
+  "Drag the model to turn it. Scroll or pinch to zoom, and right-drag or drag with two fingers to move it.":
+    "Faites glisser le modèle pour le tourner. Utilisez la molette ou pincez pour zoomer, et faites glisser avec le clic droit ou à deux doigts pour le déplacer.",
+  "Set views":
+    "Vues prédéfinies",
+  "Free, Top, Front and Side (1 to 4) look from set angles. On a phone they’re behind the ⋯ button.":
+    "Libre, Dessus, Face et Côté (1 à 4) regardent sous des angles fixes. Sur téléphone, elles sont derrière le bouton ⋯.",
+  "The view cube":
+    "Le cube de vue",
+  "Click a face, edge or corner of the cube in the top right to look from there. Hold it down to make it bigger and easier to pick.":
+    "Cliquez sur une face, une arête ou un coin du cube en haut à droite pour regarder de là. Maintenez-le appuyé pour l’agrandir et choisir plus facilement.",
+  "Lock and reset":
+    "Verrouiller et réinitialiser",
+  "Lock view (L) holds the angle still, so dragging moves the paper instead. Reset view (0) puts the camera back.":
+    "Verrouiller la vue (L) fige l’angle : faire glisser déplace alors la feuille. Réinitialiser la vue (0) remet la caméra en place.",
+  "Reading the steps":
+    "Lire les étapes",
+  "Fold lines and arrows":
+    "Lignes de pli et flèches",
+  "A dashed line is a valley fold, a dotted one a mountain fold, and the arrow shows where the paper goes. The button on this card (G) hides them.":
+    "Une ligne en tirets est un pli vallée, une ligne pointillée un pli montagne, et la flèche montre où va la feuille. Le bouton de cette carte (G) les masque.",
+  "Hide the instructions":
+    "Masquer les instructions",
+  "The ˅ on this card hides it, to see more of the model. Show instructions (I) brings it back.":
+    "Le ˅ de cette carte la masque, pour mieux voir le modèle. Afficher les instructions (I) la fait revenir.",
+  "Pick up where you left off":
+    "Reprendre où vous en étiez",
+  "Gami remembers your step in every model and marks the ones you finish. Press ? for every keyboard shortcut.":
+    "Gami retient votre étape dans chaque modèle et marque ceux que vous terminez. Appuyez sur ? pour voir tous les raccourcis clavier.",
   "Fold in half diagonally":
     "Plier en deux en diagonale",
-  "Bring the top-left corner down to meet the bottom-right corner, then press the crease flat.":
-    "Amenez le coin en haut à gauche sur le coin en bas à droite, puis marquez bien le pli.",
   "Unfold":
     "Déplier",
-  "Open the paper back up. The diagonal crease stays as a guide for later.":
-    "Rouvrez le papier. Le pli en diagonale servira de repère plus tard.",
   "Turn over":
     "Retourner",
-  "Flip the paper from left to right, so the white side faces up.":
-    "Retournez le papier de gauche à droite, face blanche vers le haut.",
   "Fold in half":
     "Plier en deux",
-  "Bring the bottom edge up to the top edge and crease. The fold crosses the diagonal at the centre.":
-    "Amenez le bord du bas sur le bord du haut et marquez le pli. Il croise la diagonale au centre.",
   "Fold in half lengthwise":
     "Plier en deux dans la longueur",
   "Bring the left edge over to the right edge and crease down the middle.":

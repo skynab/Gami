@@ -24,7 +24,8 @@ export function FoldGuides({ model, color }: { model: OrigamiModel; color: strin
   const frames = useMemo(() => framesOf(model), [model]);
   const cache = useMemo(() => new Map<number, Guides>(), [frames]);
 
-  if (!show || !total || step > total) return null;
+  // Step 0 is the paper before any fold: no fold to guide.
+  if (!show || !total || step < 1 || step > total) return null;
   let g = cache.get(step);
   if (!g) {
     g = guidesFor(frames[step - 1], frames[step], model.steps[step - 1].via);

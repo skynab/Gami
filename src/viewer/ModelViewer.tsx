@@ -6,6 +6,8 @@ import {
   FirstIcon,
   GuidesIcon,
   HalfStepIcon,
+  HideIcon,
+  InstructionsIcon,
   KeyboardIcon,
   LockIcon,
   MoreIcon,
@@ -54,7 +56,8 @@ export function ModelViewer({ progressKey, title, load, notice }: {
   const view = useViewer((s) => s.view);
   const locked = useViewer((s) => s.locked);
   const guides = useViewer((s) => s.guides);
-  const { setView, toggleLock, toggleGuides, resetCamera } = useViewer.getState();
+  const instructions = useViewer((s) => s.instructions);
+  const { setView, toggleLock, toggleGuides, toggleInstructions, resetCamera } = useViewer.getState();
   const step = usePlayback((s) => s.step);
   const total = usePlayback((s) => s.total);
   const speed = usePlayback((s) => s.speed);
@@ -63,7 +66,8 @@ export function ModelViewer({ progressKey, title, load, notice }: {
   const nextSpeed = () => setSpeed(SPEEDS[(SPEEDS.indexOf(speed) + 1) % SPEEDS.length]);
 
   // The step in the address when the page opened, or where this person left off. After that, the address follows playback.
-  const startStep = useRef(Number(params.get('step')) || readProgress(progressKey)?.step || 1);
+  const linked = Number(params.get('step') || NaN);
+  const startStep = useRef(Number.isFinite(linked) ? linked : readProgress(progressKey)?.step || 1);
   const loader = useRef(load);
   loader.current = load;
 
@@ -98,7 +102,8 @@ export function ModelViewer({ progressKey, title, load, notice }: {
   }, [progressKey]);
 
   useEffect(() => {
-    if (total) saveProgress(progressKey, step, total);
+    // Not step 0, the paper before any fold: a look back there shouldn't lose someone's place.
+    if (total && step > 0) saveProgress(progressKey, step, total);
   }, [progressKey, step, total]);
 
   useEffect(() => {
@@ -123,6 +128,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
       else if (e.key === '0') resetCamera();
       else if (e.key === 'l' || e.key === 'L') toggleLock();
       else if (e.key === 'g' || e.key === 'G') toggleGuides();
+      else if (e.key === 'i' || e.key === 'I') toggleInstructions();
       else if (e.key === 's' || e.key === 'S') nextSpeed();
       else if (e.key === '?') setHelp(true);
       else return;
@@ -137,6 +143,17 @@ export function ModelViewer({ progressKey, title, load, notice }: {
   const say = useStepText();
   const name = title || data?.title || '';
   const none = data !== null && total === 0;
+  const hideButton = (
+    <button
+      type="button"
+      className="icon small-icon"
+      aria-label={t('viewer.hideInstructions')}
+      title={t('viewer.hideInstructionsTitle')}
+      onClick={toggleInstructions}
+    >
+      <HideIcon width={18} height={18} />
+    </button>
+  );
 
   return (
     <div className="app">
@@ -149,7 +166,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
             <span className="page-title">{name}</span>
           </>
         }
-        center={total > 0 && <span>{t('viewer.stepOf', { step, total })}</span>}
+        center={total > 0 && <span>{step === 0 ? t('viewer.start') : t('viewer.stepOf', { step, total })}</span>}
         end={
           <button type="button" className="icon shortcuts-button" aria-label={t('viewer.shortcuts')} title={t('viewer.shortcutsTitle')} onClick={() => setHelp(true)}>
             <KeyboardIcon />
@@ -160,12 +177,25 @@ export function ModelViewer({ progressKey, title, load, notice }: {
       <main className="stage" aria-label={t('viewer.stage', { name })}>
         {data && (
           <Suspense fallback={null}>
-            <Stage model={data} />
+            {/* A click on the model while it plays pauses it, as on a video. */}
+            <Stage model={data} onTap={() => usePlayback.getState().playing && togglePlay()} />
           </Suspense>
         )}
         {locked && <div className="badge">{t('viewer.locked')}</div>}
         {notice && <div className="viewer-notice">{notice}</div>}
-        {current && (
+        {/* Hidden, the step card leaves a button in its corner to bring it back. */}
+        {!instructions && (current || (total > 0 && step === 0)) && (
+          <button
+            type="button"
+            className="secondary step-card-show"
+            title={t('viewer.showInstructionsTitle')}
+            onClick={toggleInstructions}
+          >
+            <InstructionsIcon width={18} height={18} />
+            {t('viewer.showInstructions')}
+          </button>
+        )}
+        {instructions && current && (
           <section className="step-card" aria-label={t('viewer.instructions')} aria-live="polite">
             <div className="step-card-head">
               <h2>
@@ -182,6 +212,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
                 >
                   <GuidesIcon width={18} height={18} />
                 </button>
+                {hideButton}
               </div>
             </div>
             {current.text && <p className="muted small">{say(current.text)}</p>}
@@ -200,6 +231,15 @@ export function ModelViewer({ progressKey, title, load, notice }: {
                 </div>
               </div>
             )}
+          </section>
+        )}
+        {instructions && total > 0 && step === 0 && (
+          <section className="step-card" aria-label={t('viewer.instructions')} aria-live="polite">
+            <div className="step-card-head">
+              <h2>{t('viewer.start')}</h2>
+              <div className="step-card-actions">{hideButton}</div>
+            </div>
+            <p className="muted small">{t('viewer.startText')}</p>
           </section>
         )}
         {none && failed && (
@@ -226,10 +266,8 @@ export function ModelViewer({ progressKey, title, load, notice }: {
 
       <footer className="bottombar playback">
         <div className="group transport">
-          <button type="button" className="icon" aria-label={t('viewer.first')} title={t('viewer.firstTitle')} disabled={step <= 1} onClick={() => goTo(1)}>
-            <FirstIcon />
-          </button>
-          <button type="button" className="icon" aria-label={t('viewer.prev')} title={t('viewer.prevTitle')} disabled={step <= 1} onClick={() => goTo(step - 1)}>
+          <FirstButton />
+          <button type="button" className="icon" aria-label={t('viewer.prev')} title={t('viewer.prevTitle')} disabled={step <= 0} onClick={() => goTo(step - 1)}>
             <PrevIcon />
           </button>
           <button type="button" className="icon" aria-label={t('viewer.replay')} title={t('viewer.replayTitle')} disabled={!total} onClick={replay}>
@@ -346,6 +384,52 @@ function NextButton() {
   );
 }
 
+/** How long to hold the first-step button before it goes back to the start. */
+const HOLD_TO_START_MS = 700;
+
+/**
+ * Back to the first step, but only once held down (filling up as it is), so a stray tap doesn't lose someone's
+ * place. From the keyboard it goes straight there: Enter or Space on it, or Home, are hard to press by accident.
+ */
+function FirstButton() {
+  const { t } = useTranslation();
+  const step = usePlayback((s) => s.step);
+  const [holding, setHolding] = useState(false);
+  const timer = useRef(0);
+  const release = () => {
+    clearTimeout(timer.current);
+    setHolding(false);
+  };
+  useEffect(() => () => clearTimeout(timer.current), []);
+  return (
+    <button
+      type="button"
+      className={holding ? 'icon hold to-start holding' : 'icon hold to-start'}
+      style={{ '--hold-ms': `${HOLD_TO_START_MS}ms` } as CSSProperties}
+      aria-label={t('viewer.first')}
+      title={t('viewer.firstTitle')}
+      disabled={step <= 1}
+      onPointerDown={(e) => {
+        if (e.button !== 0) return;
+        clearTimeout(timer.current);
+        setHolding(true);
+        timer.current = window.setTimeout(() => {
+          setHolding(false);
+          usePlayback.getState().goTo(1);
+        }, HOLD_TO_START_MS);
+      }}
+      onPointerUp={release}
+      onPointerLeave={release}
+      onPointerCancel={release}
+      onContextMenu={(e) => e.preventDefault()}
+      // A click from the keyboard has no pointer behind it (detail 0).
+      onClick={(e) => e.detail === 0 && usePlayback.getState().goTo(1)}
+    >
+      <FirstIcon />
+    </button>
+  );
+}
+
 /** Keys (or a key in `shortcuts`, for named keys) and what they do (a key in `shortcuts`). */
 const SHORTCUTS: [string, string][] = [
   ['← →', 'prevNext'],
@@ -355,6 +439,7 @@ const SHORTCUTS: [string, string][] = [
   ['H', 'half'],
   ['S', 'speed'],
   ['G', 'guides'],
+  ['I', 'instructions'],
   ['1 – 4', 'views'],
   ['L', 'lock'],
   ['0', 'reset'],
@@ -402,7 +487,7 @@ function Scrubber({ sections }: { sections: { step: number; name: string }[] }) 
         list="step-ticks"
         disabled={!total}
         aria-label={t('viewer.progress')}
-        aria-valuetext={t('viewer.stepOf', { step, total })}
+        aria-valuetext={step === 0 ? t('viewer.start') : t('viewer.stepOf', { step, total })}
         onChange={(e) => usePlayback.getState().scrub(Number(e.target.value))}
       />
       {/* A tick where each step ends. */}

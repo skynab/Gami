@@ -1,4 +1,4 @@
-import { ContactShadows, GizmoHelper } from '@react-three/drei';
+import { ContactShadows } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { useMemo } from 'react';
 import { Sphere, Vector3 } from 'three';
@@ -6,13 +6,17 @@ import { useThemeColors } from '../app/useThemeColors';
 import { stepBound } from '../fold/animate';
 import type { OrigamiModel } from '../fold/types';
 import { usePlayback } from '../state/playback';
+import { useViewer } from '../state/viewer';
 import { CameraRig } from './CameraRig';
 import { FoldedPaper } from './FoldedPaper';
 import { FoldGuides } from './FoldGuides';
-import { ViewCube } from './ViewCube';
+import { CubeCorner } from './ViewCube';
 
-/** The 3D viewport: the paper on a table, lit softly, with a view cube in the corner. Loaded on demand. */
-export default function Stage({ model }: { model: OrigamiModel }) {
+/**
+ * The 3D viewport: the paper on a table, lit softly, with a view cube in the corner. Loaded on demand.
+ * `onTap`: a click or tap in the view that isn't on the view cube, and isn't the end of a drag turning the camera.
+ */
+export default function Stage({ model, onTap }: { model: OrigamiModel; onTap?: () => void }) {
   const colors = useThemeColors();
   // The camera frames whichever step is showing, worked out when the step is reached, so the camera only
   // moves when the step changes.
@@ -23,7 +27,6 @@ export default function Stage({ model }: { model: OrigamiModel }) {
     const { center, radius } = stepBound(model, k);
     return new Sphere(new Vector3(...center), radius);
   }, [model, k]);
-  const narrow = matchMedia('(max-width: 560px)').matches;
 
   return (
     <Canvas
@@ -33,6 +36,14 @@ export default function Stage({ model }: { model: OrigamiModel }) {
       dpr={[1, 2]}
       camera={{ fov: 35, near: 0.01, far: 100, position: [0, 2, 2] }}
       fallback={<NoWebGL />}
+      // A "miss" is a click that hit nothing clickable (only the view cube is) and moved under 2px since going down.
+      // With the view cube grown, a click elsewhere only shrinks it back.
+      onPointerMissed={(e) => {
+        if (e.type !== 'click') return;
+        const viewer = useViewer.getState();
+        if (viewer.cubeZoomed) viewer.setCubeZoomed(false);
+        else onTap?.();
+      }}
     >
       <hemisphereLight args={['#ffffff', '#dcd8e6', 2.2]} />
       <directionalLight position={[2, 4, 3]} intensity={1.8} />
@@ -46,9 +57,7 @@ export default function Stage({ model }: { model: OrigamiModel }) {
 
       <CameraRig fit={fit} />
 
-      <GizmoHelper alignment="top-right" margin={narrow ? [60, 60] : [76, 76]}>
-        <ViewCube colors={colors} />
-      </GizmoHelper>
+      <CubeCorner colors={colors} />
     </Canvas>
   );
 }

@@ -726,9 +726,50 @@ kbd {
   -webkit-touch-callout: none;
 }
 
+/* The first-step button fills up from the bottom while it's held, and goes back to the start once full. */
+.icon.to-start {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.icon.to-start::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--accent-soft);
+  transform: scaleY(0);
+  transform-origin: bottom;
+}
+
+.icon.to-start.holding {
+  color: var(--accent);
+}
+
+.icon.to-start.holding::before {
+  transform: scaleY(1);
+  transition: transform var(--hold-ms) linear;
+}
+
 .step-card-actions {
   display: flex;
   gap: 2px;
+}
+
+/* Where the step card was, once it's hidden: brings it back. */
+.step-card-show {
+  position: absolute;
+  inset-block-end: 16px;
+  inset-inline-start: 16px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.12);
+}
+
+@media (max-width: 560px) {
+  .step-card-show {
+    inset-block-end: 12px;
+    inset-inline-start: 12px;
+  }
 }
 
 .small-icon {
@@ -896,9 +937,12 @@ kbd {
   transition: translate 0.15s, box-shadow 0.15s;
 }
 
-.card:hover {
-  translate: 0 -2px;
-  box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
+/* Only where there's real hover: on touch screens it would stick after a tap. */
+@media (hover: hover) {
+  .card:hover {
+    translate: 0 -2px;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
+  }
 }
 
 .card-thumb {
@@ -916,7 +960,8 @@ kbd {
   filter: drop-shadow(0 4px 6px rgb(0 0 0 / 0.12));
 }
 
-/* The looping preview sits over the finished model, shown while the card is hovered or focused. */
+/* The looping preview sits over the finished model, shown while the card is hovered or focused (or mid-screen, on
+   touch screens). */
 .card-thumb .card-preview {
   position: absolute;
   inset: 0;

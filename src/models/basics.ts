@@ -2,8 +2,8 @@ import type { OrigamiModel, Vec2, Vec3 } from '../fold/types';
 
 /**
  * "Folding basics": a four-step practice model, written by hand. It covers a fold, an unfold, turning over,
- * and a fold that splits existing faces. Kept by hand as a fixed model for the engine's tests; the gallery's
- * copy is made from a recipe (recipes/basics.ts), so its file says how each step is folded.
+ * and a fold that splits existing faces. Kept by hand as a fixed model for the engine's tests. The gallery's
+ * "Basics" lesson (recipes/basics.ts) shares its id and paper but is a tour of the app instead.
  *
  * Paper corners: BL (−½, ½), BR (½, ½), TR (½, −½), TL (−½, −½). "Top" is the edge furthest from you.
  */

@@ -74,6 +74,13 @@ export const GuidesIcon = icon(
     <path d="M15 3.5l.3 2.6-2.6.6" />
   </>,
 );
+export const InstructionsIcon = icon(
+  <>
+    <rect x="3" y="5" width="18" height="14" rx="2" />
+    <path d="M7 10h10M7 14h6" />
+  </>,
+);
+export const HideIcon = icon(<path d="M6 9l6 6 6-6" />);
 export const KeyboardIcon = icon(
   <>
     <rect x="3" y="6" width="18" height="12" rx="2" />

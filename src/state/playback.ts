@@ -7,7 +7,7 @@ const HOLD_MS = 700;
 interface PlaybackState {
   /** Number of steps in the open model (0 when it has no step data). */
   total: number;
-  /** The step being shown, 1…total. */
+  /** The step being shown, 1…total, or 0 for the paper before any step. */
   step: number;
   /**
    * Where the paper is, 0…total. Step k animates pos from k − 1 to k, so 2.5 is halfway through step 3.
@@ -49,6 +49,11 @@ export const usePlayback = create<PlaybackState>()((set, get) => {
    */
   function animate(k: number, from = k - 1, to = k) {
     stop();
+    // Step 0 is the paper before any step: nothing to play.
+    if (k === 0) {
+      set({ step: 0, pos: 0 });
+      return;
+    }
     // With reduced motion, a step appears already folded, unless the user asked to watch by pressing play.
     if (reducedMotion() && !get().playing) {
       set({ step: k, pos: to });
@@ -69,7 +74,7 @@ export const usePlayback = create<PlaybackState>()((set, get) => {
     frame = requestAnimationFrame(tick);
   }
 
-  const clampStep = (k: number) => Math.min(get().total, Math.max(1, Math.round(k)));
+  const clampStep = (k: number) => Math.min(get().total, Math.max(0, Math.round(k)));
 
   return {
     total: 0,
