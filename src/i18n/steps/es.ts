@@ -354,12 +354,6 @@ export const es: Record<string, string> = {
     "Empieza con la cara blanca hacia arriba. Dobla cada cuadrado por la mitad de lado a lado.",
   "Unfold, leaving a crease down the middle.":
     "Desdobla, dejando un pliegue por el centro.",
-  "Fold both in half the other way":
-    "Dobla los dos por la mitad en el otro sentido",
-  "Fold each square in half top to bottom.":
-    "Dobla cada cuadrado por la mitad de arriba abajo.",
-  "Unfold again. Each square has a cross of creases.":
-    "Desdobla otra vez. Cada cuadrado tiene una cruz de pliegues.",
   "Fold the sides to the middle":
     "Dobla los lados hacia el centro",
   "Fold the left and right edges of each square in to the centre crease.":

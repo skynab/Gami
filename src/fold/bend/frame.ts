@@ -2,7 +2,7 @@ import { facePositions, LAYER_GAP } from '../frames';
 import { joinedAlong, sharedSegment, signedArea } from '../geometry2d';
 import type { FoldFrame, Vec2, Vec3 } from '../types';
 import { topology, type Tri } from './mesh';
-import { solve } from './solver';
+import { hingeAngle, solve } from './solver';
 
 /**
  * Bending a frame (see docs/bending-plan.md): its faces cut into small triangles on the sheet, the solver run from
@@ -263,6 +263,94 @@ export function bendFrame(frame: FoldFrame, options: BendOptions): { via: FoldFr
   }
   const all = frames.map((f, k) => write(f, k === 0));
   return { via: all.slice(0, -1), frame: all[all.length - 1], strain };
+}
+
+/**
+ * The frames paper passes through on its way from `from` to `to` as a fold of several creases at once (a
+ * collapse): the faces of `to`, rigid, joined at every crease, each crease turning steadily from its angle
+ * before to its angle after while the face at `anchor` (on the sheet) stays put. Played one after another, the
+ * paper folds up as one piece, where moving each face its own way would pull faces apart at the creases
+ * between them. Every frame has the faces of `to`; the first points them back at `from`'s.
+ */
+export function foldPath(from: FoldFrame, to: FoldFrame, anchor: Vec2, stages = 10): FoldFrame[] {
+  // The paper before, cut into the faces it ends up as: its corners where their faces were.
+  const coords: Vec3[] = [];
+  to.faces_vertices.forEach((face, f) => {
+    const p = to.faces_parent?.[f] ?? f;
+    const place = affine(
+      from.faces_vertices[p].map((v) => from.vertices_paper[v]),
+      from.faces_vertices[p].map((v) => from.vertices_coords[v]),
+    );
+    for (const v of face) coords[v] ??= place(to.vertices_paper[v]);
+  });
+  const cuts = to.cuts ?? from.cuts;
+  const before: FoldFrame = {
+    vertices_coords: coords,
+    vertices_paper: to.vertices_paper,
+    faces_vertices: to.faces_vertices,
+    ...(from.faces_layer && { faces_layer: to.faces_vertices.map((_, f) => from.faces_layer![to.faces_parent?.[f] ?? f]) }),
+    ...(cuts?.length && { cuts }),
+  };
+  // The same mesh twice, where the paper starts and where it ends, so each crease's angle can be read off both.
+  const size = sheetSize(to) / 12;
+  const mesh = meshFrame(before, [], size);
+  const after = meshFrame(to, [], size);
+  if (after.points.length !== mesh.points.length || after.triangles.some((t, k) => t.some((v, i) => v !== mesh.triangles[k][i]))) return [];
+  const { paper, points, triangles, parent } = mesh;
+
+  const held = triangles.findIndex((t) => inside(anchor, t.map((v) => paper[v]) as [Vec2, Vec2, Vec2]));
+  if (held < 0) return [];
+  const pinned = new Set<number>();
+  triangles.forEach((t, k) => parent[k] === parent[held] && t.forEach((v) => pinned.add(v)));
+
+  // Faces hold their shape; creases turn the whole way from where they start to where they end. Not the shorter
+  // way round: a crease folded one way that ends folded the other (a reverse fold) opens out on its way over.
+  const parentOf = new Map<string, number[]>();
+  triangles.forEach((t, k) => {
+    for (let e = 0; e < 3; e++) {
+      const key = edgeKey(t[e], t[(e + 1) % 3]);
+      parentOf.set(key, [...(parentOf.get(key) ?? []), parent[k]]);
+    }
+  });
+  const hinges: { edge: [number, number]; compliance: number }[] = [];
+  const creases: { edge: [number, number]; degrees: number; by: number; compliance: number }[] = [];
+  for (const h of topology(triangles).hinges) {
+    const [f, g] = parentOf.get(edgeKey(h.a, h.b))!;
+    if (f === g) hinges.push({ edge: [h.a, h.b], compliance: 0 });
+    else creases.push({ edge: [h.a, h.b], degrees: 0, by: hingeAngle(after.points, h) - hingeAngle(points, h), compliance: CREASE_COMPLIANCE });
+  }
+
+  const { frames } = solve({
+    points,
+    sheet: paper,
+    triangles,
+    pinned: [...pinned],
+    creases,
+    hinges,
+    thickness: LAYER_GAP,
+    floor: 0,
+    ...(stacked(before) && { side: sidesByLayer(before, points, triangles, parent) }),
+    stages,
+  });
+
+  // Each corner of each face of `to`, as a point of the mesh.
+  const pointOf = to.faces_vertices.map((face, f) => {
+    const own = new Set(triangles.flatMap((t, k) => (parent[k] === f ? t : [])));
+    return face.map((v) => [...own].find((q) => same(paper[q], to.vertices_paper[v]))!);
+  });
+  if (pointOf.some((face) => face.some((q) => q === undefined))) return [];
+  // The last stage is where the paper ends up, which `to` already has, exactly.
+  return frames.slice(0, -1).map((at, k): FoldFrame => {
+    const vertices_coords: Vec3[] = [];
+    to.faces_vertices.forEach((face, f) => face.forEach((v, i) => (vertices_coords[v] ??= at[pointOf[f][i]])));
+    return {
+      vertices_coords,
+      vertices_paper: to.vertices_paper,
+      faces_vertices: to.faces_vertices,
+      ...(k === 0 && to.faces_parent && { faces_parent: to.faces_parent }),
+      ...(cuts?.length && { cuts }),
+    };
+  });
 }
 
 /** Whether a frame lies flat, its faces in layers. */

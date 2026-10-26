@@ -257,13 +257,18 @@ export class Recipe {
     if (!at) throw new FoldError(`${this.info.id}: a collapse's anchor must be a point on the sheet.`);
     try {
       const tuck = under && recorder(under);
-      const frame = collapse(this.current, { creases: lines, anchor: at, under: tuck });
-      return this.push({ title: step.title, text: step.text, kind: step.kind ?? 'fold' }, frame, {
+      const before = this.current;
+      const frame = collapse(before, { creases: lines, anchor: at, under: tuck });
+      this.push({ title: step.title, text: step.text, kind: step.kind ?? 'fold' }, frame, {
         op: 'collapse',
         creases: lines.map((c) => ({ line: c.spec, kind: c.kind, ...(c.only && { only: c.only.faces() }) })),
         anchor: { paper: at },
         ...(tuck && { under: tuck.faces() }),
       });
+      // The frames on the way, as replaying it makes them (see foldPath).
+      const via = tuck ? [] : foldPath(before, frame, at);
+      if (via.length) this.steps.at(-1)!.via = via;
+      return this;
     } catch (e) {
       if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
       throw e;

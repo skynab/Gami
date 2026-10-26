@@ -30,8 +30,11 @@ export interface BendProblem {
   pinned?: number[];
   /** Points taken from where they start to `to`, a share more each stage. */
   goals?: { vertex: number; to: Vec3; compliance?: number }[];
-  /** Hinges (by their edge's two points) taken from their rest angle to `degrees`, a share more each stage. */
-  creases?: { edge: [number, number]; degrees: number; compliance?: number }[];
+  /**
+   * Hinges (by their edge's two points) taken from their rest angle to `degrees`, a share more each stage, the
+   * shorter way round; or with `by`, turned by that many radians from where they start, whichever way round it is.
+   */
+  creases?: { edge: [number, number]; degrees: number; by?: number; compliance?: number }[];
   /** Hinges (by their edge's two points) held at their rest angle with their own compliance, in place of `compliance.bend`. */
   hinges?: { edge: [number, number]; compliance: number }[];
   /** Compliance of edge lengths (0: exact) and of bending at hinges with no crease goal. */
@@ -274,7 +277,8 @@ export function solve(problem: BendProblem): BendResult {
       const crease = creaseOf.get(hingeKey(h.a, h.b));
       if (!crease) return { angle: restAngles[k], compliance: holdOf.get(hingeKey(h.a, h.b)) ?? bend };
       const goal = (crease.degrees * Math.PI) / 180;
-      return { angle: startAngles[k] + wrap(goal - startAngles[k]) * share, compliance: crease.compliance ?? DEFAULTS.crease };
+      const by = crease.by ?? wrap(goal - startAngles[k]);
+      return { angle: startAngles[k] + by * share, compliance: crease.compliance ?? DEFAULTS.crease };
     });
 
     const lEdge = edges.map(() => 0);

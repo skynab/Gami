@@ -354,12 +354,6 @@ export const ja: Record<string, string> = {
     "白い面を上にして、それぞれの正方形を左右半分に折ります。",
   "Unfold, leaving a crease down the middle.":
     "開いて、真ん中に折り目を残します。",
-  "Fold both in half the other way":
-    "両方をもう一方の向きで半分に折る",
-  "Fold each square in half top to bottom.":
-    "それぞれの正方形を上下半分に折ります。",
-  "Unfold again. Each square has a cross of creases.":
-    "また開きます。どちらの正方形にも十字の折り目がつきます。",
   "Fold the sides to the middle":
     "両側を真ん中へ折る",
   "Fold the left and right edges of each square in to the centre crease.":

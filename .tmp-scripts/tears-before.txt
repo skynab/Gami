@@ -1,0 +1,82 @@
+0.794 folds-lesson 64 collapse | Petal fold
+0.794 bases-lesson 46 collapse | Petal fold
+0.794 crane 15 collapse | Petal fold
+0.794 crow 15 collapse | Petal fold
+0.794 flapping-bird 15 collapse | Petal fold
+0.602 bases-lesson 52 collapse | Petal fold
+0.602 crane 21 collapse | Petal fold
+0.602 crow 21 collapse | Petal fold
+0.602 flapping-bird 21 collapse | Petal fold
+0.507 king-bee 22 shape | Bend up the ailerons
+0.500 pajarita 16 collapse | Swivel the bottom left
+0.500 pajarita 14 collapse | Swivel the bottom right
+0.492 king-bee 21 shape | Fold up the wingtips
+0.460 bases-lesson 68 collapse | Collapse into a fish base
+0.460 whale 14 collapse | Collapse into a fish base
+0.460 dolphin 14 collapse | Collapse into a fish base
+0.460 seal 14 collapse | Collapse into a fish base
+0.432 pinwheel 11 collapse | Squash the top
+0.432 pinwheel 12 collapse | Squash the bottom
+0.432 butterfly 22 collapse | Squash the bottom
+0.426 lily 28 collapse | Squash and petal-fold a back flap
+0.426 lily 25 collapse | Squash and petal-fold the next flap
+0.426 lily 22 collapse | Squash and petal-fold a flap
+0.399 bases-lesson 85 collapse | Squash the third flap
+0.399 frog 15 collapse | Squash the third flap
+0.355 envelope 17 collapse | Swivel the corner out
+0.355 envelope 22 collapse | Swivel the corner out
+0.354 king-bee 20 shape | Open the wings
+0.305 masu-lid 20 shape | Raise the walls
+0.301 folds-lesson 34 collapse | Rabbit ear
+0.295 king-bee 7 collapse | Collapse the top into a triangle
+0.271 butterfly 21 collapse | Squash the top
+0.270 pajarita 17 collapse | Swivel the top right
+0.250 bases-lesson 28 collapse | Collapse into a waterbomb base
+0.250 lily 9 collapse | Collapse into a waterbomb base
+0.250 waterbomb 9 collapse | Collapse into a waterbomb base
+0.250 balloon 9 collapse | Collapse into a waterbomb base
+0.250 balloon-rabbit 9 collapse | Collapse into a waterbomb base
+0.250 masu-box 21 shape | Lock the top end
+0.250 masu-box 22 shape | Lock the bottom end
+0.238 bulldog-dart 13 shape | Open the wings
+0.211 bases-lesson 81 collapse | Squash a flap
+0.211 frog 11 collapse | Squash a flap
+0.208 folds-lesson 58 collapse | Collapse into a square base
+0.208 bases-lesson 16 collapse | Collapse into a square base
+0.208 bases-lesson 40 collapse | Collapse into a square base
+0.208 bases-lesson 79 collapse | Collapse into a square base
+0.208 crane 9 collapse | Collapse into a square base
+0.208 crow 9 collapse | Collapse into a square base
+0.208 flapping-bird 9 collapse | Collapse into a square base
+0.208 frog 9 collapse | Collapse into a square base
+0.204 bases-lesson 91 collapse | Petal fold
+0.204 frog 21 collapse | Petal fold
+0.204 bases-lesson 95 collapse | Petal fold this side
+0.204 frog 25 collapse | Petal fold this side
+0.204 bases-lesson 99 collapse | Petal fold the third flap
+0.204 frog 29 collapse | Petal fold the third flap
+0.192 jumping-frog 7 collapse | Collapse into a triangle
+0.187 bases-lesson 104 collapse | Petal fold the last flap
+0.187 frog 34 collapse | Petal fold the last flap
+0.150 masu-shallow-lid 30 shape | Raise the walls
+0.146 folds-lesson 23 collapse | Squash fold
+0.141 masu-shallow-lid 32 shape | Lock the bottom end
+0.141 masu-shallow-lid 31 shape | Lock the top end
+0.135 masu-box 20 shape | Raise the walls
+0.116 swan 13 collapse | Pull the neck up
+0.108 fox 12 collapse | Squash the head
+0.096 jumping-frog 17 collapse | Push the bottom up
+0.045 fortune-teller 19 popUp | Pop it open
+0.044 tulip 14 move | Stand the stem up
+0.044 tulip 15 move | Put the blossom on the stem
+0.041 navy-plane 19 turnOver | Turn over
+0.039 tulip 13 collapse | Pull out the stem
+0.038 frog 55 fold | Fold the head
+0.038 king-bee 23 turnOver | Turn over
+0.036 ninja-star 15 collapse | Tuck in the last point
+0.032 ninja-star 14 collapse | Tuck in a blue point
+0.029 frog 45 collapse | Turn out a back leg
+0.029 frog 54 collapse | Shape the other back foot
+0.027 frog 53 collapse | Shape a back foot
+0.027 swan 14 collapse | Turn the head
+0.026 navy-plane 16 turnOver | Turn over

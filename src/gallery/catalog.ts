@@ -61,7 +61,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'heart', title: 'Heart', blurb: 'A simple heart, nice for cards.', difficulty: 2, category: 'object', steps: 20, minutes: 5, sheets: 1 },
   { id: 'cicada', title: 'Cicada', blurb: 'A traditional Japanese cicada, its wings folded out from a diamond.', difficulty: 2, category: 'animal', steps: 10, minutes: 5, sheets: 1 },
   { id: 'jumping-frog', title: 'Jumping frog', blurb: 'From half a square of paper. Press its back and watch it hop.', difficulty: 2, category: 'animal', steps: 23, minutes: 10, sheets: 1, paper: 2 },
-  { id: 'ninja-star', title: 'Ninja star', blurb: 'Two sheets locked into a spinning shuriken.', difficulty: 2, category: 'modular', steps: 17, minutes: 10, sheets: 2 },
+  { id: 'ninja-star', title: 'Ninja star', blurb: 'Two sheets locked into a spinning shuriken.', difficulty: 2, category: 'modular', steps: 15, minutes: 10, sheets: 2 },
   { id: 'tulip', title: 'Tulip', blurb: 'A blossom and a stem from two squares.', difficulty: 3, category: 'flower', steps: 15, minutes: 10, sheets: 2 },
   { id: 'fox', title: 'Fox', blurb: 'A sitting fox with big ears and a bushy tail.', difficulty: 2, category: 'animal', steps: 14, minutes: 5, sheets: 1, needs: ['pen'] },
   { id: 'crane', title: 'Crane', blurb: 'The traditional symbol of peace and luck.', difficulty: 4, category: 'animal', steps: 33, minutes: 20, sheets: 1 },

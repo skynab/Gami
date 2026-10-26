@@ -465,7 +465,12 @@ export function stepTransition(model: OrigamiModel, k: number): Transition {
   const frames = framesOf(model);
   const over = tuckedOver(model, k);
   if (over) return transitionVia([frames[k - 1], over, { ...frames[k], faces_parent: sameFaces(over, frames[k]) }]);
-  return transitionVia([frames[k - 1], ...(model.steps[k - 1].via ?? []), frames[k]]);
+  const { op, via } = model.steps[k - 1];
+  // A collapse with the frames it passes through (see foldPath): close together, with the paper joined in each,
+  // so faces go straight from one to the next and stay joined, rather than each making its own way.
+  // The frames have the step's faces, so the last comes straight from the one before it.
+  if (op?.op === 'collapse' && via?.length) return transitionVia([frames[k - 1], ...via, { ...frames[k], faces_parent: undefined }], { joined: true });
+  return transitionVia([frames[k - 1], ...(via ?? []), frames[k]]);
 }
 
 /**
@@ -497,10 +502,13 @@ function sameFaces(a: FoldFrame, b: FoldFrame): number[] | undefined {
   return out.every((i) => i !== undefined) ? (out as number[]) : undefined;
 }
 
-/** How the paper gets through a list of frames, one after another, as a single step. */
-export function transitionVia(frames: FoldFrame[]): Transition {
-  if (frames.length <= 2) return transition(frames[0], frames.at(-1)!);
-  const parts = frames.slice(1).map((f, j) => transition(frames[j], f));
+/**
+ * How the paper gets through a list of frames, one after another, as a single step. `joined`: each face goes
+ * straight from one frame to the next, its corners kept where the faces sharing them put them (as into bent paper).
+ */
+export function transitionVia(frames: FoldFrame[], { joined = false } = {}): Transition {
+  if (frames.length <= 2 && !joined) return transition(frames[0], frames.at(-1)!);
+  const parts = frames.slice(1).map((f, j) => (joined ? blended(frames[j], f) : transition(frames[j], f)));
   const last = frames.at(-1)!;
   // Each final face's ancestor in each frame, following faces_parent back from the end.
   const ancestors: number[][] = parts.map(() => []);

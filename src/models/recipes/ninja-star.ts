@@ -31,10 +31,6 @@ export function ninjaStar() {
     for (const [, o, only] of both) r.onto(paper(o - 0.5, 0), paper(o + 0.5, 0), { title: '', only });
   })
     .unfold({ text: 'Unfold, leaving a crease down the middle.' })
-    .together({ title: 'Fold both in half the other way', text: 'Fold each square in half top to bottom.' }, (r) => {
-      for (const [, o, only] of both) r.onto(paper(o, 0.5), paper(o, -0.5), { title: '', only });
-    })
-    .unfold({ text: 'Unfold again. Each square has a cross of creases.' })
     .together({ title: 'Fold the sides to the middle', text: 'Fold the left and right edges of each square in to the centre crease.' }, (r) => {
       for (const [x, o, only] of both) {
         r.onto(paper(o - 0.5, 0), table(x, 0), { title: '', only }).onto(paper(o + 0.5, 0), table(x, 0), { title: '', only });
@@ -60,14 +56,14 @@ export function ninjaStar() {
   r.together({ title: 'Fold the top ends', text: 'On the yellow strip, bring the top edge down to the left edge. On the blue one, to the right edge.' }, ends(true))
     .together({ title: 'Fold the bottom ends', text: 'Bring the bottom edges up the other way: yellow to the right edge, blue to the left.' }, ends(false));
 
-  // Fold along the diagonal of each middle square, so the ends swing out sideways. Each fold only takes its own
-  // half of the strip: the line runs on into the other half.
+  // Fold along the diagonal of each middle square, so the ends swing out sideways. The bottom fold only takes
+  // the bottom half of the strip, leaving the top end (swung out across its line by then) where it is.
   const swing = (top: boolean) => (r: Recipe) => {
     for (const [x, o, only] of both) {
       const [l, rt] = [x - w, x];
       const mirror = only === blue;
       const [a, b] = mirror ? [rt, l] : [l, rt];
-      const half = (c: Vec2) => only(c) && (top ? c[1] < 0 : c[1] > 0);
+      const half = (c: Vec2) => only(c) && (top || c[1] > 0);
       if (top) r.along(table(a, -0.5 + 2 * w), table(b, -0.5 + w), table(x - w / 2, -0.49), { title: '', only: half });
       else r.along(table(b, 0.5 - 2 * w), table(a, 0.5 - w), table(x - w / 2, 0.49), { title: '', only: half });
       void o;

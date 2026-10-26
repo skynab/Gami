@@ -354,12 +354,6 @@ export const fr: Record<string, string> = {
     "Face blanche vers le haut. Pliez chaque carré en deux d’un côté à l’autre.",
   "Unfold, leaving a crease down the middle.":
     "Dépliez, en gardant un pli au milieu.",
-  "Fold both in half the other way":
-    "Plier les deux en deux dans l’autre sens",
-  "Fold each square in half top to bottom.":
-    "Pliez chaque carré en deux de haut en bas.",
-  "Unfold again. Each square has a cross of creases.":
-    "Dépliez encore. Chaque carré a une croix de plis.",
   "Fold the sides to the middle":
     "Plier les côtés vers le milieu",
   "Fold the left and right edges of each square in to the centre crease.":

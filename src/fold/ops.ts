@@ -6,7 +6,7 @@ import { place } from './place';
 import { anchorFor, centre, inside, locate, smallerSideMoves, topLayers } from './select';
 import { curl, radial, reparent, shape, type Bend } from './shape';
 import { sheetOf } from './sheets';
-import { bendFrame } from './bend/frame';
+import { bendFrame, foldPath } from './bend/frame';
 import type { FoldFrame, Mark, OrigamiModel, Step, StepKind, Tool, Vec2, Vec3 } from './types';
 
 /**
@@ -540,7 +540,11 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
         if (!found) throw new NoStillError('No part of the paper stays still.');
         anchor = found;
       }
-      return { frame: collapse(frame, { creases, anchor, under: test(op.under) }) };
+      const under = test(op.under);
+      const out = collapse(frame, { creases, anchor, under });
+      // The frames on the way, so the paper folds up as one piece (a tuck into a pocket plays its own way).
+      const via = under ? [] : foldPath(frame, out, anchor);
+      return { frame: out, ...(via.length && { via }) };
     }
     case 'unfold': {
       let to = op.to;
