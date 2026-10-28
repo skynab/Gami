@@ -558,9 +558,10 @@ export function transitionVia(frames: FoldFrame[]): Transition {
  */
 export function poseAt(t: Transition, s: number): Vec3[][] {
   const pose = rawPose(t, s);
-  const fixes = s > 0 && s < 1 ? fixesFor(t) : null;
+  // Not at the very start, where the paper is as the step before left it; at the end, with layers held apart.
+  const fixes = s > 0 ? fixesFor(t) : null;
   if (!fixes) return pose;
-  const x = s * JOIN_SAMPLES;
+  const x = Math.min(1, s) * JOIN_SAMPLES;
   const i = Math.min(JOIN_SAMPLES - 1, Math.floor(x));
   const w = x - i;
   return pose.map((face, f) => {
@@ -1347,7 +1348,9 @@ function apartShifts(t: Transition, poses: Vec3[][][]): Vector3[][] | null {
   let any = false;
   const out = poses.map((start, i) => {
     const shifts = start.map(() => new Vector3());
-    if (i === 0 || i === poses.length - 1) return shifts;
+    // Paper meeting where the step ends is held apart too (walls stood up onto paper that shared their layer
+    // lying flat), in the order it came in.
+    if (i === 0) return shifts;
     const normals = start.map((face) => newell(face.map((p) => new Vector3(...p))).normalize());
     // A few rounds, as holding two layers apart can push one onto a third.
     for (let round = 0; round < APART_ROUNDS; round++) {
