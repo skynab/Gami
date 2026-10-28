@@ -1,5 +1,5 @@
 import { checkNoTear, FoldError, placeLike, toFlat, type FlatFace } from './fold';
-import { joinedSegment, sideOf, split, type Cut, type Line } from './geometry2d';
+import { joinedSegment, overlapArea, sideOf, split, type Cut, type Line } from './geometry2d';
 import { LAYER_GAP } from './frames';
 import { centre } from './select';
 import type { FoldFrame, Vec2, Vec3 } from './types';
@@ -149,10 +149,38 @@ export function shape(
   // the other way round, on the table.
   const over = (i: number) => ups[i] !== null && ups[i]![1] < -0.999;
   const overTop = Math.max(0, ...pieces.filter((_, i) => over(i)).map((p) => p.layer));
+  // Any other stack turned by one bend turns about its own bottom layer, standing on the paper that stays put
+  // beneath it: turned about the table instead, a thick stack's bottom edge would cut down through that
+  // paper. Paper turned further, beyond a stack that stands up, is hinged to the stack's far side, so it lies
+  // beyond the stack's layers rather than in under them.
+  const nearest = (i: number) => order.findLast((k) => moves[k][i]) ?? -1;
+  const turnedBy = (i: number) => moves.filter((m) => m[i]).length;
+  const base = new Map<number, { bottom: number; rest: number; beyond: Vec3 | null }>();
+  pieces.forEach((_, i) => {
+    const k = nearest(i);
+    if (!ups[i] || over(i) || cornerOf[i] || turnedBy(i) !== 1 || base.has(k)) return;
+    const stack = pieces.map((_, j) => j).filter((j) => ups[j] && !cornerOf[j] && turnedBy(j) === 1 && nearest(j) === k);
+    const layers = stack.map((j) => pieces[j].layer);
+    const bottom = Math.min(...layers);
+    const under = pieces.filter((p, j) => !ups[j] && stack.some((q) => overlapArea(p.world, pieces[q].world) > 1e-6));
+    const [ux, uy, uz] = ups[i]!;
+    const width = (Math.max(...layers) - bottom + 1) * LAYER_GAP;
+    const rest = Math.max(bottom, 1 + Math.max(-1, ...under.map((p) => p.layer)));
+    base.set(k, { bottom, rest, beyond: Math.abs(uy) < 0.5 ? [ux * width, 0, uz * width] : null });
+  });
   pieces.forEach((p, i) => {
     const up = ups[i];
-    if (!up || (!p.layer && !over(i))) return;
-    const offset: Vec3 = over(i) ? [0, (overTop - 2 * p.layer) * LAYER_GAP, 0] : (up.map((c) => c * p.layer * LAYER_GAP) as Vec3);
+    const b = base.get(nearest(i));
+    const stack = b && !over(i) && !cornerOf[i] && turnedBy(i) === 1;
+    if (!up || (!p.layer && !over(i) && !(stack && b.rest) && !b?.beyond)) return;
+    const shift = b?.beyond && !stack ? b.beyond : [0, 0, 0];
+    const offset = (
+      over(i)
+        ? [0, (overTop - 2 * p.layer) * LAYER_GAP, 0]
+        : stack
+          ? up.map((c, n) => c * (p.layer - b.bottom) * LAYER_GAP + (n === 1 ? b.rest * LAYER_GAP : 0))
+          : up.map((c) => c * p.layer * LAYER_GAP)
+    ).map((c, n) => c + shift[n]) as Vec3;
     faces_vertices[i] = faces_vertices[i].map((v) => {
       vertices_paper.push(vertices_paper[v]);
       return vertices_coords.push(vertices_coords[v].map((c, n) => c + offset[n]) as Vec3) - 1;
