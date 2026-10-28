@@ -557,6 +557,17 @@ export function transitionVia(frames: FoldFrame[]): Transition {
  * apart on the way (a compound fold, faces each going their own way) pulled back together.
  */
 export function poseAt(t: Transition, s: number): Vec3[][] {
+  const pose = fixedPose(t, s);
+  if (s <= 0 || s >= 1) return pose;
+  // Resting on the table: lifted to clear it where something would dip below, but no higher. A lift big enough
+  // for the deepest dip would otherwise hold the paper up in the air for the rest of the step.
+  let low = Infinity;
+  for (const face of pose) for (const p of face) low = Math.min(low, p[1]);
+  return low > 1e-9 ? pose.map((face) => face.map(([x, y, z]): Vec3 => [x, y - low, z])) : pose;
+}
+
+/** Each face's corners `s` of the way through the step, put right (see `poseAt`) but not yet set down on the table. */
+function fixedPose(t: Transition, s: number): Vec3[][] {
   const pose = rawPose(t, s);
   // Not at the very start, where the paper is as the step before left it; at the end, with layers held apart.
   const fixes = s > 0 ? fixesFor(t) : null;
