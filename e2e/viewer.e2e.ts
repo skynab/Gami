@@ -65,8 +65,10 @@ test.describe('viewer', () => {
     await expect(page.getByRole('dialog', { name: 'Keyboard shortcuts' })).toBeVisible();
   });
 
-  test('locks the top view, then resets it', async ({ page }) => {
+  test('locks the top view, then resets it', async ({ page, isMobile }) => {
     await page.goto('/learn/basics');
+    // On a phone the view controls are tucked away behind a button.
+    if (isMobile) await page.getByRole('button', { name: 'View controls' }).click();
     await page.getByRole('button', { name: 'Top', exact: true }).click();
     await page.getByRole('button', { name: 'Lock view' }).click();
     await expect(page.getByText('View locked · drag to pan')).toBeVisible();
@@ -91,14 +93,17 @@ test.describe('viewer', () => {
     await expect(stepHeading(page)).toHaveText('15. Pli pétale');
   });
 
-  test('draws the finished models', async ({ page }) => {
+  test('draws the finished models', async ({ page, isMobile }) => {
     // The top view, locked, at the last step: the same picture every time.
     for (const [id, steps] of [
       ['paper-plane', 13],
       ['fortune-teller', 19],
     ] as const) {
       await page.goto(`/learn/${id}?step=${steps}`);
+      if (isMobile) await page.getByRole('button', { name: 'View controls' }).click();
       await page.getByRole('button', { name: 'Top', exact: true }).click();
+      // Tucked away again, so the controls don't cover the paper.
+      if (isMobile) await page.getByRole('button', { name: 'View controls' }).click();
       // Let the camera settle and the paper finish drawing.
       await page.waitForTimeout(1500);
       await expect(page.locator('canvas')).toHaveScreenshot(`${id}-finished.png`);

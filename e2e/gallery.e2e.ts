@@ -12,7 +12,7 @@ test.describe('gallery', () => {
 
     await page.getByRole('searchbox', { name: 'Search models' }).fill('');
     await page.getByRole('button', { name: 'Lessons' }).click();
-    await expect(page.getByRole('link', { name: /Folding basics/ })).toBeVisible();
+    await expect(page.getByRole('link', { name: /^Lesson Basics/ })).toBeVisible();
     await expect(page.getByRole('link', { name: /Geometry by folding/ })).toBeVisible();
     await expect(page.getByRole('link', { name: /Crane/ })).toHaveCount(0);
   });
