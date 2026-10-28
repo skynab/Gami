@@ -11,8 +11,8 @@ export function fortuneTeller() {
 
   for (const step of [
     corner(-0.5, -0.5, 'Fold a corner to the centre', 'Bring the top-left corner to where the creases cross.'),
-    corner(0.5, -0.5, 'Fold the next corner in'),
-    corner(0.5, 0.5, 'And the next'),
+    corner(0.5, -0.5, 'Fold the next corner in', 'And the top right corner.'),
+    corner(0.5, 0.5, 'And the next', 'And the bottom right corner.'),
     corner(-0.5, 0.5, 'And the last one', 'You now have a smaller square.'),
   ]) r = step(r);
 
@@ -21,8 +21,9 @@ export function fortuneTeller() {
   // The corners of the smaller square are the middles of the sheet's edges.
   for (const step of [
     corner(0, -0.5, 'Fold the corners in again', 'Bring each corner of the new square to the centre.'),
-    corner(0.5, 0, 'Next corner'),
-    corner(0, 0.5, 'Next corner'),
+    // Turned over, the sheet's right edge is on the left.
+    corner(0.5, 0, 'Fold the left corner in', 'And the left corner.'),
+    corner(0, 0.5, 'Fold the bottom corner in', 'And the bottom corner.'),
     corner(-0.5, 0, 'Last corner', 'Write numbers on the small triangles, and fortunes under them.'),
   ]) r = step(r);
 

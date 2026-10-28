@@ -196,8 +196,6 @@ export const ja: Record<string, string> = {
     "もう一度角を中心へ折る",
   "Bring each corner of the new square to the centre.":
     "新しい正方形のそれぞれの角を中心へ折ります。",
-  "Next corner":
-    "次の角",
   "Last corner":
     "最後の角",
   "Write numbers on the small triangles, and fortunes under them.":
@@ -1775,4 +1773,10 @@ export const ja: Record<string, string> = {
     "それから、右下の角と印を通る線を折ります。",
   "Open it. With the bottom edge, the two creases make a triangle with three equal sides and three 60° angles. Halve those angles (axiom 3) for 30° and 15°, or add and take them away: by the same rules, any triangle with sides you can mark folds too. Done!":
     "開きます。二本の折り目と下の辺で、三辺が等しく三つの角が60°の三角形ができました。その角を二等分（公理3）すれば30°や15°、足したり引いたりもできます。同じルールで、辺の長さを印せる三角形ならどれも折れます。できあがり！",
+  "And the left corner.":
+    "左の角も。",
+  "Fold the bottom corner in":
+    "下の角を折りこむ",
+  "And the bottom corner.":
+    "下の角も。",
 };

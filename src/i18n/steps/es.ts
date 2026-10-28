@@ -196,8 +196,6 @@ export const es: Record<string, string> = {
     "Dobla las esquinas hacia dentro otra vez",
   "Bring each corner of the new square to the centre.":
     "Lleva cada esquina del nuevo cuadrado hasta el centro.",
-  "Next corner":
-    "Siguiente esquina",
   "Last corner":
     "Última esquina",
   "Write numbers on the small triangles, and fortunes under them.":
@@ -1775,4 +1773,10 @@ export const es: Record<string, string> = {
     "Y una recta que pase por la esquina inferior derecha y la marca.",
   "Open it. With the bottom edge, the two creases make a triangle with three equal sides and three 60° angles. Halve those angles (axiom 3) for 30° and 15°, or add and take them away: by the same rules, any triangle with sides you can mark folds too. Done!":
     "Ábrelo. Con el borde inferior, los dos pliegues forman un triángulo de tres lados iguales y tres ángulos de 60°. Divide esos ángulos por la mitad (axioma 3) para obtener 30° y 15°, o súmalos y réstalos: con las mismas reglas también se pliega cualquier triángulo cuyos lados puedas marcar. ¡Listo!",
+  "And the left corner.":
+    "Y la esquina izquierda.",
+  "Fold the bottom corner in":
+    "Dobla la esquina de abajo hacia dentro",
+  "And the bottom corner.":
+    "Y la esquina de abajo.",
 };

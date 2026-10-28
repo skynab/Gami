@@ -196,8 +196,6 @@ export const fr: Record<string, string> = {
     "Plier de nouveau les coins vers le centre",
   "Bring each corner of the new square to the centre.":
     "Amenez chaque coin du nouveau carré au centre.",
-  "Next corner":
-    "Coin suivant",
   "Last corner":
     "Dernier coin",
   "Write numbers on the small triangles, and fortunes under them.":
@@ -1775,4 +1773,10 @@ export const fr: Record<string, string> = {
     "Et une droite passant par le coin inférieur droit et la marque.",
   "Open it. With the bottom edge, the two creases make a triangle with three equal sides and three 60° angles. Halve those angles (axiom 3) for 30° and 15°, or add and take them away: by the same rules, any triangle with sides you can mark folds too. Done!":
     "Dépliez. Avec le bord inférieur, les deux plis forment un triangle à trois côtés égaux et trois angles de 60°. Coupez ces angles en deux (axiome 3) pour 30° et 15°, ou additionnez-les et soustrayez-les : avec les mêmes règles, tout triangle dont on peut marquer les côtés se plie aussi. C’est fini !",
+  "And the left corner.":
+    "Et le coin gauche.",
+  "Fold the bottom corner in":
+    "Rabattre le coin du bas",
+  "And the bottom corner.":
+    "Et le coin du bas.",
 };
