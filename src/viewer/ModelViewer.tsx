@@ -19,6 +19,7 @@ import {
 } from '../app/icons';
 import { Modal } from '../app/Modal';
 import { TopBar } from '../app/TopBar';
+import { isKeyPoint } from '../fold/ops';
 import type { OrigamiModel } from '../fold/types';
 import { MODELS } from '../gallery/catalog';
 import { useStepText } from '../i18n/steps';
@@ -197,6 +198,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
         )}
         {instructions && current && (
           <section className="step-card" aria-label={t('viewer.instructions')} aria-live="polite">
+            {isKeyPoint(current) && <p className="key-point-label">{t('viewer.keyPoint')}</p>}
             <div className="step-card-head">
               <h2>
                 {step}. {say(current.title)}
@@ -216,6 +218,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
               </div>
             </div>
             {current.text && <p className="muted small">{say(current.text)}</p>}
+            {isKeyPoint(current) && <p className="muted small key-point-hint">{t('viewer.keyPointHint')}</p>}
             {finished && (
               <div className="done">
                 <p>
@@ -301,7 +304,10 @@ export function ModelViewer({ progressKey, title, load, notice }: {
           </button>
         </div>
 
-        <Scrubber sections={data?.steps.flatMap((st, i) => (st.section ? [{ step: i + 1, name: say(st.section) }] : [])) ?? []} />
+        <Scrubber
+          sections={data?.steps.flatMap((st, i) => (st.section ? [{ step: i + 1, name: say(st.section) }] : [])) ?? []}
+          keyPoints={data?.steps.flatMap((st, i) => (isKeyPoint(st) && !st.section ? [{ step: i + 1, name: say(st.title) }] : [])) ?? []}
+        />
 
         <div className="group view-controls" id="view-controls" data-open={viewsOpen || undefined}>
           <div className="segmented" role="group" aria-label={t('viewer.view')}>
@@ -468,10 +474,10 @@ function ShortcutsDialog({ onClose }: { onClose(): void }) {
 
 /**
  * Drag through the whole model, stopping anywhere, even halfway through a fold. A diamond marks where each
- * section starts (each topic of a lesson); clicking it goes there.
+ * section starts (each topic of a lesson), and a ring each key point (a complex fold); clicking one goes there.
  * Its own component because it re-renders on every animation frame.
  */
-function Scrubber({ sections }: { sections: { step: number; name: string }[] }) {
+function Scrubber({ sections, keyPoints }: { sections: { step: number; name: string }[]; keyPoints: { step: number; name: string }[] }) {
   const pos = usePlayback((s) => s.pos);
   const total = usePlayback((s) => s.total);
   const step = usePlayback((s) => s.step);
@@ -497,21 +503,21 @@ function Scrubber({ sections }: { sections: { step: number; name: string }[] }) 
         ))}
       </datalist>
       {total > 0 &&
-        sections.map((s) => {
-          const label = t('viewer.section', { name: s.name, step: s.step });
-          return (
-            <button
-              key={s.step}
-              type="button"
-              className="section-mark"
-              // Where the section's first step starts on the track (the thumb's centre runs from half its width in).
-              style={{ '--at': (s.step - 1) / total } as CSSProperties}
-              aria-label={label}
-              title={label}
-              onClick={() => usePlayback.getState().goTo(s.step)}
-            />
-          );
-        })}
+        [
+          ...sections.map((s) => ({ ...s, className: 'section-mark', label: t('viewer.section', { name: s.name, step: s.step }) })),
+          ...keyPoints.map((s) => ({ ...s, className: 'section-mark key-point-mark', label: t('viewer.keyPointMark', { name: s.name, step: s.step }) })),
+        ].map((s) => (
+          <button
+            key={s.step}
+            type="button"
+            className={s.className}
+            // Where the step starts on the track (the thumb's centre runs from half its width in).
+            style={{ '--at': (s.step - 1) / total } as CSSProperties}
+            aria-label={s.label}
+            title={s.label}
+            onClick={() => usePlayback.getState().goTo(s.step)}
+          />
+        ))}
     </div>
   );
 }

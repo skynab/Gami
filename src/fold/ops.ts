@@ -392,6 +392,20 @@ export function toolsNeeded(steps: Step[]): Tool[] {
   return [...(kinds.has('cut') ? (['scissors'] as const) : []), ...(kinds.has('draw') ? (['pen'] as const) : [])];
 }
 
+/** How many creases a collapse must fold at once to be a key point. Reverse folds, crimps and tucks fold fewer. */
+const KEY_POINT_CREASES = 3;
+
+/**
+ * Whether a step is a key point: a complex fold, where several creases fold at once (collapsing into a base,
+ * a squash, petal or swivel fold), parts of a `together` included. The viewer marks these to break the
+ * instructions up into sections. A step with no operation goes by its label.
+ */
+export function isKeyPoint(step: Step): boolean {
+  const complex = (op: Op): boolean =>
+    op.op === 'together' ? op.ops.some(complex) : op.op === 'collapse' && op.creases.length >= KEY_POINT_CREASES;
+  return step.op ? complex(step.op) : step.kind === 'squash' || step.kind === 'petal' || step.kind === 'sink';
+}
+
 /** What a step does, for deciding what an Unfold opens: from its operation if it has one, else its label. */
 function actsAs(step: Step): StepKind | undefined {
   return step.op ? opKind(step.op) : step.kind;

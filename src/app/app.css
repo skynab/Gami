@@ -369,6 +369,15 @@ a {
   margin-block-start: 4px;
 }
 
+.key-point-label {
+  margin: 0 0 2px;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 .step-card-head {
   display: flex;
   align-items: center;
@@ -838,6 +847,21 @@ kbd {
 
 .section-mark:hover {
   outline: 2px solid color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+/* A key point (a complex fold) is a hollow ring, lighter than a section's diamond. */
+.key-point-mark {
+  inset-block-start: -8px;
+  width: 7px;
+  height: 7px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  background: var(--bg);
+  transform: translateX(-50%);
+}
+
+.key-point-mark:hover {
+  outline-offset: 1px;
 }
 
 /* Gallery */
