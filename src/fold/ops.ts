@@ -445,6 +445,20 @@ export function lastFold(steps: Step[]): number | null {
 }
 
 /**
+ * The frames an unfold has since opened back up: for each unfold, the frames from just after the one it
+ * went back to up to its own, which lie folded where the paper is open now, or exactly as it was opened to.
+ */
+export function reopened(steps: Step[]): Set<number> {
+  const out = new Set<number>();
+  steps.forEach((s, i) => {
+    if (actsAs(s) !== 'unfold') return;
+    const to = (s.op?.op === 'unfold' ? s.op.to : undefined) ?? lastFold(steps.slice(0, i));
+    if (to !== null) for (let k = to + 1; k <= i + 1; k++) out.add(k);
+  });
+  return out;
+}
+
+/**
  * What became of each step: kept as it was (before `from`), folded again, failed (it and every step after
  * it keep their old paper), or a step with no operation, which replaying can't go past.
  */
@@ -585,7 +599,7 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
         to = last;
       }
       if (to >= frames.length - 1) throw new OpError(`Can’t unfold to step ${to}, which hasn’t happened yet.`);
-      return unfoldStep(frames, to);
+      return unfoldStep(frames, to, reopened(ctx.steps));
     }
     case 'turnOver':
       return { frame: turnOver(frame) };

@@ -80,7 +80,7 @@ test.describe('viewer', () => {
     await page.goto('/learn/folding-geometry');
     await expect(page.getByRole('button', { name: /^Go to: / })).toHaveCount(6);
     await page.getByRole('button', { name: /^Go to: Axiom 4/ }).click();
-    await expect(stepHeading(page)).toHaveText('11. A fresh square');
+    await expect(stepHeading(page)).toHaveText('11. Axiom 4: A fresh square');
   });
 
   test('shows the steps in the chosen language', async ({ page }) => {

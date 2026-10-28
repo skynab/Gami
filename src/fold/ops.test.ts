@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { basics } from '../models/basics';
 import { paperPlane } from '../models/recipes/paper-plane';
 import { fromFoldFile, toFoldFile } from './fold-format';
-import { applyOp, isKeyPoint, lastFold, OpError, opKind, OPS_VERSION, parseOp, replay, toolsNeeded, type Op } from './ops';
+import { applyOp, isKeyPoint, lastFold, OpError, opKind, OPS_VERSION, parseOp, reopened, replay, toolsNeeded, type Op } from './ops';
 import { butterfly } from '../models/recipes/butterfly';
 import { crane } from '../models/recipes/crane';
 import { crow } from '../models/recipes/crow';
@@ -262,6 +262,34 @@ describe('what a plain Unfold opens', () => {
     const steps = model.steps.map(({ op: _, ...s }) => s);
     expect(lastFold(steps)).toBe(0);
     expect(lastFold([...model.steps, { ...model.steps[0], kind: 'unfold', op: { op: 'unfold' } }])).toBeNull();
+  });
+});
+
+describe('opening several folds at once', () => {
+  it('passes only the folds still folded, not those an earlier unfold opened', () => {
+    // A crease (fold, unfold), then a fold the other way, then open everything: only that last fold opens.
+    const model = new Recipe({ id: 't', title: 't', sheet: basics.sheets[0] })
+      .crease(paper(0, 0.5), paper(0, -0.5), { title: 'Crease' })
+      .onto(paper(0.5, 0), paper(-0.5, 0), { title: 'Fold' })
+      .unfold({ title: 'Open', to: 0 })
+      .build();
+    expect(reopened(model.steps.slice(0, 3))).toEqual(new Set([1, 2]));
+    expect(model.steps[3].via).toBeUndefined();
+  });
+
+  it('opens what is still folded in turn, latest first', () => {
+    // Fold in half, crease it in half again, fold that way again, then open everything.
+    const model = new Recipe({ id: 't', title: 't', sheet: basics.sheets[0] })
+      .onto(paper(0, 0.5), paper(0, -0.5), { title: 'Fold' })
+      .crease(paper(0.5, -0.25), paper(-0.5, -0.25), { title: 'Crease' })
+      .onto(paper(-0.5, -0.25), paper(0.5, -0.25), { title: 'Fold again' })
+      .unfold({ title: 'Open', to: 0 })
+      .build();
+    // Just the paper folded in half on the way: the last fold opened, and not the crease's fold made again.
+    expect(model.steps[4].via).toHaveLength(1);
+    const xs = model.steps[4].via![0].vertices_coords.map((p) => p[0]);
+    const zs = model.steps[4].via![0].vertices_coords.map((p) => p[2]);
+    expect([Math.min(...xs), Math.max(...xs), Math.max(...zs)].map((n) => +n.toFixed(6))).toEqual([-0.5, 0.5, 0]);
   });
 });
 

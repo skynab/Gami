@@ -1446,8 +1446,12 @@ export const es: Record<string, string> = {
     "Forma a la vez un plisado en las dos capas siguiendo los dos pliegues, para que la punta se incline hacia arriba. Cada capa lleva el mismo plisado, en espejo, y el plisado queda metido entre ellas.",
   "Open it out: on each layer, the two creases are a pleat.":
     "Ábrelo: en cada capa, los dos pliegues forman un plisado.",
-  "A petal fold lifts one layer of a point up while its sides fold in to meet in the middle, making a long, thin diamond. Two of them turn a square base into a bird base. First, fold a square base.":
-    "Un pliegue de pétalo levanta una capa de una punta mientras sus lados se doblan hacia dentro hasta juntarse en el centro, formando un rombo largo y estrecho. Dos de ellos convierten una base preliminar en una base de pájaro. Primero, dobla una base preliminar.",
+  "A petal fold lifts one layer of a point up while its sides fold in to meet in the middle, making a long, thin diamond. Two of them turn a square base into a bird base.":
+    "Un pliegue de pétalo levanta una capa de una punta mientras sus lados se doblan hacia dentro hasta juntarse en el centro, formando un rombo largo y estrecho. Dos de ellos convierten una base preliminar en una base de pájaro.",
+  "Fold a square base":
+    "Pliega una base preliminar",
+  "Start from a square base: crease both diagonals and both halves, then collapse it so the four corners meet, loose corners towards you. Origami bases shows it step by step.":
+    "Empieza con una base preliminar: marca las dos diagonales y las dos mitades, y pliégala para que las cuatro esquinas se junten, con las esquinas sueltas hacia ti. Bases de origami la enseña paso a paso.",
   "Open it out to see the creases the petal fold left behind.":
     "Ábrelo para ver los pliegues que ha dejado el pliegue de pétalo.",
   "Kite base":

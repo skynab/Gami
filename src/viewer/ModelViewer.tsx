@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
 import {
@@ -19,6 +19,7 @@ import {
 } from '../app/icons';
 import { Modal } from '../app/Modal';
 import { TopBar } from '../app/TopBar';
+import { stepDiagramSvg } from '../fold/diagram';
 import { isKeyPoint } from '../fold/ops';
 import type { OrigamiModel } from '../fold/types';
 import { MODELS } from '../gallery/catalog';
@@ -141,6 +142,9 @@ export function ModelViewer({ progressKey, title, load, notice }: {
   });
 
   const current = data?.steps[step - 1];
+  // A lesson teaches one fold or base to a section, so each step says which, and shows its paper diagram.
+  const lesson = !!data && (MODELS.find((m) => m.id === data.id)?.category ?? data.about?.category) === 'lesson';
+  const section = lesson ? data?.steps.slice(0, step).findLast((s) => s.section)?.section : undefined;
   // Built-in models' steps in the interface's language; anything else as written.
   const say = useStepText();
   const name = title || data?.title || '';
@@ -203,7 +207,8 @@ export function ModelViewer({ progressKey, title, load, notice }: {
             {isKeyPoint(current) && <p className="key-point-label">{t('viewer.keyPoint')}</p>}
             <div className="step-card-head">
               <h2>
-                {step}. {say(current.title)}
+                {step}.{' '}
+                {section && say(section) !== say(current.title) ? t('viewer.inSection', { section: say(section), title: say(current.title) }) : say(current.title)}
               </h2>
               <div className="step-card-actions">
                 <button
@@ -219,7 +224,10 @@ export function ModelViewer({ progressKey, title, load, notice }: {
                 {hideButton}
               </div>
             </div>
-            {current.text && <p className="muted small">{say(current.text)}</p>}
+            <div className="step-card-body">
+              {current.text && <p className="muted small">{say(current.text)}</p>}
+              {lesson && data && <StepDiagram model={data} step={step} />}
+            </div>
             {isKeyPoint(current) && <p className="muted small key-point-hint">{t('viewer.keyPointHint')}</p>}
             {finished && (
               <div className="done">
@@ -333,6 +341,28 @@ export function ModelViewer({ progressKey, title, load, notice }: {
         </div>
       </footer>
     </div>
+  );
+}
+
+/**
+ * The step drawn as a paper diagram would draw it, so the 3D fold teaches how to read those too. Small beside
+ * the text; a click shows it bigger.
+ */
+function StepDiagram({ model, step }: { model: OrigamiModel; step: number }) {
+  const { t } = useTranslation();
+  const [big, setBig] = useState(false);
+  const svg = useMemo(() => stepDiagramSvg(model, step), [model, step]);
+  if (!svg) return null;
+  return (
+    <button
+      type="button"
+      className={big ? 'step-diagram big' : 'step-diagram'}
+      aria-pressed={big}
+      title={big ? t('viewer.diagramSmaller') : t('viewer.diagramBigger')}
+      onClick={() => setBig((b) => !b)}
+    >
+      <img src={`data:image/svg+xml,${encodeURIComponent(svg)}`} alt={t('viewer.diagram')} />
+    </button>
   );
 }
 

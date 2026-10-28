@@ -9,7 +9,7 @@ import { radial, reparent, shape, type Bend, type Ray } from './shape';
 import { startFrame } from './sheets';
 import { keepIn, tape } from './tape';
 import { frontUp, sideOf } from './geometry2d';
-import { applyOp, lastFold, lineOf, type At, type BendGoal, type Faces, type LineSpec, type Op } from './ops';
+import { applyOp, lastFold, lineOf, reopened, type At, type BendGoal, type Faces, type LineSpec, type Op } from './ops';
 import type { FoldFrame, Mark, OrigamiModel, Sheet, Step, Vec2 } from './types';
 
 /**
@@ -155,7 +155,7 @@ export class Recipe {
       if (last === null) throw new FoldError(`${this.info.id}: nothing to unfold at step ${this.steps.length + 1}`);
       to = last;
     }
-    const { frame, via } = unfoldStep(this.frames(), to);
+    const { frame, via } = unfoldStep(this.frames(), to, reopened(this.steps));
     this.push({ title: step.title ?? 'Unfold', text: step.text, kind: 'unfold' }, frame, { op: 'unfold', ...(step.to !== undefined && { to }) });
     const now = this.steps.at(-1)!.frame;
     if (via) this.steps.at(-1)!.via = via.map((f) => keepIn(f, now));

@@ -1446,8 +1446,12 @@ export const ja: Record<string, string> = {
     "二本の折り目に沿って二枚の層に同時に段折りをつまむと、角が上を向きます。どちらの層も鏡に映したように同じ段折りになり、段は層の間に収まります。",
   "Open it out: on each layer, the two creases are a pleat.":
     "開きます。どちらの層でも、二本の折り目が段折りになっています。",
-  "A petal fold lifts one layer of a point up while its sides fold in to meet in the middle, making a long, thin diamond. Two of them turn a square base into a bird base. First, fold a square base.":
-    "花弁折りは、角の一枚を持ち上げながら両側を折り込んで真ん中で合わせ、細長いひし形にします。これを二回すると、正方基本形が鶴の基本形になります。まず正方基本形を折ります。",
+  "A petal fold lifts one layer of a point up while its sides fold in to meet in the middle, making a long, thin diamond. Two of them turn a square base into a bird base.":
+    "花弁折りは、角の一枚を持ち上げながら両側を折り込んで真ん中で合わせ、細長いひし形にします。これを二回すると、正方基本形が鶴の基本形になります。",
+  "Fold a square base":
+    "正方基本形を折る",
+  "Start from a square base: crease both diagonals and both halves, then collapse it so the four corners meet, loose corners towards you. Origami bases shows it step by step.":
+    "正方基本形から始めます。対角線を二本と半分の折り線を二本つけ、四つの角が集まるようにたたみ、開いている角を手前に向けます。手順は「折り紙の基本形」で詳しく紹介しています。",
   "Open it out to see the creases the petal fold left behind.":
     "開いて、花弁折りが残した折り目を見てみましょう。",
   "Kite base":

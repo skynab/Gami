@@ -375,6 +375,42 @@ a {
   margin-block-start: 4px;
 }
 
+/* The step's text, with its paper diagram beside it in a lesson. */
+.step-card-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.step-card-body > p {
+  flex: 1;
+}
+
+/* Drawn like a printed diagram, on white paper whatever the theme. */
+.step-diagram {
+  flex: none;
+  width: 92px;
+  height: 92px;
+  margin-block-start: 6px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  cursor: zoom-in;
+}
+
+.step-diagram.big {
+  width: 180px;
+  height: 180px;
+  cursor: zoom-out;
+}
+
+.step-diagram img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .key-point-label {
   margin: 0 0 2px;
   color: var(--accent);

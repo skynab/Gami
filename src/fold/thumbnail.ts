@@ -20,16 +20,16 @@ export function thumbnailSvg(model: OrigamiModel, size = 240): string {
 `;
 }
 
-const flat = (f: FoldFrame) => f.vertices_coords.every((p) => Math.abs(p[1]) < 1e-6);
+export const flat = (f: FoldFrame) => f.vertices_coords.every((p) => Math.abs(p[1]) < 1e-6);
 
 /** The marks drawn by the end of step k. */
-const marksAt = (model: OrigamiModel, k: number): Mark[] => marksUpTo(model, k).map((m) => m.mark);
+export const marksAt = (model: OrigamiModel, k: number): Mark[] => marksUpTo(model, k).map((m) => m.mark);
 
 /**
  * A flat frame seen from above: its faces bottom layer first, each with the marks drawn and tape stuck on its
  * upper side, and a square box round them.
  */
-function fromAbove(model: OrigamiModel, frame: FoldFrame, marks: Mark[] = []): { box: number[]; body: string } {
+export function fromAbove(model: OrigamiModel, frame: FoldFrame, marks: Mark[] = []): { box: number[]; body: string } {
   const faces = toFlat(frame).sort((a, b) => a.layer - b.layer);
   const pts = faces.flatMap((f) => f.world);
   const xs = pts.map((p) => p[0]);

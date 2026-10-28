@@ -1446,8 +1446,12 @@ export const fr: Record<string, string> = {
     "Pincez un plissé dans les deux couches le long des deux plis à la fois, pour que la pointe se relève. Chaque couche reçoit le même plissé, en miroir, et le plissé se range entre elles.",
   "Open it out: on each layer, the two creases are a pleat.":
     "Dépliez : sur chaque couche, les deux plis forment un plissé.",
-  "A petal fold lifts one layer of a point up while its sides fold in to meet in the middle, making a long, thin diamond. Two of them turn a square base into a bird base. First, fold a square base.":
-    "Un pli pétale soulève une couche d’une pointe pendant que ses côtés se replient pour se rejoindre au milieu, ce qui donne un losange long et fin. Deux plis pétale transforment une base préliminaire en base de l’oiseau. D’abord, pliez une base préliminaire.",
+  "A petal fold lifts one layer of a point up while its sides fold in to meet in the middle, making a long, thin diamond. Two of them turn a square base into a bird base.":
+    "Un pli pétale soulève une couche d’une pointe pendant que ses côtés se replient pour se rejoindre au milieu, ce qui donne un losange long et fin. Deux plis pétale transforment une base préliminaire en base de l’oiseau.",
+  "Fold a square base":
+    "Plier une base préliminaire",
+  "Start from a square base: crease both diagonals and both halves, then collapse it so the four corners meet, loose corners towards you. Origami bases shows it step by step.":
+    "Commencez par une base préliminaire : marquez les deux diagonales et les deux moitiés, puis repliez-la pour que les quatre coins se rejoignent, coins libres vers vous. Les bases de l’origami la montre étape par étape.",
   "Open it out to see the creases the petal fold left behind.":
     "Dépliez pour voir les plis laissés par le pli pétale.",
   "Kite base":

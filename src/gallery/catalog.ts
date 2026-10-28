@@ -46,7 +46,7 @@ export const LEVELS: { id: Level; label: string }[] = [
 
 export const MODELS: ModelInfo[] = [
   { id: 'basics', title: 'Basics', blurb: 'Start here: how to step through, play, turn and read each fold.', difficulty: 1, category: 'lesson', steps: 15, minutes: 5, sheets: 1 },
-  { id: 'folds-lesson', title: 'Common folds', blurb: 'Valley and mountain, reverse, squash, rabbit ear, pleat, crimp and petal folds, each on its own square.', difficulty: 2, category: 'lesson', steps: 65, minutes: 25, sheets: 1 },
+  { id: 'folds-lesson', title: 'Common folds', blurb: 'Valley and mountain, reverse, squash, rabbit ear, pleat, crimp and petal folds, each on its own square.', difficulty: 2, category: 'lesson', steps: 56, minutes: 20, sheets: 1 },
   { id: 'bases-lesson', title: 'Origami bases', blurb: 'The kite, square, water bomb, bird, fish and frog bases: where most models start.', difficulty: 2, category: 'lesson', steps: 104, minutes: 30, sheets: 1 },
   { id: 'paper-plane', title: 'Paper plane', blurb: 'The classic dart. Flies far and straight.', difficulty: 1, category: 'plane', steps: 13, minutes: 5, sheets: 1, paper: 1.43 },
   { id: 'glider', title: 'Glider', blurb: 'A flat-nosed plane with broad wings, for slow, long glides.', difficulty: 1, category: 'plane', steps: 12, minutes: 5, sheets: 1, paper: 1.43 },
