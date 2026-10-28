@@ -1596,6 +1596,9 @@ export const fr: Record<string, string> = {
     "Et son autre coin",
   "And the left corner. Press the boomerang flat, and check it lies flat on the table.":
     "Puis le coin gauche. Aplatissez le boomerang et vérifiez qu’il repose bien à plat sur la table.",
+  "Tape the corner": "Posez du ruban sur le coin",
+  "Stick a short piece of tape across the corner of the L, so the fold can’t spring open when you throw it.":
+    "Collez un petit morceau de ruban adhésif en travers du coin du L, pour que le pli ne s’ouvre pas quand vous le lancez.",
   "Fold the top corner down onto the bottom corner, making a triangle.":
     "Rabattez le coin du haut sur le coin du bas pour former un triangle.",
   "Fold the top point up":

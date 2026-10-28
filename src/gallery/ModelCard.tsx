@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type PointerEvent } from 'react';
 import type { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { OrigamiHeartIcon, PaperIcon, PenIcon, ScissorsIcon } from '../app/icons';
+import { OrigamiHeartIcon, PaperIcon, PenIcon, ScissorsIcon, TapeIcon } from '../app/icons';
 import { modelUrl } from '../models';
 import { useFavorite, useFavorites } from '../state/favorites';
 import { readProgress } from '../state/progress';
@@ -184,7 +184,7 @@ export function paperRatio(sheets: Sheet[]): number {
 
 /**
  * What a model needs beyond a square of paper, so nobody starts it without: a rectangle (drawn to its shape, and
- * named when it's A4 or US Letter), scissors, a pen.
+ * named when it's A4 or US Letter), scissors, a pen, tape.
  */
 export function Needs({ tools, paper }: { tools?: Tool[]; paper?: number }) {
   const { t } = useTranslation();
@@ -209,8 +209,8 @@ export function Needs({ tools, paper }: { tools?: Tool[]; paper?: number }) {
         </span>
       )}
       {(tools ?? []).map((tool) => {
-        const label = t(tool === 'scissors' ? 'card.needsScissors' : 'card.needsPen');
-        const Icon = tool === 'scissors' ? ScissorsIcon : PenIcon;
+        const label = t(TOOL_LABELS[tool]);
+        const Icon = TOOL_ICONS[tool];
         return (
           <span key={tool} role="img" aria-label={label} title={label}>
             <Icon width={16} height={16} />
@@ -220,6 +220,9 @@ export function Needs({ tools, paper }: { tools?: Tool[]; paper?: number }) {
     </span>
   );
 }
+
+const TOOL_LABELS = { scissors: 'card.needsScissors', pen: 'card.needsPen', tape: 'card.needsTape' } as const satisfies Record<Tool, string>;
+const TOOL_ICONS = { scissors: ScissorsIcon, pen: PenIcon, tape: TapeIcon } satisfies Record<Tool, unknown>;
 
 /** Difficulty as five dots. */
 export function Dots({ difficulty }: { difficulty: Difficulty }) {

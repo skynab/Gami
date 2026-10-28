@@ -17,6 +17,7 @@ import { framesOf, normal } from '../fold/frames';
 import { joinedSegment } from '../fold/geometry2d';
 import { MARK_COLOUR, MARK_WIDTH, marksUpTo, onFace } from '../fold/marks';
 import { sheetOf } from '../fold/sheets';
+import { TAPE_COLOUR, TAPE_OPACITY } from '../fold/tape';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from '../fold/types';
 import { usePlayback } from '../state/playback';
 
@@ -25,7 +26,8 @@ import { usePlayback } from '../state/playback';
  * side gets its own colour; thin lines trace every face edge, which shows the creases and the paper's outline.
  * Stacked layers are drawn a little apart, so where a fold joins two of them a rounded bend closes the gap, in
  * the colour of the paper's outside there: seen from the side, it shows which layers are one piece.
- * Marks drawn on the paper ride on their faces, and a step that draws them draws them stroke by stroke.
+ * Marks drawn on the paper ride on their faces, and a step that draws them draws them stroke by stroke. Tape
+ * rides on its faces the same way, see-through, a step that lays it laying it strip by strip.
  * Paper that bends is many small triangles: the edges between them (soft) get no lines, and it's shaded smoothly
  * across them.
  * Geometry is rebuilt when the step changes (folds add faces) and updated in place on every frame.
@@ -37,6 +39,7 @@ export function FoldedPaper({ model, edgeColor }: { model: OrigamiModel; edgeCol
   const bendsFront = useRef<(Mesh | null)[]>([]);
   const bendsBack = useRef<(Mesh | null)[]>([]);
   const marks = useRef<Mesh | null>(null);
+  const tape = useRef<Mesh | null>(null);
   const invalidate = useThree((s) => s.invalidate);
   const grain = useMemo(paperGrain, []);
 
@@ -62,6 +65,7 @@ export function FoldedPaper({ model, edgeColor }: { model: OrigamiModel; edgeCol
           bendsBack.current[i]!.geometry = part.bends[1];
         });
         marks.current!.geometry = b.marks;
+        tape.current!.geometry = b.tape;
         shown = b;
       }
       b.update(k === 0 ? 1 : pos - (k - 1));
@@ -105,6 +109,20 @@ export function FoldedPaper({ model, edgeColor }: { model: OrigamiModel; edgeCol
       <mesh ref={marks} frustumCulled={false}>
         <meshStandardMaterial color={MARK_COLOUR} side={DoubleSide} roughness={0.9} polygonOffset polygonOffsetFactor={-1} polygonOffsetUnits={-1} />
       </mesh>
+      {/* Tape: see-through and a little glossy, over the marks. */}
+      <mesh ref={tape} frustumCulled={false}>
+        <meshStandardMaterial
+          color={TAPE_COLOUR}
+          side={DoubleSide}
+          transparent
+          opacity={TAPE_OPACITY}
+          depthWrite={false}
+          roughness={0.35}
+          polygonOffset
+          polygonOffsetFactor={-2}
+          polygonOffsetUnits={-2}
+        />
+      </mesh>
     </group>
   );
 }
@@ -124,6 +142,8 @@ interface Built {
   parts: Part[];
   /** Everything drawn on the paper by this step, all sheets together. */
   marks: BufferGeometry;
+  /** The tape on the paper by this step, all sheets together. */
+  tape: BufferGeometry;
   /** Poses the paper `s` of the way (0–1) through the step. */
   update(s: number): void;
   dispose(): void;
@@ -138,23 +158,38 @@ function build(t: Transition, model: OrigamiModel, k: number): Built {
   const frame = k ? model.steps[k - 1].frame : model.start;
   const parts = bySheet.map((faces) => buildPart(t, faces, frame));
   const marks = buildMarks(t, model, k);
+  const tape = buildTape(t, model, k);
   return {
     parts: parts.map((p) => p.part),
     marks: marks.geometry,
+    tape: tape.geometry,
     update(s) {
       const pose = poseAt(t, s);
       for (const p of parts) p.update(pose);
       marks.update(pose, s);
+      tape.update(pose, s);
     },
     dispose() {
       for (const p of parts) p.dispose();
       marks.geometry.dispose();
+      tape.geometry.dispose();
     },
   };
 }
 
 /** How far off its face a mark is drawn: under the gap to the next layer, so paper on top still covers it. */
 const MARK_LIFT = 0.00025;
+/** Tape, over any marks beneath it, and still under the gap to the next layer. */
+const TAPE_LIFT = 0.0004;
+
+/** One part of a mark or a piece of tape on one face, and which of this step's own it is (or -1 for earlier). */
+interface Drawn {
+  points: Vec2[];
+  fill: boolean;
+  front: boolean;
+  face: number;
+  turn: number;
+}
 
 /**
  * The marks drawn by step k's end, cut into their parts on each face and placed with it: lines as thin strips
@@ -170,6 +205,31 @@ function buildMarks(t: Transition, model: OrigamiModel, k: number): { geometry: 
   const parts = drawn.flatMap(({ mark }, i) =>
     t.faces.flatMap((face, f) => onFace(mark, face.paper).map((points) => ({ points, fill: !!mark.fill, front: mark.side === 'front', face: f, turn: turns[i] }))),
   );
+  return onFaces(t, parts, turn, width, MARK_LIFT);
+}
+
+/** The tape on the paper by step k's end, its pieces on each face placed with it; tape the step lays appears as it plays. */
+function buildTape(t: Transition, model: OrigamiModel, k: number): { geometry: BufferGeometry; update(pose: Vec3[][], s: number): void } {
+  const frameAt = (i: number) => (i ? model.steps[i - 1].frame : model.start);
+  const tapes = frameAt(k).tapes ?? [];
+  // Tape is only ever added to, until a fresh sheet: anything past what the frame before had is this step's.
+  const before = k ? (frameAt(k - 1).tapes?.length ?? 0) : tapes.length;
+  const laid = before <= tapes.length ? before : 0;
+  let turn = 0;
+  const turns = tapes.map((_, i) => (i >= laid ? turn++ : -1));
+  const parts = tapes.flatMap((strip, i) =>
+    strip.pieces.flatMap((piece) =>
+      t.faces.flatMap((face, f) => onFace(piece, face.paper).map((points) => ({ points, fill: true, front: piece.side === 'front', face: f, turn: turns[i] }))),
+    ),
+  );
+  return onFaces(t, parts, turn, 0, TAPE_LIFT);
+}
+
+/**
+ * Geometry for marks or tape on the paper's faces, `lift` off them: lines as strips `width` wide through their
+ * points, fills as their outline filled in. The step's own (`turns` of them) appear one after another as it plays.
+ */
+function onFaces(t: Transition, parts: Drawn[], turn: number, width: number, lift: number): { geometry: BufferGeometry; update(pose: Vec3[][], s: number): void } {
   // Vertices: a strip's two edges at each point, or a fill's corners.
   const sizes = parts.map(({ points, fill }) => (fill ? points.length : points.length * 2));
   const starts = sizes.map((_, i) => sizes.slice(0, i).reduce((a, b) => a + b, 0));
@@ -195,7 +255,7 @@ function buildMarks(t: Transition, model: OrigamiModel, k: number): { geometry: 
         const first = starts[i];
         const up = scale(normal(pose[face]), front ? 1 : -1);
         const place = affine(t.faces[face].paper, pose[face]);
-        let pts = points.map((p) => add(place(p), scale(up, MARK_LIFT)));
+        let pts = points.map((p) => add(place(p), scale(up, lift)));
         // While this step plays, its marks appear in turn, each in an equal share of it.
         if (at >= 0 && s * turn < at + 1) pts = pts.map(() => pts[0]);
         if (fill) {

@@ -13,6 +13,7 @@ import {
   type Piece,
 } from './geometry2d';
 import { facePositions } from './frames';
+import { withTaped } from './stuck';
 import type { FoldFrame, Vec2, Vec3 } from './types';
 import type { CreaseKind } from './collapse';
 
@@ -96,10 +97,15 @@ export function fold(frame: FoldFrame, { line, kind, layers, only }: FoldOptions
   if (!movingSideLayers.length) throw new FoldError('Nothing is on the folding side of that line.');
   const from = layers === undefined ? -Infinity : Math.max(...movingSideLayers) - layers + 1;
 
-  // Cut every face that takes part along the line.
+  // Cut every face that takes part along the line. Paper taped to paper that takes part does too.
+  const takesPart = withTaped(
+    frame.tapes,
+    faces.map((f) => f.paper),
+    faces.map((f) => f.layer >= from && (!only || only(f.paper))),
+  );
   const pieces: (FlatFace & { moves: boolean })[] = [];
   faces.forEach((f, i) => {
-    if (f.layer < from || (only && !only(f.paper))) {
+    if (!takesPart[i]) {
       pieces.push({ ...f, parent: i, moves: false });
       return;
     }

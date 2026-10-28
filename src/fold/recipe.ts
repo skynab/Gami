@@ -7,6 +7,7 @@ export { locate } from './select';
 import { place } from './place';
 import { radial, reparent, shape, type Bend, type Ray } from './shape';
 import { startFrame } from './sheets';
+import { keepIn, tape } from './tape';
 import { frontUp, sideOf } from './geometry2d';
 import { applyOp, lastFold, lineOf, type At, type BendGoal, type Faces, type LineSpec, type Op } from './ops';
 import type { FoldFrame, Mark, OrigamiModel, Sheet, Step, Vec2 } from './types';
@@ -156,8 +157,8 @@ export class Recipe {
     }
     const { frame, via } = unfoldStep(this.frames(), to);
     this.push({ title: step.title ?? 'Unfold', text: step.text, kind: 'unfold' }, frame, { op: 'unfold', ...(step.to !== undefined && { to }) });
-    const cuts = this.steps.at(-1)!.frame.cuts;
-    if (via) this.steps.at(-1)!.via = cuts ? via.map((f) => (f.cuts ? f : { ...f, cuts })) : via;
+    const now = this.steps.at(-1)!.frame;
+    if (via) this.steps.at(-1)!.via = via.map((f) => keepIn(f, now));
     return this;
   }
 
@@ -460,6 +461,25 @@ export class Recipe {
     }
   }
 
+  /**
+   * Lays a strip of sticky tape on top of the paper from one point to another, `width` wide (see tape.ts). The
+   * paper under it is stuck together from then on: folding some of it carries the rest along.
+   */
+  tape(from: At, to: At, step: { title: string; text?: string; width?: number }): this {
+    try {
+      const frame = tape(this.current, this.where(from), this.where(to), step.width);
+      return this.push({ title: step.title, text: step.text, kind: 'tape' }, frame, {
+        op: 'tape',
+        from,
+        to,
+        ...(step.width !== undefined && { width: step.width }),
+      });
+    } catch (e) {
+      if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
+      throw e;
+    }
+  }
+
   turnOver(text = 'Flip the paper over from left to right.'): this {
     return this.push({ title: 'Turn over', text, kind: 'turn-over' }, turnOver(this.current), { op: 'turnOver' });
   }
@@ -494,9 +514,8 @@ export class Recipe {
     // The fold engine works on flat faces: bent paper (its mesh of triangles) can be drawn on, but not folded again yet.
     if (this.current.soft && op.op !== 'draw') throw new FoldError(`${this.info.id}, step ${this.steps.length + 1} (${title}): paper that has bent can’t be folded any further.`);
     this.shaping = undefined;
-    // Cuts stay in the paper from step to step (a fresh sheet has none).
-    const cuts = this.current.cuts;
-    if (cuts?.length && !frame.cuts && op.op !== 'newSheet') frame = { ...frame, cuts };
+    // Cuts and tape stay in the paper from step to step (a fresh sheet has none).
+    if (op.op !== 'newSheet') frame = keepIn(frame, this.current);
     const section = this.sectionName;
     this.sectionName = undefined;
     this.steps.push({ title, ...(text && { text }), kind, ...(section && { section }), frame, op });

@@ -7,6 +7,7 @@ import { anchorFor, centre, inside, locate, smallerSideMoves, topLayers } from '
 import { curl, radial, reparent, shape, type Bend } from './shape';
 import { sheetOf } from './sheets';
 import { bendFrame } from './bend/frame';
+import { keepIn, tape } from './tape';
 import type { FoldFrame, Mark, OrigamiModel, Step, StepKind, Tool, Vec2, Vec3 } from './types';
 
 /**
@@ -93,6 +94,8 @@ export type Op =
   | { op: 'draw'; marks: Mark[] }
   /** A scissor cut along a segment, through every layer it crosses, the top N, or the faces `only` picks. */
   | { op: 'cut'; from: At; to: At; layers?: number; only?: Faces }
+  /** A strip of sticky tape laid on top of the paper from one point to another, `width` wide (see tape.ts). */
+  | { op: 'tape'; from: At; to: At; width?: number }
   /** Several operations shown as one step. */
   | { op: 'together'; ops: Op[] };
 
@@ -202,6 +205,13 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
         ...opt(o, 'layers', count, path),
         ...opt(o, 'only', (v, p) => faces(v, p, 0), path),
       };
+    case 'tape':
+      return {
+        op: 'tape',
+        from: at(o.from, `${path}.from`),
+        to: at(o.to, `${path}.to`),
+        ...opt(o, 'width', positive, path),
+      };
     case 'together':
       if (depth >= LIMITS.nesting) throw new OpError(`${path}: nested too deeply`);
       return { op: 'together', ops: list(o.ops, `${path}.ops`, (v, p) => parseOp(v, p, depth + 1)) };
@@ -256,6 +266,12 @@ function between(n: number, path: string, lo: number, hi: number): number {
   if (n < lo || n > hi) throw new OpError(`${path}: expected ${lo} to ${hi}`);
   return n;
 }
+
+const positive: Check<number> = (x, path) => {
+  const n = num(x, path);
+  if (n <= 0) throw new OpError(`${path}: expected a number above 0`);
+  return n;
+};
 
 const bool: Check<boolean> = (x, path) => {
   if (typeof x !== 'boolean') throw new OpError(`${path}: expected true or false`);
@@ -373,6 +389,8 @@ export function opKind(op: Op): StepKind {
       return 'draw';
     case 'cut':
       return 'cut';
+    case 'tape':
+      return 'tape';
     case 'together': {
       // As its last fold or unfold, so a plain Unfold finds a fold followed by a turn; else as its last part.
       const parts = op.ops.map(opKind);
@@ -381,7 +399,7 @@ export function opKind(op: Op): StepKind {
   }
 }
 
-/** The tools beyond paper that steps need: scissors for a cut, a pen for drawing, parts of a `together` included. */
+/** The tools beyond paper that steps need: scissors for a cut, a pen for drawing, tape, parts of a `together` included. */
 export function toolsNeeded(steps: Step[]): Tool[] {
   const kinds = new Set<StepKind>();
   const add = (op: Op): void => void (op.op === 'together' ? op.ops.forEach(add) : kinds.add(opKind(op)));
@@ -389,7 +407,11 @@ export function toolsNeeded(steps: Step[]): Tool[] {
     if (s.op) add(s.op);
     else if (s.kind) kinds.add(s.kind);
   }
-  return [...(kinds.has('cut') ? (['scissors'] as const) : []), ...(kinds.has('draw') ? (['pen'] as const) : [])];
+  return [
+    ...(kinds.has('cut') ? (['scissors'] as const) : []),
+    ...(kinds.has('draw') ? (['pen'] as const) : []),
+    ...(kinds.has('tape') ? (['tape'] as const) : []),
+  ];
 }
 
 /** How many creases a collapse must fold at once to be a key point. Reverse folds, crimps and tucks fold fewer. */
@@ -519,15 +541,14 @@ interface Context {
 
 const radians = (degrees: number) => (degrees * Math.PI) / 180;
 
-/** Runs an operation, keeping the cuts made so far in the paper it makes (a fresh sheet has none). */
+/** Runs an operation, keeping the cuts made and tape laid so far in the paper it makes (a fresh sheet has none). */
 function run(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; flat?: FoldFrame; marks?: Mark[] } {
   const before = ctx.steps.length ? ctx.steps[ctx.steps.length - 1].frame : ctx.model.start;
   // The fold engine works on flat faces: bent paper (its mesh of triangles) can be drawn on, but not folded again yet.
   if (before.soft && op.op !== 'draw') throw new OpError('Paper that has bent can’t be folded any further.');
   const out = runOp(op, ctx);
-  const cuts = before.cuts;
-  if (!cuts?.length || op.op === 'newSheet') return out;
-  const keep = (f: FoldFrame): FoldFrame => (f.cuts ? f : { ...f, cuts });
+  if (op.op === 'newSheet') return out;
+  const keep = (f: FoldFrame): FoldFrame => keepIn(f, before);
   return { ...out, frame: keep(out.frame), ...(out.via && { via: out.via.map(keep) }), ...(out.flat && { flat: keep(out.flat) }) };
 }
 
@@ -627,6 +648,8 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
       return { frame: { ...frame, faces_parent: undefined }, marks: op.marks };
     case 'cut':
       return { frame: cut(frame, { from: where(op.from), to: where(op.to), layers: op.layers, only: test(op.only) }) };
+    case 'tape':
+      return { frame: tape(frame, where(op.from), where(op.to), op.width) };
     case 'together': {
       const added: Step[] = [];
       for (const part of op.ops) {

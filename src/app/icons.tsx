@@ -90,6 +90,14 @@ export const KeyboardIcon = icon(
 export const HeartIcon = icon(
   <path d="M12 20s-7.5-4.6-7.5-10.1A4.4 4.4 0 0 1 12 7.2a4.4 4.4 0 0 1 7.5 2.7C19.5 15.4 12 20 12 20z" />,
 );
+/** A roll of tape with a strip pulled off it. */
+export const TapeIcon = icon(
+  <>
+    <circle cx="9" cy="11" r="6" />
+    <circle cx="9" cy="11" r="2.2" />
+    <path d="M15 11h6v4h-6" />
+  </>,
+);
 /** Lines getting shorter beside a downward arrow: the order of a list. */
 export const SortIcon = icon(<path d="M7 4v16M3.5 16.5 7 20l3.5-3.5M13 6h8M13 12h6M13 18h3" />);
 /**

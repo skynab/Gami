@@ -3,6 +3,7 @@ import { facePositions, normal } from './frames';
 import { frontUp } from './geometry2d';
 import { MARK_COLOUR, MARK_WIDTH, marksUpTo, onFace, type Mark } from './marks';
 import { faceColour } from './sheets';
+import { TAPE_COLOUR, TAPE_OPACITY } from './tape';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from './types';
 
 /**
@@ -25,8 +26,8 @@ const flat = (f: FoldFrame) => f.vertices_coords.every((p) => Math.abs(p[1]) < 1
 const marksAt = (model: OrigamiModel, k: number): Mark[] => marksUpTo(model, k).map((m) => m.mark);
 
 /**
- * A flat frame seen from above: its faces bottom layer first, each with the marks drawn on its upper side,
- * and a square box round them.
+ * A flat frame seen from above: its faces bottom layer first, each with the marks drawn and tape stuck on its
+ * upper side, and a square box round them.
  */
 function fromAbove(model: OrigamiModel, frame: FoldFrame, marks: Mark[] = []): { box: number[]; body: string } {
   const faces = toFlat(frame).sort((a, b) => a.layer - b.layer);
@@ -61,7 +62,17 @@ function fromAbove(model: OrigamiModel, frame: FoldFrame, marks: Mark[] = []): {
           }),
         )
         .join('');
-      return `<polygon points="${points}" fill="${fill}"/>${drawn}`;
+      const taped = (frame.tapes ?? [])
+        .flatMap((t) => t.pieces)
+        .filter((m) => (m.side === 'front') === up)
+        .flatMap((m) =>
+          onFace(m, f.paper).map((part) => {
+            const pts = part.map((p) => place(p).map((n) => +n.toFixed(4)).join(',')).join(' ');
+            return `<polygon points="${pts}" fill="${TAPE_COLOUR}" fill-opacity="${TAPE_OPACITY}" stroke="none"/>`;
+          }),
+        )
+        .join('');
+      return `<polygon points="${points}" fill="${fill}"/>${drawn}${taped}`;
     })
     .join('');
   return { box, body: `<g stroke="#2b2a33" stroke-opacity=".45" stroke-width="${stroke}" stroke-linejoin="round">${polys}</g>` };

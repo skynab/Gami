@@ -1596,6 +1596,9 @@ export const ja: Record<string, string> = {
     "もう一つの角も",
   "And the left corner. Press the boomerang flat, and check it lies flat on the table.":
     "左の角も入れます。ブーメランを平らに押さえ、テーブルの上で平らになるか確かめます。",
+  "Tape the corner": "角をテープで留める",
+  "Stick a short piece of tape across the corner of the L, so the fold can’t spring open when you throw it.":
+    "Lの角にまたがるように短いテープを貼り、投げたときに折り目が開かないようにします。",
   "Fold the top corner down onto the bottom corner, making a triangle.":
     "上の角を下の角に合わせて折り、三角形にします。",
   "Fold the top point up":

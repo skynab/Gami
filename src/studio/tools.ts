@@ -136,6 +136,8 @@ export function stepFor(o: Op, t: TFunction): { title: string; kind: StepKind } 
     }
     case 'cut':
       return { title: t('studio.steps.cut'), kind: 'cut' };
+    case 'tape':
+      return { title: t('studio.steps.tape'), kind: 'tape' };
     case 'move':
       return { title: t('studio.steps.move'), kind: 'assemble' };
     case 'shape':

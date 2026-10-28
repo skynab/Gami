@@ -1596,6 +1596,9 @@ export const es: Record<string, string> = {
     "Y su otra esquina",
   "And the left corner. Press the boomerang flat, and check it lies flat on the table.":
     "Y la esquina izquierda. Aplana el bumerán y comprueba que quede plano sobre la mesa.",
+  "Tape the corner": "Pon cinta en la esquina",
+  "Stick a short piece of tape across the corner of the L, so the fold can’t spring open when you throw it.":
+    "Pega un trozo corto de cinta adhesiva sobre la esquina de la L, para que el pliegue no se abra al lanzarlo.",
   "Fold the top corner down onto the bottom corner, making a triangle.":
     "Lleva la esquina de arriba a la de abajo y forma un triángulo.",
   "Fold the top point up":

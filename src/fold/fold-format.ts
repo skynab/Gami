@@ -1,5 +1,5 @@
 import { OPS_VERSION, parseMarks, parseOp, type Op } from './ops';
-import { CATEGORIES, DIFFICULTIES, STEP_KINDS, type About, type FoldFrame, type Mark, type OrigamiModel, type Step, type StepKind } from './types';
+import { CATEGORIES, DIFFICULTIES, STEP_KINDS, type About, type FoldFrame, type Mark, type OrigamiModel, type Step, type StepKind, type Tape } from './types';
 
 /**
  * Reading and writing .fold files (https://github.com/edemaine/fold). The start of the model is the file's
@@ -26,6 +26,8 @@ interface FoldFileFrame {
   'gami:faces_layer'?: number[];
   /** Scissor cuts made so far, as segments on the sheet (see FoldFrame.cuts). */
   'gami:cuts'?: number[][][];
+  /** Tape laid so far, each strip as its pieces on the sheet (see FoldFrame.tapes). */
+  'gami:tapes'?: { pieces: Mark[] }[];
   /** Seams between triangles of bent paper cut from one face (see FoldFrame.soft). */
   'gami:soft'?: number[][];
   'gami:text'?: string;
@@ -155,6 +157,7 @@ function writeFrame(f: FoldFrame, round: (x: number) => number = roundCoord): Fo
     ...(f.faces_parent && { 'gami:faces_parent': f.faces_parent }),
     ...(f.faces_layer && { 'gami:faces_layer': f.faces_layer }),
     ...(f.cuts?.length && { 'gami:cuts': f.cuts.map((c) => c.map((p) => p.map(round))) }),
+    ...(f.tapes?.length && { 'gami:tapes': f.tapes.map((t) => ({ pieces: t.pieces.map(writeMark) })) }),
     ...(f.soft?.length && { 'gami:soft': f.soft }),
   };
 }
@@ -171,6 +174,7 @@ function readFrame(f: FoldFileFrame): FoldFrame {
     ...(f['gami:faces_parent'] && { faces_parent: f['gami:faces_parent'] }),
     ...(f['gami:faces_layer'] && { faces_layer: f['gami:faces_layer'] }),
     ...(cutsOf(f['gami:cuts']) && { cuts: cutsOf(f['gami:cuts']) }),
+    ...(tapesOf(f['gami:tapes']) && { tapes: tapesOf(f['gami:tapes']) }),
     ...(softOf(f['gami:soft'], f.vertices_coords.length) && { soft: softOf(f['gami:soft'], f.vertices_coords.length) }),
   };
 }
@@ -181,6 +185,21 @@ function softOf(x: unknown, vertices: number): FoldFrame['soft'] | undefined {
   const vertex = (v: unknown) => Number.isInteger(v) && (v as number) >= 0 && (v as number) < vertices;
   const soft = x.filter((e): e is [number, number] => Array.isArray(e) && e.length === 2 && e.every(vertex));
   return soft.length ? soft : undefined;
+}
+
+/** Tape read from a file: strips of filled pieces on the sheet. Anything else is left out. */
+function tapesOf(x: unknown): FoldFrame['tapes'] | undefined {
+  if (!Array.isArray(x)) return undefined;
+  const tapes = x.flatMap((t): Tape[] => {
+    if (!t || typeof t !== 'object' || !Array.isArray((t as { pieces?: unknown }).pieces)) return [];
+    try {
+      const pieces = parseMarks((t as { pieces: unknown }).pieces).filter((p) => p.fill);
+      return pieces.length ? [{ pieces }] : [];
+    } catch {
+      return [];
+    }
+  });
+  return tapes.length ? tapes : undefined;
 }
 
 /** Cuts read from a file: segments of two points each. Anything else is left out. */
