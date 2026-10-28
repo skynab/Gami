@@ -538,8 +538,6 @@ export const es: Record<string, string> = {
     "Dobla la otra ala igual.",
   "Spread the wings":
     "Abre las alas",
-  "Lift the wings out to the sides and gently pull them apart to puff out the body. Done!":
-    "Levanta las alas hacia los lados y sepáralas con suavidad para inflar el cuerpo. ¡Listo!",
   "Colour side up. Fold in half, then unfold.":
     "Cara de color hacia arriba. Dobla por la mitad y desdobla.",
   "And the other way. Then turn the paper over.":
@@ -1741,4 +1739,8 @@ export const es: Record<string, string> = {
     "Devuelve la solapa del medio a la derecha, dejando su pliegue marcado.",
   "Open the flap from the left and press its tip down onto the crease, so it flattens into a diamond: the face.":
     "Abre la solapa desde la izquierda y presiona su punta sobre el pliegue, para que se aplane en un rombo: la cara.",
+  "Lift the wings out to the sides, so the body stands up between them.":
+    "Levanta las alas hacia los lados, de modo que el cuerpo quede de pie entre ellas.",
+  "Turn it over, so the crane stands on its body with its wings spread. Gently pull the wings apart to puff out the body. Done!":
+    "Dale la vuelta, para que la grulla se apoye en su cuerpo con las alas extendidas. Separa las alas con suavidad para inflar el cuerpo. ¡Listo!",
 };

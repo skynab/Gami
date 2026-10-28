@@ -538,8 +538,6 @@ export const ja: Record<string, string> = {
     "もう一方の翼も同じように折り下げます。",
   "Spread the wings":
     "翼を広げる",
-  "Lift the wings out to the sides and gently pull them apart to puff out the body. Done!":
-    "翼を横へ持ち上げ、そっと引いて体をふくらませます。できあがり！",
   "Colour side up. Fold in half, then unfold.":
     "色の面を上にして、半分に折ってから開きます。",
   "And the other way. Then turn the paper over.":
@@ -1741,4 +1739,8 @@ export const ja: Record<string, string> = {
     "まん中のフラップを右に戻します。折り目は残しておきます。",
   "Open the flap from the left and press its tip down onto the crease, so it flattens into a diamond: the face.":
     "フラップを左から開き、先を折り目に押しつけて、ひし形につぶします。これが顔になります。",
+  "Lift the wings out to the sides, so the body stands up between them.":
+    "翼を横へ広げ、体が翼のあいだに立つようにします。",
+  "Turn it over, so the crane stands on its body with its wings spread. Gently pull the wings apart to puff out the body. Done!":
+    "裏返して、翼を広げた鶴を体で立たせます。翼をそっと引いて体をふくらませます。できあがり！",
 };

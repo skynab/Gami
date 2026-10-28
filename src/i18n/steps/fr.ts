@@ -538,8 +538,6 @@ export const fr: Record<string, string> = {
     "Abaissez l’autre aile pareil.",
   "Spread the wings":
     "Déployer les ailes",
-  "Lift the wings out to the sides and gently pull them apart to puff out the body. Done!":
-    "Écartez les ailes sur les côtés et tirez-les doucement pour gonfler le corps. C’est fini !",
   "Colour side up. Fold in half, then unfold.":
     "Face colorée vers le haut. Pliez en deux, puis dépliez.",
   "And the other way. Then turn the paper over.":
@@ -1741,4 +1739,8 @@ export const fr: Record<string, string> = {
     "Ramenez le rabat du milieu vers la droite, en gardant son pli.",
   "Open the flap from the left and press its tip down onto the crease, so it flattens into a diamond: the face.":
     "Ouvrez le rabat par la gauche et appuyez sa pointe sur le pli, pour qu’il s’aplatisse en losange : le visage.",
+  "Lift the wings out to the sides, so the body stands up between them.":
+    "Écartez les ailes sur les côtés, pour que le corps se dresse entre elles.",
+  "Turn it over, so the crane stands on its body with its wings spread. Gently pull the wings apart to puff out the body. Done!":
+    "Retournez-la, pour que la grue repose sur son corps, les ailes déployées. Écartez doucement les ailes pour gonfler le corps. C’est fini !",
 };
