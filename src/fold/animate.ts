@@ -490,7 +490,7 @@ function settled(out: Transition, hinges: NonNullable<Transition['hinges']>): Tr
   let need = 0;
   for (let i = 1; i < 32; i++) {
     const lowest = Math.min(0, ...rawPose(hinged, i / 32).flat().map((p) => p[1]));
-    if (lowest < -1e-4) need = Math.max(need, (-lowest + 0.02) / Math.sin((Math.PI * i) / 32));
+    if (lowest < -1e-4) need = Math.max(need, (-lowest + 0.02) / raised(i / 32));
   }
   hinges.lift = need;
   return hinged;
@@ -921,7 +921,7 @@ function hingedPose(t: Transition, s: number): Vec3[][] {
     placed[f] = placed[h.parent[f]].clone().multiply(turn);
   }
   const p = new Vector3();
-  const lifted = h.lift * Math.sin(Math.PI * s);
+  const lifted = h.lift * raised(s);
   return t.faces.map((f, i) => {
     if (h.parent[i] === -2) return f.before.map((q) => move(t.motions[f.motion], q, landed(t, i, s)));
     const settle = h.fix ? FIX(landed(t, i, s)) : 0;
@@ -950,6 +950,13 @@ export function stepBound(model: OrigamiModel, k: number): { center: Vec3; radiu
 const turn = new Quaternion();
 const v = new Vector3();
 
+/**
+ * How far up paper lifted off the table is, `s` of the way through a step, as a share of its lift: up quickly,
+ * held, and down again at the end, as you'd pick the model up. Rising slowly, a dip near the start or end of the
+ * step would need the model lifted far higher to clear the table there.
+ */
+const raised = (s: number) => Math.min(1, 3 * Math.sin(Math.PI * s));
+
 export function move(m: Motion, [x, y, z]: Vec3, s: number): Vec3 {
   v.set(x, y, z);
   if (m.angle) {
@@ -957,7 +964,7 @@ export function move(m: Motion, [x, y, z]: Vec3, s: number): Vec3 {
     v.sub(m.pivot).applyQuaternion(turn).add(m.pivot);
   }
   v.addScaledVector(m.shift, s);
-  v.y += m.lift * Math.sin(Math.PI * s);
+  v.y += m.lift * raised(s);
   if (m.ease) v.addScaledVector(m.ease, Math.sin(Math.PI * s));
   return [v.x, v.y, v.z];
 }
@@ -1077,7 +1084,7 @@ function liftFor(m: Motion, points: Vec3[]): number {
   let need = 0;
   for (let i = 1; i < 16; i++) {
     const lowest = Math.min(...points.map((p) => move(m, p, i / 16)[1]));
-    if (lowest < -1e-4) need = Math.max(need, -lowest / Math.sin((Math.PI * i) / 16));
+    if (lowest < -1e-4) need = Math.max(need, -lowest / raised(i / 16));
   }
   return need ? need + 0.02 : 0;
 }
