@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState, type PointerEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { PaperIcon, PenIcon, ScissorsIcon } from '../app/icons';
+import { OrigamiHeartIcon, PaperIcon, PenIcon, ScissorsIcon } from '../app/icons';
 import { modelUrl } from '../models';
+import { useFavorite, useFavorites } from '../state/favorites';
 import { readProgress } from '../state/progress';
 import type { Sheet } from '../fold/types';
 import { levelOf, type Difficulty, type ModelInfo, type Tool } from './catalog';
@@ -43,38 +44,62 @@ export function ModelCard({ model }: { model: ModelInfo }) {
   ].filter(Boolean);
 
   return (
-    <Link
-      to={`/learn/${model.id}`}
-      ref={card}
-      className={lesson ? 'card lesson' : 'card'}
-      onPointerEnter={(e) => hover(e, show)}
-      onPointerLeave={(e) => hover(e, hide)}
-      onFocus={show}
-      onBlur={hide}
-    >
-      <div className="card-thumb">
-        {model.steps ? (
-          // The finished model from above, generated with its steps (scripts/build-models.ts).
-          <img src={modelUrl(model.id, 'svg')} alt="" loading="lazy" />
-        ) : (
-          <PaperIcon className="placeholder" />
-        )}
-        {model.steps && preview !== 'off' && (
-          // A few of its steps in turn (scripts/build-models.ts), over the finished model.
-          <img src={modelUrl(model.id, 'preview.svg')} alt="" className={preview === 'on' ? 'card-preview playing' : 'card-preview'} />
-        )}
-        {badge && <span className={model.steps ? 'card-badge' : 'card-badge soon'}>{badge}</span>}
-        <Needs tools={model.needs} paper={model.paper} />
-      </div>
-      <div className="card-body">
-        <div className="card-title">
-          <span>{model.title}</span>
-          <Dots difficulty={model.difficulty} />
+    <>
+      <Link
+        to={`/learn/${model.id}`}
+        ref={card}
+        className={lesson ? 'card lesson' : 'card'}
+        onPointerEnter={(e) => hover(e, show)}
+        onPointerLeave={(e) => hover(e, hide)}
+        onFocus={show}
+        onBlur={hide}
+      >
+        <div className="card-thumb">
+          {model.steps ? (
+            // The finished model from above, generated with its steps (scripts/build-models.ts).
+            <img src={modelUrl(model.id, 'svg')} alt="" loading="lazy" />
+          ) : (
+            <PaperIcon className="placeholder" />
+          )}
+          {model.steps && preview !== 'off' && (
+            // A few of its steps in turn (scripts/build-models.ts), over the finished model.
+            <img src={modelUrl(model.id, 'preview.svg')} alt="" className={preview === 'on' ? 'card-preview playing' : 'card-preview'} />
+          )}
+          {badge && <span className={model.steps ? 'card-badge' : 'card-badge soon'}>{badge}</span>}
+          <Needs tools={model.needs} paper={model.paper} />
         </div>
-        <p className="muted small">{model.blurb}</p>
-        <p className="muted small">{details.join(' · ')}</p>
-      </div>
-    </Link>
+        <div className="card-body">
+          <div className="card-title">
+            <span>{model.title}</span>
+            <Dots difficulty={model.difficulty} />
+          </div>
+          <p className="muted small">{model.blurb}</p>
+          <p className="muted small">{details.join(' · ')}</p>
+        </div>
+      </Link>
+      <FavoriteButton id={model.id} name={model.title} />
+    </>
+  );
+}
+
+/**
+ * The heart in a card's bottom corner, marking a model as a favourite. Beside the card's link rather than in it,
+ * so pressing it doesn't open the model; the card's list item places it.
+ */
+export function FavoriteButton({ id, name }: { id: string; name: string }) {
+  const { t } = useTranslation();
+  const on = useFavorite(id);
+  return (
+    <button
+      type="button"
+      className="favorite"
+      aria-pressed={on}
+      aria-label={t('card.favorite', { name })}
+      title={on ? t('card.unfavoriteTitle') : t('card.favoriteTitle')}
+      onClick={() => useFavorites.getState().toggle(id)}
+    >
+      <OrigamiHeartIcon width={20} height={20} />
+    </button>
   );
 }
 

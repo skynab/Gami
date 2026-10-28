@@ -30,6 +30,8 @@ export const ja: Messages = {
     all: 'すべて',
     category: 'カテゴリー',
     hideFolded: '完成を隠す',
+    favorites: 'お気に入り',
+    noFavorites: 'お気に入りはまだありません。モデルのハートを押すと、ここに表示されます。',
     sortLabel: 'モデルの並べ替え',
     noMatch: '該当する作品がありません。検索語や絞り込みを変えてみてください。',
     studioTitle: '自分の作品を作る(クリエイター専用)',
@@ -40,6 +42,9 @@ export const ja: Messages = {
   levels: { easy: 'やさしい', medium: 'ふつう', hard: 'むずかしい' },
   categories: { lesson: 'レッスン', animal: '動物', object: 'もの', toy: 'おもちゃ', plane: '飛行機', modular: 'ユニット', flower: '花' },
   card: {
+    favorite: 'お気に入り：{{name}}',
+    favoriteTitle: 'お気に入りに追加',
+    unfavoriteTitle: 'お気に入りから外す',
     soon: '近日公開',
     lesson: 'レッスン',
     folded: '完成 ✓',

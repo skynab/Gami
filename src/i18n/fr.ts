@@ -30,6 +30,8 @@ export const fr: Messages = {
     all: 'Tous',
     category: 'Catégorie',
     hideFolded: 'Masquer les pliés',
+    favorites: 'Favoris',
+    noFavorites: 'Pas encore de favoris. Appuyez sur le cœur d’un modèle pour le garder ici.',
     sortLabel: 'Trier les modèles',
     noMatch: 'Aucun modèle ne correspond. Essayez une autre recherche ou un autre filtre.',
     studioTitle: 'Créez vos propres modèles (créateurs uniquement)',
@@ -40,6 +42,9 @@ export const fr: Messages = {
   levels: { easy: 'Facile', medium: 'Moyen', hard: 'Difficile' },
   categories: { lesson: 'Leçons', animal: 'Animaux', object: 'Objets', toy: 'Jouets', plane: 'Avions', modular: 'Modulaires', flower: 'Fleurs' },
   card: {
+    favorite: 'Favori : {{name}}',
+    favoriteTitle: 'Ajouter aux favoris',
+    unfavoriteTitle: 'Retirer des favoris',
     soon: 'Bientôt',
     lesson: 'Leçon',
     folded: 'Plié ✓',

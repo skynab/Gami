@@ -92,6 +92,16 @@ export const HeartIcon = icon(
 );
 /** Lines getting shorter beside a downward arrow: the order of a list. */
 export const SortIcon = icon(<path d="M7 4v16M3.5 16.5 7 20l3.5-3.5M13 6h8M13 12h6M13 18h3" />);
+/**
+ * The origami heart, as the gallery's Heart model folds it: two squared-off lobes, the middle crease, and a corner
+ * folded down on each lobe. Its paper and creases are classed so a favourite can fill it.
+ */
+export const OrigamiHeartIcon = icon(
+  <>
+    <path className="heart-paper" d="M12 21 2 11V6l3-3h4l3 3 3-3h4l3 3v5z" />
+    <path className="heart-crease" d="M12 6v15M2 6h5L4.5 3.5M22 6h-5l2.5-2.5" strokeWidth="1.2" />
+  </>,
+);
 export const PauseIcon = icon(<path d="M8 5.5v13M16 5.5v13" />);
 export const ReplayIcon = icon(
   <>

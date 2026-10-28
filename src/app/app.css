@@ -11,6 +11,8 @@
   --accent-fg: #ffffff;
   --accent-soft: #e8e7fc;
   --danger: #b42318;
+  --heart: #e5484d;
+  --heart-edge: #b8222b;
   --canvas-bg: #ececef;
   --radius: 12px;
   color-scheme: light dark;
@@ -29,6 +31,8 @@
     --accent-fg: #0f0f14;
     --accent-soft: #2a2950;
     --danger: #ff8a80;
+    --heart: #ec5d5e;
+    --heart-edge: #ffb3b3;
     --canvas-bg: #0e0f11;
   }
 }
@@ -44,6 +48,8 @@
   --accent-fg: #0f0f14;
   --accent-soft: #2a2950;
   --danger: #ff8a80;
+  --heart: #ec5d5e;
+  --heart-edge: #ffb3b3;
   --canvas-bg: #0e0f11;
   color-scheme: dark;
 }
@@ -1086,6 +1092,75 @@ kbd {
 .card-badge.soon {
   background: var(--surface);
   color: var(--muted);
+}
+
+/* The favourite heart, in the card's bottom corner over its details line (beside the card's link, not in it). */
+.grid > li {
+  position: relative;
+}
+
+.favorite {
+  position: absolute;
+  inset-block-end: 8px;
+  inset-inline-end: 8px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--fg);
+  transition: translate 0.15s, background 0.15s;
+}
+
+.favorite:hover {
+  background: var(--surface-hover);
+}
+
+/* Not a favourite: plain, see-through paper. A favourite: solid red paper. */
+.favorite svg,
+.favorites-chip svg {
+  opacity: 0.45;
+}
+
+.favorite:hover svg {
+  opacity: 0.8;
+}
+
+.favorite[aria-pressed='true'] svg,
+.favorites-chip[aria-pressed='true'] svg {
+  opacity: 1;
+}
+
+.favorite[aria-pressed='true'] .heart-paper,
+.favorites-chip[aria-pressed='true'] .heart-paper {
+  fill: var(--heart);
+  stroke: var(--heart-edge);
+}
+
+.favorite[aria-pressed='true'] .heart-crease,
+.favorites-chip[aria-pressed='true'] .heart-crease {
+  stroke: #fff;
+  stroke-opacity: 0.6;
+}
+
+@media (hover: hover) {
+  .grid > li:hover .favorite {
+    translate: 0 -2px;
+  }
+}
+
+.favorites-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-body > p:last-child {
+  padding-inline-end: 28px;
 }
 
 .card-body {

@@ -32,6 +32,8 @@ export const en = {
     all: 'All',
     category: 'Category',
     hideFolded: 'Hide folded',
+    favorites: 'Favourites',
+    noFavorites: 'No favourites yet. Press the heart on a model to keep it here.',
     sortLabel: 'Sort models',
     noMatch: 'No models match. Try another search or filter.',
     studioTitle: 'Build your own models (creators only)',
@@ -42,6 +44,9 @@ export const en = {
   levels: { easy: 'Easy', medium: 'Medium', hard: 'Hard' },
   categories: { lesson: 'Lessons', animal: 'Animals', object: 'Objects', toy: 'Toys', plane: 'Planes', modular: 'Modular', flower: 'Flowers' },
   card: {
+    favorite: 'Favourite: {{name}}',
+    favoriteTitle: 'Add to favourites',
+    unfavoriteTitle: 'Remove from favourites',
     soon: 'Coming soon',
     lesson: 'Lesson',
     folded: 'Folded ✓',
