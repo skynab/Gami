@@ -940,6 +940,45 @@ kbd {
   color: var(--accent);
 }
 
+/* The sort order: plain text at the end of the filters, not another row of buttons. */
+.sort {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-inline-start: auto;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.sort select {
+  min-height: 34px;
+  padding: 0 4px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.sort select:hover {
+  background: var(--surface-hover);
+}
+
+.sort select:focus-visible {
+  outline: 2px solid var(--accent);
+}
+
+.sort option {
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.sort[data-changed] {
+  color: var(--accent);
+  font-weight: 550;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));

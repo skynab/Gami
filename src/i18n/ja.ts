@@ -30,11 +30,13 @@ export const ja: Messages = {
     all: 'すべて',
     category: 'カテゴリー',
     hideFolded: '完成を隠す',
+    sortLabel: 'モデルの並べ替え',
     noMatch: '該当する作品がありません。検索語や絞り込みを変えてみてください。',
     studioTitle: '自分の作品を作る(クリエイター専用)',
     community: 'コミュニティの作品',
     communityIntro: 'Gamiのクリエイターがスタジオで作った作品です。',
   },
+  sorts: { natural: '標準の順', easiest: 'やさしい順', hardest: 'むずかしい順', az: '名前順（昇順）', za: '名前順（降順）', quickest: '短い時間順' },
   levels: { easy: 'やさしい', medium: 'ふつう', hard: 'むずかしい' },
   categories: { lesson: 'レッスン', animal: '動物', object: 'もの', toy: 'おもちゃ', plane: '飛行機', modular: 'ユニット', flower: '花' },
   card: {

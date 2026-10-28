@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { filterModels, levelOf, MODELS } from './catalog';
+import { filterModels, levelOf, MODELS, sortModels } from './catalog';
 
 describe('catalog', () => {
   it('has unique, URL-safe ids', () => {
@@ -24,6 +24,20 @@ describe('catalog', () => {
       'dog-face', 'cat-face', 'cicada', 'jumping-frog', 'fox', 'swan', 'penguin', 'whale', 'pajarita', 'fish',
     ]);
     expect(filterModels(MODELS, {})).toHaveLength(MODELS.length);
+  });
+
+  it('sorts, keeping the catalog order among equals', () => {
+    expect(sortModels(MODELS, 'natural')).toEqual(MODELS);
+    const easiest = sortModels(MODELS, 'easiest');
+    expect(easiest.map((m) => m.difficulty)).toEqual(MODELS.map((m) => m.difficulty).sort());
+    expect(easiest[0].id).toBe('basics');
+    expect(sortModels(MODELS, 'hardest')[0].id).toBe('lily');
+    const az = sortModels(MODELS, 'az').map((m) => m.title);
+    expect(az[0]).toBe('Balloon');
+    expect(sortModels(MODELS, 'za').map((m) => m.title)).toEqual([...az].reverse());
+    expect(sortModels(MODELS, 'quickest').slice(0, 2).map((m) => m.id)).toEqual(['dog-face', 'cat-face']);
+    // Sorting copies: the catalog keeps its order.
+    expect(MODELS[0].id).toBe('basics');
   });
 
   it('records where every model with steps comes from', () => {

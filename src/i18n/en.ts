@@ -32,11 +32,13 @@ export const en = {
     all: 'All',
     category: 'Category',
     hideFolded: 'Hide folded',
+    sortLabel: 'Sort models',
     noMatch: 'No models match. Try another search or filter.',
     studioTitle: 'Build your own models (creators only)',
     community: 'From the community',
     communityIntro: 'Made in the Studio by Gami creators.',
   },
+  sorts: { natural: 'Natural order', easiest: 'Easiest first', hardest: 'Hardest first', az: 'A to Z', za: 'Z to A', quickest: 'Quickest first' },
   levels: { easy: 'Easy', medium: 'Medium', hard: 'Hard' },
   categories: { lesson: 'Lessons', animal: 'Animals', object: 'Objects', toy: 'Toys', plane: 'Planes', modular: 'Modular', flower: 'Flowers' },
   card: {

@@ -30,11 +30,13 @@ export const es: Messages = {
     all: 'Todos',
     category: 'Categoría',
     hideFolded: 'Ocultar plegados',
+    sortLabel: 'Ordenar modelos',
     noMatch: 'Ningún modelo coincide. Prueba otra búsqueda u otro filtro.',
     studioTitle: 'Crea tus propios modelos (solo creadores)',
     community: 'De la comunidad',
     communityIntro: 'Hechos en el Estudio por creadores de Gami.',
   },
+  sorts: { natural: 'Orden natural', easiest: 'Más fáciles primero', hardest: 'Más difíciles primero', az: 'De la A a la Z', za: 'De la Z a la A', quickest: 'Más rápidos primero' },
   levels: { easy: 'Fácil', medium: 'Medio', hard: 'Difícil' },
   categories: { lesson: 'Lecciones', animal: 'Animales', object: 'Objetos', toy: 'Juguetes', plane: 'Aviones', modular: 'Modulares', flower: 'Flores' },
   card: {

@@ -110,6 +110,27 @@ export interface Filter {
   category?: Category | null;
 }
 
+/** How the gallery orders models. `natural` is the catalog's own order, easing in from the lessons. */
+export const SORTS = ['natural', 'easiest', 'hardest', 'az', 'za', 'quickest'] as const;
+export type Sort = (typeof SORTS)[number];
+
+/**
+ * Models in the order `sort` asks for, ties kept in the catalog's order. Titles compare in `locale`, as shown.
+ */
+export function sortModels<M extends ModelInfo>(models: M[], sort: Sort, locale?: string): M[] {
+  const byTitle = (a: M, b: M) => a.title.localeCompare(b.title, locale, { sensitivity: 'base' });
+  const compare: Record<Sort, ((a: M, b: M) => number) | null> = {
+    natural: null,
+    easiest: (a, b) => a.difficulty - b.difficulty,
+    hardest: (a, b) => b.difficulty - a.difficulty,
+    az: byTitle,
+    za: (a, b) => byTitle(b, a),
+    quickest: (a, b) => a.minutes - b.minutes,
+  };
+  const by = compare[sort];
+  return by ? [...models].sort(by) : models;
+}
+
 export function filterModels(models: ModelInfo[], { query = '', level, category }: Filter): ModelInfo[] {
   const q = query.trim().toLowerCase();
   return models.filter(
