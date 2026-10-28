@@ -595,10 +595,10 @@ export function transitionVia(frames: FoldFrame[]): Transition {
  */
 export function poseAt(t: Transition, s: number): Vec3[][] {
   const pose = fixedPose(t, s);
-  if (s <= 0 || s >= 1) return pose;
   // Resting on the table: lifted to clear it where something would dip below, but no higher. A lift big enough
   // for the deepest dip would otherwise hold the paper up in the air for the rest of the step. All of it moves
-  // together, so nothing is pushed up through the paper above it.
+  // together, so nothing is pushed up through the paper above it. At the ends of the step too: paper shaped
+  // upside down, a plane's wings opened before it's turned over, can reach a little below the table.
   let low = Infinity;
   for (const face of pose) for (const p of face) low = Math.min(low, p[1]);
   return Math.abs(low) > 1e-9 ? pose.map((face) => face.map(([x, y, z]): Vec3 => [x, y - low, z])) : pose;
