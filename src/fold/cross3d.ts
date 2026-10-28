@@ -22,10 +22,19 @@ export function overlapping([amin, amax]: Box, [bmin, bmax]: Box): boolean {
  * it pokes through (the shorter end of the edge, measured from the other polygon's plane), or 0.
  */
 export function crossDepth(a: Vec3[], b: Vec3[]): number {
-  return Math.max(edgesThrough(a, b), edgesThrough(b, a));
+  return Math.max(edgesThrough(a, b, false), edgesThrough(b, a, false));
 }
 
-function edgesThrough(edges: Vec3[], face: Vec3[]): number {
+/**
+ * How far two flat convex polygons would have to move to come clear: as `crossDepth`, but an edge that passes
+ * just inside the other's rim (sliding along a crease another layer turns about, say) pokes through only that
+ * far, however long its ends.
+ */
+export function clearanceDepth(a: Vec3[], b: Vec3[]): number {
+  return Math.max(edgesThrough(a, b, true), edgesThrough(b, a, true));
+}
+
+function edgesThrough(edges: Vec3[], face: Vec3[], rim: boolean): number {
   const n = normalOf(face);
   if (!n) return 0;
   let deepest = 0;
@@ -39,25 +48,28 @@ function edgesThrough(edges: Vec3[], face: Vec3[]): number {
     if (!((sp > EPS && sq < -EPS) || (sp < -EPS && sq > EPS))) continue;
     const t = sp / (sp - sq);
     const hit: Vec3 = [p[0] + t * (q[0] - p[0]), p[1] + t * (q[1] - p[1]), p[2] + t * (q[2] - p[2])];
-    if (strictlyInside(face, n, hit)) deepest = Math.max(deepest, Math.min(Math.abs(sp), Math.abs(sq)));
+    const within = inside(face, n, hit);
+    if (within) deepest = Math.max(deepest, Math.min(Math.abs(sp), Math.abs(sq), rim ? within : Infinity));
   }
   return deepest;
 }
 
-/** Inside the polygon, not on (or within a hair of) its edges. */
-function strictlyInside(face: Vec3[], n: Vec3, p: Vec3): boolean {
+/** How far inside the polygon a point in its plane is, from its nearest edge: 0 if it's outside, or within a hair of an edge. */
+function inside(face: Vec3[], n: Vec3, p: Vec3): number {
   let sign = 0;
+  let nearest = Infinity;
   for (let i = 0; i < face.length; i++) {
     const a = face[i];
     const b = face[(i + 1) % face.length];
     const e = sub(b, a);
     const len = Math.hypot(...e);
     const c = dot(cross(e, sub(p, a)), n) / (len || 1);
-    if (Math.abs(c) < 1e-4) return false;
-    if (sign && Math.sign(c) !== sign) return false;
+    if (Math.abs(c) < 1e-4) return 0;
+    if (sign && Math.sign(c) !== sign) return 0;
     sign = Math.sign(c);
+    nearest = Math.min(nearest, Math.abs(c));
   }
-  return true;
+  return nearest;
 }
 
 function normalOf(points: Vec3[]): Vec3 | null {

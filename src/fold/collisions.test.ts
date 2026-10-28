@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { stepTransition } from './animate';
 import { crossings } from './collisions';
-import { crossDepth } from './cross3d';
+import { clearanceDepth, crossDepth } from './cross3d';
 import { fromFoldFile, toFoldFile } from './fold-format';
 import { paper, Recipe } from './recipe';
 import { RECIPES } from '../models/recipes';
@@ -21,6 +21,15 @@ describe('paper passing through paper', () => {
     const upright: Vec3[] = [[0, -0.5, -0.5], [0, 0.5, -0.5], [0, 0.5, 0.5], [0, -0.5, 0.5]];
     expect(crossDepth(square(0), upright)).toBeCloseTo(0.5);
     expect(crossDepth(square(0), square(0.1))).toBe(0);
+    expect(clearanceDepth(square(0), upright)).toBeCloseTo(0.5);
+  });
+
+  it('counts an edge through a face just inside its rim as only grazing it', () => {
+    // Upright, its bottom edge just inside the square's right edge: a long way either side of the square's
+    // plane, but a hair's move would clear it.
+    const edge: Vec3[] = [[0.999, -0.5, -0.5], [0.999, 0.5, -0.5], [1.5, 0.5, -0.5], [1.5, -0.5, -0.5]];
+    expect(crossDepth(square(0), edge)).toBeCloseTo(0.5);
+    expect(clearanceDepth(square(0), edge)).toBeCloseTo(0.001);
   });
 
   it('keeps the simple models clean', () => {

@@ -1,5 +1,5 @@
 import { Matrix4, Quaternion, Vector3 } from 'three';
-import { box, cornerKeys, crossDepth, overlapping } from './cross3d';
+import { box, clearanceDepth, cornerKeys, crossDepth, overlapping } from './cross3d';
 import { facePositions, framesOf, LAYER_GAP, normal, sphereAround } from './frames';
 import { joinedSegment, overlapArea, type Cut } from './geometry2d';
 import { applyOp, lastFold, reopened } from './ops';
@@ -374,11 +374,14 @@ function moving(from: FoldFrame, to: FoldFrame, { yielding = false } = {}): Tran
     // turn: hinged, each layer of a stack turns about its own crease, and halfway they stand in one plane.
     const through = passesThrough(out, WAY_SAMPLES);
     // Unless hanging the faces from each other tears the paper where each turning its own way doesn't (a wing
-    // swinging right over as the body stands up, both about one line).
+    // swinging right over as the body stands up, both about one line); and the other way round, when neither
+    // passes through more paper.
     const groups = cornerGroups(faces);
     const torn = (way: Transition) => Math.max(...TEAR_SAMPLES.map((s) => apart(rawPose(way, s), groups)));
-    const tears = torn(hinged!) > TEAR && torn(out) < torn(hinged!) - TEAR;
-    if (!tears && (fewest < through || (!plain && fewest === through && deepestCut(hinged!) <= deepestCut(out)))) return landInOrder(hinged!);
+    const [tornHinged, tornOwn] = [torn(hinged!), torn(out)];
+    const tears = (a: number, b: number) => a > TEAR && b < a - TEAR;
+    const tie = fewest === through && (tears(tornOwn, tornHinged) || (!plain && deepestCut(hinged!) <= deepestCut(out)));
+    if (!tears(tornHinged, tornOwn) && (fewest < through || tie)) return landInOrder(hinged!);
   }
   return landInOrder(out);
 }
@@ -1184,26 +1187,58 @@ function joinFixes(t: Transition): JoinFix[][] | null {
   let out: JoinFix[][] | null = null;
   const groups = cornerGroups(t.faces);
   if (groups.length && TEAR_SAMPLES.some((s) => apart(rawPose(t, s), groups) > TEAR)) {
-    out = [];
+    const fixes: JoinFix[][] = [];
+    const whole: boolean[] = [];
+    const raws: Vec3[][][] = [];
+    const allowed: number[] = [];
     let warm: JoinFix[] | null = null;
     for (let i = 0; i <= JOIN_SAMPLES; i++) {
       const raw = rawPose(t, i / JOIN_SAMPLES);
+      raws.push(raw);
+      // Joined up only as far as it can be without passing paper through paper that the faces moving their own
+      // ways kept clear of (a flap stood up before it's squashed, say): torn a little rather than tangled.
+      allowed.push(Math.max(deepest(t, raw), GRAZE));
       if (i === 0 || i === JOIN_SAMPLES) {
-        out.push(raw.map(() => ({ q: new Quaternion(), shift: new Vector3() })));
+        fixes.push(raw.map(() => ({ q: new Quaternion(), shift: new Vector3() })));
+        whole.push(true);
         continue;
       }
       // Starting from the last sample's fix, as the paper moves on only a little.
       const w = warm;
       const start = w ? raw.map((face, f) => applyFix(w[f], face)) : raw;
       const fitted = joinUp(t.faces, start, groups, raw);
-      warm = fitted.map((face, f) => fixFor(t.faces[f].paper, raw[f], face));
-      // Joined up only as far as it can be without passing paper through paper that the faces moving their own
-      // ways kept clear of (a flap stood up before it's squashed, say): torn a little rather than tangled.
-      const allowed = Math.max(deepest(t, raw), GRAZE);
-      const fix = warm;
-      const part = [1, 0.75, 0.5, 0.25].find((k) => deepest(t, raw.map((face, f) => applyFix(partly(fix[f], k), face))) <= allowed) ?? 0;
-      out.push(fix.map((x) => partly(x, part)));
+      const fix = fitted.map((face, f) => fixFor(t.faces[f].paper, raw[f], face));
+      const part = [1, 0.75, 0.5, 0.25].find((k) => deepest(t, raw.map((face, f) => applyFix(partly(fix[f], k), face))) <= allowed[i]) ?? 0;
+      fixes.push(fix.map((x) => partly(x, part)));
+      whole.push(part === 1);
+      // A join that passes paper through paper has found the paper folded the wrong way round (a face flipped
+      // through its neighbour): the next sample starts again from the last one joined up right.
+      if (part === 1) warm = fix;
     }
+    // Where the paper couldn't be joined up whole: joined again starting from the joins either side blended,
+    // or failing that, just those blended, if that keeps it clear.
+    for (let i = 1; i < JOIN_SAMPLES; i++) {
+      if (whole[i]) continue;
+      const a = i - 1;
+      let b = i + 1;
+      while (!whole[b]) b++;
+      const w = (i - a) / (b - a);
+      const raw = raws[i];
+      const blend = fixes[a].map((x, f) => ({ q: x.q.clone().slerp(fixes[b][f].q, w), shift: x.shift.clone().lerp(fixes[b][f].shift, w) }));
+      const start = raw.map((face, f) => applyFix(blend[f], face));
+      const fitted = joinUp(t.faces, start.map((face) => face.map((p) => [...p] as Vec3)), groups, raw);
+      const again = fitted.map((face, f) => fixFor(t.faces[f].paper, raw[f], face));
+      const torn = apart(raw.map((face, f) => applyFix(fixes[i][f], face)), groups);
+      const fix = [again, blend].find((x) => {
+        const pose = raw.map((face, f) => applyFix(x[f], face));
+        return deepest(t, pose) <= allowed[i] && apart(pose, groups) < torn;
+      });
+      if (fix) {
+        fixes[i] = fix;
+        whole[i] = true;
+      }
+    }
+    out = fixes;
   }
   joined.set(t, out);
   return out;
@@ -1214,14 +1249,14 @@ function partly({ q, shift }: JoinFix, k: number): JoinFix {
   return { q: new Quaternion().slerp(q, k), shift: shift.clone().multiplyScalar(k) };
 }
 
-/** How deep paper goes through paper, at most, in a pose of a transition's faces. */
+/** How deep paper goes through paper, at most, in a pose of a transition's faces: how far it would take to clear it. */
 function deepest(t: Transition, pose: Vec3[][]): number {
   const boxes = pose.map(box);
   let most = 0;
   for (let a = 0; a < pose.length; a++) {
     for (let b = a + 1; b < pose.length; b++) {
       if (together(t, a, b) || !overlapping(boxes[a], boxes[b]) || touching(t.faces, a, b)) continue;
-      most = Math.max(most, crossDepth(pose[a], pose[b]));
+      most = Math.max(most, clearanceDepth(pose[a], pose[b]));
     }
   }
   return most;
