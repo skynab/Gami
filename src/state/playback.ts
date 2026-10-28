@@ -28,15 +28,20 @@ interface PlaybackState {
   /** Moves the paper to any point, as when dragging the scrubber. Stops playback. */
   scrub(pos: number): void;
   togglePlay(): void;
+  /** Stops a fold part way, wherever the paper is: one step's fold, or playing on through the steps. */
+  pause(): void;
   setSpeed(speed: number): void;
 }
 
 let frame = 0;
 let hold = 0;
+/** A fold is moving the paper right now. */
+let folding = false;
 
 function stop() {
   cancelAnimationFrame(frame);
   clearTimeout(hold);
+  folding = false;
 }
 
 const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -65,12 +70,17 @@ export const usePlayback = create<PlaybackState>()((set, get) => {
     const tick = (now: number) => {
       const t = Math.min(1, ((now - start) * get().speed) / length);
       set({ pos: from + (to - from) * ease(t) });
-      if (t < 1) frame = requestAnimationFrame(tick);
-      else if (get().playing && to === k) {
+      if (t < 1) {
+        frame = requestAnimationFrame(tick);
+        return;
+      }
+      folding = false;
+      if (get().playing && to === k) {
         if (k < get().total) hold = window.setTimeout(() => animate(k + 1), HOLD_MS / get().speed);
         else set({ playing: false });
       }
     };
+    folding = true;
     frame = requestAnimationFrame(tick);
   }
 
@@ -125,6 +135,11 @@ export const usePlayback = create<PlaybackState>()((set, get) => {
       if (pos >= total) animate(1);
       else if (pos < step) animate(step);
       else animate(step + 1);
+    },
+    pause() {
+      if (!folding && !get().playing) return;
+      stop();
+      set({ playing: false });
     },
     setSpeed(speed) {
       set({ speed });

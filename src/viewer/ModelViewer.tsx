@@ -178,8 +178,8 @@ export function ModelViewer({ progressKey, title, load, notice }: {
       <main className="stage" aria-label={t('viewer.stage', { name })}>
         {data && (
           <Suspense fallback={null}>
-            {/* A click on the model while it plays pauses it, as on a video. */}
-            <Stage model={data} onTap={() => usePlayback.getState().playing && togglePlay()} />
+            {/* A click on the model while a fold moves pauses it there, as on a video. */}
+            <Stage model={data} onTap={() => usePlayback.getState().pause()} />
           </Suspense>
         )}
         {locked && <div className="badge">{t('viewer.locked')}</div>}
