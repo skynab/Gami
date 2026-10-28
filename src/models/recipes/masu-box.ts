@@ -11,7 +11,7 @@ export function masuBox() {
   return masu({
     id: 'masu-box',
     title: 'Masu box',
-    front: '#2f6f8f',
+    colour: '#2f6f8f',
     gap: 0,
     corners: [
       'Fold the bottom left corner to the middle, where the creases cross.',
@@ -33,7 +33,7 @@ export function masuLid() {
   return masu({
     id: 'masu-lid',
     title: 'Masu box lid',
-    front: '#b8573e',
+    colour: '#b8573e',
     // A small gap between each corner and the middle: on a 15 cm sheet, about 3 mm.
     gap: 0.02,
     corners: [
@@ -53,7 +53,7 @@ export function masuLid() {
  * wide, so they cross on it.
  */
 export function masuShallowLid() {
-  const r = new Recipe({ id: 'masu-shallow-lid', title: 'Shallow masu lid', card: 'finished', sheet: { size: [1, 1], front: '#6a8f3b', back: '#f6f3ec' } })
+  const r = new Recipe({ id: 'masu-shallow-lid', title: 'Shallow masu lid', card: 'finished', sheet: { size: [1, 1], front: '#f6f3ec', back: '#6a8f3b' } })
     .crease(paper(-0.5, 0), paper(0.5, 0), { title: 'Fold in half', text: 'White side up, fold in half side to side, and unfold.' })
     .crease(paper(0, -0.5), paper(0, 0.5), { title: 'Fold in half the other way', text: 'And top to bottom, and unfold.' });
   const corner: Record<string, (c: Vec2) => boolean> = {};
@@ -102,8 +102,9 @@ export function masuShallowLid() {
 }
 
 /** The box with its corners folded `gap` short of the middle (0 for the box itself). */
-function masu({ id, title, front, gap, corners: cornerTexts, done }: { id: string; title: string; front: string; gap: number; corners: [string, string, string, string]; done: string }) {
-  const r = new Recipe({ id, title, card: 'finished', sheet: { size: [1, 1], front, back: '#f6f3ec' } })
+function masu({ id, title, colour, gap, corners: cornerTexts, done }: { id: string; title: string; colour: string; gap: number; corners: [string, string, string, string]; done: string }) {
+  // Folded white side up, so the box is coloured outside and white inside.
+  const r = new Recipe({ id, title, card: 'finished', sheet: { size: [1, 1], front: '#f6f3ec', back: colour } })
     .crease(paper(-0.5, 0), paper(0.5, 0), { title: 'Fold in half', text: 'White side up, fold in half side to side, and unfold.' })
     .crease(paper(0, -0.5), paper(0, 0.5), { title: 'Fold in half the other way', text: 'And top to bottom, and unfold.' });
   // Each corner folded in; the paper each fold moved, to open some of them again.
