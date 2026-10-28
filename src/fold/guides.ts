@@ -50,7 +50,7 @@ export function guidesFor(from: FoldFrame, to: FoldFrame, via: FoldFrame[] = [])
     for (let j = i + 1; j < t.faces.length; j++) {
       const fi = t.faces[i];
       const fj = t.faces[j];
-      if (fi.motion === fj.motion) continue;
+      if (fi.motion === fj.motion || sameMove(t.motions[fi.motion], t.motions[fj.motion], fi.before)) continue;
       const shared = sharedSegment(fi.paper, fj.paper);
       if (!shared) continue;
       // The moving side is whichever isn't standing still (either, if both move).
@@ -75,10 +75,12 @@ export function guidesFor(from: FoldFrame, to: FoldFrame, via: FoldFrame[] = [])
         });
       });
       const b = best as { from: Vec3; to: Vec3; d: number } | null;
-      return b && b.d > MIN_ARROW ? { from: b.from, via: move(m, b.from, 0.5), to: b.to, d: b.d } : null;
+      return b && b.d > MIN_ARROW ? { from: b.from, via: move(m, b.from, 0.5), to: b.to, d: b.d, m } : null;
     })
     .filter((a) => a !== null)
     .sort((a, b) => b.d - a.d)
+    // One arrow for parts moving as one (a stack's layers easing round each other).
+    .filter((a, i, all) => !all.slice(0, i).some((b) => sameMove(a.m, b.m, [a.from])))
     .slice(0, MAX_ARROWS)
     .map(({ from, via, to }) => ({ from, via, to }));
 
@@ -115,6 +117,24 @@ function bendGuides(from: FoldFrame, to: FoldFrame, via: FoldFrame[]): Guides {
   const { d, ...arrow } = best;
   return { creases: [], arrows: d > MIN_ARROW ? [arrow] : [], cuts: [] };
 }
+
+/**
+ * Whether two motions take a face to the same places, all but: layers of one stack easing round each other as
+ * they turn, say, which aren't creased between them.
+ */
+function sameMove(a: Motion, b: Motion, face: Vec3[]): boolean {
+  const n = face.length;
+  const c: Vec3 = [0, 1, 2].map((d) => face.reduce((sum, p) => sum + p[d], 0) / n) as Vec3;
+  const dist = (p: Vec3, q: Vec3) => Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]);
+  return [0.5, 1].every((s) => {
+    const [p, q] = [move(a, c, s), move(b, c, s)];
+    // Close, for a fold of that size: a small fold's creases are close together too.
+    return dist(p, q) < Math.min(SAME_MOVE, 0.25 * Math.max(dist(p, c), dist(q, c)));
+  });
+}
+
+/** How close (in sheet widths) two motions keep a face, at most, for there to be no crease between them. */
+const SAME_MOVE = 0.02;
 
 /** Whether a point lies on a polygon's outline. */
 function onBoundary(poly: Vec2[], p: Vec2): boolean {
