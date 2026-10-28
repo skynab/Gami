@@ -474,8 +474,6 @@ export const es: Record<string, string> = {
     "Dobla la siguiente solapa por la misma línea. (También puedes dejarla de pie.)",
   "Squash the head":
     "Aplasta la cabeza",
-  "Open the flap and press its tip down onto the crease, so it flattens into a diamond: the face.":
-    "Abre la solapa y presiona su punta sobre el pliegue, para aplanarla en un rombo: la cara.",
   "Fold the tail in":
     "Mete la cola",
   "Push the left corner in between the layers, so the bottom edges line up and the fox can stand.":
@@ -1737,4 +1735,10 @@ export const es: Record<string, string> = {
     "Mete la punta de atrás por dentro",
   "Fold the back point up on its crease, tucking it inside the helmet, behind the brim. Open the bottom to wear it.":
     "Dobla la punta de atrás hacia arriba por su pliegue y métela dentro del casco, detrás del ala. Abre la parte de abajo para ponértelo.",
+  "Open the flap back out":
+    "Vuelve a abrir la solapa",
+  "Fold the middle flap back to the right, leaving its crease.":
+    "Devuelve la solapa del medio a la derecha, dejando su pliegue marcado.",
+  "Open the flap from the left and press its tip down onto the crease, so it flattens into a diamond: the face.":
+    "Abre la solapa desde la izquierda y presiona su punta sobre el pliegue, para que se aplane en un rombo: la cara.",
 };

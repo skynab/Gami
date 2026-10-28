@@ -86,7 +86,7 @@ describe('paper passing through paper', () => {
     // first, then each part goes to its place.
     const fox = byId('fox');
     expect(deep(fox)).toEqual([]);
-    expect(stepTransition(fox, 12).path).toBeDefined();
+    expect(stepTransition(fox, 13).path).toBeDefined();
     const lily = byId('lily');
     const squashes = lily.steps.flatMap((s, i) => (s.kind === 'petal' ? [i + 1] : []));
     expect(squashes).toHaveLength(4);

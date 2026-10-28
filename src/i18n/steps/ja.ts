@@ -474,8 +474,6 @@ export const ja: Record<string, string> = {
     "次のフラップを同じ線で折り重ねます（まっすぐ立てるだけでもかまいません）。",
   "Squash the head":
     "頭をつぶし折りする",
-  "Open the flap and press its tip down onto the crease, so it flattens into a diamond: the face.":
-    "フラップを開き、先を折り目に押しつけてひし形につぶします。これが顔です。",
   "Fold the tail in":
     "しっぽを折り込む",
   "Push the left corner in between the layers, so the bottom edges line up and the fox can stand.":
@@ -1737,4 +1735,10 @@ export const ja: Record<string, string> = {
     "後ろの角を中に差しこむ",
   "Fold the back point up on its crease, tucking it inside the helmet, behind the brim. Open the bottom to wear it.":
     "後ろの角を折り目で折り上げ、つばの裏側、兜の内側に差しこみます。下を開けばかぶれます。",
+  "Open the flap back out":
+    "フラップを元に戻す",
+  "Fold the middle flap back to the right, leaving its crease.":
+    "まん中のフラップを右に戻します。折り目は残しておきます。",
+  "Open the flap from the left and press its tip down onto the crease, so it flattens into a diamond: the face.":
+    "フラップを左から開き、先を折り目に押しつけて、ひし形につぶします。これが顔になります。",
 };

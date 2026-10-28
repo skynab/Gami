@@ -474,8 +474,6 @@ export const fr: Record<string, string> = {
     "Rabattez le rabat suivant le long de la même ligne. (Vous pouvez aussi simplement le laisser debout.)",
   "Squash the head":
     "Écraser la tête",
-  "Open the flap and press its tip down onto the crease, so it flattens into a diamond: the face.":
-    "Ouvrez le rabat et appuyez sa pointe sur le pli, pour l’aplatir en losange : le museau.",
   "Fold the tail in":
     "Rentrer la queue",
   "Push the left corner in between the layers, so the bottom edges line up and the fox can stand.":
@@ -1737,4 +1735,10 @@ export const fr: Record<string, string> = {
     "Rentrer la pointe arrière à l’intérieur",
   "Fold the back point up on its crease, tucking it inside the helmet, behind the brim. Open the bottom to wear it.":
     "Remontez la pointe arrière sur son pli en la rentrant dans le casque, derrière la visière. Ouvrez le bas pour le porter.",
+  "Open the flap back out":
+    "Rouvrir le rabat",
+  "Fold the middle flap back to the right, leaving its crease.":
+    "Ramenez le rabat du milieu vers la droite, en gardant son pli.",
+  "Open the flap from the left and press its tip down onto the crease, so it flattens into a diamond: the face.":
+    "Ouvrez le rabat par la gauche et appuyez sa pointe sur le pli, pour qu’il s’aplatisse en losange : le visage.",
 };
