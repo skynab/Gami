@@ -7,7 +7,7 @@ import { squashEnd } from './windmill';
  * out sideways and the other up (or down), so the four arms point round the same way.
  */
 export function pinwheel() {
-  const r = new Recipe({ id: 'pinwheel', title: 'Pinwheel', sheet: { size: [1, 1], front: '#e5484d', back: '#f6f3ec' } })
+  const r = new Recipe({ id: 'pinwheel', title: 'Pinwheel', sheet: { size: [1, 1], front: '#f6f3ec', back: '#e5484d' } })
     .crease(paper(-0.5, 0), paper(0.5, 0), { title: 'Fold in half', text: 'Fold in half side to side, then unfold.' })
     .crease(paper(0, -0.5), paper(0, 0.5), { title: 'Fold in half the other way', text: 'And top to bottom, then unfold.' })
     .onto(paper(-0.5, 0), paper(0, 0), { title: 'Fold the left side in', text: 'Fold the left edge to the middle crease.' })
