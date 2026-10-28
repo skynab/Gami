@@ -132,12 +132,14 @@ function workOut(from: FoldFrame, to: FoldFrame, makeWay: boolean, stages: numbe
   if (y < fewest) [best, fewest] = [yielding, y];
   if (fewest && stages) {
     // Judged by how deep paper goes through, closely: staged moves are quicker, and slip through in a moment.
+    // Not if staging pulls joined paper apart: paper lifted out of the way and put back, its neighbours left.
     let deepest = depthThrough(best);
+    const torn = tornBy(best);
     for (const staged of stagedWays(from, to, t, stages - 1)) {
       const way = staged();
       if (!way) continue;
       const d = depthThrough(way, deepest);
-      if (d < deepest) [best, deepest] = [way, d];
+      if (d < deepest && tornBy(way) <= Math.max(torn, TEAR / 2)) [best, deepest] = [way, d];
       if (!deepest) break;
     }
   }
@@ -1352,7 +1354,15 @@ function apart(pose: Vec3[][], groups: [number, number][][]): number {
  * close to joined.
  */
 function joinUp(faces: FaceTrack[], pose: Vec3[][], groups: [number, number][][], raw: Vec3[][]): Vec3[][] {
-  const still = faces.map((f) => f.before.every((p, c) => Math.hypot(p[0] - f.after[c][0], p[1] - f.after[c][1], p[2] - f.after[c][2]) < SAME));
+  const at = (p: Vec3, q: Vec3) => Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]) < SAME;
+  // Paper where it starts and ends; and of that, paper in place now too (a stage can lift paper out of the way
+  // and put it back). Paper lifted like that is held where it is, unless it's joined to paper in place: then it
+  // comes back to that.
+  const ends = faces.map((f) => f.before.every((p, c) => at(p, f.after[c])));
+  const now = faces.map((f, i) => ends[i] && f.before.every((p, c) => at(p, raw[i][c])));
+  const besideNow = faces.map(() => false);
+  for (const g of groups) if (g.some(([f]) => now[f])) for (const [f] of g) besideNow[f] = true;
+  const still = faces.map((_, i) => now[i] || (ends[i] && !besideNow[i]));
   let x = pose.map((face, i) => (still[i] ? raw[i] : face));
   for (let k = 0; k < JOIN_ROUNDS; k++) {
     drawTogether(x, groups, still);
