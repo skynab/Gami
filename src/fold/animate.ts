@@ -2,7 +2,7 @@ import { Matrix4, Quaternion, Vector3 } from 'three';
 import { box, cornerKeys, crossDepth, overlapping } from './cross3d';
 import { facePositions, framesOf, LAYER_GAP, normal, sphereAround } from './frames';
 import { joinedSegment, overlapArea, type Cut } from './geometry2d';
-import { applyOp } from './ops';
+import { applyOp, lastFold, reopened } from './ops';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from './types';
 
 /**
@@ -79,6 +79,8 @@ export interface Transition {
    * bend passes through are close together, so they barely disagree.
    */
   blend?: { moves: Motion[]; vertices: number[][] };
+  /** A step played from its end back to its start (see `unfoldingBackwards`), and each face's face in it. */
+  backwards?: { t: Transition; ancestors: number[] };
   /** Faces of separate paper that stay on the table while the rest lifts off it (see Motion.lift). */
   grounded?: boolean[];
   /**
@@ -501,7 +503,42 @@ export function stepTransition(model: OrigamiModel, k: number): Transition {
   const frames = framesOf(model);
   const over = tuckedOver(model, k);
   if (over) return transitionVia([frames[k - 1], over, { ...frames[k], faces_parent: sameFaces(over, frames[k]) }]);
-  return transitionVia([frames[k - 1], ...(model.steps[k - 1].via ?? []), frames[k]]);
+  const t = transitionVia([frames[k - 1], ...(model.steps[k - 1].via ?? []), frames[k]]);
+  return t.path ? unfoldingBackwards(model, k, t) : t;
+}
+
+/**
+ * Opening several folds at once (unfolding back to an earlier step) undoes them one at a time, each stretch
+ * undoing one step still folded. Each plays that step's own animation backwards, as paper unfolds the way it
+ * was folded: a collapse or petal fold opens as neatly as it closed, rather than each piece making its own way.
+ */
+function unfoldingBackwards(model: OrigamiModel, k: number, t: Transition): Transition {
+  const step = model.steps[k - 1];
+  if (step.op?.op !== 'unfold' || !t.path) return t;
+  const before = model.steps.slice(0, k - 1);
+  const to = step.op.to ?? lastFold(before);
+  if (to === null) return t;
+  // The frames the step passes through, by the step each one is placed like, latest first.
+  const skip = reopened(before);
+  const passes = [k - 1];
+  for (let j = k - 2; j > to; j--) if (!skip.has(j)) passes.push(j);
+  passes.push(to);
+  if (passes.length !== t.path.parts.length + 1) return t;
+  const frames = framesOf(model);
+  const parts = t.path.parts.map((part, j) => {
+    // Step a, played from its end back to its start: the steps between it and b were opened again already, so
+    // the paper lies before step a as it does at b. Each face here is a piece of one of step a's faces.
+    const a = passes[j];
+    if (a < 1) return part;
+    const forward = stepTransition(model, a);
+    const ancestors = part.faces.map((_, f) => {
+      let i = f;
+      for (let kk = k - 1; kk > a; kk--) i = frames[kk].faces_parent?.[i] ?? i;
+      return i;
+    });
+    return ancestors.every((i) => i < forward.faces.length) ? { ...part, backwards: { t: forward, ancestors } } : part;
+  });
+  return { ...t, path: { ...t.path, parts } };
 }
 
 /**
@@ -586,6 +623,11 @@ function fixedPose(t: Transition, s: number): Vec3[][] {
 function rawPose(t: Transition, s: number): Vec3[][] {
   if (s <= 0) return t.faces.map((f) => f.before);
   if (s >= 1) return t.faces.map((f) => f.after);
+  if (t.backwards) {
+    const { t: forward, ancestors } = t.backwards;
+    const pose = poseAt(forward, 1 - s);
+    return t.faces.map((f, i) => f.paper.map(affine(forward.faces[ancestors[i]].paper, pose[ancestors[i]])));
+  }
   if (t.makeWay) return wayMadePose(t, s);
   if (t.path) {
     const { parts, ancestors } = t.path;
