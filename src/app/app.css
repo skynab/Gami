@@ -1094,6 +1094,110 @@ kbd {
   color: var(--muted);
 }
 
+/* Two related models on one card, their pictures split by a slight slash. The slash crosses the top at 56% and
+   the bottom at 44% (SLASH in ModelCard.tsx). Each half is the whole picture area clipped to its side; its
+   picture, badge and needs sit in that side. */
+.pair-half {
+  position: absolute;
+  inset: 0;
+}
+
+.pair-half.first {
+  clip-path: polygon(0 0, 56% 0, 44% 100%, 0 100%);
+}
+
+.pair-half.second {
+  clip-path: polygon(56% 0, 100% 0, 100% 100%, 44% 100%);
+}
+
+.pair-picture {
+  position: absolute;
+  inset-block: 0;
+  display: grid;
+  place-items: center;
+  width: 50%;
+}
+
+.pair-half.first .pair-picture {
+  inset-inline-start: 0;
+}
+
+.pair-half.second .pair-picture {
+  inset-inline-end: 0;
+}
+
+.card-thumb .pair-picture img {
+  width: 78%;
+}
+
+/* Half as wide, so a long badge ("Continue · step 12") wraps rather than crossing the slash. */
+.pair-half .card-badge {
+  max-width: calc(100% - 24px);
+  border-radius: 10px;
+}
+
+.pair-half.second .card-badge {
+  inset-inline: auto 10px;
+}
+
+/* A half's needs go to its bottom corner, clear of the other half's badge. */
+.pair-half .card-needs {
+  inset-block: auto 10px;
+}
+
+.pair-half.first .card-needs {
+  inset-inline: 10px auto;
+}
+
+@media (hover: hover) {
+  .pair-half:hover {
+    background: color-mix(in srgb, var(--accent) 6%, transparent);
+  }
+}
+
+.pair-slash {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.pair-slash line {
+  stroke: var(--surface);
+  stroke-width: 4px;
+  vector-effect: non-scaling-stroke;
+}
+
+.pair-card .card-body {
+  gap: 10px;
+}
+
+.pair-row {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pair-row .card-title {
+  color: inherit;
+  text-decoration: none;
+}
+
+.pair-row .card-title:hover span {
+  text-decoration: underline;
+}
+
+.pair-row .favorite {
+  inset-block-end: -6px;
+  inset-inline-end: -6px;
+}
+
+.pair-row > p {
+  padding-inline-end: 28px;
+}
+
 /* The favourite heart, in the card's bottom corner over its details line (beside the card's link, not in it). */
 .grid > li {
   position: relative;

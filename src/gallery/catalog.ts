@@ -96,6 +96,36 @@ export const MODELS: ModelInfo[] = [
   { id: 'folding-geometry', title: 'Geometry by folding', blurb: 'The rules of mathematical folding, and an angle split in three.', difficulty: 1, category: 'lesson', steps: 33, minutes: 15, sheets: 1 },
 ];
 
+/**
+ * Models so closely related they share one card in the gallery, split by a slash: a box and its lid, a model
+ * and the same model taken one step further, two faces folded the same way. Left first.
+ */
+export const PAIRS: [string, string][] = [
+  ['masu-box', 'masu-lid'],
+  ['dog-face', 'cat-face'],
+  ['waterbomb', 'balloon'],
+];
+
+/**
+ * The models as the gallery lays them out: each pair whose models are both here as one entry, where the first of
+ * them comes; the rest one by one.
+ */
+export function withPairs<M extends { id: string }>(models: M[]): (M | [M, M])[] {
+  const byId = new Map(models.map((m) => [m.id, m]));
+  const pairOf = new Map(PAIRS.flatMap((p) => p.map((id) => [id, p] as const)));
+  const placed = new Set<string>();
+  const out: (M | [M, M])[] = [];
+  for (const m of models) {
+    if (placed.has(m.id)) continue;
+    const [a, b] = (pairOf.get(m.id) ?? []).map((id) => byId.get(id));
+    if (a && b) {
+      out.push([a, b]);
+      placed.add(a.id).add(b.id);
+    } else out.push(m);
+  }
+  return out;
+}
+
 export function levelOf(difficulty: Difficulty): Level {
   return difficulty <= 2 ? 'easy' : difficulty === 3 ? 'medium' : 'hard';
 }

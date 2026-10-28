@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type PointerEvent } from 'react';
+import type { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { OrigamiHeartIcon, PaperIcon, PenIcon, ScissorsIcon } from '../app/icons';
@@ -10,63 +11,14 @@ import { levelOf, type Difficulty, type ModelInfo, type Tool } from './catalog';
 
 export function ModelCard({ model }: { model: ModelInfo }) {
   const { t } = useTranslation();
-  const progress = model.steps ? readProgress(model.id) : null;
   const lesson = model.category === 'lesson';
-  // The looping preview loads the first time the card is hovered or focused, and plays while it is. Touch screens
-  // can't hover (a finger scrolling past would start it), so there it plays while the card is mid-screen instead.
-  const [preview, setPreview] = useState<'off' | 'on' | 'loaded'>('off');
-  const show = () => setPreview('on');
-  const hide = () => setPreview((p) => (p === 'off' ? 'off' : 'loaded'));
-  const hover = (e: PointerEvent, then: () => void) => e.pointerType !== 'touch' && then();
-  const card = useRef<HTMLAnchorElement>(null);
-  useEffect(() => {
-    if (!model.steps || !card.current || !matchMedia('(hover: none)').matches) return;
-    // A thin line across the middle of the screen, so one card at a time crosses it.
-    const seen = new IntersectionObserver(([entry]) => (entry.isIntersecting ? show() : hide()), {
-      rootMargin: '-49.5% 0px -49.5% 0px',
-    });
-    seen.observe(card.current);
-    return () => seen.disconnect();
-  }, [model.steps]);
-  const badge = !model.steps
-    ? t('card.soon')
-    : progress?.done
-      ? t('card.folded')
-      : progress && progress.step > 1
-        ? t('card.continue', { step: progress.step })
-        : lesson
-          ? t('card.lesson')
-          : null;
-  const details = [
-    model.steps && t('card.steps', { count: model.steps }),
-    t('card.minutes', { count: model.minutes }),
-    model.sheets > 1 && t('card.sheets', { count: model.sheets }),
-  ].filter(Boolean);
+  const { preview, ref, play } = usePreview(model);
 
   return (
     <>
-      <Link
-        to={`/learn/${model.id}`}
-        ref={card}
-        className={lesson ? 'card lesson' : 'card'}
-        onPointerEnter={(e) => hover(e, show)}
-        onPointerLeave={(e) => hover(e, hide)}
-        onFocus={show}
-        onBlur={hide}
-      >
+      <Link to={`/learn/${model.id}`} ref={ref} className={lesson ? 'card lesson' : 'card'} {...play}>
         <div className="card-thumb">
-          {model.steps ? (
-            // The finished model from above, generated with its steps (scripts/build-models.ts).
-            <img src={modelUrl(model.id, 'svg')} alt="" loading="lazy" />
-          ) : (
-            <PaperIcon className="placeholder" />
-          )}
-          {model.steps && preview !== 'off' && (
-            // A few of its steps in turn (scripts/build-models.ts), over the finished model.
-            <img src={modelUrl(model.id, 'preview.svg')} alt="" className={preview === 'on' ? 'card-preview playing' : 'card-preview'} />
-          )}
-          {badge && <span className={model.steps ? 'card-badge' : 'card-badge soon'}>{badge}</span>}
-          <Needs tools={model.needs} paper={model.paper} />
+          <Thumb model={model} preview={preview} />
         </div>
         <div className="card-body">
           <div className="card-title">
@@ -74,12 +26,134 @@ export function ModelCard({ model }: { model: ModelInfo }) {
             <Dots difficulty={model.difficulty} />
           </div>
           <p className="muted small">{model.blurb}</p>
-          <p className="muted small">{details.join(' · ')}</p>
+          <p className="muted small">{details(model, t)}</p>
         </div>
       </Link>
       <FavoriteButton id={model.id} name={model.title} />
     </>
   );
+}
+
+/**
+ * Two closely related models on one card (a box and its lid, say), its picture split by a slash: each half, and
+ * each line below, opens its own model, and has its own heart.
+ */
+export function PairCard({ models }: { models: [ModelInfo, ModelInfo] }) {
+  const { t } = useTranslation();
+  const halves = [usePreview(models[0]), usePreview(models[1])];
+  return (
+    <div className="card pair-card">
+      <div className="card-thumb">
+        {models.map((model, i) => (
+          // The lines below are the links to read out and tab to; the pictures are a bigger place to click.
+          <Link
+            key={model.id}
+            to={`/learn/${model.id}`}
+            ref={halves[i].ref}
+            className={i === 0 ? 'pair-half first' : 'pair-half second'}
+            tabIndex={-1}
+            aria-hidden="true"
+            {...halves[i].play}
+          >
+            <span className="pair-picture">
+              <Thumb model={model} preview={halves[i].preview} />
+            </span>
+          </Link>
+        ))}
+        <svg className="pair-slash" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <line x1={SLASH[0]} y1={0} x2={SLASH[1]} y2={100} />
+        </svg>
+      </div>
+      <div className="card-body">
+        {models.map((model, i) => (
+          <div key={model.id} className="pair-row">
+            <Link to={`/learn/${model.id}`} className="card-title" {...halves[i].play}>
+              <span>{model.title}</span>
+              <Dots difficulty={model.difficulty} />
+            </Link>
+            <p className="muted small">{details(model, t)}</p>
+            <FavoriteButton id={model.id} name={model.title} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Where the slash between a pair's pictures crosses the top and the bottom of the card, in percent across. */
+const SLASH = [56, 44];
+
+type Preview = 'off' | 'on' | 'loaded';
+
+/**
+ * A model's looping preview: it loads the first time the card is hovered or focused, and plays while it is. Touch
+ * screens can't hover (a finger scrolling past would start it), so there it plays while `ref` is mid-screen
+ * instead. `play` goes on whatever should start it.
+ */
+function usePreview(model: ModelInfo) {
+  const [preview, setPreview] = useState<Preview>('off');
+  const show = () => setPreview('on');
+  const hide = () => setPreview((p) => (p === 'off' ? 'off' : 'loaded'));
+  const hover = (e: PointerEvent, then: () => void) => e.pointerType !== 'touch' && then();
+  const ref = useRef<HTMLAnchorElement>(null);
+  useEffect(() => {
+    if (!model.steps || !ref.current || !matchMedia('(hover: none)').matches) return;
+    // A thin line across the middle of the screen, so one card at a time crosses it.
+    const seen = new IntersectionObserver(([entry]) => (entry.isIntersecting ? show() : hide()), {
+      rootMargin: '-49.5% 0px -49.5% 0px',
+    });
+    seen.observe(ref.current);
+    return () => seen.disconnect();
+  }, [model.steps]);
+  const play = {
+    onPointerEnter: (e: PointerEvent) => hover(e, show),
+    onPointerLeave: (e: PointerEvent) => hover(e, hide),
+    onFocus: show,
+    onBlur: hide,
+  };
+  return { preview, ref, play };
+}
+
+/** A model's picture on its card, with its badge and what it needs. */
+function Thumb({ model, preview }: { model: ModelInfo; preview: Preview }) {
+  const { t } = useTranslation();
+  const progress = model.steps ? readProgress(model.id) : null;
+  const badge = !model.steps
+    ? t('card.soon')
+    : progress?.done
+      ? t('card.folded')
+      : progress && progress.step > 1
+        ? t('card.continue', { step: progress.step })
+        : model.category === 'lesson'
+          ? t('card.lesson')
+          : null;
+  return (
+    <>
+      {model.steps ? (
+        // The finished model from above, generated with its steps (scripts/build-models.ts).
+        <img src={modelUrl(model.id, 'svg')} alt="" loading="lazy" />
+      ) : (
+        <PaperIcon className="placeholder" />
+      )}
+      {model.steps && preview !== 'off' && (
+        // A few of its steps in turn (scripts/build-models.ts), over the finished model.
+        <img src={modelUrl(model.id, 'preview.svg')} alt="" className={preview === 'on' ? 'card-preview playing' : 'card-preview'} />
+      )}
+      {badge && <span className={model.steps ? 'card-badge' : 'card-badge soon'}>{badge}</span>}
+      <Needs tools={model.needs} paper={model.paper} />
+    </>
+  );
+}
+
+/** A model's steps, time and sheets, for its card. */
+function details(model: ModelInfo, t: TFunction): string {
+  return [
+    model.steps && t('card.steps', { count: model.steps }),
+    t('card.minutes', { count: model.minutes }),
+    model.sheets > 1 && t('card.sheets', { count: model.sheets }),
+  ]
+    .filter(Boolean)
+    .join(' · ');
 }
 
 /**

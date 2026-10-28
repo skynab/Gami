@@ -5,8 +5,8 @@ import { OrigamiHeartIcon, SearchIcon, SortIcon, StudioIcon } from '../app/icons
 import { TopBar } from '../app/TopBar';
 import { AccountButton } from '../auth/AccountButton';
 import { accountsEnabled } from '../auth/store';
-import { CATEGORIES, filterModels, LEVELS, MODELS, SORTS, sortModels, type Category, type Level, type Sort } from '../gallery/catalog';
-import { ModelCard } from '../gallery/ModelCard';
+import { CATEGORIES, filterModels, LEVELS, MODELS, SORTS, sortModels, withPairs, type Category, type Level, type Sort } from '../gallery/catalog';
+import { ModelCard, PairCard } from '../gallery/ModelCard';
 import { useFavorites } from '../state/favorites';
 import { readHideFolded, readProgress, saveHideFolded } from '../state/progress';
 
@@ -142,11 +142,17 @@ export function Gallery() {
 
         {models.length > 0 ? (
           <ul className="grid">
-            {models.map((m) => (
-              <li key={m.id}>
-                <ModelCard model={m} />
-              </li>
-            ))}
+            {withPairs(models).map((m) =>
+              Array.isArray(m) ? (
+                <li key={m[0].id}>
+                  <PairCard models={m} />
+                </li>
+              ) : (
+                <li key={m.id}>
+                  <ModelCard model={m} />
+                </li>
+              ),
+            )}
           </ul>
         ) : (
           <div className="empty">
