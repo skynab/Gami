@@ -58,7 +58,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
   const locked = useViewer((s) => s.locked);
   const guides = useViewer((s) => s.guides);
   const instructions = useViewer((s) => s.instructions);
-  const { setView, toggleLock, toggleGuides, toggleInstructions, resetCamera } = useViewer.getState();
+  const { setView, toggleLock, toggleGuides, toggleInstructions, resetCamera, toggleFollow } = useViewer.getState();
   const step = usePlayback((s) => s.step);
   const total = usePlayback((s) => s.total);
   const speed = usePlayback((s) => s.speed);
@@ -127,6 +127,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
       else if (e.key === 'h' || e.key === 'H') half();
       else if (e.key >= '1' && e.key <= '4') setView(VIEWS[Number(e.key) - 1].id);
       else if (e.key === '0') resetCamera();
+      else if (e.key === 'f' || e.key === 'F') toggleFollow();
       else if (e.key === 'l' || e.key === 'L') toggleLock();
       else if (e.key === 'g' || e.key === 'G') toggleGuides();
       else if (e.key === 'i' || e.key === 'I') toggleInstructions();
@@ -183,6 +184,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
           </Suspense>
         )}
         {locked && <div className="badge">{t('viewer.locked')}</div>}
+        <FollowNotice />
         {notice && <div className="viewer-notice">{notice}</div>}
         {/* Hidden, the step card leaves a button in its corner to bring it back. */}
         {!instructions && (current || (total > 0 && step === 0)) && (
@@ -327,9 +329,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
           >
             <LockIcon />
           </button>
-          <button type="button" className="icon" aria-label={t('viewer.reset')} title={t('viewer.resetTitle')} onClick={resetCamera}>
-            <ResetIcon />
-          </button>
+          <ResetButton />
         </div>
       </footer>
     </div>
@@ -436,6 +436,80 @@ function FirstButton() {
   );
 }
 
+/** How long to hold the reset button before it turns following each step on or off. */
+const HOLD_TO_FOLLOW_MS = 700;
+
+/**
+ * Resets the view on a click. Held down (filling up as it is), it turns following each step on or off instead:
+ * the camera framing every new step, as it once always did. Lit while following.
+ */
+function ResetButton() {
+  const { t } = useTranslation();
+  const follow = useViewer((s) => s.follow);
+  const [holding, setHolding] = useState(false);
+  const timer = useRef(0);
+  // Set when a hold toggled following, so the click that ends it doesn't also reset.
+  const held = useRef(false);
+  const release = () => {
+    clearTimeout(timer.current);
+    setHolding(false);
+  };
+  useEffect(() => () => clearTimeout(timer.current), []);
+  return (
+    <button
+      type="button"
+      className={['icon hold to-start', holding && 'holding', follow && 'following'].filter(Boolean).join(' ')}
+      style={{ '--hold-ms': `${HOLD_TO_FOLLOW_MS}ms` } as CSSProperties}
+      aria-label={t('viewer.reset')}
+      title={follow ? t('viewer.resetFollowingTitle') : t('viewer.resetTitle')}
+      onPointerDown={(e) => {
+        held.current = false;
+        if (e.button !== 0) return;
+        clearTimeout(timer.current);
+        setHolding(true);
+        timer.current = window.setTimeout(() => {
+          held.current = true;
+          setHolding(false);
+          useViewer.getState().toggleFollow();
+        }, HOLD_TO_FOLLOW_MS);
+      }}
+      onPointerUp={release}
+      onPointerLeave={release}
+      onPointerCancel={release}
+      onContextMenu={(e) => e.preventDefault()}
+      onClick={() => {
+        if (held.current) held.current = false;
+        else useViewer.getState().resetCamera();
+      }}
+    >
+      <ResetIcon />
+    </button>
+  );
+}
+
+/** A moment's word when following each step is turned on or off, so a hold that worked says so. */
+function FollowNotice() {
+  const { t } = useTranslation();
+  const follow = useViewer((s) => s.follow);
+  const [shown, setShown] = useState(false);
+  const first = useRef(true);
+  useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    setShown(true);
+    const hide = setTimeout(() => setShown(false), 2000);
+    return () => clearTimeout(hide);
+  }, [follow]);
+  if (!shown) return null;
+  return (
+    <div className="badge follow-notice" role="status">
+      {follow ? t('viewer.followOn') : t('viewer.followOff')}
+    </div>
+  );
+}
+
 /** Keys (or a key in `shortcuts`, for named keys) and what they do (a key in `shortcuts`). */
 const SHORTCUTS: [string, string][] = [
   ['← →', 'prevNext'],
@@ -449,6 +523,7 @@ const SHORTCUTS: [string, string][] = [
   ['1 – 4', 'views'],
   ['L', 'lock'],
   ['0', 'reset'],
+  ['F', 'follow'],
 ];
 
 function ShortcutsDialog({ onClose }: { onClose(): void }) {

@@ -741,7 +741,8 @@ kbd {
   -webkit-touch-callout: none;
 }
 
-/* The first-step button fills up from the bottom while it's held, and goes back to the start once full. */
+/* The first-step button fills up from the bottom while it's held, and goes back to the start once full. The reset
+   button does the same, turning following each step on or off. */
 .icon.to-start {
   position: relative;
   overflow: hidden;
@@ -765,6 +766,27 @@ kbd {
 .icon.to-start.holding::before {
   transform: scaleY(1);
   transition: transform var(--hold-ms) linear;
+}
+
+/* Following each step: the reset button is lit, with a dot. */
+.icon.following {
+  color: var(--accent);
+}
+
+.icon.following::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 6px;
+  inset-inline-end: 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* Below the locked badge, should both show. */
+.badge.follow-notice {
+  inset-block-start: 48px;
 }
 
 .step-card-actions {

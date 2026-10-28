@@ -11,8 +11,9 @@ const ROTATING = ACTION.ROTATE | ACTION.TOUCH_ROTATE | ACTION.TOUCH_DOLLY_ROTATE
 const PADDING = 1.25;
 
 /**
- * Orbit, zoom and pan, plus the view presets, lock and reset from the viewer store. Whenever `fit` changes
- * (a new step), the camera glides to frame it, keeping the angle you're looking from.
+ * Orbit, zoom and pan, plus the view presets, lock and reset from the viewer store. The camera stays where it is
+ * from step to step, so a close look at one part carries on into the next fold; following, whenever `fit` changes
+ * (a new step), it glides to frame it instead, keeping the angle you're looking from.
  * Mouse: left drag rotates, right drag pans, wheel zooms. Touch: one finger rotates, two pinch and pan.
  * When locked, left drag and one finger pan instead, so the view can't be turned by accident.
  */
@@ -20,6 +21,7 @@ export function CameraRig({ fit }: { fit: Sphere }) {
   const ref = useRef<CameraControlsImpl>(null);
   const command = useViewer((s) => s.command);
   const locked = useViewer((s) => s.locked);
+  const follow = useViewer((s) => s.follow);
   const first = useRef(true);
   const invalidate = useThree((s) => s.invalidate);
   // Read inside the command effect without making it re-run when the step changes.
@@ -52,14 +54,14 @@ export function CameraRig({ fit }: { fit: Sphere }) {
     invalidate();
   }, [command, invalidate]);
 
-  // A new step: frame it from wherever the camera is looking.
+  // Following, a new step: frame it from wherever the camera is looking. Starting to follow frames the step shown.
   useEffect(() => {
     const c = ref.current;
-    if (!c || first.current || framed.current === fit) return;
+    if (!c || !follow || first.current || framed.current === fit) return;
     void frame(c, fit, animated());
     framed.current = fit;
     invalidate();
-  }, [fit, invalidate]);
+  }, [fit, follow, invalidate]);
 
   useEffect(() => {
     const c = ref.current;
