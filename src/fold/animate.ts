@@ -409,20 +409,32 @@ function endsUnder(faces: FaceTrack[], group: number[], put: boolean[]): boolean
   return under > over;
 }
 
-/** A transition landing bottom layer first instead, if that passes through less paper as it settles. */
+/**
+ * A transition landing bottom layer first instead, if that passes through less paper as it settles, without
+ * tearing it: layers joined along a crease (a neck's two halves, at its spine) can't land one after the other.
+ */
 function landInOrder(t: Transition): Transition {
   // Only for paper settling flat: a step ending in 3D (petals opened out, say) has nothing to land.
   if (t.faces.some((f) => Math.abs(normal(f.after)[1]) < 0.999)) return t;
   // Judged by how deep paper goes through, as landing in order trades crossings in time for others.
   let best = t;
   let now = depthThrough(t);
+  let torn: number | null = null;
   for (const spread of LANDS) {
     if (!now) break;
     const ordered = inLandingOrder(t, spread);
     const d = depthThrough(ordered, now);
-    if (d < now) [best, now] = [ordered, d];
+    if (d >= now) continue;
+    torn ??= tornBy(t);
+    if (tornBy(ordered) <= Math.max(torn, TEAR / 2)) [best, now] = [ordered, d];
   }
   return best;
+}
+
+/** How far apart the same point of paper comes, at most, as a transition plays (before it's pulled together). */
+function tornBy(t: Transition): number {
+  const groups = cornerGroups(t.faces);
+  return groups.length ? Math.max(...TEAR_SAMPLES.map((s) => apart(rawPose(t, s), groups))) : 0;
 }
 
 /** The deepest any two faces moving apart cut through each other, at a few points: faces joined at a corner too. */
@@ -1210,7 +1222,8 @@ function joinFixes(t: Transition): JoinFix[][] | null {
       }
       // Starting from the last sample's fix, as the paper moves on only a little.
       const w = warm;
-      const start = w ? raw.map((face, f) => applyFix(w[f], face)) : raw;
+      // (A copy either way: joining up moves the corners it's given.)
+      const start = w ? raw.map((face, f) => applyFix(w[f], face)) : raw.map((face) => face.map((p) => [...p] as Vec3));
       const fitted = joinUp(t.faces, start, groups, raw);
       const fix = fitted.map((face, f) => fixFor(t.faces[f].paper, raw[f], face));
       const part = [1, 0.75, 0.5, 0.25].find((k) => deepest(t, raw.map((face, f) => applyFix(partly(fix[f], k), face))) <= allowed[i]) ?? 0;
