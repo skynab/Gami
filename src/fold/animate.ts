@@ -349,10 +349,13 @@ function moving(from: FoldFrame, to: FoldFrame, { yielding = false } = {}): Tran
   if (found) {
     // Folds of several creases rarely move in step: try the creases folding together, and nearest-first or
     // outermost-first when faces hang from turning paper, and keep whichever passes through least paper.
+    // Faces that hang from nothing take their own motion, evenly through the step, so creases folding in turn
+    // would leave them behind, coming apart from the paper they're joined to.
     const deep = found.order.some((f) => found.parent[f] >= 0 && found.parent[found.parent[f]] >= 0);
+    const loose = found.parent.some((p) => p === -2);
     let hinged: Transition | null = null;
     let fewest = Infinity;
-    for (const stagger of deep ? [0, 0.3, 0.5, -0.3] : [0]) {
+    for (const stagger of deep && !loose ? [0, 0.3, 0.5, -0.3] : [0]) {
       const tried = hingedWith(out, { ...found, stagger });
       const count = passesThrough(tried, WAY_SAMPLES);
       if (count < fewest) [hinged, fewest] = [tried, count];
@@ -363,7 +366,12 @@ function moving(from: FoldFrame, to: FoldFrame, { yielding = false } = {}): Tran
     // compound fold by how deep any faces cut through each other, joined or not. A plain fold stays as one
     // turn: hinged, each layer of a stack turns about its own crease, and halfway they stand in one plane.
     const through = passesThrough(out, WAY_SAMPLES);
-    if (fewest < through || (!plain && fewest === through && deepestCut(hinged!) <= deepestCut(out))) return landInOrder(hinged!);
+    // Unless hanging the faces from each other tears the paper where each turning its own way doesn't (a wing
+    // swinging right over as the body stands up, both about one line).
+    const groups = cornerGroups(faces);
+    const torn = (way: Transition) => Math.max(...TEAR_SAMPLES.map((s) => apart(rawPose(way, s), groups)));
+    const tears = torn(hinged!) > TEAR && torn(out) < torn(hinged!) - TEAR;
+    if (!tears && (fewest < through || (!plain && fewest === through && deepestCut(hinged!) <= deepestCut(out)))) return landInOrder(hinged!);
   }
   return landInOrder(out);
 }
@@ -461,7 +469,7 @@ function hingedWith(out: Transition, hinges: NonNullable<Transition['hinges']>):
   const at = [...hinges.at];
   for (const i of over) at[i] = [at[i][0], (height(out.faces[i].before) + height(out.faces[i].after)) / 2, at[i][2]];
   const turned = settled(out, { ...hinges, at });
-  return passesThrough(turned) <= passesThrough(plain) ? turned : plain;
+  return passesThrough(turned) <= passesThrough(plain) && depthThrough(turned) <= depthThrough(plain) ? turned : plain;
 }
 
 /** Hinged motion about the given hinges: how far its paper rises, and how its layers settle into place. */
@@ -1082,6 +1090,8 @@ function stagger(amount: number, depth: number, deepest: number, s: number): num
 
 /** How far apart (in sheet widths) the same point of paper may come mid-step before it's pulled back together. */
 const TEAR = 0.05;
+/** Where through a step to look for paper coming apart. */
+const TEAR_SAMPLES = [0.1, 0.25, 0.4, 0.5, 0.6, 0.75, 0.9];
 /** Gaps left between the same point of paper, for layers of a stack easing round each other. */
 const JOIN_SLACK = 0.002;
 /** Points through a step at which the pull is worked out, in between which it's blended. */
@@ -1102,7 +1112,7 @@ function joinFixes(t: Transition): JoinFix[][] | null {
   if (joined.has(t)) return joined.get(t)!;
   let out: JoinFix[][] | null = null;
   const groups = cornerGroups(t.faces);
-  if (groups.length && [0.25, 0.5, 0.75].some((s) => apart(rawPose(t, s), groups) > TEAR)) {
+  if (groups.length && TEAR_SAMPLES.some((s) => apart(rawPose(t, s), groups) > TEAR)) {
     out = [];
     let warm: JoinFix[] | null = null;
     for (let i = 0; i <= JOIN_SAMPLES; i++) {
