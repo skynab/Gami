@@ -89,7 +89,8 @@ export type Op =
    * `inflate`: air blown in, the volume the paper encloses by the end (a balloon puffed up).
    */
   | { op: 'bend'; flex: Faces; anchor: { paper: Vec2 }; goals: BendGoal[]; mesh?: number; inflate?: number }
-  | { op: 'popUp'; centre: At; rays: { azimuth: number; elevation: number }[] }
+  /** `via`: the rays of shapes it passes through on the way, from flat, so it rises as one rather than each piece its own way. */
+  | { op: 'popUp'; centre: At; rays: { azimuth: number; elevation: number }[]; via?: { azimuth: number; elevation: number }[][] }
   /** Draws on the paper, leaving it where it is: a face, say. */
   | { op: 'draw'; marks: Mark[] }
   /** A scissor cut along a segment, through every layer it crosses, the top N, or the faces `only` picks. */
@@ -186,15 +187,19 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
         ...opt(o, 'mesh', (v, p) => between(num(v, p), p, 0.02, 10), path),
         ...opt(o, 'inflate', (v, p) => between(num(v, p), p, 0, 10), path),
       };
-    case 'popUp':
+    case 'popUp': {
+      const rays = (v: unknown, p: string) =>
+        list(v, p, (r, q) => {
+          const ray = record(r, q);
+          return { azimuth: num(ray.azimuth, `${q}.azimuth`), elevation: num(ray.elevation, `${q}.elevation`) };
+        });
       return {
         op: 'popUp',
         centre: at(o.centre, `${path}.centre`),
-        rays: list(o.rays, `${path}.rays`, (r, p) => {
-          const ray = record(r, p);
-          return { azimuth: num(ray.azimuth, `${p}.azimuth`), elevation: num(ray.elevation, `${p}.elevation`) };
-        }),
+        rays: rays(o.rays, `${path}.rays`),
+        ...opt(o, 'via', (v, p) => list(v, p, rays), path),
       };
+    }
     case 'draw':
       return { op: 'draw', marks: parseMarks(o.marks, `${path}.marks`) };
     case 'cut':
@@ -642,8 +647,15 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
       });
       return { frame: first < ctx.steps.length ? reparent(frame, shaped) : shaped, flat: shaped };
     }
-    case 'popUp':
-      return { frame: radial(frame, where(op.centre), op.rays) };
+    case 'popUp': {
+      const centre = where(op.centre);
+      const shapes = [...(op.via ?? []), op.rays].map((rays) => radial(frame, centre, rays));
+      if (shapes.length === 1) return { frame: shapes[0] };
+      // Every shape has the same pieces: after the first, each comes from the same piece of the shape before.
+      const [first, ...rest] = shapes;
+      const after = rest.map(({ faces_parent: _, ...f }) => f);
+      return { frame: after[after.length - 1], via: [first, ...after.slice(0, -1)] };
+    }
     case 'bend': {
       const test = select(op.flex, { frame, sheets: ctx.model.sheets });
       const flex = frame.faces_vertices.flatMap((face, f) => (test(face.map((v) => frame.vertices_paper[v])) ? [f] : []));

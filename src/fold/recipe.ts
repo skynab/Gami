@@ -385,10 +385,19 @@ export class Recipe {
     return this;
   }
 
-  /** Pops the model up about a point, creases from it rising along `rays` (see `radial`). Nothing can be folded after. */
-  popUp(step: { title: string; text?: string }, centre: At, rays: Ray[]): this {
+  /**
+   * Pops the model up about a point, creases from it rising along `rays` (see `radial`), passing through the
+   * shapes `via` gives on the way. Nothing can be folded after.
+   */
+  popUp(step: { title: string; text?: string }, centre: At, rays: Ray[], via?: Ray[][]): this {
     try {
-      return this.push({ ...step, kind: 'pose' }, radial(this.current, this.where(centre), rays), { op: 'popUp', centre, rays });
+      if (!via?.length) return this.push({ ...step, kind: 'pose' }, radial(this.current, this.where(centre), rays), { op: 'popUp', centre, rays });
+      // Made as replaying makes it, so the model and its file agree exactly.
+      const op: Op = { op: 'popUp', centre, rays, via };
+      const made = applyOp(this.build(), op);
+      this.push({ ...step, kind: 'pose' }, made.frame, op);
+      this.steps.at(-1)!.via = made.via;
+      return this;
     } catch (e) {
       if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
       throw e;

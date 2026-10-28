@@ -31,7 +31,13 @@ export function fortuneTeller() {
     .crease(table(-0.25, 0), table(0.25, 0), { title: 'Fold in half', text: 'Crease firmly through all the layers.' })
     .crease(table(0, -0.25), table(0, 0.25), { title: 'Fold in half the other way', text: 'Crease this way too.' })
     .turnOver('Turn it over, so the four square pockets are on top.')
-    .popUp({ title: 'Pop it open', text: 'Push the pockets up and together with your fingers and thumbs, and it’s ready to play.' }, centre, popped(Math.PI / 3))
+    .popUp(
+      { title: 'Pop it open', text: 'Push the pockets up and together with your fingers and thumbs, and it’s ready to play.' },
+      centre,
+      popped(Math.PI / 3),
+      // Rising steadily from flat, so the paper opens as one rather than each piece swinging its own way.
+      [1, 2, 3, 4, 5].map((k) => popped((Math.PI / 3) * (k / 6))),
+    )
     .build();
 }
 
