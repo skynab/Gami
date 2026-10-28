@@ -746,8 +746,6 @@ export const ja: Record<string, string> = {
     "三分の二",
   "And a line from the corner through where the end of the lower crease landed: two thirds, 40°. The angle is trisected, which was proved impossible with straightedge and compass alone.":
     "そして角から、下の折り目の端が重なった点を通る線を。三分の二、40°です。角が三等分されました。定規とコンパスだけでは不可能だと証明されていることです。",
-  "Open it and look at the angle: three equal parts. Origami can do everything a straightedge and compass can, and more: axiom 6 also doubles a cube and folds a regular heptagon (7 sides). Axiom 7 folds a point onto one line, square to another.":
-    "開いて角を見てみましょう。三つの等しい部分です。折り紙は定規とコンパスでできることがすべてでき、さらにそれ以上ができます。公理6では立方体の倍積や正七角形（7辺）も折れます。公理7は、点をある線に重ね、別の線に垂直に折るものです。",
   "A fresh square":
     "新しい正方形",
   "Put the creased square aside and take a new one, so the next creases stand out.":
@@ -768,18 +766,6 @@ export const ja: Record<string, string> = {
     "左の辺を右の辺に合わせて折ります。",
   "Open it: a crease down the middle.":
     "開くと、真ん中に縦の折り目ができます。",
-  "Axiom 1":
-    "公理1",
-  "Axiom 2":
-    "公理2",
-  "Axiom 3":
-    "公理3",
-  "Axiom 4":
-    "公理4",
-  "Axiom 5":
-    "公理5",
-  "Trisecting an angle":
-    "角の三等分",
   "Bring the left edge to the right edge, crease, and open it again.":
     "左の辺を右の辺に合わせて折り目をつけ、また開きます。",
   "Fold a corner to the middle":
@@ -1743,4 +1729,50 @@ export const ja: Record<string, string> = {
     "翼を横へ広げ、体が翼のあいだに立つようにします。",
   "Turn it over, so the crane stands on its body with its wings spread. Gently pull the wings apart to puff out the body. Done!":
     "裏返して、翼を広げた鶴を体で立たせます。翼をそっと引いて体をふくらませます。できあがり！",
+  "Rules for geometry":
+    "幾何学のルール",
+  "Euclid’s rules":
+    "ユークリッドのルール",
+  "Geometry is built from a few rules, or axioms, that are taken as true. Euclid’s say what a straightedge and compass can draw: a line through two points, a circle round a point, and so on. Every shape of classical geometry is drawn from them.":
+    "幾何学は、正しいと認めるいくつかのルール（公理）から組み立てられています。ユークリッドの公理は、定規とコンパスで描けるもの、つまり二点を通る直線や一点を中心とする円などを定めます。古典幾何学の図形はすべてそこから描かれます。",
+  "Folding’s rules":
+    "折り紙のルール",
+  "Folding has rules of its own, the Huzita–Hatori axioms, each saying what one fold can do. Put them in place of Euclid’s and you get a geometry of its own: everything a straightedge and compass can draw, and more. Each section here folds one of them.":
+    "折り紙には独自のルール、藤田・羽鳥の公理があり、それぞれが一回の折りでできることを定めます。ユークリッドの公理の代わりにこれを使うと、定規とコンパスで描けるものすべてと、さらにそれ以上ができる幾何学になります。各セクションでその一つずつを折ります。",
+  "Axiom 1: Through two points":
+    "公理1：二点を通る",
+  "Axiom 2: Point onto point":
+    "公理2：点を点に重ねる",
+  "Axiom 3: Line onto line":
+    "公理3：線を線に重ねる",
+  "Axiom 4: Square to a line":
+    "公理4：線に垂直",
+  "Axiom 5: Point onto a line":
+    "公理5：点を線に重ねる",
+  "Axiom 6: Trisecting an angle":
+    "公理6：角の三等分",
+  "Open it and look at the angle: three equal parts. Axiom 6 also doubles a cube and folds a regular heptagon (7 sides). The last, axiom 7, folds a point onto one line, square to another.":
+    "開いて角を見ましょう。三つの等しい部分に分かれています。公理6では立方体の倍積や正七角形（7辺）も折れます。最後の公理7は、点を一本の線に重ね、別の線に垂直に折ります。",
+  "Any angle, any triangle":
+    "どんな角も、どんな三角形も",
+  "Axioms 1 to 5 together do all a straightedge and compass can: lines through points, perpendiculars, halved angles, and where a circle meets a line (axiom 5 is the compass). So any angle or triangle classical geometry can draw, you can fold. Start with an equilateral triangle: fold the left edge onto the right.":
+    "公理1から5を合わせると、定規とコンパスでできることがすべてできます。点を通る線、垂線、角の二等分、そして円と線が交わる点（公理5がコンパスの役目）です。つまり古典幾何学で描ける角や三角形は、どれも折れます。まず正三角形から。左の辺を右の辺に重ねて折ります。",
+  "One side":
+    "一辺",
+  "The other side":
+    "もう一辺",
+  "An equilateral triangle":
+    "正三角形",
+  "Find the top corner":
+    "上の頂点を見つける",
+  "As in axiom 5: fold the bottom left corner onto the middle crease, with the fold through the bottom right corner. Where the corner lands is as far from both bottom corners as they are from each other.":
+    "公理5と同じように、左下の角をまん中の折り目に重ね、折り線が右下の角を通るように折ります。角が重なった点は、下の二つの角から、二つの角どうしの距離と同じだけ離れています。",
+  "Open it, and mark where the corner landed: the triangle’s top corner.":
+    "開いて、角が重なった点に印をつけます。これが三角形の上の頂点です。",
+  "Axiom 1: fold a line through the bottom left corner and the mark.":
+    "公理1：左下の角と印を通る線を折ります。",
+  "And a line through the bottom right corner and the mark.":
+    "それから、右下の角と印を通る線を折ります。",
+  "Open it. With the bottom edge, the two creases make a triangle with three equal sides and three 60° angles. Halve those angles (axiom 3) for 30° and 15°, or add and take them away: by the same rules, any triangle with sides you can mark folds too. Done!":
+    "開きます。二本の折り目と下の辺で、三辺が等しく三つの角が60°の三角形ができました。その角を二等分（公理3）すれば30°や15°、足したり引いたりもできます。同じルールで、辺の長さを印せる三角形ならどれも折れます。できあがり！",
 };

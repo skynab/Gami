@@ -93,7 +93,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'iris', title: 'Iris', blurb: 'Three petals up, three down, from the frog base.', difficulty: 4, category: 'flower', minutes: 20, sheets: 1 },
   { id: 'fan', title: 'Fan', blurb: 'Pleat a sheet back and forth, then pinch the end.', difficulty: 1, category: 'object', minutes: 3, sheets: 1 },
   // A lesson rather than a model, kept last: geometry by folding.
-  { id: 'folding-geometry', title: 'Geometry by folding', blurb: 'The rules of mathematical folding, and an angle split in three.', difficulty: 1, category: 'lesson', steps: 33, minutes: 15, sheets: 1 },
+  { id: 'folding-geometry', title: 'Geometry by folding', blurb: 'Folding’s own rules of geometry: an angle split in three, and any triangle a compass can draw.', difficulty: 1, category: 'lesson', steps: 44, minutes: 20, sheets: 1 },
 ];
 
 /**

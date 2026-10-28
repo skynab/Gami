@@ -105,7 +105,7 @@ export const ja: Messages = {
     tulip: { title: 'チューリップ', blurb: '2枚の紙で花と茎を作ります。' },
     fox: { title: 'キツネ', blurb: '大きな耳とふさふさのしっぽ、おすわりしたキツネ。' },
     crane: { title: '鶴', blurb: '平和と幸運を願う、昔ながらの折り鶴。' },
-    'folding-geometry': { title: '折り紙で幾何学', blurb: '数学的な折り方の規則と、角の三等分。' },
+    'folding-geometry': { title: '折り紙で幾何学', blurb: '折り紙の幾何学のルール。角の三等分や、コンパスで描ける三角形を折ります。' },
     swan: { title: '白鳥', blurb: '細く折った凧の形に、首が立ち上がります。' },
     seal: { title: 'アザラシ', blurb: '頭を上げ、ひれを広げ、しっぽを上げたアザラシ。' },
     sword: { title: '剣', blurb: '一本の細長い紙から、つばのある騎士の剣。' },

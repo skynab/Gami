@@ -78,9 +78,9 @@ test.describe('viewer', () => {
 
   test('marks where each part of a lesson starts, and goes there', async ({ page }) => {
     await page.goto('/learn/folding-geometry');
-    await expect(page.getByRole('button', { name: /^Go to: / })).toHaveCount(6);
+    await expect(page.getByRole('button', { name: /^Go to: / })).toHaveCount(8);
     await page.getByRole('button', { name: /^Go to: Axiom 4/ }).click();
-    await expect(stepHeading(page)).toHaveText('11. Axiom 4: A fresh square');
+    await expect(stepHeading(page)).toHaveText('13. Axiom 4: Square to a line: A fresh square');
   });
 
   test('shows the steps in the chosen language', async ({ page }) => {

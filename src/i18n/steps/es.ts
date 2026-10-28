@@ -746,8 +746,6 @@ export const es: Record<string, string> = {
     "Dos tercios",
   "And a line from the corner through where the end of the lower crease landed: two thirds, 40°. The angle is trisected, which was proved impossible with straightedge and compass alone.":
     "Y una recta desde la esquina por el punto donde cayó el extremo del pliegue de abajo: dos tercios, 40°. El ángulo queda trisecado, algo que se demostró imposible solo con regla y compás.",
-  "Open it and look at the angle: three equal parts. Origami can do everything a straightedge and compass can, and more: axiom 6 also doubles a cube and folds a regular heptagon (7 sides). Axiom 7 folds a point onto one line, square to another.":
-    "Ábrelo y mira el ángulo: tres partes iguales. El origami puede hacer todo lo que hacen la regla y el compás, y más: el axioma 6 también duplica el cubo y dobla un heptágono regular (7 lados). El axioma 7 lleva un punto sobre una recta, perpendicular a otra.",
   "A fresh square":
     "Un cuadrado nuevo",
   "Put the creased square aside and take a new one, so the next creases stand out.":
@@ -768,18 +766,6 @@ export const es: Record<string, string> = {
     "Dobla el borde izquierdo sobre el derecho.",
   "Open it: a crease down the middle.":
     "Ábrelo: un pliegue vertical por el centro.",
-  "Axiom 1":
-    "Axioma 1",
-  "Axiom 2":
-    "Axioma 2",
-  "Axiom 3":
-    "Axioma 3",
-  "Axiom 4":
-    "Axioma 4",
-  "Axiom 5":
-    "Axioma 5",
-  "Trisecting an angle":
-    "Trisecar un ángulo",
   "Bring the left edge to the right edge, crease, and open it again.":
     "Lleva el borde izquierdo al derecho, marca el pliegue y vuelve a abrir.",
   "Fold a corner to the middle":
@@ -1743,4 +1729,50 @@ export const es: Record<string, string> = {
     "Levanta las alas hacia los lados, de modo que el cuerpo quede de pie entre ellas.",
   "Turn it over, so the crane stands on its body with its wings spread. Gently pull the wings apart to puff out the body. Done!":
     "Dale la vuelta, para que la grulla se apoye en su cuerpo con las alas extendidas. Separa las alas con suavidad para inflar el cuerpo. ¡Listo!",
+  "Rules for geometry":
+    "Reglas de la geometría",
+  "Euclid’s rules":
+    "Las reglas de Euclides",
+  "Geometry is built from a few rules, or axioms, that are taken as true. Euclid’s say what a straightedge and compass can draw: a line through two points, a circle round a point, and so on. Every shape of classical geometry is drawn from them.":
+    "La geometría se construye a partir de unas pocas reglas, o axiomas, que se dan por ciertas. Las de Euclides dicen lo que pueden trazar una regla y un compás: una recta por dos puntos, una circunferencia alrededor de un punto, etc. Todas las figuras de la geometría clásica salen de ellas.",
+  "Folding’s rules":
+    "Las reglas del plegado",
+  "Folding has rules of its own, the Huzita–Hatori axioms, each saying what one fold can do. Put them in place of Euclid’s and you get a geometry of its own: everything a straightedge and compass can draw, and more. Each section here folds one of them.":
+    "El plegado tiene sus propias reglas, los axiomas de Huzita–Hatori, y cada una dice lo que puede hacer un pliegue. Si las pones en lugar de las de Euclides obtienes una geometría propia: todo lo que pueden trazar una regla y un compás, y más. Cada sección pliega uno de ellos.",
+  "Axiom 1: Through two points":
+    "Axioma 1: por dos puntos",
+  "Axiom 2: Point onto point":
+    "Axioma 2: un punto sobre otro",
+  "Axiom 3: Line onto line":
+    "Axioma 3: una recta sobre otra",
+  "Axiom 4: Square to a line":
+    "Axioma 4: perpendicular a una recta",
+  "Axiom 5: Point onto a line":
+    "Axioma 5: un punto sobre una recta",
+  "Axiom 6: Trisecting an angle":
+    "Axioma 6: trisecar un ángulo",
+  "Open it and look at the angle: three equal parts. Axiom 6 also doubles a cube and folds a regular heptagon (7 sides). The last, axiom 7, folds a point onto one line, square to another.":
+    "Ábrelo y mira el ángulo: tres partes iguales. El axioma 6 también duplica un cubo y pliega un heptágono regular (7 lados). El último, el axioma 7, pliega un punto sobre una recta, perpendicular a otra.",
+  "Any angle, any triangle":
+    "Cualquier ángulo, cualquier triángulo",
+  "Axioms 1 to 5 together do all a straightedge and compass can: lines through points, perpendiculars, halved angles, and where a circle meets a line (axiom 5 is the compass). So any angle or triangle classical geometry can draw, you can fold. Start with an equilateral triangle: fold the left edge onto the right.":
+    "Los axiomas 1 a 5 juntos hacen todo lo que pueden una regla y un compás: rectas por puntos, perpendiculares, ángulos divididos por la mitad y dónde corta una circunferencia a una recta (el axioma 5 es el compás). Así que cualquier ángulo o triángulo que trace la geometría clásica se puede plegar. Empieza con un triángulo equilátero: pliega el borde izquierdo sobre el derecho.",
+  "One side":
+    "Un lado",
+  "The other side":
+    "El otro lado",
+  "An equilateral triangle":
+    "Un triángulo equilátero",
+  "Find the top corner":
+    "Encuentra la esquina de arriba",
+  "As in axiom 5: fold the bottom left corner onto the middle crease, with the fold through the bottom right corner. Where the corner lands is as far from both bottom corners as they are from each other.":
+    "Como en el axioma 5: pliega la esquina inferior izquierda sobre el pliegue central, con el pliegue pasando por la esquina inferior derecha. Donde cae la esquina está tan lejos de las dos esquinas de abajo como ellas entre sí.",
+  "Open it, and mark where the corner landed: the triangle’s top corner.":
+    "Ábrelo y marca dónde cayó la esquina: es la esquina de arriba del triángulo.",
+  "Axiom 1: fold a line through the bottom left corner and the mark.":
+    "Axioma 1: pliega una recta que pase por la esquina inferior izquierda y la marca.",
+  "And a line through the bottom right corner and the mark.":
+    "Y una recta que pase por la esquina inferior derecha y la marca.",
+  "Open it. With the bottom edge, the two creases make a triangle with three equal sides and three 60° angles. Halve those angles (axiom 3) for 30° and 15°, or add and take them away: by the same rules, any triangle with sides you can mark folds too. Done!":
+    "Ábrelo. Con el borde inferior, los dos pliegues forman un triángulo de tres lados iguales y tres ángulos de 60°. Divide esos ángulos por la mitad (axioma 3) para obtener 30° y 15°, o súmalos y réstalos: con las mismas reglas también se pliega cualquier triángulo cuyos lados puedas marcar. ¡Listo!",
 };

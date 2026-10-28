@@ -105,7 +105,7 @@ export const es: Messages = {
     tulip: { title: 'Tulipán', blurb: 'Una flor y un tallo con dos cuadrados.' },
     fox: { title: 'Zorro', blurb: 'Un zorro sentado, de orejas grandes y cola espesa.' },
     crane: { title: 'Grulla', blurb: 'El símbolo tradicional de la paz y la buena suerte.' },
-    'folding-geometry': { title: 'Geometría plegando', blurb: 'Las reglas del plegado matemático, y un ángulo dividido en tres.' },
+    'folding-geometry': { title: 'Geometría plegando', blurb: 'Las reglas de la geometría del plegado: un ángulo dividido en tres y cualquier triángulo que trace un compás.' },
     swan: { title: 'Cisne', blurb: 'Una cometa estrecha con un cuello que se levanta.' },
     seal: { title: 'Foca', blurb: 'Una foca con la cabeza alta, las aletas abiertas y la cola levantada.' },
     sword: { title: 'Espada', blurb: 'Una espada de caballero con guarda, de una sola tira larga.' },

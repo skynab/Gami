@@ -107,7 +107,7 @@ export const en = {
     tulip: { title: 'Tulip', blurb: 'A blossom and a stem from two squares.' },
     fox: { title: 'Fox', blurb: 'A sitting fox with big ears and a bushy tail.' },
     crane: { title: 'Crane', blurb: 'The traditional symbol of peace and luck.' },
-    'folding-geometry': { title: 'Geometry by folding', blurb: 'The rules of mathematical folding, and an angle split in three.' },
+    'folding-geometry': { title: 'Geometry by folding', blurb: 'Folding’s own rules of geometry: an angle split in three, and any triangle a compass can draw.' },
     swan: { title: 'Swan', blurb: 'A kite folded narrow, with a neck that stands up.' },
     seal: { title: 'Seal', blurb: 'A seal with its head up, flippers out and tail raised.' },
     sword: { title: 'Sword', blurb: 'A knight’s sword with a crossguard, from one long strip.' },

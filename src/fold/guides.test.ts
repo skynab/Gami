@@ -35,7 +35,7 @@ describe('fold guides', () => {
       const fs = framesOf(model);
       for (let k = 1; k < fs.length; k++) {
         // Starting again on a fresh sheet (fewer faces than before) moves nothing, so has nothing to show.
-        if (fs[k].faces_vertices.length < fs[k - 1].faces_vertices.length) continue;
+        if (fs[k].faces_vertices.length < fs[k - 1].faces_vertices.length || model.steps[k - 1].op?.op === 'newSheet') continue;
         // Drawing on the paper or taping it doesn't fold it.
         if (model.steps[k - 1].kind === 'draw' || model.steps[k - 1].kind === 'tape') continue;
         // A bend passes through frames on its way, which its faces point back at.
