@@ -70,6 +70,18 @@ export function FoldedPaper({ model, edgeColor }: { model: OrigamiModel; edgeCol
       }
       b.update(k === 0 ? 1 : pos - (k - 1));
       invalidate();
+      warm(k + 1);
+    };
+
+    // Working out how a step plays can take a moment (paper joined up and layers held apart through a compound
+    // fold): the next step's is worked out while nothing else is going on, so it plays smoothly from the start.
+    let warmed = 0;
+    let idle = 0;
+    const warm = (k: number) => {
+      if (k > total || k === warmed) return;
+      warmed = k;
+      cancelIdle(idle);
+      idle = whenIdle(() => poseAt(stepTransition(model, k), 0.5));
     };
 
     draw(usePlayback.getState().pos);
@@ -78,6 +90,7 @@ export function FoldedPaper({ model, edgeColor }: { model: OrigamiModel; edgeCol
     });
     return () => {
       unsubscribe();
+      cancelIdle(idle);
       for (const b of built.values()) b.dispose();
     };
   }, [model, invalidate]);
@@ -486,6 +499,11 @@ function awayFrom(along: Vec3, edge: Vec3[], face: Vec3[]): Vec3 {
 }
 
 /** Faint fibres: near-white noise that the paper colour multiplies, so a flat sheet doesn't look like plastic. */
+/** Runs `work` when the browser has nothing else to do (soon after, where it can't say). */
+const whenIdle = (work: () => void): number =>
+  typeof requestIdleCallback === 'function' ? requestIdleCallback(work, { timeout: 2000 }) : window.setTimeout(work, 200);
+const cancelIdle = (id: number) => (typeof cancelIdleCallback === 'function' ? cancelIdleCallback(id) : clearTimeout(id));
+
 function paperGrain(): CanvasTexture {
   const size = 256;
   const canvas = document.createElement('canvas');

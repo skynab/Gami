@@ -441,8 +441,31 @@ function depthThrough(t: Transition, limit = Infinity): number {
   return total;
 }
 
-/** Hinged motion for a transition, with how far its paper rises and how its layers settle into place. */
+/**
+ * Hinged motion for a transition, with how far its paper rises and how its layers settle into place.
+ *
+ * A layer folding right over from still paper can turn about the height halfway between where it starts and
+ * where it lands, so the turn alone takes it to its place in the new stack: the layers of a stack swap order
+ * by turning, as paper does, keeping their gaps, instead of meeting edge-on halfway (where they flicker through
+ * each other) to be put right on the way. That's used unless it passes more paper through paper (a reverse
+ * fold's layers turn in opposite ways, each into the other's place).
+ */
 function hingedWith(out: Transition, hinges: NonNullable<Transition['hinges']>): Transition {
+  const plain = settled(out, { ...hinges, at: [...hinges.at] });
+  const over = out.faces.flatMap((_, i) => {
+    const p = hinges.parent[i];
+    return p >= 0 && hinges.parent[p] === -1 && Math.abs(Math.abs(hinges.angle[i]) - Math.PI) < 1e-3 && Math.abs(hinges.dir[i][1]) < 1e-6 ? [i] : [];
+  });
+  if (!over.length) return plain;
+  const height = (pts: Vec3[]) => pts.reduce((sum, q) => sum + q[1], 0) / pts.length;
+  const at = [...hinges.at];
+  for (const i of over) at[i] = [at[i][0], (height(out.faces[i].before) + height(out.faces[i].after)) / 2, at[i][2]];
+  const turned = settled(out, { ...hinges, at });
+  return passesThrough(turned) <= passesThrough(plain) ? turned : plain;
+}
+
+/** Hinged motion about the given hinges: how far its paper rises, and how its layers settle into place. */
+function settled(out: Transition, hinges: NonNullable<Transition['hinges']>): Transition {
   const hinged: Transition = { ...out, hinges };
   // Turning about its crease at the height it started from, a layer lands a little off its place in the new
   // stack (by up to the stack's thickness): it makes that up on the way, rather than jumping at the end.
@@ -522,7 +545,7 @@ export function transitionVia(frames: FoldFrame[]): Transition {
  */
 export function poseAt(t: Transition, s: number): Vec3[][] {
   const pose = rawPose(t, s);
-  const fixes = s > 0 && s < 1 ? joinFixes(t) : null;
+  const fixes = s > 0 && s < 1 ? fixesFor(t) : null;
   if (!fixes) return pose;
   const x = s * JOIN_SAMPLES;
   const i = Math.min(JOIN_SAMPLES - 1, Math.floor(x));
@@ -1251,3 +1274,97 @@ function newell(pts: Vector3[]): Vector3 {
   return n;
 }
 
+
+// ——— Keeping layers apart ———
+
+/**
+ * How the paper is put right through a step: joined up where it came apart, and layers that meet face to face
+ * on the way held apart. Null when neither is needed.
+ */
+const fixed = new WeakMap<Transition, JoinFix[][] | null>();
+function fixesFor(t: Transition): JoinFix[][] | null {
+  if (fixed.has(t)) return fixed.get(t)!;
+  const join = joinFixes(t);
+  const poses = Array.from({ length: JOIN_SAMPLES + 1 }, (_, i) => {
+    const raw = rawPose(t, i / JOIN_SAMPLES);
+    return join ? raw.map((face, f) => applyFix(join[i][f], face)) : raw;
+  });
+  const apart = apartShifts(t, poses);
+  const out =
+    join || apart
+      ? poses.map((_, i) =>
+          t.faces.map((_, f) => {
+            const fix = join?.[i][f] ?? { q: new Quaternion(), shift: new Vector3() };
+            return apart ? { q: fix.q, shift: fix.shift.clone().add(apart[i][f]) } : fix;
+          }),
+        )
+      : null;
+  fixed.set(t, out);
+  return out;
+}
+
+/** How close (along their normal) overlapping layers lying face to face may come before they're held apart. */
+const MEET = LAYER_GAP / 2;
+const APART_ROUNDS = 4;
+
+/**
+ * Layers that come to lie face to face while a step plays (a stack's layers swapping order in a reverse fold,
+ * say) are drawn flickering through each other. For each sample of the step, how far to move each face to
+ * hold such layers half a layer apart, in the order they were last apart in: when they've passed through each
+ * other, they swap in a step too small to see. Null if no layers meet.
+ */
+function apartShifts(t: Transition, poses: Vec3[][][]): Vector3[][] | null {
+  // Bending paper is many small triangles, joined at every corner: never layers to hold apart.
+  if (t.blend) return null;
+  const n = t.faces.length;
+  const order = new Map<number, number>();
+  let any = false;
+  const out = poses.map((start, i) => {
+    const shifts = start.map(() => new Vector3());
+    if (i === 0 || i === poses.length - 1) return shifts;
+    const normals = start.map((face) => newell(face.map((p) => new Vector3(...p))).normalize());
+    // A few rounds, as holding two layers apart can push one onto a third.
+    for (let round = 0; round < APART_ROUNDS; round++) {
+      const pose = start.map((face, f) => face.map((p) => new Vector3(...p).add(shifts[f]).toArray() as Vec3));
+      const boxes = pose.map(box);
+      let moved = false;
+      for (let a = 0; a < n; a++) {
+        for (let b = a + 1; b < n; b++) {
+          if (!overlapping(boxes[a], boxes[b]) || Math.abs(normals[a].dot(normals[b])) < 0.999) continue;
+          const gap = normals[a].dot(new Vector3(...pose[b][0]).sub(new Vector3(...pose[a][0])));
+          const key = a * n + b;
+          const known = order.get(key);
+          if (Math.abs(gap) >= MEET) {
+            // Clearly apart: this is their order now.
+            if (known !== undefined) order.set(key, Math.sign(gap));
+            continue;
+          }
+          if (!faceToFace(pose[a], pose[b], normals[a])) continue;
+          // Meeting: kept in the order they had at the last sample, or as they start out.
+          const sign = known ?? (Math.sign(normals[a].dot(new Vector3(...poses[i - 1][b][0]).sub(new Vector3(...poses[i - 1][a][0])))) || 1);
+          order.set(key, sign);
+          const need = (MEET - sign * gap) / 2;
+          shifts[a].addScaledVector(normals[a], -sign * need);
+          shifts[b].addScaledVector(normals[a], sign * need);
+          any = moved = true;
+        }
+      }
+      if (!moved) break;
+    }
+    return shifts;
+  });
+  return any ? out : null;
+}
+
+/** Whether two faces lying in one plane (with normal `n`) overlap there, rather than lying side by side. */
+function faceToFace(a: Vec3[], b: Vec3[], n: Vector3): boolean {
+  const e1 = new Vector3(...a[1]).sub(new Vector3(...a[0])).normalize();
+  const e2 = n.clone().cross(e1);
+  const o = new Vector3(...a[0]);
+  const flat = (pts: Vec3[]) =>
+    pts.map((p): Vec2 => {
+      const d = new Vector3(...p).sub(o);
+      return [d.dot(e1), d.dot(e2)];
+    });
+  return overlapArea(flat(a), flat(b)) > 1e-5;
+}
