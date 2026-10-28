@@ -149,7 +149,7 @@ export function lily() {
   r.turnOver('Turn the paper over, side to side.');
   const third = squashPetal(1, 1, { title: 'Squash and petal-fold a back flap', text: 'Squash and petal-fold the top right flap on this side too.' }, [-0.3, 0.1]);
   petalDown(third, 1, 1, 'Fold its petal down.');
-  pageTurn(r, third.top, true, { title: 'Turn a page', text: 'Fold the left half of the diamond over to the right.' });
+  pageTurn(r, third.top, true, { title: 'Turn a page', text: 'Turned over, the pages go the other way: fold the right half of the diamond over to the left.' });
   const fourth = squashPetal(-1, 1, { title: 'Squash and petal-fold the last flap', text: 'And the last flap.' }, [0.3, -0.1]);
   petalDown(fourth, -1, 1, 'Fold the last petal down. The four petals hang down from the base.');
 

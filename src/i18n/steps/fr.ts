@@ -604,8 +604,6 @@ export const fr: Record<string, string> = {
     "Écrasez aussi le rabat en haut à droite de ce côté et faites un pli pétale.",
   "Fold its petal down.":
     "Abaissez son pétale.",
-  "Fold the left half of the diamond over to the right.":
-    "Rabattez la moitié gauche du losange sur la droite.",
   "Squash and petal-fold the last flap":
     "Écraser et faire un pli pétale sur le dernier rabat",
   "And the last flap.":
@@ -910,10 +908,6 @@ export const fr: Record<string, string> = {
     "Rabats le bord en haut à droite",
   "The same on the right, leaving a narrow white strip between the two.":
     "Pareil à droite, en laissant une fine bande blanche entre les deux.",
-  "Fold the left corner in a little way.":
-    "Rabats un peu le coin gauche vers l’intérieur.",
-  "And the right corner, to match.":
-    "Et le coin droit, pareil.",
   "Fold the bottom point up, level with the lower ends of those folds.":
     "Remonte la pointe du bas, au niveau du bas de ces plis.",
   "Fold the left half over onto the right, along the middle crease.":
@@ -1779,4 +1773,10 @@ export const fr: Record<string, string> = {
     "Rabattre le coin du bas",
   "And the bottom corner.":
     "Et le coin du bas.",
+  "Fold the right corner in a little way.":
+    "Rabattez un peu le coin droit vers l’intérieur.",
+  "And the left corner, to match.":
+    "Et le coin gauche, pareil.",
+  "Turned over, the pages go the other way: fold the right half of the diamond over to the left.":
+    "Retourné, les pages vont dans l’autre sens : rabattez la moitié droite du losange vers la gauche.",
 };

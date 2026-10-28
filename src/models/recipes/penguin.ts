@@ -42,10 +42,10 @@ export function penguin() {
     .turnOver('Turn it over.');
   // Turned over, left and right swap: the corner worked out on the left is now on the right.
   r.along(table(...mirror(upper)), table(...mirror(lower)), table(...mirror(corner)), {
-    title: 'Fold the left corner in',
-    text: 'Fold the left corner in a little way.',
+    title: 'Fold the right corner in',
+    text: 'Fold the right corner in a little way.',
   })
-    .along(table(...upper), table(...lower), table(...corner), { title: 'Fold the right corner in', text: 'And the right corner, to match.' })
+    .along(table(...upper), table(...lower), table(...corner), { title: 'Fold the left corner in', text: 'And the left corner, to match.' })
     .along(table(-1, lower[1]), table(1, lower[1]), table(0, h), {
       title: 'Fold the bottom up',
       text: 'Fold the bottom point up, level with the lower ends of those folds.',

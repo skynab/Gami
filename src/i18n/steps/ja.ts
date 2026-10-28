@@ -604,8 +604,6 @@ export const ja: Record<string, string> = {
     "こちら側の右上のフラップも、つぶし折りして花弁折りします。",
   "Fold its petal down.":
     "その花びらを折り下げます。",
-  "Fold the left half of the diamond over to the right.":
-    "ひし形の左半分を右へ折り重ねます。",
   "Squash and petal-fold the last flap":
     "最後のフラップをつぶし折りして花弁折りする",
   "And the last flap.":
@@ -910,10 +908,6 @@ export const ja: Record<string, string> = {
     "右上のふちを内側に折る",
   "The same on the right, leaving a narrow white strip between the two.":
     "右も同じように折り、二つのあいだに白い細い帯を残します。",
-  "Fold the left corner in a little way.":
-    "左の角を少しだけ内側に折ります。",
-  "And the right corner, to match.":
-    "右の角も同じように折ります。",
   "Fold the bottom point up, level with the lower ends of those folds.":
     "下の角を、いま折ったところの下のはしの高さまで折り上げます。",
   "Fold the left half over onto the right, along the middle crease.":
@@ -1779,4 +1773,10 @@ export const ja: Record<string, string> = {
     "下の角を折りこむ",
   "And the bottom corner.":
     "下の角も。",
+  "Fold the right corner in a little way.":
+    "右の角を少しだけ折りこみます。",
+  "And the left corner, to match.":
+    "左の角も同じように。",
+  "Turned over, the pages go the other way: fold the right half of the diamond over to the left.":
+    "裏返したので、ページは逆向きです。ひし形の右半分を左へ折ります。",
 };

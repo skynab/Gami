@@ -604,8 +604,6 @@ export const es: Record<string, string> = {
     "Aplasta y haz el pliegue de pétalo también en la solapa de arriba a la derecha de este lado.",
   "Fold its petal down.":
     "Dobla su pétalo hacia abajo.",
-  "Fold the left half of the diamond over to the right.":
-    "Dobla la mitad izquierda del rombo sobre la derecha.",
   "Squash and petal-fold the last flap":
     "Aplasta y haz el pliegue de pétalo en la última solapa",
   "And the last flap.":
@@ -910,10 +908,6 @@ export const es: Record<string, string> = {
     "Dobla hacia dentro el borde de arriba a la derecha",
   "The same on the right, leaving a narrow white strip between the two.":
     "Lo mismo a la derecha, dejando una franja blanca estrecha entre los dos.",
-  "Fold the left corner in a little way.":
-    "Dobla un poco hacia dentro la esquina izquierda.",
-  "And the right corner, to match.":
-    "Y la esquina derecha, igual.",
   "Fold the bottom point up, level with the lower ends of those folds.":
     "Dobla la punta de abajo hacia arriba, a la altura de los extremos inferiores de esos pliegues.",
   "Fold the left half over onto the right, along the middle crease.":
@@ -1779,4 +1773,10 @@ export const es: Record<string, string> = {
     "Dobla la esquina de abajo hacia dentro",
   "And the bottom corner.":
     "Y la esquina de abajo.",
+  "Fold the right corner in a little way.":
+    "Dobla un poco la esquina derecha hacia dentro.",
+  "And the left corner, to match.":
+    "Y la esquina izquierda, igual.",
+  "Turned over, the pages go the other way: fold the right half of the diamond over to the left.":
+    "Al haberle dado la vuelta, las páginas van al revés: pasa la mitad derecha del rombo hacia la izquierda.",
 };
