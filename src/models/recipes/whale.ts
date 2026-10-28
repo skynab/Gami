@@ -8,7 +8,7 @@ import { fishBase } from './fish-base';
  * and the tail turned up by a reverse fold.
  */
 export function whale() {
-  const r = new Recipe({ id: 'whale', title: 'Whale', sheet: { size: [1, 1], front: '#f6f3ec', back: '#3f7cc0' } });
+  const r = new Recipe({ id: 'whale', title: 'Whale', card: 'finished', sheet: { size: [1, 1], front: '#f6f3ec', back: '#3f7cc0' } });
   const { h, k, sheet, onDiamond, T } = fishBase(r);
 
   // The flaps' tips, where the sheet's side corners went.
