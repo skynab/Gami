@@ -597,10 +597,11 @@ export function poseAt(t: Transition, s: number): Vec3[][] {
   const pose = fixedPose(t, s);
   if (s <= 0 || s >= 1) return pose;
   // Resting on the table: lifted to clear it where something would dip below, but no higher. A lift big enough
-  // for the deepest dip would otherwise hold the paper up in the air for the rest of the step.
+  // for the deepest dip would otherwise hold the paper up in the air for the rest of the step. All of it moves
+  // together, so nothing is pushed up through the paper above it.
   let low = Infinity;
   for (const face of pose) for (const p of face) low = Math.min(low, p[1]);
-  return low > 1e-9 ? pose.map((face) => face.map(([x, y, z]): Vec3 => [x, y - low, z])) : pose;
+  return Math.abs(low) > 1e-9 ? pose.map((face) => face.map(([x, y, z]): Vec3 => [x, y - low, z])) : pose;
 }
 
 /** Each face's corners `s` of the way through the step, put right (see `poseAt`) but not yet set down on the table. */
@@ -1226,12 +1227,10 @@ function deepest(t: Transition, pose: Vec3[][]): number {
   return most;
 }
 
-/** A face moved by its fix, and kept off the table, as the faces it's joined to are. */
+/** A face moved by its fix. */
 function applyFix({ q, shift }: JoinFix, face: Vec3[]): Vec3[] {
   const mid = new Vector3(...centroid(face));
-  const out = face.map((p) => new Vector3(...p).sub(mid).applyQuaternion(q).add(mid).add(shift));
-  const low = Math.min(0, ...out.map((p) => p.y));
-  return out.map((p) => [p.x, p.y - low, p.z]);
+  return face.map((p) => new Vector3(...p).sub(mid).applyQuaternion(q).add(mid).add(shift).toArray() as Vec3);
 }
 
 /** The turn about its middle and the move taking a face from `from` to `to`, both its shape on the sheet. */
@@ -1386,6 +1385,8 @@ function fixesFor(t: Transition): JoinFix[][] | null {
 /** How close (along their normal) overlapping layers lying face to face may come before they're held apart. */
 const MEET = LAYER_GAP / 2;
 const APART_ROUNDS = 4;
+/** The furthest a face is moved to hold it apart from the layers it meets: a few layers' thickness. */
+const MAX_APART = 4 * LAYER_GAP;
 
 /**
  * Layers that come to lie face to face while a step plays (a stack's layers swapping order in a reverse fold,
@@ -1431,6 +1432,8 @@ function apartShifts(t: Transition, poses: Vec3[][][]): Vector3[][] | null {
           any = moved = true;
         }
       }
+      // Nudged against a deep stack, layer by layer, a face could add up to a move you'd see.
+      for (const v of shifts) if (v.length() > MAX_APART) v.setLength(MAX_APART);
       if (!moved) break;
     }
     return shifts;
