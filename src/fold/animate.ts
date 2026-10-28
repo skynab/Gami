@@ -1171,10 +1171,12 @@ const JOIN_SLACK = 0.002;
 /** Points through a step at which the pull is worked out, in between which it's blended. */
 const JOIN_SAMPLES = 40;
 const JOIN_ROUNDS = 30;
+/** How many times over the points that couldn't be joined are tried again. */
+const FILL_ROUNDS = 4;
 /** How far joined-up paper may graze through other paper (a sheet's width is 1), as the crossing tests allow: far less than a tear shows. */
 const GRAZE = 0.005;
 /** How much more graze is let by, joining paper up, for each sheet width it has come apart beyond a tear. */
-const GRAZE_PER_TEAR = 0.1;
+const GRAZE_PER_TEAR = 0.2;
 
 /** How a face is moved to join the paper up: turned by `q` about its middle, then moved by `shift`. */
 interface JoinFix {
@@ -1220,25 +1222,31 @@ function joinFixes(t: Transition): JoinFix[][] | null {
     }
     // Where the paper couldn't be joined up whole: joined again starting from the joins either side blended,
     // or failing that, just those blended, if that keeps it clear.
-    for (let i = 1; i < JOIN_SAMPLES; i++) {
-      if (whole[i]) continue;
-      const a = i - 1;
-      let b = i + 1;
-      while (!whole[b]) b++;
-      const w = (i - a) / (b - a);
-      const raw = raws[i];
-      const blend = fixes[a].map((x, f) => ({ q: x.q.clone().slerp(fixes[b][f].q, w), shift: x.shift.clone().lerp(fixes[b][f].shift, w) }));
-      const start = raw.map((face, f) => applyFix(blend[f], face));
-      const fitted = joinUp(t.faces, start.map((face) => face.map((p) => [...p] as Vec3)), groups, raw);
-      const again = fitted.map((face, f) => fixFor(t.faces[f].paper, raw[f], face));
-      const torn = apart(raw.map((face, f) => applyFix(fixes[i][f], face)), groups);
-      const fix = [again, blend].find((x) => {
-        const pose = raw.map((face, f) => applyFix(x[f], face));
-        return deepest(t, pose) <= allowed[i] && apart(pose, groups) < torn;
-      });
-      if (fix) {
-        fixes[i] = fix;
-        whole[i] = true;
+    // Again while that fixes more, as each point fixed gives the ones beside it a better start.
+    for (let more = true, round = 0; more && round < FILL_ROUNDS; round++) {
+      more = false;
+      for (let i = 1; i < JOIN_SAMPLES; i++) {
+        if (whole[i]) continue;
+        let a = i - 1;
+        while (!whole[a]) a--;
+        let b = i + 1;
+        while (!whole[b]) b++;
+        const w = (i - a) / (b - a);
+        const raw = raws[i];
+        const blend = fixes[a].map((x, f) => ({ q: x.q.clone().slerp(fixes[b][f].q, w), shift: x.shift.clone().lerp(fixes[b][f].shift, w) }));
+        const start = raw.map((face, f) => applyFix(blend[f], face));
+        const fitted = joinUp(t.faces, start.map((face) => face.map((p) => [...p] as Vec3)), groups, raw);
+        const again = fitted.map((face, f) => fixFor(t.faces[f].paper, raw[f], face));
+        const torn = apart(raw.map((face, f) => applyFix(fixes[i][f], face)), groups);
+        const fix = [again, blend].find((x) => {
+          const pose = raw.map((face, f) => applyFix(x[f], face));
+          return deepest(t, pose) <= allowed[i] && apart(pose, groups) < torn;
+        });
+        if (fix) {
+          fixes[i] = fix;
+          whole[i] = true;
+          more = true;
+        }
       }
     }
     out = fixes;
