@@ -79,6 +79,8 @@ export interface Transition {
    * bend passes through are close together, so they barely disagree.
    */
   blend?: { moves: Motion[]; vertices: number[][] };
+  /** Faces of separate paper that stay on the table while the rest lifts off it (see Motion.lift). */
+  grounded?: boolean[];
   /**
    * When each face finishes its move (0–1): faces ending lower in the stack land first, so paper settles
    * bottom layer first, as it does by hand, instead of a lower layer coming down through upper ones.
@@ -337,8 +339,11 @@ function moving(from: FoldFrame, to: FoldFrame, { yielding = false } = {}): Tran
   }
   // Paper that would dip below the table (folding something behind) lifts it, and the rest of the paper with
   // it, as you'd pick the model up: lifting only the moving part would push it up through the layers above.
+  // A separate piece of paper with nothing dipping (the other half of a model made of two) stays on the table.
   const lift = Math.max(0, ...motions.map((m) => m.lift));
-  let out: Transition = { faces, motions: motions.map((m) => ({ ...m, lift })) };
+  const grounded = faces.map(() => false);
+  if (lift) for (const piece of pieces(faces)) if (piece.every((f) => !motions[faces[f].motion].lift)) for (const f of piece) grounded[f] = true;
+  let out: Transition = { faces, motions: motions.map((m) => ({ ...m, lift })), ...(grounded.some(Boolean) && { grounded }) };
   // Easing away from creases only where it helps: it can nudge a stack into paper beside the crease instead.
   if (motions.some((m) => m.ease)) {
     const plain: Transition = { faces, motions: out.motions.map((m) => ({ ...m, ease: undefined })) };
@@ -582,7 +587,10 @@ function rawPose(t: Transition, s: number): Vec3[][] {
   }
   if (t.hinges) return hingedPose(t, s);
   if (t.blend) return blendedPose(t, s);
-  return t.faces.map((f, i) => f.before.map((p) => move(t.motions[f.motion], p, landed(t, i, s))));
+  return t.faces.map((f, i) => {
+    const m = t.motions[f.motion];
+    return f.before.map((p) => move(t.grounded?.[i] ? { ...m, lift: 0 } : m, p, landed(t, i, s)));
+  });
 }
 
 /** Which faces share a corner on the sheet (joined there, so they touch without crossing), worked out once per step. */
@@ -913,10 +921,11 @@ function hingedPose(t: Transition, s: number): Vec3[][] {
     placed[f] = placed[h.parent[f]].clone().multiply(turn);
   }
   const p = new Vector3();
-  const rise = h.lift * Math.sin(Math.PI * s);
+  const lifted = h.lift * Math.sin(Math.PI * s);
   return t.faces.map((f, i) => {
     if (h.parent[i] === -2) return f.before.map((q) => move(t.motions[f.motion], q, landed(t, i, s)));
     const settle = h.fix ? FIX(landed(t, i, s)) : 0;
+    const rise = t.grounded?.[i] ? 0 : lifted;
     return f.before.map((q, c) => {
       p.set(...q).applyMatrix4(placed[i]);
       const d = h.fix?.[i][c];
