@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { basics } from '../models/basics';
 import { crane } from '../models/recipes/crane';
+import { frog } from '../models/recipes/frog';
+import { lily } from '../models/recipes/lily';
 import { poseAt, stepTransition, transition } from './animate';
 import { facePositions, framesOf, LAYER_GAP } from './frames';
 import { sharedSegment } from './geometry2d';
@@ -115,4 +117,14 @@ describe('compound folds', () => {
     // The square base's collapse and both petal folds, which each face once played its own way, coming apart.
     for (const k of [9, 15, 21]) expect(torn(model, k), `crane step ${k}`).toBeLessThan(0.01);
   });
+
+  it('keeps the paper joined through petal folds, if grazing a little', () => {
+    // The lily's squash-and-petal folds came apart by 0.4 of the sheet, and the frog base's petal folds by
+    // 0.2: joining them up all the way grazes paper by up to about twenty layers instead.
+    for (const model of [lily(), frog()]) {
+      const petals = model.steps.flatMap((s, i) => (s.kind === 'petal' ? [i + 1] : []));
+      expect(petals, model.id).toHaveLength(4);
+      for (const k of petals) expect(torn(model, k), `${model.id} step ${k}`).toBeLessThan(0.02);
+    }
+  }, 30_000);
 });

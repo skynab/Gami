@@ -1173,6 +1173,8 @@ const JOIN_SAMPLES = 40;
 const JOIN_ROUNDS = 30;
 /** How far joined-up paper may graze through other paper (a sheet's width is 1), as the crossing tests allow: far less than a tear shows. */
 const GRAZE = 0.005;
+/** How much more graze is let by, joining paper up, for each sheet width it has come apart beyond a tear. */
+const GRAZE_PER_TEAR = 0.1;
 
 /** How a face is moved to join the paper up: turned by `q` about its middle, then moved by `shift`. */
 interface JoinFix {
@@ -1196,8 +1198,9 @@ function joinFixes(t: Transition): JoinFix[][] | null {
       const raw = rawPose(t, i / JOIN_SAMPLES);
       raws.push(raw);
       // Joined up only as far as it can be without passing paper through paper that the faces moving their own
-      // ways kept clear of (a flap stood up before it's squashed, say): torn a little rather than tangled.
-      allowed.push(Math.max(deepest(t, raw), GRAZE));
+      // ways kept clear of (a flap stood up before it's squashed, say): torn a little rather than tangled. But a
+      // graze shows far less than a tear, so the wider the paper has come apart, the more of a graze is let by.
+      allowed.push(Math.max(deepest(t, raw), GRAZE + GRAZE_PER_TEAR * Math.max(0, apart(raw, groups) - TEAR)));
       if (i === 0 || i === JOIN_SAMPLES) {
         fixes.push(raw.map(() => ({ q: new Quaternion(), shift: new Vector3() })));
         whole.push(true);
