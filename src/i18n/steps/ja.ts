@@ -170,16 +170,8 @@ export const ja: Record<string, string> = {
     "右の先を左と同じように折ります。",
   "Fold the front point up":
     "手前の先を折り上げる",
-  "Fold the top layer of the bottom point up, halfway to the base of the horns.":
-    "下の先の一枚目を、つのの付け根までの半分ほど折り上げます。",
   "Fold up again":
     "もう一度折り上げる",
-  "Fold the band up along the bottom of the helmet, making the brim.":
-    "帯をかぶとの下のふちに沿って折り上げ、ひさしにします。",
-  "Fold the back point up behind":
-    "後ろの先を後ろへ折り上げる",
-  "Fold the last point up behind the helmet (or tuck it inside). Open the bottom to wear it.":
-    "最後の先をかぶとの後ろへ折り上げます（中に差し込んでもかまいません）。下を開くとかぶれます。",
   "White side up. Bring one corner to the opposite corner.":
     "白い面を上にして、角を向かいの角に合わせて折ります。",
   "Fold the other diagonal":
@@ -1725,4 +1717,24 @@ export const ja: Record<string, string> = {
     "ふくらませる",
   "Blow gently into the hole at the bottom, and the balloon puffs up. Done!":
     "下の穴にそっと息を吹きこむと、風船がふくらみます。できあがり！",
+  "Fold the left corner over to the right corner and unfold, to mark the middle.":
+    "左の角を右の角に合わせて折り、開いて真ん中に折り目をつけます。",
+  "Fold the top layer of the bottom point up, so its tip goes a little past the base of the horns.":
+    "下の角の一枚目を、先が角のつけ根を少し越えるまで折り上げます。",
+  "Fold the tip back down":
+    "先を折り下げる",
+  "Fold the tip back down along the base of the horns, making a small lip.":
+    "先を角のつけ根に沿って折り下げ、小さなふちを作ります。",
+  "Fold the band up along the bottom of the helmet, lip and all, making the brim.":
+    "ふちごと帯を兜の下の線に沿って折り上げ、つばを作ります。",
+  "Crease the back point":
+    "後ろの角に折り目をつける",
+  "Fold the last point up behind the helmet and crease it well…":
+    "最後の角を兜の後ろへ折り上げ、しっかり折り目をつけて…",
+  "…then fold it back down.":
+    "…それから元に戻します。",
+  "Tuck the back point inside":
+    "後ろの角を中に差しこむ",
+  "Fold the back point up on its crease, tucking it inside the helmet, behind the brim. Open the bottom to wear it.":
+    "後ろの角を折り目で折り上げ、つばの裏側、兜の内側に差しこみます。下を開けばかぶれます。",
 };

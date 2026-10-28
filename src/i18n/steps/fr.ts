@@ -170,16 +170,8 @@ export const fr: Record<string, string> = {
     "Faites la pointe droite comme la gauche.",
   "Fold the front point up":
     "Relever la pointe de devant",
-  "Fold the top layer of the bottom point up, halfway to the base of the horns.":
-    "Relevez la couche du dessus de la pointe du bas, à mi-chemin de la base des cornes.",
   "Fold up again":
     "Relever encore",
-  "Fold the band up along the bottom of the helmet, making the brim.":
-    "Relevez la bande le long du bas du casque pour faire le bord.",
-  "Fold the back point up behind":
-    "Relever la pointe arrière derrière",
-  "Fold the last point up behind the helmet (or tuck it inside). Open the bottom to wear it.":
-    "Relevez la dernière pointe derrière le casque (ou glissez-la dedans). Ouvrez le bas pour le porter.",
   "White side up. Bring one corner to the opposite corner.":
     "Face blanche vers le haut. Amenez un coin sur le coin opposé.",
   "Fold the other diagonal":
@@ -1725,4 +1717,24 @@ export const fr: Record<string, string> = {
     "Gonflez-le",
   "Blow gently into the hole at the bottom, and the balloon puffs up. Done!":
     "Soufflez doucement dans le trou du bas, et le ballon se gonfle. C’est fini !",
+  "Fold the left corner over to the right corner and unfold, to mark the middle.":
+    "Rabattez le coin gauche sur le coin droit puis dépliez, pour marquer le milieu.",
+  "Fold the top layer of the bottom point up, so its tip goes a little past the base of the horns.":
+    "Remontez la couche du dessus de la pointe du bas, pour que sa pointe dépasse un peu la base des cornes.",
+  "Fold the tip back down":
+    "Rabattre la pointe vers le bas",
+  "Fold the tip back down along the base of the horns, making a small lip.":
+    "Rabattez la pointe vers le bas le long de la base des cornes, pour former un petit rebord.",
+  "Fold the band up along the bottom of the helmet, lip and all, making the brim.":
+    "Remontez la bande le long du bas du casque, rebord compris, pour former la visière.",
+  "Crease the back point":
+    "Marquer la pointe arrière",
+  "Fold the last point up behind the helmet and crease it well…":
+    "Remontez la dernière pointe derrière le casque et marquez bien le pli…",
+  "…then fold it back down.":
+    "…puis rabattez-la de nouveau.",
+  "Tuck the back point inside":
+    "Rentrer la pointe arrière à l’intérieur",
+  "Fold the back point up on its crease, tucking it inside the helmet, behind the brim. Open the bottom to wear it.":
+    "Remontez la pointe arrière sur son pli en la rentrant dans le casque, derrière la visière. Ouvrez le bas pour le porter.",
 };

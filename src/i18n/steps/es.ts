@@ -170,16 +170,8 @@ export const es: Record<string, string> = {
     "Haz la punta derecha igual que la izquierda.",
   "Fold the front point up":
     "Dobla la punta de delante hacia arriba",
-  "Fold the top layer of the bottom point up, halfway to the base of the horns.":
-    "Dobla la capa de arriba de la punta de abajo hacia arriba, hasta la mitad del camino a la base de los cuernos.",
   "Fold up again":
     "Dobla otra vez hacia arriba",
-  "Fold the band up along the bottom of the helmet, making the brim.":
-    "Dobla la banda hacia arriba por la parte de abajo del casco para hacer el ala.",
-  "Fold the back point up behind":
-    "Dobla la punta de atrás hacia arriba por detrás",
-  "Fold the last point up behind the helmet (or tuck it inside). Open the bottom to wear it.":
-    "Dobla la última punta hacia arriba por detrás del casco (o métela dentro). Abre la parte de abajo para ponértelo.",
   "White side up. Bring one corner to the opposite corner.":
     "Cara blanca hacia arriba. Lleva una esquina hasta la esquina opuesta.",
   "Fold the other diagonal":
@@ -1725,4 +1717,24 @@ export const es: Record<string, string> = {
     "Ínflalo",
   "Blow gently into the hole at the bottom, and the balloon puffs up. Done!":
     "Sopla suavemente por el agujero de abajo y el globo se infla. ¡Listo!",
+  "Fold the left corner over to the right corner and unfold, to mark the middle.":
+    "Lleva la esquina izquierda sobre la derecha y desdobla, para marcar el centro.",
+  "Fold the top layer of the bottom point up, so its tip goes a little past the base of the horns.":
+    "Dobla hacia arriba la capa superior de la punta de abajo, de modo que su punta pase un poco de la base de los cuernos.",
+  "Fold the tip back down":
+    "Dobla la punta hacia abajo",
+  "Fold the tip back down along the base of the horns, making a small lip.":
+    "Dobla la punta hacia abajo a lo largo de la base de los cuernos, formando un pequeño reborde.",
+  "Fold the band up along the bottom of the helmet, lip and all, making the brim.":
+    "Dobla la banda hacia arriba a lo largo de la base del casco, con el reborde, formando el ala.",
+  "Crease the back point":
+    "Marca la punta de atrás",
+  "Fold the last point up behind the helmet and crease it well…":
+    "Dobla la última punta hacia arriba por detrás del casco y marca bien el pliegue…",
+  "…then fold it back down.":
+    "…y luego vuelve a bajarla.",
+  "Tuck the back point inside":
+    "Mete la punta de atrás por dentro",
+  "Fold the back point up on its crease, tucking it inside the helmet, behind the brim. Open the bottom to wear it.":
+    "Dobla la punta de atrás hacia arriba por su pliegue y métela dentro del casco, detrás del ala. Abre la parte de abajo para ponértelo.",
 };
