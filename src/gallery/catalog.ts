@@ -85,7 +85,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'masu-shallow-lid', title: 'Shallow masu lid', blurb: 'A low lid for the masu box, neater and easier to lift off. It takes more care to fold.', difficulty: 3, category: 'object', steps: 32, minutes: 15, sheets: 1 },
   { id: 'envelope', title: 'Envelope', blurb: 'A letter envelope from a sheet of printer paper, its top flap tucked in. No glue.', difficulty: 2, category: 'object', steps: 27, minutes: 8, sheets: 1, paper: 1.41 },
   { id: 'masu-lid', title: 'Masu box lid', blurb: 'A lid for the masu box: the same folds, the corners stopping just short of the middle.', difficulty: 2, category: 'object', steps: 22, minutes: 10, sheets: 1 },
-  { id: 'pajarita', title: 'Pajarita', blurb: 'The little paper bird of Spain, from a square with its corners folded in.', difficulty: 2, category: 'animal', steps: 19, minutes: 10, sheets: 1 },
+  { id: 'pajarita', title: 'Pajarita (little bird)', blurb: 'The little paper bird of Spain, from a square with its corners folded in.', difficulty: 2, category: 'animal', steps: 19, minutes: 10, sheets: 1 },
   { id: 'boomerang', title: 'Boomerang', blurb: 'A flat paper boomerang that flies out, turns and comes back.', difficulty: 3, category: 'toy', steps: 11, minutes: 10, sheets: 1, paper: 1.54, needs: ['tape'] },
   { id: 'fish', title: 'Fish', blurb: 'A very easy fish, all triangles.', difficulty: 1, category: 'animal', steps: 9, minutes: 3, sheets: 1 },
   // Coming soon: listed, with no steps yet.

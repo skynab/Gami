@@ -89,7 +89,7 @@ export const fr: Messages = {
     dolphin: { title: 'Dauphin', blurb: 'Un dauphin traditionnel, en plein saut.' },
     crow: { title: 'Corbeau', blurb: 'Un corbeau traditionnel au bec pointu.' },
     butterfly: { title: 'Papillon', blurb: 'Des ailes dépliées d’un carré aplati, relevées pour voler.' },
-    pajarita: { title: 'Pajarita', blurb: 'Le petit oiseau en papier d’Espagne, d’un carré aux coins rabattus.' },
+    pajarita: { title: 'Pajarita (petit oiseau)', blurb: 'Le petit oiseau en papier d’Espagne, d’un carré aux coins rabattus.' },
     iris: { title: 'Iris', blurb: 'Trois pétales en haut, trois en bas, depuis la base grenouille.' },
     pinwheel: { title: 'Moulin à vent', blurb: 'Un moulin à quatre ailes. Pique-le sur un bâton et souffle.' },
     fan: { title: 'Éventail', blurb: 'Plisse une feuille en accordéon, puis pince un bout.' },

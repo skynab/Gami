@@ -91,7 +91,7 @@ export const en = {
     dolphin: { title: 'Dolphin', blurb: 'A traditional dolphin, leaping.' },
     crow: { title: 'Crow', blurb: 'A traditional crow with a sharp beak.' },
     butterfly: { title: 'Butterfly', blurb: 'Wings folded out from a squashed square, lifted for flight.' },
-    pajarita: { title: 'Pajarita', blurb: 'The little paper bird of Spain, from a square with its corners folded in.' },
+    pajarita: { title: 'Pajarita (little bird)', blurb: 'The little paper bird of Spain, from a square with its corners folded in.' },
     iris: { title: 'Iris', blurb: 'Three petals up, three down, from the frog base.' },
     pinwheel: { title: 'Pinwheel', blurb: 'A windmill with four sails. Pin it to a stick and blow.' },
     fan: { title: 'Fan', blurb: 'Pleat a sheet back and forth, then pinch the end.' },
