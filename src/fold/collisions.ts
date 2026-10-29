@@ -1,6 +1,6 @@
 import { poseAt, stepTransition, together, type Transition } from './animate';
 import { framesOf } from './frames';
-import { box, cornerKeys, crossDepth, overlapping } from './cross3d';
+import { box, clearanceDepth, cornerKeys, overlapping } from './cross3d';
 import type { OrigamiModel } from './types';
 
 /**
@@ -42,7 +42,7 @@ export function crossingAt(t: Transition, s: number): { faces: [number, number];
       if (together(t, a, b)) continue;
       if (!overlapping(boxes[a], boxes[b])) continue;
       if ([...keys[a]].some((key) => keys[b].has(key))) continue;
-      const depth = crossDepth(pose[a], pose[b]);
+      const depth = clearanceDepth(pose[a], pose[b]);
       if (depth > 0) out.push({ faces: [a, b], depth });
     }
   }

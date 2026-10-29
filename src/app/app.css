@@ -11,6 +11,10 @@
   --accent-fg: #ffffff;
   --accent-soft: #e8e7fc;
   --danger: #b42318;
+  --heart: #e5484d;
+  --heart-edge: #b8222b;
+  --new: #8e2fd0;
+  --new-soft: #f3e6fc;
   --canvas-bg: #ececef;
   --radius: 12px;
   color-scheme: light dark;
@@ -29,6 +33,10 @@
     --accent-fg: #0f0f14;
     --accent-soft: #2a2950;
     --danger: #ff8a80;
+    --heart: #ec5d5e;
+    --heart-edge: #ffb3b3;
+    --new: #c98bff;
+    --new-soft: #33204a;
     --canvas-bg: #0e0f11;
   }
 }
@@ -44,6 +52,10 @@
   --accent-fg: #0f0f14;
   --accent-soft: #2a2950;
   --danger: #ff8a80;
+  --heart: #ec5d5e;
+  --heart-edge: #ffb3b3;
+  --new: #c98bff;
+  --new-soft: #33204a;
   --canvas-bg: #0e0f11;
   color-scheme: dark;
 }
@@ -367,6 +379,51 @@ a {
 
 .step-card p {
   margin-block-start: 4px;
+}
+
+/* The step's text, with its paper diagram beside it in a lesson. */
+.step-card-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.step-card-body > p {
+  flex: 1;
+}
+
+/* Drawn like a printed diagram, on white paper whatever the theme. */
+.step-diagram {
+  flex: none;
+  width: 92px;
+  height: 92px;
+  margin-block-start: 6px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  cursor: zoom-in;
+}
+
+.step-diagram.big {
+  width: 180px;
+  height: 180px;
+  cursor: zoom-out;
+}
+
+.step-diagram img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.key-point-label {
+  margin: 0 0 2px;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .step-card-head {
@@ -726,7 +783,8 @@ kbd {
   -webkit-touch-callout: none;
 }
 
-/* The first-step button fills up from the bottom while it's held, and goes back to the start once full. */
+/* The first-step button fills up from the bottom while it's held, and goes back to the start once full. The reset
+   button does the same, turning following each step on or off. */
 .icon.to-start {
   position: relative;
   overflow: hidden;
@@ -750,6 +808,27 @@ kbd {
 .icon.to-start.holding::before {
   transform: scaleY(1);
   transition: transform var(--hold-ms) linear;
+}
+
+/* Following each step: the reset button is lit, with a dot. */
+.icon.following {
+  color: var(--accent);
+}
+
+.icon.following::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 6px;
+  inset-inline-end: 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* Below the locked badge, should both show. */
+.badge.follow-notice {
+  inset-block-start: 48px;
 }
 
 .step-card-actions {
@@ -840,6 +919,21 @@ kbd {
   outline: 2px solid color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
+/* A key point (a complex fold) is a hollow ring, lighter than a section's diamond. */
+.key-point-mark {
+  inset-block-start: -8px;
+  width: 7px;
+  height: 7px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  background: var(--bg);
+  transform: translateX(-50%);
+}
+
+.key-point-mark:hover {
+  outline-offset: 1px;
+}
+
 /* Gallery */
 
 .gallery {
@@ -914,6 +1008,45 @@ kbd {
   border-color: transparent;
   background: var(--accent-soft);
   color: var(--accent);
+}
+
+/* The sort order: plain text at the end of the filters, not another row of buttons. */
+.sort {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-inline-start: auto;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.sort select {
+  min-height: 34px;
+  padding: 0 4px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.sort select:hover {
+  background: var(--surface-hover);
+}
+
+.sort select:focus-visible {
+  outline: 2px solid var(--accent);
+}
+
+.sort option {
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.sort[data-changed] {
+  color: var(--accent);
+  font-weight: 550;
 }
 
 .grid {
@@ -1023,6 +1156,216 @@ kbd {
 .card-badge.soon {
   background: var(--surface);
   color: var(--muted);
+}
+
+/* Two related models on one card, their pictures split by a slight slash. The slash crosses the top at 56% and
+   the bottom at 44% (SLASH in ModelCard.tsx). Each half is the whole picture area clipped to its side; its
+   picture, badge and needs sit in that side. */
+.pair-half {
+  position: absolute;
+  inset: 0;
+}
+
+.pair-half.first {
+  clip-path: polygon(0 0, 56% 0, 44% 100%, 0 100%);
+}
+
+.pair-half.second {
+  clip-path: polygon(56% 0, 100% 0, 100% 100%, 44% 100%);
+}
+
+.pair-picture {
+  position: absolute;
+  inset-block: 0;
+  display: grid;
+  place-items: center;
+  width: 50%;
+}
+
+.pair-half.first .pair-picture {
+  inset-inline-start: 0;
+}
+
+.pair-half.second .pair-picture {
+  inset-inline-end: 0;
+}
+
+.card-thumb .pair-picture img {
+  width: 78%;
+}
+
+/* Half as wide, so a long badge ("Continue · step 12") wraps rather than crossing the slash. */
+.pair-half .card-badge {
+  max-width: calc(100% - 24px);
+  border-radius: 10px;
+}
+
+.pair-half.second .card-badge {
+  inset-inline: auto 10px;
+}
+
+/* A half's needs go to its bottom corner, clear of the other half's badge. */
+.pair-half .card-needs {
+  inset-block: auto 10px;
+}
+
+.pair-half.first .card-needs {
+  inset-inline: 10px auto;
+}
+
+@media (hover: hover) {
+  .pair-half:hover {
+    background: color-mix(in srgb, var(--accent) 6%, transparent);
+  }
+}
+
+.pair-slash {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.pair-slash line {
+  stroke: var(--surface);
+  stroke-width: 4px;
+  vector-effect: non-scaling-stroke;
+}
+
+.pair-card .card-body {
+  gap: 10px;
+}
+
+.pair-row {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pair-row .card-title {
+  color: inherit;
+  text-decoration: none;
+}
+
+.pair-row .card-title:hover span {
+  text-decoration: underline;
+}
+
+.pair-row .favorite {
+  inset-block-end: -6px;
+  inset-inline-end: -6px;
+}
+
+.pair-row > p {
+  padding-inline-end: 28px;
+}
+
+/* The favourite heart, in the card's bottom corner over its details line (beside the card's link, not in it). */
+.grid > li {
+  position: relative;
+}
+
+.favorite {
+  position: absolute;
+  inset-block-end: 8px;
+  inset-inline-end: 8px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--fg);
+  transition: translate 0.15s, background 0.15s;
+}
+
+.favorite:hover {
+  background: var(--surface-hover);
+}
+
+/* Not a favourite: plain, see-through paper. A favourite: solid red paper. */
+.favorite svg,
+.favorites-chip svg {
+  opacity: 0.45;
+}
+
+.favorite:hover svg {
+  opacity: 0.8;
+}
+
+.favorite[aria-pressed='true'] svg,
+.favorites-chip[aria-pressed='true'] svg {
+  opacity: 1;
+}
+
+.favorite[aria-pressed='true'] .heart-paper,
+.favorites-chip[aria-pressed='true'] .heart-paper {
+  fill: var(--heart);
+  stroke: var(--heart-edge);
+}
+
+.favorite[aria-pressed='true'] .heart-crease,
+.favorites-chip[aria-pressed='true'] .heart-crease {
+  stroke: #fff;
+  stroke-opacity: 0.6;
+}
+
+@media (hover: hover) {
+  .grid > li:hover .favorite {
+    translate: 0 -2px;
+  }
+}
+
+.favorites-chip,
+.new-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* New models: a purple paper star by the title, and the chip that picks them out. */
+.new-star {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-inline-start: auto;
+  padding: 1px 8px 1px 5px;
+  border-radius: 999px;
+  background: var(--new-soft);
+  color: var(--new);
+  font-size: 12px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.new-star .star-paper,
+.new-chip[aria-pressed='true'] .star-paper {
+  fill: var(--new);
+  stroke: var(--new);
+}
+
+.new-star .star-crease,
+.new-chip[aria-pressed='true'] .star-crease {
+  stroke: var(--bg);
+  stroke-opacity: 0.7;
+}
+
+.new-chip svg {
+  color: var(--new);
+}
+
+.new-chip[aria-pressed='true'] {
+  background: var(--new-soft);
+  color: var(--new);
+}
+
+.card-body > p:last-child {
+  padding-inline-end: 28px;
 }
 
 .card-body {

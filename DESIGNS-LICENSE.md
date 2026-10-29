@@ -14,6 +14,30 @@ site's source code, or any other model in the gallery.
 | Model | Recipe | Since |
 |---|---|---|
 | Sword | `src/models/recipes/sword.ts` | October 2026 |
+| Crown | `src/models/recipes/crown.ts` | October 2026 |
+| Sailboat | `src/models/recipes/sailboat.ts` | October 2026 |
+| Peacock | `src/models/recipes/peacock.ts` | October 2026 |
+| Cactus | `src/models/recipes/cactus.ts` | October 2026 |
+| Frog bookmark | `src/models/recipes/frog-bookmark.ts` | October 2026 |
+| Heart bookmark | `src/models/recipes/heart-bookmark.ts` | October 2026 |
+| Cute cat | `src/models/recipes/cute-cat.ts` | October 2026 |
+| Bat | `src/models/recipes/bat.ts` | October 2026 |
+| Bull | `src/models/recipes/bull.ts` | October 2026 |
+| T-rex | `src/models/recipes/t-rex.ts` | October 2026 |
+| Knife | `src/models/recipes/knife.ts` | October 2026 |
+| Kunai | `src/models/recipes/kunai.ts` | October 2026 |
+| Hand fan | `src/models/recipes/hand-fan.ts` | October 2026 |
+| Rose | `src/models/recipes/rose.ts` | October 2026 |
+| Palm leaf | `src/models/recipes/palm-leaf.ts` | October 2026 |
+| Green leaf | `src/models/recipes/green-leaf.ts` | October 2026 |
+| Pyramid | `src/models/recipes/pyramid.ts` | October 2026 |
+| Diamond | `src/models/recipes/diamond.ts` | October 2026 |
+| Bracelet | `src/models/recipes/bracelet.ts` | October 2026 |
+| Diamond ring | `src/models/recipes/diamond-ring.ts` | October 2026 |
+| Finger trap | `src/models/recipes/finger-trap.ts` | October 2026 |
+| Easy sword | `src/models/recipes/easy-sword.ts` | October 2026 |
+| Corkscrew | `src/models/recipes/corkscrew.ts` | October 2026 |
+| Flying saucer | `src/models/recipes/flying-saucer.ts` | October 2026 |
 
 ## Other models in the gallery
 

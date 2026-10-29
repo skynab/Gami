@@ -47,3 +47,24 @@ export function faceMarks(top: Vec2, chin: Vec2, style: FaceStyle): ({ line: Vec
   }
   return marks;
 }
+
+/**
+ * A line split where it crosses x = `mid` (the line where two flaps meet, say), each piece starting just off it,
+ * on its own side, so each is drawn on the paper it lies on.
+ */
+export function halves(line: Vec2[], mid: number): Vec2[][] {
+  const gap = 1e-3;
+  const side = (p: Vec2) => (p[0] < mid ? -1 : 1);
+  const pieces: Vec2[][] = [[line[0]]];
+  for (let i = 1; i < line.length; i++) {
+    const [a, b] = [line[i - 1], line[i]];
+    if (side(a) !== side(b)) {
+      const t = (mid - a[0]) / (b[0] - a[0]);
+      const z = a[1] + t * (b[1] - a[1]);
+      pieces.at(-1)!.push([mid + side(a) * gap, z]);
+      pieces.push([[mid + side(b) * gap, z]]);
+    }
+    pieces.at(-1)!.push(b);
+  }
+  return pieces.filter((p) => p.length > 1);
+}

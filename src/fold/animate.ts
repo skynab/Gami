@@ -1,8 +1,10 @@
 import { Matrix4, Quaternion, Vector3 } from 'three';
-import { box, cornerKeys, crossDepth, overlapping } from './cross3d';
+import { box, clearanceDepth, cornerKeys, crossDepth, overlapping } from './cross3d';
 import { facePositions, framesOf, LAYER_GAP, normal, sphereAround } from './frames';
 import { joinedSegment, overlapArea, type Cut } from './geometry2d';
-import { applyOp } from './ops';
+import { applyOp, lastFold, reopened, type Op } from './ops';
+import { inside } from './select';
+import { sheetOf } from './sheets';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from './types';
 
 /**
@@ -79,6 +81,12 @@ export interface Transition {
    * bend passes through are close together, so they barely disagree.
    */
   blend?: { moves: Motion[]; vertices: number[][] };
+  /** Poses worked out some other way than by motions, as each copy of a unit folding as the first one did. */
+  replay?: (s: number) => Vec3[][];
+  /** A step played from its end back to its start (see `unfoldingBackwards`), and each face's face in it. */
+  backwards?: { t: Transition; ancestors: number[] };
+  /** Faces of separate paper that stay on the table while the rest lifts off it (see Motion.lift). */
+  grounded?: boolean[];
   /**
    * When each face finishes its move (0–1): faces ending lower in the stack land first, so paper settles
    * bottom layer first, as it does by hand, instead of a lower layer coming down through upper ones.
@@ -128,12 +136,14 @@ function workOut(from: FoldFrame, to: FoldFrame, makeWay: boolean, stages: numbe
   if (y < fewest) [best, fewest] = [yielding, y];
   if (fewest && stages) {
     // Judged by how deep paper goes through, closely: staged moves are quicker, and slip through in a moment.
+    // Not if staging pulls joined paper apart: paper lifted out of the way and put back, its neighbours left.
     let deepest = depthThrough(best);
+    const torn = tornBy(best);
     for (const staged of stagedWays(from, to, t, stages - 1)) {
       const way = staged();
       if (!way) continue;
       const d = depthThrough(way, deepest);
-      if (d < deepest) [best, deepest] = [way, d];
+      if (d < deepest && tornBy(way) <= Math.max(torn, TEAR / 2)) [best, deepest] = [way, d];
       if (!deepest) break;
     }
   }
@@ -158,6 +168,135 @@ function blended(from: FoldFrame, to: FoldFrame): Transition {
   });
   return { faces, motions: [still], blend: { moves, vertices: to.faces_vertices } };
 }
+
+/**
+ * Each face making its own move, straight from where its paper was to where it ends up. For folding a pile of
+ * units the same way as one already made (`copy`), a step that skips ahead, and for any step with more than
+ * `SEPARATELY` faces, as a kusudama's sixty petals put together: working out a joined-up motion for hundreds of
+ * faces at once takes seconds.
+ */
+const SEPARATELY = 400;
+
+/** How the paper gets from one frame to the next: as `transition`, or face by face for very many faces. */
+export function transitionBetween(from: FoldFrame, to: FoldFrame): Transition {
+  return to.faces_vertices.length > SEPARATELY && !to.soft?.length ? separately(from, to) : transition(from, to);
+}
+
+function separately(from: FoldFrame, to: FoldFrame): Transition {
+  const fromPositions = facePositions(from);
+  const toPositions = facePositions(to);
+  const motions: Motion[] = [];
+  const faces = to.faces_vertices.map((face, f): FaceTrack => {
+    const parent = to.faces_parent?.[f] ?? f;
+    const paper = face.map((v) => to.vertices_paper[v]);
+    const before = paper.map(affine(from.faces_vertices[parent].map((v) => from.vertices_paper[v]), fromPositions[parent]));
+    const { q, t } = rigid(paper, before, toPositions[f]);
+    return { paper, before, after: toPositions[f], motion: motions.push(screwsFor(q, t)[0]) - 1 };
+  });
+  cutsOf.set(faces, to.cuts ?? from.cuts ?? []);
+  return { faces, motions };
+}
+
+/** Whether a step only folds more units like one already made. */
+const copies = (op: Op): boolean => op.op === 'copy' || (op.op === 'together' && op.ops.every(copies));
+
+/**
+ * Folding more units like one already made (`copy`): each copy folds just as the first unit did, step by step,
+ * then goes to its place, lifted clear of the rest. Units take turns, from the top of the pile, each turn taking
+ * `TURN` of the step (more when there are few), starting evenly through the rest of it.
+ */
+function foldedLikeTheFirst(model: OrigamiModel, k: number, op: Op): Transition {
+  const frames = framesOf(model);
+  const [from, to] = [frames[k - 1], frames[k]];
+  // Each copy's unit, and its turn: copies made together (the first of each copy's list, say) fold together.
+  const sourceOf = new Map<number, number>();
+  const turnOf = new Map<number, number>();
+  const collect = (o: Op): void => {
+    if (o.op === 'copy')
+      o.to.forEach((t, n) => {
+        sourceOf.set(t, o.from);
+        turnOf.set(t, n);
+      });
+    else if (o.op === 'together') o.ops.forEach(collect);
+  };
+  collect(op);
+  const history = Array.from({ length: k - 1 }, (_, j) => stepTransition(model, j + 1));
+  const fromPositions = facePositions(from);
+  const toPositions = facePositions(to);
+  const origin = (n: number) => model.sheets[n]?.origin ?? [0, 0];
+  const faces = to.faces_vertices.map((face, f): FaceTrack => {
+    const paper = face.map((v) => to.vertices_paper[v]);
+    const parent = to.faces_parent?.[f] ?? f;
+    const before = paper.map(affine(from.faces_vertices[parent].map((v) => from.vertices_paper[v]), fromPositions[parent]));
+    return { paper, before, after: toPositions[f], motion: 0 };
+  });
+  cutsOf.set(faces, to.cuts ?? from.cuts ?? []);
+  const still: Motion = { axis: new Vector3(0, 1, 0), angle: 0, pivot: new Vector3(), shift: new Vector3(), lift: 0 };
+  if (!history.length) return { faces, motions: [still] };
+
+  // Each copied face: its unit, the same paper on the unit it copies, and that paper's face before this step and
+  // in each step before it (following faces back).
+  const copied = faces.map((f) => {
+    const unit = sheetOf(model.sheets, f.paper);
+    const source = sourceOf.get(unit);
+    if (source === undefined) return null;
+    const [tu, tv] = origin(unit);
+    const [su, sv] = origin(source);
+    const paper = f.paper.map(([u, v]): Vec2 => [u - tu + su, v - tv + sv]);
+    const c: Vec2 = [paper.reduce((sum, p) => sum + p[0], 0) / paper.length, paper.reduce((sum, p) => sum + p[1], 0) / paper.length];
+    let face = from.faces_vertices.findIndex((g) => inside(g.map((v) => from.vertices_paper[v]), c));
+    if (face < 0) return null;
+    const ancestors: number[] = [];
+    for (let j = k - 1; j >= 1; j--) {
+      ancestors[j - 1] = face;
+      face = frames[j].faces_parent?.[face] ?? face;
+    }
+    return { unit, paper, ancestors };
+  });
+  // Turns go from the top of the pile, the last copies first.
+  const turns = [...new Set(turnOf.values())].sort((a, b) => b - a);
+  const turn = Math.min(1, Math.max(TURN, 2 / turns.length));
+  const startOf = (unit: number) => {
+    const j = turns.indexOf(turnOf.get(unit)!);
+    return turns.length > 1 ? (j / (turns.length - 1)) * (1 - turn) : 0;
+  };
+
+  // Where the first unit's paper is `tau` of the way through its folding, each step played as it was. Moments are
+  // rounded to `MOMENTS` a step and their poses kept, as many units fold at once and each frame asks again.
+  const poses = new Map<number, Vec3[][]>();
+  const sourceAt = (i: number, tau: number): Vec3[] => {
+    const c = copied[i]!;
+    const x = Math.min(history.length - 1e-9, Math.round(tau * history.length * MOMENTS) / MOMENTS);
+    const j = Math.floor(x);
+    let pose = poses.get(x);
+    if (!pose) poses.set(x, (pose = poseAt(history[j], x - j)));
+    const a = c.ancestors[j];
+    return c.paper.map(affine(history[j].faces[a].paper, pose[a]));
+  };
+  // Each face moves along from where the first unit's paper was to where its own is: the same for all its corners.
+  const offsets = faces.map((f, i) => {
+    if (!copied[i]) return null;
+    const [s0, s1] = [sourceAt(i, 0)[0], sourceAt(i, 1)[0]];
+    return { start: f.before[0].map((x, d) => x - s0[d]) as Vec3, end: f.after[0].map((x, d) => x - s1[d]) as Vec3 };
+  });
+  const replay = (s: number): Vec3[][] => faces.map((f, i) => {
+      const c = copied[i];
+      const o = offsets[i];
+      if (!c || !o) return f.before;
+      const tau = Math.max(0, Math.min(1, (s - startOf(c.unit)) / turn));
+      if (tau <= 0) return f.before;
+      if (tau >= 1) return f.after;
+      const rise = TURN_LIFT * raised(tau);
+      return sourceAt(i, tau).map((p): Vec3 => [0, 1, 2].map((d) => p[d] + o.start[d] + (o.end[d] - o.start[d]) * tau + (d === 1 ? rise : 0)) as Vec3);
+    });
+  return { faces, motions: [still], replay };
+}
+
+/** How much of a step each unit of a pile takes to fold, at least, and how high it's lifted as it goes. */
+const TURN = 0.3;
+const TURN_LIFT = 0.3;
+/** How finely a copy's folding is played: the first unit's poses at this many moments a step. */
+const MOMENTS = 40;
 
 function blendedPose(t: Transition, s: number): Vec3[][] {
   const { moves, vertices } = t.blend!;
@@ -337,8 +476,11 @@ function moving(from: FoldFrame, to: FoldFrame, { yielding = false } = {}): Tran
   }
   // Paper that would dip below the table (folding something behind) lifts it, and the rest of the paper with
   // it, as you'd pick the model up: lifting only the moving part would push it up through the layers above.
+  // A separate piece of paper with nothing dipping (the other half of a model made of two) stays on the table.
   const lift = Math.max(0, ...motions.map((m) => m.lift));
-  let out: Transition = { faces, motions: motions.map((m) => ({ ...m, lift })) };
+  const grounded = faces.map(() => false);
+  if (lift) for (const piece of pieces(faces)) if (piece.every((f) => !motions[faces[f].motion].lift)) for (const f of piece) grounded[f] = true;
+  let out: Transition = { faces, motions: motions.map((m) => ({ ...m, lift })), ...(grounded.some(Boolean) && { grounded }) };
   // Easing away from creases only where it helps: it can nudge a stack into paper beside the crease instead.
   if (motions.some((m) => m.ease)) {
     const plain: Transition = { faces, motions: out.motions.map((m) => ({ ...m, ease: undefined })) };
@@ -349,10 +491,13 @@ function moving(from: FoldFrame, to: FoldFrame, { yielding = false } = {}): Tran
   if (found) {
     // Folds of several creases rarely move in step: try the creases folding together, and nearest-first or
     // outermost-first when faces hang from turning paper, and keep whichever passes through least paper.
+    // Faces that hang from nothing take their own motion, evenly through the step, so creases folding in turn
+    // would leave them behind, coming apart from the paper they're joined to.
     const deep = found.order.some((f) => found.parent[f] >= 0 && found.parent[found.parent[f]] >= 0);
+    const loose = found.parent.some((p) => p === -2);
     let hinged: Transition | null = null;
     let fewest = Infinity;
-    for (const stagger of deep ? [0, 0.3, 0.5, -0.3] : [0]) {
+    for (const stagger of deep && !loose ? [0, 0.3, 0.5, -0.3] : [0]) {
       const tried = hingedWith(out, { ...found, stagger });
       const count = passesThrough(tried, WAY_SAMPLES);
       if (count < fewest) [hinged, fewest] = [tried, count];
@@ -363,7 +508,15 @@ function moving(from: FoldFrame, to: FoldFrame, { yielding = false } = {}): Tran
     // compound fold by how deep any faces cut through each other, joined or not. A plain fold stays as one
     // turn: hinged, each layer of a stack turns about its own crease, and halfway they stand in one plane.
     const through = passesThrough(out, WAY_SAMPLES);
-    if (fewest < through || (!plain && fewest === through && deepestCut(hinged!) <= deepestCut(out))) return landInOrder(hinged!);
+    // Unless hanging the faces from each other tears the paper where each turning its own way doesn't (a wing
+    // swinging right over as the body stands up, both about one line); and the other way round, when neither
+    // passes through more paper.
+    const groups = cornerGroups(faces);
+    const torn = (way: Transition) => Math.max(...TEAR_SAMPLES.map((s) => apart(rawPose(way, s), groups)));
+    const [tornHinged, tornOwn] = [torn(hinged!), torn(out)];
+    const tears = (a: number, b: number) => a > TEAR && b < a - TEAR;
+    const tie = fewest === through && (tears(tornOwn, tornHinged) || (!plain && deepestCut(hinged!) <= deepestCut(out)));
+    if (!tears(tornHinged, tornOwn) && (fewest < through || tie)) return landInOrder(hinged!);
   }
   return landInOrder(out);
 }
@@ -391,27 +544,39 @@ function endsUnder(faces: FaceTrack[], group: number[], put: boolean[]): boolean
   return under > over;
 }
 
-/** A transition landing bottom layer first instead, if that passes through less paper as it settles. */
+/**
+ * A transition landing bottom layer first instead, if that passes through less paper as it settles, without
+ * tearing it: layers joined along a crease (a neck's two halves, at its spine) can't land one after the other.
+ */
 function landInOrder(t: Transition): Transition {
   // Only for paper settling flat: a step ending in 3D (petals opened out, say) has nothing to land.
   if (t.faces.some((f) => Math.abs(normal(f.after)[1]) < 0.999)) return t;
   // Judged by how deep paper goes through, as landing in order trades crossings in time for others.
   let best = t;
   let now = depthThrough(t);
+  let torn: number | null = null;
   for (const spread of LANDS) {
     if (!now) break;
     const ordered = inLandingOrder(t, spread);
     const d = depthThrough(ordered, now);
-    if (d < now) [best, now] = [ordered, d];
+    if (d >= now) continue;
+    torn ??= tornBy(t);
+    if (tornBy(ordered) <= Math.max(torn, TEAR / 2)) [best, now] = [ordered, d];
   }
   return best;
+}
+
+/** How far apart the same point of paper comes, at most, as a transition plays (before it's pulled together). */
+function tornBy(t: Transition): number {
+  const groups = cornerGroups(t.faces);
+  return groups.length ? Math.max(...TEAR_SAMPLES.map((s) => apart(rawPose(t, s), groups))) : 0;
 }
 
 /** The deepest any two faces moving apart cut through each other, at a few points: faces joined at a corner too. */
 function deepestCut(t: Transition): number {
   let deepest = 0;
   for (const s of WAY_SAMPLES) {
-    const pose = poseAt(t, s);
+    const pose = rawPose(t, s);
     const boxes = pose.map(box);
     for (let a = 0; a < pose.length; a++) {
       for (let b = a + 1; b < pose.length; b++) {
@@ -428,7 +593,7 @@ function depthThrough(t: Transition, limit = Infinity): number {
   let total = 0;
   for (const s of STAGE_SAMPLES) {
     if (total > limit) break;
-    const pose = poseAt(t, s);
+    const pose = rawPose(t, s);
     const boxes = pose.map(box);
     for (let a = 0; a < pose.length; a++) {
       for (let b = a + 1; b < pose.length; b++) {
@@ -441,8 +606,31 @@ function depthThrough(t: Transition, limit = Infinity): number {
   return total;
 }
 
-/** Hinged motion for a transition, with how far its paper rises and how its layers settle into place. */
+/**
+ * Hinged motion for a transition, with how far its paper rises and how its layers settle into place.
+ *
+ * A layer folding right over from still paper can turn about the height halfway between where it starts and
+ * where it lands, so the turn alone takes it to its place in the new stack: the layers of a stack swap order
+ * by turning, as paper does, keeping their gaps, instead of meeting edge-on halfway (where they flicker through
+ * each other) to be put right on the way. That's used unless it passes more paper through paper (a reverse
+ * fold's layers turn in opposite ways, each into the other's place).
+ */
 function hingedWith(out: Transition, hinges: NonNullable<Transition['hinges']>): Transition {
+  const plain = settled(out, { ...hinges, at: [...hinges.at] });
+  const over = out.faces.flatMap((_, i) => {
+    const p = hinges.parent[i];
+    return p >= 0 && hinges.parent[p] === -1 && Math.abs(Math.abs(hinges.angle[i]) - Math.PI) < 1e-3 && Math.abs(hinges.dir[i][1]) < 1e-6 ? [i] : [];
+  });
+  if (!over.length) return plain;
+  const height = (pts: Vec3[]) => pts.reduce((sum, q) => sum + q[1], 0) / pts.length;
+  const at = [...hinges.at];
+  for (const i of over) at[i] = [at[i][0], (height(out.faces[i].before) + height(out.faces[i].after)) / 2, at[i][2]];
+  const turned = settled(out, { ...hinges, at });
+  return passesThrough(turned) <= passesThrough(plain) && depthThrough(turned) <= depthThrough(plain) ? turned : plain;
+}
+
+/** Hinged motion about the given hinges: how far its paper rises, and how its layers settle into place. */
+function settled(out: Transition, hinges: NonNullable<Transition['hinges']>): Transition {
   const hinged: Transition = { ...out, hinges };
   // Turning about its crease at the height it started from, a layer lands a little off its place in the new
   // stack (by up to the stack's thickness): it makes that up on the way, rather than jumping at the end.
@@ -453,8 +641,8 @@ function hingedWith(out: Transition, hinges: NonNullable<Transition['hinges']>):
   hinges.lift = 0;
   let need = 0;
   for (let i = 1; i < 32; i++) {
-    const lowest = Math.min(0, ...poseAt(hinged, i / 32).flat().map((p) => p[1]));
-    if (lowest < -1e-4) need = Math.max(need, (-lowest + 0.02) / Math.sin((Math.PI * i) / 32));
+    const lowest = Math.min(0, ...rawPose(hinged, i / 32).flat().map((p) => p[1]));
+    if (lowest < -1e-4) need = Math.max(need, (-lowest + 0.02) / raised(i / 32));
   }
   hinges.lift = need;
   return hinged;
@@ -463,9 +651,47 @@ function hingedWith(out: Transition, hinges: NonNullable<Transition['hinges']>):
 /** Step k's animation (k from 1): straight from the frame before, or through the frames it passes on its way. */
 export function stepTransition(model: OrigamiModel, k: number): Transition {
   const frames = framesOf(model);
+  const op = model.steps[k - 1].op;
+  if (op && copies(op)) return foldedLikeTheFirst(model, k, op);
   const over = tuckedOver(model, k);
   if (over) return transitionVia([frames[k - 1], over, { ...frames[k], faces_parent: sameFaces(over, frames[k]) }]);
-  return transitionVia([frames[k - 1], ...(model.steps[k - 1].via ?? []), frames[k]]);
+  if (!model.steps[k - 1].via?.length) return transitionBetween(frames[k - 1], frames[k]);
+  const t = transitionVia([frames[k - 1], ...(model.steps[k - 1].via ?? []), frames[k]]);
+  return t.path ? unfoldingBackwards(model, k, t) : t;
+}
+
+/**
+ * Opening several folds at once (unfolding back to an earlier step) undoes them one at a time, each stretch
+ * undoing one step still folded. Each plays that step's own animation backwards, as paper unfolds the way it
+ * was folded: a collapse or petal fold opens as neatly as it closed, rather than each piece making its own way.
+ */
+function unfoldingBackwards(model: OrigamiModel, k: number, t: Transition): Transition {
+  const step = model.steps[k - 1];
+  if (step.op?.op !== 'unfold' || !t.path) return t;
+  const before = model.steps.slice(0, k - 1);
+  const to = step.op.to ?? lastFold(before);
+  if (to === null) return t;
+  // The frames the step passes through, by the step each one is placed like, latest first.
+  const skip = reopened(before);
+  const passes = [k - 1];
+  for (let j = k - 2; j > to; j--) if (!skip.has(j)) passes.push(j);
+  passes.push(to);
+  if (passes.length !== t.path.parts.length + 1) return t;
+  const frames = framesOf(model);
+  const parts = t.path.parts.map((part, j) => {
+    // Step a, played from its end back to its start: the steps between it and b were opened again already, so
+    // the paper lies before step a as it does at b. Each face here is a piece of one of step a's faces.
+    const a = passes[j];
+    if (a < 1) return part;
+    const forward = stepTransition(model, a);
+    const ancestors = part.faces.map((_, f) => {
+      let i = f;
+      for (let kk = k - 1; kk > a; kk--) i = frames[kk].faces_parent?.[i] ?? i;
+      return i;
+    });
+    return ancestors.every((i) => i < forward.faces.length) ? { ...part, backwards: { t: forward, ancestors } } : part;
+  });
+  return { ...t, path: { ...t.path, parts } };
 }
 
 /**
@@ -516,15 +742,52 @@ export function transitionVia(frames: FoldFrame[]): Transition {
   return { ...whole, path: { parts, ancestors } };
 }
 
-/** Each face's corners `s` of the way (0–1) through the step. */
+/**
+ * Each face's corners `s` of the way (0–1) through the step: as each face moves, then with paper that has come
+ * apart on the way (a compound fold, faces each going their own way) pulled back together.
+ */
 export function poseAt(t: Transition, s: number): Vec3[][] {
+  const pose = fixedPose(t, s);
+  // Resting on the table: lifted to clear it where something would dip below, but no higher. A lift big enough
+  // for the deepest dip would otherwise hold the paper up in the air for the rest of the step. All of it moves
+  // together, so nothing is pushed up through the paper above it. At the ends of the step too: paper shaped
+  // upside down, a plane's wings opened before it's turned over, can reach a little below the table.
+  let low = Infinity;
+  for (const face of pose) for (const p of face) low = Math.min(low, p[1]);
+  return Math.abs(low) > 1e-9 ? pose.map((face) => face.map(([x, y, z]): Vec3 => [x, y - low, z])) : pose;
+}
+
+/** Each face's corners `s` of the way through the step, put right (see `poseAt`) but not yet set down on the table. */
+function fixedPose(t: Transition, s: number): Vec3[][] {
+  const pose = rawPose(t, s);
+  // Not at the very start, where the paper is as the step before left it; at the end, with layers held apart.
+  const fixes = s > 0 ? fixesFor(t) : null;
+  if (!fixes) return pose;
+  const x = Math.min(1, s) * JOIN_SAMPLES;
+  const i = Math.min(JOIN_SAMPLES - 1, Math.floor(x));
+  const w = x - i;
+  return pose.map((face, f) => {
+    // Each face turned about its middle and moved, as blended between the samples either side: still rigid.
+    const [a, b] = [fixes[i][f], fixes[i + 1][f]];
+    return applyFix({ q: a.q.clone().slerp(b.q, w), shift: a.shift.clone().lerp(b.shift, w) }, face);
+  });
+}
+
+/** Each face's corners `s` of the way through the step, as each face moves. */
+function rawPose(t: Transition, s: number): Vec3[][] {
   if (s <= 0) return t.faces.map((f) => f.before);
   if (s >= 1) return t.faces.map((f) => f.after);
+  if (t.replay) return t.replay(s);
+  if (t.backwards) {
+    const { t: forward, ancestors } = t.backwards;
+    const pose = poseAt(forward, 1 - s);
+    return t.faces.map((f, i) => f.paper.map(affine(forward.faces[ancestors[i]].paper, pose[ancestors[i]])));
+  }
   if (t.makeWay) return wayMadePose(t, s);
   if (t.path) {
     const { parts, ancestors } = t.path;
     const j = Math.min(parts.length - 1, Math.floor(s * parts.length));
-    const pose = poseAt(parts[j], s * parts.length - j);
+    const pose = rawPose(parts[j], s * parts.length - j);
     // Each face is part of a face of that stretch: place its corners like that face's.
     return t.faces.map((f, i) => {
       const a = ancestors[j][i];
@@ -533,7 +796,10 @@ export function poseAt(t: Transition, s: number): Vec3[][] {
   }
   if (t.hinges) return hingedPose(t, s);
   if (t.blend) return blendedPose(t, s);
-  return t.faces.map((f, i) => f.before.map((p) => move(t.motions[f.motion], p, landed(t, i, s))));
+  return t.faces.map((f, i) => {
+    const m = t.motions[f.motion];
+    return f.before.map((p) => move(t.grounded?.[i] ? { ...m, lift: 0 } : m, p, landed(t, i, s)));
+  });
 }
 
 /** Which faces share a corner on the sheet (joined there, so they touch without crossing), worked out once per step. */
@@ -565,7 +831,7 @@ function passesThrough(
   let count = 0;
   for (const s of samples) {
     if (count > limit) break;
-    const pose = poseAt(t, s);
+    const pose = rawPose(t, s);
     const boxes = pose.map(box);
     for (let a = 0; a < pose.length; a++) {
       for (let b = a + 1; b < pose.length; b++) {
@@ -728,8 +994,8 @@ function withWayMade(t: Transition): Transition {
   let best: Transition | null = null;
   let fewest = Infinity;
   let least = Infinity;
-  const roughly = WAY_SAMPLES.map((s) => ({ s, pose: poseAt(t, played(s)) }));
-  const closely = CLOSE_SAMPLES.map((s) => ({ s, pose: poseAt(t, played(s)) }));
+  const roughly = WAY_SAMPLES.map((s) => ({ s, pose: rawPose(t, played(s)) }));
+  const closely = CLOSE_SAMPLES.map((s) => ({ s, pose: rawPose(t, played(s)) }));
   for (const piece of candidates) {
     const points = piece.flatMap((f) => t.faces[f].before);
     const bottom = Math.min(...points.map((p) => p[1]));
@@ -780,7 +1046,7 @@ function withWayMade(t: Transition): Transition {
 
 /** A transition with paper making way: the rest plays in the middle, while the lifted paper is up. */
 function wayMadePose(t: Transition, s: number): Vec3[][] {
-  return tilted(t.makeWay!, s, poseAt({ ...t, makeWay: undefined }, played(s)));
+  return tilted(t.makeWay!, s, rawPose({ ...t, makeWay: undefined }, played(s)));
 }
 
 /** How far through the rest of the step it is, `s` of the way through, while paper makes way. */
@@ -864,10 +1130,11 @@ function hingedPose(t: Transition, s: number): Vec3[][] {
     placed[f] = placed[h.parent[f]].clone().multiply(turn);
   }
   const p = new Vector3();
-  const rise = h.lift * Math.sin(Math.PI * s);
+  const lifted = h.lift * raised(s);
   return t.faces.map((f, i) => {
     if (h.parent[i] === -2) return f.before.map((q) => move(t.motions[f.motion], q, landed(t, i, s)));
     const settle = h.fix ? FIX(landed(t, i, s)) : 0;
+    const rise = t.grounded?.[i] ? 0 : lifted;
     return f.before.map((q, c) => {
       p.set(...q).applyMatrix4(placed[i]);
       const d = h.fix?.[i][c];
@@ -885,12 +1152,19 @@ export function stepBound(model: OrigamiModel, k: number): { center: Vec3; radiu
   if (k === 0) return sphereAround(frames[0].vertices_coords);
   const t = stepTransition(model, k);
   const points: Vec3[] = [...frames[k - 1].vertices_coords, ...frames[k].vertices_coords];
-  for (const s of [0.25, 0.5, 0.75]) for (const face of poseAt(t, s)) points.push(...face);
+  for (const s of [0.25, 0.5, 0.75]) for (const face of rawPose(t, s)) points.push(...face);
   return sphereAround(points);
 }
 
 const turn = new Quaternion();
 const v = new Vector3();
+
+/**
+ * How far up paper lifted off the table is, `s` of the way through a step, as a share of its lift: up quickly,
+ * held, and down again at the end, as you'd pick the model up. Rising slowly, a dip near the start or end of the
+ * step would need the model lifted far higher to clear the table there.
+ */
+const raised = (s: number) => Math.min(1, 3 * Math.sin(Math.PI * s));
 
 export function move(m: Motion, [x, y, z]: Vec3, s: number): Vec3 {
   v.set(x, y, z);
@@ -899,7 +1173,7 @@ export function move(m: Motion, [x, y, z]: Vec3, s: number): Vec3 {
     v.sub(m.pivot).applyQuaternion(turn).add(m.pivot);
   }
   v.addScaledVector(m.shift, s);
-  v.y += m.lift * Math.sin(Math.PI * s);
+  v.y += m.lift * raised(s);
   if (m.ease) v.addScaledVector(m.ease, Math.sin(Math.PI * s));
   return [v.x, v.y, v.z];
 }
@@ -1019,7 +1293,7 @@ function liftFor(m: Motion, points: Vec3[]): number {
   let need = 0;
   for (let i = 1; i < 16; i++) {
     const lowest = Math.min(...points.map((p) => move(m, p, i / 16)[1]));
-    if (lowest < -1e-4) need = Math.max(need, -lowest / Math.sin((Math.PI * i) / 16));
+    if (lowest < -1e-4) need = Math.max(need, -lowest / raised(i / 16));
   }
   return need ? need + 0.02 : 0;
 }
@@ -1035,4 +1309,353 @@ function stagger(amount: number, depth: number, deepest: number, s: number): num
   const span = 1 - Math.abs(amount);
   const start = k * (1 - span);
   return Math.min(1, Math.max(0, (s - start) / span));
+}
+
+// ——— Keeping paper joined ———
+
+/** How far apart (in sheet widths) the same point of paper may come mid-step before it's pulled back together. */
+const TEAR = 0.05;
+/** Where through a step to look for paper coming apart. */
+const TEAR_SAMPLES = [0.1, 0.25, 0.4, 0.5, 0.6, 0.75, 0.9];
+/** Gaps left between the same point of paper, for layers of a stack easing round each other. */
+const JOIN_SLACK = 0.002;
+/** Points through a step at which the pull is worked out, in between which it's blended. */
+const JOIN_SAMPLES = 40;
+const JOIN_ROUNDS = 30;
+/** How many times over the points that couldn't be joined are tried again. */
+const FILL_ROUNDS = 4;
+/** How far joined-up paper may graze through other paper (a sheet's width is 1), as the crossing tests allow: far less than a tear shows. */
+const GRAZE = 0.005;
+/** How much more graze is let by, joining paper up, for each sheet width it has come apart beyond a tear. */
+const GRAZE_PER_TEAR = 0.2;
+
+/** How a face is moved to join the paper up: turned by `q` about its middle, then moved by `shift`. */
+interface JoinFix {
+  q: Quaternion;
+  shift: Vector3;
+}
+
+/** For each sample through the step, how each face is moved to join the paper up; null if it stays joined. */
+const joined = new WeakMap<Transition, JoinFix[][] | null>();
+function joinFixes(t: Transition): JoinFix[][] | null {
+  if (joined.has(t)) return joined.get(t)!;
+  let out: JoinFix[][] | null = null;
+  const groups = cornerGroups(t.faces);
+  if (groups.length && TEAR_SAMPLES.some((s) => apart(rawPose(t, s), groups) > TEAR)) {
+    const fixes: JoinFix[][] = [];
+    const whole: boolean[] = [];
+    const raws: Vec3[][][] = [];
+    const allowed: number[] = [];
+    let warm: JoinFix[] | null = null;
+    for (let i = 0; i <= JOIN_SAMPLES; i++) {
+      const raw = rawPose(t, i / JOIN_SAMPLES);
+      raws.push(raw);
+      // Joined up only as far as it can be without passing paper through paper that the faces moving their own
+      // ways kept clear of (a flap stood up before it's squashed, say): torn a little rather than tangled. But a
+      // graze shows far less than a tear, so the wider the paper has come apart, the more of a graze is let by.
+      allowed.push(Math.max(deepest(t, raw), GRAZE + GRAZE_PER_TEAR * Math.max(0, apart(raw, groups) - TEAR)));
+      if (i === 0 || i === JOIN_SAMPLES) {
+        fixes.push(raw.map(() => ({ q: new Quaternion(), shift: new Vector3() })));
+        whole.push(true);
+        continue;
+      }
+      // Starting from the last sample's fix, as the paper moves on only a little.
+      const w = warm;
+      // (A copy either way: joining up moves the corners it's given.)
+      const start = w ? raw.map((face, f) => applyFix(w[f], face)) : raw.map((face) => face.map((p) => [...p] as Vec3));
+      const fitted = joinUp(t.faces, start, groups, raw);
+      const fix = fitted.map((face, f) => fixFor(t.faces[f].paper, raw[f], face));
+      const part = [1, 0.75, 0.5, 0.25].find((k) => deepest(t, raw.map((face, f) => applyFix(partly(fix[f], k), face))) <= allowed[i]) ?? 0;
+      fixes.push(fix.map((x) => partly(x, part)));
+      whole.push(part === 1);
+      // A join that passes paper through paper has found the paper folded the wrong way round (a face flipped
+      // through its neighbour): the next sample starts again from the last one joined up right.
+      if (part === 1) warm = fix;
+    }
+    // Where the paper couldn't be joined up whole: joined again starting from the joins either side blended,
+    // or failing that, just those blended, if that keeps it clear.
+    // Again while that fixes more, as each point fixed gives the ones beside it a better start.
+    for (let more = true, round = 0; more && round < FILL_ROUNDS; round++) {
+      more = false;
+      for (let i = 1; i < JOIN_SAMPLES; i++) {
+        if (whole[i]) continue;
+        let a = i - 1;
+        while (!whole[a]) a--;
+        let b = i + 1;
+        while (!whole[b]) b++;
+        const w = (i - a) / (b - a);
+        const raw = raws[i];
+        const blend = fixes[a].map((x, f) => ({ q: x.q.clone().slerp(fixes[b][f].q, w), shift: x.shift.clone().lerp(fixes[b][f].shift, w) }));
+        const start = raw.map((face, f) => applyFix(blend[f], face));
+        const fitted = joinUp(t.faces, start.map((face) => face.map((p) => [...p] as Vec3)), groups, raw);
+        const again = fitted.map((face, f) => fixFor(t.faces[f].paper, raw[f], face));
+        const torn = apart(raw.map((face, f) => applyFix(fixes[i][f], face)), groups);
+        const fix = [again, blend].find((x) => {
+          const pose = raw.map((face, f) => applyFix(x[f], face));
+          return deepest(t, pose) <= allowed[i] && apart(pose, groups) < torn;
+        });
+        if (fix) {
+          fixes[i] = fix;
+          whole[i] = true;
+          more = true;
+        }
+      }
+    }
+    out = fixes;
+  }
+  joined.set(t, out);
+  return out;
+}
+
+/** A fix made only `k` (0–1) of the way. */
+function partly({ q, shift }: JoinFix, k: number): JoinFix {
+  return { q: new Quaternion().slerp(q, k), shift: shift.clone().multiplyScalar(k) };
+}
+
+/** How deep paper goes through paper, at most, in a pose of a transition's faces: how far it would take to clear it. */
+function deepest(t: Transition, pose: Vec3[][]): number {
+  const boxes = pose.map(box);
+  let most = 0;
+  for (let a = 0; a < pose.length; a++) {
+    for (let b = a + 1; b < pose.length; b++) {
+      if (together(t, a, b) || !overlapping(boxes[a], boxes[b]) || touching(t.faces, a, b)) continue;
+      most = Math.max(most, clearanceDepth(pose[a], pose[b]));
+    }
+  }
+  return most;
+}
+
+/** A face moved by its fix. */
+function applyFix({ q, shift }: JoinFix, face: Vec3[]): Vec3[] {
+  const mid = new Vector3(...centroid(face));
+  return face.map((p) => new Vector3(...p).sub(mid).applyQuaternion(q).add(mid).add(shift).toArray() as Vec3);
+}
+
+/** The turn about its middle and the move taking a face from `from` to `to`, both its shape on the sheet. */
+function fixFor(paper: Vec2[], from: Vec3[], to: Vec3[]): JoinFix {
+  const { q } = rigid(paper, from, to);
+  const shift = new Vector3(...centroid(to)).sub(new Vector3(...centroid(from)));
+  return { q, shift };
+}
+
+/** The corners (as [face, corner]) that are one point of paper: on an edge two faces are joined along, at the same place on the sheet. */
+function cornerGroups(faces: FaceTrack[]): [number, number][][] {
+  const start: number[] = [];
+  let n = 0;
+  for (const f of faces) {
+    start.push(n);
+    n += f.paper.length;
+  }
+  const root = Array.from({ length: n }, (_, i) => i);
+  const find = (i: number): number => (root[i] === i ? i : (root[i] = find(root[i])));
+  const near = (p: Vec2, q: Vec2) => Math.abs(p[0] - q[0]) < 1e-7 && Math.abs(p[1] - q[1]) < 1e-7;
+  const along = (p: Vec2, [a, b]: [Vec2, Vec2]) => {
+    const d = [b[0] - a[0], b[1] - a[1]];
+    const len = Math.hypot(d[0], d[1]);
+    const t = ((p[0] - a[0]) * d[0] + (p[1] - a[1]) * d[1]) / (len * len);
+    return t > -1e-7 && t < 1 + 1e-7 && Math.abs((p[0] - a[0]) * d[1] - (p[1] - a[1]) * d[0]) / len < 1e-7;
+  };
+  for (const { i, j, shared } of sharedEdges(faces)) {
+    faces[i].paper.forEach((p, a) => {
+      if (!along(p, shared)) return;
+      const b = faces[j].paper.findIndex((q) => near(p, q));
+      if (b >= 0) root[find(start[i] + a)] = find(start[j] + b);
+    });
+  }
+  const groups = new Map<number, [number, number][]>();
+  faces.forEach((f, i) =>
+    f.paper.forEach((_, c) => {
+      const r = find(start[i] + c);
+      const g = groups.get(r);
+      if (g) g.push([i, c]);
+      else groups.set(r, [[i, c]]);
+    }),
+  );
+  return [...groups.values()].filter((g) => g.length > 1);
+}
+
+/** How far the furthest corner of a group is from where its group is on average. */
+function apart(pose: Vec3[][], groups: [number, number][][]): number {
+  let most = 0;
+  for (const g of groups) {
+    const m = centroid(g.map(([f, c]) => pose[f][c]));
+    for (const [f, c] of g) most = Math.max(most, Math.hypot(pose[f][c][0] - m[0], pose[f][c][1] - m[1], pose[f][c][2] - m[2]));
+  }
+  return most;
+}
+
+/**
+ * The paper joined up: in turn, each point of paper drawn together to where its corners are on average (within
+ * a layer's easing), and each face set rigidly where its corners best fit. Paper that stays where it is through
+ * the step (`raw` shows where) stays put, and the moving paper comes to it. Faces end rigid, their corners
+ * close to joined.
+ */
+function joinUp(faces: FaceTrack[], pose: Vec3[][], groups: [number, number][][], raw: Vec3[][]): Vec3[][] {
+  const at = (p: Vec3, q: Vec3) => Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]) < SAME;
+  // Paper where it starts and ends; and of that, paper in place now too (a stage can lift paper out of the way
+  // and put it back). Paper lifted like that is held where it is, unless it's joined to paper in place: then it
+  // comes back to that.
+  const ends = faces.map((f) => f.before.every((p, c) => at(p, f.after[c])));
+  const now = faces.map((f, i) => ends[i] && f.before.every((p, c) => at(p, raw[i][c])));
+  const besideNow = faces.map(() => false);
+  for (const g of groups) if (g.some(([f]) => now[f])) for (const [f] of g) besideNow[f] = true;
+  const still = faces.map((_, i) => now[i] || (ends[i] && !besideNow[i]));
+  let x = pose.map((face, i) => (still[i] ? raw[i] : face));
+  for (let k = 0; k < JOIN_ROUNDS; k++) {
+    drawTogether(x, groups, still);
+    x = faces.map((f, i) => (still[i] ? raw[i] : fitFace(f.paper, x[i])));
+  }
+  return x;
+}
+
+function drawTogether(pose: Vec3[][], groups: [number, number][][], still: boolean[]) {
+  for (const g of groups) {
+    const held = g.filter(([f]) => still[f]);
+    const m = centroid((held.length ? held : g).map(([f, c]) => pose[f][c]));
+    for (const [f, c] of g) {
+      if (still[f]) continue;
+      const p = pose[f][c];
+      const d = Math.hypot(p[0] - m[0], p[1] - m[1], p[2] - m[2]);
+      if (d <= JOIN_SLACK) continue;
+      const k = JOIN_SLACK / d;
+      pose[f][c] = [m[0] + (p[0] - m[0]) * k, m[1] + (p[1] - m[1]) * k, m[2] + (p[2] - m[2]) * k];
+    }
+  }
+}
+
+/** A face's shape on the sheet placed rigidly where it best fits `to`: facing the way `to` does, turned to match it. */
+function fitFace(paper: Vec2[], to: Vec3[]): Vec3[] {
+  const flat = paper.map(([u, v]) => new Vector3(u, 0, v));
+  const target = to.map((p) => new Vector3(...p));
+  const nFrom = newell(flat);
+  const nTo = newell(target);
+  if (nTo.lengthSq() < 1e-12) return to;
+  nFrom.normalize();
+  nTo.normalize();
+  const from0 = new Vector3(...centroid(flat.map((p) => p.toArray())));
+  const to0 = new Vector3(...centroid(to));
+  const face = new Quaternion().setFromUnitVectors(nFrom, nTo);
+  const a = flat.map((p) => p.clone().sub(from0).applyQuaternion(face));
+  const b = target.map((p) => p.clone().sub(to0));
+  let cross = 0;
+  let dot = 0;
+  a.forEach((p, i) => {
+    cross += nTo.dot(new Vector3().crossVectors(p, b[i]));
+    dot += p.dot(b[i]);
+  });
+  const turn = new Quaternion().setFromAxisAngle(nTo, Math.atan2(cross, dot));
+  return a.map((p) => p.applyQuaternion(turn).add(to0).toArray() as Vec3);
+}
+
+/** A polygon's normal, scaled by its area (Newell's method), which way round its corners go. */
+function newell(pts: Vector3[]): Vector3 {
+  const n = new Vector3();
+  pts.forEach((p, i) => {
+    const q = pts[(i + 1) % pts.length];
+    n.x += (p.y - q.y) * (p.z + q.z);
+    n.y += (p.z - q.z) * (p.x + q.x);
+    n.z += (p.x - q.x) * (p.y + q.y);
+  });
+  return n;
+}
+
+
+// ——— Keeping layers apart ———
+
+/**
+ * How the paper is put right through a step: joined up where it came apart, and layers that meet face to face
+ * on the way held apart. Null when neither is needed.
+ */
+const fixed = new WeakMap<Transition, JoinFix[][] | null>();
+function fixesFor(t: Transition): JoinFix[][] | null {
+  if (fixed.has(t)) return fixed.get(t)!;
+  const join = joinFixes(t);
+  const poses = Array.from({ length: JOIN_SAMPLES + 1 }, (_, i) => {
+    const raw = rawPose(t, i / JOIN_SAMPLES);
+    return join ? raw.map((face, f) => applyFix(join[i][f], face)) : raw;
+  });
+  const apart = apartShifts(t, poses);
+  const out =
+    join || apart
+      ? poses.map((_, i) =>
+          t.faces.map((_, f) => {
+            const fix = join?.[i][f] ?? { q: new Quaternion(), shift: new Vector3() };
+            return apart ? { q: fix.q, shift: fix.shift.clone().add(apart[i][f]) } : fix;
+          }),
+        )
+      : null;
+  fixed.set(t, out);
+  return out;
+}
+
+/** How close (along their normal) overlapping layers lying face to face may come before they're held apart. */
+const MEET = LAYER_GAP / 2;
+const APART_ROUNDS = 4;
+/** The furthest a face is moved to hold it apart from the layers it meets: a few layers' thickness. */
+const MAX_APART = 4 * LAYER_GAP;
+
+/**
+ * Layers that come to lie face to face while a step plays (a stack's layers swapping order in a reverse fold,
+ * say) are drawn flickering through each other. For each sample of the step, how far to move each face to
+ * hold such layers half a layer apart, in the order they were last apart in: when they've passed through each
+ * other, they swap in a step too small to see. Null if no layers meet.
+ */
+function apartShifts(t: Transition, poses: Vec3[][][]): Vector3[][] | null {
+  // Bending paper is many small triangles, joined at every corner: never layers to hold apart.
+  if (t.blend) return null;
+  const n = t.faces.length;
+  const order = new Map<number, number>();
+  let any = false;
+  const out = poses.map((start, i) => {
+    const shifts = start.map(() => new Vector3());
+    // Paper meeting where the step ends is held apart too (walls stood up onto paper that shared their layer
+    // lying flat), in the order it came in.
+    if (i === 0) return shifts;
+    const normals = start.map((face) => newell(face.map((p) => new Vector3(...p))).normalize());
+    // A few rounds, as holding two layers apart can push one onto a third.
+    for (let round = 0; round < APART_ROUNDS; round++) {
+      const pose = start.map((face, f) => face.map((p) => new Vector3(...p).add(shifts[f]).toArray() as Vec3));
+      const boxes = pose.map(box);
+      let moved = false;
+      for (let a = 0; a < n; a++) {
+        for (let b = a + 1; b < n; b++) {
+          if (!overlapping(boxes[a], boxes[b]) || Math.abs(normals[a].dot(normals[b])) < 0.999) continue;
+          const gap = normals[a].dot(new Vector3(...pose[b][0]).sub(new Vector3(...pose[a][0])));
+          const key = a * n + b;
+          const known = order.get(key);
+          if (Math.abs(gap) >= MEET) {
+            // Clearly apart: this is their order now.
+            if (known !== undefined) order.set(key, Math.sign(gap));
+            continue;
+          }
+          if (!faceToFace(pose[a], pose[b], normals[a])) continue;
+          // Meeting: kept in the order they had at the last sample, or as they start out.
+          const sign = known ?? (Math.sign(normals[a].dot(new Vector3(...poses[i - 1][b][0]).sub(new Vector3(...poses[i - 1][a][0])))) || 1);
+          order.set(key, sign);
+          const need = (MEET - sign * gap) / 2;
+          shifts[a].addScaledVector(normals[a], -sign * need);
+          shifts[b].addScaledVector(normals[a], sign * need);
+          any = moved = true;
+        }
+      }
+      // Nudged against a deep stack, layer by layer, a face could add up to a move you'd see.
+      for (const v of shifts) if (v.length() > MAX_APART) v.setLength(MAX_APART);
+      if (!moved) break;
+    }
+    return shifts;
+  });
+  return any ? out : null;
+}
+
+/** Whether two faces lying in one plane (with normal `n`) overlap there, rather than lying side by side. */
+function faceToFace(a: Vec3[], b: Vec3[], n: Vector3): boolean {
+  const e1 = new Vector3(...a[1]).sub(new Vector3(...a[0])).normalize();
+  const e2 = n.clone().cross(e1);
+  const o = new Vector3(...a[0]);
+  const flat = (pts: Vec3[]) =>
+    pts.map((p): Vec2 => {
+      const d = new Vector3(...p).sub(o);
+      return [d.dot(e1), d.dot(e2)];
+    });
+  return overlapArea(flat(a), flat(b)) > 1e-5;
 }

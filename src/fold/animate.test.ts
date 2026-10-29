@@ -1,8 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { basics } from '../models/basics';
-import { poseAt, transition } from './animate';
+import { crane } from '../models/recipes/crane';
+import { frog } from '../models/recipes/frog';
+import { lily } from '../models/recipes/lily';
+import { poseAt, stepTransition, transition } from './animate';
 import { facePositions, framesOf, LAYER_GAP } from './frames';
-import type { Vec2, Vec3 } from './types';
+import { sharedSegment } from './geometry2d';
+import type { OrigamiModel, Vec2, Vec3 } from './types';
 
 const frames = framesOf(basics);
 const steps = frames.slice(1).map((to, i) => transition(frames[i], to));
@@ -86,4 +90,41 @@ describe('animating a step', () => {
     expect(fold.motions).toHaveLength(2);
     expect(fold.motions.map((m) => Math.round(m.angle * 100) / 100).sort()).toEqual([0, 3.14]);
   });
+});
+
+describe('compound folds', () => {
+  /** How far apart the same point of paper comes, at most, while step k plays: corners at one place on the sheet, on an edge two faces are joined along. */
+  const torn = (model: OrigamiModel, k: number) => {
+    const t = stepTransition(model, k);
+    let most = 0;
+    for (const s of [0.2, 0.4, 0.5, 0.6, 0.8]) {
+      const pose = poseAt(t, s);
+      t.faces.forEach((f, a) =>
+        t.faces.forEach((g, b) => {
+          if (b <= a || !sharedSegment(f.paper, g.paper)) return;
+          f.paper.forEach((p, c) => {
+            const d = g.paper.findIndex((q) => key(q) === key(p));
+            if (d >= 0) most = Math.max(most, dist(pose[a][c], pose[b][d]));
+          });
+        }),
+      );
+    }
+    return most;
+  };
+
+  it('keeps the paper joined while several creases fold at once', () => {
+    const model = crane();
+    // The square base's collapse and both petal folds, which each face once played its own way, coming apart.
+    for (const k of [9, 15, 21]) expect(torn(model, k), `crane step ${k}`).toBeLessThan(0.01);
+  });
+
+  it('keeps the paper joined through petal folds, if grazing a little', () => {
+    // The lily's squash-and-petal folds came apart by 0.4 of the sheet, and the frog base's petal folds by
+    // 0.2: joining them up all the way grazes paper by up to about twenty layers instead.
+    for (const model of [lily(), frog()]) {
+      const petals = model.steps.flatMap((s, i) => (s.kind === 'petal' ? [i + 1] : []));
+      expect(petals, model.id).toHaveLength(4);
+      for (const k of petals) expect(torn(model, k), `${model.id} step ${k}`).toBeLessThan(0.02);
+    }
+  }, 30_000);
 });

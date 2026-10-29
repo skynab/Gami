@@ -12,8 +12,17 @@ test.describe('gallery', () => {
 
     await page.getByRole('searchbox', { name: 'Search models' }).fill('');
     await page.getByRole('button', { name: 'Lessons' }).click();
-    await expect(page.getByRole('link', { name: /Folding basics/ })).toBeVisible();
+    await expect(page.getByRole('link', { name: /^Lesson Basics/ })).toBeVisible();
     await expect(page.getByRole('link', { name: /Geometry by folding/ })).toBeVisible();
+    await expect(page.getByRole('link', { name: /Crane/ })).toHaveCount(0);
+  });
+
+  test('picks out the new models, each with a star', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'New', exact: true }).click();
+    const crown = page.getByRole('link', { name: /Crown/ });
+    await expect(crown).toBeVisible();
+    await expect(crown.locator('.new-star')).toBeVisible();
     await expect(page.getByRole('link', { name: /Crane/ })).toHaveCount(0);
   });
 
@@ -27,8 +36,11 @@ test.describe('gallery', () => {
     await expect(card.locator('img.card-preview.playing')).toHaveCount(0);
   });
 
-  test('shows each finished model on its card', async ({ page }) => {
+  test('shows each finished model on its card', async ({ page, isMobile }) => {
     await page.goto('/');
+    // On a touch screen a card plays its preview while it's mid-screen, in place of the finished model: show the
+    // finished model here.
+    if (isMobile) await page.addStyleTag({ content: '.card-thumb .card-preview { visibility: hidden; } .card-thumb img { opacity: 1 !important; }' });
     for (const name of ['Fortune teller', 'Crane', 'Lily']) {
       const thumb = page.getByRole('link', { name: new RegExp(name) }).locator('.card-thumb');
       await thumb.scrollIntoViewIfNeeded();

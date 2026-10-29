@@ -13,6 +13,7 @@ import {
   type Piece,
 } from './geometry2d';
 import { facePositions } from './frames';
+import { withTaped } from './stuck';
 import type { FoldFrame, Vec2, Vec3 } from './types';
 import type { CreaseKind } from './collapse';
 
@@ -96,10 +97,15 @@ export function fold(frame: FoldFrame, { line, kind, layers, only }: FoldOptions
   if (!movingSideLayers.length) throw new FoldError('Nothing is on the folding side of that line.');
   const from = layers === undefined ? -Infinity : Math.max(...movingSideLayers) - layers + 1;
 
-  // Cut every face that takes part along the line.
+  // Cut every face that takes part along the line. Paper taped to paper that takes part does too.
+  const takesPart = withTaped(
+    frame.tapes,
+    faces.map((f) => f.paper),
+    faces.map((f) => f.layer >= from && (!only || only(f.paper))),
+  );
   const pieces: (FlatFace & { moves: boolean })[] = [];
   faces.forEach((f, i) => {
-    if (f.layer < from || (only && !only(f.paper))) {
+    if (!takesPart[i]) {
       pieces.push({ ...f, parent: i, moves: false });
       return;
     }
@@ -199,11 +205,13 @@ export function unfoldTo(frames: FoldFrame[], target: number): FoldFrame {
 
 /**
  * Unfolding back to an earlier frame as a step: the frame it ends at, and the frames it passes on the way,
- * undoing the folds one at a time, latest first, so the animation opens each in turn.
+ * undoing the folds one at a time, latest first, so the animation opens each in turn. `reopened` are the
+ * frames an earlier unfold already opened back up (from `reopened` in ops.ts): passing them would fold that
+ * paper again only to open it once more.
  */
-export function unfoldStep(frames: FoldFrame[], target: number): { frame: FoldFrame; via?: FoldFrame[] } {
+export function unfoldStep(frames: FoldFrame[], target: number, reopened: ReadonlySet<number> = new Set()): { frame: FoldFrame; via?: FoldFrame[] } {
   const via: FoldFrame[] = [];
-  for (let k = frames.length - 2; k > target; k--) via.push(unfoldTo(frames, k));
+  for (let k = frames.length - 2; k > target; k--) if (!reopened.has(k)) via.push(unfoldTo(frames, k));
   return { frame: unfoldTo(frames, target), ...(via.length && { via }) };
 }
 
@@ -266,9 +274,16 @@ function compact(faces: FlatFace[]): number[] {
   const order = faces.map((_, i) => i).sort((a, b) => faces[a].layer - faces[b].layer || a - b);
   const out = new Array<number>(faces.length).fill(0);
   const placed: number[] = [];
+  // Each face's bounding box, to skip pairs far apart quickly (models of many units have hundreds of faces).
+  const boxes = faces.map((f) => {
+    const xs = f.world.map((p) => p[0]);
+    const zs = f.world.map((p) => p[1]);
+    return [Math.min(...xs), Math.max(...xs), Math.min(...zs), Math.max(...zs)];
+  });
+  const near = (a: number, b: number) => boxes[a][0] < boxes[b][1] && boxes[b][0] < boxes[a][1] && boxes[a][2] < boxes[b][3] && boxes[b][2] < boxes[a][3];
   for (const f of order) {
     let layer = 0;
-    for (const g of placed) if (out[g] + 1 > layer && overlapArea(faces[f].world, faces[g].world) > 1e-7) layer = out[g] + 1;
+    for (const g of placed) if (out[g] + 1 > layer && near(f, g) && overlapArea(faces[f].world, faces[g].world) > 1e-7) layer = out[g] + 1;
     out[f] = layer;
     placed.push(f);
   }

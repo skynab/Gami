@@ -1,5 +1,5 @@
 import { checkNoTear, FoldError, placeLike, toFlat, type FlatFace } from './fold';
-import { joinedSegment, sideOf, split, type Cut, type Line } from './geometry2d';
+import { joinedSegment, overlapArea, sideOf, split, type Cut, type Line } from './geometry2d';
 import { LAYER_GAP } from './frames';
 import { centre } from './select';
 import type { FoldFrame, Vec2, Vec3 } from './types';
@@ -149,10 +149,48 @@ export function shape(
   // the other way round, on the table.
   const over = (i: number) => ups[i] !== null && ups[i]![1] < -0.999;
   const overTop = Math.max(0, ...pieces.filter((_, i) => over(i)).map((p) => p.layer));
+  // Any other stack turned by one bend turns about its own bottom layer, standing on the paper that stays put
+  // beneath it: turned about the table instead, a thick stack's bottom edge would cut down through that
+  // paper. Paper turned further, beyond a stack that stands up, is hinged to the stack's far side, so it lies
+  // beyond the stack's layers rather than in under them. Bends turning along one line by one angle (flaps lying
+  // one on another, each turned by a bend of its own) turn one stack, so its layers stand apart.
+  const lineOf = (k: number) => {
+    if (k < 0) return '';
+    const { line, angle } = bends[k];
+    const len = Math.hypot(line.d[0], line.d[1]);
+    const sign = line.d[0] < -1e-9 || (Math.abs(line.d[0]) <= 1e-9 && line.d[1] < 0) ? -1 : 1;
+    const [dx, dz] = [(sign * line.d[0]) / len, (sign * line.d[1]) / len];
+    const across = dx * line.p[1] - dz * line.p[0];
+    return [dx, dz, across, sign * angle].map((x) => (Math.abs(x) < 5e-6 ? 0 : x).toFixed(5)).join(',');
+  };
+  const nearest = (i: number) => lineOf(order.findLast((k) => moves[k][i]) ?? -1);
+  const turnedBy = (i: number) => moves.filter((m) => m[i]).length;
+  const base = new Map<string, { bottom: number; rest: number; beyond: Vec3 | null }>();
+  pieces.forEach((_, i) => {
+    const k = nearest(i);
+    if (!ups[i] || over(i) || cornerOf[i] || turnedBy(i) !== 1 || base.has(k)) return;
+    const stack = pieces.map((_, j) => j).filter((j) => ups[j] && !cornerOf[j] && turnedBy(j) === 1 && nearest(j) === k);
+    const layers = stack.map((j) => pieces[j].layer);
+    const bottom = Math.min(...layers);
+    const under = pieces.filter((p, j) => !ups[j] && stack.some((q) => overlapArea(p.world, pieces[q].world) > 1e-6));
+    const [ux, uy, uz] = ups[i]!;
+    const width = (Math.max(...layers) - bottom + 1) * LAYER_GAP;
+    const rest = Math.max(bottom, 1 + Math.max(-1, ...under.map((p) => p.layer)));
+    base.set(k, { bottom, rest, beyond: Math.abs(uy) < 0.5 ? [ux * width, 0, uz * width] : null });
+  });
   pieces.forEach((p, i) => {
     const up = ups[i];
-    if (!up || (!p.layer && !over(i))) return;
-    const offset: Vec3 = over(i) ? [0, (overTop - 2 * p.layer) * LAYER_GAP, 0] : (up.map((c) => c * p.layer * LAYER_GAP) as Vec3);
+    const b = base.get(nearest(i));
+    const stack = b && !over(i) && !cornerOf[i] && turnedBy(i) === 1;
+    if (!up || (!p.layer && !over(i) && !(stack && b.rest) && !b?.beyond)) return;
+    const shift = b?.beyond && !stack ? b.beyond : [0, 0, 0];
+    const offset = (
+      over(i)
+        ? [0, (overTop - 2 * p.layer) * LAYER_GAP, 0]
+        : stack
+          ? up.map((c, n) => c * (p.layer - b.bottom) * LAYER_GAP + (n === 1 ? b.rest * LAYER_GAP : 0))
+          : up.map((c) => c * p.layer * LAYER_GAP)
+    ).map((c, n) => c + shift[n]) as Vec3;
     faces_vertices[i] = faces_vertices[i].map((v) => {
       vertices_paper.push(vertices_paper[v]);
       return vertices_coords.push(vertices_coords[v].map((c, n) => c + offset[n]) as Vec3) - 1;
@@ -351,7 +389,10 @@ function opened(frame: FoldFrame, bends: Bend[], anchor: Vec2, ride?: (paper: Ve
         // A crease lying flat: the paper on the line's left turns up by the angle, relative to the other side.
         const len2 = Math.hypot(bend.line.d[0], bend.line.d[1]);
         const d2: Vec3 = [bend.line.d[0] / len2, 0, bend.line.d[1] / len2];
-        const p0: Vec3 = [bend.line.p[0], faces[u].layer * LAYER_GAP, bend.line.p[1]];
+        // Paper turned right over lands a layer off the paper it turns from, rather than in among it (a box's
+        // corner folded flat onto its wall): turned about a line half a layer off the crease, the way it turns.
+        const over = Math.abs(bend.angle) > Math.PI / 2 ? Math.sign(bend.angle) * (sides[1] > 0 ? 1 : -1) * 0.5 : 0;
+        const p0: Vec3 = [bend.line.p[0], (faces[u].layer + over) * LAYER_GAP, bend.line.p[1]];
         // `turn` lifts the left of the line, which is a right-handed turn about the line's direction, downwards.
         const r = rotation(p0, d2, -bend.angle);
         moved[w] = compose(moved[u]!, sides[1] > 0 ? r : invert(r));
@@ -409,14 +450,65 @@ function opened(frame: FoldFrame, bends: Bend[], anchor: Vec2, ride?: (paper: Ve
     for (const { other: j, shared } of joins[i]) {
       for (const q of shared) {
         const [p1, p2] = [apply(moved[i] ?? identity, flatAt(i, q)), apply(moved[j] ?? identity, flatAt(j, q))];
-        const slack = riding[i] || riding[j] ? RIDING_SLACK : 0;
+        // (And a layer where paper turned right over lands a layer off.)
+        const slack = riding[i] || riding[j] ? RIDING_SLACK : 1;
         if (Math.hypot(p1[0] - p2[0], p1[1] - p2[1], p1[2] - p2[2]) > LAYER_GAP * (Math.abs(faces[i].layer - faces[j].layer) + slack) + 1e-6) {
           throw new FoldError('Those folds can’t all open together without stretching the paper.');
         }
       }
     }
   }
+  // Faces that end up lying exactly on each other (a box's corner folded flat against its wall, by a way round
+  // that loses their layers) would be drawn flickering through each other: the upper one in the flat paper is
+  // moved onto the side of the lower that its layers above went, by their layers' difference.
+  const placed = faces_vertices.map((face) => face.map((v) => vertices_coords[v]));
+  const upOf = (i: number): Vec3 => {
+    const m = moved[i] ?? identity;
+    const [o, u] = [apply(m, [0, 0, 0]), apply(m, [0, 1, 0])];
+    return [u[0] - o[0], u[1] - o[1], u[2] - o[2]];
+  };
+  const above = (i: number, j: number) => faces[j].layer > faces[i].layer || (faces[j].layer === faces[i].layer && j > i);
+  const shifted = new Set<number>();
+  for (let round = 0, more = true; more && round < SETTLE_ROUNDS; round++) {
+    more = false;
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < n; j++) {
+        if (i === j || !above(i, j) || !together(placed[i], placed[j])) continue;
+        const up = upOf(i);
+        const gap = Math.max(1, faces[j].layer - faces[i].layer) * LAYER_GAP;
+        placed[j] = placed[j].map((q) => [q[0] + up[0] * gap, q[1] + up[1] * gap, q[2] + up[2] * gap] as Vec3);
+        shifted.add(j);
+        more = true;
+      }
+    }
+  }
+  for (const j of shifted) {
+    faces_vertices[j] = placed[j].map((q, c) => {
+      vertices_paper.push(vertices_paper[faces_vertices[j][c]]);
+      return vertices_coords.push(q) - 1;
+    });
+  }
   return { vertices_paper, vertices_coords, faces_vertices, faces_parent: faces.map((f) => f.parent), faces_layer: faces.map((f) => f.layer) };
+}
+
+/** How many times over faces lying on each other are moved apart, a layer at a time. */
+const SETTLE_ROUNDS = 8;
+
+/** Whether two flat polygons lie in one plane, overlapping. */
+function together(a: Vec3[], b: Vec3[]): boolean {
+  const sub = (p: Vec3, q: Vec3): Vec3 => [p[0] - q[0], p[1] - q[1], p[2] - q[2]];
+  const cross = (p: Vec3, q: Vec3): Vec3 => [p[1] * q[2] - p[2] * q[1], p[2] * q[0] - p[0] * q[2], p[0] * q[1] - p[1] * q[0]];
+  const dot = (p: Vec3, q: Vec3) => p[0] * q[0] + p[1] * q[1] + p[2] * q[2];
+  const unit = (p: Vec3): Vec3 => {
+    const l = Math.hypot(...p) || 1;
+    return [p[0] / l, p[1] / l, p[2] / l];
+  };
+  const n = unit(cross(sub(a[1], a[0]), sub(a[2], a[0])));
+  if (b.some((q) => Math.abs(dot(n, sub(q, a[0]))) > 1e-6)) return false;
+  const e1 = unit(sub(a[1], a[0]));
+  const e2 = cross(n, e1);
+  const flat = (pts: Vec3[]): Vec2[] => pts.map((q) => [dot(sub(q, a[0]), e1), dot(sub(q, a[0]), e2)]);
+  return overlapArea(flat(a), flat(b)) > 1e-6;
 }
 
 /**
@@ -470,11 +562,14 @@ function contains(poly: Vec2[], p: Vec2): boolean {
 
 /**
  * A crease from a centre point, lifted off the table: its direction on the table (radians, from +x towards
- * +z) and how steeply it rises.
+ * +z) and how steeply it rises. It rises straight up from where it lies unless `heading` turns it: its direction
+ * seen from above once raised, for creases that swing round as they rise, such as the sides of a flap tucked
+ * inside a pyramid.
  */
 export interface Ray {
   azimuth: number;
   elevation: number;
+  heading?: number;
 }
 
 /**
@@ -485,7 +580,7 @@ export interface Ray {
  * never cross, where gaps measured off each sector would cross in its valleys.
  */
 export function radial(frame: FoldFrame, apex: Vec2, rays: Ray[]): FoldFrame {
-  const dir = ({ azimuth, elevation }: Ray): Vec3 => [Math.cos(elevation) * Math.cos(azimuth), Math.sin(elevation), Math.cos(elevation) * Math.sin(azimuth)];
+  const dir = ({ azimuth, elevation, heading = azimuth }: Ray): Vec3 => [Math.cos(elevation) * Math.cos(heading), Math.sin(elevation), Math.cos(elevation) * Math.sin(heading)];
   const n = rays.length;
   for (let k = 0; k < n; k++) {
     const [a, b] = [rays[k], rays[(k + 1) % n]];

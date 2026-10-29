@@ -13,7 +13,7 @@ import { cornerCreases, type Crease } from './windmill';
  * one corner folded behind, and the coloured square folded over for the head.
  */
 export function pajarita() {
-  const r = new Recipe({ id: 'pajarita', title: 'Pajarita', sheet: { size: [1, 1], front: '#f6f3ec', back: '#e8a33d' } })
+  const r = new Recipe({ id: 'pajarita', title: 'Pajarita (little bird)', sheet: { size: [1, 1], front: '#f6f3ec', back: '#e8a33d' } })
     .crease(paper(-0.5, -0.5), paper(0.5, 0.5), { title: 'Fold in half diagonally', text: 'White side up, fold corner to corner, and unfold.' })
     .crease(paper(0.5, -0.5), paper(-0.5, 0.5), { title: 'Fold the other diagonal', text: 'And the other way, and unfold.' });
   const corners: ((c: Vec2) => boolean)[] = [];

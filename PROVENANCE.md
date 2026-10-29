@@ -39,6 +39,10 @@ noted when it was written, and the model was folded from the common traditional 
 | `bulldog-dart` | Unattributed: the dart with its point folded back | Unknown: no designer found | none recorded | Unattributed | 18 Oct 2026 |
 | `navy-plane` | Unattributed: Fold'N Fly's Navy Plane (design #35) names no designer | Unknown: no designer found | [Fold'N Fly: Navy Plane](https://www.foldnfly.com/35.html) | Unattributed | 21 Oct 2026 |
 | `king-bee` | Unattributed: Fold'N Fly's King Bee (design #22) names no designer | Unknown: no designer found | [Fold'N Fly: King Bee](https://www.foldnfly.com/22.html) | Unattributed | 21 Oct 2026 |
+| `sprinter` | Unattributed: Fold'N Fly's Sprinter (design #4) names no designer; its references are four books by different authors, none named as the source | Unknown: no designer found | [Fold'N Fly: The Sprinter](https://www.foldnfly.com/4.html) | Unattributed | 29 Oct 2026 |
+| `fun-flyer` | Unattributed: Fold'N Fly's Fun Flyer (design #45) names no designer and lists no references | Unknown: no designer found | [Fold'N Fly: Fun Flyer](https://www.foldnfly.com/45.html), for the order of folds; Gami leaves out its rabbit ears (see the notes) | Unattributed | 29 Oct 2026 |
+| `corkscrew` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a needle-nosed stunt dart after the look of Fold'N Fly's Spin Plane, which is likely Keith Laux's, folded differently (see the notes); its nose folds are the traditional dart's | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 29 Oct 2026 |
+| `flying-saucer` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a round floater after the look of Fold'N Fly's UFO, which is Ken Blackburn and Jeff Lammers's, folded differently and without scissors (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 29 Oct 2026 |
 | `boomerang` | Unattributed: Fold'N Fly's Boomerang (design #56) names no designer | Unknown: no designer found | [Fold'N Fly: Boomerang](https://www.foldnfly.com/56.html) | Unattributed | 22 Oct 2026 |
 | `dog-face` | Traditional | None needed: nobody owns it | none recorded | Clear | 18 Oct 2026 |
 | `cat-face` | Traditional | None needed: nobody owns it | none recorded | Clear | 18 Oct 2026 |
@@ -80,9 +84,93 @@ noted when it was written, and the model was folded from the common traditional 
 | `envelope` | Traditional (origami.me: "Traditional"; Gilad's database lists over a hundred envelopes and letter-folds as "Traditional", among many by named designers) | None needed: nobody owns it | [origami.me/paper-envelope](https://origami.me/paper-envelope/), for the order of folds | Clear | 22 Oct 2026 |
 | `masu-lid` | Traditional (origami.me: "Traditional"; the masu box with its corners folded short of the middle) | None needed: nobody owns it | [origami.me/box](https://origami.me/box/) (its classic lid) | Clear | 22 Oct 2026 |
 | `christmas-tree` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/christmas-tree](https://origami.me/christmas-tree/) | Clear | 21 Oct 2026 |
+| `crown` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a simpler crown than OrigamiOK's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `sailboat` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a simpler sailboat than OrigamiOK's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `lotus` | Traditional (Gilad's database lists "Lotus" and "Lotus flower" as Traditional in many books, LaFosse and Yamaguchi among them; OrigamiOK calls it traditional) | None needed: nobody owns it | [OrigamiOK: lotus flower](https://origamiok.com/origami-lotus-flower/), for its first rounds only; Gami lifts the petals instead (see the notes) | Clear | 28 Oct 2026 |
+| `tulip-bloom` | Traditional (Gilad's database lists the tulip blossom from the water bomb base as Traditional in many books) | None needed: nobody owns it | [OrigamiOK: tulip](https://origamiok.com/origami-tulip/), the blossom only, for the order of folds | Clear | 28 Oct 2026 |
+| `peacock` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a simpler peacock than OrigamiOK's (see the notes); the body's kite and neck are the traditional swan's first folds | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `cactus` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's cactus (a ribbed body in a pot, a flower on top), folded differently and with no glue or scissors (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `pirate-hat` | Traditional: the newspaper hat (Gilad's database lists "Newspaper Hat" and "Hats" as Traditional, in Van Sicklen's *The Joy of Origami* and Beech's *Origami: The Complete Guide*); OrigamiOK's pirate hat folds the same way | None needed: nobody owns it | [OrigamiOK: pirate hat](https://origamiok.com/origami-pirate-hat/), for the order of folds; Gami folds the band up twice, as the newspaper hat usually is | Clear | 28 Oct 2026 |
+| `frog-bookmark` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's frog bookmark, its eyes folded out instead of cut out and glued on (see the notes); the corner pocket and side flaps are the common corner bookmark's | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `heart-bookmark` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a heart on the common corner bookmark, in place of OrigamiOK's heart on a long strip (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `cute-cat` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's cute cat (a slim cat sitting up, ears pointed, tail to one side), from two squares instead of half of one (see the notes); its head is the traditional cat face's folds | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `bat` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a water bomb base with its bottom corners folded up into wings, in place of OrigamiOK's pleated bat (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `bull` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a body snipped into four legs and a head folded like the heart bookmark, in place of OrigamiOK's one-sheet bull (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `t-rex` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a kite folded in half for the body, tail and legs, and a small square for the head, in place of OrigamiOK's one-sheet T-rex (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `knife` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): one strip from half a square, in place of OrigamiOK's three-sheet knife (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `kunai` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a diamond blade and a strip handle, in place of OrigamiOK's glued three-sheet kunai (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `hand-fan` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's flat fan (an uchiwa), a square rounded off with a strip for the handle (see the notes); not the pleated `fan`, still to come | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `rose` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a flat rose, the corners folded in twice and folded back out turned one way, in place of OrigamiOK's twisted rose (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `palm-leaf` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a narrow leaf pleated across its length and let open, in place of OrigamiOK's glued palm leaf (see the notes); "Palm leaf" in Gilad's database is Mark Bolitho's | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `green-leaf` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a plain leaf with its halves raised about the midrib, in place of OrigamiOK's cut and pleated round leaf (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `pyramid` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a square creased into sixteen and popped up point first, each side's spare paper tucked inside, in place of OrigamiOK's glued pyramid (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `diamond` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): the pyramid's pop upside down from an octagon, in place of OrigamiOK's cut and glued diamond (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `bracelet` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a band curled into a ring; Gilad's database lists Traditional bracelets, but OrigamiOK's pleated pattern wasn't traced, so Gami's is its own and plainer (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `diamond-ring` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a band curled round under a little blintzed gem, in place of OrigamiOK's one-sheet ring (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `finger-trap` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a strip rolled into a tube with its weave drawn on, in place of OrigamiOK's cut finger trap; Gilad's database lists only Pedruzzi's and Garibi's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `easy-sword` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's easy sword, from a kite with its end folded up and back down for the crossguard; Gilad's database lists no Traditional sword (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 29 Oct 2026 |
+| `rainbow-chain` | Traditional: the gum wrapper chain (Gilad's database: "Gum wrapper chain", Traditional, in *Creating Origami*), folded in rainbow colours after OrigamiOK's rainbow chain, which names no designer (see the notes) | None needed: nobody owns it | [Origami Resource Center: bubble gum wrapper chain](https://origami-resource-center.com/bubble-gum-wrapper-paper-chain/), for the order of folds; [OrigamiOK: rainbow chain](https://origamiok.com/origami-rainbow-chain/), for the idea | Clear | 29 Oct 2026 |
+| `business-card-cube` | Traditional: the business card cube (Gilad's database: "Business card cube", Traditional, in Thomas Hull's *Project Origami*), in place of OrigamiOK's cube, which is Mitsunobu Sonobe's unit (see the notes) | None needed: nobody owns it | none recorded: the common sequence, two cards crossed and each one's ends folded round the other | Clear | 29 Oct 2026 |
+| `dice` | Traditional: the business card cube (Gilad's database: "Business card cube", Traditional) put together with its flaps inside, the dots drawn on, in place of OrigamiOK's dice, which is Stéphane Gigandet's (see the notes) | None needed: nobody owns it | none recorded: as `business-card-cube` | Clear | 29 Oct 2026 |
+| `kusudama` | Traditional: the flower kusudama (Gilad's database: "Flower Kusudama", Traditional, in *Charming Flower Origami*), as OrigamiOK's kusudama flower ball, which names no designer (see the notes) | None needed: nobody owns it | [OrigamiOK: kusudama flower ball](https://origamiok.com/origami-kusudama-flower-ball/), for the order of folds | Clear | 29 Oct 2026 |
 
 ### Notes
 
+- **Modular models from OrigamiOK** (checked 29 October 2026; the plan is `docs/modular-plan.md`). OrigamiOK's
+  modular pages name no designer either. Its rainbow chain wasn't found by name; Gami folds the traditional gum
+  wrapper chain instead, from strips rather than squares, which gives the same zigzag of colours. Its cube is
+  Mitsunobu Sonobe's unit, so Gami's cube is the traditional business card cube; its dice, too, is the business card cube, its flaps inside and its dots drawn on,
+  as OrigamiOK's (Stéphane Gigandet's) isn't open. Its kusudama flower ball is the
+  traditional flower kusudama. Its eight-point ninja star (every 8-unit ninja star in Gilad's database has a named
+  designer), magic circle (Kumasaka Hiroshi's) and infinity cube were left out.
+- **OrigamiOK** (checked 28 October 2026). Its pages name no designer and give no licence for the designs, only a
+  copyright notice for the site, and only the lotus page calls its model traditional; so each model was looked up in
+  Gilad's database. The cactus turned up no open design (every cactus there has a named designer but one "cactus
+  seed holder"). The lotus and the 3D tulip's blossom are traditional, and Gami follows their order of folds in its
+  own words. The lotus stops before OrigamiOK's back fold and pulled-out petals, which hold and curl the paper in
+  ways rigid paper can't, and lifts its four petals instead. The crown, sailboat, peacock and cactus are Gami's own
+  simpler designs (`DESIGNS-LICENSE.md`): OrigamiOK's steps rely on photos for where their folds go, their 3D
+  endings (a crown opened into a band, a peacock's eight-feather fan) are beyond the engine, and its cactus is
+  glued. The cactus keeps the look of OrigamiOK's (a ribbed body in a pot, a flower on top) and is folded its own
+  way from three squares. The plan is `docs/origamiok-plan.md`.
+- **OrigamiOK's easy page** (checked 28 October 2026; the plan is `docs/origamiok-easy-plan.md`). The pirate hat is
+  the traditional newspaper hat. The two bookmarks are built on the corner bookmark, a pocket with its side flaps
+  folded up, which is folded everywhere with no credit; Gilad's database lists several page-corner designs by named
+  designers (LaFosse, Engels, Ng) but none matches it as the source. OrigamiOK's frog cuts its eyes from spare paper
+  and glues them on: Gami's folds the flaps' points out past the sides instead, with no scissors or glue. OrigamiOK's
+  heart bookmark is a heart on a long strip, made with squash folds from half a square; heart bookmarks are listed
+  by several named designers (Shumakov, Shinde, Yamaguchi, Sy Chen, Overmars) and the source of OrigamiOK's wasn't
+  found, so Gami's is its own, a heart on the corner bookmark: the top point folded behind, the flaps' points folded
+  down for the notch, then the humps and sides rounded.
+  The cute cat, bat, bull and T-rex (also checked 28 October 2026) are Gami's own: Gilad's database lists no
+  Traditional bull, bat or T-rex among hundreds by named designers, and OrigamiOK's cat couldn't be traced, so Gami
+  keeps the general look and folds its own way. OrigamiOK's bat, bull and T-rex shape their wings, horns, heads and
+  legs with squash and swivel folds that rigid paper can't follow, so Gami's use two squares where a separate head
+  is simpler (the cat, bull and T-rex), and two short snips for the bull's legs.
+  The knife and kunai are Gami's own too: Gilad's database has no Traditional kunai or knife (only a throwing knife,
+  a different model), and OrigamiOK's are glued from three sheets with rolled handles. Gami's knife is one strip
+  with its handle end rolled over and coloured in with a pen (a strip folded from one-sided paper shows the same
+  side all over); its kunai is a diamond blade from a square with a strip folded thin for the handle, no glue.
+  OrigamiOK's fan is a flat paddle fan (an uchiwa), not origami.me's pleated fan, which stays Coming soon until
+  bending can open it: Gami's hand fan is its own, a rounded square on a strip handle. OrigamiOK's rose twists its
+  middle into a spiral, which rigid paper can't follow, and Gilad's database lists hundreds of roses by named
+  designers: Gami's is a flat rose of its own, its four points folded back out all turned one way so they spiral.
+  The two leaves are Gami's own as well: OrigamiOK's palm leaf is a cut triangle pleated and glued into a fan, and
+  its green leaf a cut triangle pleated round from the stem. Gami's palm leaf is a square folded to a long, narrow
+  leaf and pleated across, opened a little into ripples; its green leaf is the same narrow leaf left smooth, with
+  its halves raised either side of the midrib. No scissors or glue.
+  The pyramid and diamond are Gami's own: OrigamiOK glues both, and the diamond is cut too; Gilad's database has
+  hundreds of named pyramids and gems, with only a pyramid-shaped candy box marked Traditional. Gami's pop a square
+  creased into sixteen from the middle, the diagonals rising (or, for the diamond, falling) as ridges and each
+  side's spare paper tucked inside along its middle crease, so the sides stay flat and nothing needs glue.
+  The bracelet, diamond ring and finger trap, which close into a band or a tube, are Gami's own too, curled with
+  `shape`'s spread bends rather than waiting on bending: a band folded to the middle and curled round for the
+  bracelet; a band curled round under a gem (a small square with its corners folded in) for the ring; and a strip
+  with its weave drawn on, rolled into a tube, for the finger trap. Neither OrigamiOK's pleats nor its cuts are used.
+  The easy sword (added 29 October 2026, to compare with Gami's `sword`) is Gami's own: Gilad's database lists 95
+  swords, all by named designers, and OrigamiOK's names none. It keeps the look of OrigamiOK's (a long blade, a
+  small crossguard, a short handle) but is folded from a kite: the short end folded up over the blade and most of
+  it back down, leaving a band across for the guard.
 - **Fox.** Okuda's design isn't openly licensed. It was kept on 18 October 2026 because it's very widely
   folded and taught (see the decisions log in `PLAN.md`). The gallery doesn't credit him yet. If the rule
   is tightened, the choices are: ask for permission, swap in a traditional fox, or design Gami's own.
@@ -109,7 +197,23 @@ noted when it was written, and the model was folded from the common traditional 
   down into each other's pockets. Rigid paper can't twist, so Gami folds the strip in half first and turns it
   with one 45° fold. Fold'N Fly tucks the tips' corners in between the layers; the engine's reverse fold
   moves a corner four layers thick as one piece, so Gami folds them behind instead. Gami's version starts on the half sheet, so its card shows no scissors (the first step
-  says to cut letter paper in half).
+  says to cut letter paper in half). The sprinter (Fold'N Fly #4, checked 29 October 2026: no designer, no
+  licence) lists four general books on paper planes as references (Keith Laux's among them), with none named as
+  its source, so it's Unattributed too. Fold'N Fly staples its nose; Gami's last step suggests
+  staples rather than needing them, as the engine has no stapler. The Spin Plane and UFO, checked the same day,
+  each cite only one book of a named designer's own planes (Laux's, and Ken Blackburn and Jeff Lammers's), so
+  they're left out for Gami's own (see `docs/foldnfly-planes-plan.md`). The fun flyer (Fold'N Fly #45, checked the same
+  day: no designer, no licence, no references) is Unattributed too. Fold'N Fly creases the diamond's two flaps
+  and rabbit-ears them into narrow spikes; each flap is joined to the layers under it along its bottom edge,
+  which a rabbit ear has to fold, so rigid paper can't follow. Gami leaves those steps out: the flaps' tips stick
+  out in front as they are, so it folds the point down a quarter of the way rather than halfway, to keep them
+  small, and its wings fold along a line that slants a little from nose to tail. In place of the Spin Plane, Gami has its
+  own corkscrew: the traditional dart's nose folds on letter paper, which leave a long needle nose and swept
+  wings, a notch reverse-folded into the tail, and the wingtips bent opposite ways so it rolls. The Spin Plane
+  starts from a water bomb base and stands two flaps up as a cockpit; the corkscrew has neither. In place of the
+  UFO, Gami has its own flying saucer: the top folded down to the middle for a thick front edge, the front
+  corners turned in, and the back corners folded behind and rounded off with smaller folds, so it's nearly round
+  from above. The UFO cuts a corner round with scissors and folds a dart's nose first; the saucer cuts nothing.
 - **Coming soon.** The boat and the models listed on 21 October 2026 are gallery placeholders with no recipe
   yet. Each is credited "Traditional" on origami.me. When one gets a recipe, set its reference to what was
   actually followed and its date to when it shipped. Other traditional models on origami.me that aren't

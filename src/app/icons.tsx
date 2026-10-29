@@ -90,6 +90,43 @@ export const KeyboardIcon = icon(
 export const HeartIcon = icon(
   <path d="M12 20s-7.5-4.6-7.5-10.1A4.4 4.4 0 0 1 12 7.2a4.4 4.4 0 0 1 7.5 2.7C19.5 15.4 12 20 12 20z" />,
 );
+/** A roll of tape with a strip pulled off it. */
+export const TapeIcon = icon(
+  <>
+    <circle cx="9" cy="11" r="6" />
+    <circle cx="9" cy="11" r="2.2" />
+    <path d="M15 11h6v4h-6" />
+  </>,
+);
+/** A glue stick, its cap off. */
+export const GlueIcon = icon(
+  <>
+    <rect x="7.5" y="11" width="9" height="10" rx="1.5" />
+    <path d="M9 11V8h6v3M10.5 8V5.5a1.5 1.5 0 0 1 3 0V8" />
+  </>,
+);
+/** Lines getting shorter beside a downward arrow: the order of a list. */
+export const SortIcon = icon(<path d="M7 4v16M3.5 16.5 7 20l3.5-3.5M13 6h8M13 12h6M13 18h3" />);
+/**
+ * The origami heart, as the gallery's Heart model folds it: two squared-off lobes, the middle crease, and a corner
+ * folded down on each lobe. Its paper and creases are classed so a favourite can fill it.
+ */
+export const OrigamiHeartIcon = icon(
+  <>
+    <path className="heart-paper" d="M12 21 2 11V6l3-3h4l3 3 3-3h4l3 3v5z" />
+    <path className="heart-crease" d="M12 6v15M2 6h5L4.5 3.5M22 6h-5l2.5-2.5" strokeWidth="1.2" />
+  </>,
+);
+/**
+ * A folded paper star, as the New badge: five points, with a crease from the middle to each so it reads as
+ * paper. Its paper and creases are classed so the badge can fill it.
+ */
+export const OrigamiStarIcon = icon(
+  <>
+    <path className="star-paper" d="M12 2.5l2.5 6.5 7 .4-5.4 4.4 1.8 6.8-5.9-3.8-5.9 3.8 1.8-6.8-5.4-4.4 7-.4z" />
+    <path className="star-crease" d="M12 12.5V2.5m0 10 9.5-3.1M12 12.5l5.9 8.1M12 12.5l-5.9 8.1M12 12.5 2.5 9.4" strokeWidth="1.2" />
+  </>,
+);
 export const PauseIcon = icon(<path d="M8 5.5v13M16 5.5v13" />);
 export const ReplayIcon = icon(
   <>

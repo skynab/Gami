@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
 import {
@@ -19,6 +19,8 @@ import {
 } from '../app/icons';
 import { Modal } from '../app/Modal';
 import { TopBar } from '../app/TopBar';
+import { stepDiagramSvg } from '../fold/diagram';
+import { isKeyPoint } from '../fold/ops';
 import type { OrigamiModel } from '../fold/types';
 import { MODELS } from '../gallery/catalog';
 import { useStepText } from '../i18n/steps';
@@ -57,7 +59,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
   const locked = useViewer((s) => s.locked);
   const guides = useViewer((s) => s.guides);
   const instructions = useViewer((s) => s.instructions);
-  const { setView, toggleLock, toggleGuides, toggleInstructions, resetCamera } = useViewer.getState();
+  const { setView, toggleLock, toggleGuides, toggleInstructions, resetCamera, toggleFollow } = useViewer.getState();
   const step = usePlayback((s) => s.step);
   const total = usePlayback((s) => s.total);
   const speed = usePlayback((s) => s.speed);
@@ -126,6 +128,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
       else if (e.key === 'h' || e.key === 'H') half();
       else if (e.key >= '1' && e.key <= '4') setView(VIEWS[Number(e.key) - 1].id);
       else if (e.key === '0') resetCamera();
+      else if (e.key === 'f' || e.key === 'F') toggleFollow();
       else if (e.key === 'l' || e.key === 'L') toggleLock();
       else if (e.key === 'g' || e.key === 'G') toggleGuides();
       else if (e.key === 'i' || e.key === 'I') toggleInstructions();
@@ -139,6 +142,9 @@ export function ModelViewer({ progressKey, title, load, notice }: {
   });
 
   const current = data?.steps[step - 1];
+  // A lesson teaches one fold or base to a section, so each step says which, and shows its paper diagram.
+  const lesson = !!data && (MODELS.find((m) => m.id === data.id)?.category ?? data.about?.category) === 'lesson';
+  const section = lesson ? data?.steps.slice(0, step).findLast((s) => s.section)?.section : undefined;
   // Built-in models' steps in the interface's language; anything else as written.
   const say = useStepText();
   const name = title || data?.title || '';
@@ -177,11 +183,12 @@ export function ModelViewer({ progressKey, title, load, notice }: {
       <main className="stage" aria-label={t('viewer.stage', { name })}>
         {data && (
           <Suspense fallback={null}>
-            {/* A click on the model while it plays pauses it, as on a video. */}
-            <Stage model={data} onTap={() => usePlayback.getState().playing && togglePlay()} />
+            {/* A click on the model while a fold moves pauses it there, as on a video. */}
+            <Stage model={data} onTap={() => usePlayback.getState().pause()} />
           </Suspense>
         )}
         {locked && <div className="badge">{t('viewer.locked')}</div>}
+        <FollowNotice />
         {notice && <div className="viewer-notice">{notice}</div>}
         {/* Hidden, the step card leaves a button in its corner to bring it back. */}
         {!instructions && (current || (total > 0 && step === 0)) && (
@@ -197,9 +204,11 @@ export function ModelViewer({ progressKey, title, load, notice }: {
         )}
         {instructions && current && (
           <section className="step-card" aria-label={t('viewer.instructions')} aria-live="polite">
+            {isKeyPoint(current) && <p className="key-point-label">{t('viewer.keyPoint')}</p>}
             <div className="step-card-head">
               <h2>
-                {step}. {say(current.title)}
+                {step}.{' '}
+                {section && say(section) !== say(current.title) ? t('viewer.inSection', { section: say(section), title: say(current.title) }) : say(current.title)}
               </h2>
               <div className="step-card-actions">
                 <button
@@ -215,7 +224,11 @@ export function ModelViewer({ progressKey, title, load, notice }: {
                 {hideButton}
               </div>
             </div>
-            {current.text && <p className="muted small">{say(current.text)}</p>}
+            <div className="step-card-body">
+              {current.text && <p className="muted small">{say(current.text)}</p>}
+              {lesson && data && <StepDiagram model={data} step={step} />}
+            </div>
+            {isKeyPoint(current) && <p className="muted small key-point-hint">{t('viewer.keyPointHint')}</p>}
             {finished && (
               <div className="done">
                 <p>
@@ -301,7 +314,10 @@ export function ModelViewer({ progressKey, title, load, notice }: {
           </button>
         </div>
 
-        <Scrubber sections={data?.steps.flatMap((st, i) => (st.section ? [{ step: i + 1, name: say(st.section) }] : [])) ?? []} />
+        <Scrubber
+          sections={data?.steps.flatMap((st, i) => (st.section ? [{ step: i + 1, name: say(st.section) }] : [])) ?? []}
+          keyPoints={data?.steps.flatMap((st, i) => (isKeyPoint(st) && !st.section ? [{ step: i + 1, name: say(st.title) }] : [])) ?? []}
+        />
 
         <div className="group view-controls" id="view-controls" data-open={viewsOpen || undefined}>
           <div className="segmented" role="group" aria-label={t('viewer.view')}>
@@ -321,12 +337,32 @@ export function ModelViewer({ progressKey, title, load, notice }: {
           >
             <LockIcon />
           </button>
-          <button type="button" className="icon" aria-label={t('viewer.reset')} title={t('viewer.resetTitle')} onClick={resetCamera}>
-            <ResetIcon />
-          </button>
+          <ResetButton />
         </div>
       </footer>
     </div>
+  );
+}
+
+/**
+ * The step drawn as a paper diagram would draw it, so the 3D fold teaches how to read those too. Small beside
+ * the text; a click shows it bigger.
+ */
+function StepDiagram({ model, step }: { model: OrigamiModel; step: number }) {
+  const { t } = useTranslation();
+  const [big, setBig] = useState(false);
+  const svg = useMemo(() => stepDiagramSvg(model, step), [model, step]);
+  if (!svg) return null;
+  return (
+    <button
+      type="button"
+      className={big ? 'step-diagram big' : 'step-diagram'}
+      aria-pressed={big}
+      title={big ? t('viewer.diagramSmaller') : t('viewer.diagramBigger')}
+      onClick={() => setBig((b) => !b)}
+    >
+      <img src={`data:image/svg+xml,${encodeURIComponent(svg)}`} alt={t('viewer.diagram')} />
+    </button>
   );
 }
 
@@ -430,6 +466,80 @@ function FirstButton() {
   );
 }
 
+/** How long to hold the reset button before it turns following each step on or off. */
+const HOLD_TO_FOLLOW_MS = 700;
+
+/**
+ * Resets the view on a click. Held down (filling up as it is), it turns following each step on or off instead:
+ * the camera framing every new step, as it once always did. Lit while following.
+ */
+function ResetButton() {
+  const { t } = useTranslation();
+  const follow = useViewer((s) => s.follow);
+  const [holding, setHolding] = useState(false);
+  const timer = useRef(0);
+  // Set when a hold toggled following, so the click that ends it doesn't also reset.
+  const held = useRef(false);
+  const release = () => {
+    clearTimeout(timer.current);
+    setHolding(false);
+  };
+  useEffect(() => () => clearTimeout(timer.current), []);
+  return (
+    <button
+      type="button"
+      className={['icon hold to-start', holding && 'holding', follow && 'following'].filter(Boolean).join(' ')}
+      style={{ '--hold-ms': `${HOLD_TO_FOLLOW_MS}ms` } as CSSProperties}
+      aria-label={t('viewer.reset')}
+      title={follow ? t('viewer.resetFollowingTitle') : t('viewer.resetTitle')}
+      onPointerDown={(e) => {
+        held.current = false;
+        if (e.button !== 0) return;
+        clearTimeout(timer.current);
+        setHolding(true);
+        timer.current = window.setTimeout(() => {
+          held.current = true;
+          setHolding(false);
+          useViewer.getState().toggleFollow();
+        }, HOLD_TO_FOLLOW_MS);
+      }}
+      onPointerUp={release}
+      onPointerLeave={release}
+      onPointerCancel={release}
+      onContextMenu={(e) => e.preventDefault()}
+      onClick={() => {
+        if (held.current) held.current = false;
+        else useViewer.getState().resetCamera();
+      }}
+    >
+      <ResetIcon />
+    </button>
+  );
+}
+
+/** A moment's word when following each step is turned on or off, so a hold that worked says so. */
+function FollowNotice() {
+  const { t } = useTranslation();
+  const follow = useViewer((s) => s.follow);
+  const [shown, setShown] = useState(false);
+  const first = useRef(true);
+  useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    setShown(true);
+    const hide = setTimeout(() => setShown(false), 2000);
+    return () => clearTimeout(hide);
+  }, [follow]);
+  if (!shown) return null;
+  return (
+    <div className="badge follow-notice" role="status">
+      {follow ? t('viewer.followOn') : t('viewer.followOff')}
+    </div>
+  );
+}
+
 /** Keys (or a key in `shortcuts`, for named keys) and what they do (a key in `shortcuts`). */
 const SHORTCUTS: [string, string][] = [
   ['← →', 'prevNext'],
@@ -443,6 +553,7 @@ const SHORTCUTS: [string, string][] = [
   ['1 – 4', 'views'],
   ['L', 'lock'],
   ['0', 'reset'],
+  ['F', 'follow'],
 ];
 
 function ShortcutsDialog({ onClose }: { onClose(): void }) {
@@ -468,10 +579,10 @@ function ShortcutsDialog({ onClose }: { onClose(): void }) {
 
 /**
  * Drag through the whole model, stopping anywhere, even halfway through a fold. A diamond marks where each
- * section starts (each topic of a lesson); clicking it goes there.
+ * section starts (each topic of a lesson), and a ring each key point (a complex fold); clicking one goes there.
  * Its own component because it re-renders on every animation frame.
  */
-function Scrubber({ sections }: { sections: { step: number; name: string }[] }) {
+function Scrubber({ sections, keyPoints }: { sections: { step: number; name: string }[]; keyPoints: { step: number; name: string }[] }) {
   const pos = usePlayback((s) => s.pos);
   const total = usePlayback((s) => s.total);
   const step = usePlayback((s) => s.step);
@@ -497,21 +608,21 @@ function Scrubber({ sections }: { sections: { step: number; name: string }[] }) 
         ))}
       </datalist>
       {total > 0 &&
-        sections.map((s) => {
-          const label = t('viewer.section', { name: s.name, step: s.step });
-          return (
-            <button
-              key={s.step}
-              type="button"
-              className="section-mark"
-              // Where the section's first step starts on the track (the thumb's centre runs from half its width in).
-              style={{ '--at': (s.step - 1) / total } as CSSProperties}
-              aria-label={label}
-              title={label}
-              onClick={() => usePlayback.getState().goTo(s.step)}
-            />
-          );
-        })}
+        [
+          ...sections.map((s) => ({ ...s, className: 'section-mark', label: t('viewer.section', { name: s.name, step: s.step }) })),
+          ...keyPoints.map((s) => ({ ...s, className: 'section-mark key-point-mark', label: t('viewer.keyPointMark', { name: s.name, step: s.step }) })),
+        ].map((s) => (
+          <button
+            key={s.step}
+            type="button"
+            className={s.className}
+            // Where the step starts on the track (the thumb's centre runs from half its width in).
+            style={{ '--at': (s.step - 1) / total } as CSSProperties}
+            aria-label={s.label}
+            title={s.label}
+            onClick={() => usePlayback.getState().goTo(s.step)}
+          />
+        ))}
     </div>
   );
 }

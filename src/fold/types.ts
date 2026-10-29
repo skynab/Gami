@@ -31,6 +31,8 @@ export interface FoldFrame {
    * they may share its ends. Kept from frame to frame once made.
    */
   cuts?: [Vec2, Vec2][];
+  /** Strips of sticky tape on the paper so far (see tape.ts). Kept from frame to frame once laid. */
+  tapes?: Tape[];
   /**
    * Edges between triangles of bent paper cut from one face (see docs/bending-plan.md), as pairs of vertices:
    * seams of the mesh rather than creases, so drawn without lines, and shaded smoothly across.
@@ -38,7 +40,7 @@ export interface FoldFrame {
   soft?: [number, number][];
 }
 
-export const STEP_KINDS = ['fold', 'unfold', 'turn-over', 'rotate', 'squash', 'reverse', 'petal', 'sink', 'assemble', 'pose', 'draw', 'cut'] as const;
+export const STEP_KINDS = ['fold', 'unfold', 'turn-over', 'rotate', 'squash', 'reverse', 'petal', 'sink', 'assemble', 'pose', 'draw', 'cut', 'tape'] as const;
 export type StepKind = (typeof STEP_KINDS)[number];
 
 /**
@@ -50,6 +52,14 @@ export interface Mark {
   side: 'front' | 'back';
   points: Vec2[];
   fill?: boolean;
+}
+
+/**
+ * A strip of sticky tape: a piece of it on each face it covers, each a fill on the sheet on the side of the paper
+ * it's stuck to (as a mark), so it moves with the paper. The faces under its pieces are stuck together.
+ */
+export interface Tape {
+  pieces: Mark[];
 }
 
 export interface Step {
@@ -118,5 +128,5 @@ export interface About {
   minutes?: number;
 }
 
-/** Tools beyond paper: scissors for a cut, a pen for drawing. */
-export type Tool = 'scissors' | 'pen';
+/** Tools beyond paper: scissors for a cut, a pen for drawing, tape or glue to hold paper together. */
+export type Tool = 'scissors' | 'pen' | 'tape' | 'glue';

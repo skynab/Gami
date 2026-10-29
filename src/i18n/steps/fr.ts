@@ -170,16 +170,8 @@ export const fr: Record<string, string> = {
     "Faites la pointe droite comme la gauche.",
   "Fold the front point up":
     "Relever la pointe de devant",
-  "Fold the top layer of the bottom point up, halfway to the base of the horns.":
-    "Relevez la couche du dessus de la pointe du bas, à mi-chemin de la base des cornes.",
   "Fold up again":
     "Relever encore",
-  "Fold the band up along the bottom of the helmet, making the brim.":
-    "Relevez la bande le long du bas du casque pour faire le bord.",
-  "Fold the back point up behind":
-    "Relever la pointe arrière derrière",
-  "Fold the last point up behind the helmet (or tuck it inside). Open the bottom to wear it.":
-    "Relevez la dernière pointe derrière le casque (ou glissez-la dedans). Ouvrez le bas pour le porter.",
   "White side up. Bring one corner to the opposite corner.":
     "Face blanche vers le haut. Amenez un coin sur le coin opposé.",
   "Fold the other diagonal":
@@ -204,8 +196,6 @@ export const fr: Record<string, string> = {
     "Plier de nouveau les coins vers le centre",
   "Bring each corner of the new square to the centre.":
     "Amenez chaque coin du nouveau carré au centre.",
-  "Next corner":
-    "Coin suivant",
   "Last corner":
     "Dernier coin",
   "Write numbers on the small triangles, and fortunes under them.":
@@ -482,8 +472,6 @@ export const fr: Record<string, string> = {
     "Rabattez le rabat suivant le long de la même ligne. (Vous pouvez aussi simplement le laisser debout.)",
   "Squash the head":
     "Écraser la tête",
-  "Open the flap and press its tip down onto the crease, so it flattens into a diamond: the face.":
-    "Ouvrez le rabat et appuyez sa pointe sur le pli, pour l’aplatir en losange : le museau.",
   "Fold the tail in":
     "Rentrer la queue",
   "Push the left corner in between the layers, so the bottom edges line up and the fox can stand.":
@@ -548,8 +536,6 @@ export const fr: Record<string, string> = {
     "Abaissez l’autre aile pareil.",
   "Spread the wings":
     "Déployer les ailes",
-  "Lift the wings out to the sides and gently pull them apart to puff out the body. Done!":
-    "Écartez les ailes sur les côtés et tirez-les doucement pour gonfler le corps. C’est fini !",
   "Colour side up. Fold in half, then unfold.":
     "Face colorée vers le haut. Pliez en deux, puis dépliez.",
   "And the other way. Then turn the paper over.":
@@ -618,8 +604,6 @@ export const fr: Record<string, string> = {
     "Écrasez aussi le rabat en haut à droite de ce côté et faites un pli pétale.",
   "Fold its petal down.":
     "Abaissez son pétale.",
-  "Fold the left half of the diamond over to the right.":
-    "Rabattez la moitié gauche du losange sur la droite.",
   "Squash and petal-fold the last flap":
     "Écraser et faire un pli pétale sur le dernier rabat",
   "And the last flap.":
@@ -758,8 +742,6 @@ export const fr: Record<string, string> = {
     "Deux tiers",
   "And a line from the corner through where the end of the lower crease landed: two thirds, 40°. The angle is trisected, which was proved impossible with straightedge and compass alone.":
     "Et une droite depuis le coin, passant par l’endroit où l’extrémité du pli du bas est arrivée : deux tiers, 40°. L’angle est trisecté, ce qui est impossible, on l’a démontré, avec la règle et le compas seuls.",
-  "Open it and look at the angle: three equal parts. Origami can do everything a straightedge and compass can, and more: axiom 6 also doubles a cube and folds a regular heptagon (7 sides). Axiom 7 folds a point onto one line, square to another.":
-    "Rouvrez-le et regardez l’angle : trois parties égales. L’origami peut faire tout ce que font la règle et le compas, et plus encore : l’axiome 6 duplique aussi le cube et plie un heptagone régulier (7 côtés). L’axiome 7 pose un point sur une droite, perpendiculairement à une autre.",
   "A fresh square":
     "Un carré neuf",
   "Put the creased square aside and take a new one, so the next creases stand out.":
@@ -780,18 +762,6 @@ export const fr: Record<string, string> = {
     "Pliez le bord gauche sur le bord droit.",
   "Open it: a crease down the middle.":
     "Dépliez : un pli vertical au milieu.",
-  "Axiom 1":
-    "Axiome 1",
-  "Axiom 2":
-    "Axiome 2",
-  "Axiom 3":
-    "Axiome 3",
-  "Axiom 4":
-    "Axiome 4",
-  "Axiom 5":
-    "Axiome 5",
-  "Trisecting an angle":
-    "Trisection d’un angle",
   "Bring the left edge to the right edge, crease, and open it again.":
     "Amenez le bord gauche sur le bord droit, marquez le pli et dépliez.",
   "Fold a corner to the middle":
@@ -938,10 +908,6 @@ export const fr: Record<string, string> = {
     "Rabats le bord en haut à droite",
   "The same on the right, leaving a narrow white strip between the two.":
     "Pareil à droite, en laissant une fine bande blanche entre les deux.",
-  "Fold the left corner in a little way.":
-    "Rabats un peu le coin gauche vers l’intérieur.",
-  "And the right corner, to match.":
-    "Et le coin droit, pareil.",
   "Fold the bottom point up, level with the lower ends of those folds.":
     "Remonte la pointe du bas, au niveau du bas de ces plis.",
   "Fold the left half over onto the right, along the middle crease.":
@@ -1188,6 +1154,88 @@ export const fr: Record<string, string> = {
     "Faites comme à droite, pour un triangle élancé.",
   "Fold the top layers down along a line close to the bottom, for a narrow body and wide wings.":
     "Rabattez les couches du dessus le long d’une ligne proche du bas, pour un fuselage étroit et de larges ailes.",
+  "Fold one corner onto the other":
+    "Pliez un coin sur l’autre",
+  "With the paper sideways, bring the bottom-left corner up onto the top-right corner and crease. The flap’s other corner sticks out past the top edge.":
+    "La feuille à l’horizontale, amenez le coin inférieur gauche sur le coin supérieur droit et marquez le pli. L’autre coin du rabat dépasse du bord du haut.",
+  "Fold over the long edge":
+    "Repliez le long bord",
+  "Fold a narrow strip, about 2 cm (3/4 inch) wide, over along the long folded edge.":
+    "Repliez une bande étroite, d’environ 2 cm (3/4 de pouce) de large, le long du long bord plié.",
+  "Fold from the middle of the strip to the top-right corner, bringing the bottom-right corner up over the top left. The strip ends in a thick corner at the bottom.":
+    "Pliez du milieu de la bande jusqu’au coin supérieur droit, en amenant le coin inférieur droit par-dessus le haut à gauche. La bande se termine par un coin épais en bas.",
+  "Fold the top layer back":
+    "Repliez la couche du dessus",
+  "Fold it back on itself along a line straight up from the thick corner, so the strip lies along the folded edge.":
+    "Repliez-la sur elle-même le long d’une ligne qui monte tout droit du coin épais, pour que la bande longe le bord plié.",
+  "Fold the other layer to match":
+    "Pliez l’autre couche de la même façon",
+  "Fold it back along the same line. The two folds make the bottom edge of the plane.":
+    "Repliez-la le long de la même ligne. Les deux plis forment le bord inférieur de l’avion.",
+  "Point the thick corner to the left, with the long folded edge at the bottom.":
+    "Pointez le coin épais vers la gauche, le long bord plié en bas.",
+  "Fold the top layer down along a line about 2 cm (3/4 inch) above the bottom. The layers inside stay up: they’re the tail fin.":
+    "Rabattez la couche du dessus le long d’une ligne à environ 2 cm (3/4 de pouce) au-dessus du bas. Les couches de l’intérieur restent levées : c’est la dérive.",
+  "Turn the plane over, so it stands on its keel with the fin up between its wings. A few staples in the nose help it fly straight and keep the body shut.":
+    "Retournez l’avion pour qu’il repose sur sa quille, la dérive dressée entre les ailes. Quelques agrafes dans le nez l’aident à voler droit et gardent le fuselage fermé.",
+  "Fold the triangle’s point down to halfway down it. The tips of the corners you folded up stay where they are, sticking out above the fold.":
+    "Rabattez la pointe du triangle jusqu’à mi-hauteur. Les pointes des coins que vous avez relevés restent en place et dépassent au-dessus du pli.",
+  "Fold the top layers down along a line from just above the little point to the back edge, slanting a little further from the bottom towards the back.":
+    "Rabattez les couches du dessus le long d’une ligne qui part juste au-dessus de la petite pointe jusqu’au bord arrière, en s’écartant un peu plus du bas vers l’arrière.",
+  "Turn the plane over, so it stands on its keel with its wings level on top, and the little point sticking out in front. It’s ready to fly!":
+    "Retournez l’avion pour qu’il repose sur sa quille, les ailes à plat au-dessus et la petite pointe dépassant devant. Il est prêt à voler !",
+  "Bring the slanted left edge in to the centre crease. On this wider paper the fold runs nearly to the bottom.":
+    "Amenez le bord gauche en biais sur le pli central. Sur ce papier plus large, le pli descend presque jusqu’en bas.",
+  "Match the left side, for a long, thin point.":
+    "Faites comme à gauche, pour une pointe longue et fine.",
+  "Crease the tail":
+    "Marquez la queue",
+  "Fold the bottom corner at the back up along a slanting line, through all the layers, and crease it well.":
+    "Relevez le coin inférieur arrière le long d’une ligne en biais, à travers toutes les couches, et marquez bien le pli.",
+  "Fold it back down.":
+    "Rabattez-le à nouveau.",
+  "Open the layers a little and push the corner up between them along the crease. Seen from above, the tail now has a notch.":
+    "Écartez un peu les couches et poussez le coin vers le haut entre elles le long du pli. Vue de dessus, la queue a maintenant une encoche.",
+  "Fold the top layers down along a line from the nose to the back edge, a little further up at the back, for swept wings.":
+    "Rabattez les couches du dessus le long d’une ligne allant du nez au bord arrière, un peu plus haut à l’arrière, pour des ailes en flèche.",
+  "Bend the wingtips":
+    "Pliez les bouts des ailes",
+  "Bend the tip of one wing up and the other down, a little, along lines parallel to the body. They make it roll.":
+    "Pliez un peu le bout d’une aile vers le haut et celui de l’autre vers le bas, le long de lignes parallèles au fuselage. Cela le fait tourner.",
+  "Turn the plane over, so it stands on its keel with its wings on top. Throw it gently: it corkscrews as it flies.":
+    "Retournez l’avion pour qu’il repose sur sa quille, les ailes au-dessus. Lancez-le doucement : il vole en tire-bouchon.",
+  "Fold the top down to the middle":
+    "Rabattez le haut jusqu’au milieu",
+  "Fold the top edge down so it lies across the middle of the sheet.":
+    "Rabattez le bord du haut pour qu’il repose en travers du milieu de la feuille.",
+  "Fold the top-left corner in":
+    "Repliez le coin supérieur gauche",
+  "Fold a small triangle off the top-left corner, through both layers.":
+    "Repliez un petit triangle au coin supérieur gauche, à travers les deux couches.",
+  "Fold the top-right corner in":
+    "Repliez le coin supérieur droit",
+  "And the same at the top right.":
+    "Et de même en haut à droite.",
+  "Fold the bottom-left corner behind":
+    "Repliez le coin inférieur gauche derrière",
+  "Fold a bigger triangle off the bottom-left corner, behind.":
+    "Repliez derrière un triangle plus grand au coin inférieur gauche.",
+  "Fold the bottom-right corner behind":
+    "Repliez le coin inférieur droit derrière",
+  "And the same at the bottom right.":
+    "Et de même en bas à droite.",
+  "Round off the bottom left":
+    "Arrondissez en bas à gauche",
+  "Fold the two blunt corners at the bottom left behind, just a little, to round the back.":
+    "Repliez un peu derrière les deux coins obtus en bas à gauche, pour arrondir l’arrière.",
+  "Round off the bottom right":
+    "Arrondissez en bas à droite",
+  "And the two at the bottom right.":
+    "Et les deux en bas à droite.",
+  "Fold the top layers down along a line close to the bottom, for a short body and broad wings.":
+    "Rabattez les couches du dessus le long d’une ligne proche du bas, pour un fuselage court et de larges ailes.",
+  "Turn the plane over, so it stands on its keel with its wings level on top. Throw it gently: it floats round in wide circles.":
+    "Retournez l’avion pour qu’il repose sur sa quille, les ailes à plat au-dessus. Lancez-le doucement : il flotte en grands cercles.",
   "Fold the top-left corner across":
     "Pliez le coin supérieur gauche en travers",
   "Bring the top-left corner down to the right edge, so the top edge lies along it.":
@@ -1446,8 +1494,12 @@ export const fr: Record<string, string> = {
     "Pincez un plissé dans les deux couches le long des deux plis à la fois, pour que la pointe se relève. Chaque couche reçoit le même plissé, en miroir, et le plissé se range entre elles.",
   "Open it out: on each layer, the two creases are a pleat.":
     "Dépliez : sur chaque couche, les deux plis forment un plissé.",
-  "A petal fold lifts one layer of a point up while its sides fold in to meet in the middle, making a long, thin diamond. Two of them turn a square base into a bird base. First, fold a square base.":
-    "Un pli pétale soulève une couche d’une pointe pendant que ses côtés se replient pour se rejoindre au milieu, ce qui donne un losange long et fin. Deux plis pétale transforment une base préliminaire en base de l’oiseau. D’abord, pliez une base préliminaire.",
+  "A petal fold lifts one layer of a point up while its sides fold in to meet in the middle, making a long, thin diamond. Two of them turn a square base into a bird base.":
+    "Un pli pétale soulève une couche d’une pointe pendant que ses côtés se replient pour se rejoindre au milieu, ce qui donne un losange long et fin. Deux plis pétale transforment une base préliminaire en base de l’oiseau.",
+  "Fold a square base":
+    "Plier une base préliminaire",
+  "Start from a square base: crease both diagonals and both halves, then collapse it so the four corners meet, loose corners towards you. Origami bases shows it step by step.":
+    "Commencez par une base préliminaire : marquez les deux diagonales et les deux moitiés, puis repliez-la pour que les quatre coins se rejoignent, coins libres vers vous. Les bases de l’origami la montre étape par étape.",
   "Open it out to see the creases the petal fold left behind.":
     "Dépliez pour voir les plis laissés par le pli pétale.",
   "Kite base":
@@ -1596,6 +1648,9 @@ export const fr: Record<string, string> = {
     "Et son autre coin",
   "And the left corner. Press the boomerang flat, and check it lies flat on the table.":
     "Puis le coin gauche. Aplatissez le boomerang et vérifiez qu’il repose bien à plat sur la table.",
+  "Tape the corner": "Posez du ruban sur le coin",
+  "Stick a short piece of tape across the corner of the L, so the fold can’t spring open when you throw it.":
+    "Collez un petit morceau de ruban adhésif en travers du coin du L, pour que le pli ne s’ouvre pas quand vous le lancez.",
   "Fold the top corner down onto the bottom corner, making a triangle.":
     "Rabattez le coin du haut sur le coin du bas pour former un triangle.",
   "Fold the top point up":
@@ -1718,4 +1773,674 @@ export const fr: Record<string, string> = {
     "Gonflez-le",
   "Blow gently into the hole at the bottom, and the balloon puffs up. Done!":
     "Soufflez doucement dans le trou du bas, et le ballon se gonfle. C’est fini !",
+  "Fold the left corner over to the right corner and unfold, to mark the middle.":
+    "Rabattez le coin gauche sur le coin droit puis dépliez, pour marquer le milieu.",
+  "Fold the top layer of the bottom point up, so its tip goes a little past the base of the horns.":
+    "Remontez la couche du dessus de la pointe du bas, pour que sa pointe dépasse un peu la base des cornes.",
+  "Fold the tip back down":
+    "Rabattre la pointe vers le bas",
+  "Fold the tip back down along the base of the horns, making a small lip.":
+    "Rabattez la pointe vers le bas le long de la base des cornes, pour former un petit rebord.",
+  "Fold the band up along the bottom of the helmet, lip and all, making the brim.":
+    "Remontez la bande le long du bas du casque, rebord compris, pour former la visière.",
+  "Crease the back point":
+    "Marquer la pointe arrière",
+  "Fold the last point up behind the helmet and crease it well…":
+    "Remontez la dernière pointe derrière le casque et marquez bien le pli…",
+  "…then fold it back down.":
+    "…puis rabattez-la de nouveau.",
+  "Tuck the back point inside":
+    "Rentrer la pointe arrière à l’intérieur",
+  "Fold the back point up on its crease, tucking it inside the helmet, behind the brim. Open the bottom to wear it.":
+    "Remontez la pointe arrière sur son pli en la rentrant dans le casque, derrière la visière. Ouvrez le bas pour le porter.",
+  "Open the flap back out":
+    "Rouvrir le rabat",
+  "Fold the middle flap back to the right, leaving its crease.":
+    "Ramenez le rabat du milieu vers la droite, en gardant son pli.",
+  "Open the flap from the left and press its tip down onto the crease, so it flattens into a diamond: the face.":
+    "Ouvrez le rabat par la gauche et appuyez sa pointe sur le pli, pour qu’il s’aplatisse en losange : le visage.",
+  "Lift the wings out to the sides, so the body stands up between them.":
+    "Écartez les ailes sur les côtés, pour que le corps se dresse entre elles.",
+  "Turn it over, so the crane stands on its body with its wings spread. Gently pull the wings apart to puff out the body. Done!":
+    "Retournez-la, pour que la grue repose sur son corps, les ailes déployées. Écartez doucement les ailes pour gonfler le corps. C’est fini !",
+  "Rules for geometry":
+    "Les règles de la géométrie",
+  "Euclid’s rules":
+    "Les règles d’Euclide",
+  "Geometry is built from a few rules, or axioms, that are taken as true. Euclid’s say what a straightedge and compass can draw: a line through two points, a circle round a point, and so on. Every shape of classical geometry is drawn from them.":
+    "La géométrie se construit à partir de quelques règles, ou axiomes, tenues pour vraies. Celles d’Euclide disent ce qu’une règle et un compas peuvent tracer : une droite passant par deux points, un cercle autour d’un point, etc. Toutes les figures de la géométrie classique en découlent.",
+  "Folding’s rules":
+    "Les règles du pliage",
+  "Folding has rules of its own, the Huzita–Hatori axioms, each saying what one fold can do. Put them in place of Euclid’s and you get a geometry of its own: everything a straightedge and compass can draw, and more. Each section here folds one of them.":
+    "Le pliage a ses propres règles, les axiomes de Huzita–Hatori, chacune disant ce qu’un pli peut faire. Mettez-les à la place de celles d’Euclide et vous obtenez une géométrie à part entière : tout ce que tracent une règle et un compas, et plus encore. Chaque section en plie un.",
+  "Axiom 1: Through two points":
+    "Axiome 1 : par deux points",
+  "Axiom 2: Point onto point":
+    "Axiome 2 : un point sur un autre",
+  "Axiom 3: Line onto line":
+    "Axiome 3 : une droite sur une autre",
+  "Axiom 4: Square to a line":
+    "Axiome 4 : perpendiculaire à une droite",
+  "Axiom 5: Point onto a line":
+    "Axiome 5 : un point sur une droite",
+  "Axiom 6: Trisecting an angle":
+    "Axiome 6 : la trisection de l’angle",
+  "Open it and look at the angle: three equal parts. Axiom 6 also doubles a cube and folds a regular heptagon (7 sides). The last, axiom 7, folds a point onto one line, square to another.":
+    "Dépliez et regardez l’angle : trois parts égales. L’axiome 6 permet aussi de dupliquer un cube et de plier un heptagone régulier (7 côtés). Le dernier, l’axiome 7, plie un point sur une droite, perpendiculairement à une autre.",
+  "Any angle, any triangle":
+    "Tout angle, tout triangle",
+  "Axioms 1 to 5 together do all a straightedge and compass can: lines through points, perpendiculars, halved angles, and where a circle meets a line (axiom 5 is the compass). So any angle or triangle classical geometry can draw, you can fold. Start with an equilateral triangle: fold the left edge onto the right.":
+    "Ensemble, les axiomes 1 à 5 font tout ce que font une règle et un compas : des droites par des points, des perpendiculaires, des angles coupés en deux, et l’endroit où un cercle coupe une droite (l’axiome 5 est le compas). Tout angle ou triangle que trace la géométrie classique se plie donc aussi. Commencez par un triangle équilatéral : rabattez le bord gauche sur le bord droit.",
+  "One side":
+    "Un côté",
+  "The other side":
+    "L’autre côté",
+  "An equilateral triangle":
+    "Un triangle équilatéral",
+  "Find the top corner":
+    "Trouver le sommet",
+  "As in axiom 5: fold the bottom left corner onto the middle crease, with the fold through the bottom right corner. Where the corner lands is as far from both bottom corners as they are from each other.":
+    "Comme pour l’axiome 5 : rabattez le coin inférieur gauche sur le pli du milieu, le pli passant par le coin inférieur droit. Là où tombe le coin, on est aussi loin des deux coins du bas qu’ils le sont l’un de l’autre.",
+  "Open it, and mark where the corner landed: the triangle’s top corner.":
+    "Dépliez et marquez l’endroit où le coin est tombé : c’est le sommet du triangle.",
+  "Axiom 1: fold a line through the bottom left corner and the mark.":
+    "Axiome 1 : pliez une droite passant par le coin inférieur gauche et la marque.",
+  "And a line through the bottom right corner and the mark.":
+    "Et une droite passant par le coin inférieur droit et la marque.",
+  "Open it. With the bottom edge, the two creases make a triangle with three equal sides and three 60° angles. Halve those angles (axiom 3) for 30° and 15°, or add and take them away: by the same rules, any triangle with sides you can mark folds too. Done!":
+    "Dépliez. Avec le bord inférieur, les deux plis forment un triangle à trois côtés égaux et trois angles de 60°. Coupez ces angles en deux (axiome 3) pour 30° et 15°, ou additionnez-les et soustrayez-les : avec les mêmes règles, tout triangle dont on peut marquer les côtés se plie aussi. C’est fini !",
+  "And the left corner.":
+    "Et le coin gauche.",
+  "Fold the bottom corner in":
+    "Rabattre le coin du bas",
+  "And the bottom corner.":
+    "Et le coin du bas.",
+  "Fold the right corner in a little way.":
+    "Rabattez un peu le coin droit vers l’intérieur.",
+  "And the left corner, to match.":
+    "Et le coin gauche, pareil.",
+  "Turned over, the pages go the other way: fold the right half of the diamond over to the left.":
+    "Retourné, les pages vont dans l’autre sens : rabattez la moitié droite du losange vers la gauche.",
+  "Fold the bottom corner up onto the top corner, making a triangle.":
+    "Rabattez le coin du bas sur le coin du haut, pour former un triangle.",
+  "Fold up the left point":
+    "Relevez la pointe gauche",
+  "Fold the left corner up so it points up and a little out to the left.":
+    "Pliez le coin gauche vers le haut, pour qu’il pointe vers le haut et un peu vers la gauche.",
+  "Fold up the right point":
+    "Relevez la pointe droite",
+  "Fold the right corner up to match. That’s three points.":
+    "Pliez le coin droit de la même façon. Voilà trois pointes.",
+  "Fold the bottom behind":
+    "Pliez le bas vers l’arrière",
+  "Fold the bottom edge behind, for a straight band. Your crown is done!":
+    "Pliez le bord du bas vers l’arrière, pour un bandeau bien droit. Votre couronne est finie !",
+  "Fold up the hull":
+    "Relevez la coque",
+  "Start white side up. Fold the bottom edge up, about a sixth of the way, so the coloured side shows: the hull.":
+    "Commencez face blanche dessus. Relevez le bord du bas d’environ un sixième, pour que la couleur apparaisse : c’est la coque.",
+  "Fold the top left behind":
+    "Pliez le haut gauche vers l’arrière",
+  "Fold the top left half behind, on a line from the left end of the hull’s top edge to the top right corner. That leaves a white sail.":
+    "Pliez la moitié en haut à gauche vers l’arrière, sur une ligne allant du bout gauche du bord supérieur de la coque au coin en haut à droite. Il reste une voile blanche.",
+  "Tuck the point behind":
+    "Cachez la pointe derrière",
+  "Behind, the half you folded pokes out below the hull. Fold its point up behind, level with the bottom of the hull.":
+    "Derrière, la moitié que vous avez pliée dépasse sous la coque. Relevez sa pointe par derrière, au ras du bas de la coque.",
+  "Shape the bow":
+    "Formez la proue",
+  "Fold the hull’s left end behind at a slant, for the bow.":
+    "Pliez en biais vers l’arrière le bout gauche de la coque : c’est la proue.",
+  "Shape the stern":
+    "Formez la poupe",
+  "Fold the right end behind too, a little less. Ready to sail!":
+    "Pliez aussi le bout droit vers l’arrière, un peu moins. Prêt à naviguer !",
+  "Start green side up. Fold all four corners to the middle.":
+    "Commencez face verte dessus. Pliez les quatre coins au centre.",
+  "And again":
+    "Et encore",
+  "Fold the four new corners to the middle.":
+    "Pliez au centre les quatre nouveaux coins.",
+  "And once more":
+    "Et une fois de plus",
+  "Fold the corners to the middle a third time, and crease hard.":
+    "Pliez les coins au centre une troisième fois, et marquez bien les plis.",
+  "Lift each corner’s flaps from the middle and curl them outwards, into four petals. Your lotus is done!":
+    "Soulevez depuis le centre les rabats de chaque coin et recourbez-les vers l’extérieur, en quatre pétales. Votre lotus est fini !",
+  "Fold the right corner over":
+    "Rabattez le coin droit",
+  "Fold the diamond’s right corner over to the left, past the middle.":
+    "Rabattez le coin droit du losange vers la gauche, au-delà du milieu.",
+  "Tuck the left corner in":
+    "Glissez le coin gauche",
+  "Fold the left corner over to the right, and tuck it into the pocket of the right one.":
+    "Rabattez le coin gauche vers la droite, et glissez-le dans la poche du coin droit.",
+  "Blow gently into the hole at the bottom, and the blossom puffs up. Done!":
+    "Soufflez doucement dans le trou du bas, et la fleur se gonfle. C’est fini !",
+  "A big green square and a small blue one, coloured side up, each turned so a corner points towards you.":
+    "Un grand carré vert et un petit carré bleu, face colorée dessus, chacun tourné pour qu’un coin pointe vers vous.",
+  "Fold the tail’s bottom behind":
+    "Pliez le bas de la queue vers l’arrière",
+  "Fold the green square’s bottom corner behind, to the middle.":
+    "Pliez le coin du bas du carré vert vers l’arrière, jusqu’au centre.",
+  "Fold the top corner behind a little way, so the tail spreads like a fan.":
+    "Pliez un peu le coin du haut vers l’arrière, pour que la queue s’étale en éventail.",
+  "Crease the body square":
+    "Marquez le carré du corps",
+  "Fold the blue square’s left corner to its right corner, then unfold.":
+    "Amenez le coin gauche du carré bleu sur son coin droit, puis dépliez.",
+  "Fold the upper left edge to the centre crease.":
+    "Pliez le bord en haut à gauche jusqu’au pli central.",
+  "And the upper right edge. It’s a kite, pointing up.":
+    "Et le bord en haut à droite. C’est un cerf-volant, pointe en haut.",
+  "Narrow the neck":
+    "Affinez le cou",
+  "Fold the long upper left edge to the centre again, making the top a long thin neck.":
+    "Pliez de nouveau le long bord en haut à gauche jusqu’au centre, pour que le haut devienne un long cou fin.",
+  "Fold the tip of the neck down a little way, for the head.":
+    "Rabattez un peu la pointe du cou vers le bas : c’est la tête.",
+  "Put the body in front":
+    "Placez le corps devant",
+  "Set the body in front of the tail, near its bottom edge. Your peacock is showing off!":
+    "Posez le corps devant la queue, près de son bord du bas. Votre paon fait la roue !",
+  "Start with the big green square, dark side up. Fold its left and right edges to the middle.":
+    "Commencez par le grand carré vert, face foncée dessus. Pliez ses bords gauche et droit jusqu’au centre.",
+  "Fold out the ribs":
+    "Repliez les côtes",
+  "Fold each flap’s inner edge back out a little way, so a dark stripe shows down the middle.":
+    "Repliez un peu vers l’extérieur le bord intérieur de chaque rabat, pour qu’une bande foncée apparaisse au milieu.",
+  "Round the top":
+    "Arrondissez le haut",
+  "Fold the two top corners behind, a little way.":
+    "Pliez un peu les deux coins du haut vers l’arrière.",
+  "Fold down the rim":
+    "Rabattez le bord du pot",
+  "Now the pot: fold the top edge of the orange square down a little way, for the rim.":
+    "Maintenant le pot : rabattez un peu le bord du haut du carré orange, pour faire le rebord.",
+  "Slant the sides":
+    "Inclinez les côtés",
+  "Fold the left and right edges behind at a slant, so the pot is narrower at the bottom.":
+    "Pliez en biais vers l’arrière les bords gauche et droit, pour que le pot soit plus étroit en bas.",
+  "Fold the bottom of the pot behind.":
+    "Pliez le bas du pot vers l’arrière.",
+  "Fold the flower":
+    "Pliez la fleur",
+  "Last, the flower: fold the four corners of the small square to its middle.":
+    "Enfin, la fleur : pliez les quatre coins du petit carré jusqu’à son centre.",
+  "Stand it in the pot":
+    "Plantez-le dans le pot",
+  "Slide the body down behind the rim of the pot.":
+    "Glissez le corps vers le bas, derrière le rebord du pot.",
+  "Add the flower":
+    "Ajoutez la fleur",
+  "Put the flower on top, a corner pointing up. Your cactus is in bloom!":
+    "Posez la fleur en haut, un coin vers le haut. Votre cactus est en fleur !",
+  "Start with the sheet upright. Fold the top edge down to the bottom edge.":
+    "Commencez avec la feuille à la verticale. Rabattez le bord du haut sur le bord du bas.",
+  "Fold it in half side to side, and unfold.":
+    "Pliez-la en deux de gauche à droite, puis dépliez.",
+  "Fold the top left corner down, so its top edge lies along the middle crease.":
+    "Rabattez le coin en haut à gauche, pour que son bord du haut suive le pli du milieu.",
+  "Fold the top right corner down to match. That leaves a band along the bottom.":
+    "Rabattez le coin en haut à droite de même. Il reste une bande en bas.",
+  "Fold the band in half":
+    "Plier la bande en deux",
+  "Fold the bottom edge of the top layer up to the bottom of the corners.":
+    "Relevez le bord du bas de la première couche jusqu’au bas des coins.",
+  "Fold the band up":
+    "Relever la bande",
+  "Fold the band up again, over the corners.":
+    "Relevez encore la bande, par-dessus les coins.",
+  "Fold the other band in half":
+    "Plier l’autre bande en deux",
+  "Fold this side’s bottom edge up to the bottom of the triangle…":
+    "Relevez le bord du bas de ce côté jusqu’au bas du triangle…",
+  "Fold it up":
+    "La relever",
+  "…and up again.":
+    "…et encore une fois.",
+  "Draw a skull and crossbones":
+    "Dessiner une tête de mort",
+  "Draw a skull and crossbones on the front. Open the bottom and put it on. Arr!":
+    "Dessinez une tête de mort et deux os croisés devant. Ouvrez le bas et mettez-le. Arrr !",
+  "Start dark side up, with a corner pointing towards you.":
+    "Commencez face foncée dessus, un coin pointé vers vous.",
+  "Fold the top layer’s point down to the middle of the bottom edge. This makes the pocket.":
+    "Rabattez la pointe de la première couche au milieu du bord du bas. Cela fait la poche.",
+  "Fold the left corner up to the top point.":
+    "Relevez le coin gauche jusqu’à la pointe du haut.",
+  "Fold the right corner up to match: a square.":
+    "Relevez le coin droit de même : un carré.",
+  "Fold out an eye":
+    "Sortir un œil",
+  "Fold the left flap’s point down and out, so it sticks out past the side of the head.":
+    "Rabattez la pointe du rabat gauche vers le bas et l’extérieur, pour qu’elle dépasse du côté de la tête.",
+  "Fold out the other eye":
+    "Sortir l’autre œil",
+  "Fold the right flap’s point out to match.":
+    "Sortez la pointe du rabat droit de même.",
+  "Draw on pupils, nostrils and a big smile. Slip the pocket over the corner of a page.":
+    "Dessinez les pupilles, les narines et un grand sourire. Glissez le coin d’une page dans la poche.",
+  "Fold the top point behind, a little over a quarter of the way down.":
+    "Repliez la pointe du haut derrière, un peu plus d’un quart vers le bas.",
+  "Fold the left corner up to where the top point was.":
+    "Relevez le coin gauche jusqu’à l’endroit où était la pointe du haut.",
+  "Fold down a hump":
+    "Rabattre un lobe",
+  "Fold the left flap’s point down in front, from the middle out to the edge, making a notch.":
+    "Rabattez la pointe du rabat gauche devant, du milieu jusqu’au bord, pour faire un creux.",
+  "Fold down the other hump":
+    "Rabattre l’autre lobe",
+  "Fold the right flap’s point down to match.":
+    "Rabattez la pointe du rabat droit de même.",
+  "Round the humps":
+    "Arrondir les lobes",
+  "Fold the tips of both humps behind, just a little.":
+    "Repliez le bout des deux lobes derrière, juste un peu.",
+  "Round the left side":
+    "Arrondir le côté gauche",
+  "Fold the left corner behind, just a little.":
+    "Repliez le coin gauche derrière, juste un peu.",
+  "Round the right side":
+    "Arrondir le côté droit",
+  "And the right corner. Slip the pocket over the corner of a page.":
+    "Et le coin droit. Glissez le coin d’une page dans la poche.",
+  "A big square and a small one, light side up, each turned so a corner points towards you.":
+    "Un grand carré et un petit, face claire dessus, chacun tourné un coin vers vous.",
+  "Fold the big square’s upper edges to the middle, making a tall kite.":
+    "Rabattez les bords du haut du grand carré au milieu, pour faire un grand cerf-volant.",
+  "Fold up the tail":
+    "Relever la queue",
+  "Fold the bottom point up behind, so it sticks out to the right: the tail. The body now sits on its folded edge.":
+    "Repliez la pointe du bas derrière vers le haut, pour qu’elle dépasse à droite : la queue. Le corps repose maintenant sur son bord plié.",
+  "Fold the top point behind, for the neck.":
+    "Repliez la pointe du haut derrière, pour le cou.",
+  "Fold the head in half":
+    "Plier la tête en deux",
+  "Fold the small square’s bottom corner up to its top corner.":
+    "Relevez le coin du bas du petit carré jusqu’à son coin du haut.",
+  "Fold up the ears":
+    "Relever les oreilles",
+  "Fold each side corner up, so its point sticks up past the top point and out to the side.":
+    "Relevez chaque coin de côté, pour que sa pointe dépasse la pointe du haut, un peu vers l’extérieur.",
+  "Fold the head’s top point down behind, between the ears.":
+    "Repliez la pointe du haut de la tête derrière, entre les oreilles.",
+  "Put the head on":
+    "Poser la tête",
+  "Set the head on top of the body, its chin over the neck.":
+    "Posez la tête sur le corps, le menton sur le cou.",
+  "Draw on eyes, a nose and whiskers. Your cat is sitting pretty!":
+    "Dessinez les yeux, le nez et les moustaches. Votre chat est sage comme une image !",
+  "Fold up the wings":
+    "Relever les ailes",
+  "Fold each bottom corner up and out, from just beside the middle, so the wings rise.":
+    "Relevez chaque coin du bas vers le haut et l’extérieur, juste à côté du milieu, pour que les ailes se dressent.",
+  "Draw the eyes":
+    "Dessiner les yeux",
+  "Draw two eyes on the head. Your bat is ready to fly!":
+    "Dessinez deux yeux sur la tête. Votre chauve-souris est prête à s’envoler !",
+  "Fold the body in half":
+    "Plier le corps en deux",
+  "Fold the big square in half, top to bottom.":
+    "Pliez le grand carré en deux, de haut en bas.",
+  "Snip the legs":
+    "Découper les pattes",
+  "Cut two snips up from the bottom edge, through both layers, a little in from each end.":
+    "Faites deux entailles vers le haut depuis le bord du bas, à travers les deux couches, un peu en retrait de chaque bout.",
+  "Fold up the belly":
+    "Relever le ventre",
+  "Fold the paper between the snips up behind, leaving four legs.":
+    "Repliez le papier entre les entailles derrière vers le haut : il reste quatre pattes.",
+  "Turn the head square":
+    "Tourner le carré de la tête",
+  "Turn the small square so a corner points towards you.":
+    "Tournez le petit carré pour qu’un coin pointe vers vous.",
+  "Fold its bottom corner up to its top corner, making a triangle.":
+    "Relevez son coin du bas jusqu’à son coin du haut, pour faire un triangle.",
+  "Fold the top point behind, halfway down.":
+    "Repliez la pointe du haut derrière, jusqu’à mi-hauteur.",
+  "Fold the corners up":
+    "Relever les coins",
+  "Fold each side corner up to where the top point was.":
+    "Relevez chaque coin de côté jusqu’à l’endroit où était la pointe du haut.",
+  "Fold down the horns":
+    "Rabattre les cornes",
+  "Fold each flap’s point down in front, from the middle out to the edge, so a horn stands up each side.":
+    "Rabattez la pointe de chaque rabat devant, du milieu jusqu’au bord, pour qu’une corne se dresse de chaque côté.",
+  "Set the head on the front of the body, its muzzle a little below the back.":
+    "Posez la tête à l’avant du corps, le museau un peu plus bas que le dos.",
+  "Draw two eyes and two nostrils on the head. Your bull is ready to charge!":
+    "Dessinez deux yeux et deux naseaux sur la tête. Votre taureau est prêt à charger !",
+  "Start with a diamond":
+    "Commencer avec un losange",
+  "Start with the big square, dark side up, a corner pointing towards you.":
+    "Commencez avec le grand carré, face foncée dessus, un coin pointé vers vous.",
+  "Fold the lower edges to the middle crease, making a kite.":
+    "Rabattez les bords du bas sur le pli du milieu, pour faire un cerf-volant.",
+  "Fold the left half behind onto the right.":
+    "Repliez la moitié gauche derrière, sur la droite.",
+  "Turn it on its side: the long point is the tail, the corner below is the legs.":
+    "Couchez-le sur le côté : la longue pointe est la queue, le coin du bas les pattes.",
+  "Fold the small square in half, top to bottom.":
+    "Pliez le petit carré en deux, de haut en bas.",
+  "Shape the snout":
+    "Former le museau",
+  "Fold the top right corner behind, so the snout slopes down to the front.":
+    "Repliez le coin en haut à droite derrière, pour que le museau descende vers l’avant.",
+  "Set the head on the front of the body, a little higher than its back.":
+    "Posez la tête à l’avant du corps, un peu plus haut que le dos.",
+  "Draw an eye and a row of sharp teeth on the head. Roar!":
+    "Dessinez un œil et une rangée de dents pointues sur la tête. Grrr !",
+  "Fold the edges to the middle":
+    "Rabattre les bords au milieu",
+  "Start dark side up. Fold the top and bottom edges to the middle.":
+    "Commencez face foncée dessus. Rabattez les bords du haut et du bas au milieu.",
+  "Fold the new top and bottom edges to the middle again, making a narrow strip.":
+    "Rabattez encore les nouveaux bords du haut et du bas au milieu, pour faire une bande étroite.",
+  "Shape the tip":
+    "Former la pointe",
+  "Fold the bottom right corner behind, so the end lies along the top edge and the top runs out to a point.":
+    "Repliez le coin en bas à droite derrière, pour que le bout longe le bord du haut et que le haut finisse en pointe.",
+  "Roll the handle":
+    "Rouler le manche",
+  "Fold the left end over onto the strip…":
+    "Rabattez le bout gauche sur la bande…",
+  "Roll it again":
+    "Le rouler encore",
+  "…and over once more. That’s the handle.":
+    "…et encore une fois. C’est le manche.",
+  "Colour the handle":
+    "Colorier le manche",
+  "Colour in the handle with a black pen. Your knife is ready.":
+    "Coloriez le manche avec un feutre noir. Votre couteau est prêt.",
+  "Turn the square":
+    "Tourner le carré",
+  "Turn the square so a corner points towards you, light side up.":
+    "Tournez le carré pour qu’un coin pointe vers vous, face claire dessus.",
+  "Fold the upper edges to the middle crease, making a kite with a long point at the top.":
+    "Rabattez les bords du haut sur le pli du milieu, pour faire un cerf-volant à longue pointe en haut.",
+  "Fold the short lower edges to the middle too: a long, sharp diamond.":
+    "Rabattez aussi les petits bords du bas au milieu : un long losange pointu.",
+  "Fold the bottom point up behind, a little below the widest part, so the blade’s base is short.":
+    "Repliez la pointe du bas derrière vers le haut, un peu sous la partie la plus large, pour que la base de la lame soit courte.",
+  "Fold the strip’s edges in":
+    "Rabattre les bords de la bande",
+  "Fold the long edges of the strip to its middle.":
+    "Rabattez les grands bords de la bande en son milieu.",
+  "Fold it in half lengthwise: a thin handle.":
+    "Pliez-la en deux dans la longueur : un manche fin.",
+  "Fold the end back":
+    "Replier le bout",
+  "Fold the bottom end of the handle back up, a little way, for a pommel.":
+    "Repliez un peu le bout du bas du manche derrière, pour le pommeau.",
+  "Add the handle":
+    "Ajouter le manche",
+  "Slip the top of the handle under the blade’s base. Your kunai is ready.":
+    "Glissez le haut du manche sous la base de la lame. Votre kunai est prêt.",
+  "Round the paddle":
+    "Arrondir la palette",
+  "Green side up, fold all four corners of the square behind, a little way.":
+    "Face verte dessus, repliez un peu les quatre coins du carré derrière.",
+  "Fold it in half lengthwise: the handle.":
+    "Pliez-la en deux dans la longueur : le manche.",
+  "Fold the bottom end of the handle back up, a little way.":
+    "Repliez un peu le bout du bas du manche derrière.",
+  "Slip the top of the handle under the paddle. Your fan is ready to cool you down.":
+    "Glissez le haut du manche sous la palette. Votre éventail est prêt à vous rafraîchir.",
+  "Fold the corners in":
+    "Rabattre les coins au milieu",
+  "Start light side up. Fold all four corners to the middle.":
+    "Commencez face claire dessus. Rabattez les quatre coins au milieu.",
+  "Fold the four new corners to the middle again.":
+    "Rabattez encore les quatre nouveaux coins au milieu.",
+  "Fold out the petals":
+    "Sortir les pétales",
+  "Fold each point back out, past the edge and a little to one side, all the same way round.":
+    "Ressortez chaque pointe, au-delà du bord et un peu de côté, toutes dans le même sens.",
+  "Round the petals":
+    "Arrondir les pétales",
+  "Fold the tip of each petal behind, just a little. Your rose is in bloom.":
+    "Repliez un peu le bout de chaque pétale derrière. Votre rose est en fleur.",
+  "Start light side up, with a corner pointing towards you.":
+    "Commencez face claire dessus, un coin pointé vers vous.",
+  "Fold the lower edges to the middle crease.":
+    "Rabattez les bords du bas sur le pli du milieu.",
+  "Fold the upper edges in":
+    "Rabattre les bords du haut",
+  "And the upper edges, so the paper is a long, narrow leaf.":
+    "Et les bords du haut, pour que le papier devienne une feuille longue et étroite.",
+  "Pleat the leaf":
+    "Plisser la feuille",
+  "Pleat the leaf back and forth across its length, like a fan, then let it open a little so it ripples.":
+    "Plissez la feuille en accordéon dans la largeur, comme un éventail, puis laissez-la s’ouvrir un peu pour qu’elle ondule.",
+  "Fold the top edges in":
+    "Rabattre les bords du haut vers l’intérieur",
+  "Fold the short upper edges to the middle too.":
+    "Rabattez aussi les petits bords du haut au milieu.",
+  "Turn it over: a plain green leaf.":
+    "Retournez-la : une feuille verte toute simple.",
+  "Shape the leaf":
+    "Former la feuille",
+  "Pinch the leaf along the middle crease, so its two halves rise a little either side. Your leaf is done.":
+    "Pincez la feuille le long du pli du milieu, pour que ses deux moitiés se relèvent un peu. Votre feuille est prête.",
+  "Pop it up":
+    "La dresser",
+  "Push the middle up from underneath and let the corners drop, pinching each diagonal into a ridge and pushing each side’s middle crease inside. Your pyramid stands on its four corners.":
+    "Poussez le milieu vers le haut par-dessous et laissez tomber les coins, en pinçant chaque diagonale en arête et en rentrant le pli du milieu de chaque face. Votre pyramide tient sur ses quatre coins.",
+  "Fold the corners behind":
+    "Replier les coins derrière",
+  "Fold all four corners behind, a little way, so the square is an octagon.":
+    "Repliez un peu les quatre coins derrière, pour que le carré devienne un octogone.",
+  "Pop it into a gem":
+    "En faire une gemme",
+  "Push the middle down and lift the edges, pinching each diagonal into a ridge and pushing each side’s middle crease inside, so it comes to a point underneath. Your diamond sparkles.":
+    "Poussez le milieu vers le bas et relevez les bords, en pinçant chaque diagonale en arête et en rentrant le pli du milieu de chaque face, pour qu’il finisse en pointe dessous. Votre diamant étincelle.",
+  "Fold the square in half corner to corner.":
+    "Pliez le carré en deux coin sur coin.",
+  "Fold the triangle in half, point to point.":
+    "Pliez le triangle en deux, pointe sur pointe.",
+  "Fold it in half once more, lining up the edges by the point.":
+    "Pliez-le encore en deux, en alignant les bords près de la pointe.",
+  "And once more: a thin wedge, many layers thick. Crease it hard.":
+    "Et encore une fois : un coin fin, épais de nombreuses couches. Marquez bien le pli.",
+  "Unfold it all: sixteen creases run out from the middle.":
+    "Dépliez tout : seize plis partent du milieu.",
+  "Start yellow side up. Fold the top and bottom edges to the middle.":
+    "Commencez face jaune dessus. Rabattez les bords du haut et du bas au milieu.",
+  "Fold the new top and bottom edges to the middle again: a narrow band.":
+    "Rabattez encore les nouveaux bords du haut et du bas au milieu : une bande étroite.",
+  "Turn the band over.":
+    "Retournez la bande.",
+  "Curl it round":
+    "L’enrouler",
+  "Curl the band round into a ring, until its ends meet. Slip it on your wrist.":
+    "Enroulez la bande en anneau, jusqu’à ce que ses bouts se rejoignent. Glissez-la à votre poignet.",
+  "Fold the band":
+    "Plier la bande",
+  "Fold the strip’s long edges to its middle: the band.":
+    "Rabattez les grands bords de la bande en son milieu : l’anneau.",
+  "Fold the gem":
+    "Plier la pierre",
+  "Light side up, fold the small square’s four corners to its middle: a little faceted diamond.":
+    "Face claire dessus, rabattez les quatre coins du petit carré en son milieu : un petit diamant à facettes.",
+  "Set the gem":
+    "Poser la pierre",
+  "Lay the gem on the left end of the band.":
+    "Posez la pierre sur le bout gauche de la bande.",
+  "Curl the band round":
+    "Enrouler la bande",
+  "Curl the rest of the band down and round underneath, so it meets the end under the gem. Your ring is ready to wear.":
+    "Enroulez le reste de la bande vers le bas et par-dessous, jusqu’à rejoindre le bout sous la pierre. Votre bague est prête à porter.",
+  "Turn it over: a plain strip.":
+    "Retournez-la : une bande unie.",
+  "Draw the weave":
+    "Dessiner le tressage",
+  "Draw lines slanting both ways across the strip, criss-crossing, like a woven tube.":
+    "Dessinez des lignes en biais dans les deux sens sur la bande, qui se croisent, comme un tube tressé.",
+  "Roll it into a tube":
+    "La rouler en tube",
+  "Roll the strip round across its width into a long, thin tube, the lines outside. Slip a finger in each end and pull!":
+    "Roulez la bande dans sa largeur en un long tube fin, les lignes dehors. Glissez un doigt à chaque bout et tirez !",
+  "Narrow the blade":
+    "Affiner la lame",
+  "Fold the long upper edges to the middle again: a long, narrow blade.":
+    "Rabattez encore les longs bords du haut au milieu : une lame longue et étroite.",
+  "Narrow the end":
+    "Affiner le bout",
+  "Fold the short lower edges to the middle too.":
+    "Rabattez aussi les petits bords du bas au milieu.",
+  "Fold the end up":
+    "Relever le bout",
+  "Fold the end up over the blade, along its widest corners.":
+    "Relevez le bout sur la lame, au niveau de ses coins les plus larges.",
+  "Fold it back down a little above that fold, so a narrow band is left across the sword: the crossguard. The point below is the handle.":
+    "Rabattez-le un peu au-dessus de ce pli, pour qu’une bande étroite reste en travers de l’épée : la garde. La pointe en dessous est le manche.",
+  "Shorten the handle":
+    "Raccourcir le manche",
+  "Fold the handle’s long tip up behind, so the handle is short with a flat end. Your sword is ready.":
+    "Repliez la longue pointe du manche derrière vers le haut, pour un manche court au bout plat. Votre épée est prête.",
+  "Take the first strip":
+    "Prenez la première bande",
+  "Take a strip off the pile and turn it over, white side up, long side across.":
+    "Prenez une bande sur la pile et retournez-la, face blanche dessus, le grand côté à l’horizontale.",
+  "Crease in half lengthwise":
+    "Marquez la moitié dans la longueur",
+  "Fold the strip in half lengthwise, long edge to long edge.":
+    "Pliez la bande en deux dans la longueur, grand bord sur grand bord.",
+  "Fold the long edges to the middle":
+    "Pliez les grands bords au milieu",
+  "Fold both long edges in to meet at the crease.":
+    "Pliez les deux grands bords pour qu’ils se rejoignent sur le pli.",
+  "Fold it in half along the crease, so the folded edges are inside: a narrow strip, coloured all round.":
+    "Pliez-la en deux sur le pli, bords pliés à l’intérieur : une bande étroite, colorée tout autour.",
+  "Fold the strip in half end to end, and unfold.":
+    "Pliez la bande en deux, bout à bout, puis dépliez.",
+  "Fold the ends to the middle":
+    "Pliez les bouts au milieu",
+  "Fold both ends in to meet at the middle crease. Each folded end makes a sleeve, open at the sides.":
+    "Pliez les deux bouts pour qu’ils se rejoignent sur le pli du milieu. Chaque bout plié forme un fourreau, ouvert sur les côtés.",
+  "Fold it in half at the middle, ends inside. That’s one link: two halves, each with a sleeve.":
+    "Pliez-la en deux au milieu, bouts à l’intérieur. Voilà un maillon : deux moitiés, chacune avec son fourreau.",
+  "Fold the other strips":
+    "Pliez les autres bandes",
+  "Fold the other 27 strips into links the same way.":
+    "Pliez les 27 autres bandes en maillons de la même façon.",
+  "Join two links":
+    "Assemblez deux maillons",
+  "Turn a second link a quarter turn and slide its halves into the first link’s sleeves from the side, one above and one below the folded ends, until it stops.":
+    "Tournez un deuxième maillon d’un quart de tour et glissez ses moitiés par le côté dans les fourreaux du premier, l’une au-dessus et l’autre au-dessous des bouts pliés, jusqu’en butée.",
+  "Add a third":
+    "Ajoutez-en un troisième",
+  "Slide a third link into the second’s sleeves the same way, turned back the way the first one lies.":
+    "Glissez un troisième maillon dans les fourreaux du deuxième de la même façon, retourné dans le sens du premier.",
+  "Keep going":
+    "Continuez",
+  "Add the rest the same way, turning each one a quarter turn from the last.":
+    "Ajoutez les autres de la même façon, chacun tourné d’un quart de tour par rapport au précédent.",
+  "Press it flat":
+    "Aplatissez-le",
+  "Press the chain flat, so the links lie snug in each other. Join the ends to wear it as a bracelet.":
+    "Aplatissez la chaîne pour que les maillons s’emboîtent bien. Reliez les bouts pour la porter en bracelet.",
+  "Cross two cards":
+    "Croisez deux cartes",
+  "Lay a second card across the middle of the first, so the two make a plus sign.":
+    "Posez une deuxième carte en travers du milieu de la première, pour former une croix.",
+  "Fold the top card’s ends behind":
+    "Pliez derrière les bouts de la carte du dessus",
+  "Fold the ends of the top card down behind the bottom card, sharply along its edges.":
+    "Pliez les bouts de la carte du dessus derrière la carte du dessous, bien nettement le long de ses bords.",
+  "Fold the bottom card’s ends over":
+    "Rabattez les bouts de la carte du dessous",
+  "Fold the ends of the bottom card up over the top card, along its edges.":
+    "Rabattez les bouts de la carte du dessous par-dessus la carte du dessus, le long de ses bords.",
+  "Pull them apart":
+    "Séparez-les",
+  "Slide the cards apart and turn the second one over. Each is a unit: a square with a flap folded over at either end.":
+    "Faites glisser les cartes pour les séparer et retournez la deuxième. Chacune est un module : un carré avec un rabat replié à chaque bout.",
+  "Make two more pairs":
+    "Faites deux autres paires",
+  "Fold four more cards the same way, two at a time: six units in all, two of each colour.":
+    "Pliez quatre autres cartes de la même façon, deux par deux : six modules en tout, deux de chaque couleur.",
+  "Open the flaps":
+    "Ouvrez les rabats",
+  "Open every flap out square, standing straight up from its unit.":
+    "Ouvrez chaque rabat à angle droit, bien droit sur son module.",
+  "Start the cube":
+    "Commencez le cube",
+  "Hold a red unit flaps up for the bottom. Stand the blue units on it, front and back, their lower flaps tucked under the bottom.":
+    "Prenez un module rouge, rabats en haut, pour le fond. Dressez dessus les modules bleus, devant et derrière, leurs rabats du bas glissés sous le fond.",
+  "Add the sides":
+    "Ajoutez les côtés",
+  "Slide the yellow units in at the left and right, inside the bottom’s flaps, their own flaps over the blue faces.":
+    "Glissez les modules jaunes à gauche et à droite, à l’intérieur des rabats du fond, leurs propres rabats sur les faces bleues.",
+  "Put the lid on":
+    "Posez le couvercle",
+  "Push the last red unit down on top, its flaps over the yellow faces and under the blue units’ upper flaps. Done!":
+    "Enfoncez le dernier module rouge sur le dessus, ses rabats sur les faces jaunes et sous les rabats du haut des modules bleus. C’est fini !",
+  "Take a square and turn it to a diamond, coloured side down.":
+    "Prenez un carré et posez-le en losange, face colorée dessous.",
+  "Fold the bottom corner up to the top corner: a triangle.":
+    "Pliez le coin du bas sur le coin du haut : un triangle.",
+  "Fold the left and right corners up to the top corner: a small diamond with two flaps.":
+    "Pliez les coins gauche et droit jusqu’au coin du haut : un petit losange avec deux rabats.",
+  "Crease the flaps":
+    "Marquez les rabats",
+  "Fold each flap in half, its middle edge down onto its lower edge. Unfold them.":
+    "Pliez chaque rabat en deux, son bord du milieu sur son bord du bas. Dépliez-les.",
+  "Open the flaps back up, leaving the creases.":
+    "Rouvrez les rabats en gardant les plis marqués.",
+  "Squash the flaps":
+    "Aplatissez les rabats",
+  "Stand each flap up, open it and press it flat along its crease, into a kite lying over the diamond’s lower edge. Its tip sticks out at the top.":
+    "Redressez chaque rabat, ouvrez-le et aplatissez-le le long de son pli, en cerf-volant posé sur le bord du bas du losange. Sa pointe dépasse en haut.",
+  "Fold the tips down":
+    "Rabattez les pointes",
+  "Fold down the tip of each kite where it sticks out past the diamond, along the diamond’s upper edge.":
+    "Rabattez la pointe de chaque cerf-volant là où elle dépasse du losange, le long du bord du haut du losange.",
+  "Fold the kites in half":
+    "Pliez les cerfs-volants en deux",
+  "Fold the outer half of each kite in over the diamond, along its lower edge.":
+    "Pliez la moitié extérieure de chaque cerf-volant vers l’intérieur sur le losange, le long de son bord du bas.",
+  "Fold the other petals":
+    "Pliez les autres pétales",
+  "Fold the other 59 squares into petals the same way.":
+    "Pliez les 59 autres carrés en pétales de la même façon.",
+  "Glue a petal":
+    "Collez un pétale",
+  "Glue the two folded flaps together, so the petal closes into a cone.":
+    "Collez les deux rabats pliés ensemble, pour que le pétale se referme en cône.",
+  "Glue five into a flower":
+    "Collez-en cinq en une fleur",
+  "Glue five petals side by side, their points together, into a flower.":
+    "Collez cinq pétales côte à côte, pointes réunies, en une fleur.",
+  "Make the other flowers":
+    "Faites les autres fleurs",
+  "Glue the other petals into 11 more flowers the same way.":
+    "Collez les autres pétales en 11 autres fleurs de la même façon.",
+  "Start the ball":
+    "Commencez la boule",
+  "Glue the flowers together where their petals meet: one in the middle and five round it, a bowl.":
+    "Collez les fleurs entre elles là où leurs pétales se touchent : une au milieu et cinq autour, en forme de bol.",
+  "Finish the ball":
+    "Terminez la boule",
+  "Glue on the other six flowers, the last one on top, to close the ball. Done!":
+    "Collez les six autres fleurs, la dernière en haut, pour fermer la boule. C’est fini !",
+  "Fold four more cards the same way, two at a time: six units in all.":
+    "Pliez quatre autres cartes de la même façon, deux par deux : six modules en tout.",
+  "Turn all six units over, so their flaps are underneath.":
+    "Retournez les six modules, rabats dessous.",
+  "Draw the dots":
+    "Dessinez les points",
+  "Draw the dots of a dice in the middle of each square, a different number on each, 1 to 6.":
+    "Dessinez les points d’un dé au milieu de chaque carré, un nombre différent sur chacun, de 1 à 6.",
+  "Turn the units back over, flaps up.":
+    "Retournez à nouveau les modules, rabats dessus.",
+  "Start the dice":
+    "Commencez le dé",
+  "Hold the 6 flaps up for the bottom, dots down. Stand the 2 and the 5 on it, front and back, dots out, their lower flaps inside, lying on the bottom.":
+    "Prenez le 6, rabats en haut et points dessous, pour le fond. Dressez dessus le 2 et le 5, devant et derrière, points vers l’extérieur, leurs rabats du bas à l’intérieur, posés sur le fond.",
+  "Slide the 3 and the 4 in at the left and right, outside the bottom’s flaps, their own flaps inside the 2 and the 5.":
+    "Glissez le 3 et le 4 à gauche et à droite, à l’extérieur des rabats du fond, leurs propres rabats à l’intérieur du 2 et du 5.",
+  "Push the 1 down on top, its flaps inside the 3 and the 4, over the upper flaps of the 2 and the 5. Roll it!":
+    "Enfoncez le 1 sur le dessus, ses rabats à l’intérieur du 3 et du 4, sur les rabats du haut du 2 et du 5. Lancez-le !",
 };

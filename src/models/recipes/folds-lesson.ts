@@ -214,13 +214,21 @@ export function foldsLesson() {
     );
   openUp(crimp, 'Open it out: on each layer, the two creases are a pleat.');
 
-  // 8. Petal fold: on a square base, the bird base's petal fold, as the crane folds it.
+  // 8. Petal fold: on a square base, the bird base's petal fold, as the crane folds it. Origami bases teaches the
+  // square base, so here it's folded in one step, to keep this section about the petal fold.
   const petal = start(
     'Petal fold',
     'Petal fold',
-    'A petal fold lifts one layer of a point up while its sides fold in to meet in the middle, making a long, thin diamond. Two of them turn a square base into a bird base. First, fold a square base.',
+    'A petal fold lifts one layer of a point up while its sides fold in to meet in the middle, making a long, thin diamond. Two of them turn a square base into a bird base.',
   );
-  squareBase(r);
+  r.together(
+    {
+      title: 'Fold a square base',
+      text: 'Start from a square base: crease both diagonals and both halves, then collapse it so the four corners meet, loose corners towards you. Origami bases shows it step by step.',
+      kind: 'fold',
+    },
+    () => squareBase(r),
+  );
   squareBaseFlaps(r).petal(false);
   openUp(petal, 'Open it out to see the creases the petal fold left behind.');
 

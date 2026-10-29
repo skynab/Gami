@@ -2,11 +2,15 @@ import { collapse, CREASE_KINDS, type CreaseKind } from './collapse';
 import { cut } from './cut';
 import { fold, FoldError, unplaceLike, rotate, toFlat, turnOver, unfoldStep, FOLD_KINDS, type FoldKind } from './fold';
 import { flipLine, lineEdgeOnto, lineOnto, lineThrough, sideOf, type Line } from './geometry2d';
+import { copyUnit } from './copy';
+import { assemble } from './assemble';
 import { place } from './place';
+import { settle } from './settle';
 import { anchorFor, centre, inside, locate, smallerSideMoves, topLayers } from './select';
-import { curl, radial, reparent, shape, type Bend } from './shape';
+import { curl, radial, reparent, shape, type Bend, type Ray } from './shape';
 import { sheetOf } from './sheets';
 import { bendFrame } from './bend/frame';
+import { keepIn, tape } from './tape';
 import type { FoldFrame, Mark, OrigamiModel, Step, StepKind, Tool, Vec2, Vec3 } from './types';
 
 /**
@@ -40,6 +44,12 @@ export type Faces =
   /** Faces whose centre on the sheet is inside one of these outlines. */
   | { inPaper: Vec2[][] }
   | { all: Faces[] };
+
+export interface AssemblyPiece {
+  only: Faces;
+  bends?: ShapeBend[];
+  pose?: { from: At; to: Vec3; x: Vec3; up: Vec3 };
+}
 
 export interface ShapeBend {
   line: LineSpec;
@@ -75,8 +85,20 @@ export type Op =
   | { op: 'unfold'; to?: number }
   | { op: 'turnOver' }
   | { op: 'rotate'; degrees: number }
-  | { op: 'move'; only: Faces; to?: At; degrees?: number; flip?: boolean; under?: boolean }
+  /** `into`: parts of the piece slid in just under the paper `under` picks where they land (a link into another's sleeves). */
+  | { op: 'move'; only: Faces; to?: At; degrees?: number; flip?: boolean; under?: boolean; into?: { part: Faces; under: Faces }[] }
   | { op: 'newSheet' }
+  /** More units folded like sheet `from`: each sheet of `to` becomes a copy of it, at the matching point of `at` on the table (or where it lay). */
+  | { op: 'copy'; from: number; to: number[]; at?: Vec2[] }
+  /** Presses flat paper down, so each part is only as thick as the paper there (see settle.ts). */
+  | { op: 'settle' }
+  /**
+   * Puts units together in 3D (see assemble.ts): each piece bent along lines, then set down with the point `from`
+   * at `to`, the table's +x along `x` and its up along `up`. Worked out from the flat state before a run of these
+   * steps, each adding to the run's pieces; a face goes with the last piece that picks it. `glue`: the pieces are
+   * glued as they go together (not drawn), so the model needs glue.
+   */
+  | { op: 'assemble'; pieces: AssemblyPiece[]; glue?: boolean }
   /** Bends in 3D. Lines are found on the flat state before a run of shaping steps; each adds to the run's bends. */
   /** `corners`: bends whose lines cross are walls rising together, their corners pinching into ears. */
   /** `chained`: the bends open folds along the paper from the face at this point of the sheet (stacked pleats). */
@@ -88,11 +110,14 @@ export type Op =
    * `inflate`: air blown in, the volume the paper encloses by the end (a balloon puffed up).
    */
   | { op: 'bend'; flex: Faces; anchor: { paper: Vec2 }; goals: BendGoal[]; mesh?: number; inflate?: number }
-  | { op: 'popUp'; centre: At; rays: { azimuth: number; elevation: number }[] }
+  /** `via`: the rays of shapes it passes through on the way, from flat, so it rises as one rather than each piece its own way. */
+  | { op: 'popUp'; centre: At; rays: Ray[]; via?: Ray[][] }
   /** Draws on the paper, leaving it where it is: a face, say. */
   | { op: 'draw'; marks: Mark[] }
   /** A scissor cut along a segment, through every layer it crosses, the top N, or the faces `only` picks. */
   | { op: 'cut'; from: At; to: At; layers?: number; only?: Faces }
+  /** A strip of sticky tape laid on top of the paper from one point to another, `width` wide (see tape.ts). */
+  | { op: 'tape'; from: At; to: At; width?: number }
   /** Several operations shown as one step. */
   | { op: 'together'; ops: Op[] };
 
@@ -137,6 +162,7 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
       return { op: 'unfold', ...opt(o, 'to', count, path) };
     case 'turnOver':
     case 'newSheet':
+    case 'settle':
       return { op: o.op };
     case 'rotate':
       return { op: 'rotate', degrees: num(o.degrees, `${path}.degrees`) };
@@ -148,22 +174,39 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
         ...opt(o, 'degrees', num, path),
         ...opt(o, 'flip', bool, path),
         ...opt(o, 'under', bool, path),
+        ...opt(o, 'into', (v, p) =>
+          list(v, p, (x, q) => {
+            const r = record(x, q);
+            return { part: faces(r.part, `${q}.part`, 0), under: faces(r.under, `${q}.under`, 0) };
+          }), path),
+      };
+    case 'assemble':
+      return {
+        op: 'assemble',
+        pieces: list(o.pieces, `${path}.pieces`, (x, p) => {
+          const r = record(x, p);
+          return {
+            only: faces(r.only, `${p}.only`, 0),
+            ...opt(r, 'bends', (v, q) => list(v, q, (b, bq) => shapeBend(b, bq)), p),
+            ...opt(r, 'pose', (v, q) => {
+              const pose = record(v, q);
+              return { from: at(pose.from, `${q}.from`), to: vec3(pose.to, `${q}.to`), x: vec3(pose.x, `${q}.x`), up: vec3(pose.up, `${q}.up`) };
+            }, p),
+          };
+        }),
+        ...opt(o, 'glue', bool, path),
+      };
+    case 'copy':
+      return {
+        op: 'copy',
+        from: count(o.from, `${path}.from`),
+        to: list(o.to, `${path}.to`, count),
+        ...opt(o, 'at', (v, p) => list(v, p, vec2), path),
       };
     case 'shape':
       return {
         op: 'shape',
-        bends: list(o.bends, `${path}.bends`, (b, p) => {
-          const r = record(b, p);
-          return {
-            line: lineSpec(r.line, `${p}.line`),
-            ...opt(r, 'flip', bool, p),
-            degrees: num(r.degrees, `${p}.degrees`),
-            ...opt(r, 'segments', (v, q) => between(count(v, q), q, 1, 64), p),
-            ...opt(r, 'reach', at, p),
-            ...opt(r, 'layers', count, p),
-            ...opt(r, 'only', (v, q) => faces(v, q, 0), p),
-          };
-        }),
+        bends: list(o.bends, `${path}.bends`, shapeBend),
         ...opt(o, 'corners', bool, path),
         ...opt(o, 'chained', paperAt, path),
         ...opt(o, 'ride', (v, p) => faces(v, p, 0), path),
@@ -183,15 +226,23 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
         ...opt(o, 'mesh', (v, p) => between(num(v, p), p, 0.02, 10), path),
         ...opt(o, 'inflate', (v, p) => between(num(v, p), p, 0, 10), path),
       };
-    case 'popUp':
+    case 'popUp': {
+      const rays = (v: unknown, p: string) =>
+        list(v, p, (r, q) => {
+          const ray = record(r, q);
+          return {
+            azimuth: num(ray.azimuth, `${q}.azimuth`),
+            elevation: num(ray.elevation, `${q}.elevation`),
+            ...opt(ray, 'heading', num, q),
+          };
+        });
       return {
         op: 'popUp',
         centre: at(o.centre, `${path}.centre`),
-        rays: list(o.rays, `${path}.rays`, (r, p) => {
-          const ray = record(r, p);
-          return { azimuth: num(ray.azimuth, `${p}.azimuth`), elevation: num(ray.elevation, `${p}.elevation`) };
-        }),
+        rays: rays(o.rays, `${path}.rays`),
+        ...opt(o, 'via', (v, p) => list(v, p, rays), path),
       };
+    }
     case 'draw':
       return { op: 'draw', marks: parseMarks(o.marks, `${path}.marks`) };
     case 'cut':
@@ -201,6 +252,13 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
         to: at(o.to, `${path}.to`),
         ...opt(o, 'layers', count, path),
         ...opt(o, 'only', (v, p) => faces(v, p, 0), path),
+      };
+    case 'tape':
+      return {
+        op: 'tape',
+        from: at(o.from, `${path}.from`),
+        to: at(o.to, `${path}.to`),
+        ...opt(o, 'width', positive, path),
       };
     case 'together':
       if (depth >= LIMITS.nesting) throw new OpError(`${path}: nested too deeply`);
@@ -257,6 +315,12 @@ function between(n: number, path: string, lo: number, hi: number): number {
   return n;
 }
 
+const positive: Check<number> = (x, path) => {
+  const n = num(x, path);
+  if (n <= 0) throw new OpError(`${path}: expected a number above 0`);
+  return n;
+};
+
 const bool: Check<boolean> = (x, path) => {
   if (typeof x !== 'boolean') throw new OpError(`${path}: expected true or false`);
   return x;
@@ -272,6 +336,19 @@ function list<T>(x: unknown, path: string, check: Check<T>, max = LIMITS.list): 
   if (x.length > max) throw new OpError(`${path}: more than ${max} items`);
   return x.map((v, i) => check(v, `${path}[${i}]`));
 }
+
+const shapeBend: Check<ShapeBend> = (b, p) => {
+  const r = record(b, p);
+  return {
+    line: lineSpec(r.line, `${p}.line`),
+    ...opt(r, 'flip', bool, p),
+    degrees: num(r.degrees, `${p}.degrees`),
+    ...opt(r, 'segments', (v, q) => between(count(v, q), q, 1, 64), p),
+    ...opt(r, 'reach', at, p),
+    ...opt(r, 'layers', count, p),
+    ...opt(r, 'only', (v, q) => faces(v, q, 0), p),
+  };
+};
 
 const vec3: Check<Vec3> = (x, path) => {
   if (!Array.isArray(x) || x.length !== 3) throw new OpError(`${path}: expected [x, y, z]`);
@@ -364,15 +441,20 @@ export function opKind(op: Op): StepKind {
       return 'rotate';
     case 'move':
     case 'newSheet':
+    case 'copy':
+    case 'assemble':
       return 'assemble';
     case 'shape':
     case 'popUp':
     case 'bend':
+    case 'settle':
       return 'pose';
     case 'draw':
       return 'draw';
     case 'cut':
       return 'cut';
+    case 'tape':
+      return 'tape';
     case 'together': {
       // As its last fold or unfold, so a plain Unfold finds a fold followed by a turn; else as its last part.
       const parts = op.ops.map(opKind);
@@ -381,15 +463,39 @@ export function opKind(op: Op): StepKind {
   }
 }
 
-/** The tools beyond paper that steps need: scissors for a cut, a pen for drawing, parts of a `together` included. */
+/** The tools beyond paper that steps need: scissors for a cut, a pen for drawing, tape, parts of a `together` included. */
 export function toolsNeeded(steps: Step[]): Tool[] {
   const kinds = new Set<StepKind>();
-  const add = (op: Op): void => void (op.op === 'together' ? op.ops.forEach(add) : kinds.add(opKind(op)));
+  let glue = false;
+  const add = (op: Op): void => {
+    if (op.op === 'together') op.ops.forEach(add);
+    else kinds.add(opKind(op));
+    if (op.op === 'assemble' && op.glue) glue = true;
+  };
   for (const s of steps) {
     if (s.op) add(s.op);
     else if (s.kind) kinds.add(s.kind);
   }
-  return [...(kinds.has('cut') ? (['scissors'] as const) : []), ...(kinds.has('draw') ? (['pen'] as const) : [])];
+  return [
+    ...(kinds.has('cut') ? (['scissors'] as const) : []),
+    ...(kinds.has('draw') ? (['pen'] as const) : []),
+    ...(kinds.has('tape') ? (['tape'] as const) : []),
+    ...(glue ? (['glue'] as const) : []),
+  ];
+}
+
+/** How many creases a collapse must fold at once to be a key point. Reverse folds, crimps and tucks fold fewer. */
+const KEY_POINT_CREASES = 3;
+
+/**
+ * Whether a step is a key point: a complex fold, where several creases fold at once (collapsing into a base,
+ * a squash, petal or swivel fold), parts of a `together` included. The viewer marks these to break the
+ * instructions up into sections. A step with no operation goes by its label.
+ */
+export function isKeyPoint(step: Step): boolean {
+  const complex = (op: Op): boolean =>
+    op.op === 'together' ? op.ops.some(complex) : op.op === 'collapse' && op.creases.length >= KEY_POINT_CREASES;
+  return step.op ? complex(step.op) : step.kind === 'squash' || step.kind === 'petal' || step.kind === 'sink';
 }
 
 /** What a step does, for deciding what an Unfold opens: from its operation if it has one, else its label. */
@@ -406,6 +512,20 @@ export function lastFold(steps: Step[]): number | null {
   const lastUnfold = steps.findLastIndex((s) => actsAs(s) === 'unfold');
   const last = steps.findLastIndex((s) => actsAs(s) === 'fold');
   return last > lastUnfold ? last : null;
+}
+
+/**
+ * The frames an unfold has since opened back up: for each unfold, the frames from just after the one it
+ * went back to up to its own, which lie folded where the paper is open now, or exactly as it was opened to.
+ */
+export function reopened(steps: Step[]): Set<number> {
+  const out = new Set<number>();
+  steps.forEach((s, i) => {
+    if (actsAs(s) !== 'unfold') return;
+    const to = (s.op?.op === 'unfold' ? s.op.to : undefined) ?? lastFold(steps.slice(0, i));
+    if (to !== null) for (let k = to + 1; k <= i + 1; k++) out.add(k);
+  });
+  return out;
 }
 
 /**
@@ -505,15 +625,14 @@ interface Context {
 
 const radians = (degrees: number) => (degrees * Math.PI) / 180;
 
-/** Runs an operation, keeping the cuts made so far in the paper it makes (a fresh sheet has none). */
+/** Runs an operation, keeping the cuts made and tape laid so far in the paper it makes (a fresh sheet has none). */
 function run(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; flat?: FoldFrame; marks?: Mark[] } {
   const before = ctx.steps.length ? ctx.steps[ctx.steps.length - 1].frame : ctx.model.start;
   // The fold engine works on flat faces: bent paper (its mesh of triangles) can be drawn on, but not folded again yet.
   if (before.soft && op.op !== 'draw') throw new OpError('Paper that has bent can’t be folded any further.');
   const out = runOp(op, ctx);
-  const cuts = before.cuts;
-  if (!cuts?.length || op.op === 'newSheet') return out;
-  const keep = (f: FoldFrame): FoldFrame => (f.cuts ? f : { ...f, cuts });
+  if (op.op === 'newSheet') return out;
+  const keep = (f: FoldFrame): FoldFrame => keepIn(f, before);
   return { ...out, frame: keep(out.frame), ...(out.via && { via: out.via.map(keep) }), ...(out.flat && { flat: keep(out.flat) }) };
 }
 
@@ -550,7 +669,7 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
         to = last;
       }
       if (to >= frames.length - 1) throw new OpError(`Can’t unfold to step ${to}, which hasn’t happened yet.`);
-      return unfoldStep(frames, to);
+      return unfoldStep(frames, to, reopened(ctx.steps));
     }
     case 'turnOver':
       return { frame: turnOver(frame) };
@@ -564,8 +683,27 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
           angle: radians(op.degrees ?? 0),
           flip: op.flip,
           under: op.under,
+          into: op.into?.map((i) => ({ part: test(i.part)!, under: test(i.under)! })),
         }),
       };
+    case 'copy':
+      return { frame: copyUnit(frame, ctx.model.sheets, op.from, op.to, op.at) };
+    case 'settle':
+      return { frame: settle(frame) };
+    case 'assemble': {
+      // The run of assembly steps this one adds to, and the flat state before it.
+      let first = ctx.steps.length;
+      while (first > 0 && ctx.steps[first - 1].op?.op === 'assemble') first--;
+      const base = frames[first];
+      const run = [...ctx.steps.slice(first).map((s) => s.op as Extract<Op, { op: 'assemble' }>), op];
+      const pieces = run.flatMap((o) => o.pieces).map((p) => ({
+        only: select(p.only, { frame: base, sheets: ctx.model.sheets }),
+        bends: p.bends?.flatMap((b) => bendsOf(b, base, ctx.model.sheets)),
+        pose: p.pose && { ...p.pose, from: where(p.pose.from, base) },
+      }));
+      const made = assemble(base, pieces);
+      return { frame: first < ctx.steps.length ? reparent(frame, made) : made };
+    }
     case 'newSheet': {
       const { start } = ctx.model;
       const faces_parent = start.faces_vertices.map((face) => {
@@ -593,8 +731,15 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
       });
       return { frame: first < ctx.steps.length ? reparent(frame, shaped) : shaped, flat: shaped };
     }
-    case 'popUp':
-      return { frame: radial(frame, where(op.centre), op.rays) };
+    case 'popUp': {
+      const centre = where(op.centre);
+      const shapes = [...(op.via ?? []), op.rays].map((rays) => radial(frame, centre, rays));
+      if (shapes.length === 1) return { frame: shapes[0] };
+      // Every shape has the same pieces: after the first, each comes from the same piece of the shape before.
+      const [first, ...rest] = shapes;
+      const after = rest.map(({ faces_parent: _, ...f }) => f);
+      return { frame: after[after.length - 1], via: [first, ...after.slice(0, -1)] };
+    }
     case 'bend': {
       const test = select(op.flex, { frame, sheets: ctx.model.sheets });
       const flex = frame.faces_vertices.flatMap((face, f) => (test(face.map((v) => frame.vertices_paper[v])) ? [f] : []));
@@ -613,6 +758,8 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
       return { frame: { ...frame, faces_parent: undefined }, marks: op.marks };
     case 'cut':
       return { frame: cut(frame, { from: where(op.from), to: where(op.to), layers: op.layers, only: test(op.only) }) };
+    case 'tape':
+      return { frame: tape(frame, where(op.from), where(op.to), op.width) };
     case 'together': {
       const added: Step[] = [];
       for (const part of op.ops) {

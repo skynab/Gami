@@ -58,7 +58,7 @@ export function side(r: Recipe, s: number) {
     title: 'Crease the top corner',
     text: 'Fold the top corner down on a line through where the side crease meets the top crease, and unfold.',
   })
-    .unfold()
+    .unfold({ text: 'Open it back up, leaving a crease.' })
     .onto(paper(s * hw, -0.5), table(s * (hw - 0.25), -0.25), { title: 'Fold the corner down', text: 'Fold the top corner down to the top crease.' })
     .along(table(s * q, -1), table(s * q, 1), table(s * (hw - 0.05), 0.3), { title: 'Fold the side in', text: 'Fold the side in along its crease.' });
   // The swivel and flattening in one move (crease kinds found by search): above the top crease the side's fold

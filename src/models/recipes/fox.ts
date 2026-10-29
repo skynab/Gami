@@ -1,5 +1,5 @@
 import { lerp, lineThrough, reflect, sideOf } from '../../fold/geometry2d';
-import { paper, Recipe, table } from '../../fold/recipe';
+import { locate, paper, Recipe, table } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 import { faceMarks } from './face';
 
@@ -39,28 +39,33 @@ export function fox() {
     only: head,
   });
 
-  // The squash: the head flap's back half opens back out to the right, and the flap's tip is pressed flat
-  // into a diamond on the ear's crease. Its two halves each fold along the line halving the angle at Q.
+  // The squash: the head flap's tip is pressed flat into a diamond on the ear's crease, its two halves each
+  // folding along the line halving the angle at Q (worked out with the flap folded over, as it lies now).
   const Tf = reflect(ear, T);
   const unit = (p: Vec2): Vec2 => [(p[0] - Q[0]) / Math.hypot(p[0] - Q[0], p[1] - Q[1]), (p[1] - Q[1]) / Math.hypot(p[0] - Q[0], p[1] - Q[1])];
   const [a, b] = [unit(Tf), unit(B)];
   const bisect: Vec2 = [Q[0] + a[0] + b[0], Q[1] + a[1] + b[1]];
-  // The flap (folded over to the left), and the part of it beyond the bisector, by where each face is now.
-  const inFlap = (c: Vec2) => inTriangle(r.where(paper(...c)), B, Q, Tf);
-  const nearTip = (c: Vec2) => inTriangle(r.where(paper(...c)), Q, Tf, lineHit(Q, bisect, B, Tf));
+  // The flap, and the part of it beyond the bisector, by where each face lies with the flap folded over.
+  const folded = r.current;
+  const inFlap = (c: Vec2) => inTriangle(locate(folded, c), B, Q, Tf);
+  const nearTip = (c: Vec2) => inTriangle(locate(folded, c), Q, Tf, lineHit(Q, bisect, B, Tf));
   const front = (c: Vec2) => head(c) && c[0] + c[1] > 0;
   const back = (c: Vec2) => head(c) && c[0] + c[1] < 0;
-  r.collapse(
+  // The flap folds back out to the right first, so the squash is a move of its own. From there its creases are
+  // those lines mirrored in the ear's crease, each folding the other way, as the paper lies the other way up;
+  // and the front half folds back over on the ear's crease as it squashes.
+  const back2 = reflect(ear, bisect);
+  r.unfold({ title: 'Open the flap back out', text: 'Fold the middle flap back to the right, leaving its crease.' }).collapse(
     {
       title: 'Squash the head',
-      text: 'Open the flap and press its tip down onto the crease, so it flattens into a diamond: the face.',
+      text: 'Open the flap from the left and press its tip down onto the crease, so it flattens into a diamond: the face.',
       kind: 'squash',
     },
     [
-      { through: [table(...B), table(...Q)], kind: 'flat', only: back },
-      { through: [table(...Q), table(...bisect)], kind: 'valley', only: (c) => front(c) && inFlap(c) },
-      { through: [table(...Q), table(...bisect)], kind: 'mountain', only: (c) => back(c) && inFlap(c) },
-      { through: [table(...Q), table(...Tf)], kind: 'flat', only: (c) => head(c) && nearTip(c) },
+      { through: [table(...B), table(...Q)], kind: 'valley', only: front },
+      { through: [table(...Q), table(...back2)], kind: 'mountain', only: (c) => front(c) && inFlap(c) },
+      { through: [table(...Q), table(...back2)], kind: 'valley', only: (c) => back(c) && inFlap(c) },
+      { through: [table(...Q), table(...T)], kind: 'flat', only: (c) => head(c) && nearTip(c) },
     ],
     paper(-0.3, -0.2),
   );

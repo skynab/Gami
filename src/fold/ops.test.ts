@@ -2,7 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { basics } from '../models/basics';
 import { paperPlane } from '../models/recipes/paper-plane';
 import { fromFoldFile, toFoldFile } from './fold-format';
-import { applyOp, lastFold, OpError, opKind, OPS_VERSION, parseOp, replay, toolsNeeded, type Op } from './ops';
+import { applyOp, isKeyPoint, lastFold, OpError, opKind, OPS_VERSION, parseOp, reopened, replay, toolsNeeded, type Op } from './ops';
+import { butterfly } from '../models/recipes/butterfly';
+import { crane } from '../models/recipes/crane';
+import { crow } from '../models/recipes/crow';
 import { unfoldStep } from './fold';
 import { paper, Recipe, table } from './recipe';
 import type { FoldFrame, OrigamiModel, Vec2 } from './types';
@@ -262,6 +265,34 @@ describe('what a plain Unfold opens', () => {
   });
 });
 
+describe('opening several folds at once', () => {
+  it('passes only the folds still folded, not those an earlier unfold opened', () => {
+    // A crease (fold, unfold), then a fold the other way, then open everything: only that last fold opens.
+    const model = new Recipe({ id: 't', title: 't', sheet: basics.sheets[0] })
+      .crease(paper(0, 0.5), paper(0, -0.5), { title: 'Crease' })
+      .onto(paper(0.5, 0), paper(-0.5, 0), { title: 'Fold' })
+      .unfold({ title: 'Open', to: 0 })
+      .build();
+    expect(reopened(model.steps.slice(0, 3))).toEqual(new Set([1, 2]));
+    expect(model.steps[3].via).toBeUndefined();
+  });
+
+  it('opens what is still folded in turn, latest first', () => {
+    // Fold in half, crease it in half again, fold that way again, then open everything.
+    const model = new Recipe({ id: 't', title: 't', sheet: basics.sheets[0] })
+      .onto(paper(0, 0.5), paper(0, -0.5), { title: 'Fold' })
+      .crease(paper(0.5, -0.25), paper(-0.5, -0.25), { title: 'Crease' })
+      .onto(paper(-0.5, -0.25), paper(0.5, -0.25), { title: 'Fold again' })
+      .unfold({ title: 'Open', to: 0 })
+      .build();
+    // Just the paper folded in half on the way: the last fold opened, and not the crease's fold made again.
+    expect(model.steps[4].via).toHaveLength(1);
+    const xs = model.steps[4].via![0].vertices_coords.map((p) => p[0]);
+    const zs = model.steps[4].via![0].vertices_coords.map((p) => p[2]);
+    expect([Math.min(...xs), Math.max(...xs), Math.max(...zs)].map((n) => +n.toFixed(6))).toEqual([-0.5, 0.5, 0]);
+  });
+});
+
 describe('gallery details and tools in .fold files', () => {
   it('keeps a model’s gallery details, and drops what isn’t understood', () => {
     const model: OrigamiModel = { ...basics, card: 'finished', about: { blurb: 'Hi', difficulty: 3, category: 'toy', minutes: 7 } };
@@ -283,6 +314,29 @@ describe('gallery details and tools in .fold files', () => {
     expect(toolsNeeded([step(draw), step(cut)])).toEqual(['scissors', 'pen']);
     expect(toolsNeeded([{ title: '', frame: basics.start, kind: 'draw' }])).toEqual(['pen']);
     expect(toolsNeeded(basics.steps)).toEqual([]);
+  });
+});
+
+describe('key points', () => {
+  const keyPoints = (model: OrigamiModel) => model.steps.flatMap((s, i) => (isKeyPoint(s) ? [i + 1] : []));
+
+  it('are the complex folds, where several creases fold at once', () => {
+    // Collapsing into the square base, then the two petal folds of the bird base.
+    expect(keyPoints(crane())).toEqual([9, 15, 21]);
+    expect(keyPoints(crow())).toEqual([9, 15, 21]);
+    // The two squashes.
+    expect(keyPoints(butterfly())).toEqual([21, 22]);
+    expect(keyPoints(paperPlane())).toEqual([]);
+  });
+
+  it('count parts of a step made together, and go by the label without an operation', () => {
+    const line = { line: { p: [0, 0] as Vec2, d: [1, 0] as Vec2 } };
+    const collapse = (n: number): Op => ({ op: 'collapse', creases: Array.from({ length: n }, () => ({ line, kind: 'valley' as const })), anchor: { paper: [0, 0] } });
+    const step = (op: Op) => ({ title: '', frame: basics.start, op });
+    expect(isKeyPoint(step(collapse(1)))).toBe(false);
+    expect(isKeyPoint(step({ op: 'together', ops: [{ op: 'turnOver' }, collapse(4)] }))).toBe(true);
+    expect(isKeyPoint({ title: '', frame: basics.start, kind: 'squash' })).toBe(true);
+    expect(isKeyPoint({ title: '', frame: basics.start, kind: 'reverse' })).toBe(false);
   });
 });
 

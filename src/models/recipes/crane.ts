@@ -69,16 +69,23 @@ export function crane() {
   const top = r.where(paper(0, 0))[1];
   const wing = (flap: (c: Vec2) => boolean, tip: Vec2, title: string, text: string) =>
     r.along(table(-2, top), table(2, top), paper(...tip), { title, text, only: flap });
+  // The front wing: the part of the front flap above the line, before it folds down.
+  const beforeFront = r.current;
+  const frontWing = (c: Vec2) => front(c) && locate(beforeFront, c)[1] < top;
   wing(front, [0.5, -0.5], 'Fold a wing down', 'Fold the front wing down, level with the top of the body.');
   r.turnOver('Turn the crane over.');
   // The back wing: the part of the back flap above the line, before it folds down.
   const beforeWing = r.current;
   const backWing = (c: Vec2) => back(c) && locate(beforeWing, c)[1] < top;
   wing(back, [-0.5, 0.5], 'Fold the other wing down', 'Fold the other wing down to match.');
-  // Lying on its side, the crane spreads its wings flat: the top one swings right over, to lie opposite the other.
+  // Spreading the wings, as a paper plane opens: the wing underneath stays on the table, the body stands up off
+  // it, and the other wing swings on over to lie out flat opposite. Then the crane is turned over onto its body.
+  const body = r.where(paper(0.3, 0.3));
   return r
-    .shape({ title: 'Spread the wings', text: 'Lift the wings out to the sides and gently pull them apart to puff out the body. Done!' }, [
-      { through: [table(-2, top), table(2, top)], moving: paper(-0.5, 0.5), degrees: 180, only: backWing },
+    .shape({ title: 'Spread the wings', text: 'Lift the wings out to the sides, so the body stands up between them.' }, [
+      { through: [table(-2, top), table(2, top)], moving: table(...body), degrees: 90, only: (c) => !frontWing(c) },
+      { through: [table(-2, top), table(2, top)], moving: table(...body), degrees: 90, only: backWing },
     ])
+    .turnOver('Turn it over, so the crane stands on its body with its wings spread. Gently pull the wings apart to puff out the body. Done!')
     .build();
 }

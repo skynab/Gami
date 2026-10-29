@@ -62,7 +62,7 @@ export function basesLesson() {
   base(
     'Fish base',
     'The fish base comes from a kite folded at both ends, with two little flaps pinched up at the sides. The whale, the dolphin and the seal start from it.',
-    () => fishBase(r),
+    () => fishBase(r, 'Start coloured side up, with a corner pointing towards you.'),
     'Open it out. The fish base is two kite bases, one from each end.',
   );
   base(

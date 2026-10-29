@@ -254,6 +254,7 @@ export function bendFrame(frame: FoldFrame, options: BendOptions): { via: FoldFr
     faces_vertices: triangles,
     ...(first && { faces_parent: parent }),
     ...(frame.cuts?.length && { cuts: frame.cuts }),
+    ...(frame.tapes?.length && { tapes: frame.tapes }),
     ...(soft.length && { soft }),
   });
   // Resting on the table: blown up, each frame is lifted until its lowest point is on it.

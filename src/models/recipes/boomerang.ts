@@ -46,5 +46,13 @@ export function boomerang() {
   for (const [end, a, b, corner, title, text] of corners) {
     r.along(table(...a), table(...b), table(...corner), { title, text, kind: 'mountain', only: arm(end) });
   }
+  // The 45° fold at the corner is all that holds the L, and it springs open in flight: a strip of tape across it,
+  // square to the fold, holds both arms together.
+  const across = (d: number) => table(d * Math.SQRT1_2, w / 2 + d * Math.SQRT1_2);
+  r.tape(across(-0.09), across(0.09), {
+    title: 'Tape the corner',
+    text: 'Stick a short piece of tape across the corner of the L, so the fold can’t spring open when you throw it.',
+    width: 0.07,
+  });
   return r.build();
 }
