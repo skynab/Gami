@@ -1184,6 +1184,26 @@ export const es: Record<string, string> = {
     "Dobla las capas de arriba hacia abajo por una línea que va desde justo encima de la puntita hasta el borde de atrás, alejándose un poco más del borde de abajo hacia atrás.",
   "Turn the plane over, so it stands on its keel with its wings level on top, and the little point sticking out in front. It’s ready to fly!":
     "Da la vuelta al avión para que se apoye en la quilla con las alas niveladas arriba y la puntita asomando delante. ¡Ya puede volar!",
+  "Bring the slanted left edge in to the centre crease. On this wider paper the fold runs nearly to the bottom.":
+    "Lleva el borde inclinado de la izquierda hasta el pliegue central. En este papel más ancho, el pliegue llega casi hasta abajo.",
+  "Match the left side, for a long, thin point.":
+    "Igual que en la izquierda, para una punta larga y fina.",
+  "Crease the tail":
+    "Marca la cola",
+  "Fold the bottom corner at the back up along a slanting line, through all the layers, and crease it well.":
+    "Dobla hacia arriba la esquina de abajo de la parte de atrás por una línea inclinada, por todas las capas, y marca bien el pliegue.",
+  "Fold it back down.":
+    "Vuelve a doblarla hacia abajo.",
+  "Open the layers a little and push the corner up between them along the crease. Seen from above, the tail now has a notch.":
+    "Abre un poco las capas y empuja la esquina hacia arriba entre ellas por el pliegue. Vista desde arriba, la cola tiene ahora una muesca.",
+  "Fold the top layers down along a line from the nose to the back edge, a little further up at the back, for swept wings.":
+    "Dobla las capas de arriba hacia abajo por una línea desde la nariz hasta el borde de atrás, un poco más arriba atrás, para unas alas en flecha.",
+  "Bend the wingtips":
+    "Dobla las puntas de las alas",
+  "Bend the tip of one wing up and the other down, a little, along lines parallel to the body. They make it roll.":
+    "Dobla un poco la punta de un ala hacia arriba y la de la otra hacia abajo, por líneas paralelas al cuerpo. Así gira sobre sí mismo.",
+  "Turn the plane over, so it stands on its keel with its wings on top. Throw it gently: it corkscrews as it flies.":
+    "Da la vuelta al avión para que se apoye en la quilla con las alas arriba. Lánzalo con suavidad: vuela girando como un sacacorchos.",
   "Fold the top-left corner across":
     "Dobla la esquina de arriba a la izquierda hacia el otro lado",
   "Bring the top-left corner down to the right edge, so the top edge lies along it.":

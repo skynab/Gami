@@ -1184,6 +1184,26 @@ export const fr: Record<string, string> = {
     "Rabattez les couches du dessus le long d’une ligne qui part juste au-dessus de la petite pointe jusqu’au bord arrière, en s’écartant un peu plus du bas vers l’arrière.",
   "Turn the plane over, so it stands on its keel with its wings level on top, and the little point sticking out in front. It’s ready to fly!":
     "Retournez l’avion pour qu’il repose sur sa quille, les ailes à plat au-dessus et la petite pointe dépassant devant. Il est prêt à voler !",
+  "Bring the slanted left edge in to the centre crease. On this wider paper the fold runs nearly to the bottom.":
+    "Amenez le bord gauche en biais sur le pli central. Sur ce papier plus large, le pli descend presque jusqu’en bas.",
+  "Match the left side, for a long, thin point.":
+    "Faites comme à gauche, pour une pointe longue et fine.",
+  "Crease the tail":
+    "Marquez la queue",
+  "Fold the bottom corner at the back up along a slanting line, through all the layers, and crease it well.":
+    "Relevez le coin inférieur arrière le long d’une ligne en biais, à travers toutes les couches, et marquez bien le pli.",
+  "Fold it back down.":
+    "Rabattez-le à nouveau.",
+  "Open the layers a little and push the corner up between them along the crease. Seen from above, the tail now has a notch.":
+    "Écartez un peu les couches et poussez le coin vers le haut entre elles le long du pli. Vue de dessus, la queue a maintenant une encoche.",
+  "Fold the top layers down along a line from the nose to the back edge, a little further up at the back, for swept wings.":
+    "Rabattez les couches du dessus le long d’une ligne allant du nez au bord arrière, un peu plus haut à l’arrière, pour des ailes en flèche.",
+  "Bend the wingtips":
+    "Pliez les bouts des ailes",
+  "Bend the tip of one wing up and the other down, a little, along lines parallel to the body. They make it roll.":
+    "Pliez un peu le bout d’une aile vers le haut et celui de l’autre vers le bas, le long de lignes parallèles au fuselage. Cela le fait tourner.",
+  "Turn the plane over, so it stands on its keel with its wings on top. Throw it gently: it corkscrews as it flies.":
+    "Retournez l’avion pour qu’il repose sur sa quille, les ailes au-dessus. Lancez-le doucement : il vole en tire-bouchon.",
   "Fold the top-left corner across":
     "Pliez le coin supérieur gauche en travers",
   "Bring the top-left corner down to the right edge, so the top edge lies along it.":

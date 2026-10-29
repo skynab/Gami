@@ -93,22 +93,21 @@ export function foldWings(
   // On its side, the keel runs along the bottom. Each wing folds down along a line parallel to it.
   const keel = Math.max(...plane.current.vertices_coords.map((p) => p[2]));
   const wingLine = keel - body;
-  // The line, from nose (left) to tail, and a point just past it, away from the keel. Turning the plane over
-  // mirrors a slanting line, so the second wing and the opening fold along the mirror image.
+  // The line, from nose (left) to tail, and a point just past it, away from the keel.
   const xs = plane.current.vertices_coords.map((p) => p[0]);
   const ends: [Vec2, Vec2] =
     more.tail === undefined ? [[-1, wingLine], [1, wingLine]] : [[Math.min(...xs), wingLine], [Math.max(...xs), keel - more.tail]];
   const fold: [At, At] = [table(...ends[0]), table(...ends[1])];
-  const over: [At, At] = more.tail === undefined ? fold : [table(-ends[0][0], ends[0][1]), table(-ends[1][0], ends[1][1])];
   const slope = (ends[1][1] - ends[0][1]) / (ends[1][0] - ends[0][0]);
   const lineAt = (x: number) => ends[0][1] + slope * (x - ends[0][0]);
   const past = table(0, lineAt(0) - 0.1);
-  // Each wing: the part of its half of the sheet beyond the line, before it folds down.
-  const wingOf = (half: (c: Vec2) => boolean, turned: boolean) => {
-    const beyond = plane.lying(([x, z]) => z < lineAt(turned ? -x : x));
+  // Each wing: the part of its half of the sheet beyond the line, before it folds down. `flip` takes a point
+  // on the table back to where it was before the plane turned over.
+  const wingOf = (half: (c: Vec2) => boolean, flip = (x: number) => x) => {
+    const beyond = plane.lying(([x, z]) => z < lineAt(flip(x)));
     return (c: Vec2) => half(c) && beyond(c);
   };
-  const firstWing = wingOf(right, false);
+  const firstWing = wingOf(right);
   const pastLine = plane.lying(([x, z]) => z < lineAt(x));
   const fin = (c: Vec2) => pastLine(c) && !right(c) && !left(c);
   plane.along(...fold, past, {
@@ -116,10 +115,18 @@ export function foldWings(
     text: wingText,
     only: right,
   });
+  // Turning over mirrors the plane about the middle of the paper's width, which moves a slanting line: the
+  // second wing and the opening fold along its mirror image.
+  const after = plane.current.vertices_coords.map((p) => p[0]);
+  const middle = (Math.min(...after) + Math.max(...after)) / 2;
+  const flip = (x: number) => 2 * middle - x;
+  const over: [At, At] = more.tail === undefined ? fold : [table(flip(ends[0][0]), ends[0][1]), table(flip(ends[1][0]), ends[1][1])];
+  const pastOver = more.tail === undefined ? past : table(flip(0), lineAt(0) - 0.1);
+  const onKeel = more.tail === undefined ? table(0, keel) : table(flip(0), keel);
   plane.turnOver();
-  const secondWing = wingOf(left, true);
+  const secondWing = wingOf(left, flip);
   const wings: Wings = { keel, wingLine, firstWing, secondWing };
-  plane.along(...over, past, {
+  plane.along(...over, pastOver, {
     title: 'Fold the other wing to match',
     text: 'Line it up with the first wing.',
     only: left,
@@ -129,11 +136,11 @@ export function foldWings(
     // The first wing, underneath, stays on the table; the body stands up off it, and the other wing swings
     // right over to lie out flat on the far side: the plane upside down, its keel pointing up.
     .shape({ title: 'Open the wings', text: 'Open both wings out flat on either side of the body, at right angles to it.' }, [
-      { through: over, moving: table(0, keel), degrees: 90, only: (c) => !firstWing(c) },
-      { through: over, moving: table(0, keel), degrees: 90, only: secondWing },
+      { through: over, moving: onKeel, degrees: 90, only: (c) => !firstWing(c) },
+      { through: over, moving: onKeel, degrees: 90, only: secondWing },
       // The fin carries on the body's line past the wings', so it turns with the body: down through the table,
       // until the plane turns over.
-      ...(more.fin ? [{ through: over, moving: past, degrees: -90, only: fin }] : []),
+      ...(more.fin ? [{ through: over, moving: pastOver, degrees: -90, only: fin }] : []),
     ]);
   more.afterOpen?.(plane, wings);
   return plane

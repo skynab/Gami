@@ -75,6 +75,7 @@ export const es: Messages = {
     'king-bee': { title: 'Abejorro rey', blurb: 'Un acróbata rechoncho con dos antenas, que zigzaguea por el aire como una abeja.' },
     'sprinter': { title: 'Velocista', blurb: 'Un avión de alas en flecha con una gran aleta de cola. Cuesta ajustarlo, pero es rápido cuando lo está.' },
     'fun-flyer': { title: 'Planeador divertido', blurb: 'Un dardo de alas largas con una puntita delante de la nariz. Prueba a lanzarlo hacia arriba.' },
+    'corkscrew': { title: 'Sacacorchos', blurb: 'Un dardo acrobático de nariz afilada con una punta de ala hacia arriba y otra hacia abajo, para que gire al volar.' },
     'dog-face': { title: 'Cara de perro', blurb: 'Un primer plegado: un triángulo con orejas caídas.' },
     'cat-face': { title: 'Cara de gato', blurb: 'Un primer plegado: un triángulo con orejas puntiagudas.' },
     cup: { title: 'Vaso', blurb: 'Un vaso que aguanta agua, un rato.' },

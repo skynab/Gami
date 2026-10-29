@@ -1184,6 +1184,26 @@ export const ja: Record<string, string> = {
     "上の層を、小さなとがりのすぐ上から後ろの辺までの線で折り下げます。線は後ろに行くほど、下の辺から少し離れます。",
   "Turn the plane over, so it stands on its keel with its wings level on top, and the little point sticking out in front. It’s ready to fly!":
     "飛行機を裏返して、竜骨を下に、翼を上で水平にします。小さなとがりが前に突き出します。これで飛ばせます！",
+  "Bring the slanted left edge in to the centre crease. On this wider paper the fold runs nearly to the bottom.":
+    "左の斜めの辺を中心の折り目に合わせます。この幅の広い紙では、折り目がほぼ下まで届きます。",
+  "Match the left side, for a long, thin point.":
+    "左側と同じように折ると、長く細い先になります。",
+  "Crease the tail":
+    "尾に折り目をつける",
+  "Fold the bottom corner at the back up along a slanting line, through all the layers, and crease it well.":
+    "後ろの下の角を、斜めの線で全部の層ごと折り上げ、しっかり折り目をつけます。",
+  "Fold it back down.":
+    "元に戻します。",
+  "Open the layers a little and push the corner up between them along the crease. Seen from above, the tail now has a notch.":
+    "層を少し開き、折り目に沿って角を層のあいだに押し上げます。上から見ると、尾に切れ込みができます。",
+  "Fold the top layers down along a line from the nose to the back edge, a little further up at the back, for swept wings.":
+    "上の層を、先端から後ろの辺までの線で折り下げます。線は後ろで少し高くします。これで後退翼になります。",
+  "Bend the wingtips":
+    "翼の先を曲げる",
+  "Bend the tip of one wing up and the other down, a little, along lines parallel to the body. They make it roll.":
+    "片方の翼の先を上に、もう片方を下に、胴体と平行な線で少し曲げます。これで回転します。",
+  "Turn the plane over, so it stands on its keel with its wings on top. Throw it gently: it corkscrews as it flies.":
+    "飛行機を裏返して、竜骨を下に、翼を上にします。そっと投げると、らせんを描いて飛びます。",
   "Fold the top-left corner across":
     "左上の角を反対側へ折る",
   "Bring the top-left corner down to the right edge, so the top edge lies along it.":
