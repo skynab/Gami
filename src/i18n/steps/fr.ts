@@ -2049,4 +2049,50 @@ export const fr: Record<string, string> = {
     "Posez la tête à l’avant du corps, un peu plus haut que le dos.",
   "Draw an eye and a row of sharp teeth on the head. Roar!":
     "Dessinez un œil et une rangée de dents pointues sur la tête. Grrr !",
+  "Fold the edges to the middle":
+    "Rabattre les bords au milieu",
+  "Start dark side up. Fold the top and bottom edges to the middle.":
+    "Commencez face foncée dessus. Rabattez les bords du haut et du bas au milieu.",
+  "Fold the new top and bottom edges to the middle again, making a narrow strip.":
+    "Rabattez encore les nouveaux bords du haut et du bas au milieu, pour faire une bande étroite.",
+  "Shape the tip":
+    "Former la pointe",
+  "Fold the bottom right corner behind, so the end lies along the top edge and the top runs out to a point.":
+    "Repliez le coin en bas à droite derrière, pour que le bout longe le bord du haut et que le haut finisse en pointe.",
+  "Roll the handle":
+    "Rouler le manche",
+  "Fold the left end over onto the strip…":
+    "Rabattez le bout gauche sur la bande…",
+  "Roll it again":
+    "Le rouler encore",
+  "…and over once more. That’s the handle.":
+    "…et encore une fois. C’est le manche.",
+  "Colour the handle":
+    "Colorier le manche",
+  "Colour in the handle with a black pen. Your knife is ready.":
+    "Coloriez le manche avec un feutre noir. Votre couteau est prêt.",
+  "Turn the square":
+    "Tourner le carré",
+  "Turn the square so a corner points towards you, light side up.":
+    "Tournez le carré pour qu’un coin pointe vers vous, face claire dessus.",
+  "Fold the upper edges to the middle crease, making a kite with a long point at the top.":
+    "Rabattez les bords du haut sur le pli du milieu, pour faire un cerf-volant à longue pointe en haut.",
+  "Fold the short lower edges to the middle too: a long, sharp diamond.":
+    "Rabattez aussi les petits bords du bas au milieu : un long losange pointu.",
+  "Fold the bottom point up behind, a little below the widest part, so the blade’s base is short.":
+    "Repliez la pointe du bas derrière vers le haut, un peu sous la partie la plus large, pour que la base de la lame soit courte.",
+  "Fold the strip’s edges in":
+    "Rabattre les bords de la bande",
+  "Fold the long edges of the strip to its middle.":
+    "Rabattez les grands bords de la bande en son milieu.",
+  "Fold it in half lengthwise: a thin handle.":
+    "Pliez-la en deux dans la longueur : un manche fin.",
+  "Fold the end back":
+    "Replier le bout",
+  "Fold the bottom end of the handle back up, a little way, for a pommel.":
+    "Repliez un peu le bout du bas du manche derrière, pour le pommeau.",
+  "Add the handle":
+    "Ajouter le manche",
+  "Slip the top of the handle under the blade’s base. Your kunai is ready.":
+    "Glissez le haut du manche sous la base de la lame. Votre kunai est prêt.",
 };

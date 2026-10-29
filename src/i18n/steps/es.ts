@@ -2049,4 +2049,50 @@ export const es: Record<string, string> = {
     "Pon la cabeza en la parte delantera del cuerpo, un poco más alta que el lomo.",
   "Draw an eye and a row of sharp teeth on the head. Roar!":
     "Dibuja un ojo y una fila de dientes afilados en la cabeza. ¡Grrr!",
+  "Fold the edges to the middle":
+    "Dobla los bordes hasta el centro",
+  "Start dark side up. Fold the top and bottom edges to the middle.":
+    "Empieza con el lado oscuro hacia arriba. Dobla los bordes de arriba y de abajo hasta el centro.",
+  "Fold the new top and bottom edges to the middle again, making a narrow strip.":
+    "Vuelve a doblar los nuevos bordes de arriba y de abajo hasta el centro, para hacer una tira estrecha.",
+  "Shape the tip":
+    "Da forma a la punta",
+  "Fold the bottom right corner behind, so the end lies along the top edge and the top runs out to a point.":
+    "Dobla la esquina de abajo a la derecha hacia atrás, para que el extremo quede a lo largo del borde de arriba y la parte de arriba termine en punta.",
+  "Roll the handle":
+    "Enrolla el mango",
+  "Fold the left end over onto the strip…":
+    "Dobla el extremo izquierdo sobre la tira…",
+  "Roll it again":
+    "Enróllalo otra vez",
+  "…and over once more. That’s the handle.":
+    "…y una vez más. Ese es el mango.",
+  "Colour the handle":
+    "Colorea el mango",
+  "Colour in the handle with a black pen. Your knife is ready.":
+    "Colorea el mango con un rotulador negro. Tu cuchillo está listo.",
+  "Turn the square":
+    "Gira el cuadrado",
+  "Turn the square so a corner points towards you, light side up.":
+    "Gira el cuadrado para que una esquina apunte hacia ti, con el lado claro hacia arriba.",
+  "Fold the upper edges to the middle crease, making a kite with a long point at the top.":
+    "Dobla los bordes de arriba hasta el pliegue del centro, para hacer una cometa con una punta larga arriba.",
+  "Fold the short lower edges to the middle too: a long, sharp diamond.":
+    "Dobla también los bordes cortos de abajo hasta el centro: un rombo largo y afilado.",
+  "Fold the bottom point up behind, a little below the widest part, so the blade’s base is short.":
+    "Dobla la punta de abajo hacia atrás y hacia arriba, un poco por debajo de la parte más ancha, para que la base de la hoja sea corta.",
+  "Fold the strip’s edges in":
+    "Dobla los bordes de la tira",
+  "Fold the long edges of the strip to its middle.":
+    "Dobla los bordes largos de la tira hasta su centro.",
+  "Fold it in half lengthwise: a thin handle.":
+    "Dóblala por la mitad a lo largo: un mango fino.",
+  "Fold the end back":
+    "Dobla el extremo hacia atrás",
+  "Fold the bottom end of the handle back up, a little way, for a pommel.":
+    "Dobla el extremo de abajo del mango hacia atrás y hacia arriba, solo un poco, para el pomo.",
+  "Add the handle":
+    "Pon el mango",
+  "Slip the top of the handle under the blade’s base. Your kunai is ready.":
+    "Mete la parte de arriba del mango bajo la base de la hoja. Tu kunai está listo.",
 };

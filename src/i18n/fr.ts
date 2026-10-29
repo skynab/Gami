@@ -125,6 +125,8 @@ export const fr: Messages = {
     bat: { title: 'Chauve-souris', blurb: 'Une chauve-souris aux ailes levées, à partir de la base de la bombe à eau.' },
     bull: { title: 'Taureau', blurb: 'Un taureau trapu sur quatre pattes, cornes dressées, avec deux carrés et deux coups de ciseaux.' },
     't-rex': { title: 'T-rex', blurb: 'Un T-rex à la longue queue et au sourire plein de dents, avec deux carrés.' },
+    knife: { title: 'Couteau', blurb: 'Un couteau à la pointe en biais et au manche sombre, avec un demi-carré.' },
+    kunai: { title: 'Kunai', blurb: 'Le couteau de lancer des ninjas : une longue lame en losange sur un manche fin et sombre, avec un carré et une bande.' },
   },
   notFound: {
     title: 'Cette page a été repliée',

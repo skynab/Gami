@@ -125,6 +125,8 @@ export const es: Messages = {
     bat: { title: 'Murciélago', blurb: 'Un murciélago con las alas levantadas, desde la base de la bomba de agua.' },
     bull: { title: 'Toro', blurb: 'Un toro robusto sobre cuatro patas, con los cuernos hacia arriba, con dos cuadrados y dos cortes.' },
     't-rex': { title: 'T-rex', blurb: 'Un T-rex con una cola larga y una sonrisa llena de dientes, con dos cuadrados.' },
+    knife: { title: 'Cuchillo', blurb: 'Un cuchillo con la punta inclinada y el mango oscuro, con medio cuadrado.' },
+    kunai: { title: 'Kunai', blurb: 'El cuchillo arrojadizo de los ninjas: una hoja larga en forma de rombo sobre un mango fino y oscuro, con un cuadrado y una tira.' },
   },
   notFound: {
     title: 'Esta página se ha plegado y ha desaparecido',

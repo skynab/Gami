@@ -127,6 +127,8 @@ export const en = {
     bat: { title: 'Bat', blurb: 'A bat with its wings raised, from the water bomb base.' },
     bull: { title: 'Bull', blurb: 'A stocky bull on four legs, its horns up, from two squares and two snips.' },
     't-rex': { title: 'T-rex', blurb: 'A T-rex with a long tail and a toothy grin, from two squares.' },
+    knife: { title: 'Knife', blurb: 'A knife with a slanted tip and a dark handle, from half a square.' },
+    kunai: { title: 'Kunai', blurb: 'A ninja’s throwing knife: a long diamond blade on a thin dark handle, from a square and a strip.' },
   },
   notFound: {
     title: 'This page got folded away',

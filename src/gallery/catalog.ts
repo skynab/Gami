@@ -114,6 +114,8 @@ export const MODELS: ModelInfo[] = [
   { id: 'bat', title: 'Bat', blurb: 'A bat with its wings raised, from the water bomb base.', difficulty: 2, category: 'animal', steps: 12, minutes: 8, sheets: 1, needs: ['pen'], added: '2026-10-28' },
   { id: 'bull', title: 'Bull', blurb: 'A stocky bull on four legs, its horns up, from two squares and two snips.', difficulty: 2, category: 'animal', steps: 10, minutes: 10, sheets: 2, needs: ['scissors', 'pen'], added: '2026-10-28' },
   { id: 't-rex', title: 'T-rex', blurb: 'A T-rex with a long tail and a toothy grin, from two squares.', difficulty: 2, category: 'animal', steps: 10, minutes: 10, sheets: 2, needs: ['pen'], added: '2026-10-28' },
+  { id: 'knife', title: 'Knife', blurb: 'A knife with a slanted tip and a dark handle, from half a square.', difficulty: 1, category: 'toy', steps: 7, minutes: 5, sheets: 1, paper: 2, needs: ['pen'], added: '2026-10-28' },
+  { id: 'kunai', title: 'Kunai', blurb: 'A ninja’s throwing knife: a long diamond blade on a thin dark handle, from a square and a strip.', difficulty: 2, category: 'toy', steps: 10, minutes: 8, sheets: 2, paper: 4, added: '2026-10-28' },
   // Coming soon: listed, with no steps yet.
   { id: 'boat', title: 'Boat', blurb: 'The classic paper boat. It really floats, for a while.', difficulty: 2, category: 'object', minutes: 6, sheets: 1 },
   { id: 'iris', title: 'Iris', blurb: 'Three petals up, three down, from the frog base.', difficulty: 4, category: 'flower', minutes: 20, sheets: 1 },

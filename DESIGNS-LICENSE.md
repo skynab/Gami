@@ -24,6 +24,8 @@ site's source code, or any other model in the gallery.
 | Bat | `src/models/recipes/bat.ts` | October 2026 |
 | Bull | `src/models/recipes/bull.ts` | October 2026 |
 | T-rex | `src/models/recipes/t-rex.ts` | October 2026 |
+| Knife | `src/models/recipes/knife.ts` | October 2026 |
+| Kunai | `src/models/recipes/kunai.ts` | October 2026 |
 
 ## Other models in the gallery
 

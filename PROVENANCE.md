@@ -93,6 +93,8 @@ noted when it was written, and the model was folded from the common traditional 
 | `bat` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a water bomb base with its bottom corners folded up into wings, in place of OrigamiOK's pleated bat (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
 | `bull` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a body snipped into four legs and a head folded like the heart bookmark, in place of OrigamiOK's one-sheet bull (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
 | `t-rex` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a kite folded in half for the body, tail and legs, and a small square for the head, in place of OrigamiOK's one-sheet T-rex (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `knife` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): one strip from half a square, in place of OrigamiOK's three-sheet knife (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `kunai` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a diamond blade and a strip handle, in place of OrigamiOK's glued three-sheet kunai (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
 
 ### Notes
 
@@ -120,6 +122,10 @@ noted when it was written, and the model was folded from the common traditional 
   keeps the general look and folds its own way. OrigamiOK's bat, bull and T-rex shape their wings, horns, heads and
   legs with squash and swivel folds that rigid paper can't follow, so Gami's use two squares where a separate head
   is simpler (the cat, bull and T-rex), and two short snips for the bull's legs.
+  The knife and kunai are Gami's own too: Gilad's database has no Traditional kunai or knife (only a throwing knife,
+  a different model), and OrigamiOK's are glued from three sheets with rolled handles. Gami's knife is one strip
+  with its handle end rolled over and coloured in with a pen (a strip folded from one-sided paper shows the same
+  side all over); its kunai is a diamond blade from a square with a strip folded thin for the handle, no glue.
 - **Fox.** Okuda's design isn't openly licensed. It was kept on 18 October 2026 because it's very widely
   folded and taught (see the decisions log in `PLAN.md`). The gallery doesn't credit him yet. If the rule
   is tightened, the choices are: ask for permission, swap in a traditional fox, or design Gami's own.

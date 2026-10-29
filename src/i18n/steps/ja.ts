@@ -2049,4 +2049,50 @@ export const ja: Record<string, string> = {
     "頭を体の前に、背中より少し高くおきます。",
   "Draw an eye and a row of sharp teeth on the head. Roar!":
     "頭に目を一つと、とがった歯をならべてかきます。ガオー！",
+  "Fold the edges to the middle":
+    "ふちをまん中に合わせて折る",
+  "Start dark side up. Fold the top and bottom edges to the middle.":
+    "こい色の面を上にして始めます。上と下のふちをまん中に合わせて折ります。",
+  "Fold the new top and bottom edges to the middle again, making a narrow strip.":
+    "新しい上と下のふちを、もう一度まん中に合わせて折り、細い帯にします。",
+  "Shape the tip":
+    "先の形を作る",
+  "Fold the bottom right corner behind, so the end lies along the top edge and the top runs out to a point.":
+    "右下の角をうしろに折って、はしを上のふちにそろえ、上がとがった先になるようにします。",
+  "Roll the handle":
+    "持ち手を巻く",
+  "Fold the left end over onto the strip…":
+    "左はしを帯の上に折りかえして…",
+  "Roll it again":
+    "もう一度巻く",
+  "…and over once more. That’s the handle.":
+    "…もう一回折りかえします。これが持ち手です。",
+  "Colour the handle":
+    "持ち手をぬる",
+  "Colour in the handle with a black pen. Your knife is ready.":
+    "黒いペンで持ち手をぬります。ナイフの完成です。",
+  "Turn the square":
+    "正方形をまわす",
+  "Turn the square so a corner points towards you, light side up.":
+    "明るい面を上にして、角が手前にくるように正方形をまわします。",
+  "Fold the upper edges to the middle crease, making a kite with a long point at the top.":
+    "上の二つのふちをまん中の折りすじに合わせて折り、上が長くとがったたこの形にします。",
+  "Fold the short lower edges to the middle too: a long, sharp diamond.":
+    "短い下のふちもまん中に合わせて折ります。細長くとがったひし形になります。",
+  "Fold the bottom point up behind, a little below the widest part, so the blade’s base is short.":
+    "下の先を、いちばん広いところの少し下で、うしろに折りあげます。刃の根もとが短くなります。",
+  "Fold the strip’s edges in":
+    "細長い紙のふちを折る",
+  "Fold the long edges of the strip to its middle.":
+    "細長い紙の長いふちを、まん中に合わせて折ります。",
+  "Fold it in half lengthwise: a thin handle.":
+    "たてに半分に折ります。細い持ち手になります。",
+  "Fold the end back":
+    "はしを折りかえす",
+  "Fold the bottom end of the handle back up, a little way, for a pommel.":
+    "持ち手の下のはしを、少しだけうしろに折りあげて、柄頭にします。",
+  "Add the handle":
+    "持ち手をつける",
+  "Slip the top of the handle under the blade’s base. Your kunai is ready.":
+    "持ち手の上を、刃の根もとの下に差しこみます。くないの完成です。",
 };
