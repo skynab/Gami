@@ -107,6 +107,9 @@ export const MODELS: ModelInfo[] = [
   { id: 'tulip-bloom', title: 'Tulip in 3D', blurb: 'The traditional 3D blossom: a water bomb base wrapped narrow, then blown up into a bud.', difficulty: 3, category: 'flower', steps: 20, minutes: 12, sheets: 1, added: '2026-10-28' },
   { id: 'peacock', title: 'Peacock', blurb: 'A blue bird in front of its green fan of a tail, from two squares.', difficulty: 2, category: 'animal', steps: 11, minutes: 8, sheets: 2, added: '2026-10-28' },
   { id: 'cactus', title: 'Cactus', blurb: 'A ribbed cactus in a pot, with a flower on top. Three squares, no glue.', difficulty: 2, category: 'flower', steps: 9, minutes: 10, sheets: 3, added: '2026-10-28' },
+  { id: 'pirate-hat', title: 'Pirate hat', blurb: 'The newspaper hat, from a sheet of printer paper, with a skull and crossbones drawn on.', difficulty: 1, category: 'object', steps: 12, minutes: 5, sheets: 1, paper: 1.41, needs: ['pen'], added: '2026-10-28' },
+  { id: 'frog-bookmark', title: 'Frog bookmark', blurb: 'A frog’s head with eyes that stick out, slipped over the corner of a page.', difficulty: 1, category: 'object', steps: 8, minutes: 5, sheets: 1, needs: ['pen'], added: '2026-10-28' },
+  { id: 'heart-bookmark', title: 'Heart bookmark', blurb: 'A heart that slips over the corner of a page.', difficulty: 1, category: 'object', steps: 11, minutes: 5, sheets: 1, added: '2026-10-28' },
   // Coming soon: listed, with no steps yet.
   { id: 'boat', title: 'Boat', blurb: 'The classic paper boat. It really floats, for a while.', difficulty: 2, category: 'object', minutes: 6, sheets: 1 },
   { id: 'iris', title: 'Iris', blurb: 'Three petals up, three down, from the frog base.', difficulty: 4, category: 'flower', minutes: 20, sheets: 1 },
@@ -124,6 +127,7 @@ export const PAIRS: [string, string][] = [
   ['dog-face', 'cat-face'],
   ['waterbomb', 'balloon'],
   ['tulip', 'tulip-bloom'],
+  ['frog-bookmark', 'heart-bookmark'],
 ];
 
 /**

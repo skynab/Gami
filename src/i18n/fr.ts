@@ -118,6 +118,9 @@ export const fr: Messages = {
     'tulip-bloom': { title: 'Tulipe en 3D', blurb: 'La fleur traditionnelle en 3D : une base de la bombe à eau enroulée et affinée, puis gonflée en bouton.' },
     peacock: { title: 'Paon', blurb: 'Un oiseau bleu devant sa queue verte en éventail, avec deux carrés.' },
     cactus: { title: 'Cactus', blurb: 'Un cactus à côtes dans un pot, avec une fleur dessus. Trois carrés, sans colle.' },
+    'pirate-hat': { title: 'Chapeau de pirate', blurb: 'Le chapeau en papier journal, dans une feuille d’imprimante, avec une tête de mort dessinée.' },
+    'frog-bookmark': { title: 'Marque-page grenouille', blurb: 'Une tête de grenouille aux yeux saillants, glissée sur le coin d’une page.' },
+    'heart-bookmark': { title: 'Marque-page cœur', blurb: 'Un cœur qui se glisse sur le coin d’une page.' },
   },
   notFound: {
     title: 'Cette page a été repliée',

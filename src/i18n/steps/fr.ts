@@ -1893,4 +1893,74 @@ export const fr: Record<string, string> = {
     "Ajoutez la fleur",
   "Put the flower on top, a corner pointing up. Your cactus is in bloom!":
     "Posez la fleur en haut, un coin vers le haut. Votre cactus est en fleur !",
+  "Start with the sheet upright. Fold the top edge down to the bottom edge.":
+    "Commencez avec la feuille à la verticale. Rabattez le bord du haut sur le bord du bas.",
+  "Fold it in half side to side, and unfold.":
+    "Pliez-la en deux de gauche à droite, puis dépliez.",
+  "Fold the top left corner down, so its top edge lies along the middle crease.":
+    "Rabattez le coin en haut à gauche, pour que son bord du haut suive le pli du milieu.",
+  "Fold the top right corner down to match. That leaves a band along the bottom.":
+    "Rabattez le coin en haut à droite de même. Il reste une bande en bas.",
+  "Fold the band in half":
+    "Plier la bande en deux",
+  "Fold the bottom edge of the top layer up to the bottom of the corners.":
+    "Relevez le bord du bas de la première couche jusqu’au bas des coins.",
+  "Fold the band up":
+    "Relever la bande",
+  "Fold the band up again, over the corners.":
+    "Relevez encore la bande, par-dessus les coins.",
+  "Fold the other band in half":
+    "Plier l’autre bande en deux",
+  "Fold this side’s bottom edge up to the bottom of the triangle…":
+    "Relevez le bord du bas de ce côté jusqu’au bas du triangle…",
+  "Fold it up":
+    "La relever",
+  "…and up again.":
+    "…et encore une fois.",
+  "Draw a skull and crossbones":
+    "Dessiner une tête de mort",
+  "Draw a skull and crossbones on the front. Open the bottom and put it on. Arr!":
+    "Dessinez une tête de mort et deux os croisés devant. Ouvrez le bas et mettez-le. Arrr !",
+  "Start dark side up, with a corner pointing towards you.":
+    "Commencez face foncée dessus, un coin pointé vers vous.",
+  "Fold the top layer’s point down to the middle of the bottom edge. This makes the pocket.":
+    "Rabattez la pointe de la première couche au milieu du bord du bas. Cela fait la poche.",
+  "Fold the left corner up to the top point.":
+    "Relevez le coin gauche jusqu’à la pointe du haut.",
+  "Fold the right corner up to match: a square.":
+    "Relevez le coin droit de même : un carré.",
+  "Fold out an eye":
+    "Sortir un œil",
+  "Fold the left flap’s point down and out, so it sticks out past the side of the head.":
+    "Rabattez la pointe du rabat gauche vers le bas et l’extérieur, pour qu’elle dépasse du côté de la tête.",
+  "Fold out the other eye":
+    "Sortir l’autre œil",
+  "Fold the right flap’s point out to match.":
+    "Sortez la pointe du rabat droit de même.",
+  "Draw on pupils, nostrils and a big smile. Slip the pocket over the corner of a page.":
+    "Dessinez les pupilles, les narines et un grand sourire. Glissez le coin d’une page dans la poche.",
+  "Fold the top point behind, a little over a quarter of the way down.":
+    "Repliez la pointe du haut derrière, un peu plus d’un quart vers le bas.",
+  "Fold the left corner up to where the top point was.":
+    "Relevez le coin gauche jusqu’à l’endroit où était la pointe du haut.",
+  "Fold down a hump":
+    "Rabattre un lobe",
+  "Fold the left flap’s point down in front, from the middle out to the edge, making a notch.":
+    "Rabattez la pointe du rabat gauche devant, du milieu jusqu’au bord, pour faire un creux.",
+  "Fold down the other hump":
+    "Rabattre l’autre lobe",
+  "Fold the right flap’s point down to match.":
+    "Rabattez la pointe du rabat droit de même.",
+  "Round the humps":
+    "Arrondir les lobes",
+  "Fold the tips of both humps behind, just a little.":
+    "Repliez le bout des deux lobes derrière, juste un peu.",
+  "Round the left side":
+    "Arrondir le côté gauche",
+  "Fold the left corner behind, just a little.":
+    "Repliez le coin gauche derrière, juste un peu.",
+  "Round the right side":
+    "Arrondir le côté droit",
+  "And the right corner. Slip the pocket over the corner of a page.":
+    "Et le coin droit. Glissez le coin d’une page dans la poche.",
 };

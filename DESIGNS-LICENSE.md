@@ -18,6 +18,8 @@ site's source code, or any other model in the gallery.
 | Sailboat | `src/models/recipes/sailboat.ts` | October 2026 |
 | Peacock | `src/models/recipes/peacock.ts` | October 2026 |
 | Cactus | `src/models/recipes/cactus.ts` | October 2026 |
+| Frog bookmark | `src/models/recipes/frog-bookmark.ts` | October 2026 |
+| Heart bookmark | `src/models/recipes/heart-bookmark.ts` | October 2026 |
 
 ## Other models in the gallery
 

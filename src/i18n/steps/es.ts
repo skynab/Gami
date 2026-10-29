@@ -1893,4 +1893,74 @@ export const es: Record<string, string> = {
     "Añade la flor",
   "Put the flower on top, a corner pointing up. Your cactus is in bloom!":
     "Pon la flor encima, con una esquina hacia arriba. ¡Tu cactus está en flor!",
+  "Start with the sheet upright. Fold the top edge down to the bottom edge.":
+    "Empieza con la hoja en vertical. Dobla el borde de arriba hasta el borde de abajo.",
+  "Fold it in half side to side, and unfold.":
+    "Dóblala por la mitad de lado a lado y desdóblala.",
+  "Fold the top left corner down, so its top edge lies along the middle crease.":
+    "Dobla la esquina de arriba a la izquierda hacia abajo, para que su borde de arriba quede sobre el pliegue del centro.",
+  "Fold the top right corner down to match. That leaves a band along the bottom.":
+    "Dobla la esquina de arriba a la derecha igual. Abajo queda una banda.",
+  "Fold the band in half":
+    "Dobla la banda por la mitad",
+  "Fold the bottom edge of the top layer up to the bottom of the corners.":
+    "Dobla el borde de abajo de la capa de arriba hasta la base de las esquinas.",
+  "Fold the band up":
+    "Dobla la banda hacia arriba",
+  "Fold the band up again, over the corners.":
+    "Vuelve a doblar la banda hacia arriba, sobre las esquinas.",
+  "Fold the other band in half":
+    "Dobla la otra banda por la mitad",
+  "Fold this side’s bottom edge up to the bottom of the triangle…":
+    "Dobla el borde de abajo de este lado hasta la base del triángulo…",
+  "Fold it up":
+    "Dóblala hacia arriba",
+  "…and up again.":
+    "…y otra vez hacia arriba.",
+  "Draw a skull and crossbones":
+    "Dibuja una calavera con dos huesos",
+  "Draw a skull and crossbones on the front. Open the bottom and put it on. Arr!":
+    "Dibuja una calavera con dos huesos cruzados delante. Abre la parte de abajo y póntelo. ¡Arrr!",
+  "Start dark side up, with a corner pointing towards you.":
+    "Empieza con el lado oscuro hacia arriba y una esquina hacia ti.",
+  "Fold the top layer’s point down to the middle of the bottom edge. This makes the pocket.":
+    "Dobla la punta de la capa de arriba hasta el centro del borde de abajo. Así se forma el bolsillo.",
+  "Fold the left corner up to the top point.":
+    "Dobla la esquina izquierda hasta la punta de arriba.",
+  "Fold the right corner up to match: a square.":
+    "Dobla la esquina derecha igual: un cuadrado.",
+  "Fold out an eye":
+    "Saca un ojo",
+  "Fold the left flap’s point down and out, so it sticks out past the side of the head.":
+    "Dobla la punta de la solapa izquierda hacia abajo y hacia fuera, para que asome por el lado de la cabeza.",
+  "Fold out the other eye":
+    "Saca el otro ojo",
+  "Fold the right flap’s point out to match.":
+    "Dobla la punta de la solapa derecha igual.",
+  "Draw on pupils, nostrils and a big smile. Slip the pocket over the corner of a page.":
+    "Dibuja las pupilas, la nariz y una gran sonrisa. Mete la esquina de una página en el bolsillo.",
+  "Fold the top point behind, a little over a quarter of the way down.":
+    "Dobla la punta de arriba hacia atrás, un poco más de un cuarto hacia abajo.",
+  "Fold the left corner up to where the top point was.":
+    "Dobla la esquina izquierda hasta donde estaba la punta de arriba.",
+  "Fold down a hump":
+    "Dobla un lóbulo",
+  "Fold the left flap’s point down in front, from the middle out to the edge, making a notch.":
+    "Dobla la punta de la solapa izquierda hacia delante, desde el centro hasta el borde, para hacer una muesca.",
+  "Fold down the other hump":
+    "Dobla el otro lóbulo",
+  "Fold the right flap’s point down to match.":
+    "Dobla la punta de la solapa derecha igual.",
+  "Round the humps":
+    "Redondea los lóbulos",
+  "Fold the tips of both humps behind, just a little.":
+    "Dobla las puntas de los dos lóbulos hacia atrás, solo un poco.",
+  "Round the left side":
+    "Redondea el lado izquierdo",
+  "Fold the left corner behind, just a little.":
+    "Dobla la esquina izquierda hacia atrás, solo un poco.",
+  "Round the right side":
+    "Redondea el lado derecho",
+  "And the right corner. Slip the pocket over the corner of a page.":
+    "Y la esquina derecha. Mete la esquina de una página en el bolsillo.",
 };

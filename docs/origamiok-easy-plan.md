@@ -1,8 +1,8 @@
 # Plan: easy folds from OrigamiOK
 
 A second batch from OrigamiOK, this time from its [easy origami](https://origamiok.com/easy-origami/) page: 24
-requested models. Like `docs/origamiok-plan.md`, each phase ships on its own, one commit per model, and every
-model is marked New on its card (its `added` date is after `NEW_SINCE`).
+requested models. Like `docs/origamiok-plan.md`, each phase ships on its own, in its own commit, and every
+model is marked New on its card (its `added` date is on or after `NEW_SINCE`).
 
 ## What was found (28 October 2026)
 
@@ -80,7 +80,7 @@ Easiest and clearest first. Each phase can ship alone, and models within a phase
 
 | Phase | Status |
 |---|---|
-| 1. Flat and clear | Not started |
+| 1. Flat and clear | Done. The **pirate hat** is the traditional newspaper hat on upright A4, its band folded up twice (OrigamiOK folds it once), with a skull and crossbones drawn in halves where the corners meet. It ends flat; opening it to wear is left to the last step's words. The **frog bookmark** is Gami's own: the corner bookmark with its flaps' points folded out past the sides for eyes, no scissors or glue. The **heart bookmark** is Gami's own too, a heart on the corner bookmark rather than OrigamiOK's heart on a long strip, whose squash folds come from a named design we couldn't trace: the top point folded behind, the flaps' points folded down for the notch, the humps and sides rounded. The two bookmarks share a card (`PAIRS`). |
 | 2. Flat animals | Not started |
 | 3. Weapons | Not started |
 | 4. Leaves, fan and rose | Not started |

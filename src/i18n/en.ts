@@ -120,6 +120,9 @@ export const en = {
     'tulip-bloom': { title: 'Tulip in 3D', blurb: 'The traditional 3D blossom: a water bomb base wrapped narrow, then blown up into a bud.' },
     peacock: { title: 'Peacock', blurb: 'A blue bird in front of its green fan of a tail, from two squares.' },
     cactus: { title: 'Cactus', blurb: 'A ribbed cactus in a pot, with a flower on top. Three squares, no glue.' },
+    'pirate-hat': { title: 'Pirate hat', blurb: 'The newspaper hat, from a sheet of printer paper, with a skull and crossbones drawn on.' },
+    'frog-bookmark': { title: 'Frog bookmark', blurb: 'A frog’s head with eyes that stick out, slipped over the corner of a page.' },
+    'heart-bookmark': { title: 'Heart bookmark', blurb: 'A heart that slips over the corner of a page.' },
   },
   notFound: {
     title: 'This page got folded away',

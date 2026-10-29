@@ -86,6 +86,9 @@ noted when it was written, and the model was folded from the common traditional 
 | `tulip-bloom` | Traditional (Gilad's database lists the tulip blossom from the water bomb base as Traditional in many books) | None needed: nobody owns it | [OrigamiOK: tulip](https://origamiok.com/origami-tulip/), the blossom only, for the order of folds | Clear | 28 Oct 2026 |
 | `peacock` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a simpler peacock than OrigamiOK's (see the notes); the body's kite and neck are the traditional swan's first folds | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
 | `cactus` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's cactus (a ribbed body in a pot, a flower on top), folded differently and with no glue or scissors (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `pirate-hat` | Traditional: the newspaper hat (Gilad's database lists "Newspaper Hat" and "Hats" as Traditional, in Van Sicklen's *The Joy of Origami* and Beech's *Origami: The Complete Guide*); OrigamiOK's pirate hat folds the same way | None needed: nobody owns it | [OrigamiOK: pirate hat](https://origamiok.com/origami-pirate-hat/), for the order of folds; Gami folds the band up twice, as the newspaper hat usually is | Clear | 28 Oct 2026 |
+| `frog-bookmark` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's frog bookmark, its eyes folded out instead of cut out and glued on (see the notes); the corner pocket and side flaps are the common corner bookmark's | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `heart-bookmark` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a heart on the common corner bookmark, in place of OrigamiOK's heart on a long strip (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
 
 ### Notes
 
@@ -99,6 +102,15 @@ noted when it was written, and the model was folded from the common traditional 
   endings (a crown opened into a band, a peacock's eight-feather fan) are beyond the engine, and its cactus is
   glued. The cactus keeps the look of OrigamiOK's (a ribbed body in a pot, a flower on top) and is folded its own
   way from three squares. The plan is `docs/origamiok-plan.md`.
+- **OrigamiOK's easy page** (checked 28 October 2026; the plan is `docs/origamiok-easy-plan.md`). The pirate hat is
+  the traditional newspaper hat. The two bookmarks are built on the corner bookmark, a pocket with its side flaps
+  folded up, which is folded everywhere with no credit; Gilad's database lists several page-corner designs by named
+  designers (LaFosse, Engels, Ng) but none matches it as the source. OrigamiOK's frog cuts its eyes from spare paper
+  and glues them on: Gami's folds the flaps' points out past the sides instead, with no scissors or glue. OrigamiOK's
+  heart bookmark is a heart on a long strip, made with squash folds from half a square; heart bookmarks are listed
+  by several named designers (Shumakov, Shinde, Yamaguchi, Sy Chen, Overmars) and the source of OrigamiOK's wasn't
+  found, so Gami's is its own, a heart on the corner bookmark: the top point folded behind, the flaps' points folded
+  down for the notch, then the humps and sides rounded.
 - **Fox.** Okuda's design isn't openly licensed. It was kept on 18 October 2026 because it's very widely
   folded and taught (see the decisions log in `PLAN.md`). The gallery doesn't credit him yet. If the rule
   is tightened, the choices are: ask for permission, swap in a traditional fox, or design Gami's own.

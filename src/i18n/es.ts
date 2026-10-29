@@ -118,6 +118,9 @@ export const es: Messages = {
     'tulip-bloom': { title: 'Tulipán en 3D', blurb: 'La flor tradicional en 3D: una base de bomba de agua envuelta y estrecha, que luego se infla como un capullo.' },
     peacock: { title: 'Pavo real', blurb: 'Un pájaro azul delante de su cola verde en abanico, con dos cuadrados.' },
     cactus: { title: 'Cactus', blurb: 'Un cactus con costillas en una maceta, con una flor encima. Tres cuadrados, sin pegamento.' },
+    'pirate-hat': { title: 'Sombrero pirata', blurb: 'El sombrero de periódico, con una hoja de papel de impresora y una calavera dibujada.' },
+    'frog-bookmark': { title: 'Marcapáginas de rana', blurb: 'Una cabeza de rana con los ojos saltones, que se pone en la esquina de una página.' },
+    'heart-bookmark': { title: 'Marcapáginas de corazón', blurb: 'Un corazón que se pone en la esquina de una página.' },
   },
   notFound: {
     title: 'Esta página se ha plegado y ha desaparecido',

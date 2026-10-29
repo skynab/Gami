@@ -118,6 +118,9 @@ export const ja: Messages = {
     'tulip-bloom': { title: '立体のチューリップ', blurb: '伝承の立体の花。風船の基本形を細くまとめて、ふくらませてつぼみにします。' },
     peacock: { title: 'くじゃく', blurb: '緑の扇のような尾の前に青い鳥。二枚の正方形で。' },
     cactus: { title: 'サボテン', blurb: '植木ばちに入った、すじのあるサボテン。上に花。正方形三枚で、のりは使いません。' },
+    'pirate-hat': { title: '海ぞくのぼうし', blurb: 'コピー用紙一枚で折る新聞紙のぼうしに、どくろの印をかきます。' },
+    'frog-bookmark': { title: 'カエルのしおり', blurb: '目がとび出たカエルの顔。ページの角にかぶせます。' },
+    'heart-bookmark': { title: 'ハートのしおり', blurb: 'ページの角にかぶせるハート。' },
   },
   notFound: {
     title: 'このページは折りたたまれてしまいました',

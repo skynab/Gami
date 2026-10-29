@@ -1893,4 +1893,74 @@ export const ja: Record<string, string> = {
     "花をのせる",
   "Put the flower on top, a corner pointing up. Your cactus is in bloom!":
     "角を上にして、花を上にのせます。サボテンに花がさきました！",
+  "Start with the sheet upright. Fold the top edge down to the bottom edge.":
+    "紙をたてにおいて始めます。上のふちを下のふちまで折りさげます。",
+  "Fold it in half side to side, and unfold.":
+    "左右半分に折って、開きます。",
+  "Fold the top left corner down, so its top edge lies along the middle crease.":
+    "左上の角を折りさげて、上のふちをまん中の折りすじにそろえます。",
+  "Fold the top right corner down to match. That leaves a band along the bottom.":
+    "右上の角も同じように折りさげます。下に帯がのこります。",
+  "Fold the band in half":
+    "帯を半分に折る",
+  "Fold the bottom edge of the top layer up to the bottom of the corners.":
+    "上の一枚の下のふちを、折った角の下まで折りあげます。",
+  "Fold the band up":
+    "帯を折りあげる",
+  "Fold the band up again, over the corners.":
+    "帯をもう一度、角の上に折りあげます。",
+  "Fold the other band in half":
+    "もう一つの帯を半分に折る",
+  "Fold this side’s bottom edge up to the bottom of the triangle…":
+    "こちら側の下のふちを、三角の下まで折りあげて…",
+  "Fold it up":
+    "折りあげる",
+  "…and up again.":
+    "…もう一度折りあげます。",
+  "Draw a skull and crossbones":
+    "どくろの印をかく",
+  "Draw a skull and crossbones on the front. Open the bottom and put it on. Arr!":
+    "前にどくろと、交差した二本の骨をかきます。下を開いて、かぶりましょう。アーッ！",
+  "Start dark side up, with a corner pointing towards you.":
+    "こい色の面を上にして、角を手前にむけて始めます。",
+  "Fold the top layer’s point down to the middle of the bottom edge. This makes the pocket.":
+    "上の一枚の先を、下のふちのまん中まで折りさげます。これがポケットになります。",
+  "Fold the left corner up to the top point.":
+    "左の角を、上の先まで折りあげます。",
+  "Fold the right corner up to match: a square.":
+    "右の角も同じように折りあげます。正方形になります。",
+  "Fold out an eye":
+    "目を折り出す",
+  "Fold the left flap’s point down and out, so it sticks out past the side of the head.":
+    "左のフラップの先を下へ外へ折って、頭の横から出るようにします。",
+  "Fold out the other eye":
+    "もう一つの目を折り出す",
+  "Fold the right flap’s point out to match.":
+    "右のフラップの先も同じように折り出します。",
+  "Draw on pupils, nostrils and a big smile. Slip the pocket over the corner of a page.":
+    "ひとみと鼻のあなと、大きな笑った口をかきます。ポケットをページの角にかぶせましょう。",
+  "Fold the top point behind, a little over a quarter of the way down.":
+    "上の先を、四分の一より少し下まで、うしろに折ります。",
+  "Fold the left corner up to where the top point was.":
+    "左の角を、上の先があったところまで折りあげます。",
+  "Fold down a hump":
+    "山を折りさげる",
+  "Fold the left flap’s point down in front, from the middle out to the edge, making a notch.":
+    "左のフラップの先を、まん中からふちまで前に折りさげて、くぼみを作ります。",
+  "Fold down the other hump":
+    "もう一つの山を折りさげる",
+  "Fold the right flap’s point down to match.":
+    "右のフラップの先も同じように折りさげます。",
+  "Round the humps":
+    "山を丸くする",
+  "Fold the tips of both humps behind, just a little.":
+    "二つの山の先を、少しだけうしろに折ります。",
+  "Round the left side":
+    "左はしを丸くする",
+  "Fold the left corner behind, just a little.":
+    "左の角を、少しだけうしろに折ります。",
+  "Round the right side":
+    "右はしを丸くする",
+  "And the right corner. Slip the pocket over the corner of a page.":
+    "右の角も。ポケットをページの角にかぶせましょう。",
 };
