@@ -121,6 +121,10 @@ export const es: Messages = {
     'pirate-hat': { title: 'Sombrero pirata', blurb: 'El sombrero de periódico, con una hoja de papel de impresora y una calavera dibujada.' },
     'frog-bookmark': { title: 'Marcapáginas de rana', blurb: 'Una cabeza de rana con los ojos saltones, que se pone en la esquina de una página.' },
     'heart-bookmark': { title: 'Marcapáginas de corazón', blurb: 'Un corazón que se pone en la esquina de una página.' },
+    'cute-cat': { title: 'Gato bonito', blurb: 'Un gato sentado muy erguido, con la cola a un lado, con dos cuadrados.' },
+    bat: { title: 'Murciélago', blurb: 'Un murciélago con las alas levantadas, desde la base de la bomba de agua.' },
+    bull: { title: 'Toro', blurb: 'Un toro robusto sobre cuatro patas, con los cuernos hacia arriba, con dos cuadrados y dos cortes.' },
+    't-rex': { title: 'T-rex', blurb: 'Un T-rex con una cola larga y una sonrisa llena de dientes, con dos cuadrados.' },
   },
   notFound: {
     title: 'Esta página se ha plegado y ha desaparecido',

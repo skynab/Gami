@@ -20,6 +20,10 @@ site's source code, or any other model in the gallery.
 | Cactus | `src/models/recipes/cactus.ts` | October 2026 |
 | Frog bookmark | `src/models/recipes/frog-bookmark.ts` | October 2026 |
 | Heart bookmark | `src/models/recipes/heart-bookmark.ts` | October 2026 |
+| Cute cat | `src/models/recipes/cute-cat.ts` | October 2026 |
+| Bat | `src/models/recipes/bat.ts` | October 2026 |
+| Bull | `src/models/recipes/bull.ts` | October 2026 |
+| T-rex | `src/models/recipes/t-rex.ts` | October 2026 |
 
 ## Other models in the gallery
 

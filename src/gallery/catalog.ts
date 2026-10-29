@@ -110,6 +110,10 @@ export const MODELS: ModelInfo[] = [
   { id: 'pirate-hat', title: 'Pirate hat', blurb: 'The newspaper hat, from a sheet of printer paper, with a skull and crossbones drawn on.', difficulty: 1, category: 'object', steps: 12, minutes: 5, sheets: 1, paper: 1.41, needs: ['pen'], added: '2026-10-28' },
   { id: 'frog-bookmark', title: 'Frog bookmark', blurb: 'A frog’s head with eyes that stick out, slipped over the corner of a page.', difficulty: 1, category: 'object', steps: 8, minutes: 5, sheets: 1, needs: ['pen'], added: '2026-10-28' },
   { id: 'heart-bookmark', title: 'Heart bookmark', blurb: 'A heart that slips over the corner of a page.', difficulty: 1, category: 'object', steps: 11, minutes: 5, sheets: 1, added: '2026-10-28' },
+  { id: 'cute-cat', title: 'Cute cat', blurb: 'A cat sitting tall, its tail curled out to one side, from two squares.', difficulty: 2, category: 'animal', steps: 9, minutes: 8, sheets: 2, needs: ['pen'], added: '2026-10-28' },
+  { id: 'bat', title: 'Bat', blurb: 'A bat with its wings raised, from the water bomb base.', difficulty: 2, category: 'animal', steps: 12, minutes: 8, sheets: 1, needs: ['pen'], added: '2026-10-28' },
+  { id: 'bull', title: 'Bull', blurb: 'A stocky bull on four legs, its horns up, from two squares and two snips.', difficulty: 2, category: 'animal', steps: 10, minutes: 10, sheets: 2, needs: ['scissors', 'pen'], added: '2026-10-28' },
+  { id: 't-rex', title: 'T-rex', blurb: 'A T-rex with a long tail and a toothy grin, from two squares.', difficulty: 2, category: 'animal', steps: 10, minutes: 10, sheets: 2, needs: ['pen'], added: '2026-10-28' },
   // Coming soon: listed, with no steps yet.
   { id: 'boat', title: 'Boat', blurb: 'The classic paper boat. It really floats, for a while.', difficulty: 2, category: 'object', minutes: 6, sheets: 1 },
   { id: 'iris', title: 'Iris', blurb: 'Three petals up, three down, from the frog base.', difficulty: 4, category: 'flower', minutes: 20, sheets: 1 },

@@ -1963,4 +1963,90 @@ export const es: Record<string, string> = {
     "Redondea el lado derecho",
   "And the right corner. Slip the pocket over the corner of a page.":
     "Y la esquina derecha. Mete la esquina de una página en el bolsillo.",
+  "A big square and a small one, light side up, each turned so a corner points towards you.":
+    "Un cuadrado grande y uno pequeño, con el lado claro hacia arriba, cada uno girado con una esquina hacia ti.",
+  "Fold the big square’s upper edges to the middle, making a tall kite.":
+    "Dobla los bordes de arriba del cuadrado grande hasta el centro, para hacer una cometa alta.",
+  "Fold up the tail":
+    "Dobla la cola hacia arriba",
+  "Fold the bottom point up behind, so it sticks out to the right: the tail. The body now sits on its folded edge.":
+    "Dobla la punta de abajo hacia atrás y hacia arriba, para que asome a la derecha: la cola. Ahora el cuerpo se apoya en el borde doblado.",
+  "Fold the top point behind, for the neck.":
+    "Dobla la punta de arriba hacia atrás, para el cuello.",
+  "Fold the head in half":
+    "Dobla la cabeza por la mitad",
+  "Fold the small square’s bottom corner up to its top corner.":
+    "Dobla la esquina de abajo del cuadrado pequeño hasta su esquina de arriba.",
+  "Fold up the ears":
+    "Dobla las orejas hacia arriba",
+  "Fold each side corner up, so its point sticks up past the top point and out to the side.":
+    "Dobla cada esquina lateral hacia arriba, para que su punta sobresalga por encima de la punta de arriba y un poco hacia fuera.",
+  "Fold the head’s top point down behind, between the ears.":
+    "Dobla la punta de arriba de la cabeza hacia atrás, entre las orejas.",
+  "Put the head on":
+    "Pon la cabeza",
+  "Set the head on top of the body, its chin over the neck.":
+    "Pon la cabeza encima del cuerpo, con la barbilla sobre el cuello.",
+  "Draw on eyes, a nose and whiskers. Your cat is sitting pretty!":
+    "Dibuja los ojos, la nariz y los bigotes. ¡Tu gato está sentado muy elegante!",
+  "Fold up the wings":
+    "Dobla las alas hacia arriba",
+  "Fold each bottom corner up and out, from just beside the middle, so the wings rise.":
+    "Dobla cada esquina de abajo hacia arriba y hacia fuera, desde justo al lado del centro, para que las alas se levanten.",
+  "Draw the eyes":
+    "Dibuja los ojos",
+  "Draw two eyes on the head. Your bat is ready to fly!":
+    "Dibuja dos ojos en la cabeza. ¡Tu murciélago está listo para volar!",
+  "Fold the body in half":
+    "Dobla el cuerpo por la mitad",
+  "Fold the big square in half, top to bottom.":
+    "Dobla el cuadrado grande por la mitad, de arriba abajo.",
+  "Snip the legs":
+    "Corta las patas",
+  "Cut two snips up from the bottom edge, through both layers, a little in from each end.":
+    "Haz dos cortes hacia arriba desde el borde de abajo, por las dos capas, un poco hacia dentro de cada extremo.",
+  "Fold up the belly":
+    "Dobla la barriga hacia arriba",
+  "Fold the paper between the snips up behind, leaving four legs.":
+    "Dobla el papel entre los cortes hacia atrás y hacia arriba: quedan cuatro patas.",
+  "Turn the head square":
+    "Gira el cuadrado de la cabeza",
+  "Turn the small square so a corner points towards you.":
+    "Gira el cuadrado pequeño para que una esquina apunte hacia ti.",
+  "Fold its bottom corner up to its top corner, making a triangle.":
+    "Dobla su esquina de abajo hasta su esquina de arriba, para hacer un triángulo.",
+  "Fold the top point behind, halfway down.":
+    "Dobla la punta de arriba hacia atrás, hasta la mitad.",
+  "Fold the corners up":
+    "Dobla las esquinas hacia arriba",
+  "Fold each side corner up to where the top point was.":
+    "Dobla cada esquina lateral hasta donde estaba la punta de arriba.",
+  "Fold down the horns":
+    "Dobla los cuernos",
+  "Fold each flap’s point down in front, from the middle out to the edge, so a horn stands up each side.":
+    "Dobla la punta de cada solapa hacia delante, desde el centro hasta el borde, para que se levante un cuerno a cada lado.",
+  "Set the head on the front of the body, its muzzle a little below the back.":
+    "Pon la cabeza en la parte delantera del cuerpo, con el hocico un poco por debajo del lomo.",
+  "Draw two eyes and two nostrils on the head. Your bull is ready to charge!":
+    "Dibuja dos ojos y dos orificios nasales en la cabeza. ¡Tu toro está listo para embestir!",
+  "Start with a diamond":
+    "Empieza con un rombo",
+  "Start with the big square, dark side up, a corner pointing towards you.":
+    "Empieza con el cuadrado grande, con el lado oscuro hacia arriba y una esquina hacia ti.",
+  "Fold the lower edges to the middle crease, making a kite.":
+    "Dobla los bordes de abajo hasta el pliegue del centro, para hacer una cometa.",
+  "Fold the left half behind onto the right.":
+    "Dobla la mitad izquierda hacia atrás, sobre la derecha.",
+  "Turn it on its side: the long point is the tail, the corner below is the legs.":
+    "Ponlo de lado: la punta larga es la cola y la esquina de abajo, las patas.",
+  "Fold the small square in half, top to bottom.":
+    "Dobla el cuadrado pequeño por la mitad, de arriba abajo.",
+  "Shape the snout":
+    "Da forma al hocico",
+  "Fold the top right corner behind, so the snout slopes down to the front.":
+    "Dobla la esquina de arriba a la derecha hacia atrás, para que el hocico baje hacia delante.",
+  "Set the head on the front of the body, a little higher than its back.":
+    "Pon la cabeza en la parte delantera del cuerpo, un poco más alta que el lomo.",
+  "Draw an eye and a row of sharp teeth on the head. Roar!":
+    "Dibuja un ojo y una fila de dientes afilados en la cabeza. ¡Grrr!",
 };

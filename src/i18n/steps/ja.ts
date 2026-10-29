@@ -1963,4 +1963,90 @@ export const ja: Record<string, string> = {
     "右はしを丸くする",
   "And the right corner. Slip the pocket over the corner of a page.":
     "右の角も。ポケットをページの角にかぶせましょう。",
+  "A big square and a small one, light side up, each turned so a corner points towards you.":
+    "大きい正方形と小さい正方形を、明るい面を上にして、それぞれ角を手前にむけておきます。",
+  "Fold the big square’s upper edges to the middle, making a tall kite.":
+    "大きい正方形の上の二つのふちをまん中に合わせて折り、細長いたこの形にします。",
+  "Fold up the tail":
+    "しっぽを折りあげる",
+  "Fold the bottom point up behind, so it sticks out to the right: the tail. The body now sits on its folded edge.":
+    "下の先をうしろに折りあげて、右に出るようにします。これがしっぽです。体は折ったふちですわります。",
+  "Fold the top point behind, for the neck.":
+    "上の先をうしろに折って、首にします。",
+  "Fold the head in half":
+    "頭を半分に折る",
+  "Fold the small square’s bottom corner up to its top corner.":
+    "小さい正方形の下の角を、上の角まで折りあげます。",
+  "Fold up the ears":
+    "耳を折りあげる",
+  "Fold each side corner up, so its point sticks up past the top point and out to the side.":
+    "左右の角を折りあげて、先が上の先より高く、少し外に出るようにします。",
+  "Fold the head’s top point down behind, between the ears.":
+    "頭の上の先を、耳と耳のあいだでうしろに折りさげます。",
+  "Put the head on":
+    "頭をのせる",
+  "Set the head on top of the body, its chin over the neck.":
+    "頭を体の上にのせて、あごを首にかさねます。",
+  "Draw on eyes, a nose and whiskers. Your cat is sitting pretty!":
+    "目と鼻とひげをかきます。ネコがちょこんとすわりました！",
+  "Fold up the wings":
+    "つばさを折りあげる",
+  "Fold each bottom corner up and out, from just beside the middle, so the wings rise.":
+    "まん中のすぐ横から、下の角をそれぞれ上へ外へ折って、つばさを上げます。",
+  "Draw the eyes":
+    "目をかく",
+  "Draw two eyes on the head. Your bat is ready to fly!":
+    "頭に目を二つかきます。コウモリが飛び立ちます！",
+  "Fold the body in half":
+    "体を半分に折る",
+  "Fold the big square in half, top to bottom.":
+    "大きい正方形を、上から下へ半分に折ります。",
+  "Snip the legs":
+    "足を切り出す",
+  "Cut two snips up from the bottom edge, through both layers, a little in from each end.":
+    "両はしから少し内がわで、下のふちから上へ二か所、二枚いっしょに切りこみを入れます。",
+  "Fold up the belly":
+    "おなかを折りあげる",
+  "Fold the paper between the snips up behind, leaving four legs.":
+    "切りこみのあいだの紙をうしろに折りあげます。足が四本のこります。",
+  "Turn the head square":
+    "頭の正方形をまわす",
+  "Turn the small square so a corner points towards you.":
+    "小さい正方形を、角が手前にくるようにまわします。",
+  "Fold its bottom corner up to its top corner, making a triangle.":
+    "下の角を上の角まで折りあげて、三角にします。",
+  "Fold the top point behind, halfway down.":
+    "上の先を、半分のところまでうしろに折ります。",
+  "Fold the corners up":
+    "角を折りあげる",
+  "Fold each side corner up to where the top point was.":
+    "左右の角を、上の先があったところまで折りあげます。",
+  "Fold down the horns":
+    "角を折りさげる",
+  "Fold each flap’s point down in front, from the middle out to the edge, so a horn stands up each side.":
+    "それぞれのフラップの先を、まん中からふちまで前に折りさげて、左右に角を立てます。",
+  "Set the head on the front of the body, its muzzle a little below the back.":
+    "頭を体の前におき、鼻先を背中より少し下にします。",
+  "Draw two eyes and two nostrils on the head. Your bull is ready to charge!":
+    "頭に目を二つと、鼻のあなを二つかきます。ウシが今にも走り出しそう！",
+  "Start with a diamond":
+    "ひし形から始める",
+  "Start with the big square, dark side up, a corner pointing towards you.":
+    "大きい正方形を、こい色の面を上にして、角を手前にむけておきます。",
+  "Fold the lower edges to the middle crease, making a kite.":
+    "下の二つのふちをまん中の折りすじに合わせて折り、たこの形にします。",
+  "Fold the left half behind onto the right.":
+    "左半分をうしろに折って、右半分にかさねます。",
+  "Turn it on its side: the long point is the tail, the corner below is the legs.":
+    "横にねかせます。長い先がしっぽ、下の角が足です。",
+  "Fold the small square in half, top to bottom.":
+    "小さい正方形を、上から下へ半分に折ります。",
+  "Shape the snout":
+    "鼻先の形を作る",
+  "Fold the top right corner behind, so the snout slopes down to the front.":
+    "右上の角をうしろに折って、鼻先が前にむかって下がるようにします。",
+  "Set the head on the front of the body, a little higher than its back.":
+    "頭を体の前に、背中より少し高くおきます。",
+  "Draw an eye and a row of sharp teeth on the head. Roar!":
+    "頭に目を一つと、とがった歯をならべてかきます。ガオー！",
 };

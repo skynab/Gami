@@ -89,6 +89,10 @@ noted when it was written, and the model was folded from the common traditional 
 | `pirate-hat` | Traditional: the newspaper hat (Gilad's database lists "Newspaper Hat" and "Hats" as Traditional, in Van Sicklen's *The Joy of Origami* and Beech's *Origami: The Complete Guide*); OrigamiOK's pirate hat folds the same way | None needed: nobody owns it | [OrigamiOK: pirate hat](https://origamiok.com/origami-pirate-hat/), for the order of folds; Gami folds the band up twice, as the newspaper hat usually is | Clear | 28 Oct 2026 |
 | `frog-bookmark` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's frog bookmark, its eyes folded out instead of cut out and glued on (see the notes); the corner pocket and side flaps are the common corner bookmark's | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
 | `heart-bookmark` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a heart on the common corner bookmark, in place of OrigamiOK's heart on a long strip (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `cute-cat` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's cute cat (a slim cat sitting up, ears pointed, tail to one side), from two squares instead of half of one (see the notes); its head is the traditional cat face's folds | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `bat` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a water bomb base with its bottom corners folded up into wings, in place of OrigamiOK's pleated bat (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `bull` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a body snipped into four legs and a head folded like the heart bookmark, in place of OrigamiOK's one-sheet bull (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `t-rex` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a kite folded in half for the body, tail and legs, and a small square for the head, in place of OrigamiOK's one-sheet T-rex (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
 
 ### Notes
 
@@ -111,6 +115,11 @@ noted when it was written, and the model was folded from the common traditional 
   by several named designers (Shumakov, Shinde, Yamaguchi, Sy Chen, Overmars) and the source of OrigamiOK's wasn't
   found, so Gami's is its own, a heart on the corner bookmark: the top point folded behind, the flaps' points folded
   down for the notch, then the humps and sides rounded.
+  The cute cat, bat, bull and T-rex (also checked 28 October 2026) are Gami's own: Gilad's database lists no
+  Traditional bull, bat or T-rex among hundreds by named designers, and OrigamiOK's cat couldn't be traced, so Gami
+  keeps the general look and folds its own way. OrigamiOK's bat, bull and T-rex shape their wings, horns, heads and
+  legs with squash and swivel folds that rigid paper can't follow, so Gami's use two squares where a separate head
+  is simpler (the cat, bull and T-rex), and two short snips for the bull's legs.
 - **Fox.** Okuda's design isn't openly licensed. It was kept on 18 October 2026 because it's very widely
   folded and taught (see the decisions log in `PLAN.md`). The gallery doesn't credit him yet. If the rule
   is tightened, the choices are: ask for permission, swap in a traditional fox, or design Gami's own.

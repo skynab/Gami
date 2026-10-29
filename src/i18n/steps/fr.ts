@@ -1963,4 +1963,90 @@ export const fr: Record<string, string> = {
     "Arrondir le côté droit",
   "And the right corner. Slip the pocket over the corner of a page.":
     "Et le coin droit. Glissez le coin d’une page dans la poche.",
+  "A big square and a small one, light side up, each turned so a corner points towards you.":
+    "Un grand carré et un petit, face claire dessus, chacun tourné un coin vers vous.",
+  "Fold the big square’s upper edges to the middle, making a tall kite.":
+    "Rabattez les bords du haut du grand carré au milieu, pour faire un grand cerf-volant.",
+  "Fold up the tail":
+    "Relever la queue",
+  "Fold the bottom point up behind, so it sticks out to the right: the tail. The body now sits on its folded edge.":
+    "Repliez la pointe du bas derrière vers le haut, pour qu’elle dépasse à droite : la queue. Le corps repose maintenant sur son bord plié.",
+  "Fold the top point behind, for the neck.":
+    "Repliez la pointe du haut derrière, pour le cou.",
+  "Fold the head in half":
+    "Plier la tête en deux",
+  "Fold the small square’s bottom corner up to its top corner.":
+    "Relevez le coin du bas du petit carré jusqu’à son coin du haut.",
+  "Fold up the ears":
+    "Relever les oreilles",
+  "Fold each side corner up, so its point sticks up past the top point and out to the side.":
+    "Relevez chaque coin de côté, pour que sa pointe dépasse la pointe du haut, un peu vers l’extérieur.",
+  "Fold the head’s top point down behind, between the ears.":
+    "Repliez la pointe du haut de la tête derrière, entre les oreilles.",
+  "Put the head on":
+    "Poser la tête",
+  "Set the head on top of the body, its chin over the neck.":
+    "Posez la tête sur le corps, le menton sur le cou.",
+  "Draw on eyes, a nose and whiskers. Your cat is sitting pretty!":
+    "Dessinez les yeux, le nez et les moustaches. Votre chat est sage comme une image !",
+  "Fold up the wings":
+    "Relever les ailes",
+  "Fold each bottom corner up and out, from just beside the middle, so the wings rise.":
+    "Relevez chaque coin du bas vers le haut et l’extérieur, juste à côté du milieu, pour que les ailes se dressent.",
+  "Draw the eyes":
+    "Dessiner les yeux",
+  "Draw two eyes on the head. Your bat is ready to fly!":
+    "Dessinez deux yeux sur la tête. Votre chauve-souris est prête à s’envoler !",
+  "Fold the body in half":
+    "Plier le corps en deux",
+  "Fold the big square in half, top to bottom.":
+    "Pliez le grand carré en deux, de haut en bas.",
+  "Snip the legs":
+    "Découper les pattes",
+  "Cut two snips up from the bottom edge, through both layers, a little in from each end.":
+    "Faites deux entailles vers le haut depuis le bord du bas, à travers les deux couches, un peu en retrait de chaque bout.",
+  "Fold up the belly":
+    "Relever le ventre",
+  "Fold the paper between the snips up behind, leaving four legs.":
+    "Repliez le papier entre les entailles derrière vers le haut : il reste quatre pattes.",
+  "Turn the head square":
+    "Tourner le carré de la tête",
+  "Turn the small square so a corner points towards you.":
+    "Tournez le petit carré pour qu’un coin pointe vers vous.",
+  "Fold its bottom corner up to its top corner, making a triangle.":
+    "Relevez son coin du bas jusqu’à son coin du haut, pour faire un triangle.",
+  "Fold the top point behind, halfway down.":
+    "Repliez la pointe du haut derrière, jusqu’à mi-hauteur.",
+  "Fold the corners up":
+    "Relever les coins",
+  "Fold each side corner up to where the top point was.":
+    "Relevez chaque coin de côté jusqu’à l’endroit où était la pointe du haut.",
+  "Fold down the horns":
+    "Rabattre les cornes",
+  "Fold each flap’s point down in front, from the middle out to the edge, so a horn stands up each side.":
+    "Rabattez la pointe de chaque rabat devant, du milieu jusqu’au bord, pour qu’une corne se dresse de chaque côté.",
+  "Set the head on the front of the body, its muzzle a little below the back.":
+    "Posez la tête à l’avant du corps, le museau un peu plus bas que le dos.",
+  "Draw two eyes and two nostrils on the head. Your bull is ready to charge!":
+    "Dessinez deux yeux et deux naseaux sur la tête. Votre taureau est prêt à charger !",
+  "Start with a diamond":
+    "Commencer avec un losange",
+  "Start with the big square, dark side up, a corner pointing towards you.":
+    "Commencez avec le grand carré, face foncée dessus, un coin pointé vers vous.",
+  "Fold the lower edges to the middle crease, making a kite.":
+    "Rabattez les bords du bas sur le pli du milieu, pour faire un cerf-volant.",
+  "Fold the left half behind onto the right.":
+    "Repliez la moitié gauche derrière, sur la droite.",
+  "Turn it on its side: the long point is the tail, the corner below is the legs.":
+    "Couchez-le sur le côté : la longue pointe est la queue, le coin du bas les pattes.",
+  "Fold the small square in half, top to bottom.":
+    "Pliez le petit carré en deux, de haut en bas.",
+  "Shape the snout":
+    "Former le museau",
+  "Fold the top right corner behind, so the snout slopes down to the front.":
+    "Repliez le coin en haut à droite derrière, pour que le museau descende vers l’avant.",
+  "Set the head on the front of the body, a little higher than its back.":
+    "Posez la tête à l’avant du corps, un peu plus haut que le dos.",
+  "Draw an eye and a row of sharp teeth on the head. Roar!":
+    "Dessinez un œil et une rangée de dents pointues sur la tête. Grrr !",
 };

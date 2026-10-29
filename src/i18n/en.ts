@@ -123,6 +123,10 @@ export const en = {
     'pirate-hat': { title: 'Pirate hat', blurb: 'The newspaper hat, from a sheet of printer paper, with a skull and crossbones drawn on.' },
     'frog-bookmark': { title: 'Frog bookmark', blurb: 'A frog’s head with eyes that stick out, slipped over the corner of a page.' },
     'heart-bookmark': { title: 'Heart bookmark', blurb: 'A heart that slips over the corner of a page.' },
+    'cute-cat': { title: 'Cute cat', blurb: 'A cat sitting tall, its tail curled out to one side, from two squares.' },
+    bat: { title: 'Bat', blurb: 'A bat with its wings raised, from the water bomb base.' },
+    bull: { title: 'Bull', blurb: 'A stocky bull on four legs, its horns up, from two squares and two snips.' },
+    't-rex': { title: 'T-rex', blurb: 'A T-rex with a long tail and a toothy grin, from two squares.' },
   },
   notFound: {
     title: 'This page got folded away',

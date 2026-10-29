@@ -121,6 +121,10 @@ export const fr: Messages = {
     'pirate-hat': { title: 'Chapeau de pirate', blurb: 'Le chapeau en papier journal, dans une feuille d’imprimante, avec une tête de mort dessinée.' },
     'frog-bookmark': { title: 'Marque-page grenouille', blurb: 'Une tête de grenouille aux yeux saillants, glissée sur le coin d’une page.' },
     'heart-bookmark': { title: 'Marque-page cœur', blurb: 'Un cœur qui se glisse sur le coin d’une page.' },
+    'cute-cat': { title: 'Chat mignon', blurb: 'Un chat assis bien droit, la queue sur le côté, avec deux carrés.' },
+    bat: { title: 'Chauve-souris', blurb: 'Une chauve-souris aux ailes levées, à partir de la base de la bombe à eau.' },
+    bull: { title: 'Taureau', blurb: 'Un taureau trapu sur quatre pattes, cornes dressées, avec deux carrés et deux coups de ciseaux.' },
+    't-rex': { title: 'T-rex', blurb: 'Un T-rex à la longue queue et au sourire plein de dents, avec deux carrés.' },
   },
   notFound: {
     title: 'Cette page a été repliée',
