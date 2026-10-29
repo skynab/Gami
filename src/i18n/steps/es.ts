@@ -1204,6 +1204,38 @@ export const es: Record<string, string> = {
     "Dobla un poco la punta de un ala hacia arriba y la de la otra hacia abajo, por líneas paralelas al cuerpo. Así gira sobre sí mismo.",
   "Turn the plane over, so it stands on its keel with its wings on top. Throw it gently: it corkscrews as it flies.":
     "Da la vuelta al avión para que se apoye en la quilla con las alas arriba. Lánzalo con suavidad: vuela girando como un sacacorchos.",
+  "Fold the top down to the middle":
+    "Dobla la parte de arriba hasta el centro",
+  "Fold the top edge down so it lies across the middle of the sheet.":
+    "Dobla el borde de arriba hacia abajo hasta que quede sobre el centro de la hoja.",
+  "Fold the top-left corner in":
+    "Dobla hacia dentro la esquina de arriba a la izquierda",
+  "Fold a small triangle off the top-left corner, through both layers.":
+    "Dobla un triangulito en la esquina de arriba a la izquierda, por las dos capas.",
+  "Fold the top-right corner in":
+    "Dobla hacia dentro la esquina de arriba a la derecha",
+  "And the same at the top right.":
+    "Y lo mismo arriba a la derecha.",
+  "Fold the bottom-left corner behind":
+    "Dobla hacia atrás la esquina de abajo a la izquierda",
+  "Fold a bigger triangle off the bottom-left corner, behind.":
+    "Dobla hacia atrás un triángulo más grande en la esquina de abajo a la izquierda.",
+  "Fold the bottom-right corner behind":
+    "Dobla hacia atrás la esquina de abajo a la derecha",
+  "And the same at the bottom right.":
+    "Y lo mismo abajo a la derecha.",
+  "Round off the bottom left":
+    "Redondea abajo a la izquierda",
+  "Fold the two blunt corners at the bottom left behind, just a little, to round the back.":
+    "Dobla un poco hacia atrás las dos esquinas romas de abajo a la izquierda, para redondear la parte de atrás.",
+  "Round off the bottom right":
+    "Redondea abajo a la derecha",
+  "And the two at the bottom right.":
+    "Y las dos de abajo a la derecha.",
+  "Fold the top layers down along a line close to the bottom, for a short body and broad wings.":
+    "Dobla las capas de arriba hacia abajo por una línea cerca del borde de abajo, para un cuerpo bajo y alas anchas.",
+  "Turn the plane over, so it stands on its keel with its wings level on top. Throw it gently: it floats round in wide circles.":
+    "Da la vuelta al avión para que se apoye en la quilla con las alas niveladas arriba. Lánzalo con suavidad: flota dando grandes círculos.",
   "Fold the top-left corner across":
     "Dobla la esquina de arriba a la izquierda hacia el otro lado",
   "Bring the top-left corner down to the right edge, so the top edge lies along it.":

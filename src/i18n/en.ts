@@ -78,6 +78,7 @@ export const en = {
     'sprinter': { title: 'Sprinter', blurb: 'A swept-wing plane with a tall tail fin. Fussy to trim, but quick once it is.' },
     'fun-flyer': { title: 'Fun flyer', blurb: 'A long-winged dart with a little point in front of its nose. Try throwing it straight up.' },
     'corkscrew': { title: 'Corkscrew', blurb: 'A needle-nosed stunt dart with one wingtip up and one down, so it rolls as it flies.' },
+    'flying-saucer': { title: 'Flying saucer', blurb: 'A round, broad-winged floater that drifts slowly round in wide circles.' },
     'dog-face': { title: 'Dog face', blurb: 'A first fold: a triangle with floppy ears.' },
     'cat-face': { title: 'Cat face', blurb: 'A first fold: a triangle with pointed ears.' },
     cup: { title: 'Cup', blurb: 'A cup that holds water, for a while.' },

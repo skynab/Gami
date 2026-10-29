@@ -37,6 +37,7 @@ site's source code, or any other model in the gallery.
 | Finger trap | `src/models/recipes/finger-trap.ts` | October 2026 |
 | Easy sword | `src/models/recipes/easy-sword.ts` | October 2026 |
 | Corkscrew | `src/models/recipes/corkscrew.ts` | October 2026 |
+| Flying saucer | `src/models/recipes/flying-saucer.ts` | October 2026 |
 
 ## Other models in the gallery
 

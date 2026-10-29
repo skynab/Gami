@@ -1204,6 +1204,38 @@ export const ja: Record<string, string> = {
     "片方の翼の先を上に、もう片方を下に、胴体と平行な線で少し曲げます。これで回転します。",
   "Turn the plane over, so it stands on its keel with its wings on top. Throw it gently: it corkscrews as it flies.":
     "飛行機を裏返して、竜骨を下に、翼を上にします。そっと投げると、らせんを描いて飛びます。",
+  "Fold the top down to the middle":
+    "上を真ん中まで折り下げる",
+  "Fold the top edge down so it lies across the middle of the sheet.":
+    "上の辺を折り下げて、紙の真ん中に合わせます。",
+  "Fold the top-left corner in":
+    "左上の角を内側に折る",
+  "Fold a small triangle off the top-left corner, through both layers.":
+    "左上の角を、二枚重ねたまま小さな三角に折ります。",
+  "Fold the top-right corner in":
+    "右上の角を内側に折る",
+  "And the same at the top right.":
+    "右上も同じように折ります。",
+  "Fold the bottom-left corner behind":
+    "左下の角を後ろに折る",
+  "Fold a bigger triangle off the bottom-left corner, behind.":
+    "左下の角を、もっと大きな三角に後ろへ折ります。",
+  "Fold the bottom-right corner behind":
+    "右下の角を後ろに折る",
+  "And the same at the bottom right.":
+    "右下も同じように折ります。",
+  "Round off the bottom left":
+    "左下を丸くする",
+  "Fold the two blunt corners at the bottom left behind, just a little, to round the back.":
+    "左下の二つの鈍い角を、少しだけ後ろに折って、後ろを丸くします。",
+  "Round off the bottom right":
+    "右下を丸くする",
+  "And the two at the bottom right.":
+    "右下の二つも同じように折ります。",
+  "Fold the top layers down along a line close to the bottom, for a short body and broad wings.":
+    "上の層を、下の辺に近い線で折り下げて、低い胴体と広い翼にします。",
+  "Turn the plane over, so it stands on its keel with its wings level on top. Throw it gently: it floats round in wide circles.":
+    "飛行機を裏返して、竜骨を下に、翼を上で水平にします。そっと投げると、大きな円を描いてただよいます。",
   "Fold the top-left corner across":
     "左上の角を反対側へ折る",
   "Bring the top-left corner down to the right edge, so the top edge lies along it.":

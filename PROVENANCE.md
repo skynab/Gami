@@ -42,6 +42,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `sprinter` | Unattributed: Fold'N Fly's Sprinter (design #4) names no designer; its references are four books by different authors, none named as the source | Unknown: no designer found | [Fold'N Fly: The Sprinter](https://www.foldnfly.com/4.html) | Unattributed | 29 Oct 2026 |
 | `fun-flyer` | Unattributed: Fold'N Fly's Fun Flyer (design #45) names no designer and lists no references | Unknown: no designer found | [Fold'N Fly: Fun Flyer](https://www.foldnfly.com/45.html), for the order of folds; Gami leaves out its rabbit ears (see the notes) | Unattributed | 29 Oct 2026 |
 | `corkscrew` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a needle-nosed stunt dart after the look of Fold'N Fly's Spin Plane, which is likely Keith Laux's, folded differently (see the notes); its nose folds are the traditional dart's | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 29 Oct 2026 |
+| `flying-saucer` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a round floater after the look of Fold'N Fly's UFO, which is Ken Blackburn and Jeff Lammers's, folded differently and without scissors (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 29 Oct 2026 |
 | `boomerang` | Unattributed: Fold'N Fly's Boomerang (design #56) names no designer | Unknown: no designer found | [Fold'N Fly: Boomerang](https://www.foldnfly.com/56.html) | Unattributed | 22 Oct 2026 |
 | `dog-face` | Traditional | None needed: nobody owns it | none recorded | Clear | 18 Oct 2026 |
 | `cat-face` | Traditional | None needed: nobody owns it | none recorded | Clear | 18 Oct 2026 |
@@ -198,7 +199,10 @@ noted when it was written, and the model was folded from the common traditional 
   small, and its wings fold along a line that slants a little from nose to tail. In place of the Spin Plane, Gami has its
   own corkscrew: the traditional dart's nose folds on letter paper, which leave a long needle nose and swept
   wings, a notch reverse-folded into the tail, and the wingtips bent opposite ways so it rolls. The Spin Plane
-  starts from a water bomb base and stands two flaps up as a cockpit; the corkscrew has neither.
+  starts from a water bomb base and stands two flaps up as a cockpit; the corkscrew has neither. In place of the
+  UFO, Gami has its own flying saucer: the top folded down to the middle for a thick front edge, the front
+  corners turned in, and the back corners folded behind and rounded off with smaller folds, so it's nearly round
+  from above. The UFO cuts a corner round with scissors and folds a dart's nose first; the saucer cuts nothing.
 - **Coming soon.** The boat and the models listed on 21 October 2026 are gallery placeholders with no recipe
   yet. Each is credited "Traditional" on origami.me. When one gets a recipe, set its reference to what was
   actually followed and its date to when it shipped. Other traditional models on origami.me that aren't

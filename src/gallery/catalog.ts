@@ -69,6 +69,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'sprinter', title: 'Sprinter', blurb: 'A swept-wing plane with a tall tail fin. Fussy to trim, but quick once it is.', difficulty: 2, category: 'plane', steps: 12, minutes: 5, sheets: 1, paper: 1.3, added: '2026-10-29' },
   { id: 'fun-flyer', title: 'Fun flyer', blurb: 'A long-winged dart with a little point in front of its nose. Try throwing it straight up.', difficulty: 2, category: 'plane', steps: 18, minutes: 8, sheets: 1, paper: 1.3, added: '2026-10-29' },
   { id: 'corkscrew', title: 'Corkscrew', blurb: 'A needle-nosed stunt dart with one wingtip up and one down, so it rolls as it flies.', difficulty: 2, category: 'plane', steps: 17, minutes: 6, sheets: 1, paper: 1.3, added: '2026-10-29' },
+  { id: 'flying-saucer', title: 'Flying saucer', blurb: 'A round, broad-winged floater that drifts slowly round in wide circles.', difficulty: 1, category: 'plane', steps: 16, minutes: 6, sheets: 1, paper: 1.3, added: '2026-10-29' },
   { id: 'dog-face', title: 'Dog face', blurb: 'A first fold: a triangle with floppy ears.', difficulty: 1, category: 'animal', steps: 11, minutes: 2, sheets: 1, needs: ['pen'], added: '2026-10-18' },
   { id: 'cat-face', title: 'Cat face', blurb: 'A first fold: a triangle with pointed ears.', difficulty: 1, category: 'animal', steps: 7, minutes: 2, sheets: 1, needs: ['pen'], added: '2026-10-18' },
   { id: 'cup', title: 'Cup', blurb: 'A cup that holds water, for a while.', difficulty: 1, category: 'object', steps: 7, minutes: 4, sheets: 1, added: '2026-10-16' },

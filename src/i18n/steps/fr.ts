@@ -1204,6 +1204,38 @@ export const fr: Record<string, string> = {
     "Pliez un peu le bout d’une aile vers le haut et celui de l’autre vers le bas, le long de lignes parallèles au fuselage. Cela le fait tourner.",
   "Turn the plane over, so it stands on its keel with its wings on top. Throw it gently: it corkscrews as it flies.":
     "Retournez l’avion pour qu’il repose sur sa quille, les ailes au-dessus. Lancez-le doucement : il vole en tire-bouchon.",
+  "Fold the top down to the middle":
+    "Rabattez le haut jusqu’au milieu",
+  "Fold the top edge down so it lies across the middle of the sheet.":
+    "Rabattez le bord du haut pour qu’il repose en travers du milieu de la feuille.",
+  "Fold the top-left corner in":
+    "Repliez le coin supérieur gauche",
+  "Fold a small triangle off the top-left corner, through both layers.":
+    "Repliez un petit triangle au coin supérieur gauche, à travers les deux couches.",
+  "Fold the top-right corner in":
+    "Repliez le coin supérieur droit",
+  "And the same at the top right.":
+    "Et de même en haut à droite.",
+  "Fold the bottom-left corner behind":
+    "Repliez le coin inférieur gauche derrière",
+  "Fold a bigger triangle off the bottom-left corner, behind.":
+    "Repliez derrière un triangle plus grand au coin inférieur gauche.",
+  "Fold the bottom-right corner behind":
+    "Repliez le coin inférieur droit derrière",
+  "And the same at the bottom right.":
+    "Et de même en bas à droite.",
+  "Round off the bottom left":
+    "Arrondissez en bas à gauche",
+  "Fold the two blunt corners at the bottom left behind, just a little, to round the back.":
+    "Repliez un peu derrière les deux coins obtus en bas à gauche, pour arrondir l’arrière.",
+  "Round off the bottom right":
+    "Arrondissez en bas à droite",
+  "And the two at the bottom right.":
+    "Et les deux en bas à droite.",
+  "Fold the top layers down along a line close to the bottom, for a short body and broad wings.":
+    "Rabattez les couches du dessus le long d’une ligne proche du bas, pour un fuselage court et de larges ailes.",
+  "Turn the plane over, so it stands on its keel with its wings level on top. Throw it gently: it floats round in wide circles.":
+    "Retournez l’avion pour qu’il repose sur sa quille, les ailes à plat au-dessus. Lancez-le doucement : il flotte en grands cercles.",
   "Fold the top-left corner across":
     "Pliez le coin supérieur gauche en travers",
   "Bring the top-left corner down to the right edge, so the top edge lies along it.":

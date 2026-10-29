@@ -76,6 +76,7 @@ export const fr: Messages = {
     'sprinter': { title: 'Sprinteur', blurb: 'Un avion aux ailes en flèche avec une grande dérive. Délicat à régler, mais rapide une fois réglé.' },
     'fun-flyer': { title: 'Planeur rigolo', blurb: 'Une fléchette aux longues ailes avec une petite pointe devant le nez. Essayez de la lancer droit vers le haut.' },
     'corkscrew': { title: 'Tire-bouchon', blurb: 'Une fléchette acrobatique au nez pointu, un bout d’aile relevé et l’autre baissé, pour qu’elle tourne en volant.' },
+    'flying-saucer': { title: 'Soucoupe volante', blurb: 'Un planeur rond aux larges ailes qui flotte lentement en grands cercles.' },
     'dog-face': { title: 'Tête de chien', blurb: 'Un premier pliage : un triangle aux oreilles tombantes.' },
     'cat-face': { title: 'Tête de chat', blurb: 'Un premier pliage : un triangle aux oreilles pointues.' },
     cup: { title: 'Gobelet', blurb: 'Un gobelet qui tient l’eau, un moment.' },

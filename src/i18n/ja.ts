@@ -76,6 +76,7 @@ export const ja: Messages = {
     'sprinter': { title: 'スプリンター', blurb: '大きな尾翼がある後退翼の飛行機。調整は難しいけれど、決まれば速い。' },
     'fun-flyer': { title: 'ファンフライヤー', blurb: '鼻先に小さなとがりがある、翼の長いダート。真上に投げてみよう。' },
     'corkscrew': { title: 'コークスクリュー', blurb: '先のとがった曲芸用のダート。翼の先を片方は上、片方は下に曲げるので、回りながら飛ぶ。' },
+    'flying-saucer': { title: '空飛ぶ円盤', blurb: '丸くて翼の広い機体。大きな円を描いて、ゆっくりただよう。' },
     'dog-face': { title: 'いぬのかお', blurb: 'はじめての折り紙に。たれ耳の三角。' },
     'cat-face': { title: 'ねこのかお', blurb: 'はじめての折り紙に。とがった耳の三角。' },
     cup: { title: 'コップ', blurb: 'しばらくなら水も入るコップ。' },

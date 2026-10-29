@@ -59,7 +59,7 @@ export function finishPlane(
   plane: Recipe,
   body: number,
   wingText: string,
-  more: { beforeOpen?(plane: Recipe, wings: Wings): void; afterOpen?(plane: Recipe, wings: Wings): void } = {},
+  more: { beforeOpen?(plane: Recipe, wings: Wings): void; afterOpen?(plane: Recipe, wings: Wings): void; flyText?: string } = {},
 ): OrigamiModel {
   // Each half of the plane: the paper on that side of the centre crease before it folds in half. That's the
   // sheet's own half unless an earlier fold took paper across the middle (as the navy plane's sides do).
