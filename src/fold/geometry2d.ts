@@ -207,7 +207,9 @@ export function joinedAlong(a: Vec2, b: Vec2, cuts: Cut[] | undefined, tol = 1e-
     if (Math.abs(cross(u, sub(c0, a))) > tol || Math.abs(cross(u, sub(c1, a))) > tol) continue;
     const t0 = dot(sub(c0, a), u);
     const t1 = dot(sub(c1, a), u);
-    covered.push([Math.max(0, Math.min(t0, t1)), Math.min(len, Math.max(t0, t1))]);
+    const [lo, hi] = [Math.max(0, Math.min(t0, t1)), Math.min(len, Math.max(t0, t1))];
+    // A cut further along the same line, clear of the edge, covers none of it.
+    if (hi > lo) covered.push([lo, hi]);
   }
   covered.sort((p, q) => p[0] - q[0]);
   let reach = 0;

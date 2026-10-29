@@ -19,6 +19,8 @@ describe('scissor cuts', () => {
     expect(joinedAlong([0, 0], [1, 0], [[[0, 0], [0.5, 0]], [[0.5, 0], [1, 0]]])).toBe(false);
     expect(joinedAlong([0, 0], [1, 0], [[[0, 0], [0.6, 0]]])).toBe(true);
     expect(joinedAlong([0, 0], [1, 0], [[[0, 0.1], [1, 0.1]]])).toBe(true);
+    // A cut further along the same line, past the edge's end, says nothing about the edge.
+    expect(joinedAlong([0, 0], [1, 0], [[[0, 0], [1, 0]], [[2, 0], [3, 0]]])).toBe(false);
   });
 
   it('lets paper either side of a cut fold apart', () => {
