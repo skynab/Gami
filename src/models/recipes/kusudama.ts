@@ -110,10 +110,12 @@ export function kusudama() {
   // A flower: petals 5k to 5k + 4, around `up` at `centre`, each towards one of `towards`.
   const flower = (k: number, centre: Vec3, up: Vec3, towards: Vec3[]) => towards.map((t, i) => pose(5 * k + i, centre, up, t));
   const ring = (k: number): Vec3[] => Array.from({ length: 5 }, (_, i) => [Math.cos((2 * Math.PI * i) / 5 + k), 0, Math.sin((2 * Math.PI * i) / 5 + k)]);
-  // Flowers wait on the table in a ring round where the ball goes.
+  // Flowers wait on the table in a ring round where the ball goes, those going into it first every other place,
+  // so the ones left waiting are spread round it too, and each step is seen with the ball in the middle.
   const BALL_AT: Vec2 = [0, 3.6];
   const onTable = (k: number) => {
-    const turn = (2 * Math.PI * k) / FLOWERS;
+    const half = FLOWERS / 2;
+    const turn = (2 * Math.PI * (k < half ? 2 * k : 2 * (k - half) + 1)) / FLOWERS;
     const placed = flower(k, [BALL_AT[0] - 3 * Math.sin(turn), 0, BALL_AT[1] - 3 * Math.cos(turn)], [0, 1, 0], ring(k));
     const lift = 0.01 - lowest(placed);
     return placed.map((p, i) => ({ sheet: 5 * k + i, bends: cone(5 * k + i), pose: { ...p, to: add(p.to, [0, lift, 0]) } }));
