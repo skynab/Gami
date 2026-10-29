@@ -36,8 +36,11 @@ test.describe('gallery', () => {
     await expect(card.locator('img.card-preview.playing')).toHaveCount(0);
   });
 
-  test('shows each finished model on its card', async ({ page }) => {
+  test('shows each finished model on its card', async ({ page, isMobile }) => {
     await page.goto('/');
+    // On a touch screen a card plays its preview while it's mid-screen, in place of the finished model: show the
+    // finished model here.
+    if (isMobile) await page.addStyleTag({ content: '.card-thumb .card-preview { visibility: hidden; } .card-thumb img { opacity: 1 !important; }' });
     for (const name of ['Fortune teller', 'Crane', 'Lily']) {
       const thumb = page.getByRole('link', { name: new RegExp(name) }).locator('.card-thumb');
       await thumb.scrollIntoViewIfNeeded();
