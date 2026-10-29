@@ -2199,4 +2199,22 @@ export const fr: Record<string, string> = {
     "La rouler en tube",
   "Roll the strip round across its width into a long, thin tube, the lines outside. Slip a finger in each end and pull!":
     "Roulez la bande dans sa largeur en un long tube fin, les lignes dehors. Glissez un doigt à chaque bout et tirez !",
+  "Narrow the blade":
+    "Affiner la lame",
+  "Fold the long upper edges to the middle again: a long, narrow blade.":
+    "Rabattez encore les longs bords du haut au milieu : une lame longue et étroite.",
+  "Narrow the end":
+    "Affiner le bout",
+  "Fold the short lower edges to the middle too.":
+    "Rabattez aussi les petits bords du bas au milieu.",
+  "Fold the end up":
+    "Relever le bout",
+  "Fold the end up over the blade, along its widest corners.":
+    "Relevez le bout sur la lame, au niveau de ses coins les plus larges.",
+  "Fold it back down a little above that fold, so a narrow band is left across the sword: the crossguard. The point below is the handle.":
+    "Rabattez-le un peu au-dessus de ce pli, pour qu’une bande étroite reste en travers de l’épée : la garde. La pointe en dessous est le manche.",
+  "Shorten the handle":
+    "Raccourcir le manche",
+  "Fold the handle’s long tip up behind, so the handle is short with a flat end. Your sword is ready.":
+    "Repliez la longue pointe du manche derrière vers le haut, pour un manche court au bout plat. Votre épée est prête.",
 };

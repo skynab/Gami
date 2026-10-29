@@ -136,6 +136,7 @@ export const es: Messages = {
     bracelet: { title: 'Pulsera', blurb: 'Un cuadrado doblado en una banda estrecha y enrollado en una pulsera.' },
     'diamond-ring': { title: 'Anillo de diamante', blurb: 'Una banda enrollada en un anillo, con un pequeño diamante doblado encima.' },
     'finger-trap': { title: 'Trampa para dedos', blurb: 'Un tubo tejido largo y fino para meter los dedos. Sin cortes.' },
+    'easy-sword': { title: 'Espada fácil', blurb: 'Una espada plateada con guarda y un mango corto, con un solo cuadrado.' },
   },
   notFound: {
     title: 'Esta página se ha plegado y ha desaparecido',

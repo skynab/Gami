@@ -35,6 +35,7 @@ site's source code, or any other model in the gallery.
 | Bracelet | `src/models/recipes/bracelet.ts` | October 2026 |
 | Diamond ring | `src/models/recipes/diamond-ring.ts` | October 2026 |
 | Finger trap | `src/models/recipes/finger-trap.ts` | October 2026 |
+| Easy sword | `src/models/recipes/easy-sword.ts` | October 2026 |
 
 ## Other models in the gallery
 

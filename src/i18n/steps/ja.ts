@@ -2199,4 +2199,22 @@ export const ja: Record<string, string> = {
     "筒に丸める",
   "Roll the strip round across its width into a long, thin tube, the lines outside. Slip a finger in each end and pull!":
     "帯を横はばの向きに丸め、線を外がわにして、細長い筒にします。両はしに指を一本ずつ入れて、引っぱってみましょう！",
+  "Narrow the blade":
+    "刃を細くする",
+  "Fold the long upper edges to the middle again: a long, narrow blade.":
+    "長い上のふちを、もう一度まん中に合わせて折ります。細長い刃になります。",
+  "Narrow the end":
+    "はしを細くする",
+  "Fold the short lower edges to the middle too.":
+    "短い下のふちも、まん中に合わせて折ります。",
+  "Fold the end up":
+    "はしを折りあげる",
+  "Fold the end up over the blade, along its widest corners.":
+    "いちばん広い角のところで、はしを刃の上に折りあげます。",
+  "Fold it back down a little above that fold, so a narrow band is left across the sword: the crossguard. The point below is the handle.":
+    "その折り目の少し上で、折りさげてもどします。剣を横切る細い帯がのこり、これがつばになります。下のとがった部分が持ち手です。",
+  "Shorten the handle":
+    "持ち手を短くする",
+  "Fold the handle’s long tip up behind, so the handle is short with a flat end. Your sword is ready.":
+    "持ち手の長い先をうしろに折りあげて、先の平らな短い持ち手にします。剣の完成です。",
 };

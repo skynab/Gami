@@ -72,7 +72,7 @@ Easiest and clearest first. Each phase can ship alone, and models within a phase
 
 ## Open questions
 
-- **Easy sword.** Gami has its own sword already. Skip OrigamiOK's, or add it as a second sword? Planned: skip.
+- **Easy sword.** Gami has its own sword already. Added on 29 October 2026 as a second sword (`easy-sword`), Gami's own, to compare with `sword` and keep the better one: a kite narrowed for the blade, its short end narrowed too, then folded up over the blade and most of it back down, leaving a band for the crossguard and a short handle below.
 - **The New cutoff.** Every model in this batch will show as New beside the 28 October batch. Move `NEW_SINCE`
   forward when phase 1 ships if the older batch should stop being New.
 

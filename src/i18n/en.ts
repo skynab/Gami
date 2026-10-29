@@ -138,6 +138,7 @@ export const en = {
     bracelet: { title: 'Bracelet', blurb: 'A square folded into a narrow band and curled round into a bracelet.' },
     'diamond-ring': { title: 'Diamond ring', blurb: 'A band curled round into a ring, with a little folded diamond on top.' },
     'finger-trap': { title: 'Finger trap', blurb: 'A long, thin woven tube to slip your fingers into. No cuts.' },
+    'easy-sword': { title: 'Easy sword', blurb: 'A silver sword with a crossguard and a short handle, from one square.' },
   },
   notFound: {
     title: 'This page got folded away',

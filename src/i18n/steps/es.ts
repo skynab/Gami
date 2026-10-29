@@ -2199,4 +2199,22 @@ export const es: Record<string, string> = {
     "Enróllala en un tubo",
   "Roll the strip round across its width into a long, thin tube, the lines outside. Slip a finger in each end and pull!":
     "Enrolla la tira a lo ancho en un tubo largo y fino, con las líneas por fuera. ¡Mete un dedo en cada extremo y tira!",
+  "Narrow the blade":
+    "Estrecha la hoja",
+  "Fold the long upper edges to the middle again: a long, narrow blade.":
+    "Vuelve a doblar los bordes largos de arriba hasta el centro: una hoja larga y estrecha.",
+  "Narrow the end":
+    "Estrecha el extremo",
+  "Fold the short lower edges to the middle too.":
+    "Dobla también los bordes cortos de abajo hasta el centro.",
+  "Fold the end up":
+    "Dobla el extremo hacia arriba",
+  "Fold the end up over the blade, along its widest corners.":
+    "Dobla el extremo hacia arriba sobre la hoja, por sus esquinas más anchas.",
+  "Fold it back down a little above that fold, so a narrow band is left across the sword: the crossguard. The point below is the handle.":
+    "Vuelve a doblarlo hacia abajo un poco por encima de ese pliegue, para que quede una banda estrecha a lo ancho de la espada: la guarda. La punta de abajo es el mango.",
+  "Shorten the handle":
+    "Acorta el mango",
+  "Fold the handle’s long tip up behind, so the handle is short with a flat end. Your sword is ready.":
+    "Dobla la punta larga del mango hacia atrás y hacia arriba, para que el mango quede corto y con el extremo plano. Tu espada está lista.",
 };

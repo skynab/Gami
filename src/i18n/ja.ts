@@ -136,6 +136,7 @@ export const ja: Messages = {
     bracelet: { title: 'ブレスレット', blurb: '正方形を細い帯に折り、丸めたブレスレット。' },
     'diamond-ring': { title: 'ダイヤの指輪', blurb: '丸めた帯の上に、折った小さなダイヤモンドをのせた指輪。' },
     'finger-trap': { title: '指とりわな', blurb: '指を入れて遊ぶ、細長くあんだ筒。はさみは使いません。' },
+    'easy-sword': { title: 'かんたんな剣', blurb: 'つばと短い持ち手のついた銀色の剣。正方形一枚で。' },
   },
   notFound: {
     title: 'このページは折りたたまれてしまいました',

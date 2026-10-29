@@ -125,6 +125,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'bracelet', title: 'Bracelet', blurb: 'A square folded into a narrow band and curled round into a bracelet.', difficulty: 1, category: 'object', steps: 4, minutes: 4, sheets: 1, added: '2026-10-28' },
   { id: 'diamond-ring', title: 'Diamond ring', blurb: 'A band curled round into a ring, with a little folded diamond on top.', difficulty: 2, category: 'object', steps: 4, minutes: 5, sheets: 2, paper: 2, added: '2026-10-28' },
   { id: 'finger-trap', title: 'Finger trap', blurb: 'A long, thin woven tube to slip your fingers into. No cuts.', difficulty: 1, category: 'toy', steps: 4, minutes: 4, sheets: 1, needs: ['pen'], added: '2026-10-28' },
+  { id: 'easy-sword', title: 'Easy sword', blurb: 'A silver sword with a crossguard and a short handle, from one square.', difficulty: 1, category: 'toy', steps: 9, minutes: 5, sheets: 1, added: '2026-10-29' },
   // Coming soon: listed, with no steps yet.
   { id: 'boat', title: 'Boat', blurb: 'The classic paper boat. It really floats, for a while.', difficulty: 2, category: 'object', minutes: 6, sheets: 1 },
   { id: 'iris', title: 'Iris', blurb: 'Three petals up, three down, from the frog base.', difficulty: 4, category: 'flower', minutes: 20, sheets: 1 },

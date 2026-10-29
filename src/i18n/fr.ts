@@ -136,6 +136,7 @@ export const fr: Messages = {
     bracelet: { title: 'Bracelet', blurb: 'Un carré plié en bande étroite et enroulé en bracelet.' },
     'diamond-ring': { title: 'Bague diamant', blurb: 'Une bande enroulée en bague, surmontée d’un petit diamant plié.' },
     'finger-trap': { title: 'Piège à doigts', blurb: 'Un long tube fin et tressé où glisser les doigts. Sans découpe.' },
+    'easy-sword': { title: 'Épée facile', blurb: 'Une épée argentée avec une garde et un manche court, dans un seul carré.' },
   },
   notFound: {
     title: 'Cette page a été repliée',

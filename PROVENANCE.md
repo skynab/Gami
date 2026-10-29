@@ -104,6 +104,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `bracelet` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a band curled into a ring; Gilad's database lists Traditional bracelets, but OrigamiOK's pleated pattern wasn't traced, so Gami's is its own and plainer (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
 | `diamond-ring` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a band curled round under a little blintzed gem, in place of OrigamiOK's one-sheet ring (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
 | `finger-trap` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a strip rolled into a tube with its weave drawn on, in place of OrigamiOK's cut finger trap; Gilad's database lists only Pedruzzi's and Garibi's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `easy-sword` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's easy sword, from a kite with its end folded up and back down for the crossguard; Gilad's database lists no Traditional sword (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 29 Oct 2026 |
 
 ### Notes
 
@@ -151,6 +152,10 @@ noted when it was written, and the model was folded from the common traditional 
   `shape`'s spread bends rather than waiting on bending: a band folded to the middle and curled round for the
   bracelet; a band curled round under a gem (a small square with its corners folded in) for the ring; and a strip
   with its weave drawn on, rolled into a tube, for the finger trap. Neither OrigamiOK's pleats nor its cuts are used.
+  The easy sword (added 29 October 2026, to compare with Gami's `sword`) is Gami's own: Gilad's database lists 95
+  swords, all by named designers, and OrigamiOK's names none. It keeps the look of OrigamiOK's (a long blade, a
+  small crossguard, a short handle) but is folded from a kite: the short end folded up over the blade and most of
+  it back down, leaving a band across for the guard.
 - **Fox.** Okuda's design isn't openly licensed. It was kept on 18 October 2026 because it's very widely
   folded and taught (see the decisions log in `PLAN.md`). The gallery doesn't credit him yet. If the rule
   is tightened, the choices are: ask for permission, swap in a traditional fox, or design Gami's own.
