@@ -131,6 +131,8 @@ export const fr: Messages = {
     rose: { title: 'Rose', blurb: 'Une rose plate aux quatre pétales en spirale, les coins pliés au milieu deux fois.' },
     'palm-leaf': { title: 'Feuille de palmier', blurb: 'Une longue feuille plissée en accordéon, qui ondule.' },
     'green-leaf': { title: 'Feuille verte', blurb: 'Une feuille verte toute simple, ses moitiés relevées de chaque côté de la nervure.' },
+    pyramid: { title: 'Pyramide', blurb: 'Une haute pyramide aux faces plates, dressée à partir d’un carré marqué de plis. Sans colle.' },
+    diamond: { title: 'Diamant', blurb: 'Une gemme : un octogone qui descend en pointe, comme une pierre taillée. Sans colle.' },
   },
   notFound: {
     title: 'Cette page a été repliée',

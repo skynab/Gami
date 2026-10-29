@@ -2141,4 +2141,26 @@ export const ja: Record<string, string> = {
     "葉の形を整える",
   "Pinch the leaf along the middle crease, so its two halves rise a little either side. Your leaf is done.":
     "まん中の折りすじにそってつまみ、両がわを少し立てます。葉の完成です。",
+  "Pop it up":
+    "立ち上げる",
+  "Push the middle up from underneath and let the corners drop, pinching each diagonal into a ridge and pushing each side’s middle crease inside. Your pyramid stands on its four corners.":
+    "下からまん中をおし上げ、角を下ろします。対角線をつまんで山にし、それぞれの面のまん中の折りすじを内がわにおしこみます。ピラミッドが四つの角で立ちます。",
+  "Fold the corners behind":
+    "角をうしろに折る",
+  "Fold all four corners behind, a little way, so the square is an octagon.":
+    "四つの角を少しずつうしろに折って、八角形にします。",
+  "Pop it into a gem":
+    "宝石の形に立ち上げる",
+  "Push the middle down and lift the edges, pinching each diagonal into a ridge and pushing each side’s middle crease inside, so it comes to a point underneath. Your diamond sparkles.":
+    "まん中をおし下げてふちを持ち上げ、対角線をつまんで山にし、それぞれの面のまん中の折りすじを内がわにおしこんで、下をとがらせます。ダイヤモンドがきらりと光ります。",
+  "Fold the square in half corner to corner.":
+    "正方形を、角と角を合わせて半分に折ります。",
+  "Fold the triangle in half, point to point.":
+    "三角を、とがった先どうしを合わせて半分に折ります。",
+  "Fold it in half once more, lining up the edges by the point.":
+    "とがった先のそばのふちをそろえて、もう一度半分に折ります。",
+  "And once more: a thin wedge, many layers thick. Crease it hard.":
+    "さらにもう一度。何枚も重なった細いくさび形になります。しっかり折りすじをつけます。",
+  "Unfold it all: sixteen creases run out from the middle.":
+    "すべて広げます。まん中から十六本の折りすじが出ています。",
 };

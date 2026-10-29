@@ -2141,4 +2141,26 @@ export const fr: Record<string, string> = {
     "Former la feuille",
   "Pinch the leaf along the middle crease, so its two halves rise a little either side. Your leaf is done.":
     "Pincez la feuille le long du pli du milieu, pour que ses deux moitiés se relèvent un peu. Votre feuille est prête.",
+  "Pop it up":
+    "La dresser",
+  "Push the middle up from underneath and let the corners drop, pinching each diagonal into a ridge and pushing each side’s middle crease inside. Your pyramid stands on its four corners.":
+    "Poussez le milieu vers le haut par-dessous et laissez tomber les coins, en pinçant chaque diagonale en arête et en rentrant le pli du milieu de chaque face. Votre pyramide tient sur ses quatre coins.",
+  "Fold the corners behind":
+    "Replier les coins derrière",
+  "Fold all four corners behind, a little way, so the square is an octagon.":
+    "Repliez un peu les quatre coins derrière, pour que le carré devienne un octogone.",
+  "Pop it into a gem":
+    "En faire une gemme",
+  "Push the middle down and lift the edges, pinching each diagonal into a ridge and pushing each side’s middle crease inside, so it comes to a point underneath. Your diamond sparkles.":
+    "Poussez le milieu vers le bas et relevez les bords, en pinçant chaque diagonale en arête et en rentrant le pli du milieu de chaque face, pour qu’il finisse en pointe dessous. Votre diamant étincelle.",
+  "Fold the square in half corner to corner.":
+    "Pliez le carré en deux coin sur coin.",
+  "Fold the triangle in half, point to point.":
+    "Pliez le triangle en deux, pointe sur pointe.",
+  "Fold it in half once more, lining up the edges by the point.":
+    "Pliez-le encore en deux, en alignant les bords près de la pointe.",
+  "And once more: a thin wedge, many layers thick. Crease it hard.":
+    "Et encore une fois : un coin fin, épais de nombreuses couches. Marquez bien le pli.",
+  "Unfold it all: sixteen creases run out from the middle.":
+    "Dépliez tout : seize plis partent du milieu.",
 };

@@ -133,6 +133,8 @@ export const en = {
     rose: { title: 'Rose', blurb: 'A flat rose whose four petals spiral round, from corners folded to the middle twice.' },
     'palm-leaf': { title: 'Palm leaf', blurb: 'A long leaf pleated back and forth, so it ripples.' },
     'green-leaf': { title: 'Green leaf', blurb: 'A plain green leaf, its halves raised either side of the midrib.' },
+    pyramid: { title: 'Pyramid', blurb: 'A tall pyramid with flat sides, popped up from a creased square. No glue.' },
+    diamond: { title: 'Diamond', blurb: 'A gem: an octagon popped down into a point, like a cut stone. No glue.' },
   },
   notFound: {
     title: 'This page got folded away',

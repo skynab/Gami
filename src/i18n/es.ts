@@ -131,6 +131,8 @@ export const es: Messages = {
     rose: { title: 'Rosa', blurb: 'Una rosa plana con cuatro pétalos en espiral, con las esquinas dobladas al centro dos veces.' },
     'palm-leaf': { title: 'Hoja de palmera', blurb: 'Una hoja larga plisada de un lado a otro, que se ondula.' },
     'green-leaf': { title: 'Hoja verde', blurb: 'Una hoja verde lisa, con las mitades levantadas a cada lado del nervio central.' },
+    pyramid: { title: 'Pirámide', blurb: 'Una pirámide alta de caras planas, levantada desde un cuadrado con pliegues. Sin pegamento.' },
+    diamond: { title: 'Diamante', blurb: 'Una gema: un octógono que baja hasta una punta, como una piedra tallada. Sin pegamento.' },
   },
   notFound: {
     title: 'Esta página se ha plegado y ha desaparecido',

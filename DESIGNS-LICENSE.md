@@ -30,6 +30,8 @@ site's source code, or any other model in the gallery.
 | Rose | `src/models/recipes/rose.ts` | October 2026 |
 | Palm leaf | `src/models/recipes/palm-leaf.ts` | October 2026 |
 | Green leaf | `src/models/recipes/green-leaf.ts` | October 2026 |
+| Pyramid | `src/models/recipes/pyramid.ts` | October 2026 |
+| Diamond | `src/models/recipes/diamond.ts` | October 2026 |
 
 ## Other models in the gallery
 

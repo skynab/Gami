@@ -99,6 +99,8 @@ noted when it was written, and the model was folded from the common traditional 
 | `rose` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a flat rose, the corners folded in twice and folded back out turned one way, in place of OrigamiOK's twisted rose (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
 | `palm-leaf` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a narrow leaf pleated across its length and let open, in place of OrigamiOK's glued palm leaf (see the notes); "Palm leaf" in Gilad's database is Mark Bolitho's | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
 | `green-leaf` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a plain leaf with its halves raised about the midrib, in place of OrigamiOK's cut and pleated round leaf (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `pyramid` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a square creased into sixteen and popped up point first, each side's spare paper tucked inside, in place of OrigamiOK's glued pyramid (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `diamond` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): the pyramid's pop upside down from an octagon, in place of OrigamiOK's cut and glued diamond (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
 
 ### Notes
 
@@ -138,6 +140,10 @@ noted when it was written, and the model was folded from the common traditional 
   its green leaf a cut triangle pleated round from the stem. Gami's palm leaf is a square folded to a long, narrow
   leaf and pleated across, opened a little into ripples; its green leaf is the same narrow leaf left smooth, with
   its halves raised either side of the midrib. No scissors or glue.
+  The pyramid and diamond are Gami's own: OrigamiOK glues both, and the diamond is cut too; Gilad's database has
+  hundreds of named pyramids and gems, with only a pyramid-shaped candy box marked Traditional. Gami's pop a square
+  creased into sixteen from the middle, the diagonals rising (or, for the diamond, falling) as ridges and each
+  side's spare paper tucked inside along its middle crease, so the sides stay flat and nothing needs glue.
 - **Fox.** Okuda's design isn't openly licensed. It was kept on 18 October 2026 because it's very widely
   folded and taught (see the decisions log in `PLAN.md`). The gallery doesn't credit him yet. If the rule
   is tightened, the choices are: ask for permission, swap in a traditional fox, or design Gami's own.

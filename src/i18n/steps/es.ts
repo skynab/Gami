@@ -2141,4 +2141,26 @@ export const es: Record<string, string> = {
     "Da forma a la hoja",
   "Pinch the leaf along the middle crease, so its two halves rise a little either side. Your leaf is done.":
     "Pellizca la hoja por el pliegue del centro, para que sus dos mitades se levanten un poco a cada lado. Tu hoja está lista.",
+  "Pop it up":
+    "Levántala",
+  "Push the middle up from underneath and let the corners drop, pinching each diagonal into a ridge and pushing each side’s middle crease inside. Your pyramid stands on its four corners.":
+    "Empuja el centro hacia arriba desde abajo y deja caer las esquinas, pellizcando cada diagonal en una arista y metiendo hacia dentro el pliegue central de cada cara. Tu pirámide se sostiene sobre sus cuatro esquinas.",
+  "Fold the corners behind":
+    "Dobla las esquinas hacia atrás",
+  "Fold all four corners behind, a little way, so the square is an octagon.":
+    "Dobla las cuatro esquinas hacia atrás, solo un poco, para que el cuadrado sea un octógono.",
+  "Pop it into a gem":
+    "Dale forma de gema",
+  "Push the middle down and lift the edges, pinching each diagonal into a ridge and pushing each side’s middle crease inside, so it comes to a point underneath. Your diamond sparkles.":
+    "Empuja el centro hacia abajo y levanta los bordes, pellizcando cada diagonal en una arista y metiendo hacia dentro el pliegue central de cada cara, para que acabe en punta por debajo. Tu diamante brilla.",
+  "Fold the square in half corner to corner.":
+    "Dobla el cuadrado por la mitad de esquina a esquina.",
+  "Fold the triangle in half, point to point.":
+    "Dobla el triángulo por la mitad, de punta a punta.",
+  "Fold it in half once more, lining up the edges by the point.":
+    "Dóblalo por la mitad una vez más, alineando los bordes junto a la punta.",
+  "And once more: a thin wedge, many layers thick. Crease it hard.":
+    "Y una vez más: una cuña fina de muchas capas. Marca bien el pliegue.",
+  "Unfold it all: sixteen creases run out from the middle.":
+    "Desdóblalo todo: dieciséis pliegues salen del centro.",
 };
