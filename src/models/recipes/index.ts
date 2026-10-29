@@ -63,13 +63,16 @@ import { palmLeaf } from './palm-leaf';
 import { greenLeaf } from './green-leaf';
 import { pyramid } from './pyramid';
 import { diamond } from './diamond';
+import { bracelet } from './bracelet';
+import { diamondRing } from './diamond-ring';
+import { fingerTrap } from './finger-trap';
 
 /**
  * Every built-in model, as code. `npm run models` turns these into public/models/<id>.fold and <id>.svg,
  * which the site loads. Not bundled into the site itself. Each carries its gallery details from the catalog,
  * so a copy opened in the Studio or shared keeps them.
  */
-export const RECIPES: (() => OrigamiModel)[] = ([basics, foldsLesson, basesLesson, paperPlane, glider, bulldogDart, navyPlane, kingBee, dogFace, catFace, cup, samuraiHelmet, fortuneTeller, heart, cicada, jumpingFrog, ninjaStar, tulip, fox, crane, lily, swan, penguin, whale, crow, christmasTree, waterbomb, balloon, balloonRabbit, flappingBird, pinwheel, pajarita, butterfly, frog, dolphin, seal, masuBox, masuLid, masuShallowLid, envelope, sword, boomerang, fish, crown, sailboat, lotus, tulipBloom, peacock, cactus, pirateHat, frogBookmark, heartBookmark, cuteCat, bat, bull, tRex, knife, kunai, handFan, rose, palmLeaf, greenLeaf, pyramid, diamond, foldingGeometry] as (() => OrigamiModel)[]).map((make) => () => withAbout(make()));
+export const RECIPES: (() => OrigamiModel)[] = ([basics, foldsLesson, basesLesson, paperPlane, glider, bulldogDart, navyPlane, kingBee, dogFace, catFace, cup, samuraiHelmet, fortuneTeller, heart, cicada, jumpingFrog, ninjaStar, tulip, fox, crane, lily, swan, penguin, whale, crow, christmasTree, waterbomb, balloon, balloonRabbit, flappingBird, pinwheel, pajarita, butterfly, frog, dolphin, seal, masuBox, masuLid, masuShallowLid, envelope, sword, boomerang, fish, crown, sailboat, lotus, tulipBloom, peacock, cactus, pirateHat, frogBookmark, heartBookmark, cuteCat, bat, bull, tRex, knife, kunai, handFan, rose, palmLeaf, greenLeaf, pyramid, diamond, bracelet, diamondRing, fingerTrap, foldingGeometry] as (() => OrigamiModel)[]).map((make) => () => withAbout(make()));
 
 function withAbout(model: OrigamiModel): OrigamiModel {
   const info = findModel(model.id);

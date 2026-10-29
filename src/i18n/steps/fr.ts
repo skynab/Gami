@@ -2163,4 +2163,40 @@ export const fr: Record<string, string> = {
     "Et encore une fois : un coin fin, épais de nombreuses couches. Marquez bien le pli.",
   "Unfold it all: sixteen creases run out from the middle.":
     "Dépliez tout : seize plis partent du milieu.",
+  "Start yellow side up. Fold the top and bottom edges to the middle.":
+    "Commencez face jaune dessus. Rabattez les bords du haut et du bas au milieu.",
+  "Fold the new top and bottom edges to the middle again: a narrow band.":
+    "Rabattez encore les nouveaux bords du haut et du bas au milieu : une bande étroite.",
+  "Turn the band over.":
+    "Retournez la bande.",
+  "Curl it round":
+    "L’enrouler",
+  "Curl the band round into a ring, until its ends meet. Slip it on your wrist.":
+    "Enroulez la bande en anneau, jusqu’à ce que ses bouts se rejoignent. Glissez-la à votre poignet.",
+  "Fold the band":
+    "Plier la bande",
+  "Fold the strip’s long edges to its middle: the band.":
+    "Rabattez les grands bords de la bande en son milieu : l’anneau.",
+  "Fold the gem":
+    "Plier la pierre",
+  "Light side up, fold the small square’s four corners to its middle: a little faceted diamond.":
+    "Face claire dessus, rabattez les quatre coins du petit carré en son milieu : un petit diamant à facettes.",
+  "Set the gem":
+    "Poser la pierre",
+  "Lay the gem on the left end of the band.":
+    "Posez la pierre sur le bout gauche de la bande.",
+  "Curl the band round":
+    "Enrouler la bande",
+  "Curl the rest of the band down and round underneath, so it meets the end under the gem. Your ring is ready to wear.":
+    "Enroulez le reste de la bande vers le bas et par-dessous, jusqu’à rejoindre le bout sous la pierre. Votre bague est prête à porter.",
+  "Turn it over: a plain strip.":
+    "Retournez-la : une bande unie.",
+  "Draw the weave":
+    "Dessiner le tressage",
+  "Draw lines slanting both ways across the strip, criss-crossing, like a woven tube.":
+    "Dessinez des lignes en biais dans les deux sens sur la bande, qui se croisent, comme un tube tressé.",
+  "Roll it into a tube":
+    "La rouler en tube",
+  "Roll the strip round across its width into a long, thin tube, the lines outside. Slip a finger in each end and pull!":
+    "Roulez la bande dans sa largeur en un long tube fin, les lignes dehors. Glissez un doigt à chaque bout et tirez !",
 };

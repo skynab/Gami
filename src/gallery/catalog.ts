@@ -122,6 +122,9 @@ export const MODELS: ModelInfo[] = [
   { id: 'green-leaf', title: 'Green leaf', blurb: 'A plain green leaf, its halves raised either side of the midrib.', difficulty: 1, category: 'flower', steps: 7, minutes: 4, sheets: 1, added: '2026-10-28' },
   { id: 'pyramid', title: 'Pyramid', blurb: 'A tall pyramid with flat sides, popped up from a creased square. No glue.', difficulty: 2, category: 'object', steps: 6, minutes: 6, sheets: 1, added: '2026-10-28' },
   { id: 'diamond', title: 'Diamond', blurb: 'A gem: an octagon popped down into a point, like a cut stone. No glue.', difficulty: 2, category: 'object', steps: 7, minutes: 6, sheets: 1, added: '2026-10-28' },
+  { id: 'bracelet', title: 'Bracelet', blurb: 'A square folded into a narrow band and curled round into a bracelet.', difficulty: 1, category: 'object', steps: 4, minutes: 4, sheets: 1, added: '2026-10-28' },
+  { id: 'diamond-ring', title: 'Diamond ring', blurb: 'A band curled round into a ring, with a little folded diamond on top.', difficulty: 2, category: 'object', steps: 4, minutes: 5, sheets: 2, paper: 2, added: '2026-10-28' },
+  { id: 'finger-trap', title: 'Finger trap', blurb: 'A long, thin woven tube to slip your fingers into. No cuts.', difficulty: 1, category: 'toy', steps: 4, minutes: 4, sheets: 1, needs: ['pen'], added: '2026-10-28' },
   // Coming soon: listed, with no steps yet.
   { id: 'boat', title: 'Boat', blurb: 'The classic paper boat. It really floats, for a while.', difficulty: 2, category: 'object', minutes: 6, sheets: 1 },
   { id: 'iris', title: 'Iris', blurb: 'Three petals up, three down, from the frog base.', difficulty: 4, category: 'flower', minutes: 20, sheets: 1 },

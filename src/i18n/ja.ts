@@ -133,6 +133,9 @@ export const ja: Messages = {
     'green-leaf': { title: '緑の葉', blurb: 'まん中のすじの両がわを少し立てた、シンプルな緑の葉。' },
     pyramid: { title: 'ピラミッド', blurb: '折りすじをつけた正方形を立ち上げた、面の平らな高いピラミッド。のりは使いません。' },
     diamond: { title: 'ダイヤモンド', blurb: '八角形を下にとがらせた、カットした宝石のような形。のりは使いません。' },
+    bracelet: { title: 'ブレスレット', blurb: '正方形を細い帯に折り、丸めたブレスレット。' },
+    'diamond-ring': { title: 'ダイヤの指輪', blurb: '丸めた帯の上に、折った小さなダイヤモンドをのせた指輪。' },
+    'finger-trap': { title: '指とりわな', blurb: '指を入れて遊ぶ、細長くあんだ筒。はさみは使いません。' },
   },
   notFound: {
     title: 'このページは折りたたまれてしまいました',

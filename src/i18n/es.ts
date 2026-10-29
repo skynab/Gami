@@ -133,6 +133,9 @@ export const es: Messages = {
     'green-leaf': { title: 'Hoja verde', blurb: 'Una hoja verde lisa, con las mitades levantadas a cada lado del nervio central.' },
     pyramid: { title: 'Pirámide', blurb: 'Una pirámide alta de caras planas, levantada desde un cuadrado con pliegues. Sin pegamento.' },
     diamond: { title: 'Diamante', blurb: 'Una gema: un octógono que baja hasta una punta, como una piedra tallada. Sin pegamento.' },
+    bracelet: { title: 'Pulsera', blurb: 'Un cuadrado doblado en una banda estrecha y enrollado en una pulsera.' },
+    'diamond-ring': { title: 'Anillo de diamante', blurb: 'Una banda enrollada en un anillo, con un pequeño diamante doblado encima.' },
+    'finger-trap': { title: 'Trampa para dedos', blurb: 'Un tubo tejido largo y fino para meter los dedos. Sin cortes.' },
   },
   notFound: {
     title: 'Esta página se ha plegado y ha desaparecido',

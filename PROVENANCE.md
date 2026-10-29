@@ -101,6 +101,9 @@ noted when it was written, and the model was folded from the common traditional 
 | `green-leaf` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a plain leaf with its halves raised about the midrib, in place of OrigamiOK's cut and pleated round leaf (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
 | `pyramid` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a square creased into sixteen and popped up point first, each side's spare paper tucked inside, in place of OrigamiOK's glued pyramid (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
 | `diamond` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): the pyramid's pop upside down from an octagon, in place of OrigamiOK's cut and glued diamond (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `bracelet` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a band curled into a ring; Gilad's database lists Traditional bracelets, but OrigamiOK's pleated pattern wasn't traced, so Gami's is its own and plainer (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `diamond-ring` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a band curled round under a little blintzed gem, in place of OrigamiOK's one-sheet ring (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `finger-trap` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a strip rolled into a tube with its weave drawn on, in place of OrigamiOK's cut finger trap; Gilad's database lists only Pedruzzi's and Garibi's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
 
 ### Notes
 
@@ -144,6 +147,10 @@ noted when it was written, and the model was folded from the common traditional 
   hundreds of named pyramids and gems, with only a pyramid-shaped candy box marked Traditional. Gami's pop a square
   creased into sixteen from the middle, the diagonals rising (or, for the diamond, falling) as ridges and each
   side's spare paper tucked inside along its middle crease, so the sides stay flat and nothing needs glue.
+  The bracelet, diamond ring and finger trap, which close into a band or a tube, are Gami's own too, curled with
+  `shape`'s spread bends rather than waiting on bending: a band folded to the middle and curled round for the
+  bracelet; a band curled round under a gem (a small square with its corners folded in) for the ring; and a strip
+  with its weave drawn on, rolled into a tube, for the finger trap. Neither OrigamiOK's pleats nor its cuts are used.
 - **Fox.** Okuda's design isn't openly licensed. It was kept on 18 October 2026 because it's very widely
   folded and taught (see the decisions log in `PLAN.md`). The gallery doesn't credit him yet. If the rule
   is tightened, the choices are: ask for permission, swap in a traditional fox, or design Gami's own.

@@ -135,6 +135,9 @@ export const en = {
     'green-leaf': { title: 'Green leaf', blurb: 'A plain green leaf, its halves raised either side of the midrib.' },
     pyramid: { title: 'Pyramid', blurb: 'A tall pyramid with flat sides, popped up from a creased square. No glue.' },
     diamond: { title: 'Diamond', blurb: 'A gem: an octagon popped down into a point, like a cut stone. No glue.' },
+    bracelet: { title: 'Bracelet', blurb: 'A square folded into a narrow band and curled round into a bracelet.' },
+    'diamond-ring': { title: 'Diamond ring', blurb: 'A band curled round into a ring, with a little folded diamond on top.' },
+    'finger-trap': { title: 'Finger trap', blurb: 'A long, thin woven tube to slip your fingers into. No cuts.' },
   },
   notFound: {
     title: 'This page got folded away',

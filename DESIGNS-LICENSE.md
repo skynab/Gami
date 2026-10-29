@@ -32,6 +32,9 @@ site's source code, or any other model in the gallery.
 | Green leaf | `src/models/recipes/green-leaf.ts` | October 2026 |
 | Pyramid | `src/models/recipes/pyramid.ts` | October 2026 |
 | Diamond | `src/models/recipes/diamond.ts` | October 2026 |
+| Bracelet | `src/models/recipes/bracelet.ts` | October 2026 |
+| Diamond ring | `src/models/recipes/diamond-ring.ts` | October 2026 |
+| Finger trap | `src/models/recipes/finger-trap.ts` | October 2026 |
 
 ## Other models in the gallery
 

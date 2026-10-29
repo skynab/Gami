@@ -2163,4 +2163,40 @@ export const ja: Record<string, string> = {
     "さらにもう一度。何枚も重なった細いくさび形になります。しっかり折りすじをつけます。",
   "Unfold it all: sixteen creases run out from the middle.":
     "すべて広げます。まん中から十六本の折りすじが出ています。",
+  "Start yellow side up. Fold the top and bottom edges to the middle.":
+    "黄色の面を上にして始めます。上と下のふちをまん中に合わせて折ります。",
+  "Fold the new top and bottom edges to the middle again: a narrow band.":
+    "新しい上と下のふちを、もう一度まん中に合わせて折ります。細い帯になります。",
+  "Turn the band over.":
+    "帯をうら返します。",
+  "Curl it round":
+    "丸める",
+  "Curl the band round into a ring, until its ends meet. Slip it on your wrist.":
+    "帯を丸めて輪にし、はしとはしを合わせます。手首にはめましょう。",
+  "Fold the band":
+    "帯を折る",
+  "Fold the strip’s long edges to its middle: the band.":
+    "細長い紙の長いふちをまん中に合わせて折ります。これが輪になる帯です。",
+  "Fold the gem":
+    "宝石を折る",
+  "Light side up, fold the small square’s four corners to its middle: a little faceted diamond.":
+    "明るい面を上にして、小さい正方形の四つの角をまん中に折ります。面のある小さなダイヤモンドになります。",
+  "Set the gem":
+    "宝石をのせる",
+  "Lay the gem on the left end of the band.":
+    "宝石を帯の左はしにのせます。",
+  "Curl the band round":
+    "帯を丸める",
+  "Curl the rest of the band down and round underneath, so it meets the end under the gem. Your ring is ready to wear.":
+    "帯ののこりを下へ丸め、宝石の下のはしまで回します。指輪の完成です。",
+  "Turn it over: a plain strip.":
+    "うら返します。何もない帯になります。",
+  "Draw the weave":
+    "あみ目をかく",
+  "Draw lines slanting both ways across the strip, criss-crossing, like a woven tube.":
+    "帯に、両方向にななめの線を交差させてかき、あんだ筒のようにします。",
+  "Roll it into a tube":
+    "筒に丸める",
+  "Roll the strip round across its width into a long, thin tube, the lines outside. Slip a finger in each end and pull!":
+    "帯を横はばの向きに丸め、線を外がわにして、細長い筒にします。両はしに指を一本ずつ入れて、引っぱってみましょう！",
 };

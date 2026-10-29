@@ -133,6 +133,9 @@ export const fr: Messages = {
     'green-leaf': { title: 'Feuille verte', blurb: 'Une feuille verte toute simple, ses moitiés relevées de chaque côté de la nervure.' },
     pyramid: { title: 'Pyramide', blurb: 'Une haute pyramide aux faces plates, dressée à partir d’un carré marqué de plis. Sans colle.' },
     diamond: { title: 'Diamant', blurb: 'Une gemme : un octogone qui descend en pointe, comme une pierre taillée. Sans colle.' },
+    bracelet: { title: 'Bracelet', blurb: 'Un carré plié en bande étroite et enroulé en bracelet.' },
+    'diamond-ring': { title: 'Bague diamant', blurb: 'Une bande enroulée en bague, surmontée d’un petit diamant plié.' },
+    'finger-trap': { title: 'Piège à doigts', blurb: 'Un long tube fin et tressé où glisser les doigts. Sans découpe.' },
   },
   notFound: {
     title: 'Cette page a été repliée',
