@@ -2425,4 +2425,22 @@ export const fr: Record<string, string> = {
     "Terminez la boule",
   "Glue on the other six flowers, the last one on top, to close the ball. Done!":
     "Collez les six autres fleurs, la dernière en haut, pour fermer la boule. C’est fini !",
+  "Fold four more cards the same way, two at a time: six units in all.":
+    "Pliez quatre autres cartes de la même façon, deux par deux : six modules en tout.",
+  "Turn all six units over, so their flaps are underneath.":
+    "Retournez les six modules, rabats dessous.",
+  "Draw the dots":
+    "Dessinez les points",
+  "Draw the dots of a dice in the middle of each square, a different number on each, 1 to 6.":
+    "Dessinez les points d’un dé au milieu de chaque carré, un nombre différent sur chacun, de 1 à 6.",
+  "Turn the units back over, flaps up.":
+    "Retournez à nouveau les modules, rabats dessus.",
+  "Start the dice":
+    "Commencez le dé",
+  "Hold the 6 flaps up for the bottom, dots down. Stand the 2 and the 5 on it, front and back, dots out, their lower flaps inside, lying on the bottom.":
+    "Prenez le 6, rabats en haut et points dessous, pour le fond. Dressez dessus le 2 et le 5, devant et derrière, points vers l’extérieur, leurs rabats du bas à l’intérieur, posés sur le fond.",
+  "Slide the 3 and the 4 in at the left and right, outside the bottom’s flaps, their own flaps inside the 2 and the 5.":
+    "Glissez le 3 et le 4 à gauche et à droite, à l’extérieur des rabats du fond, leurs propres rabats à l’intérieur du 2 et du 5.",
+  "Push the 1 down on top, its flaps inside the 3 and the 4, over the upper flaps of the 2 and the 5. Roll it!":
+    "Enfoncez le 1 sur le dessus, ses rabats à l’intérieur du 3 et du 4, sur les rabats du haut du 2 et du 5. Lancez-le !",
 };

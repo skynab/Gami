@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type PointerEvent } from 'react';
 import type { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { OrigamiHeartIcon, OrigamiStarIcon, PaperIcon, PenIcon, ScissorsIcon, TapeIcon } from '../app/icons';
+import { GlueIcon, OrigamiHeartIcon, OrigamiStarIcon, PaperIcon, PenIcon, ScissorsIcon, TapeIcon } from '../app/icons';
 import { modelUrl } from '../models';
 import { useFavorite, useFavorites } from '../state/favorites';
 import { readProgress } from '../state/progress';
@@ -223,8 +223,8 @@ export function Needs({ tools, paper }: { tools?: Tool[]; paper?: number }) {
   );
 }
 
-const TOOL_LABELS = { scissors: 'card.needsScissors', pen: 'card.needsPen', tape: 'card.needsTape' } as const satisfies Record<Tool, string>;
-const TOOL_ICONS = { scissors: ScissorsIcon, pen: PenIcon, tape: TapeIcon } satisfies Record<Tool, unknown>;
+const TOOL_LABELS = { scissors: 'card.needsScissors', pen: 'card.needsPen', tape: 'card.needsTape', glue: 'card.needsGlue' } as const satisfies Record<Tool, string>;
+const TOOL_ICONS = { scissors: ScissorsIcon, pen: PenIcon, tape: TapeIcon, glue: GlueIcon } satisfies Record<Tool, unknown>;
 
 /** A purple origami star by the title of a model that's new (`NEW_SINCE`). */
 export function NewStar({ model }: { model: ModelInfo }) {

@@ -2425,4 +2425,22 @@ export const es: Record<string, string> = {
     "Termina la bola",
   "Glue on the other six flowers, the last one on top, to close the ball. Done!":
     "Pega las otras seis flores, la última arriba, para cerrar la bola. ¡Listo!",
+  "Fold four more cards the same way, two at a time: six units in all.":
+    "Dobla cuatro tarjetas más de la misma manera, de dos en dos: seis módulos en total.",
+  "Turn all six units over, so their flaps are underneath.":
+    "Dale la vuelta a los seis módulos, con las solapas debajo.",
+  "Draw the dots":
+    "Dibuja los puntos",
+  "Draw the dots of a dice in the middle of each square, a different number on each, 1 to 6.":
+    "Dibuja los puntos de un dado en el centro de cada cuadrado, un número distinto en cada uno, del 1 al 6.",
+  "Turn the units back over, flaps up.":
+    "Vuelve a darles la vuelta a los módulos, con las solapas arriba.",
+  "Start the dice":
+    "Empieza el dado",
+  "Hold the 6 flaps up for the bottom, dots down. Stand the 2 and the 5 on it, front and back, dots out, their lower flaps inside, lying on the bottom.":
+    "Sujeta el 6 con las solapas hacia arriba como base, con los puntos abajo. Pon de pie el 2 y el 5 encima, delante y detrás, con los puntos hacia fuera y sus solapas de abajo por dentro, apoyadas en la base.",
+  "Slide the 3 and the 4 in at the left and right, outside the bottom’s flaps, their own flaps inside the 2 and the 5.":
+    "Mete el 3 y el 4 a izquierda y derecha, por fuera de las solapas de la base, con sus propias solapas por dentro del 2 y el 5.",
+  "Push the 1 down on top, its flaps inside the 3 and the 4, over the upper flaps of the 2 and the 5. Roll it!":
+    "Encaja el 1 arriba, con sus solapas por dentro del 3 y el 4, sobre las solapas de arriba del 2 y el 5. ¡A tirarlo!",
 };

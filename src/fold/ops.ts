@@ -95,9 +95,10 @@ export type Op =
   /**
    * Puts units together in 3D (see assemble.ts): each piece bent along lines, then set down with the point `from`
    * at `to`, the table's +x along `x` and its up along `up`. Worked out from the flat state before a run of these
-   * steps, each adding to the run's pieces; a face goes with the last piece that picks it.
+   * steps, each adding to the run's pieces; a face goes with the last piece that picks it. `glue`: the pieces are
+   * glued as they go together (not drawn), so the model needs glue.
    */
-  | { op: 'assemble'; pieces: AssemblyPiece[] }
+  | { op: 'assemble'; pieces: AssemblyPiece[]; glue?: boolean }
   /** Bends in 3D. Lines are found on the flat state before a run of shaping steps; each adds to the run's bends. */
   /** `corners`: bends whose lines cross are walls rising together, their corners pinching into ears. */
   /** `chained`: the bends open folds along the paper from the face at this point of the sheet (stacked pleats). */
@@ -193,6 +194,7 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
             }, p),
           };
         }),
+        ...opt(o, 'glue', bool, path),
       };
     case 'copy':
       return {
@@ -464,7 +466,12 @@ export function opKind(op: Op): StepKind {
 /** The tools beyond paper that steps need: scissors for a cut, a pen for drawing, tape, parts of a `together` included. */
 export function toolsNeeded(steps: Step[]): Tool[] {
   const kinds = new Set<StepKind>();
-  const add = (op: Op): void => void (op.op === 'together' ? op.ops.forEach(add) : kinds.add(opKind(op)));
+  let glue = false;
+  const add = (op: Op): void => {
+    if (op.op === 'together') op.ops.forEach(add);
+    else kinds.add(opKind(op));
+    if (op.op === 'assemble' && op.glue) glue = true;
+  };
   for (const s of steps) {
     if (s.op) add(s.op);
     else if (s.kind) kinds.add(s.kind);
@@ -473,6 +480,7 @@ export function toolsNeeded(steps: Step[]): Tool[] {
     ...(kinds.has('cut') ? (['scissors'] as const) : []),
     ...(kinds.has('draw') ? (['pen'] as const) : []),
     ...(kinds.has('tape') ? (['tape'] as const) : []),
+    ...(glue ? (['glue'] as const) : []),
   ];
 }
 

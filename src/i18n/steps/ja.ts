@@ -2425,4 +2425,22 @@ export const ja: Record<string, string> = {
     "ボールを仕上げる",
   "Glue on the other six flowers, the last one on top, to close the ball. Done!":
     "残りの六つの花をはり、最後のひとつを上にのせてボールをとじます。完成です！",
+  "Fold four more cards the same way, two at a time: six units in all.":
+    "あと四枚を二枚ずつ同じように折ります。ユニットは全部で六つです。",
+  "Turn all six units over, so their flaps are underneath.":
+    "六つのユニットをぜんぶ裏返して、フラップを下にします。",
+  "Draw the dots":
+    "目をかく",
+  "Draw the dots of a dice in the middle of each square, a different number on each, 1 to 6.":
+    "それぞれの正方形のまん中にサイコロの目をかきます。1から6まで、ひとつずつちがう数にします。",
+  "Turn the units back over, flaps up.":
+    "ユニットを裏返してもどし、フラップを上にします。",
+  "Start the dice":
+    "サイコロを組みはじめる",
+  "Hold the 6 flaps up for the bottom, dots down. Stand the 2 and the 5 on it, front and back, dots out, their lower flaps inside, lying on the bottom.":
+    "6をフラップを上、目を下にして底にします。その前とうしろに2と5を目を外にして立て、下のフラップを内側で底の上にのせます。",
+  "Slide the 3 and the 4 in at the left and right, outside the bottom’s flaps, their own flaps inside the 2 and the 5.":
+    "3と4を左右から、底のフラップの外側に差しこみます。自分のフラップは2と5の内側に入れます。",
+  "Push the 1 down on top, its flaps inside the 3 and the 4, over the upper flaps of the 2 and the 5. Roll it!":
+    "1を上からおしこみます。フラップは3と4の内側に、2と5の上のフラップの上に入れます。ふってみましょう！",
 };

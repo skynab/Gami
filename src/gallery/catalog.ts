@@ -132,7 +132,8 @@ export const MODELS: ModelInfo[] = [
   { id: 'easy-sword', title: 'Easy sword', blurb: 'A silver sword with a crossguard and a short handle, from one square.', difficulty: 1, category: 'toy', steps: 9, minutes: 5, sheets: 1, added: '2026-10-29' },
   { id: 'rainbow-chain', title: 'Rainbow chain', blurb: 'Twenty-eight links in seven colours, each slid into the last, in a long zigzag. No glue.', difficulty: 2, category: 'modular', steps: 14, minutes: 40, sheets: 28, paper: 2.5, added: '2026-10-29' },
   { id: 'business-card-cube', title: 'Business card cube', blurb: 'Six cards folded into units that lock together into a cube, every edge held by a flap. No glue.', difficulty: 2, category: 'modular', steps: 9, minutes: 15, sheets: 6, paper: 1.75, added: '2026-10-29' },
-  { id: 'kusudama', title: 'Kusudama flower ball', blurb: 'Sixty petals glued into twelve flowers, and the flowers into a ball.', difficulty: 3, category: 'modular', steps: 14, minutes: 120, sheets: 60, added: '2026-10-29' },
+  { id: 'dice', title: 'Dice', blurb: 'Six white cards locked into a cube, flaps hidden inside, with the dots drawn on. No glue.', difficulty: 2, category: 'modular', steps: 12, minutes: 20, sheets: 6, paper: 1.75, needs: ['pen'], added: '2026-10-29' },
+  { id: 'kusudama', title: 'Kusudama flower ball', blurb: 'Sixty petals glued into twelve flowers, and the flowers into a ball.', difficulty: 3, category: 'modular', steps: 14, minutes: 120, sheets: 60, needs: ['glue'], added: '2026-10-29' },
   // Coming soon: listed, with no steps yet.
   { id: 'boat', title: 'Boat', blurb: 'The classic paper boat. It really floats, for a while.', difficulty: 2, category: 'object', minutes: 6, sheets: 1 },
   { id: 'iris', title: 'Iris', blurb: 'Three petals up, three down, from the frog base.', difficulty: 4, category: 'flower', minutes: 20, sheets: 1 },

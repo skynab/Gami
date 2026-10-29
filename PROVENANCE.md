@@ -111,6 +111,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `easy-sword` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's easy sword, from a kite with its end folded up and back down for the crossguard; Gilad's database lists no Traditional sword (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 29 Oct 2026 |
 | `rainbow-chain` | Traditional: the gum wrapper chain (Gilad's database: "Gum wrapper chain", Traditional, in *Creating Origami*), folded in rainbow colours after OrigamiOK's rainbow chain, which names no designer (see the notes) | None needed: nobody owns it | [Origami Resource Center: bubble gum wrapper chain](https://origami-resource-center.com/bubble-gum-wrapper-paper-chain/), for the order of folds; [OrigamiOK: rainbow chain](https://origamiok.com/origami-rainbow-chain/), for the idea | Clear | 29 Oct 2026 |
 | `business-card-cube` | Traditional: the business card cube (Gilad's database: "Business card cube", Traditional, in Thomas Hull's *Project Origami*), in place of OrigamiOK's cube, which is Mitsunobu Sonobe's unit (see the notes) | None needed: nobody owns it | none recorded: the common sequence, two cards crossed and each one's ends folded round the other | Clear | 29 Oct 2026 |
+| `dice` | Traditional: the business card cube (Gilad's database: "Business card cube", Traditional) put together with its flaps inside, the dots drawn on, in place of OrigamiOK's dice, which is Stéphane Gigandet's (see the notes) | None needed: nobody owns it | none recorded: as `business-card-cube` | Clear | 29 Oct 2026 |
 | `kusudama` | Traditional: the flower kusudama (Gilad's database: "Flower Kusudama", Traditional, in *Charming Flower Origami*), as OrigamiOK's kusudama flower ball, which names no designer (see the notes) | None needed: nobody owns it | [OrigamiOK: kusudama flower ball](https://origamiok.com/origami-kusudama-flower-ball/), for the order of folds | Clear | 29 Oct 2026 |
 
 ### Notes
@@ -118,7 +119,8 @@ noted when it was written, and the model was folded from the common traditional 
 - **Modular models from OrigamiOK** (checked 29 October 2026; the plan is `docs/modular-plan.md`). OrigamiOK's
   modular pages name no designer either. Its rainbow chain wasn't found by name; Gami folds the traditional gum
   wrapper chain instead, from strips rather than squares, which gives the same zigzag of colours. Its cube is
-  Mitsunobu Sonobe's unit, so Gami's cube is the traditional business card cube. Its kusudama flower ball is the
+  Mitsunobu Sonobe's unit, so Gami's cube is the traditional business card cube; its dice, too, is the business card cube, its flaps inside and its dots drawn on,
+  as OrigamiOK's (Stéphane Gigandet's) isn't open. Its kusudama flower ball is the
   traditional flower kusudama. Its eight-point ninja star (every 8-unit ninja star in Gilad's database has a named
   designer), magic circle (Kumasaka Hiroshi's) and infinity cube were left out.
 - **OrigamiOK** (checked 28 October 2026). Its pages name no designer and give no licence for the designs, only a

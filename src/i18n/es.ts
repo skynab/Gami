@@ -60,6 +60,7 @@ export const es: Messages = {
     needsScissors: 'Necesita tijeras',
     needsPen: 'Necesita un bolígrafo',
     needsTape: 'Necesita cinta adhesiva',
+    needsGlue: 'Necesita pegamento',
     paperA4: 'Necesita papel A4',
     paperLetter: 'Necesita papel tamaño carta',
     paperRatio: 'Necesita un rectángulo de papel {{ratio}} veces más largo que ancho',
@@ -143,6 +144,7 @@ export const es: Messages = {
     'easy-sword': { title: 'Espada fácil', blurb: 'Una espada plateada con guarda y un mango corto, con un solo cuadrado.' },
     'rainbow-chain': { title: 'Cadena arcoíris', blurb: 'Veintiocho eslabones de siete colores, cada uno metido en el anterior, en un largo zigzag. Sin pegamento.' },
     'business-card-cube': { title: 'Cubo de tarjetas', blurb: 'Seis tarjetas dobladas en módulos que encajan en un cubo, cada arista sujeta por una solapa. Sin pegamento.' },
+    dice: { title: 'Dado', blurb: 'Seis tarjetas blancas encajadas en un cubo, con las solapas escondidas dentro y los puntos dibujados. Sin pegamento.' },
     kusudama: { title: 'Kusudama de flores', blurb: 'Sesenta pétalos pegados en doce flores, y las flores en una bola.' },
   },
   notFound: {

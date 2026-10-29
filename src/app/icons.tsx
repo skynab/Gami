@@ -98,6 +98,13 @@ export const TapeIcon = icon(
     <path d="M15 11h6v4h-6" />
   </>,
 );
+/** A glue stick, its cap off. */
+export const GlueIcon = icon(
+  <>
+    <rect x="7.5" y="11" width="9" height="10" rx="1.5" />
+    <path d="M9 11V8h6v3M10.5 8V5.5a1.5 1.5 0 0 1 3 0V8" />
+  </>,
+);
 /** Lines getting shorter beside a downward arrow: the order of a list. */
 export const SortIcon = icon(<path d="M7 4v16M3.5 16.5 7 20l3.5-3.5M13 6h8M13 12h6M13 18h3" />);
 /**

@@ -14,15 +14,31 @@ const COLOURS: [string, string][] = [
  * each flap lying over the outside of the next face, so every edge is held by one flap. No glue.
  */
 export function businessCardCube() {
+  return cardCube('cube');
+}
+
+/**
+ * A dice: the business card cube in white cards with its flaps tucked inside, so each face is one unit's plain
+ * square, and the dots drawn on the squares before it's put together, opposite faces adding up to seven.
+ */
+export function dice() {
+  return cardCube('dice');
+}
+
+/** Each unit's number on the dice: the bottom 6 and the top 1, the left and right 3 and 4, the front and back 2 and 5. */
+const DOTS = [6, 1, 3, 4, 2, 5];
+
+function cardCube(kind: 'cube' | 'dice') {
+  const isDice = kind === 'dice';
   // Card `n` has sheet coordinates around (10n, 0), its long side across. The first lies apart; the rest in a pile.
   const sheets: (Sheet & { at?: Vec2 })[] = Array.from({ length: 6 }, (_, n) => ({
     size: [1.75, 1] as Vec2,
-    front: COLOURS[n >> 1][0],
-    back: COLOURS[n >> 1][1],
+    front: isDice ? '#f6f3ec' : COLOURS[n >> 1][0],
+    back: isDice ? '#e9e3d4' : COLOURS[n >> 1][1],
     origin: [10 * n, 0] as Vec2,
     at: (n ? [0, -1.6] : [0, 0]) as Vec2,
   }));
-  const r = new Recipe({ id: 'business-card-cube', title: 'Business card cube', sheets, card: 'finished' });
+  const r = new Recipe({ id: isDice ? 'dice' : 'business-card-cube', title: isDice ? 'Dice' : 'Business card cube', sheets, card: 'finished' });
   const card = (n: number) => ([u]: Vec2) => Math.abs(u - 10 * n) < 5;
 
   // A unit: the middle square of a card, 1 across, its ends folded over as flaps `f` wide.
@@ -38,9 +54,35 @@ export function businessCardCube() {
 
   // Units lie in two rows. Even cards have their flaps at their left and right; odd ones at the top and bottom.
   const at: Vec2[] = [[0, 0], [1.5, 0], [-1.5, 0], [-1.5, 1.4], [0, 1.4], [1.5, 1.4]];
-  r.together({ title: 'Make two more pairs', text: 'Fold four more cards the same way, two at a time: six units in all, two of each colour.' }, (q) => {
-    q.copy({ title: '' }, 0, [2, 4], [at[2], at[4]]).copy({ title: '' }, 1, [3, 5], [at[3], at[5]]);
-  });
+  r.together(
+    { title: 'Make two more pairs', text: isDice ? 'Fold four more cards the same way, two at a time: six units in all.' : 'Fold four more cards the same way, two at a time: six units in all, two of each colour.' },
+    (q) => {
+      q.copy({ title: '' }, 0, [2, 4], [at[2], at[4]]).copy({ title: '' }, 1, [3, 5], [at[3], at[5]]);
+    },
+  );
+
+  // A dice's dots go on the side of each square that ends up outside, which lies underneath for now.
+  if (isDice) {
+    r.turnOver('Turn all six units over, so their flaps are underneath.');
+    const R = 0.075;
+    const d = 0.25;
+    const spots: Record<number, Vec2[]> = {
+      1: [[0, 0]],
+      2: [[-d, -d], [d, d]],
+      3: [[-d, -d], [0, 0], [d, d]],
+      4: [[-d, -d], [d, -d], [-d, d], [d, d]],
+      5: [[-d, -d], [d, -d], [0, 0], [-d, d], [d, d]],
+      6: [[-d, -d], [d, -d], [-d, 0], [d, 0], [-d, d], [d, d]],
+    };
+    const dot = ([x, z]: Vec2) => ({ fill: Array.from({ length: 16 }, (_, i): Vec2 => [x + R * Math.cos((i * Math.PI) / 8), z + R * Math.sin((i * Math.PI) / 8)]) });
+    r.draw(
+      { title: 'Draw the dots', text: 'Draw the dots of a dice in the middle of each square, a different number on each, 1 to 6.' },
+      DOTS.flatMap((count, n) => {
+        const [x, z] = r.where({ paper: [10 * n, 0] });
+        return spots[count].map(([dx, dz]) => dot([x + dx, z + dz]));
+      }),
+    ).turnOver('Turn the units back over, flaps up.');
+  }
 
   // Opening a unit's flaps square: each turns up by 90° about the edge of the square it's folded over. A flap is
   // the paper of a card's ends lying, now, on its side of the unit's middle.
@@ -60,11 +102,11 @@ export function businessCardCube() {
     });
 
   // The cube, 1 across, its middle `C`, just clear of the table. Each unit goes on a face with its flaps inside,
-  // reaching over the outside of the faces beside it along `along`: top and bottom over the left and right, the
-  // left and right over the front and back, the front and back over the top and bottom. Each face sits a
-  // paper's thickness in from the flaps over it.
+  // reaching along `along` to the faces beside it: top and bottom to the left and right, the left and right to the
+  // front and back, the front and back to the top and bottom. The cube's flaps lie over the outside of those faces,
+  // each face sitting a paper's thickness in from them; a dice's lie inside, each face a paper's thickness out.
   const C: Vec3 = [0, 0.51, 0.7];
-  const inset = 0.004;
+  const inset = isDice ? -0.015 : 0.004;
   // The cube is turned a little about the upright, so it's seen corner on, two sides and its top showing.
   const TURN = (35 * Math.PI) / 180;
   const turned = ([x, y, z]: Vec3): Vec3 => [x * Math.cos(TURN) + z * Math.sin(TURN), y, -x * Math.sin(TURN) + z * Math.cos(TURN)];
@@ -87,8 +129,14 @@ export function businessCardCube() {
     return { sheet: n, bends: open(n), pose: { from: table(...at[n]), to, x, up } };
   };
 
+  r.assemble({ title: 'Open the flaps', text: 'Open every flap out square, standing straight up from its unit.' }, [0, 1, 2, 3, 4, 5].map((n) => ({ sheet: n, bends: open(n) })));
+  if (isDice)
+    return r
+      .assemble({ title: 'Start the dice', text: 'Hold the 6 flaps up for the bottom, dots down. Stand the 2 and the 5 on it, front and back, dots out, their lower flaps inside, lying on the bottom.' }, [onCube(0), onCube(4), onCube(5)])
+      .assemble({ title: 'Add the sides', text: 'Slide the 3 and the 4 in at the left and right, outside the bottom’s flaps, their own flaps inside the 2 and the 5.' }, [onCube(2), onCube(3)])
+      .assemble({ title: 'Put the lid on', text: 'Push the 1 down on top, its flaps inside the 3 and the 4, over the upper flaps of the 2 and the 5. Roll it!' }, [onCube(1)])
+      .build();
   return r
-    .assemble({ title: 'Open the flaps', text: 'Open every flap out square, standing straight up from its unit.' }, [0, 1, 2, 3, 4, 5].map((n) => ({ sheet: n, bends: open(n) })))
     .assemble({ title: 'Start the cube', text: 'Hold a red unit flaps up for the bottom. Stand the blue units on it, front and back, their lower flaps tucked under the bottom.' }, [onCube(0), onCube(4), onCube(5)])
     .assemble({ title: 'Add the sides', text: 'Slide the yellow units in at the left and right, inside the bottom’s flaps, their own flaps over the blue faces.' }, [onCube(2), onCube(3)])
     .assemble({ title: 'Put the lid on', text: 'Push the last red unit down on top, its flaps over the yellow faces and under the blue units’ upper flaps. Done!' }, [onCube(1)])

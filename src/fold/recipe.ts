@@ -419,9 +419,10 @@ export class Recipe {
    * the sheet), is bent along lines as `shape` bends, then set down with the point `from` at `to`, the table's
    * +x along `x` and its up along `up`. Lines and points are found on the last flat state; a later assembly step
    * adds to this one's pieces, and a piece listed again is bent and placed afresh. Nothing can be folded after.
+   * With `glue`, the step says the pieces are glued as they go together, so the model needs glue.
    */
   assemble(
-    step: { title: string; text?: string },
+    step: { title: string; text?: string; glue?: boolean },
     pieces: { sheet?: number; only?: (centre: Vec2) => boolean; bends?: ShapeBend[]; pose?: { from: At; to: Vec3; x: Vec3; up: Vec3 } }[],
   ): this {
     const base = this.assembling?.base ?? this.current;
@@ -457,6 +458,7 @@ export class Recipe {
           }),
           ...(p.pose && { pose: p.pose }),
         })),
+        ...(step.glue && { glue: true }),
       };
       this.push({ title: step.title, text: step.text, kind: 'assemble' }, this.assembling ? reparent(this.current, frame) : frame, op);
     } catch (e) {

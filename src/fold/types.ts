@@ -128,5 +128,5 @@ export interface About {
   minutes?: number;
 }
 
-/** Tools beyond paper: scissors for a cut, a pen for drawing, tape to hold paper together. */
-export type Tool = 'scissors' | 'pen' | 'tape';
+/** Tools beyond paper: scissors for a cut, a pen for drawing, tape or glue to hold paper together. */
+export type Tool = 'scissors' | 'pen' | 'tape' | 'glue';

@@ -153,11 +153,11 @@ export function kusudama() {
   const strip = (p: { sheet: number; bends: ShapeBend[]; pose: ReturnType<typeof pose> }) => ({ sheet: p.sheet, bends: p.bends, pose: { from: p.pose.from, to: p.pose.to, x: p.pose.x, up: p.pose.up } });
   const range = (from: number, to: number) => Array.from({ length: to - from }, (_, i) => from + i);
   return r
-    .assemble({ title: 'Glue a petal', text: 'Glue the two folded flaps together, so the petal closes into a cone.' }, [{ sheet: 0, bends: cone(0) }])
-    .assemble({ title: 'Glue five into a flower', text: 'Glue five petals side by side, their points together, into a flower.' }, onTable(0).map(strip))
-    .assemble({ title: 'Make the other flowers', text: `Glue the other petals into ${FLOWERS - 1} more flowers the same way.` }, range(1, FLOWERS).flatMap(onTable).map(strip))
-    .assemble({ title: 'Start the ball', text: 'Glue the flowers together where their petals meet: one in the middle and five round it, a bowl.' }, inBall(range(0, 6)).map(strip))
-    .assemble({ title: 'Finish the ball', text: 'Glue on the other six flowers, the last one on top, to close the ball. Done!' }, inBall(range(6, FLOWERS)).map(strip))
+    .assemble({ glue: true, title: 'Glue a petal', text: 'Glue the two folded flaps together, so the petal closes into a cone.' }, [{ sheet: 0, bends: cone(0) }])
+    .assemble({ glue: true, title: 'Glue five into a flower', text: 'Glue five petals side by side, their points together, into a flower.' }, onTable(0).map(strip))
+    .assemble({ glue: true, title: 'Make the other flowers', text: `Glue the other petals into ${FLOWERS - 1} more flowers the same way.` }, range(1, FLOWERS).flatMap(onTable).map(strip))
+    .assemble({ glue: true, title: 'Start the ball', text: 'Glue the flowers together where their petals meet: one in the middle and five round it, a bowl.' }, inBall(range(0, 6)).map(strip))
+    .assemble({ glue: true, title: 'Finish the ball', text: 'Glue on the other six flowers, the last one on top, to close the ball. Done!' }, inBall(range(6, FLOWERS)).map(strip))
     .build();
 }
 

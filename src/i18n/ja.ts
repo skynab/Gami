@@ -60,6 +60,7 @@ export const ja: Messages = {
     needsScissors: 'はさみが必要',
     needsPen: 'ペンが必要',
     needsTape: 'セロハンテープが必要',
+    needsGlue: 'のりが必要',
     paperA4: 'A4の紙を使います',
     paperLetter: 'レターサイズの紙を使います',
     paperRatio: '縦が横の{{ratio}}倍の長方形の紙を使います',
@@ -143,6 +144,7 @@ export const ja: Messages = {
     'easy-sword': { title: 'かんたんな剣', blurb: 'つばと短い持ち手のついた銀色の剣。正方形一枚で。' },
     'rainbow-chain': { title: 'にじのくさり', blurb: '7色の輪を28個、ひとつずつ前の輪に差しこんでつなぐ、長いジグザグのくさり。のりは使いません。' },
     'business-card-cube': { title: '名刺のキューブ', blurb: '名刺6枚をユニットに折って組み合わせる立方体。どの辺もフラップでとめます。のりは使いません。' },
+    dice: { title: 'サイコロ', blurb: '白い名刺6枚を組み合わせた立方体。フラップは内側にかくし、目をかきこみます。のりは使いません。' },
     kusudama: { title: '花のくす玉', blurb: '花びら60枚を12個の花にはり、花をはり合わせてボールにします。' },
   },
   notFound: {

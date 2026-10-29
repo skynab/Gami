@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { toFlat } from './fold';
 import { fromFoldFile, toFoldFile } from './fold-format';
 import { framesOf } from './frames';
-import { applyOp } from './ops';
+import { applyOp, toolsNeeded } from './ops';
 import { paper, Recipe, table } from './recipe';
 import type { FoldFrame, Vec2, Vec3 } from './types';
 import { problems } from './validate';
@@ -89,6 +89,14 @@ describe('putting units together in 3D', () => {
     const again = replayLast(model);
     expect(again.vertices_coords.length).toBe(model.steps.at(-1)!.frame.vertices_coords.length);
     again.vertices_coords.forEach((p, i) => near(p, model.steps.at(-1)!.frame.vertices_coords[i]));
+  });
+  it('says when pieces are glued, so the model needs glue', () => {
+    const glued = two()
+      .assemble({ title: 'Glue it on', glue: true }, [{ sheet: 1, pose: { from: table(1, 0), to: [0, 1, 0], x: [0, 1, 0], up: [1, 0, 0] } }])
+      .build();
+    const read = fromFoldFile(JSON.parse(JSON.stringify(toFoldFile(glued))));
+    expect(toolsNeeded(read.steps)).toEqual(['glue']);
+    expect(toolsNeeded(two().assemble({ title: 'Put it on' }, [{ sheet: 1, pose: { from: table(1, 0), to: [0, 1, 0], x: [0, 1, 0], up: [1, 0, 0] } }]).build().steps)).toEqual([]);
   });
 });
 

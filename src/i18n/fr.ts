@@ -60,6 +60,7 @@ export const fr: Messages = {
     needsScissors: 'Il faut des ciseaux',
     needsPen: 'Il faut un stylo',
     needsTape: 'Il faut du ruban adhésif',
+    needsGlue: 'Il faut de la colle',
     paperA4: 'Demande du papier A4',
     paperLetter: 'Demande du papier format Lettre US',
     paperRatio: 'Demande un rectangle de papier {{ratio}} fois plus long que large',
@@ -143,6 +144,7 @@ export const fr: Messages = {
     'easy-sword': { title: 'Épée facile', blurb: 'Une épée argentée avec une garde et un manche court, dans un seul carré.' },
     'rainbow-chain': { title: 'Chaîne arc-en-ciel', blurb: 'Vingt-huit maillons de sept couleurs, chacun glissé dans le précédent, en un long zigzag. Sans colle.' },
     'business-card-cube': { title: 'Cube en cartes de visite', blurb: 'Six cartes pliées en modules qui s’emboîtent en un cube, chaque arête tenue par un rabat. Sans colle.' },
+    dice: { title: 'Dé', blurb: 'Six cartes blanches emboîtées en un cube, rabats cachés à l’intérieur, points dessinés. Sans colle.' },
     kusudama: { title: 'Kusudama de fleurs', blurb: 'Soixante pétales collés en douze fleurs, et les fleurs en une boule.' },
   },
   notFound: {
