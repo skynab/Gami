@@ -2,12 +2,12 @@ import { useEffect, useRef, useState, type PointerEvent } from 'react';
 import type { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { OrigamiHeartIcon, PaperIcon, PenIcon, ScissorsIcon, TapeIcon } from '../app/icons';
+import { OrigamiHeartIcon, OrigamiStarIcon, PaperIcon, PenIcon, ScissorsIcon, TapeIcon } from '../app/icons';
 import { modelUrl } from '../models';
 import { useFavorite, useFavorites } from '../state/favorites';
 import { readProgress } from '../state/progress';
 import type { Sheet } from '../fold/types';
-import { levelOf, type Difficulty, type ModelInfo, type Tool } from './catalog';
+import { isNew, levelOf, type Difficulty, type ModelInfo, type Tool } from './catalog';
 
 export function ModelCard({ model }: { model: ModelInfo }) {
   const { t } = useTranslation();
@@ -23,6 +23,7 @@ export function ModelCard({ model }: { model: ModelInfo }) {
         <div className="card-body">
           <div className="card-title">
             <span>{model.title}</span>
+            <NewStar model={model} />
             <Dots difficulty={model.difficulty} />
           </div>
           <p className="muted small">{model.blurb}</p>
@@ -69,6 +70,7 @@ export function PairCard({ models }: { models: [ModelInfo, ModelInfo] }) {
           <div key={model.id} className="pair-row">
             <Link to={`/learn/${model.id}`} className="card-title" {...halves[i].play}>
               <span>{model.title}</span>
+              <NewStar model={model} />
               <Dots difficulty={model.difficulty} />
             </Link>
             <p className="muted small">{details(model, t)}</p>
@@ -223,6 +225,18 @@ export function Needs({ tools, paper }: { tools?: Tool[]; paper?: number }) {
 
 const TOOL_LABELS = { scissors: 'card.needsScissors', pen: 'card.needsPen', tape: 'card.needsTape' } as const satisfies Record<Tool, string>;
 const TOOL_ICONS = { scissors: ScissorsIcon, pen: PenIcon, tape: TapeIcon } satisfies Record<Tool, unknown>;
+
+/** A purple origami star by the title of a model that's new (`NEW_SINCE`). */
+export function NewStar({ model }: { model: ModelInfo }) {
+  const { t } = useTranslation();
+  if (!isNew(model)) return null;
+  return (
+    <span className="new-star" title={t('card.new')}>
+      <OrigamiStarIcon width={14} height={14} />
+      {t('card.new')}
+    </span>
+  );
+}
 
 /** Difficulty as five dots. */
 export function Dots({ difficulty }: { difficulty: Difficulty }) {

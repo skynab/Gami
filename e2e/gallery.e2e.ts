@@ -17,6 +17,15 @@ test.describe('gallery', () => {
     await expect(page.getByRole('link', { name: /Crane/ })).toHaveCount(0);
   });
 
+  test('picks out the new models, each with a star', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'New', exact: true }).click();
+    const crown = page.getByRole('link', { name: /Crown/ });
+    await expect(crown).toBeVisible();
+    await expect(crown.locator('.new-star')).toBeVisible();
+    await expect(page.getByRole('link', { name: /Crane/ })).toHaveCount(0);
+  });
+
   test('plays a preview while a card is hovered', async ({ page, isMobile }) => {
     test.skip(isMobile, 'Phones have no hover.');
     await page.goto('/');

@@ -1779,4 +1779,118 @@ export const es: Record<string, string> = {
     "Y la esquina izquierda, igual.",
   "Turned over, the pages go the other way: fold the right half of the diamond over to the left.":
     "Al haberle dado la vuelta, las páginas van al revés: pasa la mitad derecha del rombo hacia la izquierda.",
+  "Fold the bottom corner up onto the top corner, making a triangle.":
+    "Dobla la esquina de abajo hacia arriba sobre la esquina de arriba, formando un triángulo.",
+  "Fold up the left point":
+    "Dobla hacia arriba la punta izquierda",
+  "Fold the left corner up so it points up and a little out to the left.":
+    "Dobla la esquina izquierda hacia arriba, de modo que apunte hacia arriba y un poco hacia la izquierda.",
+  "Fold up the right point":
+    "Dobla hacia arriba la punta derecha",
+  "Fold the right corner up to match. That’s three points.":
+    "Dobla la esquina derecha igual. Ya tienes tres puntas.",
+  "Fold the bottom behind":
+    "Dobla la parte de abajo hacia atrás",
+  "Fold the bottom edge behind, for a straight band. Your crown is done!":
+    "Dobla el borde de abajo hacia atrás, para que la banda quede recta. ¡Tu corona está lista!",
+  "Fold up the hull":
+    "Dobla hacia arriba el casco",
+  "Start white side up. Fold the bottom edge up, about a sixth of the way, so the coloured side shows: the hull.":
+    "Empieza con el lado blanco hacia arriba. Dobla el borde de abajo hacia arriba, más o menos un sexto, para que se vea el color: es el casco.",
+  "Fold the top left behind":
+    "Dobla hacia atrás la parte de arriba a la izquierda",
+  "Fold the top left half behind, on a line from the left end of the hull’s top edge to the top right corner. That leaves a white sail.":
+    "Dobla hacia atrás la mitad de arriba a la izquierda, por una línea que va del extremo izquierdo del borde de arriba del casco a la esquina de arriba a la derecha. Queda una vela blanca.",
+  "Tuck the point behind":
+    "Esconde la punta detrás",
+  "Behind, the half you folded pokes out below the hull. Fold its point up behind, level with the bottom of the hull.":
+    "Por detrás, la mitad que doblaste asoma por debajo del casco. Dobla su punta hacia arriba por detrás, a ras del fondo del casco.",
+  "Shape the bow":
+    "Da forma a la proa",
+  "Fold the hull’s left end behind at a slant, for the bow.":
+    "Dobla en diagonal hacia atrás el extremo izquierdo del casco: es la proa.",
+  "Shape the stern":
+    "Da forma a la popa",
+  "Fold the right end behind too, a little less. Ready to sail!":
+    "Dobla también hacia atrás el extremo derecho, un poco menos. ¡Listo para navegar!",
+  "Start green side up. Fold all four corners to the middle.":
+    "Empieza con el lado verde hacia arriba. Dobla las cuatro esquinas al centro.",
+  "And again":
+    "Y otra vez",
+  "Fold the four new corners to the middle.":
+    "Dobla al centro las cuatro esquinas nuevas.",
+  "And once more":
+    "Y una vez más",
+  "Fold the corners to the middle a third time, and crease hard.":
+    "Dobla las esquinas al centro por tercera vez y marca bien los pliegues.",
+  "Lift each corner’s flaps from the middle and curl them outwards, into four petals. Your lotus is done!":
+    "Levanta desde el centro las solapas de cada esquina y cúrvalas hacia fuera, en cuatro pétalos. ¡Tu loto está listo!",
+  "Fold the right corner over":
+    "Dobla la esquina derecha encima",
+  "Fold the diamond’s right corner over to the left, past the middle.":
+    "Dobla la esquina derecha del rombo hacia la izquierda, pasando del centro.",
+  "Tuck the left corner in":
+    "Mete la esquina izquierda",
+  "Fold the left corner over to the right, and tuck it into the pocket of the right one.":
+    "Dobla la esquina izquierda hacia la derecha y métela en el bolsillo de la derecha.",
+  "Blow gently into the hole at the bottom, and the blossom puffs up. Done!":
+    "Sopla suavemente por el agujero de abajo y la flor se infla. ¡Listo!",
+  "A big green square and a small blue one, coloured side up, each turned so a corner points towards you.":
+    "Un cuadrado verde grande y uno azul pequeño, con el lado de color hacia arriba, cada uno girado con una esquina hacia ti.",
+  "Fold the tail’s bottom behind":
+    "Dobla hacia atrás la parte de abajo de la cola",
+  "Fold the green square’s bottom corner behind, to the middle.":
+    "Dobla hacia atrás la esquina de abajo del cuadrado verde, hasta el centro.",
+  "Fold the top corner behind a little way, so the tail spreads like a fan.":
+    "Dobla un poco hacia atrás la esquina de arriba, para que la cola se abra como un abanico.",
+  "Crease the body square":
+    "Marca el cuadrado del cuerpo",
+  "Fold the blue square’s left corner to its right corner, then unfold.":
+    "Lleva la esquina izquierda del cuadrado azul a su esquina derecha y desdobla.",
+  "Fold the upper left edge to the centre crease.":
+    "Dobla el borde de arriba a la izquierda hasta el pliegue central.",
+  "And the upper right edge. It’s a kite, pointing up.":
+    "Y el borde de arriba a la derecha. Es una cometa que apunta hacia arriba.",
+  "Narrow the neck":
+    "Estrecha el cuello",
+  "Fold the long upper left edge to the centre again, making the top a long thin neck.":
+    "Vuelve a doblar al centro el borde largo de arriba a la izquierda, para que la parte de arriba sea un cuello largo y fino.",
+  "Fold the tip of the neck down a little way, for the head.":
+    "Dobla un poco hacia abajo la punta del cuello: es la cabeza.",
+  "Put the body in front":
+    "Pon el cuerpo delante",
+  "Set the body in front of the tail, near its bottom edge. Your peacock is showing off!":
+    "Coloca el cuerpo delante de la cola, cerca de su borde de abajo. ¡Tu pavo real está presumiendo!",
+  "Start with the big green square, dark side up. Fold its left and right edges to the middle.":
+    "Empieza con el cuadrado verde grande, con el lado oscuro hacia arriba. Dobla sus bordes izquierdo y derecho hasta el centro.",
+  "Fold out the ribs":
+    "Dobla hacia fuera las costillas",
+  "Fold each flap’s inner edge back out a little way, so a dark stripe shows down the middle.":
+    "Vuelve a doblar un poco hacia fuera el borde interior de cada solapa, para que se vea una franja oscura en el centro.",
+  "Round the top":
+    "Redondea la parte de arriba",
+  "Fold the two top corners behind, a little way.":
+    "Dobla un poco hacia atrás las dos esquinas de arriba.",
+  "Fold down the rim":
+    "Dobla el borde de la maceta",
+  "Now the pot: fold the top edge of the orange square down a little way, for the rim.":
+    "Ahora la maceta: dobla un poco hacia abajo el borde de arriba del cuadrado naranja, para hacer el borde.",
+  "Slant the sides":
+    "Inclina los lados",
+  "Fold the left and right edges behind at a slant, so the pot is narrower at the bottom.":
+    "Dobla en diagonal hacia atrás los bordes izquierdo y derecho, para que la maceta sea más estrecha abajo.",
+  "Fold the bottom of the pot behind.":
+    "Dobla hacia atrás la parte de abajo de la maceta.",
+  "Fold the flower":
+    "Dobla la flor",
+  "Last, the flower: fold the four corners of the small square to its middle.":
+    "Por último, la flor: dobla las cuatro esquinas del cuadrado pequeño hasta su centro.",
+  "Stand it in the pot":
+    "Ponlo en la maceta",
+  "Slide the body down behind the rim of the pot.":
+    "Desliza el cuerpo hacia abajo, detrás del borde de la maceta.",
+  "Add the flower":
+    "Añade la flor",
+  "Put the flower on top, a corner pointing up. Your cactus is in bloom!":
+    "Pon la flor encima, con una esquina hacia arriba. ¡Tu cactus está en flor!",
 };

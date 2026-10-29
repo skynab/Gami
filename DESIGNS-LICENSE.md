@@ -14,6 +14,10 @@ site's source code, or any other model in the gallery.
 | Model | Recipe | Since |
 |---|---|---|
 | Sword | `src/models/recipes/sword.ts` | October 2026 |
+| Crown | `src/models/recipes/crown.ts` | October 2026 |
+| Sailboat | `src/models/recipes/sailboat.ts` | October 2026 |
+| Peacock | `src/models/recipes/peacock.ts` | October 2026 |
+| Cactus | `src/models/recipes/cactus.ts` | October 2026 |
 
 ## Other models in the gallery
 

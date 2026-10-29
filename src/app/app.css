@@ -13,6 +13,8 @@
   --danger: #b42318;
   --heart: #e5484d;
   --heart-edge: #b8222b;
+  --new: #8e2fd0;
+  --new-soft: #f3e6fc;
   --canvas-bg: #ececef;
   --radius: 12px;
   color-scheme: light dark;
@@ -33,6 +35,8 @@
     --danger: #ff8a80;
     --heart: #ec5d5e;
     --heart-edge: #ffb3b3;
+    --new: #c98bff;
+    --new-soft: #33204a;
     --canvas-bg: #0e0f11;
   }
 }
@@ -50,6 +54,8 @@
   --danger: #ff8a80;
   --heart: #ec5d5e;
   --heart-edge: #ffb3b3;
+  --new: #c98bff;
+  --new-soft: #33204a;
   --canvas-bg: #0e0f11;
   color-scheme: dark;
 }
@@ -1315,10 +1321,47 @@ kbd {
   }
 }
 
-.favorites-chip {
+.favorites-chip,
+.new-chip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+}
+
+/* New models: a purple paper star by the title, and the chip that picks them out. */
+.new-star {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-inline-start: auto;
+  padding: 1px 8px 1px 5px;
+  border-radius: 999px;
+  background: var(--new-soft);
+  color: var(--new);
+  font-size: 12px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.new-star .star-paper,
+.new-chip[aria-pressed='true'] .star-paper {
+  fill: var(--new);
+  stroke: var(--new);
+}
+
+.new-star .star-crease,
+.new-chip[aria-pressed='true'] .star-crease {
+  stroke: var(--bg);
+  stroke-opacity: 0.7;
+}
+
+.new-chip svg {
+  color: var(--new);
+}
+
+.new-chip[aria-pressed='true'] {
+  background: var(--new-soft);
+  color: var(--new);
 }
 
 .card-body > p:last-child {

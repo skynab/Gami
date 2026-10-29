@@ -80,9 +80,25 @@ noted when it was written, and the model was folded from the common traditional 
 | `envelope` | Traditional (origami.me: "Traditional"; Gilad's database lists over a hundred envelopes and letter-folds as "Traditional", among many by named designers) | None needed: nobody owns it | [origami.me/paper-envelope](https://origami.me/paper-envelope/), for the order of folds | Clear | 22 Oct 2026 |
 | `masu-lid` | Traditional (origami.me: "Traditional"; the masu box with its corners folded short of the middle) | None needed: nobody owns it | [origami.me/box](https://origami.me/box/) (its classic lid) | Clear | 22 Oct 2026 |
 | `christmas-tree` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/christmas-tree](https://origami.me/christmas-tree/) | Clear | 21 Oct 2026 |
+| `crown` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a simpler crown than OrigamiOK's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `sailboat` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a simpler sailboat than OrigamiOK's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `lotus` | Traditional (Gilad's database lists "Lotus" and "Lotus flower" as Traditional in many books, LaFosse and Yamaguchi among them; OrigamiOK calls it traditional) | None needed: nobody owns it | [OrigamiOK: lotus flower](https://origamiok.com/origami-lotus-flower/), for its first rounds only; Gami lifts the petals instead (see the notes) | Clear | 28 Oct 2026 |
+| `tulip-bloom` | Traditional (Gilad's database lists the tulip blossom from the water bomb base as Traditional in many books) | None needed: nobody owns it | [OrigamiOK: tulip](https://origamiok.com/origami-tulip/), the blossom only, for the order of folds | Clear | 28 Oct 2026 |
+| `peacock` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a simpler peacock than OrigamiOK's (see the notes); the body's kite and neck are the traditional swan's first folds | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `cactus` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's cactus (a ribbed body in a pot, a flower on top), folded differently and with no glue or scissors (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
 
 ### Notes
 
+- **OrigamiOK** (checked 28 October 2026). Its pages name no designer and give no licence for the designs, only a
+  copyright notice for the site, and only the lotus page calls its model traditional; so each model was looked up in
+  Gilad's database. The cactus turned up no open design (every cactus there has a named designer but one "cactus
+  seed holder"). The lotus and the 3D tulip's blossom are traditional, and Gami follows their order of folds in its
+  own words. The lotus stops before OrigamiOK's back fold and pulled-out petals, which hold and curl the paper in
+  ways rigid paper can't, and lifts its four petals instead. The crown, sailboat, peacock and cactus are Gami's own
+  simpler designs (`DESIGNS-LICENSE.md`): OrigamiOK's steps rely on photos for where their folds go, their 3D
+  endings (a crown opened into a band, a peacock's eight-feather fan) are beyond the engine, and its cactus is
+  glued. The cactus keeps the look of OrigamiOK's (a ribbed body in a pot, a flower on top) and is folded its own
+  way from three squares. The plan is `docs/origamiok-plan.md`.
 - **Fox.** Okuda's design isn't openly licensed. It was kept on 18 October 2026 because it's very widely
   folded and taught (see the decisions log in `PLAN.md`). The gallery doesn't credit him yet. If the rule
   is tightened, the choices are: ask for permission, swap in a traditional fox, or design Gami's own.

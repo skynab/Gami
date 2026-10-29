@@ -1779,4 +1779,118 @@ export const ja: Record<string, string> = {
     "左の角も同じように。",
   "Turned over, the pages go the other way: fold the right half of the diamond over to the left.":
     "裏返したので、ページは逆向きです。ひし形の右半分を左へ折ります。",
+  "Fold the bottom corner up onto the top corner, making a triangle.":
+    "下の角を上の角に合わせて折り上げ、三角形にします。",
+  "Fold up the left point":
+    "左のとがりを折り上げる",
+  "Fold the left corner up so it points up and a little out to the left.":
+    "左の角を、上に向いて少し左に開くように折り上げます。",
+  "Fold up the right point":
+    "右のとがりを折り上げる",
+  "Fold the right corner up to match. That’s three points.":
+    "右の角も同じように折り上げます。これでとがりが三つ。",
+  "Fold the bottom behind":
+    "下を後ろに折る",
+  "Fold the bottom edge behind, for a straight band. Your crown is done!":
+    "下のふちを後ろに折って、まっすぐな帯にします。かんむりの完成です！",
+  "Fold up the hull":
+    "船体を折り上げる",
+  "Start white side up. Fold the bottom edge up, about a sixth of the way, so the coloured side shows: the hull.":
+    "白い面を上にして始めます。下のふちを六分の一くらい折り上げて、色の面を出します。これが船体です。",
+  "Fold the top left behind":
+    "左上を後ろに折る",
+  "Fold the top left half behind, on a line from the left end of the hull’s top edge to the top right corner. That leaves a white sail.":
+    "船体の上のふちの左はしから右上の角までの線で、左上の半分を後ろに折ります。白い帆ができます。",
+  "Tuck the point behind":
+    "とがりを後ろにかくす",
+  "Behind, the half you folded pokes out below the hull. Fold its point up behind, level with the bottom of the hull.":
+    "後ろで、折った半分が船体の下からはみ出しています。そのとがりを、船体の底にそろえて後ろに折り上げます。",
+  "Shape the bow":
+    "へさきを作る",
+  "Fold the hull’s left end behind at a slant, for the bow.":
+    "船体の左はしをななめに後ろへ折って、へさきにします。",
+  "Shape the stern":
+    "ともを作る",
+  "Fold the right end behind too, a little less. Ready to sail!":
+    "右はしも、少しだけ後ろに折ります。出航の準備ができました！",
+  "Start green side up. Fold all four corners to the middle.":
+    "緑の面を上にして始めます。四つの角を中心に折ります。",
+  "And again":
+    "もう一度",
+  "Fold the four new corners to the middle.":
+    "新しくできた四つの角を中心に折ります。",
+  "And once more":
+    "さらにもう一度",
+  "Fold the corners to the middle a third time, and crease hard.":
+    "三回めも角を中心に折り、しっかり折り目をつけます。",
+  "Lift each corner’s flaps from the middle and curl them outwards, into four petals. Your lotus is done!":
+    "それぞれの角で折りこんだ部分を中心から起こし、外側に反らせて四枚の花びらにします。はすの完成です！",
+  "Fold the right corner over":
+    "右の角を折りかぶせる",
+  "Fold the diamond’s right corner over to the left, past the middle.":
+    "ひし形の右の角を、まん中をこえるところまで左へ折ります。",
+  "Tuck the left corner in":
+    "左の角を差しこむ",
+  "Fold the left corner over to the right, and tuck it into the pocket of the right one.":
+    "左の角を右へ折り、右の角のポケットに差しこみます。",
+  "Blow gently into the hole at the bottom, and the blossom puffs up. Done!":
+    "下の穴にそっと息を吹きこむと、花がふくらみます。完成です！",
+  "A big green square and a small blue one, coloured side up, each turned so a corner points towards you.":
+    "大きな緑の正方形と小さな青の正方形を、色の面を上にして、それぞれ角が手前に向くように置きます。",
+  "Fold the tail’s bottom behind":
+    "尾の下を後ろに折る",
+  "Fold the green square’s bottom corner behind, to the middle.":
+    "緑の正方形の下の角を、まん中まで後ろに折ります。",
+  "Fold the top corner behind a little way, so the tail spreads like a fan.":
+    "上の角を少し後ろに折って、尾を扇のように広げます。",
+  "Crease the body square":
+    "胴の正方形に折り目をつける",
+  "Fold the blue square’s left corner to its right corner, then unfold.":
+    "青の正方形の左の角を右の角に合わせて折り、開きます。",
+  "Fold the upper left edge to the centre crease.":
+    "左上のふちを、まん中の折り目に合わせて折ります。",
+  "And the upper right edge. It’s a kite, pointing up.":
+    "右上のふちも折ります。上向きのたこの形です。",
+  "Narrow the neck":
+    "首を細くする",
+  "Fold the long upper left edge to the centre again, making the top a long thin neck.":
+    "左上の長いふちをもう一度まん中に折って、上を細長い首にします。",
+  "Fold the tip of the neck down a little way, for the head.":
+    "首の先を少し下に折って、頭にします。",
+  "Put the body in front":
+    "胴を前に置く",
+  "Set the body in front of the tail, near its bottom edge. Your peacock is showing off!":
+    "胴を尾の前の、下のふちの近くに置きます。くじゃくが羽を広げました！",
+  "Start with the big green square, dark side up. Fold its left and right edges to the middle.":
+    "大きな緑の正方形を、こい色の面を上にして始めます。左右のふちをまん中に合わせて折ります。",
+  "Fold out the ribs":
+    "すじを折り出す",
+  "Fold each flap’s inner edge back out a little way, so a dark stripe shows down the middle.":
+    "それぞれの内側のふちを少し外へ折り返して、まん中にこい色のすじを出します。",
+  "Round the top":
+    "上を丸くする",
+  "Fold the two top corners behind, a little way.":
+    "上の二つの角を、少し後ろに折ります。",
+  "Fold down the rim":
+    "ふちを折り下げる",
+  "Now the pot: fold the top edge of the orange square down a little way, for the rim.":
+    "次は植木ばちです。オレンジの正方形の上のふちを少し折り下げて、ふちにします。",
+  "Slant the sides":
+    "横をななめにする",
+  "Fold the left and right edges behind at a slant, so the pot is narrower at the bottom.":
+    "左右のふちをななめに後ろへ折って、下がせまい植木ばちにします。",
+  "Fold the bottom of the pot behind.":
+    "植木ばちの下を後ろに折ります。",
+  "Fold the flower":
+    "花を折る",
+  "Last, the flower: fold the four corners of the small square to its middle.":
+    "最後は花です。小さな正方形の四つの角を、まん中に折ります。",
+  "Stand it in the pot":
+    "植木ばちに立てる",
+  "Slide the body down behind the rim of the pot.":
+    "サボテンを、植木ばちのふちのうしろに差しこみます。",
+  "Add the flower":
+    "花をのせる",
+  "Put the flower on top, a corner pointing up. Your cactus is in bloom!":
+    "角を上にして、花を上にのせます。サボテンに花がさきました！",
 };

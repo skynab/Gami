@@ -1,17 +1,20 @@
 import { lazy, Suspense, useEffect, useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { OrigamiHeartIcon, SearchIcon, SortIcon, StudioIcon } from '../app/icons';
+import { OrigamiHeartIcon, OrigamiStarIcon, SearchIcon, SortIcon, StudioIcon } from '../app/icons';
 import { TopBar } from '../app/TopBar';
 import { AccountButton } from '../auth/AccountButton';
 import { accountsEnabled } from '../auth/store';
-import { CATEGORIES, filterModels, LEVELS, MODELS, SORTS, sortModels, withPairs, type Category, type Level, type Sort } from '../gallery/catalog';
+import { CATEGORIES, filterModels, isNew, LEVELS, MODELS, SORTS, sortModels, withPairs, type Category, type Level, type Sort } from '../gallery/catalog';
 import { ModelCard, PairCard } from '../gallery/ModelCard';
 import { useFavorites } from '../state/favorites';
 import { readHideFolded, readProgress, saveHideFolded } from '../state/progress';
 
 // Community models need the database, so they're only loaded on sites with accounts.
 const Community = accountsEnabled ? lazy(() => import('../gallery/Community')) : null;
+
+// The New chip shows only while some model is new.
+const anyNew = MODELS.some(isNew);
 
 /** Where the gallery was left: its filters and how far down it was scrolled. */
 interface Place {
@@ -20,6 +23,7 @@ interface Place {
   category: Category | null;
   sort: Sort;
   favorites: boolean;
+  onlyNew: boolean;
   scroll: number;
 }
 
@@ -50,9 +54,13 @@ export function Gallery() {
   const [category, setCategory] = useState<Category | null>(place.category ?? null);
   const [sort, setSort] = useState<Sort>(SORTS.includes(place.sort as Sort) ? place.sort! : 'natural');
   const [onlyFavorites, setOnlyFavorites] = useState(place.favorites === true);
+  const [onlyNew, setOnlyNew] = useState(anyNew && place.onlyNew === true);
   const favorites = useFavorites((s) => s.ids);
   const [hideFolded, setHideFolded] = useState(readHideFolded);
-  useEffect(() => savePlace({ query, level, category, sort, favorites: onlyFavorites }), [query, level, category, sort, onlyFavorites]);
+  useEffect(
+    () => savePlace({ query, level, category, sort, favorites: onlyFavorites, onlyNew }),
+    [query, level, category, sort, onlyFavorites, onlyNew],
+  );
   // Before the first paint, so the page doesn't flash at the top first.
   useLayoutEffect(() => {
     if (place.scroll) window.scrollTo(0, place.scroll);
@@ -62,7 +70,7 @@ export function Gallery() {
   }, [place]);
   const named = MODELS.map((m) => ({ ...m, title: t(`models.${m.id}.title`, { defaultValue: m.title }), blurb: t(`models.${m.id}.blurb`, { defaultValue: m.blurb }) }));
   const models = sortModels(
-    filterModels(named, { query, level, category }).filter(
+    filterModels(named, { query, level, category, onlyNew }).filter(
       (m) => (!hideFolded || !readProgress(m.id)?.done) && (!onlyFavorites || favorites.includes(m.id)),
     ),
     sort,
@@ -123,6 +131,12 @@ export function Gallery() {
             <OrigamiHeartIcon width={16} height={16} />
             {t('gallery.favorites')}
           </button>
+          {anyNew && (
+            <button type="button" className="chip new-chip" aria-pressed={onlyNew} onClick={() => setOnlyNew(!onlyNew)}>
+              <OrigamiStarIcon width={16} height={16} />
+              {t('gallery.new')}
+            </button>
+          )}
           <button type="button" className="chip" aria-pressed={hideFolded} onClick={toggleHideFolded}>
             {t('gallery.hideFolded')}
           </button>

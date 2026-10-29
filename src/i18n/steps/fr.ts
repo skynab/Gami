@@ -1779,4 +1779,118 @@ export const fr: Record<string, string> = {
     "Et le coin gauche, pareil.",
   "Turned over, the pages go the other way: fold the right half of the diamond over to the left.":
     "Retourné, les pages vont dans l’autre sens : rabattez la moitié droite du losange vers la gauche.",
+  "Fold the bottom corner up onto the top corner, making a triangle.":
+    "Rabattez le coin du bas sur le coin du haut, pour former un triangle.",
+  "Fold up the left point":
+    "Relevez la pointe gauche",
+  "Fold the left corner up so it points up and a little out to the left.":
+    "Pliez le coin gauche vers le haut, pour qu’il pointe vers le haut et un peu vers la gauche.",
+  "Fold up the right point":
+    "Relevez la pointe droite",
+  "Fold the right corner up to match. That’s three points.":
+    "Pliez le coin droit de la même façon. Voilà trois pointes.",
+  "Fold the bottom behind":
+    "Pliez le bas vers l’arrière",
+  "Fold the bottom edge behind, for a straight band. Your crown is done!":
+    "Pliez le bord du bas vers l’arrière, pour un bandeau bien droit. Votre couronne est finie !",
+  "Fold up the hull":
+    "Relevez la coque",
+  "Start white side up. Fold the bottom edge up, about a sixth of the way, so the coloured side shows: the hull.":
+    "Commencez face blanche dessus. Relevez le bord du bas d’environ un sixième, pour que la couleur apparaisse : c’est la coque.",
+  "Fold the top left behind":
+    "Pliez le haut gauche vers l’arrière",
+  "Fold the top left half behind, on a line from the left end of the hull’s top edge to the top right corner. That leaves a white sail.":
+    "Pliez la moitié en haut à gauche vers l’arrière, sur une ligne allant du bout gauche du bord supérieur de la coque au coin en haut à droite. Il reste une voile blanche.",
+  "Tuck the point behind":
+    "Cachez la pointe derrière",
+  "Behind, the half you folded pokes out below the hull. Fold its point up behind, level with the bottom of the hull.":
+    "Derrière, la moitié que vous avez pliée dépasse sous la coque. Relevez sa pointe par derrière, au ras du bas de la coque.",
+  "Shape the bow":
+    "Formez la proue",
+  "Fold the hull’s left end behind at a slant, for the bow.":
+    "Pliez en biais vers l’arrière le bout gauche de la coque : c’est la proue.",
+  "Shape the stern":
+    "Formez la poupe",
+  "Fold the right end behind too, a little less. Ready to sail!":
+    "Pliez aussi le bout droit vers l’arrière, un peu moins. Prêt à naviguer !",
+  "Start green side up. Fold all four corners to the middle.":
+    "Commencez face verte dessus. Pliez les quatre coins au centre.",
+  "And again":
+    "Et encore",
+  "Fold the four new corners to the middle.":
+    "Pliez au centre les quatre nouveaux coins.",
+  "And once more":
+    "Et une fois de plus",
+  "Fold the corners to the middle a third time, and crease hard.":
+    "Pliez les coins au centre une troisième fois, et marquez bien les plis.",
+  "Lift each corner’s flaps from the middle and curl them outwards, into four petals. Your lotus is done!":
+    "Soulevez depuis le centre les rabats de chaque coin et recourbez-les vers l’extérieur, en quatre pétales. Votre lotus est fini !",
+  "Fold the right corner over":
+    "Rabattez le coin droit",
+  "Fold the diamond’s right corner over to the left, past the middle.":
+    "Rabattez le coin droit du losange vers la gauche, au-delà du milieu.",
+  "Tuck the left corner in":
+    "Glissez le coin gauche",
+  "Fold the left corner over to the right, and tuck it into the pocket of the right one.":
+    "Rabattez le coin gauche vers la droite, et glissez-le dans la poche du coin droit.",
+  "Blow gently into the hole at the bottom, and the blossom puffs up. Done!":
+    "Soufflez doucement dans le trou du bas, et la fleur se gonfle. C’est fini !",
+  "A big green square and a small blue one, coloured side up, each turned so a corner points towards you.":
+    "Un grand carré vert et un petit carré bleu, face colorée dessus, chacun tourné pour qu’un coin pointe vers vous.",
+  "Fold the tail’s bottom behind":
+    "Pliez le bas de la queue vers l’arrière",
+  "Fold the green square’s bottom corner behind, to the middle.":
+    "Pliez le coin du bas du carré vert vers l’arrière, jusqu’au centre.",
+  "Fold the top corner behind a little way, so the tail spreads like a fan.":
+    "Pliez un peu le coin du haut vers l’arrière, pour que la queue s’étale en éventail.",
+  "Crease the body square":
+    "Marquez le carré du corps",
+  "Fold the blue square’s left corner to its right corner, then unfold.":
+    "Amenez le coin gauche du carré bleu sur son coin droit, puis dépliez.",
+  "Fold the upper left edge to the centre crease.":
+    "Pliez le bord en haut à gauche jusqu’au pli central.",
+  "And the upper right edge. It’s a kite, pointing up.":
+    "Et le bord en haut à droite. C’est un cerf-volant, pointe en haut.",
+  "Narrow the neck":
+    "Affinez le cou",
+  "Fold the long upper left edge to the centre again, making the top a long thin neck.":
+    "Pliez de nouveau le long bord en haut à gauche jusqu’au centre, pour que le haut devienne un long cou fin.",
+  "Fold the tip of the neck down a little way, for the head.":
+    "Rabattez un peu la pointe du cou vers le bas : c’est la tête.",
+  "Put the body in front":
+    "Placez le corps devant",
+  "Set the body in front of the tail, near its bottom edge. Your peacock is showing off!":
+    "Posez le corps devant la queue, près de son bord du bas. Votre paon fait la roue !",
+  "Start with the big green square, dark side up. Fold its left and right edges to the middle.":
+    "Commencez par le grand carré vert, face foncée dessus. Pliez ses bords gauche et droit jusqu’au centre.",
+  "Fold out the ribs":
+    "Repliez les côtes",
+  "Fold each flap’s inner edge back out a little way, so a dark stripe shows down the middle.":
+    "Repliez un peu vers l’extérieur le bord intérieur de chaque rabat, pour qu’une bande foncée apparaisse au milieu.",
+  "Round the top":
+    "Arrondissez le haut",
+  "Fold the two top corners behind, a little way.":
+    "Pliez un peu les deux coins du haut vers l’arrière.",
+  "Fold down the rim":
+    "Rabattez le bord du pot",
+  "Now the pot: fold the top edge of the orange square down a little way, for the rim.":
+    "Maintenant le pot : rabattez un peu le bord du haut du carré orange, pour faire le rebord.",
+  "Slant the sides":
+    "Inclinez les côtés",
+  "Fold the left and right edges behind at a slant, so the pot is narrower at the bottom.":
+    "Pliez en biais vers l’arrière les bords gauche et droit, pour que le pot soit plus étroit en bas.",
+  "Fold the bottom of the pot behind.":
+    "Pliez le bas du pot vers l’arrière.",
+  "Fold the flower":
+    "Pliez la fleur",
+  "Last, the flower: fold the four corners of the small square to its middle.":
+    "Enfin, la fleur : pliez les quatre coins du petit carré jusqu’à son centre.",
+  "Stand it in the pot":
+    "Plantez-le dans le pot",
+  "Slide the body down behind the rim of the pot.":
+    "Glissez le corps vers le bas, derrière le rebord du pot.",
+  "Add the flower":
+    "Ajoutez la fleur",
+  "Put the flower on top, a corner pointing up. Your cactus is in bloom!":
+    "Posez la fleur en haut, un coin vers le haut. Votre cactus est en fleur !",
 };

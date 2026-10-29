@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { filterModels, levelOf, MODELS, PAIRS, sortModels, withPairs } from './catalog';
+import { filterModels, isNew, levelOf, MODELS, NEW_SINCE, PAIRS, sortModels, withPairs } from './catalog';
 
 describe('catalog', () => {
   it('has unique, URL-safe ids', () => {
@@ -21,7 +21,7 @@ describe('catalog', () => {
     expect(filterModels(MODELS, { level: 'hard' }).every((m) => m.difficulty >= 4)).toBe(true);
     expect(filterModels(MODELS, { category: 'modular' }).map((m) => m.id)).toEqual(['ninja-star']);
     expect(filterModels(MODELS, { level: 'easy', category: 'animal' }).map((m) => m.id)).toEqual([
-      'dog-face', 'cat-face', 'cicada', 'jumping-frog', 'fox', 'swan', 'penguin', 'whale', 'pajarita', 'fish',
+      'dog-face', 'cat-face', 'cicada', 'jumping-frog', 'fox', 'swan', 'penguin', 'whale', 'pajarita', 'fish', 'peacock',
     ]);
     expect(filterModels(MODELS, {})).toHaveLength(MODELS.length);
   });
@@ -58,5 +58,29 @@ describe('catalog', () => {
     const provenance = readFileSync(new URL('../../PROVENANCE.md', import.meta.url), 'utf8');
     const missing = MODELS.filter((m) => m.steps && !provenance.includes(`| \`${m.id}\` |`)).map((m) => m.id);
     expect(missing, 'add a row to PROVENANCE.md for each').toEqual([]);
+  });
+
+  it('dates every model with steps the day its PROVENANCE.md row says it shipped', () => {
+    const provenance = readFileSync(new URL('../../PROVENANCE.md', import.meta.url), 'utf8');
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    for (const m of MODELS.filter((m) => m.steps)) {
+      const row = provenance.split('\n').find((line) => line.startsWith(`| \`${m.id}\` |`));
+      const [, day, month, year] = row?.match(/\| (\d{1,2}) (\w{3}) (\d{4}) \|$/) ?? [];
+      const shipped = `${year}-${String(months.indexOf(month) + 1).padStart(2, '0')}-${day?.padStart(2, '0')}`;
+      expect(m.added, m.id).toBe(shipped);
+    }
+  });
+
+  it('marks models shipped since NEW_SINCE as new, and filters and sorts by it', () => {
+    expect(isNew({ steps: 5, added: NEW_SINCE })).toBe(true);
+    expect(isNew({ steps: 5, added: '2026-10-16' })).toBe(false);
+    // Still to come: not new, however recently listed.
+    expect(isNew({ added: NEW_SINCE })).toBe(false);
+    expect(filterModels(MODELS, { onlyNew: true })).toEqual(MODELS.filter(isNew));
+    const newest = sortModels(MODELS, 'newest');
+    const dates = newest.map((m) => m.added ?? '');
+    expect(dates).toEqual([...dates].sort().reverse());
+    // Models still to come have no date, so they go last.
+    expect(newest.at(-1)!.steps).toBeUndefined();
   });
 });

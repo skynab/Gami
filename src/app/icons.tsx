@@ -110,6 +110,16 @@ export const OrigamiHeartIcon = icon(
     <path className="heart-crease" d="M12 6v15M2 6h5L4.5 3.5M22 6h-5l2.5-2.5" strokeWidth="1.2" />
   </>,
 );
+/**
+ * A folded paper star, as the New badge: five points, with a crease from the middle to each so it reads as
+ * paper. Its paper and creases are classed so the badge can fill it.
+ */
+export const OrigamiStarIcon = icon(
+  <>
+    <path className="star-paper" d="M12 2.5l2.5 6.5 7 .4-5.4 4.4 1.8 6.8-5.9-3.8-5.9 3.8 1.8-6.8-5.4-4.4 7-.4z" />
+    <path className="star-crease" d="M12 12.5V2.5m0 10 9.5-3.1M12 12.5l5.9 8.1M12 12.5l-5.9 8.1M12 12.5 2.5 9.4" strokeWidth="1.2" />
+  </>,
+);
 export const PauseIcon = icon(<path d="M8 5.5v13M16 5.5v13" />);
 export const ReplayIcon = icon(
   <>
