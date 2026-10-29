@@ -2095,4 +2095,28 @@ export const ja: Record<string, string> = {
     "持ち手をつける",
   "Slip the top of the handle under the blade’s base. Your kunai is ready.":
     "持ち手の上を、刃の根もとの下に差しこみます。くないの完成です。",
+  "Round the paddle":
+    "うちわを丸くする",
+  "Green side up, fold all four corners of the square behind, a little way.":
+    "緑の面を上にして、正方形の四つの角を、少しずつうしろに折ります。",
+  "Fold it in half lengthwise: the handle.":
+    "たてに半分に折ります。これが持ち手です。",
+  "Fold the bottom end of the handle back up, a little way.":
+    "持ち手の下のはしを、少しだけうしろに折りあげます。",
+  "Slip the top of the handle under the paddle. Your fan is ready to cool you down.":
+    "持ち手の上を、うちわの下に差しこみます。うちわで涼みましょう。",
+  "Fold the corners in":
+    "角をまん中に折る",
+  "Start light side up. Fold all four corners to the middle.":
+    "明るい面を上にして始めます。四つの角をすべてまん中に折ります。",
+  "Fold the four new corners to the middle again.":
+    "新しい四つの角を、もう一度まん中に折ります。",
+  "Fold out the petals":
+    "花びらを折り出す",
+  "Fold each point back out, past the edge and a little to one side, all the same way round.":
+    "それぞれの先を外へ折りかえし、ふちより外の少し横に出します。四つとも同じ向きにずらします。",
+  "Round the petals":
+    "花びらを丸くする",
+  "Fold the tip of each petal behind, just a little. Your rose is in bloom.":
+    "それぞれの花びらの先を、少しだけうしろに折ります。バラがさきました。",
 };

@@ -127,6 +127,8 @@ export const es: Messages = {
     't-rex': { title: 'T-rex', blurb: 'Un T-rex con una cola larga y una sonrisa llena de dientes, con dos cuadrados.' },
     knife: { title: 'Cuchillo', blurb: 'Un cuchillo con la punta inclinada y el mango oscuro, con medio cuadrado.' },
     kunai: { title: 'Kunai', blurb: 'El cuchillo arrojadizo de los ninjas: una hoja larga en forma de rombo sobre un mango fino y oscuro, con un cuadrado y una tira.' },
+    'hand-fan': { title: 'Abanico de mano', blurb: 'Un abanico plano de pala, un uchiwa, con un mango blanco y fino, con un cuadrado y una tira.' },
+    rose: { title: 'Rosa', blurb: 'Una rosa plana con cuatro pétalos en espiral, con las esquinas dobladas al centro dos veces.' },
   },
   notFound: {
     title: 'Esta página se ha plegado y ha desaparecido',

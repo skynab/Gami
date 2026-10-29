@@ -129,6 +129,8 @@ export const en = {
     't-rex': { title: 'T-rex', blurb: 'A T-rex with a long tail and a toothy grin, from two squares.' },
     knife: { title: 'Knife', blurb: 'A knife with a slanted tip and a dark handle, from half a square.' },
     kunai: { title: 'Kunai', blurb: 'A ninja’s throwing knife: a long diamond blade on a thin dark handle, from a square and a strip.' },
+    'hand-fan': { title: 'Hand fan', blurb: 'A flat paddle fan, an uchiwa, on a thin white handle, from a square and a strip.' },
+    rose: { title: 'Rose', blurb: 'A flat rose whose four petals spiral round, from corners folded to the middle twice.' },
   },
   notFound: {
     title: 'This page got folded away',

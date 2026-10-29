@@ -127,6 +127,8 @@ export const fr: Messages = {
     't-rex': { title: 'T-rex', blurb: 'Un T-rex à la longue queue et au sourire plein de dents, avec deux carrés.' },
     knife: { title: 'Couteau', blurb: 'Un couteau à la pointe en biais et au manche sombre, avec un demi-carré.' },
     kunai: { title: 'Kunai', blurb: 'Le couteau de lancer des ninjas : une longue lame en losange sur un manche fin et sombre, avec un carré et une bande.' },
+    'hand-fan': { title: 'Éventail plat', blurb: 'Un éventail plat à palette, un uchiwa, sur un manche blanc et fin, avec un carré et une bande.' },
+    rose: { title: 'Rose', blurb: 'Une rose plate aux quatre pétales en spirale, les coins pliés au milieu deux fois.' },
   },
   notFound: {
     title: 'Cette page a été repliée',

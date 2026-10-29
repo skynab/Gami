@@ -26,6 +26,8 @@ site's source code, or any other model in the gallery.
 | T-rex | `src/models/recipes/t-rex.ts` | October 2026 |
 | Knife | `src/models/recipes/knife.ts` | October 2026 |
 | Kunai | `src/models/recipes/kunai.ts` | October 2026 |
+| Hand fan | `src/models/recipes/hand-fan.ts` | October 2026 |
+| Rose | `src/models/recipes/rose.ts` | October 2026 |
 
 ## Other models in the gallery
 

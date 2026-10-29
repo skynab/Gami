@@ -2095,4 +2095,28 @@ export const es: Record<string, string> = {
     "Pon el mango",
   "Slip the top of the handle under the blade’s base. Your kunai is ready.":
     "Mete la parte de arriba del mango bajo la base de la hoja. Tu kunai está listo.",
+  "Round the paddle":
+    "Redondea la pala",
+  "Green side up, fold all four corners of the square behind, a little way.":
+    "Con el lado verde hacia arriba, dobla las cuatro esquinas del cuadrado hacia atrás, solo un poco.",
+  "Fold it in half lengthwise: the handle.":
+    "Dóblala por la mitad a lo largo: el mango.",
+  "Fold the bottom end of the handle back up, a little way.":
+    "Dobla el extremo de abajo del mango hacia atrás y hacia arriba, solo un poco.",
+  "Slip the top of the handle under the paddle. Your fan is ready to cool you down.":
+    "Mete la parte de arriba del mango bajo la pala. Tu abanico está listo para refrescarte.",
+  "Fold the corners in":
+    "Dobla las esquinas al centro",
+  "Start light side up. Fold all four corners to the middle.":
+    "Empieza con el lado claro hacia arriba. Dobla las cuatro esquinas hasta el centro.",
+  "Fold the four new corners to the middle again.":
+    "Vuelve a doblar las cuatro nuevas esquinas hasta el centro.",
+  "Fold out the petals":
+    "Saca los pétalos",
+  "Fold each point back out, past the edge and a little to one side, all the same way round.":
+    "Dobla cada punta hacia fuera, más allá del borde y un poco hacia un lado, todas en el mismo sentido.",
+  "Round the petals":
+    "Redondea los pétalos",
+  "Fold the tip of each petal behind, just a little. Your rose is in bloom.":
+    "Dobla la punta de cada pétalo hacia atrás, solo un poco. Tu rosa ha florecido.",
 };

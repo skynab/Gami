@@ -2095,4 +2095,28 @@ export const fr: Record<string, string> = {
     "Ajouter le manche",
   "Slip the top of the handle under the blade’s base. Your kunai is ready.":
     "Glissez le haut du manche sous la base de la lame. Votre kunai est prêt.",
+  "Round the paddle":
+    "Arrondir la palette",
+  "Green side up, fold all four corners of the square behind, a little way.":
+    "Face verte dessus, repliez un peu les quatre coins du carré derrière.",
+  "Fold it in half lengthwise: the handle.":
+    "Pliez-la en deux dans la longueur : le manche.",
+  "Fold the bottom end of the handle back up, a little way.":
+    "Repliez un peu le bout du bas du manche derrière.",
+  "Slip the top of the handle under the paddle. Your fan is ready to cool you down.":
+    "Glissez le haut du manche sous la palette. Votre éventail est prêt à vous rafraîchir.",
+  "Fold the corners in":
+    "Rabattre les coins au milieu",
+  "Start light side up. Fold all four corners to the middle.":
+    "Commencez face claire dessus. Rabattez les quatre coins au milieu.",
+  "Fold the four new corners to the middle again.":
+    "Rabattez encore les quatre nouveaux coins au milieu.",
+  "Fold out the petals":
+    "Sortir les pétales",
+  "Fold each point back out, past the edge and a little to one side, all the same way round.":
+    "Ressortez chaque pointe, au-delà du bord et un peu de côté, toutes dans le même sens.",
+  "Round the petals":
+    "Arrondir les pétales",
+  "Fold the tip of each petal behind, just a little. Your rose is in bloom.":
+    "Repliez un peu le bout de chaque pétale derrière. Votre rose est en fleur.",
 };
