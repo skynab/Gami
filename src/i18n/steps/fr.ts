@@ -1154,6 +1154,30 @@ export const fr: Record<string, string> = {
     "Faites comme à droite, pour un triangle élancé.",
   "Fold the top layers down along a line close to the bottom, for a narrow body and wide wings.":
     "Rabattez les couches du dessus le long d’une ligne proche du bas, pour un fuselage étroit et de larges ailes.",
+  "Fold one corner onto the other":
+    "Pliez un coin sur l’autre",
+  "With the paper sideways, bring the bottom-left corner up onto the top-right corner and crease. The flap’s other corner sticks out past the top edge.":
+    "La feuille à l’horizontale, amenez le coin inférieur gauche sur le coin supérieur droit et marquez le pli. L’autre coin du rabat dépasse du bord du haut.",
+  "Fold over the long edge":
+    "Repliez le long bord",
+  "Fold a narrow strip, about 2 cm (3/4 inch) wide, over along the long folded edge.":
+    "Repliez une bande étroite, d’environ 2 cm (3/4 de pouce) de large, le long du long bord plié.",
+  "Fold from the middle of the strip to the top-right corner, bringing the bottom-right corner up over the top left. The strip ends in a thick corner at the bottom.":
+    "Pliez du milieu de la bande jusqu’au coin supérieur droit, en amenant le coin inférieur droit par-dessus le haut à gauche. La bande se termine par un coin épais en bas.",
+  "Fold the top layer back":
+    "Repliez la couche du dessus",
+  "Fold it back on itself along a line straight up from the thick corner, so the strip lies along the folded edge.":
+    "Repliez-la sur elle-même le long d’une ligne qui monte tout droit du coin épais, pour que la bande longe le bord plié.",
+  "Fold the other layer to match":
+    "Pliez l’autre couche de la même façon",
+  "Fold it back along the same line. The two folds make the bottom edge of the plane.":
+    "Repliez-la le long de la même ligne. Les deux plis forment le bord inférieur de l’avion.",
+  "Point the thick corner to the left, with the long folded edge at the bottom.":
+    "Pointez le coin épais vers la gauche, le long bord plié en bas.",
+  "Fold the top layer down along a line about 2 cm (3/4 inch) above the bottom. The layers inside stay up: they’re the tail fin.":
+    "Rabattez la couche du dessus le long d’une ligne à environ 2 cm (3/4 de pouce) au-dessus du bas. Les couches de l’intérieur restent levées : c’est la dérive.",
+  "Turn the plane over, so it stands on its keel with the fin up between its wings. A few staples in the nose help it fly straight and keep the body shut.":
+    "Retournez l’avion pour qu’il repose sur sa quille, la dérive dressée entre les ailes. Quelques agrafes dans le nez l’aident à voler droit et gardent le fuselage fermé.",
   "Fold the top-left corner across":
     "Pliez le coin supérieur gauche en travers",
   "Bring the top-left corner down to the right edge, so the top edge lies along it.":

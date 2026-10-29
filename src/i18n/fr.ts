@@ -73,6 +73,7 @@ export const fr: Messages = {
     'bulldog-dart': { title: 'Fléchette bouledogue', blurb: 'La fléchette à la pointe repliée : un nez camus pour les atterrissages brutaux.' },
     'navy-plane': { title: 'Avion de la marine', blurb: 'Un jet élancé aux ailes en delta, fait pour la vitesse.' },
     'king-bee': { title: 'Abeille royale', blurb: 'Un petit acrobate à deux antennes, qui zigzague dans les airs comme une abeille.' },
+    'sprinter': { title: 'Sprinteur', blurb: 'Un avion aux ailes en flèche avec une grande dérive. Délicat à régler, mais rapide une fois réglé.' },
     'dog-face': { title: 'Tête de chien', blurb: 'Un premier pliage : un triangle aux oreilles tombantes.' },
     'cat-face': { title: 'Tête de chat', blurb: 'Un premier pliage : un triangle aux oreilles pointues.' },
     cup: { title: 'Gobelet', blurb: 'Un gobelet qui tient l’eau, un moment.' },

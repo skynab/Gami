@@ -72,8 +72,24 @@ export function finishPlane(
       kind: 'mountain',
     })
     .rotate(90, { title: 'Turn it on its side', text: 'Point the nose to the left, with the long folded edge at the bottom.' });
+  return foldWings(plane, body, wingText, right, left, more);
+}
 
-  // On its side, the centre crease runs along the bottom. Each wing folds down along a line parallel to it.
+/**
+ * The end of `finishPlane`, for a plane already on its side with its keel along the bottom: the wing on top
+ * (the paper `right` picks out) folded down `body` up from the keel, turned over, the other (`left`) to match,
+ * then the wings opened out and the plane turned over. With `fin`, paper of neither wing reaching past the line
+ * stays standing with the body, as a tail fin.
+ */
+export function foldWings(
+  plane: Recipe,
+  body: number,
+  wingText: string,
+  right: (c: Vec2) => boolean,
+  left: (c: Vec2) => boolean,
+  more: { beforeOpen?(plane: Recipe, wings: Wings): void; afterOpen?(plane: Recipe, wings: Wings): void; flyText?: string; fin?: boolean } = {},
+): OrigamiModel {
+  // On its side, the keel runs along the bottom. Each wing folds down along a line parallel to it.
   const keel = Math.max(...plane.current.vertices_coords.map((p) => p[2]));
   const wingLine = keel - body;
   const fold: [At, At] = [table(-1, wingLine), table(1, wingLine)];
@@ -83,6 +99,8 @@ export function finishPlane(
     return (c: Vec2) => half(c) && beyond(c);
   };
   const firstWing = wingOf(right);
+  const past = plane.lying(([, z]) => z < wingLine);
+  const fin = (c: Vec2) => past(c) && !right(c) && !left(c);
   plane.along(...fold, table(0, wingLine - 0.1), {
     title: 'Fold the wing down',
     text: wingText,
@@ -103,9 +121,12 @@ export function finishPlane(
     .shape({ title: 'Open the wings', text: 'Open both wings out flat on either side of the body, at right angles to it.' }, [
       { through: fold, moving: table(0, keel), degrees: 90, only: (c) => !firstWing(c) },
       { through: fold, moving: table(0, keel), degrees: 90, only: secondWing },
+      // The fin carries on the body's line past the wings', so it turns with the body: down through the table,
+      // until the plane turns over.
+      ...(more.fin ? [{ through: fold, moving: table(0, wingLine - 0.1), degrees: -90, only: fin }] : []),
     ]);
   more.afterOpen?.(plane, wings);
   return plane
-    .turnOver('Turn the plane over, so it stands on its keel with its wings level on top. It’s ready to fly!')
+    .turnOver(more.flyText ?? 'Turn the plane over, so it stands on its keel with its wings level on top. It’s ready to fly!')
     .build();
 }

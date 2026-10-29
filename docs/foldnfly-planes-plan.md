@@ -64,7 +64,7 @@ Easiest and clearest first. Each phase can ship alone.
 
 | Phase | Status |
 |---|---|
-| 1. Sprinter | Not started |
+| 1. Sprinter | Done, Unattributed, after Fold'N Fly's sequence. The corner-to-corner fold creases at right angles to the diagonal; the halving fold runs along the diagonal itself; each layer then folds back along the line halving the thick corner, so the outer layers are the wings and the inner ones the fin. `foldWings` (the second half of `finishPlane`) now takes the two wings' paper, and with `fin` lifts the paper of neither past the wing line with the body (it turns down through the table until the plane turns over). The other planes' files are unchanged. The staples are suggested in the last step, not needed. |
 | 2. Fun Flyer | Not started |
 | 3. Spinning plane | Not started |
 | 4. Flying saucer | Not started |

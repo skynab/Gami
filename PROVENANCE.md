@@ -39,6 +39,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `bulldog-dart` | Unattributed: the dart with its point folded back | Unknown: no designer found | none recorded | Unattributed | 18 Oct 2026 |
 | `navy-plane` | Unattributed: Fold'N Fly's Navy Plane (design #35) names no designer | Unknown: no designer found | [Fold'N Fly: Navy Plane](https://www.foldnfly.com/35.html) | Unattributed | 21 Oct 2026 |
 | `king-bee` | Unattributed: Fold'N Fly's King Bee (design #22) names no designer | Unknown: no designer found | [Fold'N Fly: King Bee](https://www.foldnfly.com/22.html) | Unattributed | 21 Oct 2026 |
+| `sprinter` | Unattributed: Fold'N Fly's Sprinter (design #4) names no designer; its references are four books by different authors, none named as the source | Unknown: no designer found | [Fold'N Fly: The Sprinter](https://www.foldnfly.com/4.html) | Unattributed | 29 Oct 2026 |
 | `boomerang` | Unattributed: Fold'N Fly's Boomerang (design #56) names no designer | Unknown: no designer found | [Fold'N Fly: Boomerang](https://www.foldnfly.com/56.html) | Unattributed | 22 Oct 2026 |
 | `dog-face` | Traditional | None needed: nobody owns it | none recorded | Clear | 18 Oct 2026 |
 | `cat-face` | Traditional | None needed: nobody owns it | none recorded | Clear | 18 Oct 2026 |
@@ -182,7 +183,12 @@ noted when it was written, and the model was folded from the common traditional 
   down into each other's pockets. Rigid paper can't twist, so Gami folds the strip in half first and turns it
   with one 45° fold. Fold'N Fly tucks the tips' corners in between the layers; the engine's reverse fold
   moves a corner four layers thick as one piece, so Gami folds them behind instead. Gami's version starts on the half sheet, so its card shows no scissors (the first step
-  says to cut letter paper in half).
+  says to cut letter paper in half). The sprinter (Fold'N Fly #4, checked 29 October 2026: no designer, no
+  licence) lists four general books on paper planes as references (Keith Laux's among them), with none named as
+  its source, so it's Unattributed too. Fold'N Fly staples its nose; Gami's last step suggests
+  staples rather than needing them, as the engine has no stapler. The Spin Plane and UFO, checked the same day,
+  each cite only one book of a named designer's own planes (Laux's, and Ken Blackburn and Jeff Lammers's), so
+  they're left out for Gami's own (see `docs/foldnfly-planes-plan.md`).
 - **Coming soon.** The boat and the models listed on 21 October 2026 are gallery placeholders with no recipe
   yet. Each is credited "Traditional" on origami.me. When one gets a recipe, set its reference to what was
   actually followed and its date to when it shipped. Other traditional models on origami.me that aren't

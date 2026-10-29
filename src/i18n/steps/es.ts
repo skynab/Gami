@@ -1154,6 +1154,30 @@ export const es: Record<string, string> = {
     "Haz lo mismo que en el lado derecho, para un triángulo esbelto.",
   "Fold the top layers down along a line close to the bottom, for a narrow body and wide wings.":
     "Dobla las capas de arriba hacia abajo por una línea cerca del borde de abajo, para un cuerpo estrecho y alas anchas.",
+  "Fold one corner onto the other":
+    "Dobla una esquina sobre la otra",
+  "With the paper sideways, bring the bottom-left corner up onto the top-right corner and crease. The flap’s other corner sticks out past the top edge.":
+    "Con el papel apaisado, lleva la esquina de abajo a la izquierda hasta la de arriba a la derecha y marca el pliegue. La otra esquina de la solapa sobresale por el borde de arriba.",
+  "Fold over the long edge":
+    "Dobla el borde largo",
+  "Fold a narrow strip, about 2 cm (3/4 inch) wide, over along the long folded edge.":
+    "Dobla una tira estrecha, de unos 2 cm (3/4 de pulgada) de ancho, a lo largo del borde doblado largo.",
+  "Fold from the middle of the strip to the top-right corner, bringing the bottom-right corner up over the top left. The strip ends in a thick corner at the bottom.":
+    "Dobla desde el centro de la tira hasta la esquina de arriba a la derecha, llevando la esquina de abajo a la derecha sobre la parte de arriba a la izquierda. La tira acaba en una esquina gruesa abajo.",
+  "Fold the top layer back":
+    "Dobla hacia atrás la capa de arriba",
+  "Fold it back on itself along a line straight up from the thick corner, so the strip lies along the folded edge.":
+    "Dóblala sobre sí misma por una línea que sube recta desde la esquina gruesa, para que la tira quede a lo largo del borde doblado.",
+  "Fold the other layer to match":
+    "Dobla la otra capa igual",
+  "Fold it back along the same line. The two folds make the bottom edge of the plane.":
+    "Dóblala por la misma línea. Los dos pliegues forman el borde de abajo del avión.",
+  "Point the thick corner to the left, with the long folded edge at the bottom.":
+    "Apunta la esquina gruesa a la izquierda, con el borde doblado largo abajo.",
+  "Fold the top layer down along a line about 2 cm (3/4 inch) above the bottom. The layers inside stay up: they’re the tail fin.":
+    "Dobla la capa de arriba hacia abajo por una línea a unos 2 cm (3/4 de pulgada) del borde de abajo. Las capas de dentro se quedan arriba: son la aleta de cola.",
+  "Turn the plane over, so it stands on its keel with the fin up between its wings. A few staples in the nose help it fly straight and keep the body shut.":
+    "Da la vuelta al avión para que se apoye en la quilla, con la aleta hacia arriba entre las alas. Unas grapas en la nariz lo ayudan a volar recto y mantienen el cuerpo cerrado.",
   "Fold the top-left corner across":
     "Dobla la esquina de arriba a la izquierda hacia el otro lado",
   "Bring the top-left corner down to the right edge, so the top edge lies along it.":

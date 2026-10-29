@@ -1154,6 +1154,30 @@ export const ja: Record<string, string> = {
     "右側と同じように折ると、細長い三角形になります。",
   "Fold the top layers down along a line close to the bottom, for a narrow body and wide wings.":
     "上の層を、下の辺に近い線で折り下げて、細い胴体と広い翼にします。",
+  "Fold one corner onto the other":
+    "角を反対の角に合わせて折る",
+  "With the paper sideways, bring the bottom-left corner up onto the top-right corner and crease. The flap’s other corner sticks out past the top edge.":
+    "紙を横長に置き、左下の角を右上の角に合わせて折り目をつけます。折った部分のもう一つの角が、上の辺からはみ出します。",
+  "Fold over the long edge":
+    "長い辺を折り返す",
+  "Fold a narrow strip, about 2 cm (3/4 inch) wide, over along the long folded edge.":
+    "長い折り山に沿って、幅2 cm（3/4インチ）ほどの細い帯を折り返します。",
+  "Fold from the middle of the strip to the top-right corner, bringing the bottom-right corner up over the top left. The strip ends in a thick corner at the bottom.":
+    "帯の真ん中から右上の角まで折り、右下の角を左上の上に重ねます。帯は下で厚い角になります。",
+  "Fold the top layer back":
+    "上の層を折り返す",
+  "Fold it back on itself along a line straight up from the thick corner, so the strip lies along the folded edge.":
+    "厚い角からまっすぐ上に伸びる線で折り返し、帯を折り山に沿わせます。",
+  "Fold the other layer to match":
+    "もう一方の層も同じように折る",
+  "Fold it back along the same line. The two folds make the bottom edge of the plane.":
+    "同じ線で折り返します。二つの折り山が飛行機の下の辺になります。",
+  "Point the thick corner to the left, with the long folded edge at the bottom.":
+    "厚い角を左に向け、長い折り山を下にします。",
+  "Fold the top layer down along a line about 2 cm (3/4 inch) above the bottom. The layers inside stay up: they’re the tail fin.":
+    "上の層を、下の辺から2 cm（3/4インチ）ほど上の線で折り下げます。内側の層は立てたままにします。これが尾翼です。",
+  "Turn the plane over, so it stands on its keel with the fin up between its wings. A few staples in the nose help it fly straight and keep the body shut.":
+    "飛行機を裏返して、竜骨を下に、尾翼を翼のあいだで上に立てます。先端をホチキスで何か所か留めると、まっすぐ飛び、胴体も開きません。",
   "Fold the top-left corner across":
     "左上の角を反対側へ折る",
   "Bring the top-left corner down to the right edge, so the top edge lies along it.":

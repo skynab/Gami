@@ -75,6 +75,7 @@ export const en = {
     'bulldog-dart': { title: 'Bulldog dart', blurb: 'The dart with its point folded back: a stubby nose for rough landings.' },
     'navy-plane': { title: 'Navy plane', blurb: 'A slim delta-winged jet, built for speed.' },
     'king-bee': { title: 'King bee', blurb: 'A stubby acrobat with two feelers, that wiggles through the air like a bee.' },
+    'sprinter': { title: 'Sprinter', blurb: 'A swept-wing plane with a tall tail fin. Fussy to trim, but quick once it is.' },
     'dog-face': { title: 'Dog face', blurb: 'A first fold: a triangle with floppy ears.' },
     'cat-face': { title: 'Cat face', blurb: 'A first fold: a triangle with pointed ears.' },
     cup: { title: 'Cup', blurb: 'A cup that holds water, for a while.' },
