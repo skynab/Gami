@@ -2299,4 +2299,130 @@ export const fr: Record<string, string> = {
     "Raccourcir le manche",
   "Fold the handle’s long tip up behind, so the handle is short with a flat end. Your sword is ready.":
     "Repliez la longue pointe du manche derrière vers le haut, pour un manche court au bout plat. Votre épée est prête.",
+  "Take the first strip":
+    "Prenez la première bande",
+  "Take a strip off the pile and turn it over, white side up, long side across.":
+    "Prenez une bande sur la pile et retournez-la, face blanche dessus, le grand côté à l’horizontale.",
+  "Crease in half lengthwise":
+    "Marquez la moitié dans la longueur",
+  "Fold the strip in half lengthwise, long edge to long edge.":
+    "Pliez la bande en deux dans la longueur, grand bord sur grand bord.",
+  "Fold the long edges to the middle":
+    "Pliez les grands bords au milieu",
+  "Fold both long edges in to meet at the crease.":
+    "Pliez les deux grands bords pour qu’ils se rejoignent sur le pli.",
+  "Fold it in half along the crease, so the folded edges are inside: a narrow strip, coloured all round.":
+    "Pliez-la en deux sur le pli, bords pliés à l’intérieur : une bande étroite, colorée tout autour.",
+  "Fold the strip in half end to end, and unfold.":
+    "Pliez la bande en deux, bout à bout, puis dépliez.",
+  "Fold the ends to the middle":
+    "Pliez les bouts au milieu",
+  "Fold both ends in to meet at the middle crease. Each folded end makes a sleeve, open at the sides.":
+    "Pliez les deux bouts pour qu’ils se rejoignent sur le pli du milieu. Chaque bout plié forme un fourreau, ouvert sur les côtés.",
+  "Fold it in half at the middle, ends inside. That’s one link: two halves, each with a sleeve.":
+    "Pliez-la en deux au milieu, bouts à l’intérieur. Voilà un maillon : deux moitiés, chacune avec son fourreau.",
+  "Fold the other strips":
+    "Pliez les autres bandes",
+  "Fold the other 27 strips into links the same way.":
+    "Pliez les 27 autres bandes en maillons de la même façon.",
+  "Join two links":
+    "Assemblez deux maillons",
+  "Turn a second link a quarter turn and slide its halves into the first link’s sleeves from the side, one above and one below the folded ends, until it stops.":
+    "Tournez un deuxième maillon d’un quart de tour et glissez ses moitiés par le côté dans les fourreaux du premier, l’une au-dessus et l’autre au-dessous des bouts pliés, jusqu’en butée.",
+  "Add a third":
+    "Ajoutez-en un troisième",
+  "Slide a third link into the second’s sleeves the same way, turned back the way the first one lies.":
+    "Glissez un troisième maillon dans les fourreaux du deuxième de la même façon, retourné dans le sens du premier.",
+  "Keep going":
+    "Continuez",
+  "Add the rest the same way, turning each one a quarter turn from the last.":
+    "Ajoutez les autres de la même façon, chacun tourné d’un quart de tour par rapport au précédent.",
+  "Press it flat":
+    "Aplatissez-le",
+  "Press the chain flat, so the links lie snug in each other. Join the ends to wear it as a bracelet.":
+    "Aplatissez la chaîne pour que les maillons s’emboîtent bien. Reliez les bouts pour la porter en bracelet.",
+  "Cross two cards":
+    "Croisez deux cartes",
+  "Lay a second card across the middle of the first, so the two make a plus sign.":
+    "Posez une deuxième carte en travers du milieu de la première, pour former une croix.",
+  "Fold the top card’s ends behind":
+    "Pliez derrière les bouts de la carte du dessus",
+  "Fold the ends of the top card down behind the bottom card, sharply along its edges.":
+    "Pliez les bouts de la carte du dessus derrière la carte du dessous, bien nettement le long de ses bords.",
+  "Fold the bottom card’s ends over":
+    "Rabattez les bouts de la carte du dessous",
+  "Fold the ends of the bottom card up over the top card, along its edges.":
+    "Rabattez les bouts de la carte du dessous par-dessus la carte du dessus, le long de ses bords.",
+  "Pull them apart":
+    "Séparez-les",
+  "Slide the cards apart and turn the second one over. Each is a unit: a square with a flap folded over at either end.":
+    "Faites glisser les cartes pour les séparer et retournez la deuxième. Chacune est un module : un carré avec un rabat replié à chaque bout.",
+  "Make two more pairs":
+    "Faites deux autres paires",
+  "Fold four more cards the same way, two at a time: six units in all, two of each colour.":
+    "Pliez quatre autres cartes de la même façon, deux par deux : six modules en tout, deux de chaque couleur.",
+  "Open the flaps":
+    "Ouvrez les rabats",
+  "Open every flap out square, standing straight up from its unit.":
+    "Ouvrez chaque rabat à angle droit, bien droit sur son module.",
+  "Start the cube":
+    "Commencez le cube",
+  "Hold a red unit flaps up for the bottom. Stand the blue units on it, front and back, their lower flaps tucked under the bottom.":
+    "Prenez un module rouge, rabats en haut, pour le fond. Dressez dessus les modules bleus, devant et derrière, leurs rabats du bas glissés sous le fond.",
+  "Add the sides":
+    "Ajoutez les côtés",
+  "Slide the yellow units in at the left and right, inside the bottom’s flaps, their own flaps over the blue faces.":
+    "Glissez les modules jaunes à gauche et à droite, à l’intérieur des rabats du fond, leurs propres rabats sur les faces bleues.",
+  "Put the lid on":
+    "Posez le couvercle",
+  "Push the last red unit down on top, its flaps over the yellow faces and under the blue units’ upper flaps. Done!":
+    "Enfoncez le dernier module rouge sur le dessus, ses rabats sur les faces jaunes et sous les rabats du haut des modules bleus. C’est fini !",
+  "Take a square and turn it to a diamond, coloured side down.":
+    "Prenez un carré et posez-le en losange, face colorée dessous.",
+  "Fold the bottom corner up to the top corner: a triangle.":
+    "Pliez le coin du bas sur le coin du haut : un triangle.",
+  "Fold the left and right corners up to the top corner: a small diamond with two flaps.":
+    "Pliez les coins gauche et droit jusqu’au coin du haut : un petit losange avec deux rabats.",
+  "Crease the flaps":
+    "Marquez les rabats",
+  "Fold each flap in half, its middle edge down onto its lower edge. Unfold them.":
+    "Pliez chaque rabat en deux, son bord du milieu sur son bord du bas. Dépliez-les.",
+  "Open the flaps back up, leaving the creases.":
+    "Rouvrez les rabats en gardant les plis marqués.",
+  "Squash the flaps":
+    "Aplatissez les rabats",
+  "Stand each flap up, open it and press it flat along its crease, into a kite lying over the diamond’s lower edge. Its tip sticks out at the top.":
+    "Redressez chaque rabat, ouvrez-le et aplatissez-le le long de son pli, en cerf-volant posé sur le bord du bas du losange. Sa pointe dépasse en haut.",
+  "Fold the tips down":
+    "Rabattez les pointes",
+  "Fold down the tip of each kite where it sticks out past the diamond, along the diamond’s upper edge.":
+    "Rabattez la pointe de chaque cerf-volant là où elle dépasse du losange, le long du bord du haut du losange.",
+  "Fold the kites in half":
+    "Pliez les cerfs-volants en deux",
+  "Fold the outer half of each kite in over the diamond, along its lower edge.":
+    "Pliez la moitié extérieure de chaque cerf-volant vers l’intérieur sur le losange, le long de son bord du bas.",
+  "Fold the other petals":
+    "Pliez les autres pétales",
+  "Fold the other 59 squares into petals the same way.":
+    "Pliez les 59 autres carrés en pétales de la même façon.",
+  "Glue a petal":
+    "Collez un pétale",
+  "Glue the two folded flaps together, so the petal closes into a cone.":
+    "Collez les deux rabats pliés ensemble, pour que le pétale se referme en cône.",
+  "Glue five into a flower":
+    "Collez-en cinq en une fleur",
+  "Glue five petals side by side, their points together, into a flower.":
+    "Collez cinq pétales côte à côte, pointes réunies, en une fleur.",
+  "Make the other flowers":
+    "Faites les autres fleurs",
+  "Glue the other petals into 11 more flowers the same way.":
+    "Collez les autres pétales en 11 autres fleurs de la même façon.",
+  "Start the ball":
+    "Commencez la boule",
+  "Glue the flowers together where their petals meet: one in the middle and five round it, a bowl.":
+    "Collez les fleurs entre elles là où leurs pétales se touchent : une au milieu et cinq autour, en forme de bol.",
+  "Finish the ball":
+    "Terminez la boule",
+  "Glue on the other six flowers, the last one on top, to close the ball. Done!":
+    "Collez les six autres fleurs, la dernière en haut, pour fermer la boule. C’est fini !",
 };

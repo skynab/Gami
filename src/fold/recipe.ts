@@ -4,13 +4,16 @@ import { fold, FoldError, rotate, toFlat, turnOver, unfoldStep, unplaceLike, typ
 import { roundCoord } from './fold-format';
 import { inside, locate } from './select';
 export { locate } from './select';
+import { copyUnit } from './copy';
+import { assemble, type Piece } from './assemble';
 import { place } from './place';
+import { settle } from './settle';
 import { radial, reparent, shape, type Bend, type Ray } from './shape';
-import { startFrame } from './sheets';
+import { sheetOf, startFrame } from './sheets';
 import { keepIn, tape } from './tape';
 import { frontUp, sideOf } from './geometry2d';
 import { applyOp, lastFold, lineOf, reopened, type At, type BendGoal, type Faces, type LineSpec, type Op } from './ops';
-import type { FoldFrame, Mark, OrigamiModel, Sheet, Step, Vec2 } from './types';
+import type { FoldFrame, Mark, OrigamiModel, Sheet, Step, Vec2, Vec3 } from './types';
 
 /**
  * Writing a model as code: a list of folds described the way a diagram would ("this corner onto that
@@ -54,6 +57,8 @@ export interface ShapeBend {
 export class Recipe {
   private start: FoldFrame;
   private steps: Step[] = [];
+  /** After assembling in 3D: the flat state it started from, and the pieces so far. */
+  private assembling?: { base: FoldFrame; pieces: Piece[] };
   /** After 3D shaping: the flat state it started from, and its bends so far. */
   private shaping?: { base: FoldFrame; bends: Bend[]; corners: boolean; chained?: Vec2; ride?: (paper: Vec2[]) => boolean };
   /** The section the next step starts, from `section()`. */
@@ -164,24 +169,47 @@ export class Recipe {
 
   /**
    * Picks up the faces `only` selects (a sheet, usually) and puts them down: optionally turned over and
-   * turned by `degrees`, with their middle at `to`, on top of or under the rest.
+   * turned by `degrees`, with their middle at `to`, on top of or under the rest. `into` slides parts of it
+   * (by their centre on the sheet) in just under the paper `under` picks where they land, as a link's halves
+   * go into another's sleeves.
    */
   move(
     step: { title: string; text?: string },
     only: (centre: Vec2) => boolean,
-    how: { to?: At; degrees?: number; flip?: boolean; under?: boolean },
+    how: { to?: At; degrees?: number; flip?: boolean; under?: boolean; into?: { part: (centre: Vec2) => boolean; under: (centre: Vec2) => boolean }[] },
   ): this {
     const test = recorder(only);
     const to = how.to && this.where(how.to);
-    const frame = place(this.current, { only: test, to, angle: ((how.degrees ?? 0) * Math.PI) / 180, flip: how.flip, under: how.under });
-    return this.push({ title: step.title, text: step.text, kind: 'assemble' }, frame, {
-      op: 'move',
-      only: test.faces(),
-      ...(how.to && { to: how.to }),
-      ...(how.degrees !== undefined && { degrees: how.degrees }),
-      ...(how.flip !== undefined && { flip: how.flip }),
-      ...(how.under !== undefined && { under: how.under }),
-    });
+    const into = how.into?.map((i) => ({ part: recorder(i.part), under: recorder(i.under) }));
+    try {
+      const frame = place(this.current, { only: test, to, angle: ((how.degrees ?? 0) * Math.PI) / 180, flip: how.flip, under: how.under, into });
+      return this.push({ title: step.title, text: step.text, kind: 'assemble' }, frame, {
+        op: 'move',
+        only: test.faces(),
+        ...(how.to && { to: how.to }),
+        ...(how.degrees !== undefined && { degrees: how.degrees }),
+        ...(how.flip !== undefined && { flip: how.flip }),
+        ...(how.under !== undefined && { under: how.under }),
+        ...(into && { into: into.map((i) => ({ part: i.part.faces(), under: i.under.faces() })) }),
+      });
+    } catch (e) {
+      if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
+      throw e;
+    }
+  }
+
+  /**
+   * Folds more units like one already made: each sheet in `to` (by its place in the list of sheets) becomes a
+   * copy of sheet `from` as it is now, with its middle where that sheet lay, or at the matching point of `at`.
+   */
+  copy(step: { title: string; text?: string }, from: number, to: number[], at?: Vec2[]): this {
+    try {
+      const frame = copyUnit(this.current, this.info.sheets, from, to, at);
+      return this.push({ title: step.title, text: step.text, kind: 'assemble' }, frame, { op: 'copy', from, to, ...(at && { at }) });
+    } catch (e) {
+      if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
+      throw e;
+    }
   }
 
   /**
@@ -386,6 +414,59 @@ export class Recipe {
   }
 
   /**
+   * Puts units together in 3D (see assemble.ts). Each piece, a sheet or the faces `only` picks (by their centre on
+   * the sheet), is bent along lines as `shape` bends, then set down with the point `from` at `to`, the table's
+   * +x along `x` and its up along `up`. Lines and points are found on the last flat state; a later assembly step
+   * adds to this one's pieces, and a piece listed again is bent and placed afresh. Nothing can be folded after.
+   */
+  assemble(
+    step: { title: string; text?: string },
+    pieces: { sheet?: number; only?: (centre: Vec2) => boolean; bends?: ShapeBend[]; pose?: { from: At; to: Vec3; x: Vec3; up: Vec3 } }[],
+  ): this {
+    const base = this.assembling?.base ?? this.current;
+    const at = (a: At): Vec2 => ('table' in a ? a.table : locate(base, a.paper));
+    const made = pieces.map((p) => {
+      const test = p.only ? recorder(p.only) : null;
+      const faces = (): Faces => (p.sheet !== undefined ? { sheet: p.sheet } : test ? test.faces() : { inPaper: [] });
+      const only = p.sheet !== undefined ? (poly: Vec2[]) => sheetOf(this.info.sheets, poly) === p.sheet : test!;
+      const bendTests = (p.bends ?? []).map((b) => b.only && recorder(b.only));
+      const bends = (p.bends ?? []).map((b, k): Bend => ({
+        line: lineOf({ through: b.through, moving: b.moving }, base),
+        angle: (b.degrees * Math.PI) / 180,
+        layers: b.layers,
+        only: bendTests[k],
+      }));
+      return { piece: { only, bends, ...(p.pose && { pose: { ...p.pose, from: at(p.pose.from) } }) } as Piece, faces, bendTests, p };
+    });
+    const all = [...(this.assembling?.pieces ?? []), ...made.map((m) => m.piece)];
+    try {
+      const frame = assemble(base, all);
+      // Faces' tests are recorded once they've run.
+      const op: Op = {
+        op: 'assemble',
+        pieces: made.map(({ faces, bendTests, p }) => ({
+          only: faces(),
+          ...(p.bends?.length && {
+            bends: p.bends.map((b, k) => ({
+              line: { through: b.through, moving: b.moving },
+              degrees: b.degrees,
+              ...(b.layers !== undefined && { layers: b.layers }),
+              ...(bendTests[k] && { only: bendTests[k].faces() }),
+            })),
+          }),
+          ...(p.pose && { pose: p.pose }),
+        })),
+      };
+      this.push({ title: step.title, text: step.text, kind: 'assemble' }, this.assembling ? reparent(this.current, frame) : frame, op);
+    } catch (e) {
+      if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
+      throw e;
+    }
+    this.assembling = { base, pieces: all };
+    return this;
+  }
+
+  /**
    * Pops the model up about a point, creases from it rising along `rays` (see `radial`), passing through the
    * shapes `via` gives on the way. Nothing can be folded after.
    */
@@ -489,6 +570,19 @@ export class Recipe {
     }
   }
 
+  /**
+   * Presses flat paper down, so each part is only as thick as the paper there: a long chain of units, each slid
+   * inside the last, lies flat rather than stacking up (see settle.ts). Nothing can be folded after.
+   */
+  settle(step: { title: string; text?: string }): this {
+    try {
+      return this.push({ ...step, kind: 'pose' }, settle(this.current), { op: 'settle' });
+    } catch (e) {
+      if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
+      throw e;
+    }
+  }
+
   turnOver(text = 'Flip the paper over from left to right.'): this {
     return this.push({ title: 'Turn over', text, kind: 'turn-over' }, turnOver(this.current), { op: 'turnOver' });
   }
@@ -523,6 +617,7 @@ export class Recipe {
     // The fold engine works on flat faces: bent paper (its mesh of triangles) can be drawn on, but not folded again yet.
     if (this.current.soft && op.op !== 'draw') throw new FoldError(`${this.info.id}, step ${this.steps.length + 1} (${title}): paper that has bent can’t be folded any further.`);
     this.shaping = undefined;
+    this.assembling = undefined;
     // Cuts and tape stay in the paper from step to step (a fresh sheet has none).
     if (op.op !== 'newSheet') frame = keepIn(frame, this.current);
     const section = this.sectionName;

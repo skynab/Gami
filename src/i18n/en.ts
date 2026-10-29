@@ -143,6 +143,9 @@ export const en = {
     'diamond-ring': { title: 'Diamond ring', blurb: 'A band curled round into a ring, with a little folded diamond on top.' },
     'finger-trap': { title: 'Finger trap', blurb: 'A long, thin woven tube to slip your fingers into. No cuts.' },
     'easy-sword': { title: 'Easy sword', blurb: 'A silver sword with a crossguard and a short handle, from one square.' },
+    'rainbow-chain': { title: 'Rainbow chain', blurb: 'Twenty-eight links in seven colours, each slid into the last, in a long zigzag. No glue.' },
+    'business-card-cube': { title: 'Business card cube', blurb: 'Six cards folded into units that lock together into a cube, every edge held by a flap. No glue.' },
+    kusudama: { title: 'Kusudama flower ball', blurb: 'Sixty petals glued into twelve flowers, and the flowers into a ball.' },
   },
   notFound: {
     title: 'This page got folded away',
@@ -389,6 +392,9 @@ export const en = {
       bend: 'Bend it',
       draw: 'Draw',
       newSheet: 'Take a fresh sheet',
+      copy: 'Fold the rest the same way',
+      settle: 'Press it flat',
+      assemble: 'Put the pieces together',
       together: 'Several moves at once',
     },
     errors: {

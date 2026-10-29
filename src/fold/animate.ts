@@ -165,6 +165,34 @@ function blended(from: FoldFrame, to: FoldFrame): Transition {
   return { faces, motions: [still], blend: { moves, vertices: to.faces_vertices } };
 }
 
+/**
+ * Each face making its own move, straight from where its paper was to where it ends up. For folding a pile of
+ * units the same way as one already made (`copy`), a step that skips ahead, and for any step with more than
+ * `SEPARATELY` faces, as a kusudama's sixty petals put together: working out a joined-up motion for hundreds of
+ * faces at once takes seconds.
+ */
+const SEPARATELY = 400;
+
+/** How the paper gets from one frame to the next: as `transition`, or face by face for very many faces. */
+export function transitionBetween(from: FoldFrame, to: FoldFrame): Transition {
+  return to.faces_vertices.length > SEPARATELY && !to.soft?.length ? separately(from, to) : transition(from, to);
+}
+
+function separately(from: FoldFrame, to: FoldFrame): Transition {
+  const fromPositions = facePositions(from);
+  const toPositions = facePositions(to);
+  const motions: Motion[] = [];
+  const faces = to.faces_vertices.map((face, f): FaceTrack => {
+    const parent = to.faces_parent?.[f] ?? f;
+    const paper = face.map((v) => to.vertices_paper[v]);
+    const before = paper.map(affine(from.faces_vertices[parent].map((v) => from.vertices_paper[v]), fromPositions[parent]));
+    const { q, t } = rigid(paper, before, toPositions[f]);
+    return { paper, before, after: toPositions[f], motion: motions.push(screwsFor(q, t)[0]) - 1 };
+  });
+  cutsOf.set(faces, to.cuts ?? from.cuts ?? []);
+  return { faces, motions };
+}
+
 function blendedPose(t: Transition, s: number): Vec3[][] {
   const { moves, vertices } = t.blend!;
   const sum = new Map<number, { p: Vec3; n: number }>();
@@ -518,8 +546,10 @@ function settled(out: Transition, hinges: NonNullable<Transition['hinges']>): Tr
 /** Step k's animation (k from 1): straight from the frame before, or through the frames it passes on its way. */
 export function stepTransition(model: OrigamiModel, k: number): Transition {
   const frames = framesOf(model);
+  if (model.steps[k - 1].op?.op === 'copy') return separately(frames[k - 1], frames[k]);
   const over = tuckedOver(model, k);
   if (over) return transitionVia([frames[k - 1], over, { ...frames[k], faces_parent: sameFaces(over, frames[k]) }]);
+  if (!model.steps[k - 1].via?.length) return transitionBetween(frames[k - 1], frames[k]);
   const t = transitionVia([frames[k - 1], ...(model.steps[k - 1].via ?? []), frames[k]]);
   return t.path ? unfoldingBackwards(model, k, t) : t;
 }

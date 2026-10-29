@@ -274,9 +274,16 @@ function compact(faces: FlatFace[]): number[] {
   const order = faces.map((_, i) => i).sort((a, b) => faces[a].layer - faces[b].layer || a - b);
   const out = new Array<number>(faces.length).fill(0);
   const placed: number[] = [];
+  // Each face's bounding box, to skip pairs far apart quickly (models of many units have hundreds of faces).
+  const boxes = faces.map((f) => {
+    const xs = f.world.map((p) => p[0]);
+    const zs = f.world.map((p) => p[1]);
+    return [Math.min(...xs), Math.max(...xs), Math.min(...zs), Math.max(...zs)];
+  });
+  const near = (a: number, b: number) => boxes[a][0] < boxes[b][1] && boxes[b][0] < boxes[a][1] && boxes[a][2] < boxes[b][3] && boxes[b][2] < boxes[a][3];
   for (const f of order) {
     let layer = 0;
-    for (const g of placed) if (out[g] + 1 > layer && overlapArea(faces[f].world, faces[g].world) > 1e-7) layer = out[g] + 1;
+    for (const g of placed) if (out[g] + 1 > layer && near(f, g) && overlapArea(faces[f].world, faces[g].world) > 1e-7) layer = out[g] + 1;
     out[f] = layer;
     placed.push(f);
   }

@@ -141,6 +141,9 @@ export const fr: Messages = {
     'diamond-ring': { title: 'Bague diamant', blurb: 'Une bande enroulée en bague, surmontée d’un petit diamant plié.' },
     'finger-trap': { title: 'Piège à doigts', blurb: 'Un long tube fin et tressé où glisser les doigts. Sans découpe.' },
     'easy-sword': { title: 'Épée facile', blurb: 'Une épée argentée avec une garde et un manche court, dans un seul carré.' },
+    'rainbow-chain': { title: 'Chaîne arc-en-ciel', blurb: 'Vingt-huit maillons de sept couleurs, chacun glissé dans le précédent, en un long zigzag. Sans colle.' },
+    'business-card-cube': { title: 'Cube en cartes de visite', blurb: 'Six cartes pliées en modules qui s’emboîtent en un cube, chaque arête tenue par un rabat. Sans colle.' },
+    kusudama: { title: 'Kusudama de fleurs', blurb: 'Soixante pétales collés en douze fleurs, et les fleurs en une boule.' },
   },
   notFound: {
     title: 'Cette page a été repliée',
@@ -386,6 +389,9 @@ export const fr: Messages = {
       bend: 'Courbez-le',
       draw: 'Dessiner',
       newSheet: 'Prenez une nouvelle feuille',
+      copy: 'Pliez les autres de la même façon',
+      settle: 'Aplatissez-le',
+      assemble: 'Assemblez les pièces',
       together: 'Plusieurs gestes à la fois',
     },
     errors: {

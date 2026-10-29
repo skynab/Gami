@@ -2299,4 +2299,130 @@ export const es: Record<string, string> = {
     "Acorta el mango",
   "Fold the handle’s long tip up behind, so the handle is short with a flat end. Your sword is ready.":
     "Dobla la punta larga del mango hacia atrás y hacia arriba, para que el mango quede corto y con el extremo plano. Tu espada está lista.",
+  "Take the first strip":
+    "Toma la primera tira",
+  "Take a strip off the pile and turn it over, white side up, long side across.":
+    "Toma una tira del montón y dale la vuelta, con el lado blanco hacia arriba y el lado largo en horizontal.",
+  "Crease in half lengthwise":
+    "Marca la mitad a lo largo",
+  "Fold the strip in half lengthwise, long edge to long edge.":
+    "Dobla la tira por la mitad a lo largo, borde largo con borde largo.",
+  "Fold the long edges to the middle":
+    "Dobla los bordes largos al centro",
+  "Fold both long edges in to meet at the crease.":
+    "Dobla los dos bordes largos hasta que se junten en el pliegue.",
+  "Fold it in half along the crease, so the folded edges are inside: a narrow strip, coloured all round.":
+    "Dóblala por la mitad por el pliegue, con los bordes doblados por dentro: una tira estrecha, de color por todos lados.",
+  "Fold the strip in half end to end, and unfold.":
+    "Dobla la tira por la mitad, extremo con extremo, y desdobla.",
+  "Fold the ends to the middle":
+    "Dobla los extremos al centro",
+  "Fold both ends in to meet at the middle crease. Each folded end makes a sleeve, open at the sides.":
+    "Dobla los dos extremos hasta que se junten en el pliegue del centro. Cada extremo doblado forma una funda, abierta por los lados.",
+  "Fold it in half at the middle, ends inside. That’s one link: two halves, each with a sleeve.":
+    "Dóblala por la mitad en el centro, con los extremos por dentro. Ya tienes un eslabón: dos mitades, cada una con su funda.",
+  "Fold the other strips":
+    "Dobla las demás tiras",
+  "Fold the other 27 strips into links the same way.":
+    "Dobla las otras 27 tiras en eslabones de la misma manera.",
+  "Join two links":
+    "Une dos eslabones",
+  "Turn a second link a quarter turn and slide its halves into the first link’s sleeves from the side, one above and one below the folded ends, until it stops.":
+    "Gira un segundo eslabón un cuarto de vuelta y mete sus mitades por el costado en las fundas del primero, una por encima y otra por debajo de los extremos doblados, hasta el tope.",
+  "Add a third":
+    "Añade un tercero",
+  "Slide a third link into the second’s sleeves the same way, turned back the way the first one lies.":
+    "Mete un tercer eslabón en las fundas del segundo de la misma manera, girado de vuelta como está el primero.",
+  "Keep going":
+    "Sigue así",
+  "Add the rest the same way, turning each one a quarter turn from the last.":
+    "Añade los demás de la misma manera, girando cada uno un cuarto de vuelta respecto al anterior.",
+  "Press it flat":
+    "Apriétalo para aplanarlo",
+  "Press the chain flat, so the links lie snug in each other. Join the ends to wear it as a bracelet.":
+    "Aprieta la cadena para aplanarla, de modo que los eslabones queden bien encajados. Une los extremos para llevarla como pulsera.",
+  "Cross two cards":
+    "Cruza dos tarjetas",
+  "Lay a second card across the middle of the first, so the two make a plus sign.":
+    "Pon una segunda tarjeta cruzada sobre el centro de la primera, de modo que formen una cruz.",
+  "Fold the top card’s ends behind":
+    "Dobla hacia atrás los extremos de la tarjeta de arriba",
+  "Fold the ends of the top card down behind the bottom card, sharply along its edges.":
+    "Dobla los extremos de la tarjeta de arriba por detrás de la de abajo, marcando bien por sus bordes.",
+  "Fold the bottom card’s ends over":
+    "Dobla encima los extremos de la tarjeta de abajo",
+  "Fold the ends of the bottom card up over the top card, along its edges.":
+    "Dobla los extremos de la tarjeta de abajo hacia arriba, sobre la de arriba, por sus bordes.",
+  "Pull them apart":
+    "Sepáralas",
+  "Slide the cards apart and turn the second one over. Each is a unit: a square with a flap folded over at either end.":
+    "Desliza las tarjetas para separarlas y dale la vuelta a la segunda. Cada una es un módulo: un cuadrado con una solapa doblada en cada extremo.",
+  "Make two more pairs":
+    "Haz dos pares más",
+  "Fold four more cards the same way, two at a time: six units in all, two of each colour.":
+    "Dobla cuatro tarjetas más de la misma manera, de dos en dos: seis módulos en total, dos de cada color.",
+  "Open the flaps":
+    "Abre las solapas",
+  "Open every flap out square, standing straight up from its unit.":
+    "Abre todas las solapas en ángulo recto, bien derechas sobre su módulo.",
+  "Start the cube":
+    "Empieza el cubo",
+  "Hold a red unit flaps up for the bottom. Stand the blue units on it, front and back, their lower flaps tucked under the bottom.":
+    "Sujeta un módulo rojo con las solapas hacia arriba como base. Pon de pie los módulos azules encima, delante y detrás, con sus solapas de abajo metidas bajo la base.",
+  "Add the sides":
+    "Añade los lados",
+  "Slide the yellow units in at the left and right, inside the bottom’s flaps, their own flaps over the blue faces.":
+    "Mete los módulos amarillos a izquierda y derecha, por dentro de las solapas de la base, con sus propias solapas sobre las caras azules.",
+  "Put the lid on":
+    "Pon la tapa",
+  "Push the last red unit down on top, its flaps over the yellow faces and under the blue units’ upper flaps. Done!":
+    "Encaja el último módulo rojo arriba, con sus solapas sobre las caras amarillas y bajo las solapas de arriba de los módulos azules. ¡Listo!",
+  "Take a square and turn it to a diamond, coloured side down.":
+    "Toma un cuadrado y ponlo en forma de rombo, con el lado de color hacia abajo.",
+  "Fold the bottom corner up to the top corner: a triangle.":
+    "Dobla la esquina de abajo hasta la de arriba: un triángulo.",
+  "Fold the left and right corners up to the top corner: a small diamond with two flaps.":
+    "Dobla las esquinas izquierda y derecha hasta la de arriba: un rombo pequeño con dos solapas.",
+  "Crease the flaps":
+    "Marca las solapas",
+  "Fold each flap in half, its middle edge down onto its lower edge. Unfold them.":
+    "Dobla cada solapa por la mitad, llevando su borde del centro sobre su borde de abajo. Desdóblalas.",
+  "Open the flaps back up, leaving the creases.":
+    "Vuelve a abrir las solapas, dejando los pliegues marcados.",
+  "Squash the flaps":
+    "Aplasta las solapas",
+  "Stand each flap up, open it and press it flat along its crease, into a kite lying over the diamond’s lower edge. Its tip sticks out at the top.":
+    "Levanta cada solapa, ábrela y aplánala por su pliegue, en forma de cometa sobre el borde de abajo del rombo. Su punta asoma por arriba.",
+  "Fold the tips down":
+    "Dobla las puntas hacia abajo",
+  "Fold down the tip of each kite where it sticks out past the diamond, along the diamond’s upper edge.":
+    "Dobla hacia abajo la punta de cada cometa donde sobresale del rombo, por el borde de arriba del rombo.",
+  "Fold the kites in half":
+    "Dobla las cometas por la mitad",
+  "Fold the outer half of each kite in over the diamond, along its lower edge.":
+    "Dobla la mitad exterior de cada cometa hacia dentro sobre el rombo, por su borde de abajo.",
+  "Fold the other petals":
+    "Dobla los demás pétalos",
+  "Fold the other 59 squares into petals the same way.":
+    "Dobla los otros 59 cuadrados en pétalos de la misma manera.",
+  "Glue a petal":
+    "Pega un pétalo",
+  "Glue the two folded flaps together, so the petal closes into a cone.":
+    "Pega entre sí las dos solapas dobladas, para que el pétalo se cierre en forma de cono.",
+  "Glue five into a flower":
+    "Pega cinco en una flor",
+  "Glue five petals side by side, their points together, into a flower.":
+    "Pega cinco pétalos uno junto a otro, con las puntas juntas, en una flor.",
+  "Make the other flowers":
+    "Haz las demás flores",
+  "Glue the other petals into 11 more flowers the same way.":
+    "Pega los demás pétalos en 11 flores más de la misma manera.",
+  "Start the ball":
+    "Empieza la bola",
+  "Glue the flowers together where their petals meet: one in the middle and five round it, a bowl.":
+    "Pega las flores entre sí donde se tocan sus pétalos: una en el centro y cinco alrededor, como un cuenco.",
+  "Finish the ball":
+    "Termina la bola",
+  "Glue on the other six flowers, the last one on top, to close the ball. Done!":
+    "Pega las otras seis flores, la última arriba, para cerrar la bola. ¡Listo!",
 };

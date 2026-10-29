@@ -1,4 +1,4 @@
-import { move, poseAt, transition, transitionVia, type Motion } from './animate';
+import { move, poseAt, transitionBetween, transitionVia, type Motion } from './animate';
 import { sharedSegment } from './geometry2d';
 import type { FoldFrame, Vec2, Vec3 } from './types';
 
@@ -41,16 +41,24 @@ const MAX_ARROWS = 2;
 /** `via`: the frames the step passes through on its way, if any (a bend's). */
 export function guidesFor(from: FoldFrame, to: FoldFrame, via: FoldFrame[] = []): Guides {
   if (to.soft?.length) return bendGuides(from, to, via);
-  const t = transition(from, to);
+  const t = transitionBetween(from, to);
   const still = (m: Motion) => !m.angle && m.shift.lengthSq() < 1e-12 && !m.lift;
 
-  // Creases: edges between faces that move differently. They stay put while the step plays.
+  // Creases: edges between faces that move differently. They stay put while the step plays. Only faces whose
+  // outlines on the sheet touch can share an edge, which is quick to rule out (a kusudama has hundreds of faces).
+  const boxes = t.faces.map((f) => {
+    const us = f.paper.map((p) => p[0]);
+    const vs = f.paper.map((p) => p[1]);
+    return [Math.min(...us), Math.max(...us), Math.min(...vs), Math.max(...vs)];
+  });
+  const touch = (i: number, j: number) =>
+    boxes[i][0] <= boxes[j][1] + 1e-7 && boxes[j][0] <= boxes[i][1] + 1e-7 && boxes[i][2] <= boxes[j][3] + 1e-7 && boxes[j][2] <= boxes[i][3] + 1e-7;
   const creases: CreaseGuide[] = [];
   for (let i = 0; i < t.faces.length; i++) {
     for (let j = i + 1; j < t.faces.length; j++) {
       const fi = t.faces[i];
       const fj = t.faces[j];
-      if (fi.motion === fj.motion || sameMove(t.motions[fi.motion], t.motions[fj.motion], fi.before)) continue;
+      if (!touch(i, j) || fi.motion === fj.motion || sameMove(t.motions[fi.motion], t.motions[fj.motion], fi.before)) continue;
       const shared = sharedSegment(fi.paper, fj.paper);
       if (!shared) continue;
       // The moving side is whichever isn't standing still (either, if both move).
@@ -62,27 +70,27 @@ export function guidesFor(from: FoldFrame, to: FoldFrame, via: FoldFrame[] = [])
   }
 
   // Arrows: for each part that moves, follow its corner that travels furthest.
-  const arrows = t.motions
+  const furthest = t.motions.map((): { from: Vec3; to: Vec3; d: number } | null => null);
+  for (const f of t.faces) {
+    f.before.forEach((p, c) => {
+      const q = f.after[c];
+      const d = Math.hypot(q[0] - p[0], q[1] - p[1], q[2] - p[2]);
+      if (!furthest[f.motion] || d > furthest[f.motion]!.d) furthest[f.motion] = { from: p, to: q, d };
+    });
+  }
+  const candidates = t.motions
     .map((m, k) => {
-      if (still(m)) return null;
-      let best: { from: Vec3; to: Vec3; d: number } | null = null;
-      t.faces.forEach((f) => {
-        if (f.motion !== k) return;
-        f.before.forEach((p, c) => {
-          const q = f.after[c];
-          const d = Math.hypot(q[0] - p[0], q[1] - p[1], q[2] - p[2]);
-          if (!best || d > best.d) best = { from: p, to: q, d };
-        });
-      });
-      const b = best as { from: Vec3; to: Vec3; d: number } | null;
-      return b && b.d > MIN_ARROW ? { from: b.from, via: move(m, b.from, 0.5), to: b.to, d: b.d, m } : null;
+      const b = furthest[k];
+      return !still(m) && b && b.d > MIN_ARROW ? { from: b.from, via: move(m, b.from, 0.5), to: b.to, d: b.d, m } : null;
     })
     .filter((a) => a !== null)
-    .sort((a, b) => b.d - a.d)
-    // One arrow for parts moving as one (a stack's layers easing round each other).
-    .filter((a, i, all) => !all.slice(0, i).some((b) => sameMove(a.m, b.m, [a.from])))
-    .slice(0, MAX_ARROWS)
-    .map(({ from, via, to }) => ({ from, via, to }));
+    .sort((a, b) => b.d - a.d);
+  // One arrow for parts moving as one (a stack's layers easing round each other, or a unit's faces in a big step).
+  const arrows: ArrowGuide[] = [];
+  for (let i = 0; i < candidates.length && arrows.length < MAX_ARROWS; i++) {
+    const a = candidates[i];
+    if (!candidates.slice(0, i).some((b) => sameMove(a.m, b.m, [a.from]))) arrows.push({ from: a.from, via: a.via, to: a.to });
+  }
 
   // Cuts: those this step adds, placed on a face they cross (on its edge, as cutting splits faces along them).
   const known = new Set((from.cuts ?? []).map((c) => c.map((p) => p.map((x) => x.toFixed(6)).join(',')).join('|')));

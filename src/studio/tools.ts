@@ -156,6 +156,12 @@ export function stepFor(o: Op, t: TFunction): { title: string; kind: StepKind } 
       return { title: t('studio.steps.rotate'), kind: 'rotate' };
     case 'newSheet':
       return { title: t('studio.steps.newSheet'), kind: 'assemble' };
+    case 'copy':
+      return { title: t('studio.steps.copy'), kind: 'assemble' };
+    case 'settle':
+      return { title: t('studio.steps.settle'), kind: 'pose' };
+    case 'assemble':
+      return { title: t('studio.steps.assemble'), kind: 'assemble' };
     case 'together':
       // Named after its first part; it acts as its last does.
       return { title: o.ops.length ? stepFor(o.ops[0], t).title : t('studio.steps.together'), kind: opKind(o) };

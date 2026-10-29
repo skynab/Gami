@@ -2299,4 +2299,130 @@ export const ja: Record<string, string> = {
     "持ち手を短くする",
   "Fold the handle’s long tip up behind, so the handle is short with a flat end. Your sword is ready.":
     "持ち手の長い先をうしろに折りあげて、先の平らな短い持ち手にします。剣の完成です。",
+  "Take the first strip":
+    "最初の帯をとる",
+  "Take a strip off the pile and turn it over, white side up, long side across.":
+    "山から帯を一本とって裏返し、白い面を上に、長い辺を横にしておきます。",
+  "Crease in half lengthwise":
+    "たて半分に折りすじをつける",
+  "Fold the strip in half lengthwise, long edge to long edge.":
+    "長い辺と長い辺を合わせて、帯をたて半分に折ります。",
+  "Fold the long edges to the middle":
+    "長い辺をまん中へ折る",
+  "Fold both long edges in to meet at the crease.":
+    "長い辺を両方とも折りすじまで折って合わせます。",
+  "Fold it in half along the crease, so the folded edges are inside: a narrow strip, coloured all round.":
+    "折りすじで半分に折り、折った辺を内側にします。まわりがぜんぶ色の細い帯になります。",
+  "Fold the strip in half end to end, and unfold.":
+    "端と端を合わせて帯を半分に折り、開きます。",
+  "Fold the ends to the middle":
+    "両端をまん中へ折る",
+  "Fold both ends in to meet at the middle crease. Each folded end makes a sleeve, open at the sides.":
+    "両端をまん中の折りすじまで折って合わせます。折った端はそれぞれ、横があいたさやになります。",
+  "Fold it in half at the middle, ends inside. That’s one link: two halves, each with a sleeve.":
+    "端を内側にして、まん中で半分に折ります。これで輪がひとつ。半分ずつにさやがあります。",
+  "Fold the other strips":
+    "ほかの帯を折る",
+  "Fold the other 27 strips into links the same way.":
+    "残りの27本も同じように折って輪にします。",
+  "Join two links":
+    "輪をふたつつなぐ",
+  "Turn a second link a quarter turn and slide its halves into the first link’s sleeves from the side, one above and one below the folded ends, until it stops.":
+    "ふたつ目の輪を四分の一回して、半分ずつをひとつ目の輪のさやに横から差しこみます。折った端の上と下にひとつずつ、止まるまで入れます。",
+  "Add a third":
+    "みっつ目をつなぐ",
+  "Slide a third link into the second’s sleeves the same way, turned back the way the first one lies.":
+    "みっつ目の輪をひとつ目と同じ向きにもどして、ふたつ目のさやに同じように差しこみます。",
+  "Keep going":
+    "つづける",
+  "Add the rest the same way, turning each one a quarter turn from the last.":
+    "残りも同じようにつなぎます。ひとつ前の輪から四分の一ずつ回します。",
+  "Press it flat":
+    "おさえて平らにする",
+  "Press the chain flat, so the links lie snug in each other. Join the ends to wear it as a bracelet.":
+    "くさりをおさえて平らにし、輪どうしをしっかりかみ合わせます。両端をつなげばブレスレットになります。",
+  "Cross two cards":
+    "名刺を十字に重ねる",
+  "Lay a second card across the middle of the first, so the two make a plus sign.":
+    "一枚目のまん中に二枚目を横切るように重ねて、十字の形にします。",
+  "Fold the top card’s ends behind":
+    "上の名刺の端をうしろへ折る",
+  "Fold the ends of the top card down behind the bottom card, sharply along its edges.":
+    "上の名刺の両端を、下の名刺の辺にそってしっかり、下の名刺のうしろへ折ります。",
+  "Fold the bottom card’s ends over":
+    "下の名刺の端を上へ折る",
+  "Fold the ends of the bottom card up over the top card, along its edges.":
+    "下の名刺の両端を、上の名刺の辺にそって、上の名刺の上へ折ります。",
+  "Pull them apart":
+    "二枚をはずす",
+  "Slide the cards apart and turn the second one over. Each is a unit: a square with a flap folded over at either end.":
+    "名刺をずらしてはずし、二枚目を裏返します。どちらもユニットです。両端にフラップを折りかえした正方形です。",
+  "Make two more pairs":
+    "もうふた組つくる",
+  "Fold four more cards the same way, two at a time: six units in all, two of each colour.":
+    "あと四枚を二枚ずつ同じように折ります。ユニットは全部で六つ、各色ふたつずつです。",
+  "Open the flaps":
+    "フラップを起こす",
+  "Open every flap out square, standing straight up from its unit.":
+    "どのフラップも直角に起こして、ユニットからまっすぐ立てます。",
+  "Start the cube":
+    "キューブを組みはじめる",
+  "Hold a red unit flaps up for the bottom. Stand the blue units on it, front and back, their lower flaps tucked under the bottom.":
+    "赤いユニットをフラップを上にして底にします。その前とうしろに青いユニットを立て、下のフラップを底の下に入れます。",
+  "Add the sides":
+    "横をつける",
+  "Slide the yellow units in at the left and right, inside the bottom’s flaps, their own flaps over the blue faces.":
+    "黄色いユニットを左右から、底のフラップの内側に差しこみます。自分のフラップは青い面の上にかぶせます。",
+  "Put the lid on":
+    "ふたをする",
+  "Push the last red unit down on top, its flaps over the yellow faces and under the blue units’ upper flaps. Done!":
+    "最後の赤いユニットを上からおしこみます。フラップは黄色い面の上に、青いユニットの上のフラップの下に入れます。完成です！",
+  "Take a square and turn it to a diamond, coloured side down.":
+    "色の面を下にして、正方形をひし形の向きにおきます。",
+  "Fold the bottom corner up to the top corner: a triangle.":
+    "下の角を上の角に合わせて折りあげます。三角形になります。",
+  "Fold the left and right corners up to the top corner: a small diamond with two flaps.":
+    "左右の角を上の角まで折りあげます。フラップがふたつある小さなひし形になります。",
+  "Crease the flaps":
+    "フラップに折りすじをつける",
+  "Fold each flap in half, its middle edge down onto its lower edge. Unfold them.":
+    "フラップをそれぞれ半分に折り、まん中の辺を下の辺に重ねます。開きます。",
+  "Open the flaps back up, leaving the creases.":
+    "折りすじを残して、フラップを開いてもどします。",
+  "Squash the flaps":
+    "フラップをつぶす",
+  "Stand each flap up, open it and press it flat along its crease, into a kite lying over the diamond’s lower edge. Its tip sticks out at the top.":
+    "フラップを立てて開き、折りすじにそっておしつぶして、ひし形の下の辺にかかるたこの形にします。先が上にはみ出します。",
+  "Fold the tips down":
+    "先を折りさげる",
+  "Fold down the tip of each kite where it sticks out past the diamond, along the diamond’s upper edge.":
+    "ひし形からはみ出したたこの先を、ひし形の上の辺にそって折りさげます。",
+  "Fold the kites in half":
+    "たこを半分に折る",
+  "Fold the outer half of each kite in over the diamond, along its lower edge.":
+    "たこの外側の半分を、ひし形の下の辺にそって内側に折ります。",
+  "Fold the other petals":
+    "ほかの花びらを折る",
+  "Fold the other 59 squares into petals the same way.":
+    "残りの59枚も同じように折って花びらにします。",
+  "Glue a petal":
+    "花びらをのりづけする",
+  "Glue the two folded flaps together, so the petal closes into a cone.":
+    "折ったフラップふたつをのりではり合わせ、花びらを円すいの形にとじます。",
+  "Glue five into a flower":
+    "五枚で花にする",
+  "Glue five petals side by side, their points together, into a flower.":
+    "花びらを五枚、先を合わせて横に並べてはり、花にします。",
+  "Make the other flowers":
+    "ほかの花をつくる",
+  "Glue the other petals into 11 more flowers the same way.":
+    "残りの花びらも同じようにはって、花をあと11個つくります。",
+  "Start the ball":
+    "ボールを組みはじめる",
+  "Glue the flowers together where their petals meet: one in the middle and five round it, a bowl.":
+    "花びらがふれ合うところで花どうしをはります。まん中にひとつ、まわりに五つで、おわんの形になります。",
+  "Finish the ball":
+    "ボールを仕上げる",
+  "Glue on the other six flowers, the last one on top, to close the ball. Done!":
+    "残りの六つの花をはり、最後のひとつを上にのせてボールをとじます。完成です！",
 };

@@ -17,12 +17,22 @@ export function faceColour(model: Pick<OrigamiModel, 'sheets'>, paper: Vec2[], f
 
 /**
  * The unfolded sheets lying flat on the table, front up: each centred at `at` (by default, at its own origin
- * in sheet coordinates).
+ * in sheet coordinates). Sheets put down where others lie make a pile, each on top of the ones before it.
  */
 export function startFrame(sheets: (Sheet & { at?: Vec2 })[]): FoldFrame {
   const vertices_paper: Vec2[] = [];
   const vertices_coords: Vec3[] = [];
   const faces_vertices: number[][] = [];
+  const faces_layer: number[] = [];
+  const spans: [number, number, number, number][] = [];
+  for (const s of sheets) {
+    const [w, h] = s.size;
+    const [ax, az] = s.at ?? s.origin ?? [0, 0];
+    const span: [number, number, number, number] = [ax - w / 2, ax + w / 2, az - h / 2, az + h / 2];
+    const below = spans.flatMap((o, i) => (o[0] < span[1] && span[0] < o[1] && o[2] < span[3] && span[2] < o[3] ? [faces_layer[i]] : []));
+    faces_layer.push(below.length ? Math.max(...below) + 1 : 0);
+    spans.push(span);
+  }
   for (const s of sheets) {
     const [w, h] = s.size;
     const [ou, ov] = s.origin ?? [0, 0];
@@ -34,7 +44,7 @@ export function startFrame(sheets: (Sheet & { at?: Vec2 })[]): FoldFrame {
     }
     faces_vertices.push([base, base + 1, base + 2, base + 3]);
   }
-  return { vertices_paper, vertices_coords, faces_vertices };
+  return { vertices_paper, vertices_coords, faces_vertices, ...(faces_layer.some(Boolean) && { faces_layer }) };
 }
 
 /**

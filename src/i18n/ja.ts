@@ -141,6 +141,9 @@ export const ja: Messages = {
     'diamond-ring': { title: 'ダイヤの指輪', blurb: '丸めた帯の上に、折った小さなダイヤモンドをのせた指輪。' },
     'finger-trap': { title: '指とりわな', blurb: '指を入れて遊ぶ、細長くあんだ筒。はさみは使いません。' },
     'easy-sword': { title: 'かんたんな剣', blurb: 'つばと短い持ち手のついた銀色の剣。正方形一枚で。' },
+    'rainbow-chain': { title: 'にじのくさり', blurb: '7色の輪を28個、ひとつずつ前の輪に差しこんでつなぐ、長いジグザグのくさり。のりは使いません。' },
+    'business-card-cube': { title: '名刺のキューブ', blurb: '名刺6枚をユニットに折って組み合わせる立方体。どの辺もフラップでとめます。のりは使いません。' },
+    kusudama: { title: '花のくす玉', blurb: '花びら60枚を12個の花にはり、花をはり合わせてボールにします。' },
   },
   notFound: {
     title: 'このページは折りたたまれてしまいました',
@@ -386,6 +389,9 @@ export const ja: Messages = {
       bend: '曲げる',
       draw: '描く',
       newSheet: '新しい紙を用意する',
+      copy: '残りも同じように折る',
+      settle: 'おさえて平らにする',
+      assemble: 'パーツを組み立てる',
       together: '一度にいくつかの操作',
     },
     errors: {
