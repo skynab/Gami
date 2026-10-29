@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { poseAt, stepTransition } from './animate';
+import { crossings } from './collisions';
 import { toFlat } from './fold';
 import { fromFoldFile, toFoldFile } from './fold-format';
 import { applyOp } from './ops';
@@ -100,6 +102,18 @@ describe('copying a folded unit', () => {
     const again = applyOp({ ...read, steps: read.steps.slice(0, -1) }, step.op!).frame;
     expect(again.faces_vertices.length).toBe(step.frame.faces_vertices.length);
     expect(faces(again)).toEqual(faces(step.frame));
+  });
+
+  it('plays each copy folding as the first did, in turn, through no other paper', () => {
+    const model = folded().copy({ title: 'Fold the rest' }, 0, [1, 2], [[2, 0], [4, 0]]).build();
+    const k = model.steps.length;
+    const t = stepTransition(model, k);
+    // Halfway through, the copies are on their way, and nothing passes through paper all through the step.
+    const mid = poseAt(t, 0.5);
+    const lifted = t.faces.map((f, i) => (f.before.some((p, c) => Math.hypot(...p.map((x, d) => x - mid[i][c][d])) > 1e-6) ? i : -1)).filter((i) => i >= 0);
+    expect(lifted.length).toBeGreaterThan(0);
+    expect(crossings(model).filter((c) => c.step === k && c.depth > 0.005)).toEqual([]);
+    expect(problems(model)).toEqual([]);
   });
 
   it('won’t copy onto a sheet of another size', () => {

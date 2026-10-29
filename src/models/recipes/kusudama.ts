@@ -1,3 +1,4 @@
+import type { Faces } from '../../fold/ops';
 import { paper, Recipe, table, type At, type ShapeBend } from '../../fold/recipe';
 import type { Sheet, Vec2, Vec3 } from '../../fold/types';
 
@@ -73,13 +74,16 @@ export function kusudama() {
   const across = (v: Vec3, along: Vec3) => unit(sub(v, scale(unit(along), dot(v, unit(along)))));
   const phi = Math.acos(dot(across(a, m), across(n3, m)));
   const deg = (x: number) => (x * 180) / Math.PI;
+  // A flap, the quarter of its square on the side `s` of the middle (as `left` and `right`), kept in the file as
+  // that one square rather than each of its faces.
+  const quarter = (n: number, s: number): Faces => ({ inPaper: [[[10 * n, 0], [10 * n + s * 0.5, 0], [10 * n + s * 0.5, s * 0.5], [10 * n, s * 0.5]]] });
   const cone = (n: number): ShapeBend[] => {
     const [x, z] = corner(n);
     const at = ([px, pz]: Vec2): At => table(x + px, z + pz);
     return [
-      { through: [at([0, 0]), at([0, -h])], moving: at([0.2, -0.35]), degrees: deg(2 * theta), only: square(n) },
-      { through: [at([0, 0]), at([-h / 2, -h / 2])], moving: at([-0.2, -0.35]), degrees: deg(phi), only: left(n) },
-      { through: [at([0, 0]), at([h / 2, -h / 2])], moving: at([0.2, -0.35]), degrees: deg(phi), only: right(n) },
+      { through: [at([0, 0]), at([0, -h])], moving: at([0.2, -0.35]), degrees: deg(2 * theta) },
+      { through: [at([0, 0]), at([-h / 2, -h / 2])], moving: at([-0.2, -0.35]), degrees: deg(phi), only: quarter(n, -1) },
+      { through: [at([0, 0]), at([h / 2, -h / 2])], moving: at([0.2, -0.35]), degrees: deg(phi), only: quarter(n, 1) },
     ];
   };
 

@@ -2,7 +2,9 @@ import { Matrix4, Quaternion, Vector3 } from 'three';
 import { box, clearanceDepth, cornerKeys, crossDepth, overlapping } from './cross3d';
 import { facePositions, framesOf, LAYER_GAP, normal, sphereAround } from './frames';
 import { joinedSegment, overlapArea, type Cut } from './geometry2d';
-import { applyOp, lastFold, reopened } from './ops';
+import { applyOp, lastFold, reopened, type Op } from './ops';
+import { inside } from './select';
+import { sheetOf } from './sheets';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from './types';
 
 /**
@@ -79,6 +81,8 @@ export interface Transition {
    * bend passes through are close together, so they barely disagree.
    */
   blend?: { moves: Motion[]; vertices: number[][] };
+  /** Poses worked out some other way than by motions, as each copy of a unit folding as the first one did. */
+  replay?: (s: number) => Vec3[][];
   /** A step played from its end back to its start (see `unfoldingBackwards`), and each face's face in it. */
   backwards?: { t: Transition; ancestors: number[] };
   /** Faces of separate paper that stay on the table while the rest lifts off it (see Motion.lift). */
@@ -192,6 +196,107 @@ function separately(from: FoldFrame, to: FoldFrame): Transition {
   cutsOf.set(faces, to.cuts ?? from.cuts ?? []);
   return { faces, motions };
 }
+
+/** Whether a step only folds more units like one already made. */
+const copies = (op: Op): boolean => op.op === 'copy' || (op.op === 'together' && op.ops.every(copies));
+
+/**
+ * Folding more units like one already made (`copy`): each copy folds just as the first unit did, step by step,
+ * then goes to its place, lifted clear of the rest. Units take turns, from the top of the pile, each turn taking
+ * `TURN` of the step (more when there are few), starting evenly through the rest of it.
+ */
+function foldedLikeTheFirst(model: OrigamiModel, k: number, op: Op): Transition {
+  const frames = framesOf(model);
+  const [from, to] = [frames[k - 1], frames[k]];
+  // Each copy's unit, and its turn: copies made together (the first of each copy's list, say) fold together.
+  const sourceOf = new Map<number, number>();
+  const turnOf = new Map<number, number>();
+  const collect = (o: Op): void => {
+    if (o.op === 'copy')
+      o.to.forEach((t, n) => {
+        sourceOf.set(t, o.from);
+        turnOf.set(t, n);
+      });
+    else if (o.op === 'together') o.ops.forEach(collect);
+  };
+  collect(op);
+  const history = Array.from({ length: k - 1 }, (_, j) => stepTransition(model, j + 1));
+  const fromPositions = facePositions(from);
+  const toPositions = facePositions(to);
+  const origin = (n: number) => model.sheets[n]?.origin ?? [0, 0];
+  const faces = to.faces_vertices.map((face, f): FaceTrack => {
+    const paper = face.map((v) => to.vertices_paper[v]);
+    const parent = to.faces_parent?.[f] ?? f;
+    const before = paper.map(affine(from.faces_vertices[parent].map((v) => from.vertices_paper[v]), fromPositions[parent]));
+    return { paper, before, after: toPositions[f], motion: 0 };
+  });
+  cutsOf.set(faces, to.cuts ?? from.cuts ?? []);
+  const still: Motion = { axis: new Vector3(0, 1, 0), angle: 0, pivot: new Vector3(), shift: new Vector3(), lift: 0 };
+  if (!history.length) return { faces, motions: [still] };
+
+  // Each copied face: its unit, the same paper on the unit it copies, and that paper's face before this step and
+  // in each step before it (following faces back).
+  const copied = faces.map((f) => {
+    const unit = sheetOf(model.sheets, f.paper);
+    const source = sourceOf.get(unit);
+    if (source === undefined) return null;
+    const [tu, tv] = origin(unit);
+    const [su, sv] = origin(source);
+    const paper = f.paper.map(([u, v]): Vec2 => [u - tu + su, v - tv + sv]);
+    const c: Vec2 = [paper.reduce((sum, p) => sum + p[0], 0) / paper.length, paper.reduce((sum, p) => sum + p[1], 0) / paper.length];
+    let face = from.faces_vertices.findIndex((g) => inside(g.map((v) => from.vertices_paper[v]), c));
+    if (face < 0) return null;
+    const ancestors: number[] = [];
+    for (let j = k - 1; j >= 1; j--) {
+      ancestors[j - 1] = face;
+      face = frames[j].faces_parent?.[face] ?? face;
+    }
+    return { unit, paper, ancestors };
+  });
+  // Turns go from the top of the pile, the last copies first.
+  const turns = [...new Set(turnOf.values())].sort((a, b) => b - a);
+  const turn = Math.min(1, Math.max(TURN, 2 / turns.length));
+  const startOf = (unit: number) => {
+    const j = turns.indexOf(turnOf.get(unit)!);
+    return turns.length > 1 ? (j / (turns.length - 1)) * (1 - turn) : 0;
+  };
+
+  // Where the first unit's paper is `tau` of the way through its folding, each step played as it was. Moments are
+  // rounded to `MOMENTS` a step and their poses kept, as many units fold at once and each frame asks again.
+  const poses = new Map<number, Vec3[][]>();
+  const sourceAt = (i: number, tau: number): Vec3[] => {
+    const c = copied[i]!;
+    const x = Math.min(history.length - 1e-9, Math.round(tau * history.length * MOMENTS) / MOMENTS);
+    const j = Math.floor(x);
+    let pose = poses.get(x);
+    if (!pose) poses.set(x, (pose = poseAt(history[j], x - j)));
+    const a = c.ancestors[j];
+    return c.paper.map(affine(history[j].faces[a].paper, pose[a]));
+  };
+  // Each face moves along from where the first unit's paper was to where its own is: the same for all its corners.
+  const offsets = faces.map((f, i) => {
+    if (!copied[i]) return null;
+    const [s0, s1] = [sourceAt(i, 0)[0], sourceAt(i, 1)[0]];
+    return { start: f.before[0].map((x, d) => x - s0[d]) as Vec3, end: f.after[0].map((x, d) => x - s1[d]) as Vec3 };
+  });
+  const replay = (s: number): Vec3[][] => faces.map((f, i) => {
+      const c = copied[i];
+      const o = offsets[i];
+      if (!c || !o) return f.before;
+      const tau = Math.max(0, Math.min(1, (s - startOf(c.unit)) / turn));
+      if (tau <= 0) return f.before;
+      if (tau >= 1) return f.after;
+      const rise = TURN_LIFT * raised(tau);
+      return sourceAt(i, tau).map((p): Vec3 => [0, 1, 2].map((d) => p[d] + o.start[d] + (o.end[d] - o.start[d]) * tau + (d === 1 ? rise : 0)) as Vec3);
+    });
+  return { faces, motions: [still], replay };
+}
+
+/** How much of a step each unit of a pile takes to fold, at least, and how high it's lifted as it goes. */
+const TURN = 0.3;
+const TURN_LIFT = 0.3;
+/** How finely a copy's folding is played: the first unit's poses at this many moments a step. */
+const MOMENTS = 40;
 
 function blendedPose(t: Transition, s: number): Vec3[][] {
   const { moves, vertices } = t.blend!;
@@ -546,7 +651,8 @@ function settled(out: Transition, hinges: NonNullable<Transition['hinges']>): Tr
 /** Step k's animation (k from 1): straight from the frame before, or through the frames it passes on its way. */
 export function stepTransition(model: OrigamiModel, k: number): Transition {
   const frames = framesOf(model);
-  if (model.steps[k - 1].op?.op === 'copy') return separately(frames[k - 1], frames[k]);
+  const op = model.steps[k - 1].op;
+  if (op && copies(op)) return foldedLikeTheFirst(model, k, op);
   const over = tuckedOver(model, k);
   if (over) return transitionVia([frames[k - 1], over, { ...frames[k], faces_parent: sameFaces(over, frames[k]) }]);
   if (!model.steps[k - 1].via?.length) return transitionBetween(frames[k - 1], frames[k]);
@@ -671,6 +777,7 @@ function fixedPose(t: Transition, s: number): Vec3[][] {
 function rawPose(t: Transition, s: number): Vec3[][] {
   if (s <= 0) return t.faces.map((f) => f.before);
   if (s >= 1) return t.faces.map((f) => f.after);
+  if (t.replay) return t.replay(s);
   if (t.backwards) {
     const { t: forward, ancestors } = t.backwards;
     const pose = poseAt(forward, 1 - s);

@@ -139,13 +139,15 @@ function slanted(model: OrigamiModel, frame: FoldFrame, size: number): string {
       light: Math.abs(dot(n, [0.3, 0.9, 0.3])),
     };
   });
-  // Farthest first. Layers lying flat a hair apart go by which is higher, as their centres can lie anywhere: a big
-  // floor face's centre may be nearer than a small flap's lying on it.
-  const stacked = 0.01;
-  const flat = (f: (typeof faces)[number]) => Math.abs(f.facing[1]) > 0.999;
-  faces.sort((a, b) =>
-    flat(a) && flat(b) && dot(a.facing, b.facing) > 0.999 && Math.abs(a.offset - b.offset) < stacked ? a.offset - b.offset : a.depth - b.depth,
-  );
+  // Farthest first. Where two faces cover each other on the card, the one nearer the viewer there goes after the
+  // other, however their middles lie: a big floor face's middle may be nearer than a small flap's lying on it, or a
+  // cube's face's than the flap over it.
+  const order = paintOrder(faces, ({ facing, offset }, [x, y]) => {
+    // The depth towards the viewer of the point of the face's plane drawn at (x, y): x along +x, −y along `up`.
+    const across = dot(facing, toViewer);
+    return across > 1e-6 ? (offset - facing[0] * x + dot(facing, up) * y) / across : null;
+  });
+  faces.splice(0, faces.length, ...order.map((i) => faces[i]));
   const pts = faces.flatMap((f) => f.screen);
   const xs = pts.map((p) => p[0]);
   const ys = pts.map((p) => p[1]);
@@ -172,6 +174,73 @@ function slanted(model: OrigamiModel, frame: FoldFrame, size: number): string {
 `
   );
 }
+
+/**
+ * The order to paint faces in, farthest first: for each two that cover each other on the card, the one nearer at
+ * a point they both cover goes after the other (`depthAt`, the depth of a face's plane drawn at a point, nearer
+ * being more). Faces nothing decides between go by their middles' depths.
+ */
+function paintOrder<F extends { screen: Vec2[]; depth: number }>(faces: F[], depthAt: (face: F, at: Vec2) => number | null): number[] {
+  const n = faces.length;
+  const boxes = faces.map(({ screen }) => {
+    const xs = screen.map((p) => p[0]);
+    const ys = screen.map((p) => p[1]);
+    return [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
+  });
+  const after = faces.map((): number[] => []);
+  const before = new Array<number>(n).fill(0);
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      const [a, b] = [boxes[i], boxes[j]];
+      if (a[1] <= b[0] || b[1] <= a[0] || a[3] <= b[2] || b[3] <= a[2]) continue;
+      const shared = clip(faces[i].screen, faces[j].screen);
+      if (shared.length < 3 || Math.abs(area(shared)) < 1e-9) continue;
+      const at: Vec2 = [shared.reduce((s, p) => s + p[0], 0) / shared.length, shared.reduce((s, p) => s + p[1], 0) / shared.length];
+      const [di, dj] = [depthAt(faces[i], at), depthAt(faces[j], at)];
+      if (di === null || dj === null || Math.abs(di - dj) < 1e-9) continue;
+      const [far, near] = di < dj ? [i, j] : [j, i];
+      after[far].push(near);
+      before[near]++;
+    }
+  }
+  // Painted in that order, the farthest middle first among those free to go; where faces cover each other in a
+  // ring, the farthest of the rest goes next.
+  const order: number[] = [];
+  const done = new Array<boolean>(n).fill(false);
+  const byDepth = faces.map((_, i) => i).sort((a, b) => faces[a].depth - faces[b].depth);
+  while (order.length < n) {
+    const next = byDepth.find((i) => !done[i] && !before[i]) ?? byDepth.find((i) => !done[i])!;
+    done[next] = true;
+    order.push(next);
+    for (const k of after[next]) before[k]--;
+  }
+  return order;
+}
+
+/** The part of convex polygon `a` inside convex polygon `b`. */
+function clip(a: Vec2[], b: Vec2[]): Vec2[] {
+  const turn = area(b) < 0 ? -1 : 1;
+  let out = a;
+  for (let i = 0; i < b.length && out.length; i++) {
+    const [p, q] = [b[i], b[(i + 1) % b.length]];
+    const side = (x: Vec2) => turn * ((q[0] - p[0]) * (x[1] - p[1]) - (q[1] - p[1]) * (x[0] - p[0]));
+    const input = out;
+    out = [];
+    input.forEach((cur, k) => {
+      const prev = input[(k + input.length - 1) % input.length];
+      const [sc, sp] = [side(cur), side(prev)];
+      if (sc >= 0 !== sp >= 0) {
+        const t = sp / (sp - sc);
+        out.push([prev[0] + t * (cur[0] - prev[0]), prev[1] + t * (cur[1] - prev[1])]);
+      }
+      if (sc >= 0) out.push(cur);
+    });
+  }
+  return out;
+}
+
+/** Twice a polygon's signed area. */
+const area = (poly: Vec2[]) => poly.reduce((s, p, i) => s + p[0] * poly[(i + 1) % poly.length][1] - poly[(i + 1) % poly.length][0] * p[1], 0);
 
 /** A #rrggbb colour made darker by `k` (0–1). */
 function shade(hex: string, k: number): string {

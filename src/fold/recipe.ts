@@ -12,7 +12,7 @@ import { radial, reparent, shape, type Bend, type Ray } from './shape';
 import { sheetOf, startFrame } from './sheets';
 import { keepIn, tape } from './tape';
 import { frontUp, sideOf } from './geometry2d';
-import { applyOp, lastFold, lineOf, reopened, type At, type BendGoal, type Faces, type LineSpec, type Op } from './ops';
+import { applyOp, lastFold, lineOf, reopened, select, type At, type BendGoal, type Faces, type LineSpec, type Op } from './ops';
 import type { FoldFrame, Mark, OrigamiModel, Sheet, Step, Vec2, Vec3 } from './types';
 
 /**
@@ -51,7 +51,8 @@ export interface ShapeBend {
   degrees: number;
   segments?: number;
   layers?: number;
-  only?: (centre: Vec2) => boolean;
+  /** The paper it turns: a test on faces' centres on the sheet, or faces as a file describes them (smaller to keep). */
+  only?: ((centre: Vec2) => boolean) | Faces;
 }
 
 export class Recipe {
@@ -369,7 +370,7 @@ export class Recipe {
     const anchor = chained ? chained.paper : this.shaping?.chained;
     const rideTest = ride && recorder(ride);
     const riding = rideTest ?? this.shaping?.ride;
-    const tests = bends.map((b) => b.only && recorder(b.only));
+    const tests = bends.map((b) => b.only && picker(b.only, base, this.info.sheets));
     const added = bends.flatMap((b, k): Bend[] => {
       const test = tests[k];
       const line = lineOf({ through: b.through, moving: b.moving }, base);
@@ -429,7 +430,7 @@ export class Recipe {
       const test = p.only ? recorder(p.only) : null;
       const faces = (): Faces => (p.sheet !== undefined ? { sheet: p.sheet } : test ? test.faces() : { inPaper: [] });
       const only = p.sheet !== undefined ? (poly: Vec2[]) => sheetOf(this.info.sheets, poly) === p.sheet : test!;
-      const bendTests = (p.bends ?? []).map((b) => b.only && recorder(b.only));
+      const bendTests = (p.bends ?? []).map((b) => b.only && picker(b.only, base, this.info.sheets));
       const bends = (p.bends ?? []).map((b, k): Bend => ({
         line: lineOf({ through: b.through, moving: b.moving }, base),
         angle: (b.degrees * Math.PI) / 180,
@@ -632,6 +633,12 @@ export class Recipe {
 }
 
 const avg = (poly: Vec2[], i: number) => poly.reduce((sum, p) => sum + p[i], 0) / poly.length;
+
+/** A face test given either way a shaping bend takes one: as `recorder` makes it, or from faces as a file has them. */
+function picker(only: ((centre: Vec2) => boolean) | Faces, frame: FoldFrame, sheets: Sheet[]): ((poly: Vec2[]) => boolean) & { faces(): Faces } {
+  if (typeof only === 'function') return recorder(only);
+  return Object.assign(select(only, { frame, sheets }), { faces: () => only });
+}
 
 /**
  * A test on faces' centres on the sheet, as the engine takes it (a test on their corners), that remembers the

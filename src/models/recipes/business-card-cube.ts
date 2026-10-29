@@ -65,6 +65,9 @@ export function businessCardCube() {
   // paper's thickness in from the flaps over it.
   const C: Vec3 = [0, 0.51, 0.7];
   const inset = 0.004;
+  // The cube is turned a little about the upright, so it's seen corner on, two sides and its top showing.
+  const TURN = (35 * Math.PI) / 180;
+  const turned = ([x, y, z]: Vec3): Vec3 => [x * Math.cos(TURN) + z * Math.sin(TURN), y, -x * Math.sin(TURN) + z * Math.cos(TURN)];
   const cross = (a: Vec3, b: Vec3): Vec3 => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
   const faces: { n: number; out: Vec3; along: Vec3 }[] = [
     { n: 0, out: [0, -1, 0], along: [1, 0, 0] },
@@ -75,7 +78,8 @@ export function businessCardCube() {
     { n: 5, out: [0, 0, -1], along: [0, 1, 0] },
   ];
   const onCube = (n: number) => {
-    const { out, along } = faces.find((g) => g.n === n)!;
+    const face = faces.find((g) => g.n === n)!;
+    const [out, along] = [turned(face.out), turned(face.along)];
     const up: Vec3 = [-out[0], -out[1], -out[2]];
     // The table's +x goes along the flaps for an even card; for an odd one, its flaps run along z.
     const x = n % 2 === 0 ? along : cross(up, along);
