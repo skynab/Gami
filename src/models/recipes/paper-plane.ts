@@ -79,7 +79,8 @@ export function finishPlane(
  * The end of `finishPlane`, for a plane already on its side with its keel along the bottom: the wing on top
  * (the paper `right` picks out) folded down `body` up from the keel, turned over, the other (`left`) to match,
  * then the wings opened out and the plane turned over. With `fin`, paper of neither wing reaching past the line
- * stays standing with the body, as a tail fin.
+ * stays standing with the body, as a tail fin. With `tail`, the line slants: `body` up at the nose and `tail` up
+ * at the back, for a body that deepens towards the tail.
  */
 export function foldWings(
   plane: Recipe,
@@ -87,29 +88,38 @@ export function foldWings(
   wingText: string,
   right: (c: Vec2) => boolean,
   left: (c: Vec2) => boolean,
-  more: { beforeOpen?(plane: Recipe, wings: Wings): void; afterOpen?(plane: Recipe, wings: Wings): void; flyText?: string; fin?: boolean } = {},
+  more: { beforeOpen?(plane: Recipe, wings: Wings): void; afterOpen?(plane: Recipe, wings: Wings): void; flyText?: string; fin?: boolean; tail?: number } = {},
 ): OrigamiModel {
   // On its side, the keel runs along the bottom. Each wing folds down along a line parallel to it.
   const keel = Math.max(...plane.current.vertices_coords.map((p) => p[2]));
   const wingLine = keel - body;
-  const fold: [At, At] = [table(-1, wingLine), table(1, wingLine)];
+  // The line, from nose (left) to tail, and a point just past it, away from the keel. Turning the plane over
+  // mirrors a slanting line, so the second wing and the opening fold along the mirror image.
+  const xs = plane.current.vertices_coords.map((p) => p[0]);
+  const ends: [Vec2, Vec2] =
+    more.tail === undefined ? [[-1, wingLine], [1, wingLine]] : [[Math.min(...xs), wingLine], [Math.max(...xs), keel - more.tail]];
+  const fold: [At, At] = [table(...ends[0]), table(...ends[1])];
+  const over: [At, At] = more.tail === undefined ? fold : [table(-ends[0][0], ends[0][1]), table(-ends[1][0], ends[1][1])];
+  const slope = (ends[1][1] - ends[0][1]) / (ends[1][0] - ends[0][0]);
+  const lineAt = (x: number) => ends[0][1] + slope * (x - ends[0][0]);
+  const past = table(0, lineAt(0) - 0.1);
   // Each wing: the part of its half of the sheet beyond the line, before it folds down.
-  const wingOf = (half: (c: Vec2) => boolean) => {
-    const beyond = plane.lying(([, z]) => z < wingLine);
+  const wingOf = (half: (c: Vec2) => boolean, turned: boolean) => {
+    const beyond = plane.lying(([x, z]) => z < lineAt(turned ? -x : x));
     return (c: Vec2) => half(c) && beyond(c);
   };
-  const firstWing = wingOf(right);
-  const past = plane.lying(([, z]) => z < wingLine);
-  const fin = (c: Vec2) => past(c) && !right(c) && !left(c);
-  plane.along(...fold, table(0, wingLine - 0.1), {
+  const firstWing = wingOf(right, false);
+  const pastLine = plane.lying(([x, z]) => z < lineAt(x));
+  const fin = (c: Vec2) => pastLine(c) && !right(c) && !left(c);
+  plane.along(...fold, past, {
     title: 'Fold the wing down',
     text: wingText,
     only: right,
   });
   plane.turnOver();
-  const secondWing = wingOf(left);
+  const secondWing = wingOf(left, true);
   const wings: Wings = { keel, wingLine, firstWing, secondWing };
-  plane.along(...fold, table(0, wingLine - 0.1), {
+  plane.along(...over, past, {
     title: 'Fold the other wing to match',
     text: 'Line it up with the first wing.',
     only: left,
@@ -119,11 +129,11 @@ export function foldWings(
     // The first wing, underneath, stays on the table; the body stands up off it, and the other wing swings
     // right over to lie out flat on the far side: the plane upside down, its keel pointing up.
     .shape({ title: 'Open the wings', text: 'Open both wings out flat on either side of the body, at right angles to it.' }, [
-      { through: fold, moving: table(0, keel), degrees: 90, only: (c) => !firstWing(c) },
-      { through: fold, moving: table(0, keel), degrees: 90, only: secondWing },
+      { through: over, moving: table(0, keel), degrees: 90, only: (c) => !firstWing(c) },
+      { through: over, moving: table(0, keel), degrees: 90, only: secondWing },
       // The fin carries on the body's line past the wings', so it turns with the body: down through the table,
       // until the plane turns over.
-      ...(more.fin ? [{ through: fold, moving: table(0, wingLine - 0.1), degrees: -90, only: fin }] : []),
+      ...(more.fin ? [{ through: over, moving: past, degrees: -90, only: fin }] : []),
     ]);
   more.afterOpen?.(plane, wings);
   return plane

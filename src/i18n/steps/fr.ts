@@ -1178,6 +1178,12 @@ export const fr: Record<string, string> = {
     "Rabattez la couche du dessus le long d’une ligne à environ 2 cm (3/4 de pouce) au-dessus du bas. Les couches de l’intérieur restent levées : c’est la dérive.",
   "Turn the plane over, so it stands on its keel with the fin up between its wings. A few staples in the nose help it fly straight and keep the body shut.":
     "Retournez l’avion pour qu’il repose sur sa quille, la dérive dressée entre les ailes. Quelques agrafes dans le nez l’aident à voler droit et gardent le fuselage fermé.",
+  "Fold the triangle’s point down to halfway down it. The tips of the corners you folded up stay where they are, sticking out above the fold.":
+    "Rabattez la pointe du triangle jusqu’à mi-hauteur. Les pointes des coins que vous avez relevés restent en place et dépassent au-dessus du pli.",
+  "Fold the top layers down along a line from just above the little point to the back edge, slanting a little further from the bottom towards the back.":
+    "Rabattez les couches du dessus le long d’une ligne qui part juste au-dessus de la petite pointe jusqu’au bord arrière, en s’écartant un peu plus du bas vers l’arrière.",
+  "Turn the plane over, so it stands on its keel with its wings level on top, and the little point sticking out in front. It’s ready to fly!":
+    "Retournez l’avion pour qu’il repose sur sa quille, les ailes à plat au-dessus et la petite pointe dépassant devant. Il est prêt à voler !",
   "Fold the top-left corner across":
     "Pliez le coin supérieur gauche en travers",
   "Bring the top-left corner down to the right edge, so the top edge lies along it.":

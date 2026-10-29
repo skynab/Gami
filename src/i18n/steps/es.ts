@@ -1178,6 +1178,12 @@ export const es: Record<string, string> = {
     "Dobla la capa de arriba hacia abajo por una línea a unos 2 cm (3/4 de pulgada) del borde de abajo. Las capas de dentro se quedan arriba: son la aleta de cola.",
   "Turn the plane over, so it stands on its keel with the fin up between its wings. A few staples in the nose help it fly straight and keep the body shut.":
     "Da la vuelta al avión para que se apoye en la quilla, con la aleta hacia arriba entre las alas. Unas grapas en la nariz lo ayudan a volar recto y mantienen el cuerpo cerrado.",
+  "Fold the triangle’s point down to halfway down it. The tips of the corners you folded up stay where they are, sticking out above the fold.":
+    "Dobla la punta del triángulo hacia abajo hasta la mitad de su altura. Las puntas de las esquinas que doblaste hacia arriba se quedan donde están y sobresalen por encima del pliegue.",
+  "Fold the top layers down along a line from just above the little point to the back edge, slanting a little further from the bottom towards the back.":
+    "Dobla las capas de arriba hacia abajo por una línea que va desde justo encima de la puntita hasta el borde de atrás, alejándose un poco más del borde de abajo hacia atrás.",
+  "Turn the plane over, so it stands on its keel with its wings level on top, and the little point sticking out in front. It’s ready to fly!":
+    "Da la vuelta al avión para que se apoye en la quilla con las alas niveladas arriba y la puntita asomando delante. ¡Ya puede volar!",
   "Fold the top-left corner across":
     "Dobla la esquina de arriba a la izquierda hacia el otro lado",
   "Bring the top-left corner down to the right edge, so the top edge lies along it.":

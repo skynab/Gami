@@ -65,7 +65,7 @@ Easiest and clearest first. Each phase can ship alone.
 | Phase | Status |
 |---|---|
 | 1. Sprinter | Done, Unattributed, after Fold'N Fly's sequence. The corner-to-corner fold creases at right angles to the diagonal; the halving fold runs along the diagonal itself; each layer then folds back along the line halving the thick corner, so the outer layers are the wings and the inner ones the fin. `foldWings` (the second half of `finishPlane`) now takes the two wings' paper, and with `fin` lifts the paper of neither past the wing line with the body (it turns down through the table until the plane turns over). The other planes' files are unchanged. The staples are suggested in the last step, not needed. |
-| 2. Fun Flyer | Not started |
+| 2. Fun Flyer | Done, Unattributed, after Fold'N Fly's sequence without its rabbit ears. Each of the diamond's flaps is joined to the layers under it along its bottom edge, which the rabbit ear folds, so rigid paper can't follow; the flaps' tips stick out in front as they are. So the point folds down a quarter of the way (Fold'N Fly: halfway) to keep the tips small, and the wings fold from just above them along a line slanting a little towards the tail. `foldWings` takes a `tail` for that slant: turning over mirrors a slanting line, so the second wing and the opening use its mirror image. |
 | 3. Spinning plane | Not started |
 | 4. Flying saucer | Not started |
 | Later: navy plane's tail flaps | Not started |

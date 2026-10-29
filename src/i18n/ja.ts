@@ -74,6 +74,7 @@ export const ja: Messages = {
     'navy-plane': { title: 'ネイビープレーン', blurb: 'スピードのために作られた、細いデルタ翼のジェット機。' },
     'king-bee': { title: 'キングビー', blurb: '2本の触角がある、ずんぐりした曲芸機。ハチのようにくねくね飛ぶ。' },
     'sprinter': { title: 'スプリンター', blurb: '大きな尾翼がある後退翼の飛行機。調整は難しいけれど、決まれば速い。' },
+    'fun-flyer': { title: 'ファンフライヤー', blurb: '鼻先に小さなとがりがある、翼の長いダート。真上に投げてみよう。' },
     'dog-face': { title: 'いぬのかお', blurb: 'はじめての折り紙に。たれ耳の三角。' },
     'cat-face': { title: 'ねこのかお', blurb: 'はじめての折り紙に。とがった耳の三角。' },
     cup: { title: 'コップ', blurb: 'しばらくなら水も入るコップ。' },

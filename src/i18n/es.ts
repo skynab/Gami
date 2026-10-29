@@ -74,6 +74,7 @@ export const es: Messages = {
     'navy-plane': { title: 'Avión naval', blurb: 'Un reactor esbelto de alas en delta, hecho para la velocidad.' },
     'king-bee': { title: 'Abejorro rey', blurb: 'Un acróbata rechoncho con dos antenas, que zigzaguea por el aire como una abeja.' },
     'sprinter': { title: 'Velocista', blurb: 'Un avión de alas en flecha con una gran aleta de cola. Cuesta ajustarlo, pero es rápido cuando lo está.' },
+    'fun-flyer': { title: 'Planeador divertido', blurb: 'Un dardo de alas largas con una puntita delante de la nariz. Prueba a lanzarlo hacia arriba.' },
     'dog-face': { title: 'Cara de perro', blurb: 'Un primer plegado: un triángulo con orejas caídas.' },
     'cat-face': { title: 'Cara de gato', blurb: 'Un primer plegado: un triángulo con orejas puntiagudas.' },
     cup: { title: 'Vaso', blurb: 'Un vaso que aguanta agua, un rato.' },

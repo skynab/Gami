@@ -40,6 +40,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `navy-plane` | Unattributed: Fold'N Fly's Navy Plane (design #35) names no designer | Unknown: no designer found | [Fold'N Fly: Navy Plane](https://www.foldnfly.com/35.html) | Unattributed | 21 Oct 2026 |
 | `king-bee` | Unattributed: Fold'N Fly's King Bee (design #22) names no designer | Unknown: no designer found | [Fold'N Fly: King Bee](https://www.foldnfly.com/22.html) | Unattributed | 21 Oct 2026 |
 | `sprinter` | Unattributed: Fold'N Fly's Sprinter (design #4) names no designer; its references are four books by different authors, none named as the source | Unknown: no designer found | [Fold'N Fly: The Sprinter](https://www.foldnfly.com/4.html) | Unattributed | 29 Oct 2026 |
+| `fun-flyer` | Unattributed: Fold'N Fly's Fun Flyer (design #45) names no designer and lists no references | Unknown: no designer found | [Fold'N Fly: Fun Flyer](https://www.foldnfly.com/45.html), for the order of folds; Gami leaves out its rabbit ears (see the notes) | Unattributed | 29 Oct 2026 |
 | `boomerang` | Unattributed: Fold'N Fly's Boomerang (design #56) names no designer | Unknown: no designer found | [Fold'N Fly: Boomerang](https://www.foldnfly.com/56.html) | Unattributed | 22 Oct 2026 |
 | `dog-face` | Traditional | None needed: nobody owns it | none recorded | Clear | 18 Oct 2026 |
 | `cat-face` | Traditional | None needed: nobody owns it | none recorded | Clear | 18 Oct 2026 |
@@ -188,7 +189,12 @@ noted when it was written, and the model was folded from the common traditional 
   its source, so it's Unattributed too. Fold'N Fly staples its nose; Gami's last step suggests
   staples rather than needing them, as the engine has no stapler. The Spin Plane and UFO, checked the same day,
   each cite only one book of a named designer's own planes (Laux's, and Ken Blackburn and Jeff Lammers's), so
-  they're left out for Gami's own (see `docs/foldnfly-planes-plan.md`).
+  they're left out for Gami's own (see `docs/foldnfly-planes-plan.md`). The fun flyer (Fold'N Fly #45, checked the same
+  day: no designer, no licence, no references) is Unattributed too. Fold'N Fly creases the diamond's two flaps
+  and rabbit-ears them into narrow spikes; each flap is joined to the layers under it along its bottom edge,
+  which a rabbit ear has to fold, so rigid paper can't follow. Gami leaves those steps out: the flaps' tips stick
+  out in front as they are, so it folds the point down a quarter of the way rather than halfway, to keep them
+  small, and its wings fold along a line that slants a little from nose to tail.
 - **Coming soon.** The boat and the models listed on 21 October 2026 are gallery placeholders with no recipe
   yet. Each is credited "Traditional" on origami.me. When one gets a recipe, set its reference to what was
   actually followed and its date to when it shipped. Other traditional models on origami.me that aren't

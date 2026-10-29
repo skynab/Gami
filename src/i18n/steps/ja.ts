@@ -1178,6 +1178,12 @@ export const ja: Record<string, string> = {
     "上の層を、下の辺から2 cm（3/4インチ）ほど上の線で折り下げます。内側の層は立てたままにします。これが尾翼です。",
   "Turn the plane over, so it stands on its keel with the fin up between its wings. A few staples in the nose help it fly straight and keep the body shut.":
     "飛行機を裏返して、竜骨を下に、尾翼を翼のあいだで上に立てます。先端をホチキスで何か所か留めると、まっすぐ飛び、胴体も開きません。",
+  "Fold the triangle’s point down to halfway down it. The tips of the corners you folded up stay where they are, sticking out above the fold.":
+    "三角形の先を、高さの半分まで折り下げます。さっき折り上げた角の先はそのまま残り、折り山の上に突き出します。",
+  "Fold the top layers down along a line from just above the little point to the back edge, slanting a little further from the bottom towards the back.":
+    "上の層を、小さなとがりのすぐ上から後ろの辺までの線で折り下げます。線は後ろに行くほど、下の辺から少し離れます。",
+  "Turn the plane over, so it stands on its keel with its wings level on top, and the little point sticking out in front. It’s ready to fly!":
+    "飛行機を裏返して、竜骨を下に、翼を上で水平にします。小さなとがりが前に突き出します。これで飛ばせます！",
   "Fold the top-left corner across":
     "左上の角を反対側へ折る",
   "Bring the top-left corner down to the right edge, so the top edge lies along it.":

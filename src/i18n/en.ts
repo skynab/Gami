@@ -76,6 +76,7 @@ export const en = {
     'navy-plane': { title: 'Navy plane', blurb: 'A slim delta-winged jet, built for speed.' },
     'king-bee': { title: 'King bee', blurb: 'A stubby acrobat with two feelers, that wiggles through the air like a bee.' },
     'sprinter': { title: 'Sprinter', blurb: 'A swept-wing plane with a tall tail fin. Fussy to trim, but quick once it is.' },
+    'fun-flyer': { title: 'Fun flyer', blurb: 'A long-winged dart with a little point in front of its nose. Try throwing it straight up.' },
     'dog-face': { title: 'Dog face', blurb: 'A first fold: a triangle with floppy ears.' },
     'cat-face': { title: 'Cat face', blurb: 'A first fold: a triangle with pointed ears.' },
     cup: { title: 'Cup', blurb: 'A cup that holds water, for a while.' },
