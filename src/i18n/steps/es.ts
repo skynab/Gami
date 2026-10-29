@@ -2119,4 +2119,26 @@ export const es: Record<string, string> = {
     "Redondea los pétalos",
   "Fold the tip of each petal behind, just a little. Your rose is in bloom.":
     "Dobla la punta de cada pétalo hacia atrás, solo un poco. Tu rosa ha florecido.",
+  "Start light side up, with a corner pointing towards you.":
+    "Empieza con el lado claro hacia arriba y una esquina hacia ti.",
+  "Fold the lower edges to the middle crease.":
+    "Dobla los bordes de abajo hasta el pliegue del centro.",
+  "Fold the upper edges in":
+    "Dobla los bordes de arriba",
+  "And the upper edges, so the paper is a long, narrow leaf.":
+    "Y los bordes de arriba, para que el papel sea una hoja larga y estrecha.",
+  "Pleat the leaf":
+    "Plisa la hoja",
+  "Pleat the leaf back and forth across its length, like a fan, then let it open a little so it ripples.":
+    "Plisa la hoja de un lado a otro a lo ancho, como un abanico, y luego déjala abrirse un poco para que se ondule.",
+  "Fold the top edges in":
+    "Dobla los bordes de arriba hacia dentro",
+  "Fold the short upper edges to the middle too.":
+    "Dobla también los bordes cortos de arriba hasta el centro.",
+  "Turn it over: a plain green leaf.":
+    "Dale la vuelta: una hoja verde lisa.",
+  "Shape the leaf":
+    "Da forma a la hoja",
+  "Pinch the leaf along the middle crease, so its two halves rise a little either side. Your leaf is done.":
+    "Pellizca la hoja por el pliegue del centro, para que sus dos mitades se levanten un poco a cada lado. Tu hoja está lista.",
 };

@@ -131,6 +131,8 @@ export const en = {
     kunai: { title: 'Kunai', blurb: 'A ninja’s throwing knife: a long diamond blade on a thin dark handle, from a square and a strip.' },
     'hand-fan': { title: 'Hand fan', blurb: 'A flat paddle fan, an uchiwa, on a thin white handle, from a square and a strip.' },
     rose: { title: 'Rose', blurb: 'A flat rose whose four petals spiral round, from corners folded to the middle twice.' },
+    'palm-leaf': { title: 'Palm leaf', blurb: 'A long leaf pleated back and forth, so it ripples.' },
+    'green-leaf': { title: 'Green leaf', blurb: 'A plain green leaf, its halves raised either side of the midrib.' },
   },
   notFound: {
     title: 'This page got folded away',

@@ -2119,4 +2119,26 @@ export const ja: Record<string, string> = {
     "花びらを丸くする",
   "Fold the tip of each petal behind, just a little. Your rose is in bloom.":
     "それぞれの花びらの先を、少しだけうしろに折ります。バラがさきました。",
+  "Start light side up, with a corner pointing towards you.":
+    "明るい面を上にして、角を手前にむけて始めます。",
+  "Fold the lower edges to the middle crease.":
+    "下の二つのふちを、まん中の折りすじに合わせて折ります。",
+  "Fold the upper edges in":
+    "上のふちを折る",
+  "And the upper edges, so the paper is a long, narrow leaf.":
+    "上の二つのふちも折って、細長い葉の形にします。",
+  "Pleat the leaf":
+    "葉をじゃばらに折る",
+  "Pleat the leaf back and forth across its length, like a fan, then let it open a little so it ripples.":
+    "葉を横向きに、せんすのように山と谷を交互にじゃばら折りし、少し開いて波打たせます。",
+  "Fold the top edges in":
+    "上のふちを折る",
+  "Fold the short upper edges to the middle too.":
+    "短い上のふちも、まん中に合わせて折ります。",
+  "Turn it over: a plain green leaf.":
+    "うら返します。シンプルな緑の葉です。",
+  "Shape the leaf":
+    "葉の形を整える",
+  "Pinch the leaf along the middle crease, so its two halves rise a little either side. Your leaf is done.":
+    "まん中の折りすじにそってつまみ、両がわを少し立てます。葉の完成です。",
 };

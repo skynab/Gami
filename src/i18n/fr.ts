@@ -129,6 +129,8 @@ export const fr: Messages = {
     kunai: { title: 'Kunai', blurb: 'Le couteau de lancer des ninjas : une longue lame en losange sur un manche fin et sombre, avec un carré et une bande.' },
     'hand-fan': { title: 'Éventail plat', blurb: 'Un éventail plat à palette, un uchiwa, sur un manche blanc et fin, avec un carré et une bande.' },
     rose: { title: 'Rose', blurb: 'Une rose plate aux quatre pétales en spirale, les coins pliés au milieu deux fois.' },
+    'palm-leaf': { title: 'Feuille de palmier', blurb: 'Une longue feuille plissée en accordéon, qui ondule.' },
+    'green-leaf': { title: 'Feuille verte', blurb: 'Une feuille verte toute simple, ses moitiés relevées de chaque côté de la nervure.' },
   },
   notFound: {
     title: 'Cette page a été repliée',

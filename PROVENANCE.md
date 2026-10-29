@@ -97,6 +97,8 @@ noted when it was written, and the model was folded from the common traditional 
 | `kunai` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a diamond blade and a strip handle, in place of OrigamiOK's glued three-sheet kunai (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
 | `hand-fan` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's flat fan (an uchiwa), a square rounded off with a strip for the handle (see the notes); not the pleated `fan`, still to come | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
 | `rose` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a flat rose, the corners folded in twice and folded back out turned one way, in place of OrigamiOK's twisted rose (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `palm-leaf` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a narrow leaf pleated across its length and let open, in place of OrigamiOK's glued palm leaf (see the notes); "Palm leaf" in Gilad's database is Mark Bolitho's | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
+| `green-leaf` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a plain leaf with its halves raised about the midrib, in place of OrigamiOK's cut and pleated round leaf (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
 
 ### Notes
 
@@ -132,6 +134,10 @@ noted when it was written, and the model was folded from the common traditional 
   bending can open it: Gami's hand fan is its own, a rounded square on a strip handle. OrigamiOK's rose twists its
   middle into a spiral, which rigid paper can't follow, and Gilad's database lists hundreds of roses by named
   designers: Gami's is a flat rose of its own, its four points folded back out all turned one way so they spiral.
+  The two leaves are Gami's own as well: OrigamiOK's palm leaf is a cut triangle pleated and glued into a fan, and
+  its green leaf a cut triangle pleated round from the stem. Gami's palm leaf is a square folded to a long, narrow
+  leaf and pleated across, opened a little into ripples; its green leaf is the same narrow leaf left smooth, with
+  its halves raised either side of the midrib. No scissors or glue.
 - **Fox.** Okuda's design isn't openly licensed. It was kept on 18 October 2026 because it's very widely
   folded and taught (see the decisions log in `PLAN.md`). The gallery doesn't credit him yet. If the rule
   is tightened, the choices are: ask for permission, swap in a traditional fox, or design Gami's own.

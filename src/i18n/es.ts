@@ -129,6 +129,8 @@ export const es: Messages = {
     kunai: { title: 'Kunai', blurb: 'El cuchillo arrojadizo de los ninjas: una hoja larga en forma de rombo sobre un mango fino y oscuro, con un cuadrado y una tira.' },
     'hand-fan': { title: 'Abanico de mano', blurb: 'Un abanico plano de pala, un uchiwa, con un mango blanco y fino, con un cuadrado y una tira.' },
     rose: { title: 'Rosa', blurb: 'Una rosa plana con cuatro pétalos en espiral, con las esquinas dobladas al centro dos veces.' },
+    'palm-leaf': { title: 'Hoja de palmera', blurb: 'Una hoja larga plisada de un lado a otro, que se ondula.' },
+    'green-leaf': { title: 'Hoja verde', blurb: 'Una hoja verde lisa, con las mitades levantadas a cada lado del nervio central.' },
   },
   notFound: {
     title: 'Esta página se ha plegado y ha desaparecido',

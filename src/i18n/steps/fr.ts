@@ -2119,4 +2119,26 @@ export const fr: Record<string, string> = {
     "Arrondir les pétales",
   "Fold the tip of each petal behind, just a little. Your rose is in bloom.":
     "Repliez un peu le bout de chaque pétale derrière. Votre rose est en fleur.",
+  "Start light side up, with a corner pointing towards you.":
+    "Commencez face claire dessus, un coin pointé vers vous.",
+  "Fold the lower edges to the middle crease.":
+    "Rabattez les bords du bas sur le pli du milieu.",
+  "Fold the upper edges in":
+    "Rabattre les bords du haut",
+  "And the upper edges, so the paper is a long, narrow leaf.":
+    "Et les bords du haut, pour que le papier devienne une feuille longue et étroite.",
+  "Pleat the leaf":
+    "Plisser la feuille",
+  "Pleat the leaf back and forth across its length, like a fan, then let it open a little so it ripples.":
+    "Plissez la feuille en accordéon dans la largeur, comme un éventail, puis laissez-la s’ouvrir un peu pour qu’elle ondule.",
+  "Fold the top edges in":
+    "Rabattre les bords du haut vers l’intérieur",
+  "Fold the short upper edges to the middle too.":
+    "Rabattez aussi les petits bords du haut au milieu.",
+  "Turn it over: a plain green leaf.":
+    "Retournez-la : une feuille verte toute simple.",
+  "Shape the leaf":
+    "Former la feuille",
+  "Pinch the leaf along the middle crease, so its two halves rise a little either side. Your leaf is done.":
+    "Pincez la feuille le long du pli du milieu, pour que ses deux moitiés se relèvent un peu. Votre feuille est prête.",
 };

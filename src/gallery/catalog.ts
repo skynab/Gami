@@ -118,6 +118,8 @@ export const MODELS: ModelInfo[] = [
   { id: 'kunai', title: 'Kunai', blurb: 'A ninja’s throwing knife: a long diamond blade on a thin dark handle, from a square and a strip.', difficulty: 2, category: 'toy', steps: 10, minutes: 8, sheets: 2, paper: 4, added: '2026-10-28' },
   { id: 'hand-fan', title: 'Hand fan', blurb: 'A flat paddle fan, an uchiwa, on a thin white handle, from a square and a strip.', difficulty: 1, category: 'object', steps: 5, minutes: 5, sheets: 2, paper: 4, added: '2026-10-28' },
   { id: 'rose', title: 'Rose', blurb: 'A flat rose whose four petals spiral round, from corners folded to the middle twice.', difficulty: 2, category: 'flower', steps: 4, minutes: 6, sheets: 1, added: '2026-10-28' },
+  { id: 'palm-leaf', title: 'Palm leaf', blurb: 'A long leaf pleated back and forth, so it ripples.', difficulty: 2, category: 'flower', steps: 6, minutes: 6, sheets: 1, added: '2026-10-28' },
+  { id: 'green-leaf', title: 'Green leaf', blurb: 'A plain green leaf, its halves raised either side of the midrib.', difficulty: 1, category: 'flower', steps: 7, minutes: 4, sheets: 1, added: '2026-10-28' },
   // Coming soon: listed, with no steps yet.
   { id: 'boat', title: 'Boat', blurb: 'The classic paper boat. It really floats, for a while.', difficulty: 2, category: 'object', minutes: 6, sheets: 1 },
   { id: 'iris', title: 'Iris', blurb: 'Three petals up, three down, from the frog base.', difficulty: 4, category: 'flower', minutes: 20, sheets: 1 },
