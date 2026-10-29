@@ -3,7 +3,7 @@ import { basics } from '../models/basics';
 import { fold, FoldError } from './fold';
 import { lineOnto } from './geometry2d';
 import { paper, Recipe, table } from './recipe';
-import { shape } from './shape';
+import { radial, shape } from './shape';
 import { problems } from './validate';
 
 const square = basics.start;
@@ -192,5 +192,25 @@ describe('shape, riding layers', () => {
     const again = replay(read);
     expect(again.error).toBeUndefined();
     expect(toFoldFile(again.model)).toEqual(toFoldFile(read));
+  });
+});
+
+describe('radial', () => {
+  const square = () => new Recipe({ id: 't', title: 't', sheet: { size: [1, 1], front: '#fff', back: '#000' } }).current;
+  const quarters = (heading: (k: number) => number | undefined) =>
+    Array.from({ length: 4 }, (_, k) => ({ azimuth: (k * Math.PI) / 2, elevation: 0, ...(heading(k) !== undefined && { heading: heading(k) }) }));
+
+  it('raises a crease straight up from where it lies unless it has a heading', () => {
+    const plain = radial(square(), [0, 0], quarters(() => undefined));
+    expect(radial(square(), [0, 0], quarters((k) => (k * Math.PI) / 2)).vertices_coords).toEqual(plain.vertices_coords);
+  });
+
+  it('turns a crease to its heading, keeping the paper between creases unstretched', () => {
+    // Every crease turned a quarter round: the whole sheet turns with them, flat.
+    const turned = radial(square(), [0, 0], quarters((k) => ((k + 1) * Math.PI) / 2));
+    const corner = turned.vertices_coords.find((p) => Math.abs(Math.abs(p[0]) - 0.5) < 1e-9 && Math.abs(Math.abs(p[2]) - 0.5) < 1e-9);
+    expect(corner).toBeDefined();
+    // A heading that doesn't keep the angle between neighbouring creases would stretch the paper.
+    expect(() => radial(square(), [0, 0], quarters((k) => (k ? (k * Math.PI) / 2 : 0.3)))).toThrow(FoldError);
   });
 });

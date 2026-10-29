@@ -562,11 +562,14 @@ function contains(poly: Vec2[], p: Vec2): boolean {
 
 /**
  * A crease from a centre point, lifted off the table: its direction on the table (radians, from +x towards
- * +z) and how steeply it rises.
+ * +z) and how steeply it rises. It rises straight up from where it lies unless `heading` turns it: its direction
+ * seen from above once raised, for creases that swing round as they rise, such as the sides of a flap tucked
+ * inside a pyramid.
  */
 export interface Ray {
   azimuth: number;
   elevation: number;
+  heading?: number;
 }
 
 /**
@@ -577,7 +580,7 @@ export interface Ray {
  * never cross, where gaps measured off each sector would cross in its valleys.
  */
 export function radial(frame: FoldFrame, apex: Vec2, rays: Ray[]): FoldFrame {
-  const dir = ({ azimuth, elevation }: Ray): Vec3 => [Math.cos(elevation) * Math.cos(azimuth), Math.sin(elevation), Math.cos(elevation) * Math.sin(azimuth)];
+  const dir = ({ azimuth, elevation, heading = azimuth }: Ray): Vec3 => [Math.cos(elevation) * Math.cos(heading), Math.sin(elevation), Math.cos(elevation) * Math.sin(heading)];
   const n = rays.length;
   for (let k = 0; k < n; k++) {
     const [a, b] = [rays[k], rays[(k + 1) % n]];

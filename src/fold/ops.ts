@@ -4,7 +4,7 @@ import { fold, FoldError, unplaceLike, rotate, toFlat, turnOver, unfoldStep, FOL
 import { flipLine, lineEdgeOnto, lineOnto, lineThrough, sideOf, type Line } from './geometry2d';
 import { place } from './place';
 import { anchorFor, centre, inside, locate, smallerSideMoves, topLayers } from './select';
-import { curl, radial, reparent, shape, type Bend } from './shape';
+import { curl, radial, reparent, shape, type Bend, type Ray } from './shape';
 import { sheetOf } from './sheets';
 import { bendFrame } from './bend/frame';
 import { keepIn, tape } from './tape';
@@ -90,7 +90,7 @@ export type Op =
    */
   | { op: 'bend'; flex: Faces; anchor: { paper: Vec2 }; goals: BendGoal[]; mesh?: number; inflate?: number }
   /** `via`: the rays of shapes it passes through on the way, from flat, so it rises as one rather than each piece its own way. */
-  | { op: 'popUp'; centre: At; rays: { azimuth: number; elevation: number }[]; via?: { azimuth: number; elevation: number }[][] }
+  | { op: 'popUp'; centre: At; rays: Ray[]; via?: Ray[][] }
   /** Draws on the paper, leaving it where it is: a face, say. */
   | { op: 'draw'; marks: Mark[] }
   /** A scissor cut along a segment, through every layer it crosses, the top N, or the faces `only` picks. */
@@ -191,7 +191,11 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
       const rays = (v: unknown, p: string) =>
         list(v, p, (r, q) => {
           const ray = record(r, q);
-          return { azimuth: num(ray.azimuth, `${q}.azimuth`), elevation: num(ray.elevation, `${q}.elevation`) };
+          return {
+            azimuth: num(ray.azimuth, `${q}.azimuth`),
+            elevation: num(ray.elevation, `${q}.elevation`),
+            ...opt(ray, 'heading', num, q),
+          };
         });
       return {
         op: 'popUp',
