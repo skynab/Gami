@@ -2,7 +2,7 @@ import { Matrix4, Quaternion, Vector3 } from 'three';
 import { box, clearanceDepth, cornerKeys, crossDepth, overlapping } from './cross3d';
 import { facePositions, framesOf, LAYER_GAP, normal, sphereAround } from './frames';
 import { joinedSegment, overlapArea, type Cut } from './geometry2d';
-import { applyOp, lastFold, reopened, type Op } from './ops';
+import { applyOp, lastFold, reopened, select, type Op } from './ops';
 import { inside } from './select';
 import { sheetOf } from './sheets';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from './types';
@@ -291,6 +291,69 @@ function foldedLikeTheFirst(model: OrigamiModel, k: number, op: Op): Transition 
     });
   return { faces, motions: [still], replay };
 }
+
+/**
+ * Putting units together (`assemble`), as you would by hand: each unit placed this step goes first to a spot just
+ * outside its place, out from the middle of everything put together so far, then slides straight in. Going
+ * straight to its place, a unit would cut through the ones already there. A unit is moved as one when it keeps
+ * its shape; one bent as it's placed moves face by face.
+ */
+function comingIn(model: OrigamiModel, k: number, op: Extract<Op, { op: 'assemble' }>): Transition {
+  const frames = framesOf(model);
+  const [from, to] = [frames[k - 1], frames[k]];
+  const fromPositions = facePositions(from);
+  const toPositions = facePositions(to);
+  const faces = to.faces_vertices.map((face, f): FaceTrack => {
+    const paper = face.map((v) => to.vertices_paper[v]);
+    const parent = to.faces_parent?.[f] ?? f;
+    const before = paper.map(affine(from.faces_vertices[parent].map((v) => from.vertices_paper[v]), fromPositions[parent]));
+    return { paper, before, after: toPositions[f], motion: 0 };
+  });
+  cutsOf.set(faces, to.cuts ?? from.cuts ?? []);
+  const still: Motion = { axis: new Vector3(0, 1, 0), angle: 0, pivot: new Vector3(), shift: new Vector3(), lift: 0 };
+
+  // The units placed this step, and everything placed in the run of assembly steps so far.
+  const pick = (only: Parameters<typeof select>[0]) => select(only, { frame: to, sheets: model.sheets });
+  const placing = op.pieces.filter((p) => p.pose).map((p) => pick(p.only));
+  const run: Op[] = [op];
+  for (let j = k - 1; j >= 1 && model.steps[j - 1].op?.op === 'assemble'; j--) run.push(model.steps[j - 1].op!);
+  const placed = run.flatMap((o) => (o.op === 'assemble' ? o.pieces.filter((p) => p.pose).map((p) => pick(p.only)) : []));
+  const unitOf = faces.map((f) => placing.findLastIndex((test) => test(f.paper)));
+  const middle = (pts: Vec3[]): Vec3 => [0, 1, 2].map((d) => pts.reduce((sum, p) => sum + p[d], 0) / pts.length) as Vec3;
+  const centre = middle(faces.filter((f) => placed.some((test) => test(f.paper))).flatMap((f) => f.after));
+
+  // Each unit's way in: out from the middle, as far as the unit is across.
+  const ways = placing.map((_, u) => {
+    const pts = faces.filter((_, i) => unitOf[i] === u).flatMap((f) => f.after);
+    if (!pts.length) return null;
+    const c = middle(pts);
+    const out = new Vector3(c[0] - centre[0], c[1] - centre[1], c[2] - centre[2]);
+    if (out.lengthSq() < 1e-12) out.set(0, 1, 0);
+    const across = Math.max(...pts.map((p) => Math.hypot(p[0] - c[0], p[1] - c[1], p[2] - c[2])));
+    return out.normalize().multiplyScalar(COME_IN * across);
+  });
+  // Each face's move to just outside its place, as a screw motion of its own (the same for a whole unit that keeps its shape).
+  const moves = faces.map((f, i) => {
+    const way = ways[unitOf[i]];
+    if (unitOf[i] < 0 || !way) return null;
+    const outside = f.after.map((p): Vec3 => [p[0] + way.x, p[1] + way.y, p[2] + way.z]);
+    const { q, t } = rigid(f.paper, f.before, outside);
+    return { motion: screwsFor(q, t)[0], way };
+  });
+  const replay = (s: number): Vec3[][] =>
+    faces.map((f, i) => {
+      const m = moves[i];
+      if (!m) return f.before.map((p, c) => [0, 1, 2].map((d) => p[d] + (f.after[c][d] - p[d]) * s) as Vec3);
+      if (s < ARRIVE) return f.before.map((p) => move(m.motion, p, s / ARRIVE));
+      const left = (1 - s) / (1 - ARRIVE);
+      return f.after.map((p): Vec3 => [p[0] + m.way.x * left, p[1] + m.way.y * left, p[2] + m.way.z * left]);
+    });
+  return { faces, motions: [still], replay };
+}
+
+/** How far out a unit comes in from, for its size, and how much of the step it takes to get there before sliding in. */
+const COME_IN = 0.8;
+const ARRIVE = 0.65;
 
 /** How much of a step each unit of a pile takes to fold, at least, and how high it's lifted as it goes. */
 const TURN = 0.3;
@@ -653,6 +716,7 @@ export function stepTransition(model: OrigamiModel, k: number): Transition {
   const frames = framesOf(model);
   const op = model.steps[k - 1].op;
   if (op && copies(op)) return foldedLikeTheFirst(model, k, op);
+  if (op?.op === 'assemble' && !op.straight && op.pieces.some((p) => p.pose)) return comingIn(model, k, op);
   const over = tuckedOver(model, k);
   if (over) return transitionVia([frames[k - 1], over, { ...frames[k], faces_parent: sameFaces(over, frames[k]) }]);
   if (!model.steps[k - 1].via?.length) return transitionBetween(frames[k - 1], frames[k]);

@@ -8,7 +8,7 @@ import { pose } from '../fold/pose';
 import { layOut, sheetOf } from '../fold/sheets';
 import { basics } from '../models/basics';
 import { applyOp, atOf } from '../fold/ops';
-import { anchorFor, cutsOnTable, isPicked, markAt, markOnTable, popRays, popSettings, project, toggleFace, topLayers } from './editor';
+import { anchorFor, cutsOnTable, foldRest, isPicked, markAt, markOnTable, popRays, popSettings, project, tapeOnFace, toggleFace, topLayers } from './editor';
 import { fortuneTeller } from '../models/recipes/fortune-teller';
 import type { Op } from '../fold/ops';
 
@@ -22,6 +22,20 @@ function reflect(l: Line, p: Vec2): Vec2 {
 
 
 describe('Studio helpers', () => {
+  it('draws tape on the side of the paper it was stuck to, wherever that side is facing up', () => {
+    const area = (poly: Vec2[]) => Math.abs(poly.reduce((a, p, i) => a + p[0] * poly[(i + 1) % poly.length][1] - poly[(i + 1) % poly.length][0] * p[1], 0)) / 2;
+    const strip: Op = { op: 'tape', from: { table: [-0.3, 0] }, to: { table: [0.3, 0] }, width: 0.1 };
+    const sheet = { ...basics, steps: [] };
+    const taped = applyOp(sheet, strip).frame;
+    const pieces = project(taped).flatMap((f) => tapeOnFace(taped, f));
+    expect(pieces).toHaveLength(1);
+    expect(area(pieces[0])).toBeCloseTo(0.06, 6);
+    // Turned over, the tape is underneath: nothing to draw from above.
+    const m = { ...sheet, steps: [{ title: '', frame: taped, op: strip }] };
+    const over = applyOp(m, { op: 'turnOver' }).frame;
+    expect(project(over).flatMap((f) => tapeOnFace(over, f))).toEqual([]);
+  });
+
   it('anchors on the still side, off every crease', () => {
     const h = lineThrough([-1, 0], [1, 0]);
     const v = lineThrough([0, -1], [0, 1]);
@@ -165,5 +179,34 @@ describe('Studio tools for drawing, picking faces and popping up', () => {
       }
     }
     expect(popRays(5, 0, 1)).toBeNull();
+  });
+});
+
+describe('folding the rest alike', () => {
+  const three = () =>
+    new Recipe({
+      id: 'three',
+      title: 'Three',
+      sheets: [
+        { size: [1, 1], front: '#111111', back: '#222222', at: [0, 0] },
+        { size: [1, 1], front: '#333333', back: '#444444', origin: [10, 0], at: [0, 2] },
+        { size: [1, 0.5], front: '#555555', back: '#666666', origin: [20, 0], at: [0, 4] },
+      ],
+    });
+
+  it('copies a folded sheet onto the unfolded ones the same size', () => {
+    const model = three().onto(paper(0.5, 0), paper(-0.5, 0), { title: 'Fold', only: ([u]) => u < 5 }).build();
+    const op = foldRest(model, 0);
+    expect(op).toEqual({ op: 'copy', from: 0, to: [1] });
+    expect(() => applyOp(model, op!)).not.toThrow();
+  });
+
+  it('has nothing to copy from an unfolded sheet, or onto folded ones', () => {
+    expect(foldRest(three().build(), 0)).toBeNull();
+    const both = three()
+      .onto(paper(0.5, 0), paper(-0.5, 0), { title: 'Fold', only: ([u]) => u < 5 })
+      .onto(paper(10.5, 0), paper(9.5, 0), { title: 'Fold', only: ([u]) => u > 5 && u < 15 })
+      .build();
+    expect(foldRest(both, 0)).toBeNull();
   });
 });

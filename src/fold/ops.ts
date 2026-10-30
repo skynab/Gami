@@ -96,9 +96,11 @@ export type Op =
    * Puts units together in 3D (see assemble.ts): each piece bent along lines, then set down with the point `from`
    * at `to`, the table's +x along `x` and its up along `up`. Worked out from the flat state before a run of these
    * steps, each adding to the run's pieces; a face goes with the last piece that picks it. `glue`: the pieces are
-   * glued as they go together (not drawn), so the model needs glue.
+   * glued as they go together (not drawn), so the model needs glue. After paper pressed flat (`settle`), they start
+   * from where it lies pressed flat. `straight`: the pieces go straight to their places together, as a chain curled
+   * round into a ring, rather than each coming in from outside its place.
    */
-  | { op: 'assemble'; pieces: AssemblyPiece[]; glue?: boolean }
+  | { op: 'assemble'; pieces: AssemblyPiece[]; glue?: boolean; straight?: boolean }
   /** Bends in 3D. Lines are found on the flat state before a run of shaping steps; each adds to the run's bends. */
   /** `corners`: bends whose lines cross are walls rising together, their corners pinching into ears. */
   /** `chained`: the bends open folds along the paper from the face at this point of the sheet (stacked pleats). */
@@ -195,6 +197,7 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
           };
         }),
         ...opt(o, 'glue', bool, path),
+        ...opt(o, 'straight', bool, path),
       };
     case 'copy':
       return {
@@ -694,14 +697,16 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
       // The run of assembly steps this one adds to, and the flat state before it.
       let first = ctx.steps.length;
       while (first > 0 && ctx.steps[first - 1].op?.op === 'assemble') first--;
-      const base = frames[first];
+      // Paper pressed flat is put together from the flat state before it was pressed.
+      const settled = first > 0 && ctx.steps[first - 1].op?.op === 'settle';
+      const base = frames[settled ? first - 1 : first];
       const run = [...ctx.steps.slice(first).map((s) => s.op as Extract<Op, { op: 'assemble' }>), op];
       const pieces = run.flatMap((o) => o.pieces).map((p) => ({
         only: select(p.only, { frame: base, sheets: ctx.model.sheets }),
         bends: p.bends?.flatMap((b) => bendsOf(b, base, ctx.model.sheets)),
         pose: p.pose && { ...p.pose, from: where(p.pose.from, base) },
       }));
-      const made = assemble(base, pieces);
+      const made = assemble(base, pieces, { settled });
       return { frame: first < ctx.steps.length ? reparent(frame, made) : made };
     }
     case 'newSheet': {

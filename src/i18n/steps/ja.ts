@@ -2339,8 +2339,6 @@ export const ja: Record<string, string> = {
     "残りも同じようにつなぎます。ひとつ前の輪から四分の一ずつ回します。",
   "Press it flat":
     "おさえて平らにする",
-  "Press the chain flat, so the links lie snug in each other. Join the ends to wear it as a bracelet.":
-    "くさりをおさえて平らにし、輪どうしをしっかりかみ合わせます。両端をつなげばブレスレットになります。",
   "Cross two cards":
     "名刺を十字に重ねる",
   "Lay a second card across the middle of the first, so the two make a plus sign.":
@@ -2423,8 +2421,6 @@ export const ja: Record<string, string> = {
     "花びらがふれ合うところで花どうしをはります。まん中にひとつ、まわりに五つで、おわんの形になります。",
   "Finish the ball":
     "ボールを仕上げる",
-  "Glue on the other six flowers, the last one on top, to close the ball. Done!":
-    "残りの六つの花をはり、最後のひとつを上にのせてボールをとじます。完成です！",
   "Fold four more cards the same way, two at a time: six units in all.":
     "あと四枚を二枚ずつ同じように折ります。ユニットは全部で六つです。",
   "Turn all six units over, so their flaps are underneath.":
@@ -2443,4 +2439,40 @@ export const ja: Record<string, string> = {
     "3と4を左右から、底のフラップの外側に差しこみます。自分のフラップは2と5の内側に入れます。",
   "Push the 1 down on top, its flaps inside the 3 and the 4, over the upper flaps of the 2 and the 5. Roll it!":
     "1を上からおしこみます。フラップは3と4の内側に、2と5の上のフラップの上に入れます。ふってみましょう！",
+  "Press the chain flat, so the links lie snug in each other.":
+    "くさりをおさえて平らにし、輪どうしをしっかりかみ合わせます。",
+  "Join the ends":
+    "両端をつなぐ",
+  "Curl the chain round and slide the first link into the last one’s sleeves, to wear it as a bracelet.":
+    "くさりを丸め、最初の輪を最後の輪のさやに差しこんで、ブレスレットにします。",
+  "Glue on the other six flowers, the last one on top, to close the ball.":
+    "残りの六つの花をはり、最後のひとつを上にのせてボールをとじます。",
+  "Add a loop":
+    "ひもの輪をつける",
+  "Glue the ends of a strip together into a loop, and glue it in between the top flowers to hang the ball. Done!":
+    "帯の両端をはり合わせて輪にし、上の花のあいだにはって、ボールをつるせるようにします。完成です！",
+  "Fold a square in half side to side, then unfold.":
+    "正方形を左右に半分に折り、開きます。",
+  "Fold the sides in":
+    "左右を折りこむ",
+  "Fold the left and right edges to the middle crease.":
+    "左右の辺をまん中の折りすじまで折ります。",
+  "The same at the bottom, the other way round. That’s one unit: a square with four arms whirling round it.":
+    "下も同じように、向きを逆にして折ります。これでユニットがひとつ。正方形のまわりに四本の腕がうずを巻いています。",
+  "Fold five more":
+    "あと五つ折る",
+  "Fold five more squares the same way: six units, two of each colour.":
+    "あと五枚の正方形を同じように折ります。ユニットは六つ、各色ふたつずつです。",
+  "Lift each unit’s four arms up from its square, so they stand out like petals.":
+    "それぞれのユニットの四本の腕を正方形から起こして、花びらのように立てます。",
+  "Hold a red unit petals down for the bottom. Glue a yellow unit to it at each side, square corners to square corners, petals out.":
+    "赤いユニットを花びらを下にして底にします。その左右に黄色いユニットを、正方形の角どうしを合わせ、花びらを外にしてはります。",
+  "Add the purple units":
+    "むらさきのユニットをつける",
+  "Glue the purple units in at the front and back, their square corners to the corners beside them.":
+    "むらさきのユニットを前とうしろにはり、正方形の角をとなりの角に合わせます。",
+  "Close the ball":
+    "ボールをとじる",
+  "Glue the last red unit on top. Done!":
+    "最後の赤いユニットを上にはります。完成です！",
 };

@@ -58,8 +58,8 @@ export interface ShapeBend {
 export class Recipe {
   private start: FoldFrame;
   private steps: Step[] = [];
-  /** After assembling in 3D: the flat state it started from, and the pieces so far. */
-  private assembling?: { base: FoldFrame; pieces: Piece[] };
+  /** After assembling in 3D: the flat state it started from (pressed flat, if `settled`), and the pieces so far. */
+  private assembling?: { base: FoldFrame; settled: boolean; pieces: Piece[] };
   /** After 3D shaping: the flat state it started from, and its bends so far. */
   private shaping?: { base: FoldFrame; bends: Bend[]; corners: boolean; chained?: Vec2; ride?: (paper: Vec2[]) => boolean };
   /** The section the next step starts, from `section()`. */
@@ -371,22 +371,7 @@ export class Recipe {
     const rideTest = ride && recorder(ride);
     const riding = rideTest ?? this.shaping?.ride;
     const tests = bends.map((b) => b.only && picker(b.only, base, this.info.sheets));
-    const added = bends.flatMap((b, k): Bend[] => {
-      const test = tests[k];
-      const line = lineOf({ through: b.through, moving: b.moving }, base);
-      const tip = this.where(b.moving);
-      const n = b.segments ?? 1;
-      // A curl: the same line moved towards the tip, a step at a time, each turning its share of the angle.
-      const len = Math.hypot(line.d[0], line.d[1]);
-      const across: Vec2 = [-line.d[1] / len, line.d[0] / len];
-      const reach = sideOf(line, tip) / len;
-      return Array.from({ length: n }, (_, i) => ({
-        line: { p: [line.p[0] + (across[0] * reach * i) / n, line.p[1] + (across[1] * reach * i) / n] as Vec2, d: line.d },
-        angle: ((b.degrees / n) * Math.PI) / 180,
-        layers: b.layers,
-        only: test,
-      }));
-    });
+    const added = bends.flatMap((b, k) => curled(b, base, tests[k]));
     const bendsSoFar = [...(this.shaping?.bends ?? []), ...added];
     try {
       // Shaped again from the flat state: each face's parent is the face of the last step it lies within.
@@ -419,30 +404,29 @@ export class Recipe {
    * the sheet), is bent along lines as `shape` bends, then set down with the point `from` at `to`, the table's
    * +x along `x` and its up along `up`. Lines and points are found on the last flat state; a later assembly step
    * adds to this one's pieces, and a piece listed again is bent and placed afresh. Nothing can be folded after.
-   * With `glue`, the step says the pieces are glued as they go together, so the model needs glue.
+   * With `glue`, the step says the pieces are glued as they go together, so the model needs glue. After paper is
+   * pressed flat (`settle`), it's put together from there, pieces unbent. With `straight`, the pieces go straight to
+   * their places together (a chain curled round into a ring) rather than each coming in from outside.
    */
   assemble(
-    step: { title: string; text?: string; glue?: boolean },
+    step: { title: string; text?: string; glue?: boolean; straight?: boolean },
     pieces: { sheet?: number; only?: (centre: Vec2) => boolean; bends?: ShapeBend[]; pose?: { from: At; to: Vec3; x: Vec3; up: Vec3 } }[],
   ): this {
-    const base = this.assembling?.base ?? this.current;
+    const pressed = !this.assembling && this.steps.at(-1)?.op?.op === 'settle';
+    const settled = this.assembling?.settled ?? pressed;
+    const base = this.assembling?.base ?? (pressed ? this.steps.at(-2)?.frame ?? this.start : this.current);
     const at = (a: At): Vec2 => ('table' in a ? a.table : locate(base, a.paper));
     const made = pieces.map((p) => {
       const test = p.only ? recorder(p.only) : null;
       const faces = (): Faces => (p.sheet !== undefined ? { sheet: p.sheet } : test ? test.faces() : { inPaper: [] });
       const only = p.sheet !== undefined ? (poly: Vec2[]) => sheetOf(this.info.sheets, poly) === p.sheet : test!;
       const bendTests = (p.bends ?? []).map((b) => b.only && picker(b.only, base, this.info.sheets));
-      const bends = (p.bends ?? []).map((b, k): Bend => ({
-        line: lineOf({ through: b.through, moving: b.moving }, base),
-        angle: (b.degrees * Math.PI) / 180,
-        layers: b.layers,
-        only: bendTests[k],
-      }));
+      const bends = (p.bends ?? []).flatMap((b, k) => curled(b, base, bendTests[k]));
       return { piece: { only, bends, ...(p.pose && { pose: { ...p.pose, from: at(p.pose.from) } }) } as Piece, faces, bendTests, p };
     });
     const all = [...(this.assembling?.pieces ?? []), ...made.map((m) => m.piece)];
     try {
-      const frame = assemble(base, all);
+      const frame = assemble(base, all, { settled });
       // Faces' tests are recorded once they've run.
       const op: Op = {
         op: 'assemble',
@@ -452,6 +436,8 @@ export class Recipe {
             bends: p.bends.map((b, k) => ({
               line: { through: b.through, moving: b.moving },
               degrees: b.degrees,
+              ...(b.segments !== undefined && { segments: b.segments }),
+              ...((b.segments ?? 1) > 1 && { reach: b.moving }),
               ...(b.layers !== undefined && { layers: b.layers }),
               ...(bendTests[k] && { only: bendTests[k].faces() }),
             })),
@@ -459,13 +445,14 @@ export class Recipe {
           ...(p.pose && { pose: p.pose }),
         })),
         ...(step.glue && { glue: true }),
+        ...(step.straight && { straight: true }),
       };
       this.push({ title: step.title, text: step.text, kind: 'assemble' }, this.assembling ? reparent(this.current, frame) : frame, op);
     } catch (e) {
       if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
       throw e;
     }
-    this.assembling = { base, pieces: all };
+    this.assembling = { base, settled, pieces: all };
     return this;
   }
 
@@ -635,6 +622,25 @@ export class Recipe {
 }
 
 const avg = (poly: Vec2[], i: number) => poly.reduce((sum, p) => sum + p[i], 0) / poly.length;
+
+/**
+ * A shaping bend as the engine takes it, on the flat state `base`: one bend, or with `segments`, a curl: the same
+ * line moved towards `moving` a step at a time, each turning its share of the angle.
+ */
+function curled(b: ShapeBend, base: FoldFrame, only?: (poly: Vec2[]) => boolean): Bend[] {
+  const line = lineOf({ through: b.through, moving: b.moving }, base);
+  const tip = 'table' in b.moving ? b.moving.table : locate(base, b.moving.paper);
+  const n = b.segments ?? 1;
+  const len = Math.hypot(line.d[0], line.d[1]);
+  const across: Vec2 = [-line.d[1] / len, line.d[0] / len];
+  const reach = sideOf(line, tip) / len;
+  return Array.from({ length: n }, (_, i) => ({
+    line: { p: [line.p[0] + (across[0] * reach * i) / n, line.p[1] + (across[1] * reach * i) / n] as Vec2, d: line.d },
+    angle: ((b.degrees / n) * Math.PI) / 180,
+    layers: b.layers,
+    only,
+  }));
+}
 
 /** A face test given either way a shaping bend takes one: as `recorder` makes it, or from faces as a file has them. */
 function picker(only: ((centre: Vec2) => boolean) | Faces, frame: FoldFrame, sheets: Sheet[]): ((poly: Vec2[]) => boolean) & { faces(): Faces } {

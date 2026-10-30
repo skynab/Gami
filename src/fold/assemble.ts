@@ -1,5 +1,6 @@
 import { FoldError, toFlat } from './fold';
 import { facePositions } from './frames';
+import { settle } from './settle';
 import { shape, type Bend } from './shape';
 import type { FoldFrame, Vec2, Vec3 } from './types';
 
@@ -24,7 +25,11 @@ export interface Pose {
   up: Vec3;
 }
 
-export function assemble(base: FoldFrame, pieces: Piece[]): FoldFrame {
+/**
+ * `settled`: the flat state was pressed flat first (`settle`), so its faces start from those heights, each part only
+ * as thick as the paper there, rather than stacked by layer. Pieces can't be bent then.
+ */
+export function assemble(base: FoldFrame, pieces: Piece[], { settled = false } = {}): FoldFrame {
   toFlat(base);
   const pieceOf = (paper: Vec2[]) => pieces.findLastIndex((p) => p.only(paper));
   // Each piece's bends turn only the faces it has, so a piece placed again later isn't bent by its old bends.
@@ -32,8 +37,9 @@ export function assemble(base: FoldFrame, pieces: Piece[]): FoldFrame {
   const bends = pieces.flatMap((p, i) =>
     held.has(i) ? (p.bends ?? []).map((b): Bend => ({ ...b, only: (paper) => pieceOf(paper) === i && (!b.only || b.only(paper)) })) : [],
   );
+  if (settled && bends.length) throw new FoldError('Paper pressed flat can’t be bent as it’s put together.');
   const shaped = bends.length ? shape(base, bends) : base;
-  const placed = facePositions(shaped);
+  const placed = facePositions(settled ? settle(base) : shaped);
   const moves = pieces.map((p) => p.pose && rigidMove(p.pose));
 
   // Faces meeting at the same point of the sheet in the same place share a vertex, which keeps files small.

@@ -1,17 +1,17 @@
 import { create } from 'zustand';
 import type { SavedModel, Status } from '../cloud/models';
-import { fromFoldFile, toFoldFile, type FoldFile } from '../fold/fold-format';
+import { fromFoldFile, toFoldFile } from '../fold/fold-format';
 import type { Replay } from '../fold/ops';
 import { layOut } from '../fold/sheets';
+import { thumbnailSvg } from '../fold/thumbnail';
 import type { FoldFrame, OrigamiModel, Sheet, Step } from '../fold/types';
 import { BLANK_SHEET } from '../models';
+import { putDesign, type LocalDesign } from './library';
 
 /**
- * The model being made in the Studio. Kept in this browser's storage so a refresh doesn't lose it, along with
- * which cloud model it is (if it's been saved) and whether it has changes since.
+ * The design being made in the Studio, saved to this browser's library (studio/library.ts) as it changes so a
+ * refresh doesn't lose it, along with which cloud model it is (if it's been saved) and whether it has changes since.
  */
-
-const STORAGE_KEY = 'gami.studio.draft';
 
 /** The saved copy in the cloud this draft belongs to. */
 export interface CloudInfo {
@@ -29,6 +29,9 @@ export interface Problem {
 }
 
 interface DraftState {
+  /** The library design being edited, or null before one is opened. */
+  designId: string | null;
+  created: number;
   model: OrigamiModel;
   problem: Problem | null;
   /** The model before each change this visit, latest last, for undo. */
@@ -36,8 +39,12 @@ interface DraftState {
   cloud: CloudInfo | null;
   /** Changed since it was last saved to (or opened from) the cloud. */
   dirty: boolean;
+  /** The last change couldn't be written to the library: Export is the way to keep it. */
+  unsaved: boolean;
   /** The paper after the last step: what the next fold starts from. */
   current(): FoldFrame;
+  /** Starts editing a design from the library. */
+  open(design: LocalDesign): void;
   addStep(step: Step): void;
   /** Takes back the last change this visit, or with none, removes the last step. */
   undo(): void;
@@ -49,50 +56,48 @@ interface DraftState {
   setInfo(patch: Partial<Pick<OrigamiModel, 'id' | 'title' | 'about' | 'card'>>): void;
   /** Changes the sheets (their colours, sizes, how many), laid out in a row. Only before the first step. */
   setSheets(sheets: Sheet[]): void;
-  /** Opens a model from a file: it's new to the cloud. */
-  replace(model: OrigamiModel): void;
-  /** Opens or has just saved a cloud model. `withModel` also replaces the model (when opening). */
-  fromCloud(saved: SavedModel, withModel: boolean): void;
+  /** Has just saved to the cloud. */
+  fromCloud(saved: SavedModel): void;
   /** Catches up with the cloud copy's status (after a review), keeping any local changes. */
   updateStatus(saved: SavedModel): void;
   /** Keeps working on this model as a new, unsaved one (after its cloud copy was submitted or deleted). */
   detach(): void;
-  clear(): void;
 }
 
-function emptyModel(): OrigamiModel {
+export function emptyModel(): OrigamiModel {
   return { ...BLANK_SHEET, id: 'untitled', title: 'Untitled model' };
-}
-
-interface Stored {
-  fold: FoldFile;
-  cloud: CloudInfo | null;
-  dirty: boolean;
-  problem?: Problem | null;
-}
-
-function restore(): Pick<DraftState, 'model' | 'cloud' | 'dirty' | 'problem' | 'history'> {
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? 'null') as Stored | FoldFile | null;
-    // Drafts saved before cloud saving were just the .fold file.
-    if (saved && 'fold' in saved) return { model: fromFoldFile(saved.fold), cloud: saved.cloud, dirty: saved.dirty, problem: saved.problem ?? null, history: [] };
-    if (saved) return { model: fromFoldFile(saved), cloud: null, dirty: true, problem: null, history: [] };
-  } catch {
-    // Storage blocked or the saved draft is unreadable: start fresh.
-  }
-  return { model: emptyModel(), cloud: null, dirty: false, problem: null, history: [] };
 }
 
 /** Undo keeps this many changes. */
 const HISTORY = 50;
 
-const cloudInfo = (s: SavedModel): CloudInfo => ({ id: s.id, status: s.status, reviewNote: s.reviewNote, shareToken: s.shareToken });
+export const cloudInfo = (s: SavedModel): CloudInfo => ({ id: s.id, status: s.status, reviewNote: s.reviewNote, shareToken: s.shareToken });
 
 export const useDraft = create<DraftState>()((set, get) => ({
-  ...restore(),
+  designId: null,
+  created: 0,
+  model: emptyModel(),
+  problem: null,
+  history: [],
+  cloud: null,
+  dirty: false,
+  unsaved: false,
   current() {
     const { model } = get();
     return model.steps.at(-1)?.frame ?? model.start;
+  },
+  open(design) {
+    clearTimeout(timer);
+    set({
+      designId: design.id,
+      created: design.created,
+      model: fromFoldFile(design.file),
+      problem: design.problem ?? null,
+      history: [],
+      cloud: design.cloud ?? null,
+      dirty: design.dirty ?? false,
+      unsaved: false,
+    });
   },
   addStep(step) {
     set((s) => ({ model: { ...s.model, steps: [...s.model.steps, step] }, dirty: true, history: remember(s) }));
@@ -119,11 +124,8 @@ export const useDraft = create<DraftState>()((set, get) => ({
   setSheets(sheets) {
     set(({ model }) => (model.steps.length ? {} : { model: { ...model, ...layOut(sheets) }, dirty: true }));
   },
-  replace(model) {
-    set({ model, cloud: null, dirty: true, problem: null, history: [] });
-  },
-  fromCloud(saved, withModel) {
-    set({ ...(withModel && { model: saved.model, problem: null, history: [] }), cloud: cloudInfo(saved), dirty: false });
+  fromCloud(saved) {
+    set({ cloud: cloudInfo(saved), dirty: false });
   },
   updateStatus(saved) {
     set({ cloud: cloudInfo(saved) });
@@ -131,19 +133,35 @@ export const useDraft = create<DraftState>()((set, get) => ({
   detach() {
     set({ cloud: null, dirty: true });
   },
-  clear() {
-    set({ model: emptyModel(), cloud: null, dirty: false, problem: null, history: [] });
-  },
 }));
 
 const remember = ({ model, problem, history }: DraftState) => [...history.slice(1 - HISTORY), { model, problem }];
 
-useDraft.subscribe(({ model, cloud, dirty, problem }, prev) => {
-  if (model === prev.model && cloud === prev.cloud && dirty === prev.dirty && problem === prev.problem) return;
+/** Changes are written this long after the last one, so typing a title doesn't write the model each key. */
+const WAIT = 400;
+let timer: ReturnType<typeof setTimeout> | undefined;
+
+/** Writes the open design to the library now, rather than after the wait. */
+export async function saveDraft() {
+  clearTimeout(timer);
+  const { designId, created, model, cloud, dirty, problem } = useDraft.getState();
+  if (!designId) return;
+  let thumbnail: string | undefined;
   try {
-    const stored: Stored = { fold: toFoldFile(model), cloud, dirty, problem };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+    thumbnail = thumbnailSvg(model, 160);
   } catch {
-    // Storage full or blocked: the draft still works for this visit, and Export saves it for good.
+    // A picture is a convenience: the list shows a plain sheet instead.
   }
+  const file = toFoldFile(model);
+  const ok = await putDesign({ id: designId, file, title: model.title, steps: model.steps.length, created, updated: Date.now(), thumbnail, cloud, dirty, problem });
+  // Unless another design was opened meanwhile.
+  if (useDraft.getState().designId === designId) useDraft.setState({ unsaved: !ok });
+}
+
+useDraft.subscribe(({ designId, model, cloud, dirty, problem }, prev) => {
+  // Opening a design isn't a change to it.
+  if (!designId || designId !== prev.designId) return;
+  if (model === prev.model && cloud === prev.cloud && dirty === prev.dirty && problem === prev.problem) return;
+  clearTimeout(timer);
+  timer = setTimeout(() => void saveDraft(), WAIT);
 });

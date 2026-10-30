@@ -1404,7 +1404,43 @@ kbd {
   text-align: center;
 }
 
-/* Studio (development) */
+/* Studio library: the designs kept in this browser */
+
+.library-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-block: 20px 8px;
+}
+
+.library > .grid {
+  margin-block-start: 20px;
+}
+
+.design-card .card-title {
+  color: inherit;
+  text-decoration: none;
+}
+
+.design-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  margin-block-start: 6px;
+}
+
+.library-cloud {
+  max-width: 560px;
+  margin-block-start: 40px;
+}
+
+.library-cloud h2 {
+  margin: 0 0 4px;
+  font-size: 20px;
+}
+
+/* Studio editor */
 
 .studio {
   display: grid;
@@ -1487,6 +1523,20 @@ kbd {
 .fold-editor .cut.planned {
   stroke: var(--accent);
   stroke-width: 3px;
+}
+
+/* Tape: see-through, as in the viewer; the strip about to be laid outlined in the accent colour. */
+.fold-editor .tape {
+  fill: #efe3b4;
+  fill-opacity: 0.7;
+  stroke: none;
+  pointer-events: none;
+}
+
+.fold-editor .tape.planned {
+  stroke: var(--accent);
+  stroke-width: 2px;
+  vector-effect: non-scaling-stroke;
 }
 
 .fold-editor .mark {
@@ -1781,6 +1831,11 @@ kbd {
 .bottombar .group {
   flex-wrap: wrap;
   gap: 6px;
+}
+
+/* The Studio's actions wrap onto more lines rather than running off a narrow screen. */
+.studio-bar .segmented {
+  flex-wrap: wrap;
 }
 
 /* Learning a fold: when the bar wraps onto several lines (narrow screens), each line is centred. On one line the

@@ -8,13 +8,12 @@ import { useAuth } from './auth/store';
 import { Gallery } from './routes/Gallery';
 import { CommunityModel } from './routes/CommunityModel';
 import { Learn } from './routes/Learn';
+import { MyDesign } from './routes/MyDesign';
 import { NotFound } from './routes/NotFound';
 
-// Only creators need the Studio, so everyone else never downloads it.
+// Only people making models need the Studio, so everyone else never downloads it.
 const Studio = lazy(() => import('./routes/Studio'));
 const Admin = lazy(() => import('./routes/Admin'));
-// The Studio editor without signing in, for writing the built-in models. Left out of production builds.
-const StudioDev = import.meta.env.DEV ? lazy(() => import('./routes/StudioEditor')) : null;
 
 // Picks up a saved session, or the sign-in link someone just clicked. Does nothing on sites without accounts.
 useAuth.getState().start();
@@ -27,8 +26,9 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/learn/:modelId" element={<Learn />} />
         <Route path="/m/:id" element={<CommunityModel />} />
         <Route path="/s/:token" element={<CommunityModel shared />} />
+        <Route path="/mine/:id" element={<MyDesign />} />
         <Route
-          path="/studio/:draftId?"
+          path="/studio/:id?"
           element={
             <Suspense fallback={null}>
               <Studio />
@@ -43,16 +43,6 @@ createRoot(document.getElementById('root')!).render(
             </Suspense>
           }
         />
-        {StudioDev && (
-          <Route
-            path="/studio/dev"
-            element={
-              <Suspense fallback={null}>
-                <StudioDev />
-              </Suspense>
-            }
-          />
-        )}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

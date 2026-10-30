@@ -3,14 +3,15 @@ import { placeLike } from '../fold/fold';
 import { dist, signedArea, split, type Line } from '../fold/geometry2d';
 import { faceColour } from '../fold/sheets';
 import type { FoldFrame, Mark, OrigamiModel, Vec2 } from '../fold/types';
-import { cutsOnTable, frontUp, isPicked, markOnTable, project, snapPoints, viewBox } from './editor';
+import { cutsOnTable, frontUp, isPicked, markOnTable, project, snapPoints, tapeOnFace, viewBox } from './editor';
 
 /**
  * The paper seen from above, as you'd see it on the table. Click the dots to place a fold: the crease
  * shows as a line, the side that moves is shaded, and a dashed outline shows where it will land.
- * Scissor cuts made so far show as solid lines, and what's been drawn on the paper as thin ones.
+ * Scissor cuts made so far show as solid lines, what's been drawn on the paper as thin ones, and tape as
+ * see-through strips.
  */
-export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kind, preview, extra = [], cut = null, free = false, marks = [], drawing = [], faces: picked, anchor = null, onPick, onFace }: {
+export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kind, preview, extra = [], cut = null, tape = null, free = false, marks = [], drawing = [], faces: picked, anchor = null, onPick, onFace }: {
   frame: FoldFrame;
   model: Pick<OrigamiModel, 'sheets'>;
   picks: Vec2[];
@@ -24,6 +25,8 @@ export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kin
   extra?: { line: Line; kind: string }[];
   /** A cut about to be made, from one end to the other. */
   cut?: [Vec2, Vec2] | null;
+  /** A strip of tape about to be laid, its outline on the table. */
+  tape?: Vec2[] | null;
   /** Picks can go anywhere, snapping to a dot only when one is close. */
   free?: boolean;
   /** What's drawn on the paper so far. */
@@ -84,7 +87,12 @@ export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kin
   return (
     <svg ref={svg} className="fold-editor" viewBox={box.join(' ')} onPointerDown={pick} role="img" aria-label="The paper from above">
       {faces.map((f, i) => (
-        <polygon key={i} points={pts(f.world)} fill={faceColour(model, f.paper, frontUp(f.world, f.paper))} className="face" />
+        <g key={i}>
+          <polygon points={pts(f.world)} fill={faceColour(model, f.paper, frontUp(f.world, f.paper))} className="face" />
+          {tapeOnFace(frame, f).map((piece, k) => (
+            <polygon key={k} points={pts(piece)} className="tape" />
+          ))}
+        </g>
       ))}
       {drawn.map((m, i) => (m.fill ? <polygon key={i} points={pts(m.points)} className="mark fill" /> : <polyline key={i} points={pts(m.points)} className="mark" />))}
       {picked &&
@@ -119,6 +127,7 @@ export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kin
         m.fill && m.points.length > 2 ? <polygon key={i} points={pts(m.points)} className="mark fill planned" /> : <polyline key={i} points={pts(m.points)} className="mark planned" />,
       )}
       {anchor && <rect x={anchor[0] - 1.6 * unit} y={anchor[1] - 1.6 * unit} width={3.2 * unit} height={3.2 * unit} className="anchor" />}
+      {tape && <polygon points={pts(tape)} className="tape planned" />}
       {cut && <line x1={cut[0][0]} y1={cut[0][1]} x2={cut[1][0]} y2={cut[1][1]} className="cut planned" />}
       {snaps.map((s, i) => (
         <circle key={i} cx={s[0]} cy={s[1]} r={1.1 * unit} className="snap" />

@@ -2339,8 +2339,6 @@ export const fr: Record<string, string> = {
     "Ajoutez les autres de la même façon, chacun tourné d’un quart de tour par rapport au précédent.",
   "Press it flat":
     "Aplatissez-le",
-  "Press the chain flat, so the links lie snug in each other. Join the ends to wear it as a bracelet.":
-    "Aplatissez la chaîne pour que les maillons s’emboîtent bien. Reliez les bouts pour la porter en bracelet.",
   "Cross two cards":
     "Croisez deux cartes",
   "Lay a second card across the middle of the first, so the two make a plus sign.":
@@ -2423,8 +2421,6 @@ export const fr: Record<string, string> = {
     "Collez les fleurs entre elles là où leurs pétales se touchent : une au milieu et cinq autour, en forme de bol.",
   "Finish the ball":
     "Terminez la boule",
-  "Glue on the other six flowers, the last one on top, to close the ball. Done!":
-    "Collez les six autres fleurs, la dernière en haut, pour fermer la boule. C’est fini !",
   "Fold four more cards the same way, two at a time: six units in all.":
     "Pliez quatre autres cartes de la même façon, deux par deux : six modules en tout.",
   "Turn all six units over, so their flaps are underneath.":
@@ -2443,4 +2439,40 @@ export const fr: Record<string, string> = {
     "Glissez le 3 et le 4 à gauche et à droite, à l’extérieur des rabats du fond, leurs propres rabats à l’intérieur du 2 et du 5.",
   "Push the 1 down on top, its flaps inside the 3 and the 4, over the upper flaps of the 2 and the 5. Roll it!":
     "Enfoncez le 1 sur le dessus, ses rabats à l’intérieur du 3 et du 4, sur les rabats du haut du 2 et du 5. Lancez-le !",
+  "Press the chain flat, so the links lie snug in each other.":
+    "Aplatissez la chaîne pour que les maillons s’emboîtent bien.",
+  "Join the ends":
+    "Reliez les bouts",
+  "Curl the chain round and slide the first link into the last one’s sleeves, to wear it as a bracelet.":
+    "Enroulez la chaîne et glissez le premier maillon dans les fourreaux du dernier, pour la porter en bracelet.",
+  "Glue on the other six flowers, the last one on top, to close the ball.":
+    "Collez les six autres fleurs, la dernière en haut, pour fermer la boule.",
+  "Add a loop":
+    "Ajoutez une boucle",
+  "Glue the ends of a strip together into a loop, and glue it in between the top flowers to hang the ball. Done!":
+    "Collez les bouts d’une bande en boucle, puis collez-la entre les fleurs du haut pour suspendre la boule. C’est fini !",
+  "Fold a square in half side to side, then unfold.":
+    "Pliez un carré en deux de gauche à droite, puis dépliez.",
+  "Fold the sides in":
+    "Rabattez les côtés",
+  "Fold the left and right edges to the middle crease.":
+    "Pliez les bords gauche et droit jusqu’au pli du milieu.",
+  "The same at the bottom, the other way round. That’s one unit: a square with four arms whirling round it.":
+    "Pareil en bas, dans l’autre sens. Voilà un module : un carré avec quatre bras qui tournent autour.",
+  "Fold five more":
+    "Pliez-en cinq autres",
+  "Fold five more squares the same way: six units, two of each colour.":
+    "Pliez cinq autres carrés de la même façon : six modules, deux de chaque couleur.",
+  "Lift each unit’s four arms up from its square, so they stand out like petals.":
+    "Relevez les quatre bras de chaque module depuis son carré, pour qu’ils se dressent comme des pétales.",
+  "Hold a red unit petals down for the bottom. Glue a yellow unit to it at each side, square corners to square corners, petals out.":
+    "Prenez un module rouge, pétales en bas, pour le fond. Collez-y un module jaune de chaque côté, coins des carrés contre coins des carrés, pétales vers l’extérieur.",
+  "Add the purple units":
+    "Ajoutez les modules violets",
+  "Glue the purple units in at the front and back, their square corners to the corners beside them.":
+    "Collez les modules violets devant et derrière, les coins de leurs carrés contre les coins voisins.",
+  "Close the ball":
+    "Fermez la boule",
+  "Glue the last red unit on top. Done!":
+    "Collez le dernier module rouge sur le dessus. C’est fini !",
 };

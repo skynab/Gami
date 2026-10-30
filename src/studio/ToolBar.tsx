@@ -1,19 +1,22 @@
 import { useTranslation } from 'react-i18next';
 import type { Op } from '../fold/ops';
-import { ACTIONS, FACE_ACTIONS, LINE_ACTIONS, type Layers } from './tools';
+import { PRESETS, type PresetKind } from '../fold/presets';
+import { ACTIONS, FACE_ACTIONS, LINE_ACTIONS, TAPE_WIDTHS, type Layers } from './tools';
 import type { Tools } from './useTools';
 
 /**
  * The Studio's bottom bar: what the next step does and how (the action, its fold line and settings), keeping it
  * as part of a step or applying it, and the steps that need no picks.
  */
-export function ToolBar({ tools, sheets, canUndo, unfoldable, onHold, onApply, onNow, onUndo }: {
+export function ToolBar({ tools, sheets, canUndo, unfoldable, rest, onHold, onApply, onNow, onUndo }: {
   tools: Tools;
   /** How many sheets the model has. */
   sheets: number;
   canUndo: boolean;
   /** There's a fold to unfold. */
   unfoldable: boolean;
+  /** Folding the other sheets like the chosen one (`foldRest`), if there are any to fold. */
+  rest: Op | null;
   onHold(): void;
   onApply(): void;
   /** Makes a step that needs no picks. */
@@ -23,7 +26,7 @@ export function ToolBar({ tools, sheets, canUndo, unfoldable, onHold, onApply, o
   const { t } = useTranslation();
   const { s, set } = tools;
   return (
-        <footer className="bottombar">
+        <footer className="bottombar studio-bar">
           <div className="group">
             <div className="segmented" role="group" aria-label={t('studio.actions.action')}>
               {ACTIONS.filter((a) => a !== 'move' || tools.many).map((a) => (
@@ -32,7 +35,7 @@ export function ToolBar({ tools, sheets, canUndo, unfoldable, onHold, onApply, o
                 </button>
               ))}
             </div>
-            {tools.many && s.action !== 'popUp' && s.action !== 'draw' && (
+            {tools.many && s.action !== 'popUp' && s.action !== 'draw' && s.action !== 'tape' && (
               <label className="field inline" title={t('studio.sheetTitle')}>
                 <span>{t('studio.sheet')}</span>
                 <select value={String(s.sheet)} onChange={(e) => set({ sheet: e.target.value === 'all' ? 'all' : Number(e.target.value) })}>
@@ -40,6 +43,31 @@ export function ToolBar({ tools, sheets, canUndo, unfoldable, onHold, onApply, o
                   {Array.from({ length: sheets }, (_, i) => (
                     <option key={i} value={i}>
                       {t('studio.sheetN', { n: i + 1 })}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+            {s.action === 'preset' && (
+              <label className="field inline">
+                <span>{t('studio.presetLabel')}</span>
+                <select value={s.preset} onChange={(e) => set({ preset: e.target.value as PresetKind, picks: [], flipped: false })}>
+                  {PRESETS.map((p) => (
+                    <option key={p} value={p}>
+                      {t(`studio.steps.${p}`)}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+            {s.action === 'tape' && (
+              <label className="field inline">
+                <span>{t('studio.tapeWidth')}</span>
+                <select value={s.tapeWidth} onChange={(e) => set({ tapeWidth: Number(e.target.value) })}>
+                  {/* A width a step was made with that isn't one of these stays choosable. */}
+                  {(TAPE_WIDTHS.includes(s.tapeWidth) ? TAPE_WIDTHS : [...TAPE_WIDTHS, s.tapeWidth]).map((w, i) => (
+                    <option key={w} value={w}>
+                      {t(`studio.tapeWidths.${['narrow', 'normal', 'wide'][i] ?? 'other'}`)}
                     </option>
                   ))}
                 </select>
@@ -224,6 +252,11 @@ export function ToolBar({ tools, sheets, canUndo, unfoldable, onHold, onApply, o
               {t('studio.flipSide')}
             </button>
             )}
+            {s.action === 'preset' && s.preset !== 'squash' && s.preset !== 'petal' && (
+              <button type="button" className="secondary" disabled={!tools.op} aria-pressed={s.flipped} onClick={() => set({ flipped: !s.flipped })} title={t('studio.otherWayTitle')}>
+                {t('studio.otherWay')}
+              </button>
+            )}
             {s.action === 'collapse' && (
               <>
                 <button type="button" className="secondary" disabled={!tools.line} onClick={tools.addCrease} title={t('studio.addCreaseTitle')}>
@@ -279,6 +312,14 @@ export function ToolBar({ tools, sheets, canUndo, unfoldable, onHold, onApply, o
             </button>
             <button type="button" className="secondary" onClick={() => onNow({ op: 'newSheet' })} title={t('studio.newSheetTitle')}>
               {t('studio.newSheet')}
+            </button>
+            {tools.many && (
+              <button type="button" className="secondary" disabled={!rest} onClick={() => rest && onNow(rest)} title={t('studio.foldRestTitle')}>
+                {t('studio.foldRest')}
+              </button>
+            )}
+            <button type="button" className="secondary" onClick={() => onNow({ op: 'settle' })} title={t('studio.pressFlatTitle')}>
+              {t('studio.pressFlat')}
             </button>
             <button type="button" className="secondary" disabled={!canUndo} onClick={onUndo} title={t('studio.undoTitle')}>
               {t('studio.undo')}

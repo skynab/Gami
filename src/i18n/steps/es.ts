@@ -2339,8 +2339,6 @@ export const es: Record<string, string> = {
     "Añade los demás de la misma manera, girando cada uno un cuarto de vuelta respecto al anterior.",
   "Press it flat":
     "Apriétalo para aplanarlo",
-  "Press the chain flat, so the links lie snug in each other. Join the ends to wear it as a bracelet.":
-    "Aprieta la cadena para aplanarla, de modo que los eslabones queden bien encajados. Une los extremos para llevarla como pulsera.",
   "Cross two cards":
     "Cruza dos tarjetas",
   "Lay a second card across the middle of the first, so the two make a plus sign.":
@@ -2423,8 +2421,6 @@ export const es: Record<string, string> = {
     "Pega las flores entre sí donde se tocan sus pétalos: una en el centro y cinco alrededor, como un cuenco.",
   "Finish the ball":
     "Termina la bola",
-  "Glue on the other six flowers, the last one on top, to close the ball. Done!":
-    "Pega las otras seis flores, la última arriba, para cerrar la bola. ¡Listo!",
   "Fold four more cards the same way, two at a time: six units in all.":
     "Dobla cuatro tarjetas más de la misma manera, de dos en dos: seis módulos en total.",
   "Turn all six units over, so their flaps are underneath.":
@@ -2443,4 +2439,40 @@ export const es: Record<string, string> = {
     "Mete el 3 y el 4 a izquierda y derecha, por fuera de las solapas de la base, con sus propias solapas por dentro del 2 y el 5.",
   "Push the 1 down on top, its flaps inside the 3 and the 4, over the upper flaps of the 2 and the 5. Roll it!":
     "Encaja el 1 arriba, con sus solapas por dentro del 3 y el 4, sobre las solapas de arriba del 2 y el 5. ¡A tirarlo!",
+  "Press the chain flat, so the links lie snug in each other.":
+    "Aprieta la cadena para aplanarla, de modo que los eslabones queden bien encajados.",
+  "Join the ends":
+    "Une los extremos",
+  "Curl the chain round and slide the first link into the last one’s sleeves, to wear it as a bracelet.":
+    "Curva la cadena y mete el primer eslabón en las fundas del último, para llevarla como pulsera.",
+  "Glue on the other six flowers, the last one on top, to close the ball.":
+    "Pega las otras seis flores, la última arriba, para cerrar la bola.",
+  "Add a loop":
+    "Añade una anilla",
+  "Glue the ends of a strip together into a loop, and glue it in between the top flowers to hang the ball. Done!":
+    "Pega los extremos de una tira para formar una anilla y pégala entre las flores de arriba para colgar la bola. ¡Listo!",
+  "Fold a square in half side to side, then unfold.":
+    "Dobla un cuadrado por la mitad de lado a lado y desdobla.",
+  "Fold the sides in":
+    "Dobla los lados hacia dentro",
+  "Fold the left and right edges to the middle crease.":
+    "Dobla los bordes izquierdo y derecho hasta el pliegue del centro.",
+  "The same at the bottom, the other way round. That’s one unit: a square with four arms whirling round it.":
+    "Lo mismo abajo, al revés. Ya tienes un módulo: un cuadrado con cuatro brazos girando a su alrededor.",
+  "Fold five more":
+    "Dobla cinco más",
+  "Fold five more squares the same way: six units, two of each colour.":
+    "Dobla cinco cuadrados más de la misma manera: seis módulos, dos de cada color.",
+  "Lift each unit’s four arms up from its square, so they stand out like petals.":
+    "Levanta los cuatro brazos de cada módulo desde su cuadrado, para que sobresalgan como pétalos.",
+  "Hold a red unit petals down for the bottom. Glue a yellow unit to it at each side, square corners to square corners, petals out.":
+    "Sujeta un módulo rojo con los pétalos hacia abajo como base. Pégale un módulo amarillo a cada lado, esquina con esquina de los cuadrados, con los pétalos hacia fuera.",
+  "Add the purple units":
+    "Añade los módulos morados",
+  "Glue the purple units in at the front and back, their square corners to the corners beside them.":
+    "Pega los módulos morados delante y detrás, con las esquinas de sus cuadrados contra las de al lado.",
+  "Close the ball":
+    "Cierra la bola",
+  "Glue the last red unit on top. Done!":
+    "Pega el último módulo rojo arriba. ¡Listo!",
 };

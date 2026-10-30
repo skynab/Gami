@@ -3,7 +3,9 @@ import type { CreaseKind } from '../fold/collapse';
 import { FoldError, type FoldKind } from '../fold/fold';
 import type { Line } from '../fold/geometry2d';
 import { applyOp, lineOf, opKind, shapingBase, type At, type Faces, type LineSpec, type Op, type ShapeBend } from '../fold/ops';
+import type { PresetKind } from '../fold/presets';
 import { locate } from '../fold/select';
+import { TAPE_WIDTH } from '../fold/tape';
 import type { FoldFrame, Mark, OrigamiModel, StepKind, Vec2 } from '../fold/types';
 import { markOnTable, popSettings } from './editor';
 
@@ -12,14 +14,17 @@ import { markOnTable, popSettings } from './editor';
 export type Tool = 'onto' | 'through' | 'edges';
 export type Layers = 'all' | 1 | 2 | 3;
 /**
- * What the picked line does: a plain fold, a reverse fold, a crease for a collapse, or lifting into 3D.
+ * What the picked line does: a plain fold, a reverse fold, a crease for a collapse, or lifting into 3D. Or a named
+ * compound fold (pleat, crimp, squash, petal, rabbit ear) worked out from a few picks (fold/presets.ts).
  * Or popping the model up about a point (picking the point, then which way the first crease points), a
- * scissor cut (picking where it starts and ends), drawing on the paper (picking points along the mark), or,
- * for models of several sheets, moving one sheet (picking where its middle goes).
+ * scissor cut (picking where it starts and ends), a strip of tape (picking its two ends), drawing on the paper
+ * (picking points along the mark), or, for models of several sheets, moving one sheet (picking where its middle goes).
  */
-export type Action = 'fold' | 'reverse' | 'collapse' | 'lift' | 'popUp' | 'cut' | 'draw' | 'move';
+export type Action = 'fold' | 'reverse' | 'preset' | 'collapse' | 'lift' | 'popUp' | 'cut' | 'tape' | 'draw' | 'move';
 
-export const ACTIONS: Action[] = ['fold', 'reverse', 'collapse', 'lift', 'popUp', 'cut', 'draw', 'move'];
+export const ACTIONS: Action[] = ['fold', 'reverse', 'preset', 'collapse', 'lift', 'popUp', 'cut', 'tape', 'draw', 'move'];
+/** How wide a strip of tape can be, on a 1 × 1 sheet: narrow, as it comes, and wide. */
+export const TAPE_WIDTHS = [0.06, TAPE_WIDTH, 0.2];
 /** Actions that can be limited to faces picked by clicking them. */
 export const FACE_ACTIONS: Action[] = ['fold', 'reverse', 'collapse', 'lift', 'cut'];
 /** Actions that pick a fold line. */
@@ -36,6 +41,8 @@ export interface ToolState {
   kind: FoldKind;
   reverseKind: 'inside' | 'outside';
   creaseKind: 'valley' | 'mountain' | 'flat';
+  /** Which named fold the preset action makes. */
+  preset: PresetKind;
   /** A collapse's creases kept so far. */
   creases: { line: Line; kind: CreaseKind; op: CreaseOp }[];
   angle: number;
@@ -54,6 +61,7 @@ export interface ToolState {
   /** Drawing: marks kept for this step, with where they are on the table, and whether the next is filled in. */
   marks: { mark: Mark; table: Vec2[] }[];
   fill: boolean;
+  tapeWidth: number;
   layers: Layers;
   /** Models of several sheets: which one the next step works on (or all), and for a move, how it's put down. */
   sheet: number | 'all';
@@ -87,6 +95,7 @@ export const INITIAL: ToolState = {
   kind: 'valley',
   reverseKind: 'inside',
   creaseKind: 'valley',
+  preset: 'pleat',
   angle: 90,
   segments: 1,
   corners: false,
@@ -94,6 +103,7 @@ export const INITIAL: ToolState = {
   rays: 8,
   steep: 60,
   fill: false,
+  tapeWidth: TAPE_WIDTH,
   layers: 'all',
   sheet: 'all',
   turn: 0,
@@ -121,6 +131,11 @@ export function allOf(...fs: (Faces | undefined)[]): Faces | undefined {
 /** What a compound fold's crease folds: the top N layers on its moving side, of one sheet, among picked faces. */
 export function creaseFaces(n: number | undefined, sheet: number | null, faces?: Faces): Faces | undefined {
   return allOf(n === undefined ? undefined : { top: n }, sheet === null ? undefined : { sheet }, faces);
+}
+
+/** The step a named fold makes: its title and kind, as the collapse it's saved as wouldn't say. */
+export function presetStep(kind: PresetKind, t: TFunction): { title: string; kind: StepKind } {
+  return { title: t(`studio.steps.${kind}`), kind: kind === 'squash' || kind === 'petal' ? kind : kind === 'crimp' ? 'reverse' : 'fold' };
 }
 
 /** A step's default title and kind, from what it does. */
@@ -249,6 +264,9 @@ export function toolsFor(made: Op | undefined, m: OrigamiModel): Partial<ToolSta
   } else if (made.op === 'cut') {
     Object.assign(out, { action: 'cut', layers: layersOf(made.layers) });
     limits(made.only);
+    tryTo(() => (out.picks = [where(made.from, paperBefore), where(made.to, paperBefore)]));
+  } else if (made.op === 'tape') {
+    Object.assign(out, { action: 'tape', tapeWidth: made.width ?? TAPE_WIDTH });
     tryTo(() => (out.picks = [where(made.from, paperBefore), where(made.to, paperBefore)]));
   } else if (made.op === 'move') {
     out.action = 'move';

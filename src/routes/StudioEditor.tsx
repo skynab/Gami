@@ -1,28 +1,40 @@
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
 import { TopBar } from '../app/TopBar';
 import { FoldError } from '../fold/fold';
-import { fromFoldFile, toFoldFile } from '../fold/fold-format';
+import { toFoldFile } from '../fold/fold-format';
 import { applyOp, OpError, type Op } from '../fold/ops';
 import { marksUpTo } from '../fold/marks';
+import type { PresetKind } from '../fold/presets';
+import { tapeStrip } from '../fold/tape';
 import type { Step } from '../fold/types';
-import { useDraft } from '../studio/draft';
-import { unfoldTarget } from '../studio/editor';
+import { saveDraft, useDraft } from '../studio/draft';
+import { foldRest, unfoldTarget } from '../studio/editor';
 import { canInsert, canRemove, canReplace, insertStep, lastFixed, removeStep, replaceStep } from '../studio/steps';
 import { CloudPanel } from '../studio/CloudPanel';
 import { FoldEditor } from '../studio/FoldEditor';
 import { AboutPanel, SheetsPanel } from '../studio/panels';
 import { ToolBar } from '../studio/ToolBar';
-import { FACE_ACTIONS, stepFor, withParts } from '../studio/tools';
+import { FACE_ACTIONS, presetStep, stepFor, withParts } from '../studio/tools';
 import { useTools } from '../studio/useTools';
 import { usePlayback } from '../state/playback';
 import { useViewer } from '../state/viewer';
 
 const Stage = lazy(() => import('../viewer/Stage'));
 
+/** What each named fold's picks are called on the paper: the two lines of a pleat or crimp, a squash's corner and landing line, and so on. */
+const PRESET_LABELS: Record<PresetKind, string[]> = {
+  pleat: ['A', 'A', 'B', 'B'],
+  crimp: ['A', 'A', 'B', 'B'],
+  squash: ['O', 'M'],
+  petal: ['P'],
+  rabbitEar: ['1', '2', '3'],
+};
+
 /**
- * The Studio editor: fold a model step by step and export it as a .fold file. Creators reach it through
- * /studio (signed in); in development builds it's also at /studio/dev without signing in.
+ * The Studio editor: fold a design step by step, saved to this browser's library as it changes, and export it as
+ * a .fold file. Opened from the library at /studio/<id>, with the design already in the draft store.
  *
  * This holds the model's steps and where the next one goes (at the end, in place of one, or before one, and
  * any parts held for a step made of several); the tools for making it are in studio/useTools.ts.
@@ -36,7 +48,9 @@ export default function StudioEditor({ end, cloud = false }: {
   const model = useDraft((s) => s.model);
   const problem = useDraft((s) => s.problem);
   const canUndo = useDraft((s) => s.model.steps.length > 0 || s.history.length > 0);
-  const { addStep, undo: undoDraft, change, removeFrom, editStep, setInfo, setSheets, replace, clear } = useDraft.getState();
+  const designId = useDraft((s) => s.designId);
+  const unsaved = useDraft((s) => s.unsaved);
+  const { addStep, undo: undoDraft, change, removeFrom, editStep, setInfo, setSheets } = useDraft.getState();
   // Changing a step in the middle, or adding one before it: the tools then work on the paper before it.
   const [at, setAt] = useState<{ index: number; mode: 'edit' | 'insert' } | null>(null);
   const editing = at && at.index < model.steps.length ? at : null;
@@ -53,7 +67,6 @@ export default function StudioEditor({ end, cloud = false }: {
   const tools = useTools(before);
   const { s } = tools;
   const [message, setMessage] = useState<string | null>(null);
-  const file = useRef<HTMLInputElement>(null);
 
   const add = (step: Step) => {
     if (editing?.mode === 'edit') {
@@ -71,11 +84,11 @@ export default function StudioEditor({ end, cloud = false }: {
     setMessage(null);
   };
 
-  /** Adds a step made by `o` on the paper before any held parts. */
-  const addOp = (o: Op) => {
+  /** Adds a step made by `o` on the paper before any held parts, named as `named` says or after what it does. */
+  const addOp = (o: Op, named?: Pick<Step, 'title' | 'kind'>) => {
     try {
       const { frame: next, via, marks: drawn } = applyOp(start, o);
-      add({ ...stepFor(o, t), frame: next, ...(via && { via }), ...(drawn && { marks: drawn }), op: o });
+      add({ ...(named ?? stepFor(o, t)), frame: next, ...(via && { via }), ...(drawn && { marks: drawn }), op: o });
     } catch (e) {
       if (!(e instanceof FoldError || e instanceof OpError)) throw e;
       setMessage(e.message);
@@ -83,9 +96,9 @@ export default function StudioEditor({ end, cloud = false }: {
   };
 
   /** Ends a step made of the held parts and `last`, if any: one step that does them all at once. */
-  const finish = (last?: Op) => {
+  const finish = (last?: Op, named?: Pick<Step, 'title' | 'kind'>) => {
     const ops = last ? [...held, last] : held;
-    if (ops.length) addOp(ops.length === 1 ? ops[0] : { op: 'together', ops });
+    if (ops.length) addOp(ops.length === 1 ? ops[0] : { op: 'together', ops }, held.length ? undefined : named);
   };
 
   const undo = () => {
@@ -134,7 +147,7 @@ export default function StudioEditor({ end, cloud = false }: {
 
   const apply = () => {
     if (!tools.preview || !tools.op) return;
-    finish(tools.op);
+    finish(tools.op, s.action === 'preset' ? presetStep(s.preset, t) : undefined);
   };
 
   /** Keeps the step the tools describe as a part of the next step, and clears them for the next part. */
@@ -158,6 +171,15 @@ export default function StudioEditor({ end, cloud = false }: {
 
   const fixed = lastFixed(model);
 
+  /** Something to draw for a step being picked, or nothing if the picks don't make one yet. */
+  const planned = <T,>(make: () => T): T | null => {
+    try {
+      return make();
+    } catch {
+      return null;
+    }
+  };
+
   // The preview plays the newest step whenever one is added or removed.
   const total = model.steps.length;
   useEffect(() => {
@@ -165,7 +187,14 @@ export default function StudioEditor({ end, cloud = false }: {
   }, [total]);
   useEffect(() => {
     useViewer.getState().init();
-    return () => usePlayback.getState().load(0, 1);
+    // Leaving the page or the tab writes any change still waiting.
+    const leave = () => void saveDraft();
+    window.addEventListener('pagehide', leave);
+    return () => {
+      window.removeEventListener('pagehide', leave);
+      leave();
+      usePlayback.getState().load(0, 1);
+    };
   }, []);
 
   useEffect(() => {
@@ -199,17 +228,6 @@ export default function StudioEditor({ end, cloud = false }: {
     URL.revokeObjectURL(a.href);
   };
 
-  const importFile = async (f: File | undefined) => {
-    if (!f) return;
-    try {
-      replace(fromFoldFile(JSON.parse(await f.text())));
-      cancel();
-      setMessage(null);
-    } catch (e) {
-      setMessage(t('studio.openFailed', { error: (e as Error).message }));
-    }
-  };
-
   const status = message ?? tools.error;
   const onPaper = useMemo(() => marksUpTo(before, before.steps.length).map((m) => m.mark), [before]);
   const { result } = tools;
@@ -221,15 +239,14 @@ export default function StudioEditor({ end, cloud = false }: {
         end={
           <>
             {end}
-            <button type="button" className="secondary" onClick={() => file.current?.click()}>
-              {t('studio.open')}
-            </button>
-            <input ref={file} type="file" accept=".fold,.json" hidden onChange={(e) => void importFile(e.target.files?.[0])} />
+            <Link to="/studio" className="secondary">
+              {t('library.heading')}
+            </Link>
+            <Link to={`/mine/${designId}`} className="secondary" title={t('library.foldItTitle')}>
+              {t('library.foldIt')}
+            </Link>
             <button type="button" className="secondary" onClick={exportFile}>
               {t('studio.export')}
-            </button>
-            <button type="button" className="secondary" onClick={() => confirm(t('studio.newConfirm')) && (clear(), cancel())}>
-              {t('studio.new')}
             </button>
           </>
         }
@@ -241,14 +258,17 @@ export default function StudioEditor({ end, cloud = false }: {
             frame={tools.editFrame}
             model={model}
             picks={s.picks}
-            labels={s.action === 'draw' ? [''] : s.action === 'popUp' ? ['O', '1'] : s.tool === 'edges' ? ['A', 'A', 'B', 'B'] : undefined}
+            labels={
+              s.action === 'draw' ? [''] : s.action === 'popUp' ? ['O', '1'] : s.action === 'preset' ? PRESET_LABELS[s.preset] : s.tool === 'edges' ? ['A', 'A', 'B', 'B'] : undefined
+            }
             line={tools.line}
             kind={s.action === 'fold' ? s.kind : s.action === 'collapse' && s.creaseKind === 'mountain' ? 'mountain' : 'valley'}
             preview={result && 'frame' in result ? (result.onFlat ?? result.frame) : null}
-            extra={s.action === 'lift' ? s.bends.map((b) => ({ line: b.line, kind: 'valley' })) : s.creases}
+            extra={s.action === 'lift' ? s.bends.map((b) => ({ line: b.line, kind: 'valley' })) : s.action === 'preset' ? tools.presetCreases : s.creases}
             // A cut about to be made, or the way a pop-up's first crease points.
             cut={(s.action === 'cut' || s.action === 'popUp') && s.picks.length === 2 ? [s.picks[0], s.picks[1]] : null}
-            free={s.action === 'cut' || s.action === 'draw' || s.action === 'popUp' || s.pickMode === 'anchor'}
+            tape={s.action === 'tape' && s.picks.length === 2 ? planned(() => tapeStrip(s.picks[0], s.picks[1], s.tapeWidth)) : null}
+            free={s.action === 'cut' || s.action === 'tape' || s.action === 'preset' || s.action === 'draw' || s.action === 'popUp' || s.pickMode === 'anchor'}
             marks={onPaper}
             drawing={s.action === 'draw' ? [...s.marks.map((m) => ({ points: m.table, fill: !!m.mark.fill })), { points: s.picks, fill: s.fill }] : []}
             faces={FACE_ACTIONS.includes(s.action) && (s.pickMode === 'faces' || s.picked.length) ? s.picked : null}
@@ -266,6 +286,11 @@ export default function StudioEditor({ end, cloud = false }: {
             </Suspense>
           </div>
           <div className="studio-steps">
+            {unsaved && (
+              <p className="error-text" role="alert">
+                {t('studio.saveFailed')}
+              </p>
+            )}
             {cloud && <CloudPanel />}
             <label className="field">
               <span>{t('studio.title')}</span>
@@ -348,6 +373,7 @@ export default function StudioEditor({ end, cloud = false }: {
         sheets={model.sheets.length}
         canUndo={canUndo || held.length > 0}
         unfoldable={unfoldTarget(before.steps) !== null}
+        rest={typeof s.sheet === 'number' ? foldRest(before, s.sheet) : null}
         onHold={hold}
         onApply={apply}
         onNow={now}
