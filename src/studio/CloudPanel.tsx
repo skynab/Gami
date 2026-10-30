@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { Modal } from '../app/Modal';
 import { useAuth } from '../auth/store';
 import { deleteModel, myModels, openModel, saveModel, shareLink, submitModel, type SavedModel, type Status } from '../cloud/models';
-import { useDraft } from './draft';
+import { toFoldFile } from '../fold/fold-format';
+import { cloudInfo, saveDraft, useDraft } from './draft';
+import { designOf, listDesigns, putDesign } from './library';
 
 const status = (s: Status) => `cloud.status.${s}` as const;
 
@@ -51,14 +53,14 @@ export function CloudPanel() {
   const save = (asCopy = false) =>
     run(async () => {
       const saved = await saveModel(model, asCopy ? undefined : cloud?.id);
-      useDraft.getState().fromCloud(saved, false);
+      useDraft.getState().fromCloud(saved);
       return asCopy ? t('cloud.savedCopy') : t('cloud.saved');
     });
 
   const submit = () =>
     run(async () => {
       if (!cloud) return;
-      useDraft.getState().fromCloud(await submitModel(cloud.id), false);
+      useDraft.getState().fromCloud(await submitModel(cloud.id));
       return t('cloud.sent');
     });
 
@@ -129,10 +131,16 @@ function MyModels({ onClose }: { onClose(): void }) {
     myModels(userId).then(setModels, (e: Error) => setError(e.message));
   }, [userId]);
 
-  const open = (m: SavedModel) => {
-    if (useDraft.getState().dirty && !confirm(t('cloud.openConfirm'))) return;
-    useDraft.getState().fromCloud(m, true);
+  const navigate = useNavigate();
+
+  /** Opens a cloud model as a design of its own: the one already made from it, or a new one. */
+  const open = async (m: SavedModel) => {
+    await saveDraft();
+    const mine = (await listDesigns())?.find((d) => d.cloud?.id === m.id);
+    const design = mine ?? designOf(toFoldFile(m.model), { cloud: cloudInfo(m), dirty: false });
+    if (!mine && !(await putDesign(design))) return setError(t('library.unavailable'));
     onClose();
+    navigate(`/studio/${design.id}`);
   };
 
   const remove = async (m: SavedModel) => {
@@ -166,7 +174,7 @@ function MyModels({ onClose }: { onClose(): void }) {
                 </span>
               </div>
               <div className="request-actions">
-                <button type="button" className="primary small-button" onClick={() => open(m)}>
+                <button type="button" className="primary small-button" onClick={() => void open(m)}>
                   {t('cloud.open')}
                 </button>
                 {m.status === 'published' && (

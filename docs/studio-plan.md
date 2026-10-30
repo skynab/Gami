@@ -1,6 +1,6 @@
 # Plan: the Studio for everyone
 
-Status: **planned, not started** (October 2026). To revisit when there's time for features.
+Status: **part 1 done** (29 October 2026): steps 1 and 2 of the order of work. Parts 2 to 4 not started.
 
 The Studio today is for approved creators only (`docs/accounts.md`): it needs Supabase, a sign-in and the creator
 role, keeps one draft in the browser, and saves to the cloud, where a model can be shared by link and submitted for
@@ -167,6 +167,13 @@ publishing), and adds what an open gallery needs:
 | 8 | Submissions with ownership and licence (part 4) | Large; needs decisions first |
 
 1 and 2 together make a useful release on their own. Each later row ships separately.
+
+## Progress
+
+| # | Status |
+|---|---|
+| 1. Local library | Done. `src/studio/library.ts` keeps designs in IndexedDB (`list`, `get`, `put`, `remove`, all failing quietly) with each one's title, step count and thumbnail beside its `.fold` file, so the list reads no models. The draft store (`studio/draft.ts`) edits one design at a time and writes it 400 ms after each change, and on leaving the page. The old `gami.studio.draft` becomes the first design, its key removed only once that's written. `navigator.storage.persist()` is asked once a visit. |
+| 2. Open the Studio | Done. `/studio` is the library for everyone (New, Import, and on each card Fold it, Duplicate, Rename, Export, Delete), `/studio/<id>` the editor, `/mine/<id>` the viewer (progress kept as `mine-<id>`). `/studio/dev` is gone. Signed-in creators get the cloud panel in the editor as before; opening a cloud model makes it a design of its own, or reopens the one made from it. People who aren't creators see how to ask on the library page. Submit is still shown to creators (the open question below). Favourites aren't offered for designs: the gallery's favourites list only shows gallery models. Tested end to end in `e2e/studio.e2e.ts`. |
 
 ## Open questions
 
