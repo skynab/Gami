@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { poseAt, stepTransition } from './animate';
+import { crossings } from './collisions';
 import { toFlat } from './fold';
 import { fromFoldFile, toFoldFile } from './fold-format';
 import { framesOf } from './frames';
@@ -90,6 +92,22 @@ describe('putting units together in 3D', () => {
     expect(again.vertices_coords.length).toBe(model.steps.at(-1)!.frame.vertices_coords.length);
     again.vertices_coords.forEach((p, i) => near(p, model.steps.at(-1)!.frame.vertices_coords[i]));
   });
+  it('brings each piece in from outside its place, so it doesn’t cut through what’s there', () => {
+    // The first square lifted flat to y = 1; the second stood up across its middle, from below, as a wall.
+    const model = two()
+      .assemble({ title: 'Lift the first' }, [{ sheet: 0, pose: { from: table(-1, 0), to: [0, 1, 0], x: [1, 0, 0], up: [0, 1, 0] } }])
+      .assemble({ title: 'Stand the second on it' }, [{ sheet: 1, pose: { from: table(1, 0), to: [0, 1.5, 0], x: [0, 1, 0], up: [1, 0, 0] } }])
+      .build();
+    const t = stepTransition(model, model.steps.length);
+    const second = t.faces.map((f, i) => (f.paper.every(([u]) => u > 5) ? i : -1)).filter((i) => i >= 0);
+    // Most of the way through, the wall is right above its place, out from the middle of the two: higher. (Poses
+    // are set down on the table, so they're compared with the pose at the end.)
+    const [nearly, end] = [poseAt(t, 0.65), poseAt(t, 1)];
+    for (const i of second) nearly[i].forEach((p, c) => expect(p[1]).toBeGreaterThan(end[i][c][1] + 0.3));
+    expect(crossings(model).filter((c) => c.depth > 0.005)).toEqual([]);
+    expect(problems(model)).toEqual([]);
+  });
+
   it('says when pieces are glued, so the model needs glue', () => {
     const glued = two()
       .assemble({ title: 'Glue it on', glue: true }, [{ sheet: 1, pose: { from: table(1, 0), to: [0, 1, 0], x: [0, 1, 0], up: [1, 0, 0] } }])
