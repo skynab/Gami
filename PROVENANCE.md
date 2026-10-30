@@ -113,6 +113,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `business-card-cube` | Traditional: the business card cube (Gilad's database: "Business card cube", Traditional, in Thomas Hull's *Project Origami*), in place of OrigamiOK's cube, which is Mitsunobu Sonobe's unit (see the notes) | None needed: nobody owns it | none recorded: the common sequence, two cards crossed and each one's ends folded round the other | Clear | 29 Oct 2026 |
 | `dice` | Traditional: the business card cube (Gilad's database: "Business card cube", Traditional) put together with its flaps inside, the dots drawn on, in place of OrigamiOK's dice, which is Stéphane Gigandet's (see the notes) | None needed: nobody owns it | none recorded: as `business-card-cube` | Clear | 29 Oct 2026 |
 | `kusudama` | Traditional: the flower kusudama (Gilad's database: "Flower Kusudama", Traditional, in *Charming Flower Origami*), as OrigamiOK's kusudama flower ball, which names no designer (see the notes) | None needed: nobody owns it | [OrigamiOK: kusudama flower ball](https://origamiok.com/origami-kusudama-flower-ball/), for the order of folds | Clear | 29 Oct 2026 |
+| `chrysanthemum` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of origami.me's kusudama chrysanthemum (Traditional), whose text doesn't say where its petals' squashed flaps go or which corners are glued; Gami's units are windmill bases with their arms opened as petals, glued corner to corner on a cube (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami, after the look of [origami.me/kusudama-chrysanthemum](https://origami.me/kusudama-chrysanthemum/) | Clear | 29 Oct 2026 |
 
 ### Notes
 
@@ -122,7 +123,7 @@ noted when it was written, and the model was folded from the common traditional 
   Mitsunobu Sonobe's unit, so Gami's cube is the traditional business card cube; its dice, too, is the business card cube, its flaps inside and its dots drawn on,
   as OrigamiOK's (Stéphane Gigandet's) isn't open. Its kusudama flower ball is the
   traditional flower kusudama. Its eight-point ninja star (every 8-unit ninja star in Gilad's database has a named
-  designer), magic circle (Kumasaka Hiroshi's) and infinity cube were left out.
+  designer), magic circle (Kumasaka Hiroshi's) and infinity cube were left out. The kusudama chrysanthemum is origami.me's, Traditional, but its text leaves its petals' folds and gluing to the diagrams, so Gami's is its own: windmill units, petals opened out, glued corner to corner.
 - **OrigamiOK** (checked 28 October 2026). Its pages name no designer and give no licence for the designs, only a
   copyright notice for the site, and only the lotus page calls its model traditional; so each model was looked up in
   Gilad's database. The cactus turned up no open design (every cactus there has a named designer but one "cactus

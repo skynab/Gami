@@ -146,6 +146,7 @@ export const fr: Messages = {
     'business-card-cube': { title: 'Cube en cartes de visite', blurb: 'Six cartes pliées en modules qui s’emboîtent en un cube, chaque arête tenue par un rabat. Sans colle.' },
     dice: { title: 'Dé', blurb: 'Six cartes blanches emboîtées en un cube, rabats cachés à l’intérieur, points dessinés. Sans colle.' },
     kusudama: { title: 'Kusudama de fleurs', blurb: 'Soixante pétales collés en douze fleurs, les fleurs en une boule, et une boucle pour la suspendre.' },
+    chrysanthemum: { title: 'Kusudama chrysanthème', blurb: 'Six modules en moulin collés coin à coin en une boule, leurs bras ouverts en pétales.' },
   },
   notFound: {
     title: 'Cette page a été repliée',

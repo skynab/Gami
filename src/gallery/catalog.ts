@@ -134,6 +134,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'business-card-cube', title: 'Business card cube', blurb: 'Six cards folded into units that lock together into a cube, every edge held by a flap. No glue.', difficulty: 2, category: 'modular', steps: 9, minutes: 15, sheets: 6, paper: 1.75, added: '2026-10-29' },
   { id: 'dice', title: 'Dice', blurb: 'Six white cards locked into a cube, flaps hidden inside, with the dots drawn on. No glue.', difficulty: 2, category: 'modular', steps: 12, minutes: 20, sheets: 6, paper: 1.75, needs: ['pen'], added: '2026-10-29' },
   { id: 'kusudama', title: 'Kusudama flower ball', blurb: 'Sixty petals glued into twelve flowers, the flowers into a ball, and a loop to hang it from.', difficulty: 3, category: 'modular', steps: 15, minutes: 120, sheets: 61, paper: 13.33, needs: ['glue'], added: '2026-10-29' },
+  { id: 'chrysanthemum', title: 'Chrysanthemum kusudama', blurb: 'Six windmill units glued corner to corner into a ball, their arms opened out as petals.', difficulty: 2, category: 'modular', steps: 16, minutes: 30, sheets: 6, needs: ['glue'], added: '2026-10-29' },
   // Coming soon: listed, with no steps yet.
   { id: 'boat', title: 'Boat', blurb: 'The classic paper boat. It really floats, for a while.', difficulty: 2, category: 'object', minutes: 6, sheets: 1 },
   { id: 'iris', title: 'Iris', blurb: 'Three petals up, three down, from the frog base.', difficulty: 4, category: 'flower', minutes: 20, sheets: 1 },

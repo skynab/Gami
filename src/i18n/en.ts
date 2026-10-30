@@ -148,6 +148,7 @@ export const en = {
     'business-card-cube': { title: 'Business card cube', blurb: 'Six cards folded into units that lock together into a cube, every edge held by a flap. No glue.' },
     dice: { title: 'Dice', blurb: 'Six white cards locked into a cube, flaps hidden inside, with the dots drawn on. No glue.' },
     kusudama: { title: 'Kusudama flower ball', blurb: 'Sixty petals glued into twelve flowers, the flowers into a ball, and a loop to hang it from.' },
+    chrysanthemum: { title: 'Chrysanthemum kusudama', blurb: 'Six windmill units glued corner to corner into a ball, their arms opened out as petals.' },
   },
   notFound: {
     title: 'This page got folded away',

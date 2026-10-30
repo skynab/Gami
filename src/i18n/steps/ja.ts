@@ -2451,4 +2451,28 @@ export const ja: Record<string, string> = {
     "ひもの輪をつける",
   "Glue the ends of a strip together into a loop, and glue it in between the top flowers to hang the ball. Done!":
     "帯の両端をはり合わせて輪にし、上の花のあいだにはって、ボールをつるせるようにします。完成です！",
+  "Fold a square in half side to side, then unfold.":
+    "正方形を左右に半分に折り、開きます。",
+  "Fold the sides in":
+    "左右を折りこむ",
+  "Fold the left and right edges to the middle crease.":
+    "左右の辺をまん中の折りすじまで折ります。",
+  "The same at the bottom, the other way round. That’s one unit: a square with four arms whirling round it.":
+    "下も同じように、向きを逆にして折ります。これでユニットがひとつ。正方形のまわりに四本の腕がうずを巻いています。",
+  "Fold five more":
+    "あと五つ折る",
+  "Fold five more squares the same way: six units, two of each colour.":
+    "あと五枚の正方形を同じように折ります。ユニットは六つ、各色ふたつずつです。",
+  "Lift each unit’s four arms up from its square, so they stand out like petals.":
+    "それぞれのユニットの四本の腕を正方形から起こして、花びらのように立てます。",
+  "Hold a red unit petals down for the bottom. Glue a yellow unit to it at each side, square corners to square corners, petals out.":
+    "赤いユニットを花びらを下にして底にします。その左右に黄色いユニットを、正方形の角どうしを合わせ、花びらを外にしてはります。",
+  "Add the purple units":
+    "むらさきのユニットをつける",
+  "Glue the purple units in at the front and back, their square corners to the corners beside them.":
+    "むらさきのユニットを前とうしろにはり、正方形の角をとなりの角に合わせます。",
+  "Close the ball":
+    "ボールをとじる",
+  "Glue the last red unit on top. Done!":
+    "最後の赤いユニットを上にはります。完成です！",
 };

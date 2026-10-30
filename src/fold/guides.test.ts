@@ -43,6 +43,7 @@ describe('fold guides', () => {
         expect(g.arrows.length + g.creases.length + g.cuts.length, `${model.id} step ${k}`).toBeGreaterThan(0);
       }
     }
-    // Every step of every model is animated here, which takes a few seconds (more under a full run).
-  }, 60_000);
+    // Every model is built and every step animated here, which takes the best part of a minute (more under a full
+    // run): the kusudama alone takes seconds to build.
+  }, 120_000);
 });

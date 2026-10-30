@@ -2451,4 +2451,28 @@ export const es: Record<string, string> = {
     "Añade una anilla",
   "Glue the ends of a strip together into a loop, and glue it in between the top flowers to hang the ball. Done!":
     "Pega los extremos de una tira para formar una anilla y pégala entre las flores de arriba para colgar la bola. ¡Listo!",
+  "Fold a square in half side to side, then unfold.":
+    "Dobla un cuadrado por la mitad de lado a lado y desdobla.",
+  "Fold the sides in":
+    "Dobla los lados hacia dentro",
+  "Fold the left and right edges to the middle crease.":
+    "Dobla los bordes izquierdo y derecho hasta el pliegue del centro.",
+  "The same at the bottom, the other way round. That’s one unit: a square with four arms whirling round it.":
+    "Lo mismo abajo, al revés. Ya tienes un módulo: un cuadrado con cuatro brazos girando a su alrededor.",
+  "Fold five more":
+    "Dobla cinco más",
+  "Fold five more squares the same way: six units, two of each colour.":
+    "Dobla cinco cuadrados más de la misma manera: seis módulos, dos de cada color.",
+  "Lift each unit’s four arms up from its square, so they stand out like petals.":
+    "Levanta los cuatro brazos de cada módulo desde su cuadrado, para que sobresalgan como pétalos.",
+  "Hold a red unit petals down for the bottom. Glue a yellow unit to it at each side, square corners to square corners, petals out.":
+    "Sujeta un módulo rojo con los pétalos hacia abajo como base. Pégale un módulo amarillo a cada lado, esquina con esquina de los cuadrados, con los pétalos hacia fuera.",
+  "Add the purple units":
+    "Añade los módulos morados",
+  "Glue the purple units in at the front and back, their square corners to the corners beside them.":
+    "Pega los módulos morados delante y detrás, con las esquinas de sus cuadrados contra las de al lado.",
+  "Close the ball":
+    "Cierra la bola",
+  "Glue the last red unit on top. Done!":
+    "Pega el último módulo rojo arriba. ¡Listo!",
 };
