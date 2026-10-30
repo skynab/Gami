@@ -1833,6 +1833,11 @@ kbd {
   gap: 6px;
 }
 
+/* The Studio's actions wrap onto more lines rather than running off a narrow screen. */
+.studio-bar .segmented {
+  flex-wrap: wrap;
+}
+
 /* Learning a fold: when the bar wraps onto several lines (narrow screens), each line is centred. On one line the
    scrubber takes up the spare room, so nothing moves. */
 .playback,

@@ -6,6 +6,7 @@ import { FoldError } from '../fold/fold';
 import { toFoldFile } from '../fold/fold-format';
 import { applyOp, OpError, type Op } from '../fold/ops';
 import { marksUpTo } from '../fold/marks';
+import type { PresetKind } from '../fold/presets';
 import { tapeStrip } from '../fold/tape';
 import type { Step } from '../fold/types';
 import { saveDraft, useDraft } from '../studio/draft';
@@ -15,12 +16,21 @@ import { CloudPanel } from '../studio/CloudPanel';
 import { FoldEditor } from '../studio/FoldEditor';
 import { AboutPanel, SheetsPanel } from '../studio/panels';
 import { ToolBar } from '../studio/ToolBar';
-import { FACE_ACTIONS, stepFor, withParts } from '../studio/tools';
+import { FACE_ACTIONS, presetStep, stepFor, withParts } from '../studio/tools';
 import { useTools } from '../studio/useTools';
 import { usePlayback } from '../state/playback';
 import { useViewer } from '../state/viewer';
 
 const Stage = lazy(() => import('../viewer/Stage'));
+
+/** What each named fold's picks are called on the paper: the two lines of a pleat or crimp, a squash's corner and landing line, and so on. */
+const PRESET_LABELS: Record<PresetKind, string[]> = {
+  pleat: ['A', 'A', 'B', 'B'],
+  crimp: ['A', 'A', 'B', 'B'],
+  squash: ['O', 'M'],
+  petal: ['P'],
+  rabbitEar: ['1', '2', '3'],
+};
 
 /**
  * The Studio editor: fold a design step by step, saved to this browser's library as it changes, and export it as
@@ -74,11 +84,11 @@ export default function StudioEditor({ end, cloud = false }: {
     setMessage(null);
   };
 
-  /** Adds a step made by `o` on the paper before any held parts. */
-  const addOp = (o: Op) => {
+  /** Adds a step made by `o` on the paper before any held parts, named as `named` says or after what it does. */
+  const addOp = (o: Op, named?: Pick<Step, 'title' | 'kind'>) => {
     try {
       const { frame: next, via, marks: drawn } = applyOp(start, o);
-      add({ ...stepFor(o, t), frame: next, ...(via && { via }), ...(drawn && { marks: drawn }), op: o });
+      add({ ...(named ?? stepFor(o, t)), frame: next, ...(via && { via }), ...(drawn && { marks: drawn }), op: o });
     } catch (e) {
       if (!(e instanceof FoldError || e instanceof OpError)) throw e;
       setMessage(e.message);
@@ -86,9 +96,9 @@ export default function StudioEditor({ end, cloud = false }: {
   };
 
   /** Ends a step made of the held parts and `last`, if any: one step that does them all at once. */
-  const finish = (last?: Op) => {
+  const finish = (last?: Op, named?: Pick<Step, 'title' | 'kind'>) => {
     const ops = last ? [...held, last] : held;
-    if (ops.length) addOp(ops.length === 1 ? ops[0] : { op: 'together', ops });
+    if (ops.length) addOp(ops.length === 1 ? ops[0] : { op: 'together', ops }, held.length ? undefined : named);
   };
 
   const undo = () => {
@@ -137,7 +147,7 @@ export default function StudioEditor({ end, cloud = false }: {
 
   const apply = () => {
     if (!tools.preview || !tools.op) return;
-    finish(tools.op);
+    finish(tools.op, s.action === 'preset' ? presetStep(s.preset, t) : undefined);
   };
 
   /** Keeps the step the tools describe as a part of the next step, and clears them for the next part. */
@@ -248,15 +258,17 @@ export default function StudioEditor({ end, cloud = false }: {
             frame={tools.editFrame}
             model={model}
             picks={s.picks}
-            labels={s.action === 'draw' ? [''] : s.action === 'popUp' ? ['O', '1'] : s.tool === 'edges' ? ['A', 'A', 'B', 'B'] : undefined}
+            labels={
+              s.action === 'draw' ? [''] : s.action === 'popUp' ? ['O', '1'] : s.action === 'preset' ? PRESET_LABELS[s.preset] : s.tool === 'edges' ? ['A', 'A', 'B', 'B'] : undefined
+            }
             line={tools.line}
             kind={s.action === 'fold' ? s.kind : s.action === 'collapse' && s.creaseKind === 'mountain' ? 'mountain' : 'valley'}
             preview={result && 'frame' in result ? (result.onFlat ?? result.frame) : null}
-            extra={s.action === 'lift' ? s.bends.map((b) => ({ line: b.line, kind: 'valley' })) : s.creases}
+            extra={s.action === 'lift' ? s.bends.map((b) => ({ line: b.line, kind: 'valley' })) : s.action === 'preset' ? tools.presetCreases : s.creases}
             // A cut about to be made, or the way a pop-up's first crease points.
             cut={(s.action === 'cut' || s.action === 'popUp') && s.picks.length === 2 ? [s.picks[0], s.picks[1]] : null}
             tape={s.action === 'tape' && s.picks.length === 2 ? planned(() => tapeStrip(s.picks[0], s.picks[1], s.tapeWidth)) : null}
-            free={s.action === 'cut' || s.action === 'tape' || s.action === 'draw' || s.action === 'popUp' || s.pickMode === 'anchor'}
+            free={s.action === 'cut' || s.action === 'tape' || s.action === 'preset' || s.action === 'draw' || s.action === 'popUp' || s.pickMode === 'anchor'}
             marks={onPaper}
             drawing={s.action === 'draw' ? [...s.marks.map((m) => ({ points: m.table, fill: !!m.mark.fill })), { points: s.picks, fill: s.fill }] : []}
             faces={FACE_ACTIONS.includes(s.action) && (s.pickMode === 'faces' || s.picked.length) ? s.picked : null}

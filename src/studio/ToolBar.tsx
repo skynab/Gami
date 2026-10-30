@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import type { Op } from '../fold/ops';
+import { PRESETS, type PresetKind } from '../fold/presets';
 import { ACTIONS, FACE_ACTIONS, LINE_ACTIONS, TAPE_WIDTHS, type Layers } from './tools';
 import type { Tools } from './useTools';
 
@@ -23,7 +24,7 @@ export function ToolBar({ tools, sheets, canUndo, unfoldable, onHold, onApply, o
   const { t } = useTranslation();
   const { s, set } = tools;
   return (
-        <footer className="bottombar">
+        <footer className="bottombar studio-bar">
           <div className="group">
             <div className="segmented" role="group" aria-label={t('studio.actions.action')}>
               {ACTIONS.filter((a) => a !== 'move' || tools.many).map((a) => (
@@ -40,6 +41,18 @@ export function ToolBar({ tools, sheets, canUndo, unfoldable, onHold, onApply, o
                   {Array.from({ length: sheets }, (_, i) => (
                     <option key={i} value={i}>
                       {t('studio.sheetN', { n: i + 1 })}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+            {s.action === 'preset' && (
+              <label className="field inline">
+                <span>{t('studio.presetLabel')}</span>
+                <select value={s.preset} onChange={(e) => set({ preset: e.target.value as PresetKind, picks: [], flipped: false })}>
+                  {PRESETS.map((p) => (
+                    <option key={p} value={p}>
+                      {t(`studio.steps.${p}`)}
                     </option>
                   ))}
                 </select>
@@ -236,6 +249,11 @@ export function ToolBar({ tools, sheets, canUndo, unfoldable, onHold, onApply, o
             <button type="button" className="secondary" disabled={!tools.line} onClick={() => set({ flipped: !s.flipped })} title={t('studio.flipTitle')}>
               {t('studio.flipSide')}
             </button>
+            )}
+            {s.action === 'preset' && s.preset !== 'squash' && s.preset !== 'petal' && (
+              <button type="button" className="secondary" disabled={!tools.op} aria-pressed={s.flipped} onClick={() => set({ flipped: !s.flipped })} title={t('studio.otherWayTitle')}>
+                {t('studio.otherWay')}
+              </button>
             )}
             {s.action === 'collapse' && (
               <>

@@ -79,6 +79,43 @@ test.describe('studio library', () => {
     await expect(editor.locator('.tape:not(.planned)')).toHaveCount(1);
   });
 
+  test('makes named folds: a pleat, and a rabbit ear on a triangle', async ({ page }) => {
+    await page.goto('/studio');
+    await page.getByRole('button', { name: 'New design' }).click();
+    const editor = page.getByRole('img', { name: 'The paper from above' });
+    const click = async (x: number, z: number) => {
+      const p = await editor.evaluate((svg, [x, z]) => {
+        const p = new DOMPoint(x, z).matrixTransform((svg as SVGSVGElement).getScreenCTM()!);
+        return { x: p.x, y: p.y };
+      }, [x, z] as const);
+      await page.mouse.click(p.x, p.y);
+    };
+    // Enter applies the step, as the bar's last button does (which a phone may have scrolled out of reach).
+    const apply = () => page.keyboard.press('Enter');
+
+    // A pleat on the flat sheet: its two creases show before it's made.
+    await page.getByRole('button', { name: 'Named fold' }).click();
+    await expect(page.getByText('Pick two points along the valley crease')).toBeVisible();
+    for (const [x, z] of [[-0.4, 0.25], [0.4, 0.25], [-0.4, 0.375], [0.4, 0.375]] as const) await click(x, z);
+    await expect(editor.locator('.crease.pending')).toHaveCount(2);
+    await apply();
+    await expect(page.getByRole('textbox', { name: 'Step 1 title' })).toHaveValue('Pleat');
+
+    // Undone, then a triangle: a corner folded onto the opposite one, and a rabbit ear standing its right angle up.
+    await page.getByRole('button', { name: 'Undo' }).click();
+    await page.getByRole('button', { name: 'Fold', exact: true }).first().click();
+    await click(-0.5, 0.5);
+    await click(0.5, -0.5);
+    await apply();
+    await expect(page.getByRole('textbox', { name: 'Step 1 title' })).toHaveValue('Valley fold');
+    await page.getByRole('button', { name: 'Named fold' }).click();
+    await page.getByRole('combobox', { name: 'Fold' }).selectOption({ label: 'Rabbit ear' });
+    for (const [x, z] of [[0.5, -0.5], [-0.5, -0.5], [0.5, 0.5]] as const) await click(x, z);
+    await expect(editor.locator('.crease.pending')).toHaveCount(4);
+    await apply();
+    await expect(page.getByRole('textbox', { name: 'Step 2 title' })).toHaveValue('Rabbit ear');
+  });
+
   test('moves the old single draft into the library', async ({ page }) => {
     const fold = JSON.parse(await readFile('public/models/cup.fold', 'utf8'));
     await page.addInitScript((f) => {

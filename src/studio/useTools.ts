@@ -4,6 +4,7 @@ import { FoldError } from '../fold/fold';
 import type { Line } from '../fold/geometry2d';
 import { applyOp, atOf, lineOf, NoStillError, OpError, shapingBase, type At, type Faces, type LineSpec, type Op, type ShapeBend } from '../fold/ops';
 import type { FoldFrame, Mark, OrigamiModel, Vec2 } from '../fold/types';
+import { PRESET_PICKS, presetOp } from '../fold/presets';
 import { TAPE_WIDTH } from '../fold/tape';
 import { markAt, popRays, project, toggleFace, viewBox } from './editor';
 import { allOf, creaseFaces, FACE_ACTIONS, GATHERED, INITIAL, LINE_ACTIONS, toolsFor, type Action, type ToolState } from './tools';
@@ -33,7 +34,7 @@ export function useTools(before: OrigamiModel) {
   // Picks a fold line needs: two points, or for edge to edge, two along each edge (a cut needs its two ends,
   // a pop-up its point and a direction). A mark takes as many as it likes.
   // Each is kept as the point of the sheet picked, so the step follows the paper if an earlier one changes.
-  const needs = action === 'draw' ? Infinity : tool === 'edges' && LINE_ACTIONS.includes(action) ? 4 : 2;
+  const needs = action === 'draw' ? Infinity : action === 'preset' ? PRESET_PICKS[s.preset] : tool === 'edges' && LINE_ACTIONS.includes(action) ? 4 : 2;
   const spec = useMemo((): LineSpec | null => {
     if (!LINE_ACTIONS.includes(action) || picks.length < needs) return null;
     const [a, b, c, d] = picks.map((p) => atOf(editFrame, p));
@@ -79,8 +80,20 @@ export function useTools(before: OrigamiModel) {
     ...(only && { only }),
   });
 
+  // A named fold, worked out from its picks, or why it can't be made there.
+  const named = useMemo((): { op: Op } | { error: string } | null => {
+    if (action !== 'preset' || picks.length < needs) return null;
+    try {
+      return { op: presetOp(before, { kind: s.preset, picks, flip: flipped, ...(inSheet && { only: inSheet }) }) };
+    } catch (e) {
+      if (e instanceof FoldError || e instanceof OpError) return { error: e.message };
+      throw e;
+    }
+  }, [action, picks, needs, before, s.preset, flipped, chosen]);
+
   // The step the tools describe now, if they describe one.
   const op = useMemo((): Op | null => {
+    if (action === 'preset') return named && 'op' in named ? named.op : null;
     const auto = { auto: true as const, ...(inSheet && { among: inSheet }) };
     const flip = flipped ? { flip: true } : {};
     if (action === 'move')
@@ -116,7 +129,7 @@ export function useTools(before: OrigamiModel) {
     const faces = creaseFaces(n, chosen, facesPicked);
     return { op: 'collapse', creases: [{ line: spec, ...flip, kind: s.reverseKind, ...(faces && { only: faces }) }], anchor: auto };
     // The operation is rebuilt from the whole tool state; `result` below only refolds when it changes.
-  }, [s, chosen, editFrame, spec, line, mark, anchorAt]);
+  }, [s, chosen, editFrame, spec, line, mark, anchorAt, named]);
   const opKey = JSON.stringify(op);
 
   // For a lift, `onFlat` is the preview with its faces matched to the flat state the lines are picked on.
@@ -125,6 +138,7 @@ export function useTools(before: OrigamiModel) {
     if (action === 'draw' && picks.length >= (s.fill ? 3 : 2) && !mark) return { error: t('studio.errors.drawOnPaper') };
     if (action === 'popUp' && picks.length >= 2 && !op) return { error: t('studio.errors.tooSteep') };
     if (action === 'lift' && s.chained && !anchored) return { error: t('studio.errors.anchorOffPaper') };
+    if (named && 'error' in named) return named;
     if (!op) return null;
     if (action === 'lift' && !base && frame.vertices_coords.some((p) => Math.abs(p[1]) > 1e-6)) return { error: t('studio.errors.shaped') };
     try {
@@ -136,8 +150,18 @@ export function useTools(before: OrigamiModel) {
       throw e;
     }
     // `op` is followed by its key, so a tool change that leaves the step as it was doesn't fold it again.
-  }, [opKey, action, chosen, picks.length, s.fill, mark, s.chained, anchored, base, frame, before, t]);
+  }, [opKey, action, chosen, picks.length, s.fill, mark, s.chained, anchored, base, frame, before, t, named]);
   const preview = result && 'frame' in result ? result.frame : null;
+  // A named fold's creases, to show on the paper before it's made.
+  const presetCreases = useMemo(() => {
+    if (action !== 'preset' || op?.op !== 'collapse') return [];
+    try {
+      return op.creases.map((c) => ({ line: lineOf(c.line, editFrame, c.flip), kind: c.kind }));
+    } catch (e) {
+      if (e instanceof FoldError) return [];
+      throw e;
+    }
+  }, [action, opKey, editFrame]);
   const error = result && 'error' in result ? result.error : null;
 
   const hint = (() => {
@@ -146,6 +170,7 @@ export function useTools(before: OrigamiModel) {
     if (action === 'move') return preview ? (picks.length ? t('studio.hints.move') : t('studio.hints.moveWhere')) : null;
     if (action === 'cut' && picks.length < needs) return t('studio.hints.cutEnds');
     if (action === 'tape' && picks.length < needs) return t('studio.hints.tapeEnds');
+    if (action === 'preset') return picks.length < needs ? t(`studio.hints.presets.${s.preset}`) : preview ? t('studio.hints.preset') : null;
     if (action === 'draw') return mark ? t('studio.hints.draw') : s.marks.length ? t('studio.hints.marks', { count: s.marks.length }) : t('studio.hints.drawPoints');
     if (action === 'popUp') return preview ? t('studio.hints.popUp') : t('studio.hints.popUpPoints');
     if (action === 'collapse' && s.creases.length && picks.length < needs) return t('studio.hints.creases', { count: s.creases.length });
@@ -173,6 +198,7 @@ export function useTools(before: OrigamiModel) {
     op,
     result,
     preview,
+    presetCreases,
     error,
     hint,
     startOver,
