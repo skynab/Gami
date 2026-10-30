@@ -4,6 +4,7 @@ import { FoldError, type FoldKind } from '../fold/fold';
 import type { Line } from '../fold/geometry2d';
 import { applyOp, lineOf, opKind, shapingBase, type At, type Faces, type LineSpec, type Op, type ShapeBend } from '../fold/ops';
 import { locate } from '../fold/select';
+import { TAPE_WIDTH } from '../fold/tape';
 import type { FoldFrame, Mark, OrigamiModel, StepKind, Vec2 } from '../fold/types';
 import { markOnTable, popSettings } from './editor';
 
@@ -14,12 +15,14 @@ export type Layers = 'all' | 1 | 2 | 3;
 /**
  * What the picked line does: a plain fold, a reverse fold, a crease for a collapse, or lifting into 3D.
  * Or popping the model up about a point (picking the point, then which way the first crease points), a
- * scissor cut (picking where it starts and ends), drawing on the paper (picking points along the mark), or,
- * for models of several sheets, moving one sheet (picking where its middle goes).
+ * scissor cut (picking where it starts and ends), a strip of tape (picking its two ends), drawing on the paper
+ * (picking points along the mark), or, for models of several sheets, moving one sheet (picking where its middle goes).
  */
-export type Action = 'fold' | 'reverse' | 'collapse' | 'lift' | 'popUp' | 'cut' | 'draw' | 'move';
+export type Action = 'fold' | 'reverse' | 'collapse' | 'lift' | 'popUp' | 'cut' | 'tape' | 'draw' | 'move';
 
-export const ACTIONS: Action[] = ['fold', 'reverse', 'collapse', 'lift', 'popUp', 'cut', 'draw', 'move'];
+export const ACTIONS: Action[] = ['fold', 'reverse', 'collapse', 'lift', 'popUp', 'cut', 'tape', 'draw', 'move'];
+/** How wide a strip of tape can be, on a 1 × 1 sheet: narrow, as it comes, and wide. */
+export const TAPE_WIDTHS = [0.06, TAPE_WIDTH, 0.2];
 /** Actions that can be limited to faces picked by clicking them. */
 export const FACE_ACTIONS: Action[] = ['fold', 'reverse', 'collapse', 'lift', 'cut'];
 /** Actions that pick a fold line. */
@@ -54,6 +57,7 @@ export interface ToolState {
   /** Drawing: marks kept for this step, with where they are on the table, and whether the next is filled in. */
   marks: { mark: Mark; table: Vec2[] }[];
   fill: boolean;
+  tapeWidth: number;
   layers: Layers;
   /** Models of several sheets: which one the next step works on (or all), and for a move, how it's put down. */
   sheet: number | 'all';
@@ -94,6 +98,7 @@ export const INITIAL: ToolState = {
   rays: 8,
   steep: 60,
   fill: false,
+  tapeWidth: TAPE_WIDTH,
   layers: 'all',
   sheet: 'all',
   turn: 0,
@@ -249,6 +254,9 @@ export function toolsFor(made: Op | undefined, m: OrigamiModel): Partial<ToolSta
   } else if (made.op === 'cut') {
     Object.assign(out, { action: 'cut', layers: layersOf(made.layers) });
     limits(made.only);
+    tryTo(() => (out.picks = [where(made.from, paperBefore), where(made.to, paperBefore)]));
+  } else if (made.op === 'tape') {
+    Object.assign(out, { action: 'tape', tapeWidth: made.width ?? TAPE_WIDTH });
     tryTo(() => (out.picks = [where(made.from, paperBefore), where(made.to, paperBefore)]));
   } else if (made.op === 'move') {
     out.action = 'move';

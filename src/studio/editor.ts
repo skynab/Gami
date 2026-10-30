@@ -1,8 +1,9 @@
 import { clip } from '../fold/cut';
-import { placeLike, unplaceLike } from '../fold/fold';
+import { placeLike, unplaceLike, type FlatFace } from '../fold/fold';
 import { roundCoord } from '../fold/fold-format';
 import { frontUp, lerp } from '../fold/geometry2d';
 export { frontUp } from '../fold/geometry2d';
+import { onFace } from '../fold/marks';
 import { centre, inside, locate, project } from '../fold/select';
 import type { Ray } from '../fold/shape';
 export { anchorFor, project, smallerSideMoves, topLayers } from '../fold/select';
@@ -35,6 +36,20 @@ export function cutsOnTable(frame: FoldFrame): [Vec2, Vec2][] {
     }
   }
   return out;
+}
+
+/**
+ * The tape stuck on a face's upper side, as outlines on the table: drawn just after the face, so the faces above
+ * it cover it as they cover the face.
+ */
+export function tapeOnFace(frame: FoldFrame, face: FlatFace): Vec2[][] {
+  if (!frame.tapes?.length) return [];
+  const up = frontUp(face.world, face.paper);
+  const toTable = placeLike(face);
+  return frame.tapes
+    .flatMap((t) => t.pieces)
+    .filter((m) => (m.side === 'front') === up)
+    .flatMap((m) => onFace(m, face.paper).map((part) => part.map(toTable)));
 }
 
 /** The frame to unfold back to: the one before the latest fold or collapse made since the last unfold. */

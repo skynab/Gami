@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import type { Op } from '../fold/ops';
-import { ACTIONS, FACE_ACTIONS, LINE_ACTIONS, type Layers } from './tools';
+import { ACTIONS, FACE_ACTIONS, LINE_ACTIONS, TAPE_WIDTHS, type Layers } from './tools';
 import type { Tools } from './useTools';
 
 /**
@@ -32,7 +32,7 @@ export function ToolBar({ tools, sheets, canUndo, unfoldable, onHold, onApply, o
                 </button>
               ))}
             </div>
-            {tools.many && s.action !== 'popUp' && s.action !== 'draw' && (
+            {tools.many && s.action !== 'popUp' && s.action !== 'draw' && s.action !== 'tape' && (
               <label className="field inline" title={t('studio.sheetTitle')}>
                 <span>{t('studio.sheet')}</span>
                 <select value={String(s.sheet)} onChange={(e) => set({ sheet: e.target.value === 'all' ? 'all' : Number(e.target.value) })}>
@@ -40,6 +40,19 @@ export function ToolBar({ tools, sheets, canUndo, unfoldable, onHold, onApply, o
                   {Array.from({ length: sheets }, (_, i) => (
                     <option key={i} value={i}>
                       {t('studio.sheetN', { n: i + 1 })}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+            {s.action === 'tape' && (
+              <label className="field inline">
+                <span>{t('studio.tapeWidth')}</span>
+                <select value={s.tapeWidth} onChange={(e) => set({ tapeWidth: Number(e.target.value) })}>
+                  {/* A width a step was made with that isn't one of these stays choosable. */}
+                  {(TAPE_WIDTHS.includes(s.tapeWidth) ? TAPE_WIDTHS : [...TAPE_WIDTHS, s.tapeWidth]).map((w, i) => (
+                    <option key={w} value={w}>
+                      {t(`studio.tapeWidths.${['narrow', 'normal', 'wide'][i] ?? 'other'}`)}
                     </option>
                   ))}
                 </select>

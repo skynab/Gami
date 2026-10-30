@@ -4,6 +4,7 @@ import { FoldError } from '../fold/fold';
 import type { Line } from '../fold/geometry2d';
 import { applyOp, atOf, lineOf, NoStillError, OpError, shapingBase, type At, type Faces, type LineSpec, type Op, type ShapeBend } from '../fold/ops';
 import type { FoldFrame, Mark, OrigamiModel, Vec2 } from '../fold/types';
+import { TAPE_WIDTH } from '../fold/tape';
 import { markAt, popRays, project, toggleFace, viewBox } from './editor';
 import { allOf, creaseFaces, FACE_ACTIONS, GATHERED, INITIAL, LINE_ACTIONS, toolsFor, type Action, type ToolState } from './tools';
 
@@ -89,6 +90,11 @@ export function useTools(before: OrigamiModel) {
       const [from, to] = picks.map((p) => atOf(editFrame, p));
       return { op: 'cut', from, to, ...(n !== undefined && { layers: n }), ...(only && { only }) };
     }
+    if (action === 'tape') {
+      if (picks.length < 2) return null;
+      const [from, to] = picks.map((p) => atOf(editFrame, p));
+      return { op: 'tape', from, to, ...(s.tapeWidth !== TAPE_WIDTH && { width: s.tapeWidth }) };
+    }
     if (action === 'draw') {
       const all = [...s.marks.map((m) => m.mark), ...(mark ? [mark] : [])];
       return all.length ? { op: 'draw', marks: all } : null;
@@ -139,6 +145,7 @@ export function useTools(before: OrigamiModel) {
     if (s.pickMode === 'anchor') return t('studio.hints.anchor');
     if (action === 'move') return preview ? (picks.length ? t('studio.hints.move') : t('studio.hints.moveWhere')) : null;
     if (action === 'cut' && picks.length < needs) return t('studio.hints.cutEnds');
+    if (action === 'tape' && picks.length < needs) return t('studio.hints.tapeEnds');
     if (action === 'draw') return mark ? t('studio.hints.draw') : s.marks.length ? t('studio.hints.marks', { count: s.marks.length }) : t('studio.hints.drawPoints');
     if (action === 'popUp') return preview ? t('studio.hints.popUp') : t('studio.hints.popUpPoints');
     if (action === 'collapse' && s.creases.length && picks.length < needs) return t('studio.hints.creases', { count: s.creases.length });

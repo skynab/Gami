@@ -5,6 +5,7 @@ import type { OrigamiModel } from '../fold/types';
 import { fortuneTeller } from '../models/recipes/fortune-teller';
 import { masuBox } from '../models/recipes/masu-box';
 import { basics } from '../models/basics';
+import { TAPE_WIDTH } from '../fold/tape';
 import { stepFor, toolsFor } from './tools';
 
 /** The model before step `i`, as Change loads a step. */
@@ -36,6 +37,15 @@ describe('loading a step into the tools', () => {
     const onTable: Op = { op: 'fold', line: { line: { p: [0, 0], d: [1, 0] } } };
     expect(toolsFor(onTable, before(basics, 0)).picks).toBeUndefined();
     expect(toolsFor(undefined, before(basics, 0))).toEqual({ corners: false, chained: false });
+  });
+
+  it('sets tape from its two ends and its width', () => {
+    const strip: Op = { op: 'tape', from: { paper: [-0.3, 0.1] }, to: { paper: [0.3, 0.1] }, width: 0.2 };
+    const tools = toolsFor(strip, before(basics, 0));
+    expect(tools).toMatchObject({ action: 'tape', tapeWidth: 0.2 });
+    expect(tools.picks?.flat().map((n) => +n.toFixed(9))).toEqual([-0.3, 0.1, 0.3, 0.1]);
+    expect(toolsFor({ ...strip, width: undefined }, before(basics, 0)).tapeWidth).toBe(TAPE_WIDTH);
+    expect(stepFor(strip, ((key: string) => key) as unknown as TFunction)).toEqual({ title: 'studio.steps.tape', kind: 'tape' });
   });
 });
 

@@ -19,17 +19,22 @@ export const TAPE_WIDTH = 0.12;
 export const TAPE_COLOUR = '#efe3b4';
 export const TAPE_OPACITY = 0.7;
 
-/** The paper with a strip of tape laid from `from` to `to` on the table, `width` wide. */
-export function tape(frame: FoldFrame, from: Vec2, to: Vec2, width = TAPE_WIDTH): FoldFrame {
+/** The outline on the table of a strip of tape from `from` to `to`, `width` wide. */
+export function tapeStrip(from: Vec2, to: Vec2, width = TAPE_WIDTH): Vec2[] {
   const length = Math.hypot(to[0] - from[0], to[1] - from[1]);
   if (length < 1e-6) throw new FoldError('A piece of tape needs two different ends.');
   const across: Vec2 = [(-(to[1] - from[1]) / length) * (width / 2), ((to[0] - from[0]) / length) * (width / 2)];
-  const strip: Vec2[] = [
+  return [
     [from[0] + across[0], from[1] + across[1]],
     [to[0] + across[0], to[1] + across[1]],
     [to[0] - across[0], to[1] - across[1]],
     [from[0] - across[0], from[1] - across[1]],
   ];
+}
+
+/** The paper with a strip of tape laid from `from` to `to` on the table, `width` wide. */
+export function tape(frame: FoldFrame, from: Vec2, to: Vec2, width = TAPE_WIDTH): FoldFrame {
+  const strip = tapeStrip(from, to, width);
   const faces = toFlat(frame).sort((a, b) => b.layer - a.layer);
   const pieces = faces.flatMap((f, i) =>
     onFace({ side: 'front', points: strip, fill: true }, f.world)

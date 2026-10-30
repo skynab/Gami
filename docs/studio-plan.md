@@ -1,6 +1,6 @@
 # Plan: the Studio for everyone
 
-Status: **part 1 done** (29 October 2026): steps 1 and 2 of the order of work. Parts 2 to 4 not started.
+Status: **part 1 done, and tape** (29 October 2026): steps 1 to 3 of the order of work. The presets, bend and submissions not started.
 
 The Studio today is for approved creators only (`docs/accounts.md`): it needs Supabase, a sign-in and the creator
 role, keeps one draft in the browser, and saves to the cloud, where a model can be shared by link and submitted for
@@ -174,6 +174,7 @@ publishing), and adds what an open gallery needs:
 |---|---|
 | 1. Local library | Done. `src/studio/library.ts` keeps designs in IndexedDB (`list`, `get`, `put`, `remove`, all failing quietly) with each one's title, step count and thumbnail beside its `.fold` file, so the list reads no models. The draft store (`studio/draft.ts`) edits one design at a time and writes it 400 ms after each change, and on leaving the page. The old `gami.studio.draft` becomes the first design, its key removed only once that's written. `navigator.storage.persist()` is asked once a visit. |
 | 2. Open the Studio | Done. `/studio` is the library for everyone (New, Import, and on each card Fold it, Duplicate, Rename, Export, Delete), `/studio/<id>` the editor, `/mine/<id>` the viewer (progress kept as `mine-<id>`). `/studio/dev` is gone. Signed-in creators get the cloud panel in the editor as before; opening a cloud model makes it a design of its own, or reopens the one made from it. People who aren't creators see how to ask on the library page. Submit is still shown to creators (the open question below). Favourites aren't offered for designs: the gallery's favourites list only shows gallery models. Tested end to end in `e2e/studio.e2e.ts`. |
+| 3. Tape | Done. **Tape** is an action beside Cut: pick its two ends, anywhere on the paper, and a width (narrow, normal or wide; a step made with another width keeps it). The strip about to be laid shows outlined on the 2D editor, and laid tape shows there from then on, drawn with the face it's stuck to so the paper above covers it (`tapeOnFace` in `studio/editor.ts`). Change opens a tape step with its ends and width. |
 
 ## Open questions
 

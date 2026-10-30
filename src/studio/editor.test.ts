@@ -8,7 +8,7 @@ import { pose } from '../fold/pose';
 import { layOut, sheetOf } from '../fold/sheets';
 import { basics } from '../models/basics';
 import { applyOp, atOf } from '../fold/ops';
-import { anchorFor, cutsOnTable, isPicked, markAt, markOnTable, popRays, popSettings, project, toggleFace, topLayers } from './editor';
+import { anchorFor, cutsOnTable, isPicked, markAt, markOnTable, popRays, popSettings, project, tapeOnFace, toggleFace, topLayers } from './editor';
 import { fortuneTeller } from '../models/recipes/fortune-teller';
 import type { Op } from '../fold/ops';
 
@@ -22,6 +22,20 @@ function reflect(l: Line, p: Vec2): Vec2 {
 
 
 describe('Studio helpers', () => {
+  it('draws tape on the side of the paper it was stuck to, wherever that side is facing up', () => {
+    const area = (poly: Vec2[]) => Math.abs(poly.reduce((a, p, i) => a + p[0] * poly[(i + 1) % poly.length][1] - poly[(i + 1) % poly.length][0] * p[1], 0)) / 2;
+    const strip: Op = { op: 'tape', from: { table: [-0.3, 0] }, to: { table: [0.3, 0] }, width: 0.1 };
+    const sheet = { ...basics, steps: [] };
+    const taped = applyOp(sheet, strip).frame;
+    const pieces = project(taped).flatMap((f) => tapeOnFace(taped, f));
+    expect(pieces).toHaveLength(1);
+    expect(area(pieces[0])).toBeCloseTo(0.06, 6);
+    // Turned over, the tape is underneath: nothing to draw from above.
+    const m = { ...sheet, steps: [{ title: '', frame: taped, op: strip }] };
+    const over = applyOp(m, { op: 'turnOver' }).frame;
+    expect(project(over).flatMap((f) => tapeOnFace(over, f))).toEqual([]);
+  });
+
   it('anchors on the still side, off every crease', () => {
     const h = lineThrough([-1, 0], [1, 0]);
     const v = lineThrough([0, -1], [0, 1]);

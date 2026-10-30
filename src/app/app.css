@@ -1525,6 +1525,20 @@ kbd {
   stroke-width: 3px;
 }
 
+/* Tape: see-through, as in the viewer; the strip about to be laid outlined in the accent colour. */
+.fold-editor .tape {
+  fill: #efe3b4;
+  fill-opacity: 0.7;
+  stroke: none;
+  pointer-events: none;
+}
+
+.fold-editor .tape.planned {
+  stroke: var(--accent);
+  stroke-width: 2px;
+  vector-effect: non-scaling-stroke;
+}
+
 .fold-editor .mark {
   fill: none;
   stroke: #222;

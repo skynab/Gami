@@ -54,6 +54,31 @@ test.describe('studio library', () => {
     expect(JSON.parse(await readFile(await again.path(), 'utf8'))).toEqual(first);
   });
 
+  test('lays a strip of tape with the tape tool', async ({ page }) => {
+    await page.goto('/studio');
+    await page.getByRole('button', { name: 'New design' }).click();
+    await page.getByRole('button', { name: 'Tape', exact: true }).first().click();
+    await expect(page.getByText('Pick where the tape starts')).toBeVisible();
+
+    // Two points on the paper, found from the editor's own coordinates (the sheet runs from -0.5 to 0.5).
+    const editor = page.getByRole('img', { name: 'The paper from above' });
+    const onScreen = (x: number, z: number) =>
+      editor.evaluate((svg, [x, z]) => {
+        const p = new DOMPoint(x, z).matrixTransform((svg as SVGSVGElement).getScreenCTM()!);
+        return { x: p.x, y: p.y };
+      }, [x, z] as const);
+    for (const [x, z] of [[-0.3, 0.1], [0.3, 0.1]] as const) {
+      const p = await onScreen(x, z);
+      await page.mouse.click(p.x, p.y);
+    }
+    await expect(editor.locator('.tape.planned')).toHaveCount(1);
+    await page.locator('.bottombar').getByRole('button', { name: 'Tape', exact: true }).last().click();
+
+    // The step is made, and the tape now shows on the paper in the editor.
+    await expect(page.getByRole('textbox', { name: 'Step 1 title' })).toHaveValue('Tape');
+    await expect(editor.locator('.tape:not(.planned)')).toHaveCount(1);
+  });
+
   test('moves the old single draft into the library', async ({ page }) => {
     const fold = JSON.parse(await readFile('public/models/cup.fold', 'utf8'));
     await page.addInitScript((f) => {

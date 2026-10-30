@@ -6,6 +6,7 @@ import { FoldError } from '../fold/fold';
 import { toFoldFile } from '../fold/fold-format';
 import { applyOp, OpError, type Op } from '../fold/ops';
 import { marksUpTo } from '../fold/marks';
+import { tapeStrip } from '../fold/tape';
 import type { Step } from '../fold/types';
 import { saveDraft, useDraft } from '../studio/draft';
 import { unfoldTarget } from '../studio/editor';
@@ -160,6 +161,15 @@ export default function StudioEditor({ end, cloud = false }: {
 
   const fixed = lastFixed(model);
 
+  /** Something to draw for a step being picked, or nothing if the picks don't make one yet. */
+  const planned = <T,>(make: () => T): T | null => {
+    try {
+      return make();
+    } catch {
+      return null;
+    }
+  };
+
   // The preview plays the newest step whenever one is added or removed.
   const total = model.steps.length;
   useEffect(() => {
@@ -245,7 +255,8 @@ export default function StudioEditor({ end, cloud = false }: {
             extra={s.action === 'lift' ? s.bends.map((b) => ({ line: b.line, kind: 'valley' })) : s.creases}
             // A cut about to be made, or the way a pop-up's first crease points.
             cut={(s.action === 'cut' || s.action === 'popUp') && s.picks.length === 2 ? [s.picks[0], s.picks[1]] : null}
-            free={s.action === 'cut' || s.action === 'draw' || s.action === 'popUp' || s.pickMode === 'anchor'}
+            tape={s.action === 'tape' && s.picks.length === 2 ? planned(() => tapeStrip(s.picks[0], s.picks[1], s.tapeWidth)) : null}
+            free={s.action === 'cut' || s.action === 'tape' || s.action === 'draw' || s.action === 'popUp' || s.pickMode === 'anchor'}
             marks={onPaper}
             drawing={s.action === 'draw' ? [...s.marks.map((m) => ({ points: m.table, fill: !!m.mark.fill })), { points: s.picks, fill: s.fill }] : []}
             faces={FACE_ACTIONS.includes(s.action) && (s.pickMode === 'faces' || s.picked.length) ? s.picked : null}
