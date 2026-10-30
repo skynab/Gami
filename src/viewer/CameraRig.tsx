@@ -1,7 +1,7 @@
 import { CameraControls, CameraControlsImpl } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
-import { useEffect, useRef } from 'react';
-import type { Sphere } from 'three';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import type { PerspectiveCamera, Sphere } from 'three';
 import { useViewer } from '../state/viewer';
 import { anglesFrom, nearestAngle, sameAngles, VIEW_ANGLES, type Angles } from './views';
 
@@ -32,6 +32,31 @@ export function CameraRig({ fit }: { fit: Sphere }) {
   const animated = () => !first.current && !matchMedia('(prefers-reduced-motion: reduce)').matches;
   const frame = (c: CameraControlsImpl, sphere: Sphere, animate: boolean) =>
     c.fitToSphere(sphere.clone().set(sphere.center, sphere.radius * PADDING), animate);
+
+  // Where the step card lies across the whole view (on a phone), the camera frames what's left above it: its
+  // picture is that part of the view, carrying on down under the card, so the model is fitted to and centred in
+  // the part you can see.
+  const covered = useCovered();
+  const camera = useThree((s) => s.camera) as PerspectiveCamera & { manual?: boolean };
+  const size = useThree((s) => s.size);
+  useLayoutEffect(() => {
+    const { width, height } = size;
+    if (!width || !height) return;
+    const seen = Math.max(height * 0.4, height - covered);
+    camera.manual = true;
+    camera.aspect = width / seen;
+    if (seen < height) camera.setViewOffset(width, seen, 0, 0, width, height);
+    else camera.clearViewOffset();
+    camera.updateProjectionMatrix();
+    invalidate();
+  }, [camera, size, covered, invalidate]);
+  // The card growing or shrinking (each step's text is its own length) changes what can be seen: frame it again.
+  useEffect(() => {
+    const c = ref.current;
+    if (!c || first.current || !useViewer.getState().follow || !framed.current) return;
+    void frame(c, framed.current, animated());
+    invalidate();
+  }, [covered, invalidate]);
 
   useEffect(() => {
     const c = ref.current;
@@ -84,4 +109,40 @@ export function CameraRig({ fit }: { fit: Sphere }) {
   }, []);
 
   return <CameraControls ref={ref} makeDefault minDistance={0.3} maxDistance={8} />;
+}
+
+/**
+ * How much of the bottom of the view the step card covers, when it lies across the whole width of it (as on a
+ * phone); 0 when it sits to one side or is hidden. Kept up to date as the card changes.
+ */
+function useCovered(): number {
+  const canvas = useThree((s) => s.gl.domElement);
+  const [covered, setCovered] = useState(0);
+  useEffect(() => {
+    const stage = canvas.closest('.stage');
+    if (!stage) return;
+    const measure = () => {
+      const card = stage.querySelector('.step-card');
+      const view = canvas.getBoundingClientRect();
+      const box = card?.getBoundingClientRect();
+      setCovered(box && box.width > 0.8 * view.width ? Math.round(Math.max(0, view.bottom - box.top)) : 0);
+    };
+    const sizes = new ResizeObserver(measure);
+    const watch = () => {
+      sizes.disconnect();
+      sizes.observe(canvas);
+      const card = stage.querySelector('.step-card');
+      if (card) sizes.observe(card);
+      measure();
+    };
+    // The card comes and goes (hidden, or between steps), so watch for it.
+    const changes = new MutationObserver(watch);
+    changes.observe(stage, { childList: true });
+    watch();
+    return () => {
+      sizes.disconnect();
+      changes.disconnect();
+    };
+  }, [canvas]);
+  return covered;
 }
