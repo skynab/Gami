@@ -544,5 +544,9 @@ export const es: Messages = {
     drop: 'Descartarlas',
     newSheet: 'Hoja nueva',
     newSheetTitle: 'Aparta el papel plegado y empieza de nuevo con una hoja nueva, como hace una lección en cada parte',
+    foldRest: 'Dobla el resto igual',
+    foldRestTitle: 'Dobla cada hoja del mismo tamaño que siga sin doblar como está doblada ahora la hoja elegida: el resto de los módulos de un modelo modular',
+    pressFlat: 'Aplana',
+    pressFlatTitle: 'Aprieta el papel para que cada parte tenga solo el grosor del papel que hay allí: una cadena de módulos metidos unos en otros queda plana en vez de amontonarse',
   },
 };

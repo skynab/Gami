@@ -544,5 +544,9 @@ export const fr: Messages = {
     drop: 'Les abandonner',
     newSheet: 'Nouvelle feuille',
     newSheetTitle: 'Mettre de côté le papier plié et recommencer sur une nouvelle feuille, comme une leçon le fait à chaque partie',
+    foldRest: 'Pliez les autres pareil',
+    foldRestTitle: 'Pliez chaque autre feuille de même taille encore dépliée comme la feuille choisie l’est maintenant : les autres modules d’un modèle modulaire',
+    pressFlat: 'Aplatissez',
+    pressFlatTitle: 'Appuyez sur le papier pour que chaque partie n’ait que l’épaisseur du papier à cet endroit : une chaîne de modules glissés les uns dans les autres reste à plat au lieu de s’empiler',
   },
 };

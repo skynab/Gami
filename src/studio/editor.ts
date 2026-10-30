@@ -1,5 +1,7 @@
 import { clip } from '../fold/cut';
-import { placeLike, unplaceLike, type FlatFace } from '../fold/fold';
+import { placeLike, toFlat, unplaceLike, type FlatFace } from '../fold/fold';
+import type { Op } from '../fold/ops';
+import { sheetOf } from '../fold/sheets';
 import { roundCoord } from '../fold/fold-format';
 import { frontUp, lerp } from '../fold/geometry2d';
 export { frontUp } from '../fold/geometry2d';
@@ -7,9 +9,29 @@ import { onFace } from '../fold/marks';
 import { centre, inside, locate, project } from '../fold/select';
 import type { Ray } from '../fold/shape';
 export { anchorFor, project, smallerSideMoves, topLayers } from '../fold/select';
-import type { FoldFrame, Mark, Vec2 } from '../fold/types';
+import type { FoldFrame, Mark, OrigamiModel, Vec2 } from '../fold/types';
 
 /** Helpers for the Studio's fold editor that don't need React. */
+
+/**
+ * Folding the rest like sheet `from`: a step copying it onto every other sheet the same size that's still unfolded
+ * (one face), each copy where its sheet lies. Null when there's nothing to copy (`from` unfolded, or no such sheets),
+ * or the paper isn't flat.
+ */
+export function foldRest(model: OrigamiModel, from: number): Op | null {
+  const frame = model.steps.at(-1)?.frame ?? model.start;
+  let faces;
+  try {
+    faces = toFlat(frame);
+  } catch {
+    return null;
+  }
+  const count = model.sheets.map((_, n) => faces.filter((f) => sheetOf(model.sheets, f.paper) === n).length);
+  const [w, h] = model.sheets[from]?.size ?? [0, 0];
+  if (!(count[from] > 1)) return null;
+  const to = model.sheets.flatMap((s, n) => (n !== from && count[n] === 1 && Math.abs(s.size[0] - w) < 1e-9 && Math.abs(s.size[1] - h) < 1e-9 ? [n] : []));
+  return to.length ? { op: 'copy', from, to } : null;
+}
 
 /** Points a fold line can snap to: every corner, plus the middle of every edge. */
 export function snapPoints(frame: FoldFrame): Vec2[] {

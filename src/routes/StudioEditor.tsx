@@ -10,7 +10,7 @@ import type { PresetKind } from '../fold/presets';
 import { tapeStrip } from '../fold/tape';
 import type { Step } from '../fold/types';
 import { saveDraft, useDraft } from '../studio/draft';
-import { unfoldTarget } from '../studio/editor';
+import { foldRest, unfoldTarget } from '../studio/editor';
 import { canInsert, canRemove, canReplace, insertStep, lastFixed, removeStep, replaceStep } from '../studio/steps';
 import { CloudPanel } from '../studio/CloudPanel';
 import { FoldEditor } from '../studio/FoldEditor';
@@ -373,6 +373,7 @@ export default function StudioEditor({ end, cloud = false }: {
         sheets={model.sheets.length}
         canUndo={canUndo || held.length > 0}
         unfoldable={unfoldTarget(before.steps) !== null}
+        rest={typeof s.sheet === 'number' ? foldRest(before, s.sheet) : null}
         onHold={hold}
         onApply={apply}
         onNow={now}

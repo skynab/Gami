@@ -547,6 +547,10 @@ export const en = {
     drop: 'Drop them',
     newSheet: 'Fresh sheet',
     newSheetTitle: 'Put the folded paper aside and start again on a fresh sheet, as a lesson does for each part',
+    foldRest: 'Fold the rest alike',
+    foldRestTitle: 'Fold every other sheet the same size that’s still unfolded the way the chosen sheet is folded now: the rest of a modular model’s units',
+    pressFlat: 'Press flat',
+    pressFlatTitle: 'Press the paper down, so each part is only as thick as the paper there: a chain of units slid into each other lies flat instead of stacking up',
   },
 };
 

@@ -8,13 +8,15 @@ import type { Tools } from './useTools';
  * The Studio's bottom bar: what the next step does and how (the action, its fold line and settings), keeping it
  * as part of a step or applying it, and the steps that need no picks.
  */
-export function ToolBar({ tools, sheets, canUndo, unfoldable, onHold, onApply, onNow, onUndo }: {
+export function ToolBar({ tools, sheets, canUndo, unfoldable, rest, onHold, onApply, onNow, onUndo }: {
   tools: Tools;
   /** How many sheets the model has. */
   sheets: number;
   canUndo: boolean;
   /** There's a fold to unfold. */
   unfoldable: boolean;
+  /** Folding the other sheets like the chosen one (`foldRest`), if there are any to fold. */
+  rest: Op | null;
   onHold(): void;
   onApply(): void;
   /** Makes a step that needs no picks. */
@@ -310,6 +312,14 @@ export function ToolBar({ tools, sheets, canUndo, unfoldable, onHold, onApply, o
             </button>
             <button type="button" className="secondary" onClick={() => onNow({ op: 'newSheet' })} title={t('studio.newSheetTitle')}>
               {t('studio.newSheet')}
+            </button>
+            {tools.many && (
+              <button type="button" className="secondary" disabled={!rest} onClick={() => rest && onNow(rest)} title={t('studio.foldRestTitle')}>
+                {t('studio.foldRest')}
+              </button>
+            )}
+            <button type="button" className="secondary" onClick={() => onNow({ op: 'settle' })} title={t('studio.pressFlatTitle')}>
+              {t('studio.pressFlat')}
             </button>
             <button type="button" className="secondary" disabled={!canUndo} onClick={onUndo} title={t('studio.undoTitle')}>
               {t('studio.undo')}
