@@ -145,7 +145,7 @@ export const es: Messages = {
     'rainbow-chain': { title: 'Cadena arcoíris', blurb: 'Veintiocho eslabones de siete colores, cada uno metido en el anterior, en un zigzag cerrado en pulsera. Sin pegamento.' },
     'business-card-cube': { title: 'Cubo de tarjetas', blurb: 'Seis tarjetas dobladas en módulos que encajan en un cubo, cada arista sujeta por una solapa. Sin pegamento.' },
     dice: { title: 'Dado', blurb: 'Seis tarjetas blancas encajadas en un cubo, con las solapas escondidas dentro y los puntos dibujados. Sin pegamento.' },
-    kusudama: { title: 'Kusudama de flores', blurb: 'Sesenta pétalos pegados en doce flores, y las flores en una bola.' },
+    kusudama: { title: 'Kusudama de flores', blurb: 'Sesenta pétalos pegados en doce flores, las flores en una bola, y una anilla para colgarla.' },
   },
   notFound: {
     title: 'Esta página se ha plegado y ha desaparecido',

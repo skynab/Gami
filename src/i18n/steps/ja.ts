@@ -2421,8 +2421,6 @@ export const ja: Record<string, string> = {
     "花びらがふれ合うところで花どうしをはります。まん中にひとつ、まわりに五つで、おわんの形になります。",
   "Finish the ball":
     "ボールを仕上げる",
-  "Glue on the other six flowers, the last one on top, to close the ball. Done!":
-    "残りの六つの花をはり、最後のひとつを上にのせてボールをとじます。完成です！",
   "Fold four more cards the same way, two at a time: six units in all.":
     "あと四枚を二枚ずつ同じように折ります。ユニットは全部で六つです。",
   "Turn all six units over, so their flaps are underneath.":
@@ -2447,4 +2445,10 @@ export const ja: Record<string, string> = {
     "両端をつなぐ",
   "Curl the chain round and slide the first link into the last one’s sleeves, to wear it as a bracelet.":
     "くさりを丸め、最初の輪を最後の輪のさやに差しこんで、ブレスレットにします。",
+  "Glue on the other six flowers, the last one on top, to close the ball.":
+    "残りの六つの花をはり、最後のひとつを上にのせてボールをとじます。",
+  "Add a loop":
+    "ひもの輪をつける",
+  "Glue the ends of a strip together into a loop, and glue it in between the top flowers to hang the ball. Done!":
+    "帯の両端をはり合わせて輪にし、上の花のあいだにはって、ボールをつるせるようにします。完成です！",
 };

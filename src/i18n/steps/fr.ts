@@ -2421,8 +2421,6 @@ export const fr: Record<string, string> = {
     "Collez les fleurs entre elles là où leurs pétales se touchent : une au milieu et cinq autour, en forme de bol.",
   "Finish the ball":
     "Terminez la boule",
-  "Glue on the other six flowers, the last one on top, to close the ball. Done!":
-    "Collez les six autres fleurs, la dernière en haut, pour fermer la boule. C’est fini !",
   "Fold four more cards the same way, two at a time: six units in all.":
     "Pliez quatre autres cartes de la même façon, deux par deux : six modules en tout.",
   "Turn all six units over, so their flaps are underneath.":
@@ -2447,4 +2445,10 @@ export const fr: Record<string, string> = {
     "Reliez les bouts",
   "Curl the chain round and slide the first link into the last one’s sleeves, to wear it as a bracelet.":
     "Enroulez la chaîne et glissez le premier maillon dans les fourreaux du dernier, pour la porter en bracelet.",
+  "Glue on the other six flowers, the last one on top, to close the ball.":
+    "Collez les six autres fleurs, la dernière en haut, pour fermer la boule.",
+  "Add a loop":
+    "Ajoutez une boucle",
+  "Glue the ends of a strip together into a loop, and glue it in between the top flowers to hang the ball. Done!":
+    "Collez les bouts d’une bande en boucle, puis collez-la entre les fleurs du haut pour suspendre la boule. C’est fini !",
 };

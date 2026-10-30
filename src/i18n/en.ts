@@ -147,7 +147,7 @@ export const en = {
     'rainbow-chain': { title: 'Rainbow chain', blurb: 'Twenty-eight links in seven colours, each slid into the last, in a zigzag closed into a bracelet. No glue.' },
     'business-card-cube': { title: 'Business card cube', blurb: 'Six cards folded into units that lock together into a cube, every edge held by a flap. No glue.' },
     dice: { title: 'Dice', blurb: 'Six white cards locked into a cube, flaps hidden inside, with the dots drawn on. No glue.' },
-    kusudama: { title: 'Kusudama flower ball', blurb: 'Sixty petals glued into twelve flowers, and the flowers into a ball.' },
+    kusudama: { title: 'Kusudama flower ball', blurb: 'Sixty petals glued into twelve flowers, the flowers into a ball, and a loop to hang it from.' },
   },
   notFound: {
     title: 'This page got folded away',

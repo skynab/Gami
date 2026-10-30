@@ -4,6 +4,9 @@ import type { Sheet, Vec2, Vec3 } from '../../fold/types';
 
 const PETALS = 60;
 const FLOWERS = PETALS / 5;
+/** The loop's strip: how long, and where its middle lies on the table. */
+const LOOP = 1.6;
+const LOOP_AT: Vec2 = [0, 1.8];
 
 /**
  * The flower kusudama, traditional: sixty squares, each folded into a petal, five petals glued into a flower and
@@ -20,6 +23,8 @@ export function kusudama() {
     origin: [10 * n, 0] as Vec2,
     at: (n ? [0, -1.5] : [0, 0]) as Vec2,
   }));
+  // And a strip for the loop it hangs from, lying between where the ball goes and the flowers waiting round it.
+  sheets.push({ size: [LOOP, 0.12], front: '#f2c94c', back: '#f9e6a8', origin: [10 * PETALS, 0], at: LOOP_AT });
   const r = new Recipe({ id: 'kusudama', title: 'Kusudama flower ball', sheets, card: 'finished' });
   const square = (n: number) => ([u]: Vec2) => Math.abs(u - 10 * n) < 5;
   const local = (n: number, test: (u: number, v: number) => boolean) => ([u, v]: Vec2) => square(n)([u, v]) && test(u - 10 * n, v);
@@ -147,6 +152,9 @@ export function kusudama() {
   const BALL: Vec3 = [BALL_AT[0], 0, BALL_AT[1]];
   const all = Array.from({ length: FLOWERS }, (_, k) => ball(k, BALL));
   const lift = 0.01 - lowest(all.flat());
+  // The top of the ball, where the loop goes, and the loop's left end on the table.
+  const top = Math.max(...all.flat().flatMap((p) => [a, m, n3, meet].map((c) => add(p.to, p.turn(c))[1]))) + lift;
+  const loopEnd = LOOP_AT[0] - LOOP / 2;
   const inBall = (ks: number[]) =>
     ks.flatMap((k) => all[k].map((p, i) => ({ sheet: 5 * k + i, bends: cone(5 * k + i), pose: { ...p, to: add(p.to, [0, lift, 0]) } })));
 
@@ -157,7 +165,15 @@ export function kusudama() {
     .assemble({ glue: true, title: 'Glue five into a flower', text: 'Glue five petals side by side, their points together, into a flower.' }, onTable(0).map(strip))
     .assemble({ glue: true, title: 'Make the other flowers', text: `Glue the other petals into ${FLOWERS - 1} more flowers the same way.` }, range(1, FLOWERS).flatMap(onTable).map(strip))
     .assemble({ glue: true, title: 'Start the ball', text: 'Glue the flowers together where their petals meet: one in the middle and five round it, a bowl.' }, inBall(range(0, 6)).map(strip))
-    .assemble({ glue: true, title: 'Finish the ball', text: 'Glue on the other six flowers, the last one on top, to close the ball. Done!' }, inBall(range(6, FLOWERS)).map(strip))
+    .assemble({ glue: true, title: 'Finish the ball', text: 'Glue on the other six flowers, the last one on top, to close the ball.' }, inBall(range(6, FLOWERS)).map(strip))
+    .assemble({ glue: true, title: 'Add a loop', text: 'Glue the ends of a strip together into a loop, and glue it in between the top flowers to hang the ball. Done!' }, [
+      {
+        sheet: PETALS,
+        // Curled right round from its left end, which stays put at the bottom of the loop, tucked in at the top of the ball.
+        bends: [{ through: [table(loopEnd, -1), table(loopEnd, 1)], moving: table(loopEnd + LOOP, LOOP_AT[1]), degrees: 360, segments: 24 }],
+        pose: { from: table(loopEnd, LOOP_AT[1]), to: [BALL[0], top - 0.06, BALL[2]], x: [1, 0, 0], up: [0, 1, 0] },
+      },
+    ])
     .build();
 }
 

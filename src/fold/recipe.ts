@@ -371,22 +371,7 @@ export class Recipe {
     const rideTest = ride && recorder(ride);
     const riding = rideTest ?? this.shaping?.ride;
     const tests = bends.map((b) => b.only && picker(b.only, base, this.info.sheets));
-    const added = bends.flatMap((b, k): Bend[] => {
-      const test = tests[k];
-      const line = lineOf({ through: b.through, moving: b.moving }, base);
-      const tip = this.where(b.moving);
-      const n = b.segments ?? 1;
-      // A curl: the same line moved towards the tip, a step at a time, each turning its share of the angle.
-      const len = Math.hypot(line.d[0], line.d[1]);
-      const across: Vec2 = [-line.d[1] / len, line.d[0] / len];
-      const reach = sideOf(line, tip) / len;
-      return Array.from({ length: n }, (_, i) => ({
-        line: { p: [line.p[0] + (across[0] * reach * i) / n, line.p[1] + (across[1] * reach * i) / n] as Vec2, d: line.d },
-        angle: ((b.degrees / n) * Math.PI) / 180,
-        layers: b.layers,
-        only: test,
-      }));
-    });
+    const added = bends.flatMap((b, k) => curled(b, base, tests[k]));
     const bendsSoFar = [...(this.shaping?.bends ?? []), ...added];
     try {
       // Shaped again from the flat state: each face's parent is the face of the last step it lies within.
@@ -436,12 +421,7 @@ export class Recipe {
       const faces = (): Faces => (p.sheet !== undefined ? { sheet: p.sheet } : test ? test.faces() : { inPaper: [] });
       const only = p.sheet !== undefined ? (poly: Vec2[]) => sheetOf(this.info.sheets, poly) === p.sheet : test!;
       const bendTests = (p.bends ?? []).map((b) => b.only && picker(b.only, base, this.info.sheets));
-      const bends = (p.bends ?? []).map((b, k): Bend => ({
-        line: lineOf({ through: b.through, moving: b.moving }, base),
-        angle: (b.degrees * Math.PI) / 180,
-        layers: b.layers,
-        only: bendTests[k],
-      }));
+      const bends = (p.bends ?? []).flatMap((b, k) => curled(b, base, bendTests[k]));
       return { piece: { only, bends, ...(p.pose && { pose: { ...p.pose, from: at(p.pose.from) } }) } as Piece, faces, bendTests, p };
     });
     const all = [...(this.assembling?.pieces ?? []), ...made.map((m) => m.piece)];
@@ -456,6 +436,8 @@ export class Recipe {
             bends: p.bends.map((b, k) => ({
               line: { through: b.through, moving: b.moving },
               degrees: b.degrees,
+              ...(b.segments !== undefined && { segments: b.segments }),
+              ...((b.segments ?? 1) > 1 && { reach: b.moving }),
               ...(b.layers !== undefined && { layers: b.layers }),
               ...(bendTests[k] && { only: bendTests[k].faces() }),
             })),
@@ -640,6 +622,25 @@ export class Recipe {
 }
 
 const avg = (poly: Vec2[], i: number) => poly.reduce((sum, p) => sum + p[i], 0) / poly.length;
+
+/**
+ * A shaping bend as the engine takes it, on the flat state `base`: one bend, or with `segments`, a curl: the same
+ * line moved towards `moving` a step at a time, each turning its share of the angle.
+ */
+function curled(b: ShapeBend, base: FoldFrame, only?: (poly: Vec2[]) => boolean): Bend[] {
+  const line = lineOf({ through: b.through, moving: b.moving }, base);
+  const tip = 'table' in b.moving ? b.moving.table : locate(base, b.moving.paper);
+  const n = b.segments ?? 1;
+  const len = Math.hypot(line.d[0], line.d[1]);
+  const across: Vec2 = [-line.d[1] / len, line.d[0] / len];
+  const reach = sideOf(line, tip) / len;
+  return Array.from({ length: n }, (_, i) => ({
+    line: { p: [line.p[0] + (across[0] * reach * i) / n, line.p[1] + (across[1] * reach * i) / n] as Vec2, d: line.d },
+    angle: ((b.degrees / n) * Math.PI) / 180,
+    layers: b.layers,
+    only,
+  }));
+}
 
 /** A face test given either way a shaping bend takes one: as `recorder` makes it, or from faces as a file has them. */
 function picker(only: ((centre: Vec2) => boolean) | Faces, frame: FoldFrame, sheets: Sheet[]): ((poly: Vec2[]) => boolean) & { faces(): Faces } {
