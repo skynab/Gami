@@ -142,7 +142,7 @@ export const fr: Messages = {
     'diamond-ring': { title: 'Bague diamant', blurb: 'Une bande enroulée en bague, surmontée d’un petit diamant plié.' },
     'finger-trap': { title: 'Piège à doigts', blurb: 'Un long tube fin et tressé où glisser les doigts. Sans découpe.' },
     'easy-sword': { title: 'Épée facile', blurb: 'Une épée argentée avec une garde et un manche court, dans un seul carré.' },
-    'rainbow-chain': { title: 'Chaîne arc-en-ciel', blurb: 'Vingt-huit maillons de sept couleurs, chacun glissé dans le précédent, en un long zigzag. Sans colle.' },
+    'rainbow-chain': { title: 'Chaîne arc-en-ciel', blurb: 'Vingt-huit maillons de sept couleurs, chacun glissé dans le précédent, en un zigzag refermé en bracelet. Sans colle.' },
     'business-card-cube': { title: 'Cube en cartes de visite', blurb: 'Six cartes pliées en modules qui s’emboîtent en un cube, chaque arête tenue par un rabat. Sans colle.' },
     dice: { title: 'Dé', blurb: 'Six cartes blanches emboîtées en un cube, rabats cachés à l’intérieur, points dessinés. Sans colle.' },
     kusudama: { title: 'Kusudama de fleurs', blurb: 'Soixante pétales collés en douze fleurs, et les fleurs en une boule.' },

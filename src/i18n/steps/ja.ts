@@ -2339,8 +2339,6 @@ export const ja: Record<string, string> = {
     "残りも同じようにつなぎます。ひとつ前の輪から四分の一ずつ回します。",
   "Press it flat":
     "おさえて平らにする",
-  "Press the chain flat, so the links lie snug in each other. Join the ends to wear it as a bracelet.":
-    "くさりをおさえて平らにし、輪どうしをしっかりかみ合わせます。両端をつなげばブレスレットになります。",
   "Cross two cards":
     "名刺を十字に重ねる",
   "Lay a second card across the middle of the first, so the two make a plus sign.":
@@ -2443,4 +2441,10 @@ export const ja: Record<string, string> = {
     "3と4を左右から、底のフラップの外側に差しこみます。自分のフラップは2と5の内側に入れます。",
   "Push the 1 down on top, its flaps inside the 3 and the 4, over the upper flaps of the 2 and the 5. Roll it!":
     "1を上からおしこみます。フラップは3と4の内側に、2と5の上のフラップの上に入れます。ふってみましょう！",
+  "Press the chain flat, so the links lie snug in each other.":
+    "くさりをおさえて平らにし、輪どうしをしっかりかみ合わせます。",
+  "Join the ends":
+    "両端をつなぐ",
+  "Curl the chain round and slide the first link into the last one’s sleeves, to wear it as a bracelet.":
+    "くさりを丸め、最初の輪を最後の輪のさやに差しこんで、ブレスレットにします。",
 };

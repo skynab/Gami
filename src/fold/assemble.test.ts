@@ -145,5 +145,14 @@ describe('pressing paper flat', () => {
     expect(Math.max(...frame.vertices_coords.map((p) => p[1]))).toBeLessThan(4 * 0.0007);
     expect(problems(model)).toEqual([]);
     replayLast(model).vertices_coords.forEach((p, i) => near(p, frame.vertices_coords[i]));
+
+    // Put together from there, the chain keeps those heights: lifted 1 as it is, it's still as thin.
+    const strips = [0, 1, 2].map((n) => ({ sheet: n, pose: { from: table(0.4 * n, 0), to: [0.4 * n, 1, 0] as Vec3, x: [1, 0, 0] as Vec3, up: [0, 1, 0] as Vec3 } }));
+    const raised = r.assemble({ title: 'Lift it', straight: true }, strips).build();
+    const ys = raised.steps.at(-1)!.frame.vertices_coords.map((p) => p[1]);
+    expect(Math.min(...ys)).toBeGreaterThan(1 - 1e-6);
+    expect(Math.max(...ys)).toBeLessThan(1 + 4 * 0.0007);
+    expect(problems(raised)).toEqual([]);
+    expect(replayLast(raised).vertices_coords.length).toBe(raised.steps.at(-1)!.frame.vertices_coords.length);
   });
 });

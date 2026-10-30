@@ -142,7 +142,7 @@ export const es: Messages = {
     'diamond-ring': { title: 'Anillo de diamante', blurb: 'Una banda enrollada en un anillo, con un pequeño diamante doblado encima.' },
     'finger-trap': { title: 'Trampa para dedos', blurb: 'Un tubo tejido largo y fino para meter los dedos. Sin cortes.' },
     'easy-sword': { title: 'Espada fácil', blurb: 'Una espada plateada con guarda y un mango corto, con un solo cuadrado.' },
-    'rainbow-chain': { title: 'Cadena arcoíris', blurb: 'Veintiocho eslabones de siete colores, cada uno metido en el anterior, en un largo zigzag. Sin pegamento.' },
+    'rainbow-chain': { title: 'Cadena arcoíris', blurb: 'Veintiocho eslabones de siete colores, cada uno metido en el anterior, en un zigzag cerrado en pulsera. Sin pegamento.' },
     'business-card-cube': { title: 'Cubo de tarjetas', blurb: 'Seis tarjetas dobladas en módulos que encajan en un cubo, cada arista sujeta por una solapa. Sin pegamento.' },
     dice: { title: 'Dado', blurb: 'Seis tarjetas blancas encajadas en un cubo, con las solapas escondidas dentro y los puntos dibujados. Sin pegamento.' },
     kusudama: { title: 'Kusudama de flores', blurb: 'Sesenta pétalos pegados en doce flores, y las flores en una bola.' },

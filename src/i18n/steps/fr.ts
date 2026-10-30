@@ -2339,8 +2339,6 @@ export const fr: Record<string, string> = {
     "Ajoutez les autres de la même façon, chacun tourné d’un quart de tour par rapport au précédent.",
   "Press it flat":
     "Aplatissez-le",
-  "Press the chain flat, so the links lie snug in each other. Join the ends to wear it as a bracelet.":
-    "Aplatissez la chaîne pour que les maillons s’emboîtent bien. Reliez les bouts pour la porter en bracelet.",
   "Cross two cards":
     "Croisez deux cartes",
   "Lay a second card across the middle of the first, so the two make a plus sign.":
@@ -2443,4 +2441,10 @@ export const fr: Record<string, string> = {
     "Glissez le 3 et le 4 à gauche et à droite, à l’extérieur des rabats du fond, leurs propres rabats à l’intérieur du 2 et du 5.",
   "Push the 1 down on top, its flaps inside the 3 and the 4, over the upper flaps of the 2 and the 5. Roll it!":
     "Enfoncez le 1 sur le dessus, ses rabats à l’intérieur du 3 et du 4, sur les rabats du haut du 2 et du 5. Lancez-le !",
+  "Press the chain flat, so the links lie snug in each other.":
+    "Aplatissez la chaîne pour que les maillons s’emboîtent bien.",
+  "Join the ends":
+    "Reliez les bouts",
+  "Curl the chain round and slide the first link into the last one’s sleeves, to wear it as a bracelet.":
+    "Enroulez la chaîne et glissez le premier maillon dans les fourreaux du dernier, pour la porter en bracelet.",
 };

@@ -716,7 +716,7 @@ export function stepTransition(model: OrigamiModel, k: number): Transition {
   const frames = framesOf(model);
   const op = model.steps[k - 1].op;
   if (op && copies(op)) return foldedLikeTheFirst(model, k, op);
-  if (op?.op === 'assemble' && op.pieces.some((p) => p.pose)) return comingIn(model, k, op);
+  if (op?.op === 'assemble' && !op.straight && op.pieces.some((p) => p.pose)) return comingIn(model, k, op);
   const over = tuckedOver(model, k);
   if (over) return transitionVia([frames[k - 1], over, { ...frames[k], faces_parent: sameFaces(over, frames[k]) }]);
   if (!model.steps[k - 1].via?.length) return transitionBetween(frames[k - 1], frames[k]);

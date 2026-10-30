@@ -2339,8 +2339,6 @@ export const es: Record<string, string> = {
     "Añade los demás de la misma manera, girando cada uno un cuarto de vuelta respecto al anterior.",
   "Press it flat":
     "Apriétalo para aplanarlo",
-  "Press the chain flat, so the links lie snug in each other. Join the ends to wear it as a bracelet.":
-    "Aprieta la cadena para aplanarla, de modo que los eslabones queden bien encajados. Une los extremos para llevarla como pulsera.",
   "Cross two cards":
     "Cruza dos tarjetas",
   "Lay a second card across the middle of the first, so the two make a plus sign.":
@@ -2443,4 +2441,10 @@ export const es: Record<string, string> = {
     "Mete el 3 y el 4 a izquierda y derecha, por fuera de las solapas de la base, con sus propias solapas por dentro del 2 y el 5.",
   "Push the 1 down on top, its flaps inside the 3 and the 4, over the upper flaps of the 2 and the 5. Roll it!":
     "Encaja el 1 arriba, con sus solapas por dentro del 3 y el 4, sobre las solapas de arriba del 2 y el 5. ¡A tirarlo!",
+  "Press the chain flat, so the links lie snug in each other.":
+    "Aprieta la cadena para aplanarla, de modo que los eslabones queden bien encajados.",
+  "Join the ends":
+    "Une los extremos",
+  "Curl the chain round and slide the first link into the last one’s sleeves, to wear it as a bracelet.":
+    "Curva la cadena y mete el primer eslabón en las fundas del último, para llevarla como pulsera.",
 };

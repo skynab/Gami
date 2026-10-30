@@ -58,8 +58,8 @@ export interface ShapeBend {
 export class Recipe {
   private start: FoldFrame;
   private steps: Step[] = [];
-  /** After assembling in 3D: the flat state it started from, and the pieces so far. */
-  private assembling?: { base: FoldFrame; pieces: Piece[] };
+  /** After assembling in 3D: the flat state it started from (pressed flat, if `settled`), and the pieces so far. */
+  private assembling?: { base: FoldFrame; settled: boolean; pieces: Piece[] };
   /** After 3D shaping: the flat state it started from, and its bends so far. */
   private shaping?: { base: FoldFrame; bends: Bend[]; corners: boolean; chained?: Vec2; ride?: (paper: Vec2[]) => boolean };
   /** The section the next step starts, from `section()`. */
@@ -419,13 +419,17 @@ export class Recipe {
    * the sheet), is bent along lines as `shape` bends, then set down with the point `from` at `to`, the table's
    * +x along `x` and its up along `up`. Lines and points are found on the last flat state; a later assembly step
    * adds to this one's pieces, and a piece listed again is bent and placed afresh. Nothing can be folded after.
-   * With `glue`, the step says the pieces are glued as they go together, so the model needs glue.
+   * With `glue`, the step says the pieces are glued as they go together, so the model needs glue. After paper is
+   * pressed flat (`settle`), it's put together from there, pieces unbent. With `straight`, the pieces go straight to
+   * their places together (a chain curled round into a ring) rather than each coming in from outside.
    */
   assemble(
-    step: { title: string; text?: string; glue?: boolean },
+    step: { title: string; text?: string; glue?: boolean; straight?: boolean },
     pieces: { sheet?: number; only?: (centre: Vec2) => boolean; bends?: ShapeBend[]; pose?: { from: At; to: Vec3; x: Vec3; up: Vec3 } }[],
   ): this {
-    const base = this.assembling?.base ?? this.current;
+    const pressed = !this.assembling && this.steps.at(-1)?.op?.op === 'settle';
+    const settled = this.assembling?.settled ?? pressed;
+    const base = this.assembling?.base ?? (pressed ? this.steps.at(-2)?.frame ?? this.start : this.current);
     const at = (a: At): Vec2 => ('table' in a ? a.table : locate(base, a.paper));
     const made = pieces.map((p) => {
       const test = p.only ? recorder(p.only) : null;
@@ -442,7 +446,7 @@ export class Recipe {
     });
     const all = [...(this.assembling?.pieces ?? []), ...made.map((m) => m.piece)];
     try {
-      const frame = assemble(base, all);
+      const frame = assemble(base, all, { settled });
       // Faces' tests are recorded once they've run.
       const op: Op = {
         op: 'assemble',
@@ -459,13 +463,14 @@ export class Recipe {
           ...(p.pose && { pose: p.pose }),
         })),
         ...(step.glue && { glue: true }),
+        ...(step.straight && { straight: true }),
       };
       this.push({ title: step.title, text: step.text, kind: 'assemble' }, this.assembling ? reparent(this.current, frame) : frame, op);
     } catch (e) {
       if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
       throw e;
     }
-    this.assembling = { base, pieces: all };
+    this.assembling = { base, settled, pieces: all };
     return this;
   }
 
