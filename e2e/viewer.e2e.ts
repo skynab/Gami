@@ -104,8 +104,9 @@ test.describe('viewer', () => {
       await page.getByRole('button', { name: 'Top', exact: true }).click();
       // Tucked away again, so the controls don't cover the paper.
       if (isMobile) await page.getByRole('button', { name: 'View controls' }).click();
-      // Let the camera settle and the paper finish drawing.
-      await page.waitForTimeout(1500);
+      // Let the camera settle and the paper finish drawing: the camera eases in, slower when the machine is busy
+      // (as in a full run), so a shorter wait can catch it a little short of its place.
+      await page.waitForTimeout(3000);
       await expect(page.locator('canvas')).toHaveScreenshot(`${id}-finished.png`);
     }
   });
