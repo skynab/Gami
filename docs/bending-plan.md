@@ -348,6 +348,85 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
 8. **The iris, later.** It needs paper that bends and then lies flat again (a "relax to flat" mode, or using the
    solver to find the crease pattern real paper takes). Revisit once 1–7 are done.
 
+9. **The cup, opened** (October 2026). Squeezed at its sides, the cup's walls bow apart into a mouth; it's stood up on
+   its bottom crease as it opens. In the gallery.
+   - **First tries.** Goals pushing the rim's corners in, the cup lying on the table: the bottom wall can't go down,
+     so the whole stack domed up instead of the mouth opening. Off the table (`free`), with the rim's middles pulled
+     apart as well: the mouth opened partway, the flaps peeled off the walls, and the last stage crumpled (4%). As
+     for the fan, boat and balloon, a few goals leave the solver to find a shape far from a flat stack, which it
+     doesn't.
+   - **Guides** (`{ guide: { paper }, path }`). The shape is worked out beforehand and the paper led to it: points
+     anywhere on the sheet, each with where it is at every stage, which pull it softly (compliance 1e-2) and give way
+     where it can't follow without stretching. They're applied first in each pass, before the edges, so the paper
+     follows as it can rather than ending each pass wherever the guides put it; nothing is pinned (a triangle held
+     flat where it starts fought the paper curving through it). The cup's guide (`openCup` in its recipe) keeps the
+     paper's lengths: each wall's horizontal lines stay as long, bowed into parabolas; its sides stay as long, drawn in
+     by a pinch growing as the square of the height; and the line up its middle stays as long, the middle of the rim
+     dipping below the corners to allow it. An earlier guide that only bowed the walls was 12% off the paper's shape
+     at the corners, and a pinch turning the sides about the bottom corners opened the bottom crease right at them
+     (depth as the square root of the height), where four folds meet; both left the paper stretched. Every layer
+     goes with the wall on its side of the pocket, as far out as it lies, and the squeeze grows as the square of the
+     stage, as the mouth opens as its square root: evenly ramped, the first stage opened it a third of the way, and
+     the step stretched 12% as it played. Guides 5 cm apart and within 8 mm of the folds (414 of them) reach the
+     narrow corners of the flaps; 7 cm apart and 1.2 cm in, paper passed 6 mm through paper there.
+   - **Why the solver stretched paper rather than bending it.** Traced pass by pass, each stage's loop ended up to 94%
+     stretched on some edges, put right only by setting lengths at the stage's end. A hinge's fold angle changes by
+     the move of a corner divided by the triangle's height, so its gradient is about 1/h (50 for 2 cm triangles), and
+     a compliance of 1e-2 in plain angles is nothing beside |∇θ|² ≈ 10⁴: every pass put the hinge right back, and the
+     λ that lets it give would take about a million passes to build. Bending was rigid, and the guides (or goals)
+     stretched the edges instead. Now a held hinge's compliance is a share of its own stiffness (Σ w|∇θ|²): bending
+     1e-2, creases between faces 0.1 (they open as a cup does). Solving together, edges and goals' points get a far
+     smaller floor than the rest (1e-8 against 1e-5), as at 1e-5 a hinge on a small triangle outweighed them there
+     too. Without guides, hinges are held there at plain angles (1e-2), stiffly, so a crease goal turns a whole flap
+     rather than kinking it by the crease; with guides, which carry the paper themselves, as shares of their
+     stiffness.
+   - **Paper through paper from the start.** Before anything moved, 2000 of the cup's point–triangle pairs were
+     already a millimetre or two through each other, by folds and at corners where eight layers' corners meet (one
+     point shared by layers 1, 6 and 7 sits mid-stack). Keeping each a gap apart pushed them 2 mm at every pass
+     against the edges. Pairs found crossed as the paper starts are now kept no deeper through, not pushed out.
+   - **Frames that pass through themselves.** Setting a stage's lengths, all at once or one at a time, ignores layers
+     and moved 1600 points through paper by up to 3 mm, which drew as stripes in the viewer (the balloon showed it
+     too). Now, where paper has gone through paper, each stage ends by settling the edges with layers kept apart
+     (`settleLayers`): bending isn't held (held where the paper was, it pulled it back and stretched it), but faces that
+     don't bend and crease goals are. It stops at the last look that found the paper stretched no more than 0.8%:
+     interlocked paper, as in the balloon, can't be parted without stretching it, and stretched it 4%. Tried and
+     dropped: contacts solved together with the edges (unstable in a deep stack: 20% stretched), lengths set all at
+     once along the paper only (too stiff to change curvature, or with any slack across it, 600 points through),
+     thinner layers in the solver (no better once the rest was right, and stacked bent layers half a gap apart
+     z-fought in the viewer).
+   - **Other bends.** The test models still pass, as do the balloon and the tulip bloom, which also bends: the
+     balloon blows up about as far (7 cm), within 0.8%. A crease goal's turn needs stiff bending solving together, as
+     above; goals' points are put where they end before the last stage's lengths are set, and the last pass holds
+     them where it can. Both still show patches of paper through paper, as before: blown up, their layers interlock
+     edge first, and settling with layers apart stops at its stretch rather than part them. Guides are the way on
+     for them, as for the fan and the boat: the shape worked out face by face, the paper led there.
+   - **Tried and dropped.** Turning the cup round as it stood up, to show its front with the flaps: it stretched 9.5%
+     as it played, and the guide's arrow looped round it.
+   - **Where it stands.** The cup: 1528 triangles (mesh 0.07), eight stages, about 9 s to solve, 860 KB. Its frames
+     stretch at most 0.8% and 4.7% as it plays.
+   - **Paper through paper, looked for again.** Inside the open cup, specks of the flaps showed through the front
+     wall. In its last frame, 1050 pairs of triangles pass through a wall by more than a tenth of a millimetre (140
+     by over 1 mm), mostly the corner flaps through the front wall, which they lie on, and the flaps' tops through
+     the wall just under the rim, inside the fold that takes the apex flap round them. Few are there at the start (54,
+     all under half a millimetre); they come as the cup opens, from each stage's loop and from setting lengths at
+     its end, which moves paper a millimetre or two through layers 0.7 mm apart. Tried, each on the solver, and
+     each trading crossings for stretch: finer meshes (no fewer crossings, and 15% stretched as it played); layers
+     half as thick, or twice as thick; pushing out the pairs crossed at the start; setting lengths only along the
+     paper (a third of the crossings, but 3% stretched at the rim's corners); settling only near what's stretched;
+     and settling with layers apart in turns with setting lengths along the paper (a quarter of the crossings, but
+     7% stretched under the rim). That last stretch is the fold round the flaps: five gaps out, on a rim turning
+     about 1.8 radians, the apex flap needs about 1% more length than the paper has, so either it stretches or
+     layers pass through it. In a viewer screenshot, the solver as it was showed the fewest specks.
+   - **So the viewer draws bent paper's stacked layers in the order they were stacked** (`FoldedPaper`'s `LIFT`):
+     each triangle a little nearer the eye by its layer before the bend, four layer gaps per layer, along the line
+     of sight, so nothing moves on screen but which shows where layers meet: the side that faced up in the stack in
+     the stack's order, the other side in reverse. Measured, the cup's crossings need under 2.2 mm a layer for 99% of
+     them (the balloon 1.0 mm, the tulip bloom 2.6 mm); the cup, the balloon and the tulip bloom now draw clean, but
+     for a mark or two at the cup's rim. It assumes paper stays in its stack's order where it meets: two walls facing
+     each other across a pocket get an order that needn't be right within a few centimetres of where they meet (none
+     shows in these models), and paper that swings past other paper as it bends (a fan's pleats) would need it
+     thought about again.
+
 ## Risks
 
 - **Collisions in deep stacks.** Sixteen layers a hair apart, moving a lot: the solver may tangle or jitter. Mitigate

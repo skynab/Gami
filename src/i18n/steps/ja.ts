@@ -140,8 +140,12 @@ export const ja: Record<string, string> = {
     "上の先の一枚目を手前に折り下げます。ポケットに差し込んでもかまいません。",
   "Fold the other flap down":
     "もう一枚のフラップを折り下げる",
-  "Fold the last point down to match. Push the sides gently to open the cup.":
-    "残りの先も同じように折り下げます。両側をそっと押すとコップが開きます。",
+  "Fold the last point down to match.":
+    "残りの先も同じように折り下げます。",
+  "Open the cup":
+    "コップを開く",
+  "Squeeze the sides gently towards each other, so the cup opens, and stand it up. Done!":
+    "両側をそっと押し寄せるとコップが開きます。立たせて、できあがり！",
   "Turn it to a diamond":
     "ひし形に置く",
   "Turn the square so a corner points towards you.":

@@ -146,10 +146,22 @@ export function meshFrame(frame: FoldFrame, flex: number[], size: number, rigidS
 export interface BendOptions {
   /** The faces allowed to bend. The rest move as rigid pieces. */
   flex: number[];
-  /** A point on the sheet whose triangle stays put; all of its face, if that face doesn't bend. */
+  /**
+   * A point on the sheet whose triangle stays put; all of its face, if that face doesn't bend. With guides, they
+   * place the paper, and nothing is held.
+   */
   anchor: Vec2;
   /** Points on the sheet (corners of faces) taken to positions in 3D. */
   goals: { paper: Vec2; to: Vec3 }[];
+  /**
+   * Points anywhere on the sheet guided through positions in 3D, spaced evenly over the stages, the last where they
+   * end: the shape the paper is to take, worked out beforehand, which it follows as closely as it can without
+   * stretching. Paper far from where it starts, a cup opened from a flat stack say, is found this way, rather than
+   * from a few goals, which leave the solver to find the shape (see docs/bending-plan.md).
+   */
+  guides?: { paper: Vec2; path: Vec3[] }[];
+  /** Not held up by the table as it bends, so it can bend both ways from the middle; each frame is set down on it. */
+  free?: boolean;
   /**
    * Creases (between two points on the sheet, along edges of faces) taken to a fold angle: valley folds positive
    * (the front sides turning towards each other), mountain folds negative, 0 flat.
@@ -157,7 +169,10 @@ export interface BendOptions {
   creases?: { from: Vec2; to: Vec2; degrees: number }[];
   /** The longest edge of a triangle of bending paper, on the sheet. Defaults to a twelfth of the sheet's size. */
   mesh?: number;
-  /** How readily creases between faces give (soft mesh edges bend more readily still). */
+  /**
+   * How readily creases between faces give, as a share of each hinge's own stiffness (see solver.ts); soft mesh edges
+   * bend more readily still.
+   */
   creaseCompliance?: number;
   /** How many stages the goals ramp over: the step's in-between frames, and its last. */
   stages?: number;
@@ -168,7 +183,7 @@ export interface BendOptions {
   inflate?: number;
 }
 
-const CREASE_COMPLIANCE = 1e-3;
+const CREASE_COMPLIANCE = 0.1;
 
 /**
  * Bends the paper of a frame towards its goals. Returns the frames it passes through (the first pointing each
@@ -190,10 +205,17 @@ export function bendFrame(frame: FoldFrame, options: BendOptions): { via: FoldFr
     if (dist2(paper[vertex], g.paper) > 1e-12) throw new Error(`A bend's goal at (${g.paper}) isn't a corner of a face.`);
     return { vertex, to: g.to };
   });
+  const guides = (options.guides ?? []).map((g) => {
+    const t = triangles.find((tri) => inside(g.paper, tri.map((v) => paper[v]) as [Vec2, Vec2, Vec2]));
+    if (!t) throw new Error(`A bend's guide at (${g.paper}) isn't on the paper.`);
+    return { ids: [...t], weights: barycentric(g.paper, t.map((v) => paper[v]) as [Vec2, Vec2, Vec2]), path: g.path };
+  });
   const held = triangles.findIndex((t) => inside(options.anchor, t.map((v) => paper[v]) as [Vec2, Vec2, Vec2]));
   if (held < 0) throw new Error(`A bend's anchor at (${options.anchor}) isn't on the paper.`);
-  const pinned = new Set(triangles[held]);
-  if (!flexible.has(parent[held])) triangles.forEach((t, k) => parent[k] === parent[held] && t.forEach((v) => pinned.add(v)));
+  // Guided, the paper goes where the guides take it: a triangle held flat where it starts would fight paper that
+  // curves through it.
+  const pinned = new Set(guides.length ? [] : triangles[held]);
+  if (!guides.length && !flexible.has(parent[held])) triangles.forEach((t, k) => parent[k] === parent[held] && t.forEach((v) => pinned.add(v)));
   // Held where its face is, not out past a fold it's on (see meshFrame): held there, the paper beside it couldn't
   // take its shape back.
   const face = frame.faces_vertices[parent[held]];
@@ -238,12 +260,13 @@ export function bendFrame(frame: FoldFrame, options: BendOptions): { via: FoldFr
     triangles,
     pinned: [...pinned],
     goals,
+    ...(guides.length && { guides }),
     creases,
     hinges,
     thickness: LAYER_GAP,
     // Paper blown up puffs out both ways from the middle: it rises off the table as it does (below), rather
-    // than its bottom being held flat on it.
-    ...(!options.inflate && { floor: 0 }),
+    // than its bottom being held flat on it. So does paper bent free of the table.
+    ...(!options.inflate && !options.free && { floor: 0 }),
     ...(stacked(frame) && { side: sidesByLayer(frame, points, triangles, parent) }),
     ...(options.inflate && { inflate: inflation(frame, points, triangles, parent, options.inflate) }),
     ...(options.stages && { stages: options.stages }),
@@ -257,8 +280,8 @@ export function bendFrame(frame: FoldFrame, options: BendOptions): { via: FoldFr
     ...(frame.tapes?.length && { tapes: frame.tapes }),
     ...(soft.length && { soft }),
   });
-  // Resting on the table: blown up, each frame is lifted until its lowest point is on it.
-  if (options.inflate) for (const f of frames) {
+  // Resting on the table: blown up or bent free of it, each frame is set down with its lowest point on it.
+  if (options.inflate || options.free) for (const f of frames) {
     const low = Math.min(...f.map((q) => q[1]));
     for (const q of f) q[1] -= low;
   }
@@ -504,6 +527,14 @@ function inside(q: Vec2, [a, b, c]: [Vec2, Vec2, Vec2]): boolean {
   const s2 = (c[0] - b[0]) * (q[1] - b[1]) - (c[1] - b[1]) * (q[0] - b[0]);
   const s3 = (a[0] - c[0]) * (q[1] - c[1]) - (a[1] - c[1]) * (q[0] - c[0]);
   return (s1 >= -1e-15 && s2 >= -1e-15 && s3 >= -1e-15) || (s1 <= 1e-15 && s2 <= 1e-15 && s3 <= 1e-15);
+}
+
+/** The weights of a triangle's corners that make q. */
+function barycentric(q: Vec2, [a, b, c]: [Vec2, Vec2, Vec2]): number[] {
+  const area = signedArea([a, b, c]);
+  const wa = signedArea([q, b, c]) / area;
+  const wb = signedArea([a, q, c]) / area;
+  return [wa, wb, 1 - wa - wb];
 }
 
 function minAngle(a: Vec2, b: Vec2, c: Vec2): number {

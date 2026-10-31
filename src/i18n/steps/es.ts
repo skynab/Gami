@@ -140,8 +140,12 @@ export const es: Record<string, string> = {
     "Dobla la capa de arriba de la punta hacia delante. También puedes meterla en el bolsillo.",
   "Fold the other flap down":
     "Dobla la otra solapa hacia abajo",
-  "Fold the last point down to match. Push the sides gently to open the cup.":
-    "Dobla la última punta igual. Empuja los lados con suavidad para abrir el vaso.",
+  "Fold the last point down to match.":
+    "Dobla la última punta igual.",
+  "Open the cup":
+    "Abre el vaso",
+  "Squeeze the sides gently towards each other, so the cup opens, and stand it up. Done!":
+    "Aprieta los lados con suavidad, uno hacia el otro, para que el vaso se abra, y ponlo de pie. ¡Listo!",
   "Turn it to a diamond":
     "Ponlo como un rombo",
   "Turn the square so a corner points towards you.":

@@ -72,7 +72,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'flying-saucer', title: 'Flying saucer', blurb: 'A round, broad-winged floater that drifts slowly round in wide circles.', difficulty: 1, category: 'plane', steps: 16, minutes: 6, sheets: 1, paper: 1.3, added: '2026-10-29' },
   { id: 'dog-face', title: 'Dog face', blurb: 'A first fold: a triangle with floppy ears.', difficulty: 1, category: 'animal', steps: 11, minutes: 2, sheets: 1, needs: ['pen'], added: '2026-10-18' },
   { id: 'cat-face', title: 'Cat face', blurb: 'A first fold: a triangle with pointed ears.', difficulty: 1, category: 'animal', steps: 7, minutes: 2, sheets: 1, needs: ['pen'], added: '2026-10-18' },
-  { id: 'cup', title: 'Cup', blurb: 'A cup that holds water, for a while.', difficulty: 1, category: 'object', steps: 7, minutes: 4, sheets: 1, added: '2026-10-16' },
+  { id: 'cup', title: 'Cup', blurb: 'A cup that holds water, for a while.', difficulty: 1, category: 'object', steps: 8, minutes: 4, sheets: 1, added: '2026-10-16' },
   { id: 'samurai-helmet', title: 'Samurai helmet', blurb: 'A kabuto with horns. Fold a big one to wear.', difficulty: 2, category: 'object', steps: 15, minutes: 8, sheets: 1, added: '2026-10-16' },
   { id: 'fortune-teller', title: 'Fortune teller', blurb: 'Pick a colour, pick a number.', difficulty: 2, category: 'toy', steps: 19, minutes: 8, sheets: 1, added: '2026-10-16' },
   { id: 'heart', title: 'Heart', blurb: 'A simple heart, nice for cards.', difficulty: 2, category: 'object', steps: 20, minutes: 5, sheets: 1, added: '2026-10-16' },

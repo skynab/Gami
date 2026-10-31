@@ -13,8 +13,9 @@ import {
   type Mesh,
 } from 'three';
 import { affine, poseAt, stepTransition, transition, type Transition } from '../fold/animate';
-import { framesOf, normal } from '../fold/frames';
-import { joinedSegment } from '../fold/geometry2d';
+import { toFlat } from '../fold/fold';
+import { framesOf, LAYER_GAP, normal } from '../fold/frames';
+import { frontUp, joinedSegment } from '../fold/geometry2d';
 import { MARK_COLOUR, MARK_WIDTH, marksUpTo, onFace } from '../fold/marks';
 import { sheetOf } from '../fold/sheets';
 import { TAPE_COLOUR, TAPE_OPACITY } from '../fold/tape';
@@ -29,7 +30,7 @@ import { usePlayback } from '../state/playback';
  * Marks drawn on the paper ride on their faces, and a step that draws them draws them stroke by stroke. Tape
  * rides on its faces the same way, see-through, a step that lays it laying it strip by strip.
  * Paper that bends is many small triangles: the edges between them (soft) get no lines, and it's shaded smoothly
- * across them.
+ * across them. Where its stacked layers meet, they show in the order they were stacked (see LIFT).
  * Geometry is rebuilt when the step changes (folds add faces) and updated in place on every frame.
  */
 export function FoldedPaper({ model, edgeColor }: { model: OrigamiModel; edgeColor: string }) {
@@ -101,10 +102,10 @@ export function FoldedPaper({ model, edgeColor }: { model: OrigamiModel; edgeCol
         <group key={i}>
           {/* Pushed back a touch in depth so the edge lines always draw on top. */}
           <mesh ref={(m) => void (front.current[i] = m)} frustumCulled={false}>
-            <meshStandardMaterial color={sheet.front} map={grain} side={FrontSide} roughness={0.8} polygonOffset polygonOffsetFactor={1} polygonOffsetUnits={1} />
+            <meshStandardMaterial color={sheet.front} map={grain} side={FrontSide} roughness={0.8} polygonOffset polygonOffsetFactor={1} polygonOffsetUnits={1} onBeforeCompile={liftFront} customProgramCacheKey={liftFrontKey} />
           </mesh>
           <mesh ref={(m) => void (back.current[i] = m)} frustumCulled={false}>
-            <meshStandardMaterial color={sheet.back} map={grain} side={BackSide} roughness={0.85} polygonOffset polygonOffsetFactor={1} polygonOffsetUnits={1} />
+            <meshStandardMaterial color={sheet.back} map={grain} side={BackSide} roughness={0.85} polygonOffset polygonOffsetFactor={1} polygonOffsetUnits={1} onBeforeCompile={liftBack} customProgramCacheKey={liftBackKey} />
           </mesh>
           {/* Fold bends, by which side of the paper is on their outside. */}
           <mesh ref={(m) => void (bendsFront.current[i] = m)} frustumCulled={false}>
@@ -114,7 +115,7 @@ export function FoldedPaper({ model, edgeColor }: { model: OrigamiModel; edgeCol
             <meshStandardMaterial color={sheet.back} side={DoubleSide} roughness={0.85} polygonOffset polygonOffsetFactor={1} polygonOffsetUnits={1} />
           </mesh>
           <lineSegments ref={(l) => void (lines.current[i] = l)} frustumCulled={false}>
-            <lineBasicMaterial color={edgeColor} transparent opacity={0.6} />
+            <lineBasicMaterial color={edgeColor} transparent opacity={0.6} onBeforeCompile={liftLines} customProgramCacheKey={liftLinesKey} />
           </lineSegments>
         </group>
       ))}
@@ -169,7 +170,8 @@ function build(t: Transition, model: OrigamiModel, k: number): Built {
   t.faces.forEach((f, i) => bySheet[sheetOf(sheets, f.paper)].push(i));
   // Faces either side of a scissor cut aren't joined: no bend is drawn between them. The step's faces are its frame's.
   const frame = k ? model.steps[k - 1].frame : model.start;
-  const parts = bySheet.map((faces) => buildPart(t, faces, frame));
+  const ranks = stackRanks(model, k, t.faces.length);
+  const parts = bySheet.map((faces) => buildPart(t, faces, frame, ranks));
   const marks = buildMarks(t, model, k);
   const tape = buildTape(t, model, k);
   return {
@@ -293,27 +295,32 @@ function onFaces(t: Transition, parts: Drawn[], turn: number, width: number, lif
   };
 }
 
-function buildPart(t: Transition, faceIndices: number[], frame: FoldFrame): { part: Part; update(pose: ReturnType<typeof poseAt>): void; dispose(): void } {
+function buildPart(t: Transition, faceIndices: number[], frame: FoldFrame, ranks?: number[]): { part: Part; update(pose: ReturnType<typeof poseAt>): void; dispose(): void } {
   const { cuts } = frame;
   const tracks = faceIndices.map((i) => t.faces[i]);
   const corners = tracks.reduce((n, f) => n + f.paper.length, 0);
   const positions = new Float32Array(corners * 3);
   const normals = new Float32Array(corners * 3);
   const uvs = new Float32Array(corners * 2);
+  const rank = new Float32Array(corners);
   const index: number[] = [];
   const { lines, smooth, softly } = softness(frame, faceIndices);
   const edgePositions = new Float32Array(lines.length * 6);
+  // Each line drawn as near the eye as its face's side facing it (see LIFT).
+  const edgeRanks = Float32Array.from(lines.flatMap(([a]) => [ranks?.[faceIndices[a]] ?? 0, ranks?.[faceIndices[a]] ?? 0]));
+  const edgeNormals = new Float32Array(lines.length * 6);
 
   let base = 0;
-  for (const f of tracks) {
+  tracks.forEach((f, a) => {
     f.paper.forEach(([u, v], i) => {
       uvs[(base + i) * 2] = u + 0.5;
       uvs[(base + i) * 2 + 1] = v + 0.5;
+      rank[base + i] = ranks?.[faceIndices[a]] ?? 0;
     });
     // Faces are convex (straight folds of a convex sheet), so a fan triangulates them.
     for (let i = 1; i < f.paper.length - 1; i++) index.push(base, base + i, base + i + 1);
     base += f.paper.length;
-  }
+  });
 
   // Faces joined along an edge on the sheet, and that edge.
   const joins: { a: number; b: number; ends: [Vec2, Vec2] }[] = [];
@@ -400,9 +407,12 @@ function buildPart(t: Transition, faceIndices: number[], frame: FoldFrame): { pa
   surface.setAttribute('position', new BufferAttribute(positions, 3));
   surface.setAttribute('normal', new BufferAttribute(normals, 3));
   surface.setAttribute('uv', new BufferAttribute(uvs, 2));
+  surface.setAttribute('rank', new BufferAttribute(rank, 1));
   surface.setIndex(index);
   const edges = new BufferGeometry();
   edges.setAttribute('position', new BufferAttribute(edgePositions, 3));
+  edges.setAttribute('rank', new BufferAttribute(edgeRanks, 1));
+  edges.setAttribute('faceNormal', new BufferAttribute(edgeNormals, 3));
 
   return {
     part: { surface, edges, bends },
@@ -421,10 +431,13 @@ function buildPart(t: Transition, faceIndices: number[], frame: FoldFrame): { pa
         const points = pose[faceIndices[a]];
         edgePositions.set(points[i], e * 6);
         edgePositions.set(points[(i + 1) % points.length], e * 6 + 3);
+        edgeNormals.set(faceNormals[a], e * 6);
+        edgeNormals.set(faceNormals[a], e * 6 + 3);
       });
       surface.attributes.position.needsUpdate = true;
       surface.attributes.normal.needsUpdate = true;
       edges.attributes.position.needsUpdate = true;
+      edges.attributes.faceNormal.needsUpdate = true;
       placeBends(pose);
     },
     dispose() {
@@ -522,3 +535,52 @@ function paperGrain(): CanvasTexture {
   texture.repeat.set(2, 2);
   return texture;
 }
+
+/**
+ * For bent paper (step k's frame cut into triangles by a bend): each triangle's place in the stack it was bent from,
+ * its layer, signed by which way up it lay there (minus if its back faced up). Undefined for paper that isn't bent.
+ */
+function stackRanks(model: OrigamiModel, k: number, faces: number): number[] | undefined {
+  const frames = framesOf(model);
+  if (!k || !frames[k].soft?.length) return undefined;
+  let b = k;
+  while (b > 1 && frames[b - 1].soft?.length) b--;
+  const parent = model.steps[b - 1].via?.[0]?.faces_parent;
+  const before = frames[b - 1];
+  if (!parent || parent.length !== faces || !before.faces_layer) return undefined;
+  try {
+    const flat = toFlat(before);
+    return parent.map((f) => (frontUp(flat[f].world, flat[f].paper) ? 1 : -1) * flat[f].layer);
+  } catch {
+    // Bent from paper that wasn't lying flat: no stack to draw it in the order of.
+    return undefined;
+  }
+}
+
+/**
+ * Stacked layers of bent paper are kept apart at their triangles' corners, but between them, and where a fold wraps
+ * round other layers, they can pass a millimetre or two into one another (see docs/bending-plan.md), which would show
+ * as specks of one through the other. So each is drawn nearer the eye by its place in the stack (`rank`) times this,
+ * along the line of sight, which changes only which shows where they meet: the side that faced up in the stack in the
+ * stack's order, the other side in reverse. Bent paper only: a flat stack's layers are drawn apart as it is.
+ */
+const LIFT = 4 * LAYER_GAP;
+const lift = (sign: number) => (shader: { vertexShader: string }) => {
+  shader.vertexShader = shader.vertexShader
+    .replace('#include <common>', '#include <common>\nattribute float rank;')
+    .replace('#include <project_vertex>', `#include <project_vertex>\nmvPosition.xyz *= 1.0 - rank * ${(sign * LIFT).toFixed(6)} / max(length(mvPosition.xyz), 1e-6);\ngl_Position = projectionMatrix * mvPosition;`);
+};
+const liftFront = lift(1);
+const liftBack = lift(-1);
+/** Lines take their face's lift, by which of its sides faces the eye. */
+const liftLines = (shader: { vertexShader: string }) => {
+  shader.vertexShader = shader.vertexShader
+    .replace('#include <common>', '#include <common>\nattribute float rank;\nattribute vec3 faceNormal;')
+    .replace(
+      '#include <project_vertex>',
+      `#include <project_vertex>\nfloat facing = dot(normalMatrix * faceNormal, -mvPosition.xyz) >= 0.0 ? 1.0 : -1.0;\nmvPosition.xyz *= 1.0 - facing * rank * ${LIFT.toFixed(6)} / max(length(mvPosition.xyz), 1e-6);\ngl_Position = projectionMatrix * mvPosition;`,
+    );
+};
+const liftLinesKey = () => 'lift-lines';
+const liftFrontKey = () => 'lift-front';
+const liftBackKey = () => 'lift-back';

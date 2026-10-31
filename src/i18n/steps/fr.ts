@@ -140,8 +140,12 @@ export const fr: Record<string, string> = {
     "Pliez la couche du dessus de la pointe vers l’avant. Vous pouvez aussi la glisser dans la poche.",
   "Fold the other flap down":
     "Abaisser l’autre rabat",
-  "Fold the last point down to match. Push the sides gently to open the cup.":
-    "Pliez la dernière pointe pareil. Appuyez doucement sur les côtés pour ouvrir le gobelet.",
+  "Fold the last point down to match.":
+    "Pliez la dernière pointe pareil.",
+  "Open the cup":
+    "Ouvrir le gobelet",
+  "Squeeze the sides gently towards each other, so the cup opens, and stand it up. Done!":
+    "Pressez doucement les côtés l’un vers l’autre pour que le gobelet s’ouvre, puis posez-le debout. C’est fini !",
   "Turn it to a diamond":
     "Le placer en losange",
   "Turn the square so a corner points towards you.":

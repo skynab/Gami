@@ -65,9 +65,11 @@ export interface ShapeBend {
 
 /**
  * Where a bend takes the paper (see docs/bending-plan.md): a point on the sheet (a corner of a face) to a position in
- * 3D, or the crease between two points on the sheet to a fold angle, valley folds positive.
+ * 3D, the crease between two points on the sheet to a fold angle, valley folds positive, or a point anywhere on the
+ * sheet guided along a path in 3D, its positions spaced evenly over the stages: the shape the paper is to take, which
+ * it follows as closely as it can without stretching.
  */
-export type BendGoal = { point: { paper: Vec2 }; to: Vec3 } | { crease: [Vec2, Vec2]; degrees: number };
+export type BendGoal = { point: { paper: Vec2 }; to: Vec3 } | { crease: [Vec2, Vec2]; degrees: number } | { guide: { paper: Vec2 }; path: Vec3[] };
 
 export type { Mark } from './types';
 
@@ -107,11 +109,13 @@ export type Op =
   /** `ride`: with `chained`, faces held flat on whatever lies beneath them, moving with it (a rim folded in). */
   | { op: 'shape'; bends: ShapeBend[]; corners?: boolean; chained?: { paper: Vec2 }; ride?: Faces }
   /**
-   * Bends the paper of the faces `flex` picks, the rest staying rigid, holding the paper at `anchor` still and taking
-   * it to its goals. `mesh`: the longest edge of the triangles the bending paper is cut into, on the sheet.
-   * `inflate`: air blown in, the volume the paper encloses by the end (a balloon puffed up).
+   * Bends the paper of the faces `flex` picks, the rest staying rigid, holding the paper at `anchor` still (unless
+   * guides place it) and taking it to its goals. `mesh`: the longest edge of the triangles the bending paper is cut
+   * into, on the sheet. `inflate`: air blown in, the volume the paper encloses by the end (a balloon puffed up).
+   * `free`: not held up by the table as it bends, and set down on it after. `stages`: how many frames it passes
+   * through.
    */
-  | { op: 'bend'; flex: Faces; anchor: { paper: Vec2 }; goals: BendGoal[]; mesh?: number; inflate?: number }
+  | { op: 'bend'; flex: Faces; anchor: { paper: Vec2 }; goals: BendGoal[]; mesh?: number; inflate?: number; free?: boolean; stages?: number }
   /** `via`: the rays of shapes it passes through on the way, from flat, so it rises as one rather than each piece its own way. */
   | { op: 'popUp'; centre: At; rays: Ray[]; via?: Ray[][] }
   /** Draws on the paper, leaving it where it is: a face, say. */
@@ -128,7 +132,7 @@ export class OpError extends Error {}
 /** A compound fold where no part of the paper stays still, so there's nothing to fold it from. */
 export class NoStillError extends FoldError {}
 
-const LIMITS = { list: 256, outline: 64, outlines: 512, nesting: 4, steps: 2000, faces: 20000, marks: 256 };
+const LIMITS = { list: 256, outline: 64, outlines: 512, nesting: 4, steps: 2000, faces: 20000, marks: 256, goals: 2048, stages: 64 };
 
 // ——— Checking operations read from a file ———
 
@@ -219,15 +223,27 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
         op: 'bend',
         flex: faces(o.flex, `${path}.flex`, 0),
         anchor: paperAt(o.anchor, `${path}.anchor`),
-        goals: list(o.goals, `${path}.goals`, (g, p) => {
-          const r = record(g, p);
-          if ('point' in r) return { point: paperAt(r.point, `${p}.point`), to: vec3(r.to, `${p}.to`) };
-          if ('crease' in r) return { crease: pair(r.crease, `${p}.crease`, vec2), degrees: between(num(r.degrees, `${p}.degrees`), `${p}.degrees`, -180, 180) };
-          throw new OpError(`${p}: expected { point, to } or { crease, degrees }`);
-        }),
+        goals: list(
+          o.goals,
+          `${path}.goals`,
+          (g, p) => {
+            const r = record(g, p);
+            if ('point' in r) return { point: paperAt(r.point, `${p}.point`), to: vec3(r.to, `${p}.to`) };
+            if ('crease' in r) return { crease: pair(r.crease, `${p}.crease`, vec2), degrees: between(num(r.degrees, `${p}.degrees`), `${p}.degrees`, -180, 180) };
+            if ('guide' in r) {
+              const along = list(r.path, `${p}.path`, vec3, LIMITS.stages);
+              if (!along.length) throw new OpError(`${p}.path: expected at least one position`);
+              return { guide: paperAt(r.guide, `${p}.guide`), path: along };
+            }
+            throw new OpError(`${p}: expected { point, to }, { crease, degrees } or { guide, path }`);
+          },
+          LIMITS.goals,
+        ),
         // Not so fine that meshing it takes too long.
         ...opt(o, 'mesh', (v, p) => between(num(v, p), p, 0.02, 10), path),
         ...opt(o, 'inflate', (v, p) => between(num(v, p), p, 0, 10), path),
+        ...opt(o, 'free', bool, path),
+        ...opt(o, 'stages', (v, p) => between(count(v, p), p, 1, LIMITS.stages), path),
       };
     case 'popUp': {
       const rays = (v: unknown, p: string) =>
@@ -754,8 +770,11 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
         anchor: op.anchor.paper,
         goals: op.goals.flatMap((g) => ('point' in g ? [{ paper: g.point.paper, to: g.to }] : [])),
         creases: op.goals.flatMap((g) => ('crease' in g ? [{ from: g.crease[0], to: g.crease[1], degrees: g.degrees }] : [])),
+        guides: op.goals.flatMap((g) => ('guide' in g ? [{ paper: g.guide.paper, path: g.path }] : [])),
         ...(op.mesh !== undefined && { mesh: op.mesh }),
         ...(op.inflate && { inflate: op.inflate }),
+        ...(op.free && { free: true }),
+        ...(op.stages && { stages: op.stages }),
       });
       return { frame: bent, via };
     }

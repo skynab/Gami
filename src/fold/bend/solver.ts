@@ -13,6 +13,10 @@ import { topology, type Hinge, type Tri } from './mesh';
  * One constraint at a time finds where paper buckles and curls, which solving them all at once (linearised) can't
  * see from flat paper. But each pass carries a correction only a few triangles further, so now and then everything
  * is also solved together (`together`), and each stage ends by setting every edge's length at once (`keepLengths`).
+ *
+ * A hinge held at an angle gives way against its own stiffness, not in plain angles: turning a triangle a few
+ * millimetres across barely moves its corner, so in plain angles even a soft hinge outweighs the edges a
+ * thousandfold, and paper stretches rather than bends.
  */
 
 export interface BendProblem {
@@ -30,12 +34,22 @@ export interface BendProblem {
   pinned?: number[];
   /** Points taken from where they start to `to`, a share more each stage. */
   goals?: { vertex: number; to: Vec3; compliance?: number }[];
+  /**
+   * Places on the paper guided along paths, softly: each a point of a triangle (its corners `ids`, weighted by
+   * `weights`), taken from where it starts through `path`, its entries spaced evenly over the stages and the last
+   * where it ends. They pull the paper towards the shape it's to take, and give way where it can't follow without
+   * stretching.
+   */
+  guides?: { ids: number[]; weights: number[]; path: Vec3[] }[];
   /** Hinges (by their edge's two points) taken from their rest angle to `degrees`, a share more each stage. */
   creases?: { edge: [number, number]; degrees: number; compliance?: number }[];
   /** Hinges (by their edge's two points) held at their rest angle with their own compliance, in place of `compliance.bend`. */
   hinges?: { edge: [number, number]; compliance: number }[];
-  /** Compliance of edge lengths (0: exact) and of bending at hinges with no crease goal. */
-  compliance?: { stretch?: number; bend?: number };
+  /**
+   * Compliance of edge lengths (0: exact), of bending at hinges with no crease goal (as a share of the hinge's own
+   * stiffness, see above), and of guides.
+   */
+  compliance?: { stretch?: number; bend?: number; guide?: number };
   /** The gap layers keep between them. Leave out for no collisions. */
   thickness?: number;
   /**
@@ -64,7 +78,7 @@ export interface BendResult {
   strain: number;
 }
 
-const DEFAULTS = { stretch: 0, bend: 1e-2, goal: 0, crease: 0, stages: 12, iterations: 120 };
+const DEFAULTS = { stretch: 0, bend: 1e-2, goal: 0, guide: 1e-2, crease: 0, stages: 12, iterations: 120 };
 /** The last pass on edge lengths stops once every edge is within this share of its length, or after this many passes. */
 const SETTLED = 1e-4;
 const POLISH = 2400;
@@ -72,12 +86,26 @@ const POLISH = 2400;
 const STAGE_SETTLED = 2e-3;
 const STAGE_POLISH = 800;
 /**
+ * Settling edges with layers kept apart (`settleLayers`) at the end of each stage, and of the last: at most this many
+ * passes, and no further than stretching the paper this much.
+ */
+const LAYERED_POLISH = 60;
+const LAST_LAYERED_POLISH = 300;
+const LAYERED_STRAIN = 0.008;
+/**
  * Solving constraints together (`together`): the least compliance any has (exact ones included, as flat paper has
  * more edges than ways to move in its plane, so they aren't all independent), and how far each solve goes.
  */
 const DAMPING = 1e-5;
+/**
+ * The same for edge lengths, far smaller: paper doesn't stretch, so however small the triangles, and however stiffly
+ * their hinges turn, bending gives way before the edges do. Goals' points, as exact, too.
+ */
+const HARD_DAMPING = 1e-8;
 /** The same, setting edge lengths alone (`keepLengths`), where nothing else needs to outweigh. */
 const LENGTH_DAMPING = 1e-4;
+/** Hinges carrying a crease's turn across the paper, solving together: held with this compliance, in plain angles. */
+const CARRY = 1e-2;
 const CG_ITERATIONS = 200;
 /** How far a point may move in one solve, as a share of the shortest edge, or of the paper's size. */
 const REACH = 0.25;
@@ -182,6 +210,7 @@ export function solve(problem: BendProblem): BendResult {
   const { edges, hinges } = topology(problem.triangles);
   const stretch = problem.compliance?.stretch ?? DEFAULTS.stretch;
   const bend = problem.compliance?.bend ?? DEFAULTS.bend;
+  const guideCompliance = problem.compliance?.guide ?? DEFAULTS.guide;
   const stages = problem.stages ?? DEFAULTS.stages;
   const iterations = problem.iterations ?? DEFAULTS.iterations;
   const thickness = problem.thickness ?? 0;
@@ -213,6 +242,16 @@ export function solve(problem: BendProblem): BendResult {
   const restAngles = hinges.map((h) => hingeAngle(rest, h));
   const startAngles = hinges.map((h) => hingeAngle(p, h));
   const goalStarts = (problem.goals ?? []).map((g) => [...p[g.vertex]] as Vec3);
+  const guides = problem.guides ?? [];
+  /** Where a guided place on the paper is now. */
+  const guided = ({ ids, weights }: (typeof guides)[number]): Vec3 => {
+    const q: Vec3 = [0, 0, 0];
+    ids.forEach((v, k) => {
+      for (let i = 0; i < 3; i++) q[i] += weights[k] * p[v][i];
+    });
+    return q;
+  };
+  let guideStarts = guides.map(guided);
 
   /** Moves the points by one constraint's correction (as XPBD does, one at a time); returns the new multiplier. */
   const project = (ids: number[], grads: Vec3[], c: number, lambda: number, compliance: number, mass = w): number => {
@@ -228,6 +267,16 @@ export function solve(problem: BendProblem): BendResult {
       q[2] += m * grads[k][2];
     }
     return lambda + dl;
+  };
+  /**
+   * A hinge's compliance at its target: a crease goal's as it's given, as it drives the paper; any other hinge's as a
+   * share of its own stiffness (see above).
+   */
+  const hingeCompliance = (h: Hinge, grads: Vec3[], compliance: number, mass = w) => {
+    if (creaseOf.has(hingeKey(h.a, h.b))) return compliance;
+    let own = 0;
+    [h.a, h.b, h.c, h.d].forEach((v, i) => (own += mass[v] * dot(grads[i], grads[i])));
+    return compliance * own;
   };
 
   const strainNow = () => Math.max(0, ...edges.map(([a, b], k) => Math.abs(len(sub(p[b], p[a])) - lengths[k]) / lengths[k]));
@@ -253,24 +302,90 @@ export function solve(problem: BendProblem): BendResult {
 
   const frames: Vec3[][] = [];
   let pairs: Pair[] = [];
-  // The side of each triangle a point was first seen on, kept for good: a point pushed through stays wrong side
-  // otherwise, as the next search would take where it ended up as where it belongs.
-  const sides = new Map<number, number>();
-  const findPairs = () => (pairs = thickness > 0 ? nearPairs(p, problem.triangles, thickness, sides, problem.side) : []);
+  // The side of each triangle a point was first seen on, and the gap kept, for good: a point pushed through stays
+  // wrong side otherwise, as the next search would take where it ended up as where it belongs.
+  const sides = new Map<number, Seen>();
+  const findPairs = (start = false) => (pairs = thickness > 0 ? nearPairs(p, problem.triangles, thickness, sides, problem.side, start) : []);
+  /**
+   * Whether any point has gone through paper, by more than a tenth of a gap (or deeper than it started through):
+   * closer than its gap but on its own side, it's out of sight.
+   */
+  const through = () =>
+    pairs.some(({ v, t, side, gap }) => {
+      const [a, b, c] = problem.triangles[t].map((i) => p[i]);
+      const n = cross(sub(b, a), sub(c, a));
+      const nl = len(n);
+      if (nl < 1e-15) return false;
+      const u = scale(n, side / nl);
+      return dot(sub(p[v], a), u) < Math.min(gap, 0) - thickness / 10 && over(p[v], a, b, c, u);
+    });
+  /**
+   * Where paper has gone through paper, edges set right one at a time with layers kept apart, until no point is
+   * through and every edge is within `settled` of its length, for at most `passes`: so a frame's paper neither
+   * stretches nor passes through itself. Bending isn't held: held at the angles the paper had before, it pulls back
+   * the way the paper came, and the edges stretch against it. Faces that don't bend are, as are crease goals, which
+   * drive the paper, and with `mass`, the goals' points.
+   */
+  const settleLayers = (passes: number, settled: number, targets: { angle: number; compliance: number }[], mass = w) => {
+    const lEnd = edges.map(() => 0);
+    const lHeld = hinges.map(() => 0);
+    findPairs();
+    if (!through()) return;
+    // Paper interlocked edge first can't be parted without stretching it (see docs/bending-plan.md), so it ends as it
+    // was at the last look that found it stretched no more than `LAYERED_STRAIN`. Only now and then: the first passes
+    // push every point that's through back out at once, and the edges take a while to catch up.
+    let kept = p.map((q) => [...q] as Vec3);
+    const restore = () => strainNow() > LAYERED_STRAIN && kept.forEach((q, v) => (p[v] = q));
+    for (let it = 0; it < passes; it++) {
+      if (it % SEARCH_EVERY === 0) {
+        findPairs();
+        if (it && strainNow() <= LAYERED_STRAIN) {
+          if (strainNow() <= settled && !through()) return;
+          kept = p.map((q) => [...q] as Vec3);
+        }
+      }
+      hinges.forEach((h, k) => {
+        if (targets[k].compliance && !creaseOf.has(hingeKey(h.a, h.b))) return;
+        lHeld[k] = project([h.a, h.b, h.c, h.d], hingeGradient(p, h), wrap(hingeAngle(p, h) - targets[k].angle), lHeld[k], targets[k].compliance, mass);
+      });
+      edges.forEach(([a, b], k) => {
+        const d = sub(p[b], p[a]);
+        const dl = len(d);
+        if (dl < 1e-12) return;
+        const n = scale(d, 1 / dl);
+        lEnd[k] = project([a, b], [scale(n, -1), n], dl - lengths[k], lEnd[k], 0, mass);
+      });
+      for (const pair of pairs) separate(p, mass, problem.triangles, pair);
+      ground();
+    }
+    restore();
+  };
   if (sheet) {
     // Paper starting a little off the sheet's shape takes it back before anything moves, so the first frame
-    // doesn't move it as well; the creases and goals start from there.
+    // doesn't move it as well; the creases, goals and guides start from there.
     settle(STAGE_POLISH, STAGE_SETTLED);
     hinges.forEach((h, k) => (startAngles[k] = hingeAngle(p, h)));
     (problem.goals ?? []).forEach((g, k) => (goalStarts[k] = [...p[g.vertex]] as Vec3));
+    guideStarts = guides.map(guided);
   }
+  // Paper as it starts, before anything moves: pairs crossed already (folds started a hair inside one another) are
+  // kept no deeper through, rather than pushed out against the paper's shape at every step.
+  findPairs(true);
+  let targets: { angle: number; compliance: number }[] = [];
   for (let s = 1; s <= stages; s++) {
     const share = s / stages;
     const goalAt = (problem.goals ?? []).map((g, k): Vec3 => {
       const a = goalStarts[k];
       return [a[0] + (g.to[0] - a[0]) * share, a[1] + (g.to[1] - a[1]) * share, a[2] + (g.to[2] - a[2]) * share];
     });
-    const targets = hinges.map((h, k) => {
+    // Along each guide's path, its entries spaced evenly over the stages.
+    const guideAt = guides.map((g, k): Vec3 => {
+      const along = [guideStarts[k], ...g.path];
+      const x = share * g.path.length;
+      const i = Math.min(Math.floor(x), g.path.length - 1);
+      return [0, 1, 2].map((c) => along[i][c] + (along[i + 1][c] - along[i][c]) * (x - i)) as Vec3;
+    });
+    targets = hinges.map((h, k) => {
       const crease = creaseOf.get(hingeKey(h.a, h.b));
       if (!crease) return { angle: restAngles[k], compliance: holdOf.get(hingeKey(h.a, h.b)) ?? bend };
       const goal = (crease.degrees * Math.PI) / 180;
@@ -280,9 +395,16 @@ export function solve(problem: BendProblem): BendResult {
     const lEdge = edges.map(() => 0);
     const lHinge = hinges.map(() => 0);
     const lGoal = goalAt.map(() => 0);
+    const lGuide = guideAt.map(() => 0);
     for (let it = 0; it < iterations; it++) {
       // Points slide over the paper beneath them, onto triangles they weren't near before: look again now and then.
       if (it % SEARCH_EVERY === 0) findPairs();
+      // Guides first, so the edges are set right after them: they lead the paper, and it follows as it can.
+      guides.forEach((g, k) => {
+        const d = sub(guided(g), guideAt[k]);
+        const dl = len(d);
+        if (dl > 1e-12) lGuide[k] = project(g.ids, g.weights.map((x) => scale(d, x / dl)), dl, lGuide[k], guideCompliance);
+      });
       edges.forEach(([a, b], k) => {
         const d = sub(p[b], p[a]);
         const dl = len(d);
@@ -292,7 +414,8 @@ export function solve(problem: BendProblem): BendResult {
       });
       hinges.forEach((h, k) => {
         const c = wrap(hingeAngle(p, h) - targets[k].angle);
-        lHinge[k] = project([h.a, h.b, h.c, h.d], hingeGradient(p, h), c, lHinge[k], targets[k].compliance);
+        const grads = hingeGradient(p, h);
+        lHinge[k] = project([h.a, h.b, h.c, h.d], grads, c, lHinge[k], hingeCompliance(h, grads, targets[k].compliance));
       });
       // Goals last but for layers keeping apart: the lengths they upset are set right at the end of the stage.
       (problem.goals ?? []).forEach((g, k) => {
@@ -304,17 +427,29 @@ export function solve(problem: BendProblem): BendResult {
       for (const pair of pairs) separate(p, w, problem.triangles, pair);
       ground();
       // Now and then, a step solving everything together carries corrections right across the paper, as a crease
-      // turning a whole flap: one at a time, they reach only a few triangles further each pass.
+      // turning a whole flap: one at a time, they reach only a few triangles further each pass. Bending is held at
+      // plain angles there, stiffly, so the flap turns rather than kinking by the crease; guided paper is carried
+      // by its guides, and bending gives way as it does one at a time, rather than stretching the paper against
+      // them.
       if ((it + 1) % SUBSTEP === 0) {
         const rows = new Rows(DAMPING);
         edges.forEach(([a, b], k) => {
           const d = sub(p[b], p[a]);
           const dl = len(d);
-          if (dl > 1e-12) rows.add([a, b], [scale(d, -1 / dl), scale(d, 1 / dl)], dl - lengths[k], stretch);
+          if (dl > 1e-12) rows.add([a, b], [scale(d, -1 / dl), scale(d, 1 / dl)], dl - lengths[k], stretch, HARD_DAMPING);
         });
-        hinges.forEach((h, k) => rows.add([h.a, h.b, h.c, h.d], hingeGradient(p, h), wrap(hingeAngle(p, h) - targets[k].angle), targets[k].compliance));
+        hinges.forEach((h, k) => {
+          const grads = hingeGradient(p, h);
+          const { compliance } = targets[k];
+          const held = guides.length ? hingeCompliance(h, grads, compliance) : creaseOf.has(hingeKey(h.a, h.b)) || !compliance ? compliance : CARRY;
+          rows.add([h.a, h.b, h.c, h.d], grads, wrap(hingeAngle(p, h) - targets[k].angle), held);
+        });
         (problem.goals ?? []).forEach((g, k) => {
-          for (let i = 0; i < 3; i++) rows.add([g.vertex], [AXES[i]], p[g.vertex][i] - goalAt[k][i], g.compliance ?? DEFAULTS.goal);
+          for (let i = 0; i < 3; i++) rows.add([g.vertex], [AXES[i]], p[g.vertex][i] - goalAt[k][i], g.compliance ?? DEFAULTS.goal, HARD_DAMPING);
+        });
+        guides.forEach((g, k) => {
+          const at = guided(g);
+          for (let i = 0; i < 3; i++) rows.add(g.ids, g.weights.map((x) => scale(AXES[i], x)), at[i] - guideAt[k][i], guideCompliance);
         });
         // Air blown in pushes as part of it too: otherwise solving the rest together would undo the push each time.
         if (problem.inflate) {
@@ -330,21 +465,29 @@ export function solve(problem: BendProblem): BendResult {
         ground();
       }
     }
-    // Each stage's paper is kept as a frame, so it mustn't look stretched. Setting its lengths may let the goals'
-    // points give a little (holding them, flat paper can't lift to meet them), but not at the last stage.
+    // Each stage's paper is kept as a frame, so it mustn't look stretched, nor pass through itself. Setting its
+    // lengths may let the goals' points give a little (holding them, flat paper can't lift to meet them), but not at
+    // the last stage; setting them all at once, or one at a time without layers, moves paper through paper, which
+    // settling with layers kept apart then puts right.
     if (stretch === 0) {
+      // At the last stage, the goals' points held where they're to end, not a hair short of it.
+      if (s === stages) (problem.goals ?? []).forEach((g, k) => w[g.vertex] && (p[g.vertex] = [...goalAt[k]]));
       keepLengths(p, s === stages ? held : w, edges, lengths, 5, 1e-3);
       for (const pair of pairs) separate(p, w, problem.triangles, pair);
       ground();
       if (s < stages) settle(STAGE_POLISH, STAGE_SETTLED, held);
+      settleLayers(LAYERED_POLISH, STAGE_SETTLED, targets, held);
     }
     frames.push(p.map((q) => [...q] as Vec3));
   }
 
-  // A last pass on the edges alone, so every triangle keeps its shape as closely as it can: all of them at once,
-  // then one at a time with layers kept apart, until they settle.
+  // A last pass on the edges, so every triangle keeps its shape as closely as it can: all of them at once, then one
+  // at a time, the goals' points held where they can be and let give a little where they can't (an arch's end,
+  // held, would leave it stretched), then one at a time with layers kept apart.
   keepLengths(p, held, edges, lengths, 10, SETTLED / 10);
+  settle(POLISH, SETTLED, held);
   settle(POLISH, SETTLED);
+  if (stretch === 0) settleLayers(LAST_LAYERED_POLISH, SETTLED * 10, targets, held);
   frames[frames.length - 1] = p.map((q) => [...q] as Vec3);
   const strain = strainNow();
   return { frames, strain };
@@ -370,7 +513,11 @@ function keepLengths(p: Vec3[], w: number[], edges: [number, number][], lengths:
   }
 }
 
-/** Constraints for solving together: each one's points, its gradient at each, its value, and its compliance. */
+
+/**
+ * Constraints for solving together: each one's points, its gradient at each, its value, and its compliance, at least
+ * `floor` (the default for all, or the row's own).
+ */
 class Rows {
   /** The least compliance a constraint is given. */
   constructor(private floor: number) {}
@@ -379,14 +526,14 @@ class Rows {
   grads: number[] = [];
   c: number[] = [];
   alpha: number[] = [];
-  add(ids: number[], grads: Vec3[], c: number, compliance: number) {
+  add(ids: number[], grads: Vec3[], c: number, compliance: number, floor = this.floor) {
     for (let k = 0; k < ids.length; k++) {
       this.ids.push(ids[k]);
       this.grads.push(grads[k][0], grads[k][1], grads[k][2]);
     }
     this.start.push(this.ids.length);
     this.c.push(c);
-    this.alpha.push(Math.max(compliance, this.floor));
+    this.alpha.push(Math.max(compliance, floor));
   }
 }
 
@@ -465,24 +612,29 @@ function together(p: Vec3[], w: number[], rows: Rows, reach = Infinity) {
   for (let v = 0; v < n; v++) for (let i = 0; i < 3; i++) p[v][i] += k * g[3 * v + i];
 }
 
-/** A point near a triangle it isn't part of, and which side of it the point is on. */
-interface Pair {
+/**
+ * Which side of a triangle a point belongs on, and how far from it it's kept: the layers' gap, or less if they were
+ * first seen closer (a point by a fold, where the mesh can't round the paper off), so they aren't pushed further
+ * apart than the paper there can go. A point already through the triangle as the paper starts is kept no deeper
+ * through (a gap below 0).
+ */
+interface Seen {
+  side: number;
+  gap: number;
+}
+
+/** A point near a triangle it isn't part of, the side of it the point belongs on, and the gap kept. */
+interface Pair extends Seen {
   v: number;
   t: number;
-  side: number;
-  /**
-   * How far apart they're kept: the layers' gap, or less if they were first seen closer (a point by a fold, where
-   * the mesh can't round the paper off), so they aren't pushed further apart than the paper there can go.
-   */
-  gap: number;
 }
 
 /**
  * Points close to triangles of other paper, as they may be before the next search: within a few gaps of the triangle's plane,
- * over the triangle or nearly (they slide between searches). Each keeps the side it was first seen on (in `sides`). Plain search for now; a spatial hash
- * when meshes grow.
+ * over the triangle or nearly (they slide between searches). Each keeps the side it was first seen on and its gap (in
+ * `sides`): at the `start`, the gap it's found at, even through the triangle.
  */
-function nearPairs(p: Vec3[], triangles: Tri[], thickness: number, sides: Map<number, number>, known?: BendProblem['side']): Pair[] {
+function nearPairs(p: Vec3[], triangles: Tri[], thickness: number, sides: Map<number, Seen>, known?: BendProblem['side'], start = false): Pair[] {
   const out: Pair[] = [];
   const reach = 4 * thickness;
   // Points by cell of a grid about a triangle's size, so each triangle looks only at the points near it. A point
@@ -520,10 +672,12 @@ function nearPairs(p: Vec3[], triangles: Tri[], thickness: number, sides: Map<nu
             const d = (q[0] - a[0]) * u[0] + (q[1] - a[1]) * u[1] + (q[2] - a[2]) * u[2];
             if (Math.abs(d) > reach || !over(q, a, b, c, u, reach)) continue;
             const id = v * triangles.length + t;
-            // Kept as the side it's on times the gap it keeps.
             let seen = sides.get(id);
-            if (seen === undefined) sides.set(id, (seen = (known?.(v, t) ?? (d >= 0 ? 1 : -1)) * Math.min(thickness, Math.max(Math.abs(d), thickness / 4))));
-            out.push({ v, t, side: Math.sign(seen), gap: Math.abs(seen) });
+            if (!seen) {
+              const side = known?.(v, t) ?? (d >= 0 ? 1 : -1);
+              sides.set(id, (seen = { side, gap: start && side * d < 0 ? side * d : Math.min(thickness, Math.max(Math.abs(d), thickness / 4)) }));
+            }
+            out.push({ v, t, ...seen });
           }
   });
   return out;
