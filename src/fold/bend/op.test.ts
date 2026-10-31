@@ -94,5 +94,12 @@ describe('the bend operation', () => {
     expect(() => parseOp({ ...good, anchor: { table: [0, 0] } })).toThrow();
     // Too fine a mesh would take too long to solve.
     expect(() => parseOp({ ...good, mesh: 0.001 })).toThrow();
+    // Guided, off the table, through a set number of stages.
+    const guided: Op = { ...good, goals: [{ guide: { paper: [0.1, 0.2] }, path: [[0, 0.1, 0], [0, 0.2, 0]] }], free: true, stages: 8 };
+    expect(parseOp(JSON.parse(JSON.stringify(guided)))).toEqual(guided);
+    expect(() => parseOp({ ...guided, goals: [{ guide: { paper: [0.1, 0.2] }, path: [] }] })).toThrow();
+    expect(() => parseOp({ ...guided, goals: [{ guide: { table: [0.1, 0.2] }, path: [[0, 0, 0]] }] })).toThrow();
+    expect(() => parseOp({ ...guided, stages: 0 })).toThrow();
+    expect(() => parseOp({ ...guided, stages: 1000 })).toThrow();
   });
 });

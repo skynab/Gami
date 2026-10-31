@@ -477,17 +477,27 @@ export class Recipe {
 
   /**
    * Bends the paper (see docs/bending-plan.md): the faces `flex` picks (by their centre on the sheet) bend, the rest
-   * stay rigid, the paper at `anchor` stays put, and the goals take points of the sheet (corners of faces) to
-   * places in 3D and creases to fold angles. The step plays through the stages the paper went through. Nothing can
-   * be folded after.
+   * stay rigid, the paper at `anchor` stays put (unless guides place it), and the goals take points of the sheet
+   * (corners of faces) to places in 3D, creases to fold angles, and guide points anywhere on it along paths. With
+   * `free`, the table doesn't hold it up as it bends, and it's set down after. The step plays through the stages the
+   * paper went through. Nothing can be folded after.
    */
   bend(
     step: { title: string; text?: string },
-    bend: { flex: (centre: Vec2) => boolean; anchor: Vec2; goals: BendGoal[]; mesh?: number; inflate?: number },
+    bend: { flex: (centre: Vec2) => boolean; anchor: Vec2; goals: BendGoal[]; mesh?: number; inflate?: number; free?: boolean; stages?: number },
   ): this {
     const test = recorder(bend.flex);
     for (const face of this.current.faces_vertices) test(face.map((v) => this.current.vertices_paper[v]));
-    const op: Op = { op: 'bend', flex: test.faces(), anchor: { paper: bend.anchor }, goals: bend.goals, ...(bend.mesh !== undefined && { mesh: bend.mesh }), ...(bend.inflate && { inflate: bend.inflate }) };
+    const op: Op = {
+      op: 'bend',
+      flex: test.faces(),
+      anchor: { paper: bend.anchor },
+      goals: bend.goals,
+      ...(bend.mesh !== undefined && { mesh: bend.mesh }),
+      ...(bend.inflate && { inflate: bend.inflate }),
+      ...(bend.free && { free: true }),
+      ...(bend.stages && { stages: bend.stages }),
+    };
     try {
       // Made as replaying makes it, so the model and its file agree exactly.
       const { frame, via } = applyOp(this.build(), op);

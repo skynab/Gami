@@ -239,6 +239,36 @@ describe('bending a frame', () => {
     }
   });
 
+  it('follows guides into a shape far from flat, keeping its lengths', { timeout: 20000 }, () => {
+    // Rolled into half a tube about its left edge, a little more each stage: every stage's shape is the sheet's own,
+    // so guided there, the paper follows unstretched. Nothing holds it but the guides.
+    const rolled = ([u, v]: Vec2, share: number): Vec3 => {
+      if (!share) return [u, 0, v];
+      const radius = 1 / (Math.PI * share);
+      const a = (u + 0.5) / radius;
+      return [-0.5 + radius * Math.sin(a), radius * (1 - Math.cos(a)), v];
+    };
+    const guides = [-0.5, -1 / 3, -1 / 6, 0, 1 / 6, 1 / 3, 0.5].flatMap((u) => [-0.5, 0, 0.5].map((v): { paper: Vec2; path: Vec3[] } => ({ paper: [u, v], path: [1, 2, 3, 4, 5, 6].map((k) => rolled([u, v], k / 6)) })));
+    const { frame, via } = bendFrame(flat, { flex: [0], anchor: [0, 0], goals: [], guides, mesh: 0.1, stages: 6 });
+    expect(via).toHaveLength(5);
+    frame.vertices_paper.forEach((p, v) => {
+      const q = frame.vertices_coords[v];
+      // Close to the roll, but for the far edge, which the guides pull round softly, so it trails a little: still
+      // right over the near edge, and up by the top.
+      if (p[0] < 0.4) expect(dist(q, rolled(p, 1))).toBeLessThan(0.015);
+      else if (p[0] > 0.5 - 1e-9) expect([q[0] < -0.45, q[1] > 0.6]).toEqual([true, true]);
+    });
+    for (const f of [...via, frame]) {
+      for (const t of f.faces_vertices) {
+        for (let e = 0; e < 3; e++) {
+          const [a, b] = [t[e], t[(e + 1) % 3]];
+          const want = dist(f.vertices_paper[a], f.vertices_paper[b]);
+          expect(Math.abs(dist(f.vertices_coords[a], f.vertices_coords[b]) - want) / want).toBeLessThan(1e-2);
+        }
+      }
+    }
+  });
+
   it('round-trips through a .fold file', () => {
     const model: OrigamiModel = {
       id: 'taco',
