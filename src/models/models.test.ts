@@ -30,10 +30,10 @@ const GRAZES: Record<string, number> = {
 };
 
 describe.each(models.map((m) => [m.id, m] as const))('%s', (id, model) => {
-  // Animating every step of the biggest models (the frog's 55) takes a few seconds; the later tests reuse it.
+  // Animating every step of the biggest models (the kusudama's 61 sheets) takes up to 20 s; the later tests reuse it.
   it('folds without stretching, tearing or tangling', () => {
     expect(problems(model)).toEqual([]);
-  }, 30_000);
+  }, 90_000);
 
   it('passes paper through paper no deeper than a few layers, or than it’s known to', () => {
     const deepest = Math.max(0, ...crossings(model).filter((c) => !model.steps[c.step - 1].frame.soft?.length).map((c) => c.depth));

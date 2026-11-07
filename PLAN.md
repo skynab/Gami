@@ -244,6 +244,7 @@ supabase/         migrations (profiles, models, RLS policies)
 - **Animation:** halfway through each step, faces have the same shape as at the start and end.
 - **Playwright end-to-end (`npm run e2e`):** gallery → model → step through → lock Top → reset, and the language menu. Golden screenshots of gallery cards and finished models (`e2e/*-snapshots`).
 - **Role gating:** tests against a local Supabase check that a non-creator's insert fails at the database, not only in the UI.
+- **CI** (`.github/workflows/test.yml`): every push to `dev` or `main` and every pull request runs the type check, the unit tests (the model checks above among them) and the end-to-end tests in Chromium. The golden screenshots aren't compared there (`--ignore-snapshots`): they're taken with a desktop GPU, and a runner draws WebGL in software. On CI, tests get 30 s rather than 5 by default.
 
 ## 9. Milestones
 
