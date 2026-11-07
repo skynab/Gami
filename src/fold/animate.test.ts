@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { basics } from '../models/basics';
 import { crane } from '../models/recipes/crane';
+import { envelope } from '../models/recipes/envelope';
+import { fox } from '../models/recipes/fox';
 import { frog } from '../models/recipes/frog';
 import { lily } from '../models/recipes/lily';
 import { poseAt, stepTransition, transition } from './animate';
+import { crossings } from './collisions';
 import { facePositions, framesOf, LAYER_GAP } from './frames';
 import { sharedSegment } from './geometry2d';
 import type { OrigamiModel, Vec2, Vec3 } from './types';
@@ -127,4 +130,19 @@ describe('compound folds', () => {
       for (const k of petals) expect(torn(model, k), `${model.id} step ${k}`).toBeLessThan(0.02);
     }
   }, 30_000);
+
+  it('folds the creases round a point in step, so the paper stays joined without passing through itself', () => {
+    // Each crease turning at its own steady rate, the ring of them round the envelope's swivel point came apart by
+    // a quarter of the sheet halfway, and joined up again it passed 0.03 through the side under it. The fox's
+    // squash came apart by 0.05.
+    const model = envelope();
+    const swivels = model.steps.flatMap((s, i) => (s.title === 'Swivel the corner out' ? [i + 1] : []));
+    expect(swivels).toHaveLength(2);
+    for (const k of swivels) {
+      expect(stepTransition(model, k).hinges?.turns, `step ${k}`).toBeDefined();
+      expect(torn(model, k), `step ${k}`).toBeLessThan(0.01);
+    }
+    expect(crossings(model).filter((c) => c.depth > 2 * LAYER_GAP)).toEqual([]);
+    expect(torn(fox(), 13)).toBeLessThan(0.01);
+  });
 });

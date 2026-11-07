@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { crossings } from '../fold/collisions';
 import { fromFoldFile, toFoldFile } from '../fold/fold-format';
 import { replay } from '../fold/ops';
 import { previewSvg, thumbnailSvg } from '../fold/thumbnail';
@@ -11,11 +12,35 @@ import { RECIPES } from './recipes';
 const models = RECIPES.map((make) => make());
 const file = (name: string) => readFileSync(new URL(`../../public/models/${name}`, import.meta.url), 'utf8');
 
+/** How deep paper may pass through paper as a model plays (a sheet's width is 1, a layer 0.0007): a few layers. */
+const GRAZE = 0.005;
+/**
+ * The models known to go deeper, each a little over what it was measured at (November 2026), and where. Bent steps
+ * are left to the bending checks: the viewer draws bent paper in its stacking order where layers meet.
+ */
+const GRAZES: Record<string, number> = {
+  'king-bee': 0.0065, // Bending up the ailerons between the slits.
+  lily: 0.009, // Its squash-and-petal folds, joined up all the way (see collisions.test.ts).
+  swan: 0.013, // Pulling up the neck: with rigid paper its body is a closed tube (PLAN.md, milestone 13).
+  whale: 0.009, // Opening the fins out in 3D.
+  dolphin: 0.0075, // Opening the fins out in 3D.
+  frog: 0.013, // Lifting the front legs, against the other front quarter (docs/origami-me-plan.md).
+  'masu-shallow-lid': 0.0085, // Raising the walls: riding layers sit a little off the faces they ride on.
+  'rainbow-chain': 0.034, // Joining the ends: rigid links set on a ring dip into each other where they cross.
+};
+
 describe.each(models.map((m) => [m.id, m] as const))('%s', (id, model) => {
   // Animating every step of the biggest models (the frog's 55) takes a few seconds; the later tests reuse it.
   it('folds without stretching, tearing or tangling', () => {
     expect(problems(model)).toEqual([]);
   }, 30_000);
+
+  it('passes paper through paper no deeper than a few layers, or than it’s known to', () => {
+    const deepest = Math.max(0, ...crossings(model).filter((c) => !model.steps[c.step - 1].frame.soft?.length).map((c) => c.depth));
+    expect(deepest).toBeLessThanOrEqual(GRAZES[id] ?? GRAZE);
+    // A model that no longer goes deeper comes off the list.
+    if (id in GRAZES) expect(deepest).toBeGreaterThan(GRAZE);
+  }, 60_000);
 
   it('has a title on every step', () => {
     for (const s of model.steps) expect(s.title.trim()).not.toBe('');
