@@ -1593,8 +1593,15 @@ function stagger(amount: number, depth: number, deepest: number, s: number): num
 
 // ——— Keeping paper joined ———
 
-/** How far apart (in sheet widths) the same point of paper may come mid-step before it's pulled back together. */
+/** How far apart (in sheet widths) the same point of paper comes mid-step before it counts as torn. */
 const TEAR = 0.05;
+/**
+ * How far apart it may come before it's pulled back together, where that passes no paper through paper: past
+ * how far the layers of a stack ease apart folding over. And where through a step to look, closely enough to
+ * catch paper coming apart for a moment (a pop-up's first stretch).
+ */
+const JOIN_FROM = 0.01;
+const JOIN_CHECKS = Array.from({ length: 19 }, (_, i) => (i + 1) / 20);
 /** Where through a step to look for paper coming apart. */
 const TEAR_SAMPLES = [0.1, 0.25, 0.4, 0.5, 0.6, 0.75, 0.9];
 /** Gaps left between the same point of paper, for layers of a stack easing round each other. */
@@ -1621,11 +1628,21 @@ function joinFixes(t: Transition): JoinFix[][] | null {
   if (joined.has(t)) return joined.get(t)!;
   let out: JoinFix[][] | null = null;
   const groups = cornerGroups(t.faces);
-  if (groups.length && TEAR_SAMPLES.some((s) => apart(rawPose(t, s), groups) > TEAR)) {
+  // Torn, or come apart for a while further than it is at either end (where layers lie a little apart anyway).
+  let opens = groups.length > 0 && TEAR_SAMPLES.some((s) => apart(rawPose(t, s), groups) > TEAR);
+  if (groups.length && !opens) {
+    const ends: [number[], number[]] = [spreads(rawPose(t, 0), groups), spreads(rawPose(t, 1), groups)];
+    opens = JOIN_CHECKS.some((s) => opened(t, groups, ends, s) > JOIN_FROM);
+  }
+  if (opens) {
     const fixes: JoinFix[][] = [];
     const whole: boolean[] = [];
     const raws: Vec3[][][] = [];
     const allowed: number[] = [];
+    // How deep the paper joined up whole goes through paper elsewhere in the step, at most, and each point's
+    // join made whole, whether it was kept or not.
+    let grazes = 0;
+    const full: JoinFix[][] = [];
     let warm: JoinFix[] | null = null;
     for (let i = 0; i <= JOIN_SAMPLES; i++) {
       const raw = rawPose(t, i / JOIN_SAMPLES);
@@ -1637,6 +1654,7 @@ function joinFixes(t: Transition): JoinFix[][] | null {
       if (i === 0 || i === JOIN_SAMPLES) {
         fixes.push(raw.map(() => ({ q: new Quaternion(), shift: new Vector3() })));
         whole.push(true);
+        full.push(fixes[i]);
         continue;
       }
       // Starting from the last sample's fix, as the paper moves on only a little.
@@ -1645,15 +1663,20 @@ function joinFixes(t: Transition): JoinFix[][] | null {
       const start = w ? raw.map((face, f) => applyFix(w[f], face)) : raw.map((face) => face.map((p) => [...p] as Vec3));
       const fitted = joinUp(t.faces, start, groups, raw);
       const fix = fitted.map((face, f) => fixFor(t.faces[f].paper, raw[f], face));
-      const part = [1, 0.75, 0.5, 0.25].find((k) => deepest(t, raw.map((face, f) => applyFix(partly(fix[f], k), face))) <= allowed[i]) ?? 0;
+      let depth = 0;
+      const part = [1, 0.75, 0.5, 0.25].find((k) => (depth = deepest(t, raw.map((face, f) => applyFix(partly(fix[f], k), face)))) <= allowed[i]) ?? 0;
       fixes.push(fix.map((x) => partly(x, part)));
       whole.push(part === 1);
+      full.push(fix);
+      if (part === 1) grazes = Math.max(grazes, depth);
       // A join that passes paper through paper has found the paper folded the wrong way round (a face flipped
       // through its neighbour): the next sample starts again from the last one joined up right.
       if (part === 1) warm = fix;
     }
     // Where the paper couldn't be joined up whole: joined again starting from the joins either side blended,
-    // or failing that, just those blended, if that keeps it clear.
+    // or failing that, just those blended, if that keeps it clear, or grazes no more than a layer deeper than
+    // the paper joined up elsewhere in the step (so the step looks no worse for it, only joined: the lily's
+    // petal folds came apart for a moment near the end, rather than graze a hair more than a few layers).
     // Again while that fixes more, as each point fixed gives the ones beside it a better start.
     for (let more = true, round = 0; more && round < FILL_ROUNDS; round++) {
       more = false;
@@ -1670,9 +1693,9 @@ function joinFixes(t: Transition): JoinFix[][] | null {
         const fitted = joinUp(t.faces, start.map((face) => face.map((p) => [...p] as Vec3)), groups, raw);
         const again = fitted.map((face, f) => fixFor(t.faces[f].paper, raw[f], face));
         const torn = apart(raw.map((face, f) => applyFix(fixes[i][f], face)), groups);
-        const fix = [again, blend].find((x) => {
+        const fix = [again, blend, full[i]].find((x) => {
           const pose = raw.map((face, f) => applyFix(x[f], face));
-          return deepest(t, pose) <= allowed[i] && apart(pose, groups) < torn;
+          return deepest(t, pose) <= Math.max(allowed[i], grazes + LAYER_GAP) && apart(pose, groups) < torn;
         });
         if (fix) {
           fixes[i] = fix;
@@ -1756,12 +1779,22 @@ function cornerGroups(faces: FaceTrack[]): [number, number][][] {
 
 /** How far the furthest corner of a group is from where its group is on average. */
 function apart(pose: Vec3[][], groups: [number, number][][]): number {
-  let most = 0;
-  for (const g of groups) {
+  return Math.max(0, ...spreads(pose, groups));
+}
+
+/** For each group of corners, how far its furthest corner is from where the group is on average. */
+function spreads(pose: Vec3[][], groups: [number, number][][]): number[] {
+  return groups.map((g) => {
     const m = centroid(g.map(([f, c]) => pose[f][c]));
+    let most = 0;
     for (const [f, c] of g) most = Math.max(most, Math.hypot(pose[f][c][0] - m[0], pose[f][c][1] - m[1], pose[f][c][2] - m[2]));
-  }
-  return most;
+    return most;
+  });
+}
+
+/** How much further apart the same point of paper comes `s` of the way through a step than at either end, at most. */
+function opened(t: Transition, groups: [number, number][][], ends: [number[], number[]], s: number): number {
+  return Math.max(0, ...spreads(rawPose(t, s), groups).map((d, g) => d - Math.max(ends[0][g], ends[1][g])));
 }
 
 /**

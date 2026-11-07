@@ -97,10 +97,10 @@ describe('animating a step', () => {
 
 describe('compound folds', () => {
   /** How far apart the same point of paper comes, at most, while step k plays: corners at one place on the sheet, on an edge two faces are joined along. */
-  const torn = (model: OrigamiModel, k: number) => {
+  const torn = (model: OrigamiModel, k: number, samples = [0.2, 0.4, 0.5, 0.6, 0.8]) => {
     const t = stepTransition(model, k);
     let most = 0;
-    for (const s of [0.2, 0.4, 0.5, 0.6, 0.8]) {
+    for (const s of samples) {
       const pose = poseAt(t, s);
       t.faces.forEach((f, a) =>
         t.faces.forEach((g, b) => {
@@ -128,6 +128,16 @@ describe('compound folds', () => {
       const petals = model.steps.flatMap((s, i) => (s.kind === 'petal' ? [i + 1] : []));
       expect(petals, model.id).toHaveLength(4);
       for (const k of petals) expect(torn(model, k), `${model.id} step ${k}`).toBeLessThan(0.02);
+    }
+  }, 30_000);
+
+  it('keeps the lily’s petal folds joined right to the end', () => {
+    // Joining the paper up there grazed a hair more than a few layers, so it was left to come apart by 0.07 for a
+    // moment; it now may graze as deep as the step does elsewhere (and a layer more). The back flap's still does.
+    const model = lily();
+    for (const title of ['Squash and petal-fold the next flap', 'Squash and petal-fold the last flap']) {
+      const k = model.steps.findIndex((s) => s.title === title) + 1;
+      expect(torn(model, k, [0.9, 0.925, 0.95, 0.975]), title).toBeLessThan(0.02);
     }
   }, 30_000);
 
