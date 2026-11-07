@@ -4,6 +4,10 @@ Where Gami stands on 7 November 2026: the housekeeping done, what's waiting on a
 only the owner can see, and the order of work after that. Each area keeps its detail in its own plan; this
 one points to them and is kept up to date as items close.
 
+Work goes straight onto `dev`, not into worktrees or feature branches (decided 7 November 2026). The `wip/*`
+branches stay for experiments that would leave `dev` broken; releases go to `main` by a `dev-to-main-N` pull
+request.
+
 ## Housekeeping (7 November 2026)
 
 | Item | Status |
@@ -12,7 +16,8 @@ one points to them and is kept up to date as items close.
 | Fold'N Fly plan: "Gami's own planes need names of their own" | Done: they're the corkscrew and the flying saucer. Taken off the open questions. |
 | A link here from `PLAN.md` | Done, under the milestones. |
 | CI's first run (`Tests`, 7 November, on `dev` at `933b887`) | **Failed in the end-to-end job.** The type check and unit tests passed. See "Waiting" below. The e2e job's report was never uploaded, as Playwright wasn't writing one; on CI it now writes an HTML report, with a trace of each test that fails once and is run again, which the workflow uploads as `playwright-report`. |
-| Old branches and worktrees | **Not done.** Auto mode stopped the deletions as irreversible. The commands are under "Branches to delete by hand". |
+| Finished sessions' worktrees | Done: "Lesson: common origami folds", "Lesson: origami bases" and "Standardise fold vocabulary and unfold logic" are archived and their worktrees removed. Their work is all in `dev` (the third's commit, `5dbf414`, landed in another form: `CREASE_KINDS`, `FOLD_KINDS`, `lastFold`). |
+| Old branches, and the `fold-grazes` worktree | **Not done.** Auto mode stopped the deletions as irreversible. The commands are under "Branches to delete by hand". |
 | Release `dev` to `main` | See Progress at the end. |
 
 ## Waiting
@@ -39,10 +44,6 @@ Things that can't be settled from the code alone.
   ninja star. It's 79 commits behind `dev`. "Creases round a point fold in step" and "Paper joined up sooner, and
   to the end" (November) took on the same problem, so it's probably done with. Check its list against `dev`,
   then delete it here and on GitHub, or pick it up.
-- **Three finished sessions still hold worktrees**: "Lesson: common origami folds", "Lesson: origami bases" and
-  "Standardise fold vocabulary and unfold logic". Their work is all in `dev`: the two lessons are merged, and the
-  third's commit (`5dbf414`) landed in another form (`CREASE_KINDS`, `FOLD_KINDS`, `lastFold`). Archiving them
-  in the app removes their worktrees; their branches can then go (below).
 - **The Studio's open questions** (`docs/studio-plan.md`): keep the cloud panel for creators, share links that
   carry a design in the address, a first-fold tour, phones. Part 4 (submissions with ownership and licence)
   needs its decisions before any work starts.
@@ -66,7 +67,7 @@ copy of `animate.ts` as `dev` has it):
 git worktree remove --force .claude/worktrees/fold-grazes && git branch -d worktree-fold-grazes
 ```
 
-Once the three sessions above are archived:
+The archived sessions' branches:
 
 ```bash
 git branch -d claude/lesson-bases-cf4d91 claude/lesson-folds-cc4e1d && git branch -D claude/sharp-mccarthy-24d693
