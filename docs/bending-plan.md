@@ -596,7 +596,7 @@ folded flat in a stack), a rolled fold. In order:
 | 3 | Each stage started where the guides put the paper (with dense guides), and the guides moved gradually within a stage rather than all at once, so the paper can't fall behind | Small | Tried November 2026: no help (below) |
 | 4 | A stage split where something snaps (a triangle turning further than a limit, or the paper falling behind), keeping only the frames needed | Medium | |
 | 5 | Paths found, not designed: from the start and a designed end shape, the in-between shapes that stretch the paper least (each fold's angle interpolated and the points rebuilt, as in Kilian, Mitra and Pottmann, "Geometric modeling in shape space", 2007) | Medium–large | |
-| 6 | One energy per stage (stretch, bending, guides, contact) solved to its minimum by Newton's method, in place of passes and three different settlings | Large | |
+| 6 | One energy per stage (stretch, bending, guides, contact) solved to its minimum by Newton's method, in place of passes and three different settlings | Large | Tried November 2026, on `wip/energy-solver`: not yet as good (below) |
 | 7 | Contact paper can't cross: checked continuously between steps, edge against edge too, ideally a barrier (IPC, Li et al. 2020) | Large | |
 | 8 | Playing that keeps lengths: a few passes setting edge lengths in the viewer after blending | Small–medium | |
 | 9 | A mesh that fits the bend: solved coarsely, refined where any frame bends sharply, coarsened where none does | Medium | |
@@ -624,6 +624,29 @@ with guide rows) took the worst of it to 3 cm, no more. Two causes:
   between them, and whatever the last setting of lengths finds is the frame. That's row 6: one energy, guides
   in it, solved to its minimum. A mesh with edges along the folds a bend makes (row 9; for fixed folds, lines on
   the table cut through every layer before meshing, as the creases above did) would make the guides reachable.
+
+**Row 6, tried** (November 2026; on the `wip/energy-solver` branch, switched on by `E_METHOD=energy`). Each stage
+brought to the least of one energy (`src/fold/bend/minimize.ts`): edges kept to their lengths by an augmented
+Lagrangian (stiff springs whose rests move by how far each was off, round by round), bending per hinge as the
+sheet's triangles weight it (Grinspun et al., "Discrete shells", 2003, so it costs the same however fine the mesh),
+guides, goals, contacts and the table, by Newton's method (each step by conjugate gradients, each point's 3 × 3
+block as preconditioner) with a line search; then lengths set exactly and layers parted as before. Contacts had to
+come in only at half their gap (in a flat stack the least squeeze brings thousands in, and their coming and going
+breaks the steps) and leave out points beside the triangle (across a fold lying flat they're almost on it).
+- **The balloon.** No snapping: 0.6% stretch in its frames, 4.4% as it plays, at most 46° turned between frames,
+  and setting lengths at a stage's end moved it half a centimetre, not five. But its ends never close: it stays as
+  long as the flat stack, 15 cm behind its guides by the end. Unchanged with twenty times the steps, a finer mesh
+  (0.045), no contacts, no bending, multipliers started afresh each stage, or guides on the plus alone (the passes,
+  given the plus's guides alone, do reach the cube, snapping on the way). So the plus itself locks: following the
+  cube's path takes the triangles round T and the hole stretching for a moment, which the passes allow (the snap)
+  and exact lengths don't. Real paper crumples there.
+- **The fan and the cup** aren't as good yet. The fan: 4–6 cm behind its guides (the passes 1.1), 2.6–9.4% as it
+  plays (1.5%), more paper through paper, however its bending and contacts were weighted. The cup follows its
+  guides better (0.9 cm against 1.4) and stretches less in its frames (0.4% against 0.8%), but 5.5% as it plays
+  (the limit is 5%) and twice the paper through paper. Three or four times slower.
+- **Next.** The energy is the right shape for the solver, but it needs the passes' care with contacts and creases
+  before it can replace them; and for the balloon, a few places (T, the hole) where the paper may crumple, its
+  lengths given way for a while, if the cube's path is to be followed at all.
 
 ## Risks
 
