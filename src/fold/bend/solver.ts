@@ -1,5 +1,6 @@
 import type { Vec3 } from '../types';
 import { topology, type Hinge, type Tri } from './mesh';
+import { minimize } from './minimize';
 
 /**
  * Working out how paper bends (see docs/bending-plan.md): a mesh of small rigid triangles moved by
@@ -114,6 +115,19 @@ const REACH_SHEET = 0.015;
 const SUBSTEP = 20;
 /** How often, in iterations, to look again for points near other paper. */
 const SEARCH_EVERY = 10;
+/** Experiment: each stage as one energy brought to its least (minimize.ts), and its weights. */
+const ENERGY = process.env.E_METHOD === 'energy';
+const E = {
+  stretch: +(process.env.E_STRETCH ?? 1e2),
+  guide: +(process.env.E_GUIDE ?? 1),
+  bend: +(process.env.E_BEND ?? 1e-5),
+  crease: +(process.env.E_CREASE ?? 0.1),
+  rigid: +(process.env.E_RIGID ?? 1e-1),
+  contact: +(process.env.E_CONTACT ?? 10),
+  goal: +(process.env.E_GOAL ?? 1e2),
+  rounds: +(process.env.E_ROUNDS ?? 3),
+  steps: +(process.env.E_STEPS ?? 10),
+};
 const AXES: Vec3[] = [
   [1, 0, 0],
   [0, 1, 0],
@@ -372,6 +386,12 @@ export function solve(problem: BendProblem): BendResult {
   // kept no deeper through, rather than pushed out against the paper's shape at every step.
   findPairs(true);
   let targets: { angle: number; compliance: number }[] = [];
+  // For the energy: each hinge's weight, from its triangles on the sheet, so bending costs the same however fine
+  // the mesh (Grinspun et al., "Discrete shells", 2003); and the edges' multipliers, kept from stage to stage.
+  const flatAt = (v: number): Vec3 => (sheet ? [sheet[v][0], 0, sheet[v][1]] : rest[v]);
+  const area = (a: number, b: number, c: number) => len(cross(sub(flatAt(b), flatAt(a)), sub(flatAt(c), flatAt(a)))) / 2;
+  const hingeWeight = hinges.map((h) => (3 * dot(sub(flatAt(h.b), flatAt(h.a)), sub(flatAt(h.b), flatAt(h.a)))) / Math.max(1e-12, area(h.a, h.b, h.c) + area(h.b, h.a, h.d)));
+  let multipliers = new Float64Array(edges.length);
   for (let s = 1; s <= stages; s++) {
     const share = s / stages;
     const goalAt = (problem.goals ?? []).map((g, k): Vec3 => {
@@ -392,6 +412,47 @@ export function solve(problem: BendProblem): BendResult {
       return { angle: startAngles[k] + wrap(goal - startAngles[k]) * share, compliance: crease.compliance ?? DEFAULTS.crease };
     });
 
+    if (ENERGY) {
+      if (process.env.E_RESET) multipliers = new Float64Array(edges.length);
+      const out = minimize(
+        p,
+        w,
+        {
+          edges,
+          lengths,
+          stretch: E.stretch,
+          hinges,
+          angles: targets.map((t) => t.angle),
+          stiffness: hinges.map((h, k) => {
+            if (creaseOf.has(hingeKey(h.a, h.b))) return E.rigid * hingeWeight[k];
+            const c = targets[k].compliance;
+            if (!c) return E.rigid * hingeWeight[k];
+            // Held as a share of its own stiffness before: the bending's share (1e-2) as E.bend, a crease's more readily.
+            return (E.bend * hingeWeight[k] * DEFAULTS.bend) / c;
+          }),
+          guides: guides.map((g, k) => ({ ids: g.ids, weights: g.weights, to: guideAt[k] })),
+          guide: E.guide,
+          goals: (problem.goals ?? []).map((g, k) => ({ vertex: g.vertex, to: goalAt[k] })),
+          goal: E.goal,
+          triangles: problem.triangles,
+          contacts: thickness > 0 ? () => nearPairs(p, problem.triangles, thickness, sides, problem.side) : undefined,
+          contact: E.contact,
+          floor,
+        },
+        multipliers,
+        { rounds: E.rounds, steps: E.steps },
+      );
+      if (process.env.E_DEBUG) console.log(`stage ${s}: ${out.rounds} rounds, ${out.steps} steps, strain ${out.strain.toFixed(5)}, off guides ${Math.max(0, ...guides.map((g, k) => len(sub(guided(g), guideAt[k])))).toFixed(4)}`);
+      if (stretch === 0) {
+        if (s === stages) (problem.goals ?? []).forEach((g, k) => w[g.vertex] && (p[g.vertex] = [...goalAt[k]]));
+        keepLengths(p, s === stages ? held : w, edges, lengths, 5, 1e-3);
+        if (s < stages) settle(STAGE_POLISH, STAGE_SETTLED, held);
+        settleLayers(LAYERED_POLISH, STAGE_SETTLED, targets, held);
+      }
+      if (process.env.E_DEBUG) console.log(`  settled: strain ${strainNow().toFixed(5)}, off guides ${Math.max(0, ...guides.map((g, k) => len(sub(guided(g), guideAt[k])))).toFixed(4)}`);
+      frames.push(p.map((q) => [...q] as Vec3));
+      continue;
+    }
     const lEdge = edges.map(() => 0);
     const lHinge = hinges.map(() => 0);
     const lGoal = goalAt.map(() => 0);
