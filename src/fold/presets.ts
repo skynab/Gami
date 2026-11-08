@@ -1,24 +1,24 @@
 import type { CreaseKind } from './collapse';
-import { FoldError, placeLike, toFlat, type FlatFace } from './fold';
+import { FoldError, placeLike, toFlat, unplaceLike, type FlatFace } from './fold';
 import { roundCoord } from './fold-format';
-import { add, cross, dist, dot, joinedSegment, lineThrough, normalize, overlapArea, scale, sideOf, sub, type Line } from './geometry2d';
-import { applyOp, atOf, type At, type Faces, type Op } from './ops';
+import { add, cross, dist, dot, frontUp, joinedSegment, lineThrough, normalize, overlapArea, scale, sideOf, split, sub, type Line } from './geometry2d';
+import { applyOp, atOf, select, type At, type Faces, type Op } from './ops';
 import { centre, inside } from './select';
 import type { FoldFrame, OrigamiModel, Vec2 } from './types';
 
 /**
- * Fold presets: the named compound folds (pleat, crimp, squash, petal, rabbit ear) worked out from the few points
- * a person would pick on the paper as it lies on the table. Each comes back as an ordinary collapse, so it replays
- * when an earlier step changes and opens in the Studio's Collapse to adjust a crease. Which paper each crease
- * folds is found from the stack: a face's rank (how many faces lie over it), and which faces are joined along a
- * folded edge.
+ * Fold presets: the named compound folds (pleat, crimp, squash, petal, rabbit ear, swivel, open sink) worked out
+ * from the few points a person would pick on the paper as it lies on the table. Each comes back as an ordinary
+ * collapse, so it replays when an earlier step changes and opens in the Studio's Collapse to adjust a crease.
+ * Which paper each crease folds is found from the stack: a face's rank (how many faces lie over it), which faces
+ * are joined along a folded edge, and which way up each face's paper lies.
  */
 
-export type PresetKind = 'pleat' | 'crimp' | 'squash' | 'petal' | 'rabbitEar';
-export const PRESETS: PresetKind[] = ['pleat', 'crimp', 'squash', 'petal', 'rabbitEar'];
+export type PresetKind = 'pleat' | 'crimp' | 'squash' | 'petal' | 'rabbitEar' | 'swivel' | 'sink';
+export const PRESETS: PresetKind[] = ['pleat', 'crimp', 'squash', 'petal', 'rabbitEar', 'swivel', 'sink'];
 
 /** How many points each preset is picked with. */
-export const PRESET_PICKS: Record<PresetKind, number> = { pleat: 4, crimp: 4, squash: 2, petal: 1, rabbitEar: 3 };
+export const PRESET_PICKS: Record<PresetKind, number> = { pleat: 4, crimp: 4, squash: 2, petal: 1, rabbitEar: 3, swivel: 3, sink: 2 };
 
 /**
  * Picks, all points on the table:
@@ -28,8 +28,13 @@ export const PRESET_PICKS: Record<PresetKind, number> = { pleat: 4, crimp: 4, sq
  *   is pressed down onto;
  * - petal: the free corner of the flap to lift;
  * - rabbit ear: the corner that stands up, then the other two corners, the paper by the first of them staying put
- *   (`flip`: the flap lies down the other way).
- * `only` limits a pleat or crimp to some of the paper, as the Studio's sheet and face picks do.
+ *   (`flip`: the flap lies down the other way);
+ * - swivel: the pivot, a point along the flap's hinge (the folded edge it swings on), then where that point swings
+ *   to; the paper the flap swings across folds into a pleat (`flip`: the paper under the hinge swings instead of
+ *   the flap on top);
+ * - sink (an open sink): the tip of the point, then a point on the line it sinks to, square across the point from
+ *   the tip (`flip`: sunk from underneath, where that differs).
+ * `only` limits a pleat, crimp, swivel or sink to some of the paper, as the Studio's sheet and face picks do.
  */
 export interface Preset {
   kind: PresetKind;
@@ -50,13 +55,15 @@ export function presetOp(model: OrigamiModel, preset: Preset): CollapseOp {
   const frame = model.steps.at(-1)?.frame ?? model.start;
   const { kind, picks } = preset;
   if (picks.length < PRESET_PICKS[kind]) throw new PresetError('Not enough points picked yet.');
-  // Each candidate in turn, the first that folds flat: the kinds that depend on the layers aren't known in advance.
-  const first = (candidates: CollapseOp[]): CollapseOp => {
+  // Each candidate in turn, the first that folds flat (and passes `check`): the kinds that depend on the layers
+  // aren't known in advance.
+  const first = (candidates: CollapseOp[], check?: (made: FoldFrame) => PresetError | null): CollapseOp => {
     let error: unknown;
     for (const c of preset.flip ? [...candidates].reverse() : candidates) {
       try {
-        applyOp(model, c);
-        return c;
+        const failed = check?.(applyOp(model, c).frame);
+        if (!failed) return c;
+        error ??= failed;
       } catch (e) {
         if (!(e instanceof FoldError)) throw e;
         error ??= e;
@@ -64,6 +71,8 @@ export function presetOp(model: OrigamiModel, preset: Preset): CollapseOp {
     }
     throw error;
   };
+  // The paper `only` allows, if anything limits it.
+  const allowed = preset.only ? select(preset.only, { frame, sheets: model.sheets }) : () => true;
   switch (kind) {
     case 'pleat':
     case 'crimp':
@@ -74,6 +83,13 @@ export function presetOp(model: OrigamiModel, preset: Preset): CollapseOp {
       return first(petal(frame, picks[0]));
     case 'rabbitEar':
       return first(rabbitEar(frame, picks[0], picks[1], picks[2]));
+    case 'swivel':
+      // Creases that cross no paper but the flap leave everything where it was: that's no swivel.
+      return first(swivel(frame, picks[0], picks[1], picks[2], allowed), (made) =>
+        made.vertices_coords.length === frame.vertices_coords.length ? new PresetError('There’s no paper for the flap to swing across that way.') : null,
+      );
+    case 'sink':
+      return first(sink(frame, picks[0], picks[1], allowed));
   }
 }
 
@@ -240,6 +256,108 @@ function rabbitEar(frame: FoldFrame, corner: Vec2, a: Vec2, b: Vec2): CollapseOp
   }));
 }
 
+/**
+ * A swivel fold: a flap swings round flat about `pivot`, the end of its hinge, until the hinge's point at
+ * `hingeAt` lies towards `to`. The paper it swings across folds into a pleat, as `Recipe.swivel` makes it: a new
+ * crease where the hinge ends up, and a gusset halfway back to the old hinge, folded the other way. The flap keeps
+ * its hinge and isn't creased. The paper beyond the new hinge stays put. Which paper is the flap: the faces on top
+ * at the hinge and all joined to them other than across it (or, later in the list, the faces underneath).
+ */
+function swivel(frame: FoldFrame, pivot: Vec2, hingeAt: Vec2, to: Vec2, allowed: (paper: Vec2[]) => boolean): CollapseOp[] {
+  const len = dist(pivot, hingeAt);
+  if (len < TOL || dist(pivot, to) < TOL) throw new PresetError('Pick the pivot, a point along the flap’s folded edge, then where that point should swing to.');
+  const h = normalize(sub(hingeAt, pivot));
+  const t = normalize(sub(to, pivot));
+  const turn = cross(h, t);
+  if (Math.abs(turn) < 1e-6) throw new PresetError('Pick where the folded edge swings to off the line it’s on now.');
+  const s = stack(frame);
+  const hinge = lineThrough(pivot, hingeAt);
+  // The hinge: folds joining two faces along its line, the face on top first.
+  const folds: [Face, Face][] = [];
+  for (const f of s) {
+    for (const g of s) {
+      if (f.layer <= g.layer || frontUp(f.world, f.paper) === frontUp(g.world, g.paper)) continue;
+      if (joins([f], [g], frame.cuts).some((j) => onLine(j.world, hinge))) folds.push([f, g]);
+    }
+  }
+  if (!folds.length) throw new PresetError('There’s no flap hinged there. Pick the pivot at the end of a folded edge, then a point along it.');
+  // The flap: joined to its side of the hinge without crossing it. If that reaches the other side, it isn't free.
+  const flapFrom = (start: Face[], other: Face[]) => {
+    const flap = connectedOff(start, s, hinge, frame.cuts);
+    return flap.some((f) => other.includes(f)) ? null : flap;
+  };
+  const flaps = [flapFrom(folds.map(([f]) => f), folds.map(([, g]) => g)), flapFrom(folds.map(([, g]) => g), folds.map(([f]) => f))];
+  // The gusset halves the swing; the paper beyond the new hinge, turning on past `to`, stays put.
+  const gusset = normalize(add(h, t));
+  const sense = Math.sign(turn);
+  const beyond = (Math.PI - Math.acos(Math.max(-1, Math.min(1, dot(h, t)))) / 2) / 2;
+  const out: CollapseOp[] = [];
+  for (const flap of flaps) {
+    if (!flap) continue;
+    const pleated = s.filter((f) => !flap.includes(f) && allowed(f.paper));
+    const anchor = stillAlong(pleated, pivot, rotate(t, sense * beyond), len);
+    if (!pleated.length || !anchor) continue;
+    for (const [hingeKind, gussetKind] of [
+      ['valley', 'mountain'],
+      ['mountain', 'valley'],
+    ] as const) {
+      out.push({
+        op: 'collapse',
+        creases: [
+          { line: through(frame, pivot, add(pivot, scale(t, len))), kind: hingeKind, only: outlines(pleated) },
+          { line: through(frame, pivot, add(pivot, scale(gusset, len))), kind: gussetKind, only: outlines(pleated) },
+        ],
+        anchor: { paper: anchor },
+      });
+    }
+  }
+  if (!out.length) throw new PresetError('There’s no paper for the flap to swing across that way.');
+  return out;
+}
+
+/**
+ * An open sink: the point at `tip` pushed in along the line through `at` square across it, the paper beyond the
+ * line turning inside out into the point's own inside, as when a point is opened out flat, its tip pressed in and
+ * closed up again. Every layer of the point folds along the line, each into the inside of the point: down under
+ * the faces lying the way the top one does (a mountain fold), up over the others (a valley fold), so the tip's
+ * layers tuck into the pockets between the point's layers rather than all to one side. On a point of two layers
+ * it's an inside reverse fold. A closed sink, the layers re-stacked inside a point that can't open, can't be made.
+ */
+function sink(frame: FoldFrame, tip: Vec2, at: Vec2, allowed: (paper: Vec2[]) => boolean): CollapseOp[] {
+  if (dist(tip, at) < TOL) throw new PresetError('Pick the tip of the point, then a point further in for it to sink to.');
+  const d = normalize(sub(at, tip));
+  const line: Line = { p: at, d: [-d[1], d[0]] };
+  const tipSide = Math.sign(sideOf(line, tip));
+  const s = stack(frame).filter((f) => allowed(f.paper));
+  const near = s.filter((f) => f.world.some((p) => sideOf(line, p) * tipSide > 1e-7));
+  const start = near.filter((f) => f.world.some((p) => dist(p, tip) < 1e-6));
+  if (!start.length) throw new PresetError('There’s no point there to sink. Pick the tip of a point.');
+  const crossing = connected(start, near).filter((f) => f.world.some((p) => sideOf(line, p) * tipSide < -1e-7));
+  if (!crossing.length) throw new PresetError('Pick a point on the paper for the tip to sink to.');
+  // The point's inside is the same side of the paper all round it: under the face on top, or (sunk from
+  // underneath) over the face at the bottom. Faces lying the way that face does fold to the same side of
+  // themselves, the others to the other side.
+  const ends: [Vec2, Vec2] = [add(at, scale(line.d, -dist(tip, at))), add(at, scale(line.d, dist(tip, at)))];
+  const anchor = bodyPaper(stack(frame), line, -tipSide);
+  const sunkFrom = (face: Face, below: boolean): CollapseOp => {
+    const up = frontUp(face.world, face.paper);
+    const alike = crossing.filter((f) => frontUp(f.world, f.paper) === up);
+    const other = crossing.filter((f) => !alike.includes(f));
+    const [mountain, valley] = below ? [other, alike] : [alike, other];
+    return {
+      op: 'collapse',
+      creases: [
+        ...(mountain.length ? [{ line: through(frame, ...ends), kind: 'mountain' as const, only: outlines(mountain) }] : []),
+        ...(valley.length ? [{ line: through(frame, ...ends), kind: 'valley' as const, only: outlines(valley) }] : []),
+      ],
+      anchor,
+    };
+  };
+  const fromTop = sunkFrom(crossing.reduce((a, b) => (b.rank < a.rank ? b : a)), false);
+  const fromBottom = sunkFrom(crossing.reduce((a, b) => (b.rank > a.rank ? b : a)), true);
+  return JSON.stringify(fromTop) === JSON.stringify(fromBottom) ? [fromTop] : [fromTop, fromBottom];
+}
+
 // ——— The stack ———
 
 interface Face extends FlatFace {
@@ -278,6 +396,39 @@ function connected(start: Face[], among: Face[]): Face[] {
   return [...found];
 }
 
+/** Faces of `among` reachable from `start` across edges they share, other than edges on `line`. */
+function connectedOff(start: Face[], among: Face[], line: Line, cuts?: [Vec2, Vec2][]): Face[] {
+  const found = new Set(start);
+  const queue = [...start];
+  while (queue.length) {
+    const f = queue.shift()!;
+    for (const g of among) if (!found.has(g) && joins([f], [g], cuts).some((j) => !onLine(j.world, line))) (found.add(g), queue.push(g));
+  }
+  return [...found];
+}
+
+/**
+ * A point of the sheet on one of `faces`, found out from `from` along `dir` (at distances scaled by `len`): paper
+ * that stays put, as the sheet there (not whatever lies over it).
+ */
+function stillAlong(faces: Face[], from: Vec2, dir: Vec2, len: number): Vec2 | null {
+  for (const k of [0.5, 0.25, 0.75, 1, 1.5, 2, 3]) {
+    const spot = add(from, scale(dir, k * len));
+    const face = faces.find((f) => inside(f.world, spot));
+    if (face) return unplaceLike(face)(spot).map(roundCoord) as Vec2;
+  }
+  return null;
+}
+
+/** A point of the sheet on the side `side` of `line`: on the biggest stretch of a face there. */
+function bodyPaper(faces: Face[], line: Line, side: number): CollapseOp['anchor'] {
+  const parts = faces.map((f) => (side > 0 ? split(f, line).pos : split(f, line).neg)).filter((p) => p !== null);
+  if (!parts.length) return { auto: true };
+  const area = (p: { paper: Vec2[] }) => Math.abs(p.paper.reduce((s, q, i) => s + cross(q, p.paper[(i + 1) % p.paper.length]), 0));
+  const biggest = parts.reduce((x, y) => (area(y) > area(x) ? y : x));
+  return { paper: centre(biggest.paper).map(roundCoord) as Vec2 };
+}
+
 /** A point of the sheet on the biggest face that isn't in `moving`: paper that stays put. */
 function stillPaper(faces: Face[], moving: Face[]): CollapseOp['anchor'] {
   const rest = faces.filter((f) => !moving.includes(f));
@@ -298,6 +449,8 @@ const onLineFrom = (seg: [Vec2, Vec2], p: Vec2) => dist(seg[0], p) < 1e-6 || dis
 /** The end of a segment farther from `p`. */
 const far = (p: Vec2, seg: [Vec2, Vec2]) => (dist(seg[0], p) > dist(seg[1], p) ? seg[0] : seg[1]);
 const lineFrom = (p: Vec2, seg: [Vec2, Vec2]) => lineThrough(p, far(p, seg));
+/** `v` turned by `angle` radians, the way that takes the x axis towards the z axis. */
+const rotate = (v: Vec2, angle: number): Vec2 => [v[0] * Math.cos(angle) - v[1] * Math.sin(angle), v[0] * Math.sin(angle) + v[1] * Math.cos(angle)];
 
 /** Where the ray from `p` along `d` meets the segment a–b, if it does. */
 function meet(p: Vec2, d: Vec2, a: Vec2, b: Vec2): Vec2 | null {

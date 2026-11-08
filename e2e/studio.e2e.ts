@@ -98,7 +98,7 @@ test.describe('studio library', () => {
     await expect(editor.locator('.tape:not(.planned)')).toHaveCount(1);
   });
 
-  test('makes named folds: a pleat, and a rabbit ear on a triangle', async ({ page }) => {
+  test('makes named folds: a pleat, a rabbit ear on a triangle, and a swivel', async ({ page }) => {
     await page.goto('/studio');
     await page.getByRole('button', { name: 'New design' }).click();
     const editor = page.getByRole('img', { name: 'The paper from above' });
@@ -133,6 +133,25 @@ test.describe('studio library', () => {
     await expect(editor.locator('.crease.pending')).toHaveCount(4);
     await apply();
     await expect(page.getByRole('textbox', { name: 'Step 2 title' })).toHaveValue('Rabbit ear');
+
+    // Back to the sheet, a corner folded over between two edges' middles, then swivelled 30° about the end of its
+    // hinge: the paper it swings across takes two creases, the new hinge and the gusset.
+    await page.getByRole('button', { name: 'Undo' }).click();
+    await page.getByRole('button', { name: 'Undo' }).click();
+    await page.getByRole('button', { name: 'Fold', exact: true }).first().click();
+    await page.getByRole('button', { name: 'Through 2 points' }).click();
+    await click(0, 0.5);
+    await click(0.5, 0);
+    await apply();
+    await expect(page.getByRole('textbox', { name: 'Step 1 title' })).toHaveValue('Valley fold');
+    await page.getByRole('button', { name: 'Named fold' }).click();
+    await page.getByRole('combobox', { name: 'Fold' }).selectOption({ label: 'Swivel fold' });
+    await expect(page.getByText('Pick the pivot at the end of the flap’s folded edge')).toBeVisible();
+    const a = Math.PI / 6;
+    for (const [x, z] of [[0, 0.5], [0.5, 0], [0.5 * Math.cos(a) - 0.5 * Math.sin(a), 0.5 - 0.5 * Math.sin(a) - 0.5 * Math.cos(a)]] as const) await click(x, z);
+    await expect(editor.locator('.crease.pending')).toHaveCount(2);
+    await apply();
+    await expect(page.getByRole('textbox', { name: 'Step 2 title' })).toHaveValue('Swivel fold');
   });
 
   test('moves the old single draft into the library', async ({ page }) => {

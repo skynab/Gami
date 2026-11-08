@@ -30,6 +30,8 @@ const PRESET_LABELS: Record<PresetKind, string[]> = {
   squash: ['O', 'M'],
   petal: ['P'],
   rabbitEar: ['1', '2', '3'],
+  swivel: ['O', '1', '2'],
+  sink: ['P', 'M'],
 };
 
 /**

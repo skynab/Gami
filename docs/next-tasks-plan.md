@@ -119,13 +119,20 @@ list can't go stale.
 
 | Row | Work | Size |
 |---|---|---|
-| 5 | Swivel and open sink as named folds | Medium |
+| 5 | ✅ Swivel and open sink as named folds (8 November) | Medium |
 | 6 | Bend with crease goals, solved in a worker, baked on save | Large; after the fan and boat have proved guides |
 | 7 | Bend with point goals (3D handles) | Large, and only if 6 shows the need |
 | 8 | Submissions with ownership and licence | Large; needs decisions first |
 
 ### 4. Smaller
 
+- **Reverse folds stack the point wrongly.** Found 8 November making the open sink: `collapse` works out where a
+  reverse fold's point tucks in (the middle of the flap's stack) from the faces the crease crosses, but only after
+  cutting them along it, so none cross and it's always 0. Every `inside` crease then lays the point behind all the
+  flap's layers, and every `outside` one in front: the crane's legs and neck, the seal's, the swan's and the rest
+  look right from the front, wrong from behind and as they play, and an outside reverse fold shows the wrong colour.
+  The fix is to measure the middle before cutting; it changes every model with a reverse fold, so their files are
+  made again (`npm run models`) and the grazes looked at again.
 - The fold engine's error messages are still English only (milestone 9 left them).
 - The recipes make named folds their own way; they could call `src/fold/presets.ts`, which the tests show gives
   the same paper.
@@ -138,6 +145,7 @@ list can't go stale.
 | Item | Status |
 |---|---|
 | Housekeeping | Done but for the branches (above). |
+| Studio, row 5 | Done 8 November: swivel and open sink in the Studio's Named fold (`src/fold/presets.ts`); see `docs/studio-plan.md`. Not yet in the common-folds lesson. |
 | Bending, rows 1 and 3 (boat) | Parked 8 November: its recipe and the opening lab on `dev`, findings in `docs/bending-plan.md` (step 7). Stays Coming soon. |
 | Bending, row 2 (fan) | Done 7 November: in the gallery. |
 | Bending, row 4 (balloon) | Started 8 November: the cube's shape and guides in `scripts/balloon-cube-lab.ts`; the path doesn't solve smoothly yet. |
