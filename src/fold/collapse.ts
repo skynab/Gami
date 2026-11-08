@@ -137,9 +137,13 @@ export function collapse(frame: FoldFrame, { creases, anchor, under }: CollapseO
     folded: frontUp(now[e.f], faces[e.f].paper) !== frontUp(now[e.g], faces[e.g].paper),
   }));
 
-  let layers: number[];
-  try {
-    layers = solveLayers(
+  // Faces that move together usually keep their order. Not always: opening a pocket and flattening it the
+  // other way (as when a hat becomes a diamond) lets layers swap, so if no stacking keeps the order, the
+  // solver tries again keeping it only for faces still hinged together along an unchanged crease, and then
+  // without it.
+  const hinged = new Set(edges.flatMap((e, i) => (change[i] ? [] : [e.f * faces.length + e.g, e.g * faces.length + e.f])));
+  const solve = (keep: 'all' | 'hinged' | 'none') =>
+    solveLayers(
       now.map((world) => ({ world })),
       layerEdges,
       (f, g) => {
@@ -147,7 +151,8 @@ export function collapse(frame: FoldFrame, { creases, anchor, under }: CollapseO
         if (k !== undefined) return k;
         const r = creaseOrder.get(g * faces.length + f);
         if (r !== undefined) return !r;
-        if (group[f] === group[g] && overlappedBefore(f, g)) return wasAbove(f, g) !== flipped[f];
+        if (group[f] === group[g] && overlappedBefore(f, g) && (keep === 'all' || (keep === 'hinged' && hinged.has(f * faces.length + g))))
+          return wasAbove(f, g) !== flipped[f];
         // A tucked flap goes under the faces it slides beneath.
         if (under) {
           const moved = (i: number) => group[i] !== group[start];
@@ -158,9 +163,15 @@ export function collapse(frame: FoldFrame, { creases, anchor, under }: CollapseO
       },
       (f, g) => (overlappedBefore(f, g) ? wasAbove(f, g) : group[f] !== group[start]),
     );
-  } catch (e) {
-    if (e instanceof LayerError) throw new FoldError(e.message);
-    throw e;
+  let layers: number[] = [];
+  for (const keep of ['all', 'hinged', 'none'] as const) {
+    try {
+      layers = solve(keep);
+      break;
+    } catch (e) {
+      if (!(e instanceof LayerError)) throw e;
+      if (keep === 'none') throw new FoldError(e.message);
+    }
   }
 
   return fromFlat(faces.map((f, i) => ({ ...f, world: now[i], layer: layers[i] })));

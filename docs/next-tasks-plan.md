@@ -80,13 +80,13 @@ git branch -d claude/lesson-bases-cf4d91 claude/lesson-folds-cc4e1d && git branc
 ### 1. Bending: the three coming-soon models (`docs/bending-plan.md`)
 
 The cup showed the way: work the shape out first and lead the paper there with guides, rather than leaving the
-solver to find it from a few goals. Every `wip/*` branch is 100 to 210 commits behind `dev`, so each starts by
-bringing its recipe across to a fresh branch.
+solver to find it from a few goals. The other `wip/*` branches are 100 to 210 commits behind `dev`; the boat's and
+the fan's recipes are on `dev` now, not yet in the gallery's list.
 
 | # | Work | Needs bending? |
 |---|---|---|
-| 1 | **Boat, as far as the small diamond.** Its two diamond squashes pass paper through paper (14 cm, then 1.7 cm). The staged, hinged and in-step playing other squashes use should clear them. | No |
-| 2 | **Fan.** Build the spread directly (each half strip a ruled surface from the pinch to its place on a quarter circle) and let the solver only settle it. The first try, from the flat stack, ended 100% stretched after 64 s. | Yes |
+| 1 | **Boat, as far as the small diamond.** On `dev`. The squashes now pass paper through paper by 0.007 and 0.025 (they were 14 cm and 1.7 cm). The second can't fold in step: kept joined, its creases follow another way of folding (bending plan, step 7). Next: live with 0.025 on `GRAZES`, or find what keeps its creases on this way of folding. | No |
+| 2 | **Fan.** On `dev`, redesigned to fold as origami.me does, so it can open at all; the spread is guided as a book's pages fanned round a half circle and holds its shape within 0.8%. Played, slivers in the mesh stretch 13% (5% allowed). Next: a grid mesh pattern for long thin faces (bending plan, step 6), then the cup, balloon and 3D tulip checked again. | Yes |
 | 3 | **Boat's opening.** Pulling the diamond's points apart, with guides as for the cup. | Yes |
 | 4 | **Balloon blown up**, and the 3D tulip with it: the blown-up shape built face by face first. | Yes |
 | 5 | **Shallow masu lid's locks.** They come apart by up to 0.08 as the flap goes over the wall; with rigid paper the flap is locked there. | Yes |
@@ -132,3 +132,4 @@ list can't go stale.
 | Item | Status |
 |---|---|
 | Housekeeping | Done but for the branches (above). |
+| Bending, rows 1 and 2 | Started 7 November: the boat's and fan's recipes on `dev`, findings in `docs/bending-plan.md` (steps 6 and 7). Neither is in the gallery yet. |

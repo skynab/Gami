@@ -228,6 +228,38 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
    - **Next.** Rather than solving from the flat stack, build the spread shape directly (each half strip a ruled
      surface from the pinch to its place on the arc) and let the solver only settle it and the frames on the
      way; and see where the time goes at this size.
+
+   **Second try** (November 2026, on `dev`: `src/models/recipes/fan.ts`, not yet in the gallery's list).
+   - **The recipe couldn't open.** It turned the paper back over before pleating, so the strip next to the flap
+     was at the bottom of the stack and, folded in half, outermost. The flap's corners fold through both its
+     layers, which locks them together, and so locks that strip's two halves, the outside of the whole stack:
+     shut, bent or not. origami.me collapses the pleats from the back (its step 6 doesn't turn back over), so
+     that strip ends on top, then in the middle once folded in half, and the flap locks the fan's middle, where
+     its photos show a closed rib. The recipe now does the same: pleated from the back, the second strip from
+     the left staying put and the rest going under it.
+   - **The flap stays out.** origami.me's step 10 closes the flap "towards the center of the fan". Its two
+     layers hang from the two middle layers, so folded over either face it would wrap one half of the stack and
+     hold it shut; tucked in between them (an inside reverse fold along its crease) the collapse reshuffled the
+     whole stack. With its corners folded it already holds the middle together, so it stays out, as a tab.
+   - **The shape** (`spread` in the recipe). The fan opens like a book whose spine is the fold at its bottom: the
+     bottom half of the stack fans up from the table on one side, the top half swings over onto the other, the
+     two middle layers and the flap stand upright between them, and each half strip is a page a share of a
+     quarter turn round. Between its creases a page is a ruled surface: at the spine the creases are a strip's
+     width apart across it, as they lie folded; further out they fan apart round the arc and draw in across it
+     to keep the page as wide. Every guided frame keeps the paper within 0.8%, paper passes through paper by
+     at most half a centimetre, and the solved paper stays within 1.5 mm of its guides (0.01 at worst).
+   - **What's left: slivers.** Played, the step stretches 13% (16 stages), 6.5% (32) or 8.5% (48); 5% is
+     allowed. At each stage it's under 0.8%: in between, each triangle takes its own screw from one frame to
+     the next and shared corners are averaged, and the worst are slivers along the pages' edges, 10° at their
+     narrow corner, whose normals swing by 45° from one stage to the next while their corners move half a
+     millimetre. Splitting the longest edge never splits a face's 10° corner (the diagonal of a strip 0.0875
+     by 0.5): it's passed down, and the points it adds line up along the diagonal, close to the edges, so
+     swapping diagonals within a face (tried) doesn't help. More stages don't either: the last stage's extra
+     polishing jumps, and over 20 stages the file is past 1 MB. At 16 stages and a mesh of 0.15 (576
+     triangles) it solves in 7 s.
+   - **Next.** A mesh pattern for long thin faces (see the open question below): points on a regular grid in each
+     face, the outline cut evenly to match its neighbours. Every bent model's mesh would change with it, so the
+     cup, the balloon and the 3D tulip need their checks again.
 7. **The boat.** Pulling the diamond's points apart, as a bend from the small diamond. Done as for the fan.
 
    **Started; not reachable yet.** What the first try found (on `wip/boat`):
@@ -309,6 +341,14 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      Step 13's squash, played backwards part way, isn't boat-shaped either (it's staged, a flap lifted then moved).
    - **Next.** Work out where each of the diamond's 28 faces goes in the finished boat (a paper model would settle
      it), then give the opening as those faces' crease angles.
+   - **On `dev`** (November 2026: `src/models/recipes/boat.ts`, not yet in the gallery's list, and the collapse
+     change, which only acts where a stacking would otherwise fail). With what's come since (paper joined up
+     sooner, creases round a point folded in step), the squashes into the diamonds pass paper through paper by
+     0.007 and 0.025, not 14 cm and 1.7 cm. The first folds hinged, in step, and grazes only as the strip's ends
+     meet, one tucked under the other. The second can't fold in step: kept joined, its creases follow another
+     way of folding the paper (some stay put, some turn the wrong way) and jump at the end, and nearly halfway
+     it parts by just over the 0.003 allowed. Changing which paper stays put makes no difference (0.029 to
+     0.033 whichever face). It would go on `GRAZES` at about 0.025 if the boat went in as it is.
 
    **The paper balloon** (October 2026). The gallery's water bomb ends flat, with "blow into the hole" in words;
    blowing it up is a bend of its own (Kids Web Japan's balloon, the same model, ends as a rounded cube with a crease
@@ -443,5 +483,7 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
 - **Replay in other browsers.** Should a bend step's replay in the Studio re-solve (and possibly differ slightly), or
   keep the baked frames and only re-solve when an earlier step changes?
 - **Mesh pattern.** A regular grid of right triangles is simplest; aligned to the paper's creases it meshes cleanly.
-  Is that enough, or does the fan's twist need a finer mesh near the pinched end?
+  Is that enough, or does the fan's twist need a finer mesh near the pinched end? (November 2026: the fan needs
+  it. Ear-clipping then splitting long edges leaves its strips full of 10° slivers, which stretch as the step
+  plays; see step 6.)
 - **A bend tool in the Studio.** Worth it only if creators ask for curved finishes.
