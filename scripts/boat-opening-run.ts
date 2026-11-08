@@ -1,0 +1,24 @@
+// The boat opened by its guides: time, stretch, how deep paper goes through paper as it plays.
+import { writeFileSync } from 'node:fs';
+import { boat } from '../src/models/recipes/boat';
+import { openingGuides, STAGES } from './boat-opening-lab';
+import { problems, bendStrain } from '../src/fold/validate';
+import { crossingAt } from '../src/fold/collisions';
+import { stepTransition } from '../src/fold/animate';
+import { toFoldFile } from '../src/fold/fold-format';
+const r = boat();
+const goals = openingGuides(r);
+const t0 = performance.now();
+r.bend({ title: 'Open it into a boat', text: 'Pull the two top corners apart.' }, { flex: () => true, anchor: [0, 0], goals, mesh: +(process.env.MESH ?? 0.07), stages: STAGES, free: true });
+const model = r.build();
+const k = model.steps.length;
+console.log('solved in', Math.round(performance.now() - t0), 'ms; triangles', model.steps[k - 1].frame.faces_vertices.length, 'stages', STAGES);
+console.log('problems', JSON.stringify(problems(model)));
+console.log('strain', JSON.stringify(bendStrain(model, k)));
+const t = stepTransition(model, k);
+const n = 16;
+console.log('crossing', JSON.stringify(Array.from({ length: n }, (_, i) => +Math.max(0, ...crossingAt(t, (i + 1) / n - 1e-9).map((c) => c.depth)).toFixed(4))));
+const f = model.steps[k - 1].frame;
+const ys = f.vertices_coords.map((q) => q[1]);
+console.log('height', Math.max(...ys).toFixed(3), 'low', Math.min(...ys).toFixed(3));
+if (process.env.OUT) writeFileSync(process.env.OUT, JSON.stringify(toFoldFile({ ...model, id: 'boat-lab' })));

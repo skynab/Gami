@@ -393,8 +393,24 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      round under the keel and up the far side, its fold at the keel opening right out and closing the other
      way. On the way it passes the layers under it (the other wall's bow triangle, the quarters, the brims), so
      a guided path needs staging (the sail halves up first, the swing after) and the paper lifted off the
-     table (`free`). Not tried yet; a paper boat opened slowly, watching which wall comes round, would confirm
-     it before building the guides.
+     table (`free`).
+   - **Tried: the staged swing** (November 2026, `scripts/boat-opening-lab.ts`, run by `boat-opening-run.ts`).
+     Every face's path is a chain of hinged turns: sail halves and the quarters' inner halves up about the keel,
+     the upper (starboard) wall up onto its sail, the lower (port) wall round under the keel carrying the
+     quarters' outer halves folded inside it, the end triangles turned in about their grey creases until their
+     corners reach the middle plane (found by search), the brims folded down inside, and the brims' smaller
+     pieces turned on their hinges to where their mirror across the gunwale lands. The end shape holds
+     together: every point shared by two faces lands in one place to within 0.026 (the four tips, as above).
+     Solved (1840 triangles, 12 or 24 stages, 15–32 s), the path tangles: 8–10% stretched, and up to 300
+     triangles flipping right over between stages. It starts where the starboard wall's bow triangle has to
+     get past the port wall. The small diamond's halves interlock: that triangle, folded under its wall, wraps
+     round the port wall's middle, while the port wall's own bow triangle and brim wrap round it from below,
+     like two folders each holding a page of the other. That's what holds the diamond together, and a path
+     keeping every face rigid can't take them apart; moving the port wall first only moves the clash. Giving
+     the brims their own phase, after their wall is up, cut the flipping early on but not the clash.
+   - **Next.** How real paper unlocks them: a paper boat opened slowly, watching the starboard wall's bow
+     triangle and the port wall's bow brim. Perhaps they stay interlocked in the finished boat (one tucked round
+     the other at that end), in which case the end shape here is wrong there, not the path.
 
    **The paper balloon** (October 2026). The gallery's water bomb ends flat, with "blow into the hole" in words;
    blowing it up is a bend of its own (Kids Web Japan's balloon, the same model, ends as a rounded cube with a crease
