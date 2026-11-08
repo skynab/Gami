@@ -360,6 +360,22 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      way of folding the paper (some stay put, some turn the wrong way) and jump at the end, and nearly halfway
      it parts by just over the 0.003 allowed. Changing which paper stays put makes no difference (0.029 to
      0.033 whichever face). It would go on `GRAZES` at about 0.025 if the boat went in as it is.
+   - **The finished boat, from origami.me's diagrams** (November 2026). Its last diagram is the boat side on: a
+     trapezoid hull, the gunwale long and straight from bow point to stern point, the keel half as long, two
+     grey creases from the keel's ends up to the gunwale's middle, and a small sail just showing above it there.
+     On the sheet that reads as: the gunwales are the brim folds (v = ±0.5, each 1.0 long, the striped brims
+     lining the inside); the bow and stern are the hat's corners, (∓0.5, ±0.5); the keel runs between the small
+     diamond's side corners (±0.25, v), 0.5 long, the two walls meeting along it; each wall is the trapezoid of
+     its quarter between gunwale and keel (0.25 high), the grey creases its edges from the keel's ends to the
+     gunwale's middle (0, ±0.5); and the rest of that quarter, past the keel, folds up inside along a new crease
+     (v = ±0.25, across two faces) into half the sail, its tip the sheet's middle, 0.25 above the keel, so just
+     above gunwales whose walls lean out. The quarters at bow and stern join the walls along the stem.
+   - **Why it needs designing, not finding.** At each end of the keel two straight creases cross square (the
+     diamond's diagonal and the line from the gunwale's middle to the raw edge's), and such a vertex can't fold
+     in 3D, only flat; the bow quarter can't lie flat in the middle either (its corner would land under the
+     keel or on the sail's tip). So the paper bends round the keel's ends and the stem, and a guided opening
+     needs a shape that keeps the paper's lengths there, worked out as the cup's was, or measured off a paper
+     boat face by face.
 
    **The paper balloon** (October 2026). The gallery's water bomb ends flat, with "blow into the hole" in words;
    blowing it up is a bend of its own (Kids Web Japan's balloon, the same model, ends as a rounded cube with a crease
