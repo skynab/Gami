@@ -1,6 +1,7 @@
 /**
  * Tuning the energy solver (see src/fold/bend/minimize.ts): a model's bend solved again from its .fold file, with
- * the solver as the environment sets it (E_METHOD=energy, E_* weights), and the bend report on it.
+ * the solver as it is now (its weights in solver.ts's `ENERGY`), and the bend report on it. Seconds, where building
+ * the model again folds it all.
  *
  *   npx tsx scripts/energy-tune.ts <model id> [step]
  */
@@ -19,5 +20,5 @@ const t0 = performance.now();
 const { frame, via } = applyOp(before, step.op);
 const ms = Math.round(performance.now() - t0);
 const again = { ...model, steps: [...before.steps, { ...step, frame, via }] };
-console.log(`${id} step ${k} (${process.env.E_METHOD ?? 'passes'}): solved in ${ms} ms`);
+console.log(`${id} step ${k}: solved in ${ms} ms`);
 console.log(describeBend(bendReport(again, k)).join('\n'));
