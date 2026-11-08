@@ -3,7 +3,8 @@ import type { Vec2 } from '../../fold/types';
 
 /**
  * The traditional paper boat, from an A4 sheet, following origami.me/traditional-boat, as far as the small
- * diamond. Not in the gallery yet: opening it into a boat waits for bending (docs/bending-plan.md, step 7).
+ * diamond. Parked, not in the gallery: opening it into a boat tangles where the diamond's halves interlock
+ * (docs/bending-plan.md, step 7).
  */
 export function boat() {
   const h = Math.SQRT2 / 2;

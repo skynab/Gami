@@ -273,7 +273,7 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      0.8%, 1.5% as it plays, paper through paper by at most 0.0025, the file 732 KB.
 7. **The boat.** Pulling the diamond's points apart, as a bend from the small diamond. Done as for the fan.
 
-   **Started; not reachable yet.** What the first try found (on `wip/boat`):
+   **Parked (8 November 2026); not reachable yet.** What the first try found (on `wip/boat`):
    - **The branch.** Its recipe and collapse change still apply to `dev`, and the boat folds to the small diamond
      (28 faces, 13 layers) with no `problems`. But its two diamond squashes pass paper through paper: the first
      by 14 cm, the second by 1.7 cm. They need the staged and hinged playing other squashes have before the boat
@@ -408,9 +408,10 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      like two folders each holding a page of the other. That's what holds the diamond together, and a path
      keeping every face rigid can't take them apart; moving the port wall first only moves the clash. Giving
      the brims their own phase, after their wall is up, cut the flipping early on but not the clash.
-   - **Next.** How real paper unlocks them: a paper boat opened slowly, watching the starboard wall's bow
-     triangle and the port wall's bow brim. Perhaps they stay interlocked in the finished boat (one tucked round
-     the other at that end), in which case the end shape here is wrong there, not the path.
+   - **Parked** (8 November 2026). The boat stays Coming soon, its recipe and the lab on `dev`. What would
+     unpark it: a paper boat opened slowly, watching the starboard wall's bow triangle and the port wall's bow
+     brim, to see how real paper unlocks them. Perhaps they stay interlocked in the finished boat (one tucked
+     round the other at that end), in which case the end shape here is wrong there, not the path.
 
    **The paper balloon** (October 2026). The gallery's water bomb ends flat, with "blow into the hole" in words;
    blowing it up is a bend of its own (Kids Web Japan's balloon, the same model, ends as a rounded cube with a crease
