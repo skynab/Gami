@@ -89,11 +89,23 @@ checker; the tolerance for bent steps is set from what the solver reaches.
 - `gami:op` gains `bend` (above), checked by `parseOp` like the rest.
 - Frames gain `gami:soft`: the edges between triangles of bending paper, as pairs of vertex indices. Drawing
   skips their lines and shades across them smoothly; the fold engine and checks treat them as ordinary edges.
-- In-between frames go in `gami:via`, as now.
+- In-between frames go in `gami:via`, as now. A bend's are written compactly (November 2026): they share the
+  step's triangles, points on the sheet and seams, so each is just how far its points move from the frame before,
+  in whole steps of 1e-5 (`gami:moves`); bent paper's points are kept to 1e-5, a seventieth of the gap between
+  layers, not 1e-9. The bend's guides' paths go the same way, losslessly, as recipes round them to millionths
+  (`gami:path`). Files written before still read.
 
 **Size.** A meshed step and its in-between frames are much bigger than a flat one. Budget: a bent model's file
-stays under 1 MB (the largest model now, the frog, is 288 KB). Levers: coarser mesh where the paper barely
-bends, fewer in-between frames (the viewer interpolates between them), and only the bending region meshed.
+stays under 1 MB. Written compactly, the bent models went from 715–975 KB to 170–250 KB (the fan 250 KB, the cup
+249, the balloon 200, the 3D tulip 173): before, the repeated triangles and points on the sheet were over half of
+each, and the fan's guides a third of it. Other levers, if needed: coarser mesh where the paper barely bends, fewer
+in-between frames (the viewer interpolates between them), and only the bending region meshed.
+
+**Looking at a bend.** `npm run bend-report -- <model id, or a .fold file> [step]` (`src/fold/bend/report.ts`)
+says what each bent step does, and where on the sheet: its stretch in its frames and as it plays, the most any
+triangle turns from one frame to the next (paper snapping through turns a long way at once), how far the paper
+is behind its guides stage by stage, how deep paper goes through paper, and its share of the file. The labs in
+`scripts/` print it too.
 
 ## What changes elsewhere
 
@@ -471,7 +483,7 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      150° between two frames). Unchanged with exact guides on the plus alone, without the layers' sides, with the
      end faces left unguided, with guides right up to T and the hole, with twice the stages, a finer mesh (0.045)
      or guides held 100 times stiffer. The solver keeps paper folded along creases it has rather than make a fold
-     that moves across it. The file is also over budget as it is: 1.2 MB at 12 stages.
+     that moves across it. The file was over budget too, 1.2 MB at 12 stages; 312 KB written compactly.
    - **Tried: a rolling fold** (`MODE=roll`). The moving fold is sharp: it starts almost flat on the diagonal
      crease (the path round the corner turning 159°) and eases to the cube's edge from the corner to the middle of
      the gusset's edge (94° near the end), so in effect it rolls from one to the other, passing within a few
@@ -567,6 +579,30 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      each other across a pocket get an order that needn't be right within a few centimetres of where they meet (none
      shows in these models), and paper that swings past other paper as it bends (a fan's pleats) would need it
      thought about again.
+
+## Improving the solver
+
+Outlined in November 2026, after the boat and the balloon showed its limits (see step 7): paper that falls behind
+its guides and then snaps through, playing that stretches wherever a triangle turns a lot relative to its
+neighbours, paper through paper (points against triangles only, and only at moments), guides worked out by hand
+for each model, finer meshes behaving worse, and no new creases. Tried on the balloon and no help: stiffer guides,
+more stages, a finer mesh, no sides kept by layer, creases free to turn (they're held at the angle they start at,
+folded flat in a stack), a rolled fold. In order:
+
+| # | Work | Size | Status |
+|---|---|---|---|
+| 1 | Smaller files: bends' in-between frames and guides written compactly (see Format) | Small | ✅ November 2026 |
+| 2 | A report on each bent step: stretch, turns between frames, lag behind guides, crossings, where (see Format) | Small | ✅ November 2026 |
+| 3 | Each stage started where the guides put the paper (with dense guides), and the guides moved gradually within a stage rather than all at once, so the paper can't fall behind | Small | |
+| 4 | A stage split where something snaps (a triangle turning further than a limit, or the paper falling behind), keeping only the frames needed | Medium | |
+| 5 | Paths found, not designed: from the start and a designed end shape, the in-between shapes that stretch the paper least (each fold's angle interpolated and the points rebuilt, as in Kilian, Mitra and Pottmann, "Geometric modeling in shape space", 2007) | Medium–large | |
+| 6 | One energy per stage (stretch, bending, guides, contact) solved to its minimum by Newton's method, in place of passes and three different settlings | Large | |
+| 7 | Contact paper can't cross: checked continuously between steps, edge against edge too, ideally a barrier (IPC, Li et al. 2020) | Large | |
+| 8 | Playing that keeps lengths: a few passes setting edge lengths in the viewer after blending | Small–medium | |
+| 9 | A mesh that fits the bend: solved coarsely, refined where any frame bends sharply, coarsened where none does | Medium | |
+| 10 | Creases that form: a hinge bent past a limit takes its new angle as its rest | Medium | |
+
+The balloon's snapping wants 3, 4 and 5; crossings (the cup, the 3D tulip, the balloon) 7; the iris 10.
 
 ## Risks
 

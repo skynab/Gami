@@ -1,31 +1,21 @@
-// The balloon blown up by its guides into a cube: time, stretch, how deep paper goes through paper as it plays.
+// The balloon blown up by its guides into a cube, and what its bend does (see src/fold/bend/report.ts).
 import { writeFileSync } from 'node:fs';
 import { Recipe } from '../src/fold/recipe';
 import { tuckedSide, waterbombBase } from '../src/models/recipes/waterbomb-base';
 import { cubeGuides, STAGES } from './balloon-cube-lab';
-import { problems, bendStrain } from '../src/fold/validate';
-import { crossingAt } from '../src/fold/collisions';
-import { stepTransition } from '../src/fold/animate';
+import { bendReport, describeBend } from '../src/fold/bend/report';
 import { toFoldFile } from '../src/fold/fold-format';
 const r = waterbombBase(new Recipe({ id: 'balloon', title: 'Balloon', sheet: { size: [1, 1], front: '#4caf50', back: '#f6f3ec' } }));
 tuckedSide(r);
 r.turnOver('Turn it over, and do the same on this side.');
 tuckedSide(r);
 const goals = cubeGuides(r.current);
-console.log('guides', goals.length);
 const t0 = performance.now();
 r.bend({ title: 'Blow it up', text: 'Blow into the hole.' }, { flex: () => true, anchor: [0, 0], goals, mesh: +(process.env.MESH ?? 0.07), stages: STAGES, free: true });
 const model = r.build();
-const k = model.steps.length;
-console.log('solved in', Math.round(performance.now() - t0), 'ms; triangles', model.steps[k - 1].frame.faces_vertices.length, 'stages', STAGES);
-console.log('problems', JSON.stringify(problems(model)));
-console.log('strain', JSON.stringify(bendStrain(model, k)));
-const t = stepTransition(model, k);
-const n = 12;
-console.log('crossing', JSON.stringify(Array.from({ length: n }, (_, i) => +Math.max(0, ...crossingAt(t, (i + 1) / n - 1e-9).map((c) => c.depth)).toFixed(4))));
-const f = model.steps[k - 1].frame;
+console.log(`${goals.length} guides, solved in ${Math.round(performance.now() - t0)} ms`);
+console.log(describeBend(bendReport(model, model.steps.length)).join('\n'));
+const f = model.steps.at(-1)!.frame;
 const ext = [0, 1, 2].map((c) => { const xs = f.vertices_coords.map((q) => q[c]); return `${Math.min(...xs).toFixed(3)}..${Math.max(...xs).toFixed(3)}`; });
-console.log('extent x y z', ext.join(' '));
-const json = JSON.stringify(toFoldFile({ ...model, id: 'balloon-lab' }));
-console.log('file', Math.round(json.length / 1024), 'KB');
-if (process.env.OUT) writeFileSync(process.env.OUT, json);
+console.log('  extent x y z           ', ext.join(' '));
+if (process.env.OUT) writeFileSync(process.env.OUT, JSON.stringify(toFoldFile({ ...model, id: 'balloon-lab' })));

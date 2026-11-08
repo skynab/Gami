@@ -15,6 +15,11 @@ import { CATEGORIES, DIFFICULTIES, STEP_KINDS, type About, type FoldFrame, type 
  *
  * How the gallery describes the model (`gami:about`: its blurb, difficulty, category, minutes and how its card
  * shows it) travels with it too. Anything there that isn't understood is left out.
+ *
+ * Bent paper (see docs/bending-plan.md) is written compactly, as it's most of a bent model's file: its points to
+ * 1/`BENT`; the frames a bend passes through (`gami:via`), which share the step's triangles, points on the sheet
+ * and seams, as just how far each point moves from one to the next (`gami:moves`); and the paths of the bend's
+ * guides the same way (`gami:path`, in whole millionths, as recipes round them). Files written before still read.
  */
 
 interface FoldFileFrame {
@@ -34,10 +39,20 @@ interface FoldFileFrame {
   'gami:kind'?: StepKind;
   'gami:section'?: string;
   /** Frames the step passes through on its way, as when unfolding several folds one after another. */
-  'gami:via'?: FoldFileFrame[];
+  'gami:via'?: (FoldFileFrame | MovedFrame)[];
   /** What the step draws on the paper. */
   'gami:marks'?: Mark[];
-  'gami:op'?: Op;
+  /** How the step was made: an operation, a bend's guides' paths written as moves (see `writeOp`). */
+  'gami:op'?: Op | Record<string, unknown>;
+}
+
+/**
+ * A frame a bend passes through, which has the step's triangles, points on the sheet and seams: where its points
+ * are, as whole steps of 1/`BENT` from where they were in the frame before (from 0 in the first), x, y, z for each.
+ */
+interface MovedFrame {
+  'gami:moves': number[];
+  'gami:faces_parent'?: number[];
 }
 
 export interface FoldFile extends FoldFileFrame {
@@ -67,15 +82,15 @@ export function toFoldFile(model: OrigamiModel): FoldFile {
     ...(model.steps.some((s) => s.op) && { 'gami:ops': OPS_VERSION }),
     // The start is kept exactly, as everything replayed from the file starts from it: a sheet's corners can be
     // irrational (an A4 sheet's are at ±√2/2), and rounded they'd put every later step a hair out.
-    ...writeFrame(model.start, (x) => x),
+    ...writeFrame(model.start, true),
     file_frames: model.steps.map((s) => ({
       frame_title: s.title,
       ...(s.text && { 'gami:text': s.text }),
       ...(s.kind && { 'gami:kind': s.kind }),
       ...(s.section && { 'gami:section': s.section }),
-      ...(s.via?.length && { 'gami:via': s.via.map((v) => writeFrame(v)) }),
+      ...(s.via?.length && { 'gami:via': writeVia(s.via, s.frame) }),
       ...(s.marks?.length && { 'gami:marks': s.marks.map(writeMark) }),
-      ...(s.op && { 'gami:op': s.op }),
+      ...(s.op && { 'gami:op': writeOp(s.op) }),
       ...writeFrame(s.frame),
     })),
   };
@@ -94,7 +109,7 @@ export function fromFoldFile(file: FoldFile, warnings: string[] = []): OrigamiMo
   const opOf = (f: FoldFileFrame, k: number): { op?: Op } => {
     if (!withOps || f['gami:op'] === undefined) return {};
     try {
-      return { op: parseOp(f['gami:op'], `step ${k + 1}`) };
+      return { op: parseOp(readOp(f['gami:op']), `step ${k + 1}`) };
     } catch (e) {
       warnings.push((e as Error).message);
       return {};
@@ -115,18 +130,20 @@ export function fromFoldFile(file: FoldFile, warnings: string[] = []): OrigamiMo
     ...aboutOf(file['gami:about']),
     sheets,
     start: readFrame(file),
-    steps: file.file_frames.map(
-      (f, k): Step => ({
+    steps: file.file_frames.map((f, k): Step => {
+      const frame = readFrame(f);
+      const via = f['gami:via'] && viaOf(f['gami:via'], frame, k, warnings);
+      return {
         title: f.frame_title ?? '',
         ...(f['gami:text'] && { text: f['gami:text'] }),
         ...(STEP_KINDS.includes(f['gami:kind']!) && { kind: f['gami:kind'] }),
         ...(f['gami:section'] && { section: f['gami:section'] }),
-        ...(f['gami:via'] && { via: f['gami:via'].map(readFrame) }),
-        frame: readFrame(f),
+        ...(via && { via }),
+        frame,
         ...marksOf(f, k),
         ...opOf(f, k),
-      }),
-    ),
+      };
+    }),
   };
 }
 
@@ -149,9 +166,22 @@ function aboutOf(x: unknown): Pick<OrigamiModel, 'about' | 'card'> {
 /** Coordinates rounded to 1e-9: enough for any sheet, and keeps files small and diffs readable. */
 export const roundCoord = (x: number) => Math.round(x * 1e9) / 1e9 || 0;
 
-function writeFrame(f: FoldFrame, round: (x: number) => number = roundCoord): FoldFileFrame {
+/**
+ * Bent paper's points are kept to 1/BENT of the sheet, a seventieth of the gap between layers: finer than anything
+ * shows, and nothing folds from them (nothing can be folded after a bend).
+ */
+export const BENT = 1e5;
+const roundBent = (x: number) => Math.round(x * BENT) / BENT || 0;
+
+/** Guides' paths as recipes round them: whole millionths of the sheet. */
+const GUIDE = 1e6;
+
+/** A frame as the file keeps it: `exact` for the start, which everything replayed is folded from. */
+function writeFrame(f: FoldFrame, exact = false): FoldFileFrame {
+  const round = exact ? (x: number) => x : roundCoord;
+  const coord = exact ? round : f.soft?.length ? roundBent : roundCoord;
   return {
-    vertices_coords: f.vertices_coords.map((p) => p.map(round)),
+    vertices_coords: f.vertices_coords.map((p) => p.map(coord)),
     faces_vertices: f.faces_vertices,
     'gami:vertices_paper': f.vertices_paper.map((p) => p.map(round)),
     ...(f.faces_parent && { 'gami:faces_parent': f.faces_parent }),
@@ -160,6 +190,84 @@ function writeFrame(f: FoldFrame, round: (x: number) => number = roundCoord): Fo
     ...(f.tapes?.length && { 'gami:tapes': f.tapes.map((t) => ({ pieces: t.pieces.map(writeMark) })) }),
     ...(f.soft?.length && { 'gami:soft': f.soft }),
   };
+}
+
+/**
+ * A step's in-between frames: as moves (see MovedFrame) when they're a bend's, with the step's triangles, points on
+ * the sheet and seams, else as frames of their own.
+ */
+function writeVia(via: FoldFrame[], frame: FoldFrame): FoldFileFrame[] | MovedFrame[] {
+  const shared = (v: FoldFrame) =>
+    v.vertices_coords.length === frame.vertices_coords.length && same(v.faces_vertices, frame.faces_vertices) && same(v.vertices_paper, frame.vertices_paper) && same(v.soft, frame.soft);
+  if (!frame.soft?.length || !via.every(shared)) return via.map((v) => writeFrame(v));
+  let before = frame.vertices_coords.flatMap(() => [0, 0, 0]);
+  return via.map((v): MovedFrame => {
+    const now = v.vertices_coords.flatMap((p) => p.map((x) => Math.round(x * BENT)));
+    const moves = now.map((x, i) => x - before[i] || 0);
+    before = now;
+    return { 'gami:moves': moves, ...(v.faces_parent && { 'gami:faces_parent': v.faces_parent }) };
+  });
+}
+
+/** In-between frames read from a file: written whole, or as moves, with the step's frame's triangles (see MovedFrame). */
+function viaOf(entries: (FoldFileFrame | MovedFrame)[], frame: FoldFrame, k: number, warnings: string[]): FoldFrame[] | undefined {
+  if (!Array.isArray(entries)) return undefined;
+  if (!entries.some((e) => 'gami:moves' in e)) return entries.map((e) => readFrame(e as FoldFileFrame));
+  const n = frame.vertices_coords.length * 3;
+  const whole = (m: unknown): m is number[] => Array.isArray(m) && m.length === n && m.every((x) => Number.isSafeInteger(x));
+  if (!entries.every((e) => 'gami:moves' in e && whole(e['gami:moves']))) {
+    warnings.push(`Step ${k + 1}’s in-between frames aren’t well formed, so it plays straight to its end.`);
+    return undefined;
+  }
+  let at = new Array<number>(n).fill(0);
+  return (entries as MovedFrame[]).map((e): FoldFrame => {
+    at = at.map((x, i) => x + e['gami:moves'][i]);
+    const parent = e['gami:faces_parent'];
+    const { faces_parent: _, ...shared } = frame;
+    return {
+      ...shared,
+      vertices_coords: frame.vertices_coords.map((_q, v) => [at[3 * v] / BENT || 0, at[3 * v + 1] / BENT || 0, at[3 * v + 2] / BENT || 0]),
+      ...(Array.isArray(parent) && parent.every((f) => Number.isInteger(f)) && { faces_parent: parent }),
+    };
+  });
+}
+
+/** A bend's guides' paths, when they're whole millionths, as moves from one entry to the next (see `readOp`). */
+function writeOp(op: Op): Op | Record<string, unknown> {
+  if (op.op !== 'bend') return op;
+  const onGrid = (x: number) => Math.abs(x * GUIDE - Math.round(x * GUIDE)) < 1e-6;
+  return {
+    ...op,
+    goals: op.goals.map((g) => {
+      if (!('guide' in g) || !g.path.every((q) => q.every(onGrid))) return g;
+      const whole = g.path.flatMap((q) => q.map((x) => Math.round(x * GUIDE)));
+      return { guide: g.guide, 'gami:path': whole.map((x, i) => (i < 3 ? x : x - whole[i - 3]) || 0) };
+    }),
+  };
+}
+
+/** A bend's guides' paths back from moves (see `writeOp`), before the operation is checked like any other. */
+function readOp(x: unknown): unknown {
+  const o = x as { op?: unknown; goals?: unknown };
+  if (typeof x !== 'object' || x === null || o.op !== 'bend' || !Array.isArray(o.goals)) return x;
+  return {
+    ...o,
+    goals: o.goals.map((g) => {
+      const moves = (g as Record<string, unknown> | null)?.['gami:path'];
+      if (!Array.isArray(moves) || moves.length % 3 || !moves.every((m) => Number.isSafeInteger(m))) return g;
+      const { 'gami:path': _, ...rest } = g as Record<string, unknown>;
+      const at = [0, 0, 0];
+      const path = Array.from({ length: moves.length / 3 }, (_q, i) => at.map((_x, c) => (at[c] += moves[3 * i + c]) / GUIDE || 0));
+      return { ...rest, path };
+    }),
+  };
+}
+
+/** Whether two arrays read the same, entry by entry, nested or not. */
+function same(a: unknown, b: unknown): boolean {
+  if (a === b) return true;
+  if (!Array.isArray(a) || !Array.isArray(b) || a.length !== b.length) return false;
+  return a.every((x, i) => same(x, b[i]));
 }
 
 function writeMark(m: Mark): Mark {
