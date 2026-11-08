@@ -593,7 +593,7 @@ folded flat in a stack), a rolled fold. In order:
 |---|---|---|---|
 | 1 | Smaller files: bends' in-between frames and guides written compactly (see Format) | Small | ✅ November 2026 |
 | 2 | A report on each bent step: stretch, turns between frames, lag behind guides, crossings, where (see Format) | Small | ✅ November 2026 |
-| 3 | Each stage started where the guides put the paper (with dense guides), and the guides moved gradually within a stage rather than all at once, so the paper can't fall behind | Small | |
+| 3 | Each stage started where the guides put the paper (with dense guides), and the guides moved gradually within a stage rather than all at once, so the paper can't fall behind | Small | Tried November 2026: no help (below) |
 | 4 | A stage split where something snaps (a triangle turning further than a limit, or the paper falling behind), keeping only the frames needed | Medium | |
 | 5 | Paths found, not designed: from the start and a designed end shape, the in-between shapes that stretch the paper least (each fold's angle interpolated and the points rebuilt, as in Kilian, Mitra and Pottmann, "Geometric modeling in shape space", 2007) | Medium–large | |
 | 6 | One energy per stage (stretch, bending, guides, contact) solved to its minimum by Newton's method, in place of passes and three different settlings | Large | |
@@ -603,6 +603,27 @@ folded flat in a stack), a rolled fold. In order:
 | 10 | Creases that form: a hinge bent past a limit takes its new angle as its rest | Medium | |
 
 The balloon's snapping wants 3, 4 and 5; crossings (the cup, the 3D tulip, the balloon) 7; the iris 10.
+
+**Row 3, tried** (November 2026, on the balloon's exact guides). Leading the paper to its guides at each stage's
+start (their moves spread over the mesh by its edges, so layers lying over each other aren't dragged along) put it
+within 3–12 mm of them; ramping the guides over half a stage, or both, changed nothing either: the paper was as
+far behind (1.4, 2.3, 3.5, 3.6 cm at stages 2 to 5) and snapped as before. It isn't falling behind as it goes.
+Traced through a stage, the paper ends its passes 10–100% stretched (once 1000%), with bending held or not and
+layers kept apart or not; then setting the edges' lengths at the stage's end, which knows nothing of the guides,
+moves it 1–5 cm, and that's where it's kept. Setting lengths with the guides held softly as well (`keepLengths`
+with guide rows) took the worst of it to 3 cm, no more. Two causes:
+- **Guides the mesh can't follow.** Placed exactly where the cube's map puts them (`scripts/balloon-mesh-fit.ts`),
+  the mesh's own triangles stretch: 80–135 of the 1400 over 1%, up to 48% on the way and 25% at the cube. Folds of
+  the map cross triangles rather than running along their edges: the cube's edges (inside faces of the flat stack:
+  in it, all the cube's top and bottom edges lie on two lines across the table), the end triangles' moving folds,
+  and flaps wrapped round an edge many layers out (a few millimetres longer than the face under them, which is
+  real). Creasing the cube's edges first, across the stack, brought it to 63–120 triangles (9% at most at the cube)
+  and the stretch within a stage to 7–24%, but the paper was still as far behind.
+- **A stage that doesn't settle.** 120 passes, a step solving everything together every 20 (each limited to a few
+  millimetres), and then lengths set alone: where guides and lengths disagree, the paper never reaches a balance
+  between them, and whatever the last setting of lengths finds is the frame. That's row 6: one energy, guides
+  in it, solved to its minimum. A mesh with edges along the folds a bend makes (row 9; for fixed folds, lines on
+  the table cut through every layer before meshing, as the creases above did) would make the guides reachable.
 
 ## Risks
 

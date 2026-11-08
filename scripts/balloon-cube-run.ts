@@ -1,6 +1,6 @@
 // The balloon blown up by its guides into a cube, and what its bend does (see src/fold/bend/report.ts).
 import { writeFileSync } from 'node:fs';
-import { Recipe } from '../src/fold/recipe';
+import { Recipe, table } from '../src/fold/recipe';
 import { tuckedSide, waterbombBase } from '../src/models/recipes/waterbomb-base';
 import { cubeGuides, STAGES } from './balloon-cube-lab';
 import { bendReport, describeBend } from '../src/fold/bend/report';
@@ -9,6 +9,11 @@ const r = waterbombBase(new Recipe({ id: 'balloon', title: 'Balloon', sheet: { s
 tuckedSide(r);
 r.turnOver('Turn it over, and do the same on this side.');
 tuckedSide(r);
+// Experiment: the cube's edges creased first, across the stack, so the mesh has edges along them.
+if (process.env.PRECREASE) {
+  r.crease(table(0, -0.5), table(0, -0.25), { title: 'Crease the top edges' });
+  r.crease(table(0, 0), table(0, -0.25), { title: 'Crease the bottom edges' });
+}
 const goals = cubeGuides(r.current);
 const t0 = performance.now();
 r.bend({ title: 'Blow it up', text: 'Blow into the hole.' }, { flex: () => true, anchor: [0, 0], goals, mesh: +(process.env.MESH ?? 0.07), stages: STAGES, free: true });

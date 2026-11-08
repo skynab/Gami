@@ -303,32 +303,63 @@ function lattice(poly: Vec2[]): Vec2[] {
 
 const ease = (s: number) => s;
 
-/** Guides taking the flat water bomb (`frame`) to the cube. */
-export function cubeGuides(frame: FoldFrame): BendGoal[] {
+const middleOf = (poly: Vec2[]): Vec2 => [poly.reduce((s, q) => s + q[0], 0) / poly.length, poly.reduce((s, q) => s + q[1], 0) / poly.length];
+
+/**
+ * For each face of the flat water bomb (`frame`): whether it's part of the plus (by its middle on the sheet, split by
+ * creases or not); where its points lie on the table (`place`); the face of the plus it lies against, as a map from
+ * the table to that face's sheet (`back`): of the faces stacked at its middle, the plus's nearest in the stack; and
+ * how far out from it it is (`gap`), by the layers between.
+ */
+function placements(frame: FoldFrame) {
   const faces = toFlat(frame);
   const layers = frame.faces_layer!;
-  const core = faces.map((f) => f.paper.some((q) => Math.hypot(q[0], q[1]) < 1e-9));
-  const half = (f: (typeof faces)[number]) => Math.sign(f.world.reduce((s, p) => s + p[0], 0));
-  return faces.flatMap((f, n) => {
-    // The face of the plus this one lies against, on the same side of the middle: the nearest of its layers.
-    const mine = faces.map((_, k) => k).filter((k) => core[k] && half(faces[k]) === half(f));
-    const by = (k: number) => Math.abs(layers[k] - layers[n]);
-    const under = core[n] ? n : mine.reduce((a, b) => (by(b) < by(a) ? b : a));
-    const gap = Math.abs(layers[under] - layers[n]) * LAYER_GAP;
-    const place = placeLike(f);
-    const back = unplaceLike(faces[under]);
-    return [...lattice(f.paper), ...(core[n] && process.env.TIPS !== '0' ? tips(f.paper) : [])].flatMap((q): BendGoal[] => {
+  const core = faces.map((f) => {
+    const [u, v] = f.paper.reduce((m, q) => [m[0] + Math.abs(q[0]) / f.paper.length, m[1] + Math.abs(q[1]) / f.paper.length], [0, 0]);
+    return (u < E || v < E) && u + v < 0.5;
+  });
+  const covers = (poly: Vec2[], q: Vec2) => {
+    let odd = false;
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      const [a, b] = [poly[i], poly[j]];
+      if (a[1] > q[1] !== b[1] > q[1] && q[0] < ((b[0] - a[0]) * (q[1] - a[1])) / (b[1] - a[1]) + a[0]) odd = !odd;
+    }
+    return odd;
+  };
+  return faces.map((f, n) => {
+    const mid = middleOf(f.world);
+    const stack = faces.map((_, k) => k).filter((k) => covers(faces[k].world, mid)).sort((a, b) => layers[a] - layers[b]);
+    const rank = (k: number) => stack.indexOf(k);
+    const under = core[n] ? n : stack.filter((k) => core[k]).reduce((a, b) => (Math.abs(rank(b) - rank(n)) < Math.abs(rank(a) - rank(n)) ? b : a));
+    return { face: f, core: core[n], layer: layers[n], place: placeLike(f), back: unplaceLike(faces[under]), gap: Math.abs(rank(under) - rank(n)) * LAYER_GAP };
+  });
+}
+
+/** Where each point of the flat water bomb (`frame`) goes on the cube at θ, by the face of the frame it's on. */
+export function onCube(frame: FoldFrame): (face: number, q: Vec2, theta: number) => V {
+  const all = placements(frame);
+  return (face, q, theta) => {
+    const { place, back, gap } = all[face];
+    const p = plus(back(place(q)), theta);
+    return add(p.at, mul(p.out, gap));
+  };
+}
+
+/** Guides taking the flat water bomb (`frame`) to the cube. */
+export function cubeGuides(frame: FoldFrame): BendGoal[] {
+  return placements(frame).flatMap(({ face: f, core, layer, place, back, gap }) => {
+    return [...lattice(f.paper), ...(core && process.env.TIPS !== '0' ? tips(f.paper) : [])].flatMap((q): BendGoal[] => {
       const xz = place(q);
       const onPlus = back(xz);
-      if (FREE_ENDS && (process.env.FREE_ENDS === "all" ? anyEnd(onPlus) : sideEnd(onPlus))) return [];
-      if (process.env.CORE_ONLY && !core[n]) return [];
+      if (FREE_ENDS && (process.env.FREE_ENDS === 'all' ? anyEnd(onPlus) : sideEnd(onPlus))) return [];
+      if (process.env.CORE_ONLY && !core) return [];
       const at = (theta: number) => {
         const p = plus(onPlus, theta);
         return add(p.at, mul(p.out, gap));
       };
       // From where it lies flat, layers and all, eased into the shape as it opens.
       const start = at(0);
-      const lying: V = [xz[0], layers[n] * LAYER_GAP, xz[1]];
+      const lying: V = [xz[0], layer * LAYER_GAP, xz[1]];
       const path = Array.from({ length: STAGES }, (_, k): Vec3 => {
         const s = ease((k + 1) / STAGES);
         return add(at((s * Math.PI) / 2), mul(sub(lying, start), 1 - s)).map((x) => Math.round(x * 1e6) / 1e6 || 0) as Vec3;
