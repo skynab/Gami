@@ -54,6 +54,25 @@ test.describe('studio library', () => {
     expect(JSON.parse(await readFile(await again.path(), 'utf8'))).toEqual(first);
   });
 
+  test('fits the screen: nothing wider than it, and nothing over the tools', async ({ page }) => {
+    await page.goto('/studio');
+    await page.getByRole('button', { name: 'New design' }).click();
+    await expect(page.getByRole('img', { name: 'The paper from above' })).toBeVisible();
+    // A page wider than a phone is shown zoomed out (the top bar's buttons once made it so). Measured against the
+    // screen: the window's own width grows with the page, on a phone.
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width);
+    // Each tool a tap reaches, not something over it (the 3D preview once spilled over them on a short screen).
+    const covered = await page.locator('.bottombar button').evaluateAll((buttons) =>
+      buttons.flatMap((b) => {
+        const r = b.getBoundingClientRect();
+        if (!r.width || r.bottom > window.innerHeight) return [];
+        const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+        return hit && !b.contains(hit) ? [b.textContent] : [];
+      }),
+    );
+    expect(covered).toEqual([]);
+  });
+
   test('lays a strip of tape with the tape tool', async ({ page }) => {
     await page.goto('/studio');
     await page.getByRole('button', { name: 'New design' }).click();

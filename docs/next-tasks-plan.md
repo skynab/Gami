@@ -15,7 +15,7 @@ request.
 | The decision on `PROVENANCE.md` was in the `PLAN.md` decisions log twice | Done: one copy removed. |
 | Fold'N Fly plan: "Gami's own planes need names of their own" | Done: they're the corkscrew and the flying saucer. Taken off the open questions. |
 | A link here from `PLAN.md` | Done, under the milestones. |
-| CI's first run (`Tests`, 7 November, on `dev` at `933b887`) | **Failed in the end-to-end job.** The type check and unit tests passed. See "Waiting" below. The e2e job's report was never uploaded, as Playwright wasn't writing one; on CI it now writes an HTML report, with a trace of each test that fails once and is run again, which the workflow uploads as `playwright-report`. |
+| CI's first run (`Tests`, 7 November, on `dev` at `933b887`) | **Failed in the end-to-end job**: found and fixed 8 November (see "Waiting" below), to confirm on CI. The type check and unit tests passed. The e2e job's report was never uploaded, as Playwright wasn't writing one; on CI it now writes an HTML report, with a trace of each test that fails once and is run again, which the workflow uploads as `playwright-report`. |
 | Finished sessions' worktrees | Done: "Lesson: common origami folds", "Lesson: origami bases" and "Standardise fold vocabulary and unfold logic" are archived and their worktrees removed. Their work is all in `dev` (the third's commit, `5dbf414`, landed in another form: `CREASE_KINDS`, `FOLD_KINDS`, `lastFold`). |
 | Old branches, and the `fold-grazes` worktree | **Not done.** Auto mode stopped the deletions as irreversible. The commands are under "Branches to delete by hand". |
 | Release `dev` to `main` | See Progress at the end. |
@@ -24,13 +24,15 @@ request.
 
 Things that can't be settled from the code alone.
 
-- **Why the e2e job fails on CI.** Its log is only open to the repository's admins. Tried: the e2e tests pass
-  here with `CI=1`, and again with Chromium drawing WebGL in software (SwiftShader), as a runner does; no import
-  or `public/` path differs from its file in case, which Linux would care about and Windows doesn't. Next: read
-  the failing run's log
-  ([run 42422151666](https://github.com/skynab/Gami/actions/runs/42422151666)), or the `playwright-report`
-  artifact the next failing run uploads. Likely suspects, given everything passes locally: a test running past
-  Playwright's 30 s on a two-core runner drawing WebGL in software (the finished-model pictures), or fonts.
+- **CI's e2e job, to confirm.** Found 8 November from its log: on the phone, two Studio tests (the tape tool, the
+  named folds) waited the whole 30 s to click a tool. A runner's fonts are wider than Windows', so the Studio's
+  tool bar wraps onto more lines and leaves less height; on a narrow screen the 3D preview kept its 220 px and
+  spilled down over the tools, taking their clicks. And the editor's top bar made the page wider than a phone
+  (535 px on a 412 px screen), so it showed zoomed out. Both reproduced here with text spaced wider, and fixed:
+  the preview shrinks into what height is left and the Studio's middle is clipped; on screens up to 760 px the
+  editor's crowded top bar scrolls sideways in one line (its "Studio" title hidden; a screen-reader label inside it
+  had been left past the screen's edge); a long hint wraps. A new test checks the editor fits the screen and its
+  tools take taps (it fails on the old layout). Passes here; confirm on CI's next run, after a push.
 - **The New cutoff.** `NEW_SINCE` is `2026-10-28`, so 34 models show as New: 24 added on 28 October and 10 on
   29 October. Nothing has been added since, so moving it past the 29th leaves the New filter empty. Either leave
   it until the next batch, or move it to `2026-10-29` to keep only the last batch's stars.

@@ -236,6 +236,7 @@ export default function StudioEditor({ end, cloud = false }: {
     <div className="app">
       <TopBar
         center={t('common.studio')}
+        crowded
         end={
           <>
             {end}
