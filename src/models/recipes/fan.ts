@@ -6,10 +6,9 @@ import { paper, Recipe, table } from '../../fold/recipe';
 import type { FoldFrame, Vec2, Vec3 } from '../../fold/types';
 
 /**
- * The traditional fan, following the order of folds at origami.me/fan: a sheet held sideways creased into
- * sixteen strips (halves, quarters and eighths from the front, sixteenths from the back), pleated from the back
- * with the strip on the left left out as a flap, folded in half, the flap's corners folded in and the flap tucked
- * between the two middle layers to lock the halves together, then the pleats spread out into a half circle.
+ * The traditional fan, after origami.me/fan: a sheet held sideways creased in half, quarters and eighths, turned
+ * over and pleated into sixteen strips with the strip on the left left out as a flap, folded in half, the flap's
+ * corners folded in through both layers to lock the halves together, then the pleats spread into a half circle.
  */
 export function fan() {
   // A sheet shaped like A4, held sideways (1.4 : 1, exact in a .fold file).
@@ -26,38 +25,29 @@ export function fan() {
     title: 'Fold in half',
     text: 'With the paper sideways, fold the left edge over to the right edge, and unfold.',
   });
-  // Each crease folds a strip's edge onto the crease that's to be its middle, then unfolds.
-  const creases = (title: string, text: string, pairs: [number, number][]) =>
+  // Both edges fold in at once, onto creases already made, then open out again. (origami.me goes on to crease
+  // every strip in half; folded by hand at once and opened, that would play as nothing moving, so the pleating
+  // makes the rest of the creases, the ones made guiding it.)
+  const edges = (title: string, text: string, onto: [number, number]) => {
+    const before = r.mark();
     r.together({ title, text }, (q) => {
-      for (const [from, onto] of pairs) q.crease(paper(x(from), 0), paper(x(onto), 0), { title });
+      q.onto(paper(x(0), 0), paper(x(onto[0]), 0), { title });
+      q.onto(paper(x(16), 0), paper(x(onto[1]), 0), { title });
     });
-  creases('Fold the sides to the middle', 'Fold each side edge to the middle crease, and unfold.', [
-    [0, 8],
-    [16, 8],
-  ]);
-  creases('Fold the right quarters in half', 'Fold each of the two right quarters in half, edge to crease, and unfold.', [
-    [16, 12],
-    [8, 12],
-  ]);
-  creases('Fold the left quarters in half', 'The same with the two left quarters.', [
-    [0, 4],
-    [8, 4],
-  ]);
+    r.unfold({ title: 'Unfold', text: 'Open them out again, leaving the creases.', to: before });
+  };
+  edges('Fold the sides to the middle', 'Fold the left and right edges to the middle crease.', [8, 8]);
+  edges('Fold the edges to the creases', 'Fold the left and right edges to the creases you just made.', [4, 12]);
+  // The last, an eighth in from each edge, is the flap's hinge.
+  edges('And once more', 'Fold the left and right edges to the nearest creases.', [2, 14]);
   r.turnOver('Turn the paper over.');
-  creases(
-    'Fold each strip in half',
-    'Now fold each of the eight strips in half and unfold, so the paper is creased into sixteen strips, front and back in turn.',
-    // Each eighth-wide strip folded edge to edge, creasing it down its middle. Turned over, the sheet's edges have
-    // swapped sides, but the strips lie as they did.
-    [0, 2, 4, 6, 8, 10, 12, 14].map((k): [number, number] => [k, k + 2]),
-  );
 
   // The pleats, from this side, as origami.me collapses them: every crease but the first folds, the second strip
   // staying put and the rest going under it in turn, so the strip next to the flap ends up on top. Folded in half
   // next, that strip's halves are the middle of the stack, which the flap can lock together; on the outside, the
   // flap would hold the whole stack shut, and the fan couldn't open.
   r.collapse(
-    { title: 'Pleat it', text: 'Keeping this side up, fold the paper back and forth along the creases into a narrow stack, leaving the strip on the left open as a flap.' },
+    { title: 'Pleat it', text: 'Keeping this side up, fold the paper back and forth into sixteen equal strips, using the creases as a guide, leaving the strip on the left open as a flap.' },
     Array.from({ length: 14 }, (_, i) => i + 2).map((k) => ({ through: across(k), kind: k % 2 ? ('valley' as const) : ('mountain' as const) })),
     // The second strip from the left, on the sheet turned over.
     paper(-(x(1) + strip / 2), 0),
@@ -84,12 +74,13 @@ export function fan() {
   });
 
   // Spread, the fan opens like a book about the fold at its bottom, its pages fanned evenly over a half circle.
-  // Paper bends to do it, so the shape is worked out beforehand (`spread`) and the paper guided there. Not in the
-  // gallery yet: played, slivers in the mesh stretch by 13% (docs/bending-plan.md, step 6).
-  return r.bend(
-    { title: 'Spread it', text: 'Hold the bottom and open the two halves out into a half circle. Done!' },
-    { flex: () => true, anchor: [0, -0.25], goals: spread(r.current, { pinch: (x(1) + x(2)) / 2, width: strip }), mesh: MESH, stages: STAGES },
-  );
+  // Paper bends to do it, so the shape is worked out beforehand (`spread`) and the paper guided there.
+  return r
+    .bend(
+      { title: 'Spread it', text: 'Hold the bottom and open the two halves out into a half circle. Done!' },
+      { flex: () => true, anchor: [0, -0.25], goals: spread(r.current, { pinch: (x(1) + x(2)) / 2, width: strip }), mesh: MESH, stages: STAGES },
+    )
+    .build();
 }
 
 const STAGES = 16;

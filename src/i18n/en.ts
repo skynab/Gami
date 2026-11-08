@@ -101,7 +101,7 @@ export const en = {
     pajarita: { title: 'Pajarita (little bird)', blurb: 'The little paper bird of Spain, from a square with its corners folded in.' },
     iris: { title: 'Iris', blurb: 'Three petals up, three down, from the frog base.' },
     pinwheel: { title: 'Pinwheel', blurb: 'A windmill with four sails. Pin it to a stick and blow.' },
-    fan: { title: 'Fan', blurb: 'Pleat a sheet back and forth, then pinch the end.' },
+    fan: { title: 'Fan', blurb: 'Pleat a sheet back and forth, fold it in half and lock the middle, then spread it into a half circle.' },
     'masu-box': { title: 'Masu box', blurb: 'A square box from one sheet, its corners locked in by the ends.' },
     envelope: { title: 'Envelope', blurb: 'A letter envelope from a sheet of printer paper, its top flap tucked in. No glue.' },
     'masu-lid': { title: 'Masu box lid', blurb: 'A lid for the masu box: the same folds, the corners stopping just short of the middle.' },

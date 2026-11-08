@@ -2479,4 +2479,30 @@ export const fr: Record<string, string> = {
     "Fermez la boule",
   "Glue the last red unit on top. Done!":
     "Collez le dernier module rouge sur le dessus. C’est fini !",
+  "With the paper sideways, fold the left edge over to the right edge, and unfold.":
+    "Le papier posé en largeur, pliez le bord gauche sur le bord droit, puis dépliez.",
+  "Pleat it":
+    "Le plisser en accordéon",
+  "Fold the bottom half of the stack up onto the top half, flap and all.":
+    "Pliez la moitié inférieure de la pile sur la moitié supérieure, rabat compris.",
+  "Fold in the top corner":
+    "Rentrer le coin du haut",
+  "Fold the flap’s top outer corner in at a slant, through both layers, so its top edge lies along the flap’s inner edge.":
+    "Repliez en biais le coin extérieur du haut du rabat, à travers les deux épaisseurs, pour que son bord supérieur longe le bord intérieur du rabat.",
+  "Fold in the bottom corner":
+    "Rentrer le coin du bas",
+  "And the bottom outer corner, the same way. The flap now holds the two halves of the fan together.":
+    "Puis le coin extérieur du bas, de la même façon. Le rabat tient maintenant ensemble les deux moitiés de l’éventail.",
+  "Spread it":
+    "Le déployer",
+  "Hold the bottom and open the two halves out into a half circle. Done!":
+    "Tenez le bas et déployez les deux moitiés en demi-cercle. C’est fini !",
+  "Fold the edges to the creases":
+    "Plier les bords sur les plis",
+  "Fold the left and right edges to the creases you just made.":
+    "Pliez les bords gauche et droit sur les plis que vous venez de faire.",
+  "Fold the left and right edges to the nearest creases.":
+    "Pliez les bords gauche et droit sur les plis les plus proches.",
+  "Keeping this side up, fold the paper back and forth into sixteen equal strips, using the creases as a guide, leaving the strip on the left open as a flap.":
+    "Cette face vers le haut, pliez le papier en accordéon en seize bandes égales, en vous guidant sur les plis, et laissez la bande de gauche ouverte comme un rabat.",
 };

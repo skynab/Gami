@@ -99,7 +99,7 @@ export const fr: Messages = {
     pajarita: { title: 'Pajarita (petit oiseau)', blurb: 'Le petit oiseau en papier d’Espagne, d’un carré aux coins rabattus.' },
     iris: { title: 'Iris', blurb: 'Trois pétales en haut, trois en bas, depuis la base grenouille.' },
     pinwheel: { title: 'Moulin à vent', blurb: 'Un moulin à quatre ailes. Pique-le sur un bâton et souffle.' },
-    fan: { title: 'Éventail', blurb: 'Plisse une feuille en accordéon, puis pince un bout.' },
+    fan: { title: 'Éventail', blurb: 'Plisse une feuille en accordéon, plie-la en deux, bloque le milieu, puis déploie-la en demi-cercle.' },
     'masu-box': { title: 'Boîte masu', blurb: 'Une boîte carrée d’une seule feuille, ses coins tenus par les bouts.' },
     envelope: { title: 'Enveloppe', blurb: 'Une enveloppe à lettre dans une feuille de papier d’imprimante, le rabat du haut glissé dedans. Sans colle.' },
     'masu-lid': { title: 'Couvercle de boîte masu', blurb: 'Un couvercle pour la boîte masu : les mêmes plis, les coins s’arrêtant juste avant le centre.' },

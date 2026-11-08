@@ -99,7 +99,7 @@ export const es: Messages = {
     pajarita: { title: 'Pajarita', blurb: 'El pajarito de papel de España, desde un cuadrado con las esquinas al centro.' },
     iris: { title: 'Iris', blurb: 'Tres pétalos arriba y tres abajo, desde la base de rana.' },
     pinwheel: { title: 'Molinillo', blurb: 'Un molino de cuatro aspas. Clávalo en un palo y sopla.' },
-    fan: { title: 'Abanico', blurb: 'Pliega una hoja adelante y atrás y junta un extremo.' },
+    fan: { title: 'Abanico', blurb: 'Pliega una hoja adelante y atrás, dóblala por la mitad, sujeta el centro y ábrela en un semicírculo.' },
     'masu-box': { title: 'Caja masu', blurb: 'Una caja cuadrada de una sola hoja, con las esquinas sujetas por los extremos.' },
     envelope: { title: 'Sobre', blurb: 'Un sobre para cartas con una hoja de papel de impresora, con la solapa de arriba metida. Sin pegamento.' },
     'masu-lid': { title: 'Tapa de la caja masu', blurb: 'Una tapa para la caja masu: los mismos pliegues, con las esquinas un poco antes del centro.' },

@@ -78,7 +78,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `pajarita` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/pajarita](https://origami.me/pajarita/) | Clear | 22 Oct 2026 |
 | `iris` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/iris](https://origami.me/iris/) | Clear | Coming soon, listed 21 Oct 2026 |
 | `pinwheel` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/pinwheel](https://origami.me/pinwheel/) | Clear | 21 Oct 2026 |
-| `fan` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/fan](https://origami.me/fan/) | Clear | Coming soon, listed 21 Oct 2026 |
+| `fan` | Traditional (origami.me: "Traditional"; Gilad's database lists the fan as "Traditional" in Kenneway's *Complete Origami*, LaFosse's *Origami Activities* and others, besides many fans by named designers) | None needed: nobody owns it | [origami.me/fan](https://origami.me/fan/), for the order of folds; its flap stays out rather than closed (see the notes) | Clear | 7 Nov 2026 |
 | `masu-box` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/box](https://origami.me/box/) (the box) | Clear | 22 Oct 2026 |
 | `masu-shallow-lid` | Traditional (origami.me: "Traditional"; the masu box's crease pattern with a larger floor and lower walls) | None needed: nobody owns it | [origami.me/box](https://origami.me/box/) (its shallow lid) | Clear | 22 Oct 2026 |
 | `envelope` | Traditional (origami.me: "Traditional"; Gilad's database lists over a hundred envelopes and letter-folds as "Traditional", among many by named designers) | None needed: nobody owns it | [origami.me/paper-envelope](https://origami.me/paper-envelope/), for the order of folds | Clear | 22 Oct 2026 |
@@ -219,6 +219,11 @@ noted when it was written, and the model was folded from the common traditional 
   yet. Each is credited "Traditional" on origami.me. When one gets a recipe, set its reference to what was
   actually followed and its date to when it shipped. Other traditional models on origami.me that aren't
   listed yet are in `docs/origami-me-candidates.md`.
+- **Fan** (checked 7 November 2026). Gami follows origami.me's order of folds, pleated from the back so the strip
+  beside the flap ends in the middle of the stack, but leaves the flap out where origami.me closes it towards
+  the middle: its two layers hang from the two middle layers, so closed over either face it would hold half the
+  fan shut. Its corners, folded through both layers, still lock the halves together. The spread is bent paper
+  (see `docs/bending-plan.md`, step 6).
 
 ## Adding a model
 

@@ -30,6 +30,27 @@ export function meshFrame(frame: FoldFrame, flex: number[], size: number, rigidS
   const corners = facePositions(frame);
   const polys = frame.faces_vertices.map((face) => face.map((v) => frame.vertices_paper[v]));
 
+  // A face narrower than a triangle's edge (a fan's strip) would be cut into slivers, which tip right over at the
+  // slightest nudge to a narrow corner, so the frames a bend passes through, played one into the next, stretch
+  // them. Its outline is cut evenly instead, and so are the stretches its neighbours share with it, so outlines
+  // still match; the triangles then run across it in a row, well shaped.
+  const thin = polys.map((poly) => {
+    const around = poly.reduce((sum, a, i) => sum + Math.sqrt(dist2(a, poly[(i + 1) % poly.length])), 0);
+    return (2 * Math.abs(signedArea(poly))) / around < size;
+  });
+  const sharedThin: [Vec2, Vec2][][] = polys.map(() => []);
+  for (let f = 0; f < polys.length; f++) {
+    for (let g = f + 1; g < polys.length; g++) {
+      if (!thin[f] && !thin[g]) continue;
+      const shared = sharedSegment(polys[f], polys[g]);
+      if (!shared) continue;
+      sharedThin[f].push(shared as [Vec2, Vec2]);
+      sharedThin[g].push(shared as [Vec2, Vec2]);
+    }
+  }
+  const cutEvenly = (f: number, a: Vec2, b: Vec2) =>
+    thin[f] || sharedThin[f].some(([s, e]) => onSegment(a, s, e, true) !== null && onSegment(b, s, e, true) !== null);
+
   // Each face's outline, with every vertex of the frame that lies along its edges (where a neighbour was split
   // and it wasn't), so neighbouring faces' outlines match point for point.
   const local: { paper: Vec2[]; points: Vec3[] }[] = polys.map((poly, f) => {
@@ -44,7 +65,12 @@ export function meshFrame(frame: FoldFrame, flex: number[], size: number, rigidS
         .sort((x, y) => x.t - y.t);
       for (const { q } of along) if (!paper.some((p) => same(p, q))) paper.push(q);
     });
-    return { paper, points: paper.map(at) };
+    const even = paper.flatMap((a, i): Vec2[] => {
+      const b = paper[(i + 1) % paper.length];
+      const n = cutEvenly(f, a, b) ? Math.max(1, Math.ceil(Math.sqrt(dist2(a, b)) / size - 1e-9)) : 1;
+      return Array.from({ length: n }, (_, k): Vec2 => (k ? [a[0] + ((b[0] - a[0]) * k) / n, a[1] + ((b[1] - a[1]) * k) / n] : a));
+    });
+    return { paper: even, points: even.map(at) };
   });
 
   // Points shared by joined faces become one, where the faces meet.
@@ -140,7 +166,51 @@ export function meshFrame(frame: FoldFrame, flex: number[], size: number, rigidS
 
   const flexible = new Set(flex);
   refine(paper, points, triangles, parent, (f) => (flexible.has(f) ? size : rigidSize));
+  // A wider face beside a thin one has many points along that edge, which ear-clipping fans out to.
+  delaunay(paper, triangles, parent, (f) => thin[f] || sharedThin[f].length > 0);
   return { paper, points, triangles, parent };
+}
+
+/**
+ * Swaps the diagonal of any two triangles of one face (of those `among` picks) whose angles opposite it add up to
+ * more than a straight angle (the Delaunay rule), until none do, so no triangle is needlessly thin.
+ */
+function delaunay(paper: Vec2[], triangles: Tri[], parent: number[], among: (face: number) => boolean) {
+  const angle = (p: Vec2, a: Vec2, b: Vec2) => {
+    const [u, v]: Vec2[] = [a, b].map((q) => [q[0] - p[0], q[1] - p[1]]);
+    return Math.atan2(Math.abs(u[0] * v[1] - u[1] * v[0]), u[0] * v[0] + u[1] * v[1]);
+  };
+  const area = (t: Tri) => signedArea(t.map((v) => paper[v]));
+  for (let round = 0; round < 100; round++) {
+    const byEdge = new Map<string, number[]>();
+    triangles.forEach((t, k) => {
+      if (!among(parent[k])) return;
+      for (let e = 0; e < 3; e++) {
+        const key = edgeKey(t[e], t[(e + 1) % 3]);
+        byEdge.set(key, [...(byEdge.get(key) ?? []), k]);
+      }
+    });
+    const swapped = new Set<number>();
+    for (const pair of byEdge.values()) {
+      if (pair.length !== 2) continue;
+      const [k, j] = pair;
+      if (parent[k] !== parent[j] || swapped.has(k) || swapped.has(j)) continue;
+      const [a, b] = triangles[k].filter((v) => triangles[j].includes(v));
+      const c = triangles[k].find((v) => v !== a && v !== b)!;
+      const d = triangles[j].find((v) => v !== a && v !== b)!;
+      if (angle(paper[c], paper[a], paper[b]) + angle(paper[d], paper[a], paper[b]) <= Math.PI + 1e-9) continue;
+      // Only across a convex pair: a and b on either side of the new diagonal.
+      const side = (q: Vec2) => Math.sign(signedArea([paper[c], paper[d], q]));
+      if (side(paper[a]) * side(paper[b]) >= 0) continue;
+      // Wound as the face is.
+      const turn = Math.sign(area(triangles[k]));
+      const wound = (t: Tri): Tri => (Math.sign(area(t)) === turn ? t : [t[0], t[2], t[1]]);
+      triangles[k] = wound([c, d, a]);
+      triangles[j] = wound([d, c, b]);
+      swapped.add(k).add(j);
+    }
+    if (!swapped.size) break;
+  }
 }
 
 export interface BendOptions {

@@ -135,10 +135,10 @@ export const MODELS: ModelInfo[] = [
   { id: 'dice', title: 'Dice', blurb: 'Six white cards locked into a cube, flaps hidden inside, with the dots drawn on. No glue.', difficulty: 2, category: 'modular', steps: 12, minutes: 20, sheets: 6, paper: 1.75, needs: ['pen'], added: '2026-10-29' },
   { id: 'kusudama', title: 'Kusudama flower ball', blurb: 'Sixty petals glued into twelve flowers, the flowers into a ball, and a loop to hang it from.', difficulty: 3, category: 'modular', steps: 15, minutes: 120, sheets: 61, paper: 13.33, needs: ['glue'], added: '2026-10-29' },
   { id: 'chrysanthemum', title: 'Chrysanthemum kusudama', blurb: 'Six windmill units glued corner to corner into a ball, their arms opened out as petals.', difficulty: 2, category: 'modular', steps: 16, minutes: 30, sheets: 6, needs: ['glue'], added: '2026-10-29' },
+  { id: 'fan', title: 'Fan', blurb: 'Pleat a sheet back and forth, fold it in half and lock the middle, then spread it into a half circle.', difficulty: 1, category: 'object', steps: 14, minutes: 10, sheets: 1, paper: 1.4, added: '2026-11-07' },
   // Coming soon: listed, with no steps yet.
   { id: 'boat', title: 'Boat', blurb: 'The classic paper boat. It really floats, for a while.', difficulty: 2, category: 'object', minutes: 6, sheets: 1 },
   { id: 'iris', title: 'Iris', blurb: 'Three petals up, three down, from the frog base.', difficulty: 4, category: 'flower', minutes: 20, sheets: 1 },
-  { id: 'fan', title: 'Fan', blurb: 'Pleat a sheet back and forth, then pinch the end.', difficulty: 1, category: 'object', minutes: 3, sheets: 1 },
   // A lesson rather than a model, kept last: geometry by folding.
   { id: 'folding-geometry', title: 'Geometry by folding', blurb: 'Folding’s own rules of geometry: an angle split in three, and any triangle a compass can draw.', difficulty: 1, category: 'lesson', steps: 44, minutes: 20, sheets: 1, added: '2026-10-18' },
 ];

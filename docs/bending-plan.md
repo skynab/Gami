@@ -229,7 +229,7 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      surface from the pinch to its place on the arc) and let the solver only settle it and the frames on the
      way; and see where the time goes at this size.
 
-   **Second try** (November 2026, on `dev`: `src/models/recipes/fan.ts`, not yet in the gallery's list).
+   **Second try: done** (November 2026, `src/models/recipes/fan.ts`).
    - **The recipe couldn't open.** It turned the paper back over before pleating, so the strip next to the flap
      was at the bottom of the stack and, folded in half, outermost. The flap's corners fold through both its
      layers, which locks them together, and so locks that strip's two halves, the outside of the whole stack:
@@ -248,18 +248,29 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      width apart across it, as they lie folded; further out they fan apart round the arc and draw in across it
      to keep the page as wide. Every guided frame keeps the paper within 0.8%, paper passes through paper by
      at most half a centimetre, and the solved paper stays within 1.5 mm of its guides (0.01 at worst).
-   - **What's left: slivers.** Played, the step stretches 13% (16 stages), 6.5% (32) or 8.5% (48); 5% is
-     allowed. At each stage it's under 0.8%: in between, each triangle takes its own screw from one frame to
-     the next and shared corners are averaged, and the worst are slivers along the pages' edges, 10° at their
-     narrow corner, whose normals swing by 45° from one stage to the next while their corners move half a
-     millimetre. Splitting the longest edge never splits a face's 10° corner (the diagonal of a strip 0.0875
-     by 0.5): it's passed down, and the points it adds line up along the diagonal, close to the edges, so
-     swapping diagonals within a face (tried) doesn't help. More stages don't either: the last stage's extra
-     polishing jumps, and over 20 stages the file is past 1 MB. At 16 stages and a mesh of 0.15 (576
-     triangles) it solves in 7 s.
-   - **Next.** A mesh pattern for long thin faces (see the open question below): points on a regular grid in each
-     face, the outline cut evenly to match its neighbours. Every bent model's mesh would change with it, so the
-     cup, the balloon and the 3D tulip need their checks again.
+   - **Slivers.** Played, the step stretched 13% (16 stages), 6.5% (32) or 8.5% (48); 5% is allowed. At each
+     stage it was under 0.8%: in between, each triangle takes its own screw from one frame to the next and shared
+     corners are averaged, and the worst were slivers along the pages' edges, 10° at their narrow corner, whose
+     normals swung by 45° from one stage to the next while their corners moved half a millimetre. Splitting the
+     longest edge never splits a face's 10° corner (the diagonal of a strip 0.0875 by 0.5): it's passed down. More
+     stages didn't help either: the last stage's extra polishing jumps, and over 20 stages the file is past 1 MB.
+   - **Thin faces cut in rows** (`meshFrame`). A face narrower than a triangle's edge (twice its area over its
+     perimeter) has its outline cut evenly instead, as do the stretches its neighbours share with it, so outlines
+     still match; ear-clipped, it's a row of triangles across it, 35° at the narrowest. The wider faces beside
+     them, with many points along that edge, have their diagonals swapped until no triangle is needlessly thin
+     (the Delaunay rule). Other faces mesh as before. Tried and dropped: cutting every outline evenly (the cup's
+     big faces filled with slivers where midpoints of different edges landed together), and points on a lattice
+     inside every face, swapped to Delaunay (no slivers anywhere, but no edges along a square's diagonals, which
+     the old mesh has, so a sheet curled about its diagonal couldn't reach its goals within the tests' 0.1%).
+     The cup meshes exactly as before; the 3D tulip has no slivers now and plays within 0.9% (3% before); the
+     balloon passes paper through paper less (0.0054 from 0.0061), its file 998 KB, just inside the budget.
+   - **The creasing.** origami.me creases every strip; done as creases inside one step (fold and unfold at once,
+     as the recipe had them) nothing moves, so there's nothing to show. The recipe creases in half, then both
+     edges to the middle, to those creases, and to the nearest ones, each pair folding together and opening
+     again; the pleating makes the rest. The last pair is the flap's hinge, which a collapse can't add as a
+     crease left open.
+   - **In the gallery** (7 November 2026): 14 steps, 498 triangles, 16 stages, solved in 5 s; every frame within
+     0.8%, 1.5% as it plays, paper through paper by at most 0.0025, the file 732 KB.
 7. **The boat.** Pulling the diamond's points apart, as a bend from the small diamond. Done as for the fan.
 
    **Started; not reachable yet.** What the first try found (on `wip/boat`):
@@ -483,7 +494,6 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
 - **Replay in other browsers.** Should a bend step's replay in the Studio re-solve (and possibly differ slightly), or
   keep the baked frames and only re-solve when an earlier step changes?
 - **Mesh pattern.** A regular grid of right triangles is simplest; aligned to the paper's creases it meshes cleanly.
-  Is that enough, or does the fan's twist need a finer mesh near the pinched end? (November 2026: the fan needs
-  it. Ear-clipping then splitting long edges leaves its strips full of 10° slivers, which stretch as the step
-  plays; see step 6.)
+  Is that enough, or does the fan's twist need a finer mesh near the pinched end? (November 2026: thin faces now
+  have their outlines cut evenly, which the fan's strips needed; see step 6.)
 - **A bend tool in the Studio.** Worth it only if creators ask for curved finishes.

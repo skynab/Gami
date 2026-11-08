@@ -2479,4 +2479,30 @@ export const es: Record<string, string> = {
     "Cierra la bola",
   "Glue the last red unit on top. Done!":
     "Pega el último módulo rojo arriba. ¡Listo!",
+  "With the paper sideways, fold the left edge over to the right edge, and unfold.":
+    "Con el papel en horizontal, dobla el borde izquierdo sobre el borde derecho y desdobla.",
+  "Pleat it":
+    "Pliégalo en acordeón",
+  "Fold the bottom half of the stack up onto the top half, flap and all.":
+    "Dobla la mitad de abajo de la pila hacia arriba sobre la mitad de arriba, solapa incluida.",
+  "Fold in the top corner":
+    "Dobla hacia dentro la esquina de arriba",
+  "Fold the flap’s top outer corner in at a slant, through both layers, so its top edge lies along the flap’s inner edge.":
+    "Dobla en diagonal hacia dentro la esquina exterior de arriba de la solapa, por las dos capas, de modo que su borde de arriba quede a lo largo del borde interior de la solapa.",
+  "Fold in the bottom corner":
+    "Dobla hacia dentro la esquina de abajo",
+  "And the bottom outer corner, the same way. The flap now holds the two halves of the fan together.":
+    "Y la esquina exterior de abajo, igual. Ahora la solapa mantiene unidas las dos mitades del abanico.",
+  "Spread it":
+    "Ábrelo",
+  "Hold the bottom and open the two halves out into a half circle. Done!":
+    "Sujeta la parte de abajo y abre las dos mitades en un semicírculo. ¡Listo!",
+  "Fold the edges to the creases":
+    "Dobla los bordes hasta los pliegues",
+  "Fold the left and right edges to the creases you just made.":
+    "Dobla los bordes izquierdo y derecho hasta los pliegues que acabas de marcar.",
+  "Fold the left and right edges to the nearest creases.":
+    "Dobla los bordes izquierdo y derecho hasta los pliegues más cercanos.",
+  "Keeping this side up, fold the paper back and forth into sixteen equal strips, using the creases as a guide, leaving the strip on the left open as a flap.":
+    "Con esta cara hacia arriba, dobla el papel de un lado a otro en dieciséis franjas iguales, guiándote por los pliegues, y deja abierta la franja de la izquierda como solapa.",
 };
