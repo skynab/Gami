@@ -11,6 +11,9 @@ import { minimize } from './minimize';
  * Δλ = (−C − α̃λ) / (Σ w|∇C|² + α̃), where α̃ is its compliance (0 for exact, larger for softer) and λ its
  * accumulated multiplier.
  *
+ * Guided paper (paper led along paths worked out beforehand) is solved otherwise: each stage as one energy brought
+ * to its least (minimize.ts). The rest is solved as follows.
+ *
  * One constraint at a time finds where paper buckles and curls, which solving them all at once (linearised) can't
  * see from flat paper. But each pass carries a correction only a few triangles further, so now and then everything
  * is also solved together (`together`), and each stage ends by setting every edge's length at once (`keepLengths`).
@@ -115,19 +118,15 @@ const REACH_SHEET = 0.015;
 const SUBSTEP = 20;
 /** How often, in iterations, to look again for points near other paper. */
 const SEARCH_EVERY = 10;
-/** Experiment: each stage as one energy brought to its least (minimize.ts), and its weights. */
-const ENERGY = process.env.E_METHOD === 'energy';
-const E = {
-  stretch: +(process.env.E_STRETCH ?? 1e2),
-  guide: +(process.env.E_GUIDE ?? 1),
-  bend: +(process.env.E_BEND ?? 1e-5),
-  crease: +(process.env.E_CREASE ?? 0.1),
-  rigid: +(process.env.E_RIGID ?? 1e-1),
-  contact: +(process.env.E_CONTACT ?? 10),
-  goal: +(process.env.E_GOAL ?? 1e2),
-  rounds: +(process.env.E_ROUNDS ?? 3),
-  steps: +(process.env.E_STEPS ?? 10),
-};
+/**
+ * Guided paper's energy (minimize.ts), by weight: the edges' springs (per unit of strain squared and length, their
+ * lengths then made exact round by round); the guides (per unit of distance squared), outweighing contacts so the
+ * stack doesn't hold the paper back from them; bending, per hinge as its triangles on the sheet weight it, light,
+ * so the guides lead and bending only smooths between them; hinges held rigid or driven to a crease's angle; goals;
+ * contacts and the table. Tuned on the fan and the cup (November 2026), and how many rounds and steps a stage takes
+ * at most.
+ */
+const ENERGY = { stretch: 1e2, guide: 10, bend: 1e-4, rigid: 1e-1, contact: 10, goal: 1e2, rounds: 4, steps: 15 };
 const AXES: Vec3[] = [
   [1, 0, 0],
   [0, 1, 0],
@@ -391,7 +390,7 @@ export function solve(problem: BendProblem): BendResult {
   const flatAt = (v: number): Vec3 => (sheet ? [sheet[v][0], 0, sheet[v][1]] : rest[v]);
   const area = (a: number, b: number, c: number) => len(cross(sub(flatAt(b), flatAt(a)), sub(flatAt(c), flatAt(a)))) / 2;
   const hingeWeight = hinges.map((h) => (3 * dot(sub(flatAt(h.b), flatAt(h.a)), sub(flatAt(h.b), flatAt(h.a)))) / Math.max(1e-12, area(h.a, h.b, h.c) + area(h.b, h.a, h.d)));
-  let multipliers = new Float64Array(edges.length);
+  const multipliers = new Float64Array(edges.length);
   for (let s = 1; s <= stages; s++) {
     const share = s / stages;
     const goalAt = (problem.goals ?? []).map((g, k): Vec3 => {
@@ -412,44 +411,44 @@ export function solve(problem: BendProblem): BendResult {
       return { angle: startAngles[k] + wrap(goal - startAngles[k]) * share, compliance: crease.compliance ?? DEFAULTS.crease };
     });
 
-    if (ENERGY) {
-      if (process.env.E_RESET) multipliers = new Float64Array(edges.length);
-      const out = minimize(
+    // Guided paper: each stage brought to the least of one energy, where the passes below, one constraint at a time
+    // with lengths set alone at the end, leave it wherever the last of them put it (see docs/bending-plan.md).
+    if (guides.length) {
+      minimize(
         p,
         w,
         {
           edges,
           lengths,
-          stretch: E.stretch,
+          stretch: ENERGY.stretch,
           hinges,
           angles: targets.map((t) => t.angle),
           stiffness: hinges.map((h, k) => {
-            if (creaseOf.has(hingeKey(h.a, h.b))) return E.rigid * hingeWeight[k];
+            if (creaseOf.has(hingeKey(h.a, h.b))) return ENERGY.rigid * hingeWeight[k];
             const c = targets[k].compliance;
-            if (!c) return E.rigid * hingeWeight[k];
-            // Held as a share of its own stiffness before: the bending's share (1e-2) as E.bend, a crease's more readily.
-            return (E.bend * hingeWeight[k] * DEFAULTS.bend) / c;
+            if (!c) return ENERGY.rigid * hingeWeight[k];
+            // As readily as its compliance says, against the bending's (a crease between faces more readily).
+            return (ENERGY.bend * hingeWeight[k] * DEFAULTS.bend) / c;
           }),
           guides: guides.map((g, k) => ({ ids: g.ids, weights: g.weights, to: guideAt[k] })),
-          guide: E.guide,
+          guide: ENERGY.guide,
           goals: (problem.goals ?? []).map((g, k) => ({ vertex: g.vertex, to: goalAt[k] })),
-          goal: E.goal,
+          goal: ENERGY.goal,
           triangles: problem.triangles,
           contacts: thickness > 0 ? () => nearPairs(p, problem.triangles, thickness, sides, problem.side) : undefined,
-          contact: E.contact,
+          contact: ENERGY.contact,
           floor,
         },
         multipliers,
-        { rounds: E.rounds, steps: E.steps },
+        // Close enough for setting the lengths exactly after (keepLengths) to move the paper only a little.
+        { rounds: ENERGY.rounds, steps: ENERGY.steps, settled: 1e-3 },
       );
-      if (process.env.E_DEBUG) console.log(`stage ${s}: ${out.rounds} rounds, ${out.steps} steps, strain ${out.strain.toFixed(5)}, off guides ${Math.max(0, ...guides.map((g, k) => len(sub(guided(g), guideAt[k])))).toFixed(4)}`);
       if (stretch === 0) {
         if (s === stages) (problem.goals ?? []).forEach((g, k) => w[g.vertex] && (p[g.vertex] = [...goalAt[k]]));
         keepLengths(p, s === stages ? held : w, edges, lengths, 5, 1e-3);
         if (s < stages) settle(STAGE_POLISH, STAGE_SETTLED, held);
         settleLayers(LAYERED_POLISH, STAGE_SETTLED, targets, held);
       }
-      if (process.env.E_DEBUG) console.log(`  settled: strain ${strainNow().toFixed(5)}, off guides ${Math.max(0, ...guides.map((g, k) => len(sub(guided(g), guideAt[k])))).toFixed(4)}`);
       frames.push(p.map((q) => [...q] as Vec3));
       continue;
     }

@@ -45,13 +45,14 @@ export interface Minimized {
   strain: number;
 }
 
-const trace = { count: 0 };
 /**
  * Layers lie a gap apart in a stack, so the least squeeze would bring thousands of contacts in at once, and each
  * coming and going breaks the steps; they're kept only this share of their gap apart, and what goes further is put
  * right at the end of the stage (solver.ts's \`settleLayers\`).
  */
-const SLACK = +(process.env.E_SLACK ?? 0.5);
+const SLACK = 0.5;
+/** A step lowering the energy by less than this share of it ends the round. */
+const LEVEL = 1e-4;
 const sub = (a: Vec3, b: Vec3): Vec3 => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
 const dot = (a: Vec3, b: Vec3) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 const cross = (a: Vec3, b: Vec3): Vec3 => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
@@ -275,8 +276,7 @@ export function minimize(
       let rz = r.reduce((s, x, i) => s + x * z[i], 0);
       // Only as closely as a step of Newton's needs (the next step corrects it).
       const stop = rz * 1e-6;
-      let cg = 0;
-      for (let it = 0; it < 200 && rz > stop; it++, cg++) {
+      for (let it = 0; it < 200 && rz > stop; it++) {
         times(d, hd);
         const dhd = d.reduce((s, x, i) => s + x * hd[i], 0);
         if (dhd <= 0) break;
@@ -332,13 +332,14 @@ export function minimize(
       }
       let far = 0;
       for (let v = 0; v < n; v++) far = Math.max(far, scale * Math.hypot(delta[3 * v], delta[3 * v + 1], delta[3 * v + 2]));
-      if (process.env.E_TRACE && trace.count++ < 40) console.log(`  round ${round} step ${step}: energy ${before.toExponential(3)} -> ${after.toExponential(3)}, scale ${scale}, cg ${cg} (rz ${rz.toExponential(1)}/${stop.toExponential(1)}), far ${far.toExponential(2)}, contacts ${touching.length}, strain ${strainNow().toExponential(2)}`);
+      const settling = before - after < LEVEL * before;
       moved = Math.max(moved, far);
-      if (far < 1e-7) break;
+      // Done once a step barely lowers the energy: the rest is the edges' (the next round), or nothing.
+      if (far < 1e-7 || settling) break;
     }
     // The springs' rests moved by how far each edge is off.
     edges.forEach(([a, b], k) => (multipliers[k] += spring[k] * ((len(sub(p[b], p[a])) - lengths[k]) / lengths[k])));
-    if (strainNow() <= settled && moved < 1e-5) {
+    if (strainNow() <= settled) {
       round++;
       break;
     }
