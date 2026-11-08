@@ -472,10 +472,19 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      end faces left unguided, with guides right up to T and the hole, with twice the stages, a finer mesh (0.045)
      or guides held 100 times stiffer. The solver keeps paper folded along creases it has rather than make a fold
      that moves across it. The file is also over budget as it is: 1.2 MB at 12 stages.
-   - **Next.** Either the solver learns to roll a fold across the paper (a fold rounded over a few triangles, the
-     mesh finer at the ends than elsewhere), or the end triangles get creases where they fold (a fan of them from
-     each corner, which the paper doesn't have), or the path is found some other way, a real balloon blown up
-     slowly showing how the ends open.
+   - **Tried: a rolling fold** (`MODE=roll`). The moving fold is sharp: it starts almost flat on the diagonal
+     crease (the path round the corner turning 159°) and eases to the cube's edge from the corner to the middle of
+     the gusset's edge (94° near the end), so in effect it rolls from one to the other, passing within a few
+     centimetres of T (and the hole) while still folded 120°–160°. Rounded, each half is a cone at its corner, its
+     directions turning steadily over a few degrees either side of the fold; solving for how far it turns and
+     which way it sets off keeps it exact and ending at the tip, but the front and back halves then miss along
+     their shared middle line by up to 13 mm (solving for where the turn is instead moves the miss onto the
+     diagonal, 23 mm). Solved: 40% stretch as it plays (rolled over 6°) and 88% (12°), against 29% sharp. With
+     triangles 0.02 across in the end triangles (a finer mesh within given regions, tried as a bend option and
+     taken out again), worse: 120–135%, the small triangles by T and the hole flipping right over.
+   - **Next.** It's the solver, at the ends, that needs to change, or the path found some other way. A real balloon
+     blown up slowly would show how the ends open; the end triangles might also take creases where they fold (a fan
+     from each corner), which the paper doesn't have.
 
 8. **The iris, later.** It needs paper that bends and then lies flat again (a "relax to flat" mode, or using the
    solver to find the crease pattern real paper takes). Revisit once 1–7 are done.
