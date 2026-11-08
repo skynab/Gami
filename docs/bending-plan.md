@@ -376,6 +376,25 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      keel or on the sail's tip). So the paper bends round the keel's ends and the stem, and a guided opening
      needs a shape that keeps the paper's lengths there, worked out as the cup's was, or measured off a paper
      boat face by face.
+   - **The shape, nearly rigid.** Each wall is three triangles hinged at the grey creases: the middle one on the
+     keel, (±0.25, v) to the gunwale's middle, and one at each end, (∓0.5, v) to (0, v) to the keel's end. Tilt
+     the middles out by φ and each end triangle turns about its grey crease until its corner reaches the middle
+     plane: at φ = 30° the bow tip is 0.481 along and 0.267 up, both walls' corners meeting there, every length
+     kept, the gunwale two straight halves bowed out 0.125 at the middle, which sags to 0.217. The sail halves
+     stand on the keel, their tip 0.25 up, just above. The two diamond corners at each end hold one hat corner
+     from each wall (the diamond turned about the keel puts each wall's bow at a different end), so the left
+     and right quarters each run the boat's length: folded in half along the keel line they stand in the middle
+     plane, back to back with the sail halves, their raw edges along the top from tip to tip, 4% longer than
+     the 0.962 between the tips, which a little bending takes.
+   - **The motion turns it inside out.** In the flat small diamond both walls' middles lie on the keel's one side
+     (layers 5 and 11, one on the other) and both sail halves on its other side, each wall bent to its sail
+     half across the keel. Stood up, the sail halves meet in the middle and the walls must be either side of
+     them: the upper wall folds up onto its sail, the keel closing as usual, but the lower one has to swing
+     round under the keel and up the far side, its fold at the keel opening right out and closing the other
+     way. On the way it passes the layers under it (the other wall's bow triangle, the quarters, the brims), so
+     a guided path needs staging (the sail halves up first, the swing after) and the paper lifted off the
+     table (`free`). Not tried yet; a paper boat opened slowly, watching which wall comes round, would confirm
+     it before building the guides.
 
    **The paper balloon** (October 2026). The gallery's water bomb ends flat, with "blow into the hole" in words;
    blowing it up is a bend of its own (Kids Web Japan's balloon, the same model, ends as a rounded cube with a crease
