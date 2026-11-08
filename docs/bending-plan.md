@@ -556,7 +556,8 @@ is behind its guides stage by stage, how deep paper goes through paper, and its 
    - **Tried and dropped.** Turning the cup round as it stood up, to show its front with the flaps: it stretched 9.5%
      as it played, and the guide's arrow looped round it.
    - **Where it stands.** The cup: 1528 triangles (mesh 0.07), eight stages, about 9 s to solve, 860 KB. Its frames
-     stretch at most 0.8% and 4.7% as it plays.
+     stretch at most 0.8% and 4.7% as it plays. (November 2026: solved by the energy, in ten stages, it stretches
+     0.7% and 3.5% as it plays, and follows its guides to within 0.8 cm; see "Improving the solver", row 6.)
    - **Paper through paper, looked for again.** Inside the open cup, specks of the flaps showed through the front
      wall. In its last frame, 1050 pairs of triangles pass through a wall by more than a tenth of a millimetre (140
      by over 1 mm), mostly the corner flaps through the front wall, which they lie on, and the flaps' tops through
@@ -596,7 +597,7 @@ folded flat in a stack), a rolled fold. In order:
 | 3 | Each stage started where the guides put the paper (with dense guides), and the guides moved gradually within a stage rather than all at once, so the paper can't fall behind | Small | Tried November 2026: no help (below) |
 | 4 | A stage split where something snaps (a triangle turning further than a limit, or the paper falling behind), keeping only the frames needed | Medium | |
 | 5 | Paths found, not designed: from the start and a designed end shape, the in-between shapes that stretch the paper least (each fold's angle interpolated and the points rebuilt, as in Kilian, Mitra and Pottmann, "Geometric modeling in shape space", 2007) | Medium–large | |
-| 6 | One energy per stage (stretch, bending, guides, contact) solved to its minimum by Newton's method, in place of passes and three different settlings | Large | Tried November 2026, on `wip/energy-solver`: not yet as good (below) |
+| 6 | One energy per stage (stretch, bending, guides, contact) solved to its minimum by Newton's method, in place of passes and three different settlings | Large | ✅ November 2026, for guided bends (below) |
 | 7 | Contact paper can't cross: checked continuously between steps, edge against edge too, ideally a barrier (IPC, Li et al. 2020) | Large | |
 | 8 | Playing that keeps lengths: a few passes setting edge lengths in the viewer after blending | Small–medium | |
 | 9 | A mesh that fits the bend: solved coarsely, refined where any frame bends sharply, coarsened where none does | Medium | |
@@ -625,8 +626,7 @@ with guide rows) took the worst of it to 3 cm, no more. Two causes:
   in it, solved to its minimum. A mesh with edges along the folds a bend makes (row 9; for fixed folds, lines on
   the table cut through every layer before meshing, as the creases above did) would make the guides reachable.
 
-**Row 6, tried** (November 2026; on the `wip/energy-solver` branch, switched on by `E_METHOD=energy`). Each stage
-brought to the least of one energy (`src/fold/bend/minimize.ts`): edges kept to their lengths by an augmented
+**Row 6** (November 2026). Guided bends now bring each stage to the least of one energy (`src/fold/bend/minimize.ts`): edges kept to their lengths by an augmented
 Lagrangian (stiff springs whose rests move by how far each was off, round by round), bending per hinge as the
 sheet's triangles weight it (Grinspun et al., "Discrete shells", 2003, so it costs the same however fine the mesh),
 guides, goals, contacts and the table, by Newton's method (each step by conjugate gradients, each point's 3 × 3
@@ -640,13 +640,23 @@ breaks the steps) and leave out points beside the triangle (across a fold lying 
   given the plus's guides alone, do reach the cube, snapping on the way). So the plus itself locks: following the
   cube's path takes the triangles round T and the hole stretching for a moment, which the passes allow (the snap)
   and exact lengths don't. Real paper crumples there.
-- **The fan and the cup** aren't as good yet. The fan: 4–6 cm behind its guides (the passes 1.1), 2.6–9.4% as it
-  plays (1.5%), more paper through paper, however its bending and contacts were weighted. The cup follows its
-  guides better (0.9 cm against 1.4) and stretches less in its frames (0.4% against 0.8%), but 5.5% as it plays
-  (the limit is 5%) and twice the paper through paper. Three or four times slower.
-- **Next.** The energy is the right shape for the solver, but it needs the passes' care with contacts and creases
-  before it can replace them; and for the balloon, a few places (T, the hole) where the paper may crumple, its
-  lengths given way for a while, if the cube's path is to be followed at all.
+- **The fan and the cup**, first: not as good. The fan 4–6 cm behind its guides (the passes 1.1), 2.6–9.4% as
+  it plays (1.5%); the cup 5.5% as it plays. Tuned (`scripts/energy-tune.ts` solves a model's bend again from its
+  file with the weights changed, in seconds), the contacts were holding the paper back from its guides: with the
+  guides weighing ten times as much (10 against contacts' 10), bending at 1e-4, and a stage's steps ending once one
+  lowers the energy by less than a ten-thousandth, the fan: 0.8% in its frames, 1.2% as it plays (the passes
+  1.5%), 0.6–1.2 cm behind its guides (0.7–1.2), paper through paper 0.14 cm (0.25), 13 s to solve (6 s). The
+  cup still played at 5.6%, from the flat stack into its first frame, which it now reaches nearer its guides; in
+  ten stages rather than eight (270 KB, the files now written compactly): 0.7% in its frames, 3.5% as it plays
+  (the passes, in ten, 3.9%), 0.8 cm behind its guides (1.2), 0.47 cm through paper (0.51), 39 s (16 s). Guides
+  ten times heavier still (30) made the cup worse (12% as it plays). So guided bends use the energy, and the fan
+  and the cup were made again with it. Bends without guides (blown up, goals only) still use the passes. The
+  test suite takes 340 s rather than 240, replaying the two.
+- **The balloon** with those weights reaches nearly the cube (0.31 long) but snaps on the way again (74% as it
+  plays): the guides now outweigh the lock at its ends, which still has to give somewhere.
+- **Next.** For the balloon, a few places (T, the hole) where the paper may crumple, its lengths given way for a
+  while, if the cube's path is to be followed without snapping; for the rest, the energy taking over the bends
+  without guides too, once they're tuned as these were.
 
 ## Risks
 
