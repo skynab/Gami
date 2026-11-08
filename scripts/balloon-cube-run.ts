@@ -1,22 +1,19 @@
 // The balloon blown up by its guides into a cube, and what its bend does (see src/fold/bend/report.ts).
 import { writeFileSync } from 'node:fs';
-import { Recipe, table } from '../src/fold/recipe';
+import { Recipe } from '../src/fold/recipe';
 import { tuckedSide, waterbombBase } from '../src/models/recipes/waterbomb-base';
-import { cubeGuides, STAGES } from './balloon-cube-lab';
+import { CUBE_EDGES, cubeGuides, STAGES } from './balloon-cube-lab';
 import { bendReport, describeBend } from '../src/fold/bend/report';
 import { toFoldFile } from '../src/fold/fold-format';
 const r = waterbombBase(new Recipe({ id: 'balloon', title: 'Balloon', sheet: { size: [1, 1], front: '#4caf50', back: '#f6f3ec' } }));
 tuckedSide(r);
 r.turnOver('Turn it over, and do the same on this side.');
 tuckedSide(r);
-// Experiment: the cube's edges creased first, across the stack, so the mesh has edges along them.
-if (process.env.PRECREASE) {
-  r.crease(table(0, -0.5), table(0, -0.25), { title: 'Crease the top edges' });
-  r.crease(table(0, 0), table(0, -0.25), { title: 'Crease the bottom edges' });
-}
 const goals = cubeGuides(r.current);
 const t0 = performance.now();
-r.bend({ title: 'Blow it up', text: 'Blow into the hole.' }, { flex: () => true, anchor: [0, 0], goals, mesh: +(process.env.MESH ?? 0.07), stages: STAGES, free: true });
+// LINES: the mesh cut along the cube's top and bottom edges, which lie on two lines across the flat stack.
+const lines = process.env.LINES ? CUBE_EDGES : undefined;
+r.bend({ title: 'Blow it up', text: 'Blow into the hole.' }, { flex: () => true, anchor: [0, 0], goals, mesh: +(process.env.MESH ?? 0.07), ...(lines && { lines }), stages: STAGES, free: true });
 const model = r.build();
 console.log(`${goals.length} guides, solved in ${Math.round(performance.now() - t0)} ms`);
 console.log(describeBend(bendReport(model, model.steps.length)).join('\n'));

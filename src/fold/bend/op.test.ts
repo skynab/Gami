@@ -101,5 +101,10 @@ describe('the bend operation', () => {
     expect(() => parseOp({ ...guided, goals: [{ guide: { table: [0.1, 0.2] }, path: [[0, 0, 0]] }] })).toThrow();
     expect(() => parseOp({ ...guided, stages: 0 })).toThrow();
     expect(() => parseOp({ ...guided, stages: 1000 })).toThrow();
+    // Lines to fold along, as segments on the table.
+    const lined: Op = { ...guided, lines: [[[-1, 0.25], [1, 0.25]]] };
+    expect(parseOp(JSON.parse(JSON.stringify(lined)))).toEqual(lined);
+    expect(() => parseOp({ ...guided, lines: [[[-1, 0.25]]] })).toThrow();
+    expect(() => parseOp({ ...guided, lines: [[[-1, 0.25], [1, 'a']]] })).toThrow();
   });
 });

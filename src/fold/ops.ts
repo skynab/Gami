@@ -115,7 +115,7 @@ export type Op =
    * `free`: not held up by the table as it bends, and set down on it after. `stages`: how many frames it passes
    * through.
    */
-  | { op: 'bend'; flex: Faces; anchor: { paper: Vec2 }; goals: BendGoal[]; mesh?: number; inflate?: number; free?: boolean; stages?: number }
+  | { op: 'bend'; flex: Faces; anchor: { paper: Vec2 }; goals: BendGoal[]; mesh?: number; lines?: [Vec2, Vec2][]; inflate?: number; free?: boolean; stages?: number }
   /** `via`: the rays of shapes it passes through on the way, from flat, so it rises as one rather than each piece its own way. */
   | { op: 'popUp'; centre: At; rays: Ray[]; via?: Ray[][] }
   /** Draws on the paper, leaving it where it is: a face, say. */
@@ -241,6 +241,7 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
         ),
         // Not so fine that meshing it takes too long.
         ...opt(o, 'mesh', (v, p) => between(num(v, p), p, 0.02, 10), path),
+        ...opt(o, 'lines', (v, p) => list(v, p, (l, q) => pair(l, q, vec2), LIMITS.list), path),
         ...opt(o, 'inflate', (v, p) => between(num(v, p), p, 0, 10), path),
         ...opt(o, 'free', bool, path),
         ...opt(o, 'stages', (v, p) => between(count(v, p), p, 1, LIMITS.stages), path),
@@ -772,6 +773,7 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
         creases: op.goals.flatMap((g) => ('crease' in g ? [{ from: g.crease[0], to: g.crease[1], degrees: g.degrees }] : [])),
         guides: op.goals.flatMap((g) => ('guide' in g ? [{ paper: g.guide.paper, path: g.path }] : [])),
         ...(op.mesh !== undefined && { mesh: op.mesh }),
+        ...(op.lines?.length && { lines: op.lines }),
         ...(op.inflate && { inflate: op.inflate }),
         ...(op.free && { free: true }),
         ...(op.stages && { stages: op.stages }),

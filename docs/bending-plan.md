@@ -45,6 +45,11 @@ A new operation, `bend`, recorded like every other (`gami:op`), so a file folds 
   goals: ({ point: At; to: Vec3 } | { crease: LineSpec; degrees: number })[];
   /** How finely to mesh the bending paper, as the longest triangle edge on the sheet. */
   mesh?: number;
+  /**
+   * Lines the paper will fold along, as segments on the table (paper lying flat only): every face they cross, in
+   * every layer, is cut along them before meshing, so the mesh has edges there (November 2026).
+   */
+  lines?: [Vec2, Vec2][];
 }
 ```
 
@@ -600,7 +605,7 @@ folded flat in a stack), a rolled fold. In order:
 | 6 | One energy per stage (stretch, bending, guides, contact) solved to its minimum by Newton's method, in place of passes and three different settlings | Large | ✅ November 2026, for guided bends (below) |
 | 7 | Contact paper can't cross: checked continuously between steps, edge against edge too, ideally a barrier (IPC, Li et al. 2020) | Large | |
 | 8 | Playing that keeps lengths: a few passes setting edge lengths in the viewer after blending | Small–medium | |
-| 9 | A mesh that fits the bend: solved coarsely, refined where any frame bends sharply, coarsened where none does | Medium | |
+| 9 | A mesh that fits the bend: solved coarsely, refined where any frame bends sharply, coarsened where none does | Medium | Fixed folds ✅ November 2026: `lines` (below); refining where it bends, not yet |
 | 10 | Creases that form: a hinge bent past a limit takes its new angle as its rest | Medium | |
 
 The balloon's snapping wants 3, 4 and 5; crossings (the cup, the 3D tulip, the balloon) 7; the iris 10.
@@ -657,6 +662,17 @@ breaks the steps) and leave out points beside the triangle (across a fold lying 
 - **Next.** For the balloon, a few places (T, the hole) where the paper may crumple, its lengths given way for a
   while, if the cube's path is to be followed without snapping; for the rest, the energy taking over the bends
   without guides too, once they're tuned as these were.
+
+**Row 9, fixed folds** (November 2026). A bend can name `lines` on the table it will fold along (`cutAlong` in
+`src/fold/bend/frame.ts`): every face a segment crosses, in every layer, is cut along it before meshing, as scissors
+would but joined still, and the bent frames' faces point back at the frame's. A fold through the middle of a face
+then runs along the mesh's edges: in a test, turning part of one face straight up about a line through it, the
+paper ends within a centimetre of the fold's shape, more than twice as near as without. On the balloon, the cube's
+top and bottom edges lie on two lines across the flat stack (`CUBE_EDGES`): with them, the triangles that can't
+follow the cube's map flat drop from 102 to 76 at the cube (9% at most, from 25%), its frames stretch 0.3% rather
+than 0.8%, and it ends 3.1 cm from its guides rather than 6.4. It still snaps on the way (79% as it plays): that's
+its ends, which have to crumple (above). Refining the mesh where the paper bends most, for folds that move, isn't
+done.
 
 ## Risks
 

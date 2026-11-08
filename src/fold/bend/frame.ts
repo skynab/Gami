@@ -1,5 +1,7 @@
+import { clip } from '../cut';
+import { FoldError, fromFlat, toFlat, type FlatFace } from '../fold';
 import { facePositions, LAYER_GAP } from '../frames';
-import { joinedAlong, sharedSegment, signedArea } from '../geometry2d';
+import { joinedAlong, sharedSegment, signedArea, split } from '../geometry2d';
 import type { FoldFrame, Vec2, Vec3 } from '../types';
 import { topology, type Tri } from './mesh';
 import { solve } from './solver';
@@ -240,6 +242,12 @@ export interface BendOptions {
   /** The longest edge of a triangle of bending paper, on the sheet. Defaults to a twelfth of the sheet's size. */
   mesh?: number;
   /**
+   * Lines the paper will fold along, as segments on the table, for paper lying flat: every layer's face a segment
+   * crosses is cut along it before meshing (joined still, as a crease is), so the mesh has edges there and the
+   * paper can fold along them, rather than across triangles, which can't.
+   */
+  lines?: [Vec2, Vec2][];
+  /**
    * How readily creases between faces give, as a share of each hinge's own stiffness (see solver.ts); soft mesh edges
    * bend more readily still.
    */
@@ -259,11 +267,14 @@ const CREASE_COMPLIANCE = 0.1;
  * Bends the paper of a frame towards its goals. Returns the frames it passes through (the first pointing each
  * triangle back at the face of `frame` it came from) and the bent paper, and how far any triangle strains.
  */
-export function bendFrame(frame: FoldFrame, options: BendOptions): { via: FoldFrame[]; frame: FoldFrame; strain: number } {
+export function bendFrame(given: FoldFrame, options: BendOptions): { via: FoldFrame[]; frame: FoldFrame; strain: number } {
+  // Cut along the lines it will fold along, if any; its faces then point back at the frame's (`origin`).
+  const { frame, origin } = options.lines?.length ? cutAlong(given, options.lines) : { frame: given, origin: given.faces_vertices.map((_, f) => f) };
+  const flex = frame.faces_vertices.flatMap((_, f) => (options.flex.includes(origin[f]) ? [f] : []));
   const size = options.mesh ?? sheetSize(frame) / 12;
-  const mesh = meshFrame(frame, options.flex, size);
+  const mesh = meshFrame(frame, flex, size);
   const { paper, points, triangles, parent } = mesh;
-  const flexible = new Set(options.flex);
+  const flexible = new Set(flex);
 
   const near = (q: Vec2) => {
     let best = 0;
@@ -345,7 +356,7 @@ export function bendFrame(frame: FoldFrame, options: BendOptions): { via: FoldFr
     vertices_coords: coords,
     vertices_paper: paper,
     faces_vertices: triangles,
-    ...(first && { faces_parent: parent }),
+    ...(first && { faces_parent: parent.map((f) => origin[f]) }),
     ...(frame.cuts?.length && { cuts: frame.cuts }),
     ...(frame.tapes?.length && { tapes: frame.tapes }),
     ...(soft.length && { soft }),
@@ -357,6 +368,28 @@ export function bendFrame(frame: FoldFrame, options: BendOptions): { via: FoldFr
   }
   const all = frames.map((f, k) => write(f, k === 0));
   return { via: all.slice(0, -1), frame: all[all.length - 1], strain };
+}
+
+/**
+ * A flat frame with every face a line crosses cut along it (see BendOptions.lines), each piece pointing back at the
+ * face it's cut from (`origin`). The paper stays joined: unlike scissors, no cut is kept.
+ */
+export function cutAlong(frame: FoldFrame, lines: [Vec2, Vec2][]): { frame: FoldFrame; origin: number[] } {
+  if (!frame.vertices_coords.every((q) => Math.abs(q[1]) < 1e-9)) throw new FoldError('Lines to fold along are on the table: the paper has to lie flat.');
+  let faces: FlatFace[] = toFlat(frame);
+  for (const [a, b] of lines) {
+    const line = { p: a, d: [b[0] - a[0], b[1] - a[1]] as Vec2 };
+    faces = faces.flatMap((f) => {
+      if (!clip(f.world, a, b)) return [f];
+      const { pos, neg } = split(f, line);
+      return pos && neg ? [{ ...pos, layer: f.layer, parent: f.parent }, { ...neg, layer: f.layer, parent: f.parent }] : [f];
+    });
+  }
+  const cutUp = fromFlat(faces);
+  return {
+    frame: { ...cutUp, faces_parent: undefined, ...(frame.cuts?.length && { cuts: frame.cuts }), ...(frame.tapes?.length && { tapes: frame.tapes }) },
+    origin: faces.map((f) => f.parent),
+  };
 }
 
 /** Whether a frame lies flat, its faces in layers. */

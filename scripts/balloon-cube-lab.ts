@@ -345,6 +345,15 @@ export function onCube(frame: FoldFrame): (face: number, q: Vec2, theta: number)
   };
 }
 
+/**
+ * The cube's top and bottom edges in the flat stack: every face of the plus folds onto the end faces at one of
+ * these two lines across the table, and so does whatever lies on it (see BendOptions.lines).
+ */
+export const CUBE_EDGES: [Vec2, Vec2][] = [
+  [[-1, -3 * E], [1, -3 * E]],
+  [[-1, -E], [1, -E]],
+];
+
 /** Guides taking the flat water bomb (`frame`) to the cube. */
 export function cubeGuides(frame: FoldFrame): BendGoal[] {
   return placements(frame).flatMap(({ face: f, core, layer, place, back, gap }) => {

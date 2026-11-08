@@ -1,22 +1,18 @@
 // How far the exact cube map (balloon-cube-lab.ts) stretches the bend's own mesh: each triangle's corners placed
 // through the map, by the face it's cut from, its edges against the sheet's. A triangle crossing a fold of the map
-// can't follow it flat, so the guides ask the impossible there. PRECREASE creases the cube's edges first, across
-// the stack (as balloon-cube-run.ts can), so the mesh has edges along them; MESH sets the mesh's size.
-import { meshFrame } from '../src/fold/bend/frame';
-import { Recipe, table } from '../src/fold/recipe';
+// can't follow it flat, so the guides ask the impossible there. LINES cuts the mesh along the cube's edges first
+// (as balloon-cube-run.ts can, see BendOptions.lines); MESH sets the mesh's size.
+import { cutAlong, meshFrame } from '../src/fold/bend/frame';
+import { Recipe } from '../src/fold/recipe';
 import type { Vec2, Vec3 } from '../src/fold/types';
 import { tuckedSide, waterbombBase } from '../src/models/recipes/waterbomb-base';
-import { onCube } from './balloon-cube-lab';
+import { CUBE_EDGES, onCube } from './balloon-cube-lab';
 
 const r = waterbombBase(new Recipe({ id: 'balloon', title: 'Balloon', sheet: { size: [1, 1], front: '#4caf50', back: '#f6f3ec' } }));
 tuckedSide(r);
 r.turnOver('Turn it over, and do the same on this side.');
 tuckedSide(r);
-if (process.env.PRECREASE) {
-  r.crease(table(0, -0.5), table(0, -0.25), { title: 'Crease the top edges' });
-  r.crease(table(0, 0), table(0, -0.25), { title: 'Crease the bottom edges' });
-}
-const frame = r.current;
+const frame = process.env.LINES ? cutAlong(r.current, CUBE_EDGES).frame : r.current;
 const at = onCube(frame);
 const mesh = meshFrame(frame, frame.faces_vertices.map((_, i) => i), +(process.env.MESH ?? 0.07));
 

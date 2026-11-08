@@ -269,6 +269,31 @@ describe('bending a frame', () => {
     }
   });
 
+  it('folds along lines it’s given, though no crease is there, the mesh cut along them', { timeout: 20000 }, () => {
+    // The right of the sheet turned straight up about x = 0.1, which runs through the middle of the one face.
+    const up = ([u, v]: Vec2, share: number): Vec3 => {
+      const turn = (share * Math.PI) / 2;
+      return u <= 0.1 ? [u, 0, v] : [0.1 + (u - 0.1) * Math.cos(turn), (u - 0.1) * Math.sin(turn), v];
+    };
+    const at = [-0.4, -0.2, 0, 0.05, 0.15, 0.25, 0.4];
+    const guides = at.flatMap((u) => [-0.4, 0, 0.4].map((v): { paper: Vec2; path: Vec3[] } => ({ paper: [u, v], path: [1, 2, 3, 4].map((k) => up([u, v], k / 4)) })));
+    const bend = (lines?: [Vec2, Vec2][]) => bendFrame(flat, { flex: [0], anchor: [0, 0], goals: [], guides, mesh: 0.15, stages: 4, ...(lines && { lines }) });
+    // How far the paper ends from the fold's shape, at most.
+    const off = (f: FoldFrame) => Math.max(...f.vertices_paper.map((p, v) => dist(f.vertices_coords[v], up(p, 1))));
+    const along = bend([[[0.1, -1], [0.1, 1]]]);
+    // The mesh has a line of points down x = 0.1, and every triangle still comes from the sheet's one face.
+    expect(along.frame.vertices_paper.filter(([u]) => Math.abs(u - 0.1) < 1e-9).length).toBeGreaterThan(3);
+    expect(new Set(along.via[0].faces_parent)).toEqual(new Set([0]));
+    // Folding along it, the paper takes the fold's shape; without it, triangles across the line can't.
+    expect(off(along.frame)).toBeLessThan(0.01);
+    expect(off(bend().frame)).toBeGreaterThan(2 * off(along.frame));
+  });
+
+  it('can’t fold along lines unless the paper lies flat', () => {
+    const tilted: FoldFrame = { ...flat, vertices_coords: flat.vertices_coords.map(([x, , z]): Vec3 => [x, x + 0.5, z]) };
+    expect(() => bendFrame(tilted, { flex: [0], anchor: [0, 0], goals: [{ paper: [0.5, 0.5], to: [0.5, 1, 0.5] }], lines: [[[0, -1], [0, 1]]] })).toThrow(/flat/);
+  });
+
   it('round-trips through a .fold file', () => {
     const model: OrigamiModel = {
       id: 'taco',
