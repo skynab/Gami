@@ -444,9 +444,38 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      in real paper. Holding points that lie together on the outline from parting stops that, and then it barely
      fills (5 cm): with its outline held, the paper can only bulge by bending. Drawing the outline in to a square
      belt with goals mangles it.
-   - **Next.** Build the blown-up shape first (where each of the flat water bomb's faces goes on the cube) and let
-     the solver settle it, as for the boat. A real balloon, blown up and looked at face by face, would settle where
-     the hole, the tucked corners and the outline end up.
+   - **The cube, face by face** (November 2026, `scripts/balloon-cube-lab.ts`). Flat, the water bomb is a cube
+     pressed flat, and a smaller one than thought: ¼ across, not 0.3. The paper round the sheet's centre, a plus
+     with pointed arms (|u| or |v| under ⅛, inside |u| + |v| = ½), covers it exactly once: the centre square is the
+     face at T (the sheet's centre), the arms the four sides, their points the face at the hole (the edge
+     midpoints meet in its middle). In the stack, the front and back sides lie flat (layers 8 and 15), the left and
+     right sides fold in half between them as a paper bag's gussets do (layers 9 and 14), and both end faces fold
+     up as water bomb bases. The flat outline isn't a belt round the middle: it runs from T across its face to a
+     corner, down an edge and across the hole's face. So the pocket the air fills is between layers 8 and 9 and
+     between 14 and 15, joined in the middle; between 9 and 14 is outside, inside the gussets, where the corners'
+     tips are tucked. The corners lie against the outside of the plus, so each point of the flat model goes where
+     the face it lies on goes, out from it by as many layers. Guided there, the solver does reach a cube (0.27
+     across, its sides clean, the flaps in place but for a corner or two).
+   - **The way there.** The front and back sides part (d = ¼ sin θ), the side faces open as gussets and the end
+     triangles on the front and back turn up. The end triangles on the sides can't: with every face of the plus
+     flat, only the flat stack and the cube fit (worked through for an octagonal box too: the end's eight triangles
+     force it back to one or the other), like a paper bag, which can't be opened rigidly either. The line from T
+     to the middle of a gusset's edge is shorter in 3D than on the sheet. Two ways tried: bulging those triangles
+     out (asks up to 18% stretch of them on the way), and folding each half from its corner to a point on that
+     line (exact; the point is level with T and in line with the gusset's edge, t = 1 − cos θ along it), which
+     moves the fold across the paper as the balloon opens. A fixed fold fits only at θ = 60°; a cone at the corner
+     misses by 1–3 cm.
+   - **Why it doesn't solve smoothly yet.** Either way the paper ends at the cube within about 2–3%, but it plays
+     at 30% or more: at T and at the hole the end triangles lag behind their guides, folded along the creases
+     they have, and then jump, all four together, as a water bomb base pops through (a triangle turning up to
+     150° between two frames). Unchanged with exact guides on the plus alone, without the layers' sides, with the
+     end faces left unguided, with guides right up to T and the hole, with twice the stages, a finer mesh (0.045)
+     or guides held 100 times stiffer. The solver keeps paper folded along creases it has rather than make a fold
+     that moves across it. The file is also over budget as it is: 1.2 MB at 12 stages.
+   - **Next.** Either the solver learns to roll a fold across the paper (a fold rounded over a few triangles, the
+     mesh finer at the ends than elsewhere), or the end triangles get creases where they fold (a fan of them from
+     each corner, which the paper doesn't have), or the path is found some other way, a real balloon blown up
+     slowly showing how the ends open.
 
 8. **The iris, later.** It needs paper that bends and then lies flat again (a "relax to flat" mode, or using the
    solver to find the crease pattern real paper takes). Revisit once 1–7 are done.

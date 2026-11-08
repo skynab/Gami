@@ -92,7 +92,7 @@ recipe is on `dev` now, not yet in the gallery's list. The fan is in the gallery
 | 1 | **Boat, as far as the small diamond.** Parked with row 3 (8 November). On `dev`. The squashes now pass paper through paper by 0.007 and 0.025 (they were 14 cm and 1.7 cm). The second can't fold in step: kept joined, its creases follow another way of folding (bending plan, step 7). Next: live with 0.025 on `GRAZES`, or find what keeps its creases on this way of folding. | No |
 | 2 | ✅ **Fan.** In the gallery (7 November): redesigned to fold as origami.me does, so it can open at all; the spread guided as a book's pages fanned round a half circle; thin faces now meshed in rows, which also helps the 3D tulip (bending plan, step 6). | Yes |
 | 3 | **Boat's opening.** Parked (8 November) until a real paper boat has been watched opening (see "Waiting"). Its shape is worked out and holds together, but the guided path tangles where the small diamond's two halves interlock (bending plan, step 7; `scripts/boat-opening-lab.ts`). Next: watch a real paper boat open to see how the interlock comes apart, or whether it stays. | Yes |
-| 4 | **Balloon blown up**, and the 3D tulip with it: the blown-up shape built face by face first. | Yes |
+| 4 | **Balloon blown up**, and the 3D tulip with it. The cube is worked out face by face and the solver reaches it, but the way there pops through at T and the hole (30% stretch as it plays): the ends' side triangles can't open without a fold moving across the paper, which the solver won't make (bending plan, step 7, the paper balloon; `scripts/balloon-cube-lab.ts`). The gallery's balloon is unchanged. | Yes |
 | 5 | **Shallow masu lid's locks.** They come apart by up to 0.08 as the flap goes over the wall; with rigid paper the flap is locked there. | Yes |
 | 6 | **Iris.** Needs paper that bends and then lies flat again. Last. | Yes |
 
@@ -138,3 +138,4 @@ list can't go stale.
 | Housekeeping | Done but for the branches (above). |
 | Bending, rows 1 and 3 (boat) | Parked 8 November: its recipe and the opening lab on `dev`, findings in `docs/bending-plan.md` (step 7). Stays Coming soon. |
 | Bending, row 2 (fan) | Done 7 November: in the gallery. |
+| Bending, row 4 (balloon) | Started 8 November: the cube's shape and guides in `scripts/balloon-cube-lab.ts`; the path doesn't solve smoothly yet. |
