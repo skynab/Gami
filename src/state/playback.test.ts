@@ -55,3 +55,66 @@ describe('pausing', () => {
     expect(usePlayback.getState()).toMatchObject({ playing: false, pos: 1, step: 1 });
   });
 });
+
+describe('going back', () => {
+  it('unfolds the step shown in reverse, to the end of the step before', () => {
+    usePlayback.getState().goTo(3);
+    advance(5000);
+    expect(usePlayback.getState()).toMatchObject({ step: 3, pos: 3 });
+    usePlayback.getState().back();
+    advance(800);
+    // Part way back, the paper is still in step 3's fold.
+    const { pos, step } = usePlayback.getState();
+    expect(pos).toBeGreaterThan(2);
+    expect(pos).toBeLessThan(3);
+    expect(step).toBe(3);
+    advance(5000);
+    expect(usePlayback.getState()).toMatchObject({ step: 2, pos: 2, playing: false });
+  });
+
+  it('undoes only the part played of a fold stopped part way', () => {
+    usePlayback.getState().goTo(3);
+    advance(800);
+    usePlayback.getState().pause();
+    usePlayback.getState().back();
+    advance(5000);
+    expect(usePlayback.getState()).toMatchObject({ step: 2, pos: 2 });
+  });
+
+  it('carries on through the step before when pressed again on the way', () => {
+    usePlayback.getState().goTo(4);
+    advance(5000);
+    usePlayback.getState().back();
+    advance(400);
+    usePlayback.getState().back();
+    advance(800);
+    expect(usePlayback.getState().pos).toBeGreaterThan(2);
+    advance(10000);
+    expect(usePlayback.getState()).toMatchObject({ step: 2, pos: 2 });
+  });
+
+  it('stops playing on through the steps', () => {
+    usePlayback.getState().goTo(2);
+    advance(5000);
+    usePlayback.getState().togglePlay();
+    advance(400);
+    usePlayback.getState().back();
+    advance(10000);
+    expect(usePlayback.getState()).toMatchObject({ playing: false, step: 2, pos: 2 });
+  });
+
+  it('goes back to the paper before any fold, and no further', () => {
+    usePlayback.getState().back();
+    advance(5000);
+    expect(usePlayback.getState()).toMatchObject({ step: 0, pos: 0 });
+    usePlayback.getState().back();
+    advance(5000);
+    expect(usePlayback.getState()).toMatchObject({ step: 0, pos: 0 });
+  });
+
+  it('appears there straight away for someone who prefers less motion', () => {
+    vi.stubGlobal('matchMedia', () => ({ matches: true }));
+    usePlayback.getState().back();
+    expect(usePlayback.getState()).toMatchObject({ step: 0, pos: 0 });
+  });
+});

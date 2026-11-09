@@ -52,6 +52,13 @@ export const ResetIcon = icon(
     <path d="M4 4v4h4" />
   </>,
 );
+/** A gridded table top, seen in perspective. */
+export const TableIcon = icon(
+  <>
+    <path d="M7 7h10l4 11H3z" />
+    <path d="M10.3 7 9 18M13.7 7 15 18M5.2 12.5h13.6" />
+  </>,
+);
 export const StudioIcon = icon(
   <>
     <path d="M4 20h4L19 9l-4-4L4 16z" />

@@ -20,9 +20,14 @@ interface ViewerState {
   cubeZoomed: boolean;
   /**
    * The camera frames each new step as it comes (keeping the angle). Off, it stays where it is from step to step
-   * until reset. Kept from model to model, and in this browser.
+   * until reset. On to begin with; kept from model to model, and in this browser.
    */
   follow: boolean;
+  /**
+   * A faint grid on the table under the paper, so how close the camera is shows at a glance. On to begin with;
+   * kept from model to model, and in this browser.
+   */
+  table: boolean;
   command: CameraCommand;
 
   setView(view: View): void;
@@ -33,6 +38,7 @@ interface ViewerState {
   toggleInstructions(): void;
   setCubeZoomed(zoomed: boolean): void;
   toggleFollow(): void;
+  toggleTable(): void;
   /** The user rotated the camera by hand, so it's no longer at a preset. */
   leftPreset(): void;
   /** Back to the starting view, for a newly opened model. */
@@ -42,18 +48,20 @@ interface ViewerState {
 let nextId = 1;
 
 const FOLLOW_KEY = 'gami.followSteps';
+const TABLE_KEY = 'gami.tableGrid';
 
-function readFollow(): boolean {
+/** A setting that's on unless this browser has turned it off. */
+function readOn(key: string): boolean {
   try {
-    return localStorage.getItem(FOLLOW_KEY) === '1';
+    return localStorage.getItem(key) !== '0';
   } catch {
-    return false;
+    return true;
   }
 }
 
-function saveFollow(follow: boolean) {
+function save(key: string, on: boolean) {
   try {
-    localStorage.setItem(FOLLOW_KEY, follow ? '1' : '0');
+    localStorage.setItem(key, on ? '1' : '0');
   } catch {
     // Nothing to do: it still applies for this visit.
   }
@@ -65,7 +73,8 @@ export const useViewer = create<ViewerState>()((set) => ({
   guides: true,
   instructions: true,
   cubeZoomed: false,
-  follow: readFollow(),
+  follow: readOn(FOLLOW_KEY),
+  table: readOn(TABLE_KEY),
   command: { kind: 'reset', id: 0 },
 
   setView: (view) => set({ view, command: { kind: 'view', view, id: nextId++ } }),
@@ -77,8 +86,13 @@ export const useViewer = create<ViewerState>()((set) => ({
   setCubeZoomed: (cubeZoomed) => set({ cubeZoomed }),
   toggleFollow: () =>
     set((s) => {
-      saveFollow(!s.follow);
+      save(FOLLOW_KEY, !s.follow);
       return { follow: !s.follow };
+    }),
+  toggleTable: () =>
+    set((s) => {
+      save(TABLE_KEY, !s.table);
+      return { table: !s.table };
     }),
   leftPreset: () => set((s) => (s.view === 'free' ? s : { view: 'free' })),
   init: () => set({ view: 'free', locked: false, cubeZoomed: false, command: { kind: 'reset', id: nextId++ } }),

@@ -1,4 +1,4 @@
-import { ContactShadows } from '@react-three/drei';
+import { ContactShadows, Grid } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { useMemo } from 'react';
 import { Sphere, Vector3 } from 'three';
@@ -18,6 +18,7 @@ import { CubeCorner } from './ViewCube';
  */
 export default function Stage({ model, onTap }: { model: OrigamiModel; onTap?: () => void }) {
   const colors = useThemeColors();
+  const table = useViewer((s) => s.table);
   // The camera frames whichever step is showing, worked out when the step is reached, so the camera only
   // moves when the step changes.
   const step = usePlayback((s) => s.step);
@@ -54,6 +55,25 @@ export default function Stage({ model, onTap }: { model: OrigamiModel; onTap?: (
       <FoldGuides model={model} color={colors.accent} />
       {/* A little below the table top, so the paper (pushed back in depth to keep its crease lines visible) always wins. */}
       <ContactShadows position-y={-0.01} scale={3} blur={2.4} far={1} opacity={0.35} />
+      {/* A faint grid on the table, so how near the camera is shows at a glance: a cell is a tenth of a standard
+          sheet, a heavier line every half sheet. It fades out around the paper, and is seen only from above. Under
+          the shadow, which is drawn after it. */}
+      {table && (
+        <Grid
+          position-y={-0.012}
+          renderOrder={-1}
+          infiniteGrid
+          cellSize={0.1}
+          sectionSize={0.5}
+          cellThickness={0.6}
+          sectionThickness={1}
+          cellColor={colors.line}
+          sectionColor={colors.line}
+          fadeDistance={3.5}
+          fadeStrength={1.5}
+          fadeFrom={0}
+        />
+      )}
 
       <CameraRig fit={fit} />
 

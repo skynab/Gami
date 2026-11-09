@@ -16,6 +16,7 @@ import {
   PrevIcon,
   ReplayIcon,
   ResetIcon,
+  TableIcon,
 } from '../app/icons';
 import { Modal } from '../app/Modal';
 import { TopBar } from '../app/TopBar';
@@ -59,12 +60,13 @@ export function ModelViewer({ progressKey, title, load, notice }: {
   const locked = useViewer((s) => s.locked);
   const guides = useViewer((s) => s.guides);
   const instructions = useViewer((s) => s.instructions);
-  const { setView, toggleLock, toggleGuides, toggleInstructions, resetCamera, toggleFollow } = useViewer.getState();
+  const table = useViewer((s) => s.table);
+  const { setView, toggleLock, toggleGuides, toggleInstructions, resetCamera, toggleFollow, toggleTable } = useViewer.getState();
   const step = usePlayback((s) => s.step);
   const total = usePlayback((s) => s.total);
   const speed = usePlayback((s) => s.speed);
   const finished = usePlayback((s) => s.total > 0 && s.pos >= s.total);
-  const { goTo, replay, half, togglePlay, setSpeed } = usePlayback.getState();
+  const { goTo, back, replay, half, togglePlay, setSpeed } = usePlayback.getState();
   const nextSpeed = () => setSpeed(SPEEDS[(SPEEDS.indexOf(speed) + 1) % SPEEDS.length]);
 
   // The step in the address when the page opened, or where this person left off. After that, the address follows playback.
@@ -119,7 +121,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
       if (help || e.target instanceof HTMLInputElement || e.metaKey || e.ctrlKey || e.altKey) return;
       // Space on a focused button presses that button.
       if (e.key === ' ' && e.target instanceof HTMLButtonElement) return;
-      if (e.key === 'ArrowLeft') goTo(step - 1);
+      if (e.key === 'ArrowLeft') back();
       else if (e.key === 'ArrowRight') goTo(step + 1);
       else if (e.key === 'Home') goTo(1);
       else if (e.key === 'End') goTo(total);
@@ -130,6 +132,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
       else if (e.key === '0') resetCamera();
       else if (e.key === 'f' || e.key === 'F') toggleFollow();
       else if (e.key === 'l' || e.key === 'L') toggleLock();
+      else if (e.key === 't' || e.key === 'T') toggleTable();
       else if (e.key === 'g' || e.key === 'G') toggleGuides();
       else if (e.key === 'i' || e.key === 'I') toggleInstructions();
       else if (e.key === 's' || e.key === 'S') nextSpeed();
@@ -280,7 +283,7 @@ export function ModelViewer({ progressKey, title, load, notice }: {
       <footer className="bottombar playback">
         <div className="group transport">
           <FirstButton />
-          <button type="button" className="icon" aria-label={t('viewer.prev')} title={t('viewer.prevTitle')} disabled={step <= 0} onClick={() => goTo(step - 1)}>
+          <button type="button" className="icon" aria-label={t('viewer.prev')} title={t('viewer.prevTitle')} disabled={step <= 0} onClick={back}>
             <PrevIcon />
           </button>
           <button type="button" className="icon" aria-label={t('viewer.replay')} title={t('viewer.replayTitle')} disabled={!total} onClick={replay}>
@@ -336,6 +339,16 @@ export function ModelViewer({ progressKey, title, load, notice }: {
             onClick={toggleLock}
           >
             <LockIcon />
+          </button>
+          <button
+            type="button"
+            className="icon"
+            aria-label={t('viewer.table')}
+            title={t('viewer.tableTitle')}
+            aria-pressed={table}
+            onClick={toggleTable}
+          >
+            <TableIcon />
           </button>
           <ResetButton />
         </div>
@@ -471,7 +484,7 @@ const HOLD_TO_FOLLOW_MS = 700;
 
 /**
  * Resets the view on a click. Held down (filling up as it is), it turns following each step on or off instead:
- * the camera framing every new step, as it once always did. Lit while following.
+ * the camera framing every new step, as it does to begin with. Lit while following.
  */
 function ResetButton() {
   const { t } = useTranslation();
@@ -552,6 +565,7 @@ const SHORTCUTS: [string, string][] = [
   ['I', 'instructions'],
   ['1 – 4', 'views'],
   ['L', 'lock'],
+  ['T', 'table'],
   ['0', 'reset'],
   ['F', 'follow'],
 ];
@@ -577,19 +591,93 @@ function ShortcutsDialog({ onClose }: { onClose(): void }) {
   );
 }
 
+/** The range thumb's width (app.css): its centre runs from half this in from one end of the track to the other. */
+const THUMB_PX = 16;
+/** How near the thumb a press has to start to jog the paper rather than jump: further for a finger than a mouse. */
+const NEAR_MOUSE_PX = 10;
+const NEAR_TOUCH_PX = 28;
+/** Jogging, how far to drag to play one step's fold: slow enough to stop anywhere in it, even on a phone. */
+const JOG_PX_PER_STEP = 200;
+
+/** A drag on the scrubber: where it started, and how many pixels make a step (0 when it follows the track). */
+interface Drag {
+  id: number;
+  x: number;
+  pos: number;
+  perStep: number;
+}
+
 /**
- * Drag through the whole model, stopping anywhere, even halfway through a fold. A diamond marks where each
- * section starts (each topic of a lesson), and a ring each key point (a complex fold); clicking one goes there.
- * Its own component because it re-renders on every animation frame.
+ * Drag through the whole model, stopping anywhere, even halfway through a fold. Pressed near the thumb, a drag
+ * jogs the paper slowly back and forth through the fold it's in, wherever on the track the finger goes; pressed
+ * anywhere else, the paper jumps there and follows the track, for long moves through the model.
+ * A diamond marks where each section starts (each topic of a lesson), and a ring each key point (a complex fold);
+ * clicking one goes there. Its own component because it re-renders on every animation frame.
  */
 function Scrubber({ sections, keyPoints }: { sections: { step: number; name: string }[]; keyPoints: { step: number; name: string }[] }) {
   const pos = usePlayback((s) => s.pos);
   const total = usePlayback((s) => s.total);
   const step = usePlayback((s) => s.step);
   const { t } = useTranslation();
+  const input = useRef<HTMLInputElement>(null);
+  const drag = useRef<Drag | null>(null);
+  const [jogging, setJogging] = useState(false);
+
+  /** Where the thumb's centre runs on screen, and the position under `x` on it. */
+  const track = () => {
+    const box = input.current!.getBoundingClientRect();
+    const left = box.left + THUMB_PX / 2;
+    const width = Math.max(1, box.width - THUMB_PX);
+    const max = Math.max(1, usePlayback.getState().total);
+    return { left, width, max, at: (x: number) => ((x - left) / width) * max };
+  };
+  const end = () => {
+    drag.current = null;
+    setJogging(false);
+  };
+
   return (
-    <div className="scrubber">
+    // The input shows the place and takes the keyboard; a press anywhere on it (or a little above or below) is
+    // handled here instead, so a drag can jog.
+    <div
+      className="scrubber"
+      data-jogging={jogging || undefined}
+      onPointerDown={(e) => {
+        const playback = usePlayback.getState();
+        if (!playback.total || !e.isPrimary || e.button !== 0 || (e.target as Element).closest('.section-mark')) return;
+        e.preventDefault();
+        e.currentTarget.setPointerCapture(e.pointerId);
+        const { left, width, max, at } = track();
+        const thumb = left + (playback.pos / max) * width;
+        const near = Math.abs(e.clientX - thumb) <= (e.pointerType === 'mouse' ? NEAR_MOUSE_PX : NEAR_TOUCH_PX);
+        // Jogging is never quicker than following the track, however few steps there are.
+        const perStep = near ? Math.max(JOG_PX_PER_STEP, (2 * width) / max) : 0;
+        drag.current = { id: e.pointerId, x: e.clientX, pos: playback.pos, perStep };
+        setJogging(near);
+        // Either way the paper stops: held where it is to jog, or jumped to the press.
+        playback.scrub(near ? playback.pos : at(e.clientX));
+      }}
+      onPointerMove={(e) => {
+        const d = drag.current;
+        if (!d || e.pointerId !== d.id) return;
+        const playback = usePlayback.getState();
+        if (!d.perStep) {
+          playback.scrub(track().at(e.clientX));
+          return;
+        }
+        const want = d.pos + (e.clientX - d.x) / d.perStep;
+        const p = Math.min(playback.total, Math.max(0, want));
+        // Dragged on past either end: start again from there, so coming back moves the paper straight away.
+        if (p !== want) Object.assign(d, { pos: p, x: e.clientX });
+        playback.scrub(p);
+      }}
+      onPointerUp={end}
+      onPointerCancel={end}
+      onLostPointerCapture={end}
+      onContextMenu={(e) => e.preventDefault()}
+    >
       <input
+        ref={input}
         type="range"
         min={0}
         max={Math.max(1, total)}

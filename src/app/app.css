@@ -892,6 +892,18 @@ kbd {
   display: flex;
   flex: 1;
   min-width: 140px;
+  cursor: pointer;
+  /* A drag along it is the scrubber's, not the page's. */
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Presses are the scrubber's own (ModelViewer): near the thumb they jog the paper, elsewhere they jump. A little
+   above and below the thin track counts too, for a finger. */
+.scrubber::before {
+  content: '';
+  position: absolute;
+  inset: -8px 0;
 }
 
 .scrubber input {
@@ -899,6 +911,16 @@ kbd {
   min-width: 0;
   margin: 0;
   accent-color: var(--accent);
+  pointer-events: none;
+}
+
+/* Jogging: the thumb glows, and the pointer says it moves side to side. */
+.scrubber[data-jogging] {
+  cursor: ew-resize;
+}
+
+.scrubber[data-jogging] input {
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--accent) 60%, transparent));
 }
 
 /* A small diamond above the track where a section starts. The range thumb is 16px, so its centre travels
@@ -1887,6 +1909,19 @@ kbd {
 
   .views-toggle[aria-expanded='true'] {
     background: var(--surface);
+  }
+
+  /* The views and their buttons a little closer together, so they still share one line on a phone. */
+  .playback .view-controls {
+    gap: 2px;
+  }
+
+  .view-controls .segmented button {
+    padding-inline: 7px;
+  }
+
+  .view-controls .icon {
+    width: 38px;
   }
 }
 
