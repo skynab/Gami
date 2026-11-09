@@ -1,14 +1,53 @@
 import { paper, Recipe, table } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
+import { bendsOpening, openingGuides, STAGES } from './boat-opening';
 
 /**
- * The traditional paper boat, from an A4 sheet, following origami.me/traditional-boat, as far as the small
- * diamond. Not in the gallery yet: opening it into a boat needs paper that bends, and a path worked out for it
- * (docs/bending-plan.md, step 7, "The small diamond as paper stacks it").
+ * The traditional paper boat, from an A4 sheet, following origami.me/traditional-boat: the newspaper hat squashed
+ * into a diamond twice, then pulled apart into a boat lying flat, as origami.me's last diagram shows it, and opened
+ * out to stand on its keel. The opening is a bend (see docs/bending-plan.md, step 7): the walls lean out, and the
+ * corner flaps folded in at the bow and stern bend a little, as they do in your hands (./boat-opening.ts).
  */
 export function boat() {
+  const r = smallDiamond();
+  // Pulled apart at the top, the diamond flattens into a boat lying on its side, its keel the diamond's other
+  // diagonal (from (−¼, ±¼) to (¼, ±¼) on the sheet). Each wall's bottom half folds up about the keel, P's in front
+  // (the quarter v < 0, on top) and S's behind; the corner flaps fold up inside, between the sails; and the creases
+  // made by folding the bottom points up open out, so the bow and stern pieces swing out, ½ along the keel either
+  // way. Paper does it in one pull, bending as it goes; here it's one collapse. Its pieces at each end turn round,
+  // so the crease joining P's end to its corner flap turns inside out on the way.
+  const keelEnd = table(...r.where(paper(-0.25, -0.25)));
+  const otherEnd = table(...r.where(paper(0.25, -0.25)));
+  const bottom = table(...r.where(paper(0, -0.5)));
+  const quarter = ([u, v]: Vec2) => Math.abs(u) < Math.abs(v) && Math.abs(u) + Math.abs(v) < 0.5;
+  const flap = ([u, v]: Vec2) => Math.abs(v) < Math.abs(u) && Math.abs(u) + Math.abs(v) < 0.5;
+  r.collapse(
+    {
+      title: 'Pull it out into a boat',
+      text: 'Hold the two loose points at the top and pull them apart. The middle rises into a sail, and it flattens into a boat.',
+      kind: 'squash',
+    },
+    [
+      { through: [keelEnd, otherEnd], kind: 'valley', only: (c) => quarter(c) && c[1] < 0 },
+      { through: [keelEnd, otherEnd], kind: 'mountain', only: (c) => quarter(c) && c[1] > 0 },
+      { through: [keelEnd, otherEnd], kind: 'inside', only: flap },
+      { through: [keelEnd, bottom], kind: 'flat' },
+      { through: [otherEnd, bottom], kind: 'flat' },
+    ],
+    paper(-0.05, -0.12),
+  );
+  return r
+    .bend(
+      { title: 'Open the boat', text: 'Spread the sides a little, and stand the boat up on its bottom. Done!' },
+      { flex: bendsOpening, anchor: [-0.05, -0.12], goals: openingGuides(r.current), mesh: 0.06, stages: STAGES, free: true },
+    )
+    .build();
+}
+
+/** The boat's folds as far as the small diamond, the last before it's pulled apart. */
+export function smallDiamond() {
   const h = Math.SQRT2 / 2;
-  const r = new Recipe({ id: 'boat', title: 'Boat', sheet: { size: [1, Math.SQRT2], front: '#3b82c4', back: '#f6f3ec' } })
+  const r = new Recipe({ id: 'boat', title: 'Boat', card: 'finished', sheet: { size: [1, Math.SQRT2], front: '#3b82c4', back: '#f6f3ec' } })
     .crease(paper(-0.5, 0), paper(0.5, 0), { title: 'Crease down the middle', text: 'Fold in half side to side, then unfold.' })
     .onto(paper(0, -h), paper(0, h), { title: 'Fold in half', text: 'Fold the top edge down to the bottom edge.' })
     .onto(table(-0.5, 0), table(0, 0.5), { title: 'Fold the left corner down', text: 'Fold the top left corner down to the centre crease.' })

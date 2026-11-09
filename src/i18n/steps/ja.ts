@@ -1775,8 +1775,8 @@ export const ja: Record<string, string> = {
     "上の辺を中心に向かって折り下げますが、少し手前で止め、開きます。",
   "Blow it up":
     "ふくらませる",
-  "Blow gently into the hole at the bottom, and the balloon puffs up. Done!":
-    "下の穴にそっと息を吹きこむと、風船がふくらみます。できあがり！",
+  "Blow gently into the hole at the bottom, and the balloon puffs up into a cube. Done!":
+    "下の穴にそっと息を吹きこむと、風船がふくらんで立方体になります。できあがり！",
   "Fold the left corner over to the right corner and unfold, to mark the middle.":
     "左の角を右の角に合わせて折り、開いて真ん中に折り目をつけます。",
   "Fold the top layer of the bottom point up, so its tip goes a little past the base of the horns.":
@@ -2505,4 +2505,38 @@ export const ja: Record<string, string> = {
     "左右の辺を、いちばん近い折り目に合わせて折ります。",
   "Keeping this side up, fold the paper back and forth into sixteen equal strips, using the creases as a guide, leaving the strip on the left open as a flap.":
     "この面を上にしたまま、折り目を目安に紙をじゃばらに折り、同じ幅の十六本の帯にします。左端の帯は開いたまま、フラップとして残します。",
+  "Fold the top edge down to the bottom edge.":
+    "上のふちを下のふちに合わせて折り下げます。",
+  "And the right one. It’s a triangle with a strip underneath.":
+    "右の角も。下に帯がついた三角形になります。",
+  "Fold the top layer of the strip up over the triangle.":
+    "帯の手前の一枚を、三角形の上に折り上げます。",
+  "Fold the back strip up":
+    "後ろの帯を折り上げる",
+  "Fold the other layer of the strip up behind. It looks like a hat.":
+    "帯のもう一枚を、後ろに折り上げます。帽子のような形です。",
+  "Open it into a diamond":
+    "開いてひし形にする",
+  "Open the hat from the bottom and push the two sides together, so it flattens into a diamond. Tuck one end of the strip under the other.":
+    "帽子を下から開き、両側を寄せて、ひし形につぶします。帯の片はしを、もう片方の下に差しこみます。",
+  "Turn the diamond so the closed point is at the top.":
+    "閉じた角が上に来るように、ひし形を回します。",
+  "Fold the front flap’s bottom point up to the top point.":
+    "手前のフラップの下の角を、上の角まで折り上げます。",
+  "Fold the other side up":
+    "反対側を折り上げる",
+  "Fold this side’s bottom point up to match. It’s a small hat.":
+    "こちら側の下の角も、同じように折り上げます。小さな帽子になります。",
+  "Open it into a diamond again":
+    "もう一度開いてひし形にする",
+  "Open the bottom and push the two sides together again, flattening a smaller diamond.":
+    "下を開き、もう一度両側を寄せて、小さなひし形につぶします。",
+  "Pull it out into a boat":
+    "引っぱってふねにする",
+  "Hold the two loose points at the top and pull them apart. The middle rises into a sail, and it flattens into a boat.":
+    "上のはなれた二つの角を持って、左右に引っぱります。真ん中が帆になって立ち、平らなふねの形になります。",
+  "Open the boat":
+    "ふねを開く",
+  "Spread the sides a little, and stand the boat up on its bottom. Done!":
+    "側面を少し広げて、ふねを底で立たせます。できあがり！",
 };

@@ -1775,8 +1775,8 @@ export const fr: Record<string, string> = {
     "Pliez le bord supérieur vers le centre en vous arrêtant un peu avant, puis dépliez.",
   "Blow it up":
     "Gonflez-le",
-  "Blow gently into the hole at the bottom, and the balloon puffs up. Done!":
-    "Soufflez doucement dans le trou du bas, et le ballon se gonfle. C’est fini !",
+  "Blow gently into the hole at the bottom, and the balloon puffs up into a cube. Done!":
+    "Soufflez doucement dans le trou du bas, et le ballon se gonfle en cube. C’est fini !",
   "Fold the left corner over to the right corner and unfold, to mark the middle.":
     "Rabattez le coin gauche sur le coin droit puis dépliez, pour marquer le milieu.",
   "Fold the top layer of the bottom point up, so its tip goes a little past the base of the horns.":
@@ -2505,4 +2505,38 @@ export const fr: Record<string, string> = {
     "Pliez les bords gauche et droit sur les plis les plus proches.",
   "Keeping this side up, fold the paper back and forth into sixteen equal strips, using the creases as a guide, leaving the strip on the left open as a flap.":
     "Cette face vers le haut, pliez le papier en accordéon en seize bandes égales, en vous guidant sur les plis, et laissez la bande de gauche ouverte comme un rabat.",
+  "Fold the top edge down to the bottom edge.":
+    "Pliez le bord du haut sur le bord du bas.",
+  "And the right one. It’s a triangle with a strip underneath.":
+    "Et le coin droit. C’est un triangle avec une bande en dessous.",
+  "Fold the top layer of the strip up over the triangle.":
+    "Relevez l’épaisseur du dessus de la bande sur le triangle.",
+  "Fold the back strip up":
+    "Pliez la bande de derrière vers le haut",
+  "Fold the other layer of the strip up behind. It looks like a hat.":
+    "Relevez l’autre épaisseur de la bande, derrière. On dirait un chapeau.",
+  "Open it into a diamond":
+    "L’ouvrir en losange",
+  "Open the hat from the bottom and push the two sides together, so it flattens into a diamond. Tuck one end of the strip under the other.":
+    "Ouvrez le chapeau par le bas et rapprochez les deux côtés, pour qu’il s’aplatisse en losange. Glissez un bout de la bande sous l’autre.",
+  "Turn the diamond so the closed point is at the top.":
+    "Tournez le losange pour que la pointe fermée soit en haut.",
+  "Fold the front flap’s bottom point up to the top point.":
+    "Relevez la pointe du bas du rabat de devant jusqu’à la pointe du haut.",
+  "Fold the other side up":
+    "Relever l’autre côté",
+  "Fold this side’s bottom point up to match. It’s a small hat.":
+    "Relevez de même la pointe du bas de ce côté. C’est un petit chapeau.",
+  "Open it into a diamond again":
+    "L’ouvrir de nouveau en losange",
+  "Open the bottom and push the two sides together again, flattening a smaller diamond.":
+    "Ouvrez le bas et rapprochez de nouveau les deux côtés, pour aplatir un losange plus petit.",
+  "Pull it out into a boat":
+    "L’étirer en bateau",
+  "Hold the two loose points at the top and pull them apart. The middle rises into a sail, and it flattens into a boat.":
+    "Tenez les deux pointes libres du haut et écartez-les. Le milieu monte en voile, et il s’aplatit en bateau.",
+  "Open the boat":
+    "Ouvrir le bateau",
+  "Spread the sides a little, and stand the boat up on its bottom. Done!":
+    "Écartez un peu les côtés, et posez le bateau debout sur son fond. C’est fini !",
 };

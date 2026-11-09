@@ -63,7 +63,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `folds-lesson` | Folding techniques: valley and mountain, inside and outside reverse, squash, rabbit ear, pleat, crimp and petal folds (the choice of folds after origami.me's beginner's guide, its words and pictures not used) | None needed: nobody owns them | [origami.me/beginners-guide](https://origami.me/beginners-guide/), for the choice of folds only | Clear | 21 Oct 2026 |
 | `bases-lesson` | Traditional: the kite, square, water bomb, bird, fish and frog bases (the choice of bases after origami.me's beginner's guide, its words and pictures not used) | None needed: nobody owns them | [origami.me/beginners-guide](https://origami.me/beginners-guide/), for the choice of bases only | Clear | 21 Oct 2026 |
 | `seal` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/seal](https://origami.me/seal/) | Clear | 22 Oct 2026 |
-| `boat` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/traditional-boat](https://origami.me/traditional-boat/) | Clear | Coming soon |
+| `boat` | Traditional (origami.me: "Traditional"; Gilad's database lists the boat as "Traditional" in many books, from a rectangle in Palacios's *Beginning Origami*) | None needed: nobody owns it | [origami.me/traditional-boat](https://origami.me/traditional-boat/), for the order of folds; its last move is shown as two steps (see the notes) | Clear | 9 Nov 2026 |
 | `waterbomb` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/waterbomb](https://origami.me/waterbomb/) | Clear | 21 Oct 2026 |
 | `balloon` | Traditional (Gilad's database lists the paper balloon as "Traditional" in many books; Kids Web Japan names no designer) | None needed: nobody owns it | [Kids Web Japan: Balloon](https://web-japan.org/kidsweb/virtual/origami/exploring02g.html), for the last step (blowing it up); the folds are the water bomb's | Clear | 23 Oct 2026 |
 | `balloon-rabbit` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/balloon-rabbit](https://origami.me/balloon-rabbit/) | Clear | 21 Oct 2026 |
@@ -215,10 +215,13 @@ noted when it was written, and the model was folded from the common traditional 
   UFO, Gami has its own flying saucer: the top folded down to the middle for a thick front edge, the front
   corners turned in, and the back corners folded behind and rounded off with smaller folds, so it's nearly round
   from above. The UFO cuts a corner round with scissors and folds a dart's nose first; the saucer cuts nothing.
-- **Coming soon.** The boat and the models listed on 21 October 2026 are gallery placeholders with no recipe
+- **Coming soon.** The models listed on 21 October 2026 are gallery placeholders with no recipe
   yet. Each is credited "Traditional" on origami.me. When one gets a recipe, set its reference to what was
   actually followed and its date to when it shipped. Other traditional models on origami.me that aren't
   listed yet are in `docs/origami-me-candidates.md`.
+- **Boat** (checked 9 November 2026). Gami follows origami.me's order of folds, from an A4 sheet. Its last move,
+  pulling the small diamond's top points apart, is shown as two steps: pulled out into a boat lying flat (as
+  origami.me's last diagram shows it), then opened a little and stood up, the paper bending at the bow and stern.
 - **Fan** (checked 7 November 2026). Gami follows origami.me's order of folds, pleated from the back so the strip
   beside the flap ends in the middle of the stack, but leaves the flap out where origami.me closes it towards
   the middle: its two layers hang from the two middle layers, so closed over either face it would hold half the

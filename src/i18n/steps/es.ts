@@ -1775,8 +1775,8 @@ export const es: Record<string, string> = {
     "Dobla el borde superior hacia el centro, quedándote un poco antes, y desdobla.",
   "Blow it up":
     "Ínflalo",
-  "Blow gently into the hole at the bottom, and the balloon puffs up. Done!":
-    "Sopla suavemente por el agujero de abajo y el globo se infla. ¡Listo!",
+  "Blow gently into the hole at the bottom, and the balloon puffs up into a cube. Done!":
+    "Sopla suavemente por el agujero de abajo y el globo se infla hasta formar un cubo. ¡Listo!",
   "Fold the left corner over to the right corner and unfold, to mark the middle.":
     "Lleva la esquina izquierda sobre la derecha y desdobla, para marcar el centro.",
   "Fold the top layer of the bottom point up, so its tip goes a little past the base of the horns.":
@@ -2505,4 +2505,38 @@ export const es: Record<string, string> = {
     "Dobla los bordes izquierdo y derecho hasta los pliegues más cercanos.",
   "Keeping this side up, fold the paper back and forth into sixteen equal strips, using the creases as a guide, leaving the strip on the left open as a flap.":
     "Con esta cara hacia arriba, dobla el papel de un lado a otro en dieciséis franjas iguales, guiándote por los pliegues, y deja abierta la franja de la izquierda como solapa.",
+  "Fold the top edge down to the bottom edge.":
+    "Dobla el borde de arriba hasta el borde de abajo.",
+  "And the right one. It’s a triangle with a strip underneath.":
+    "Y la esquina derecha. Es un triángulo con una tira debajo.",
+  "Fold the top layer of the strip up over the triangle.":
+    "Dobla la capa de arriba de la tira hacia arriba, sobre el triángulo.",
+  "Fold the back strip up":
+    "Dobla la tira de atrás hacia arriba",
+  "Fold the other layer of the strip up behind. It looks like a hat.":
+    "Dobla la otra capa de la tira hacia arriba, por detrás. Parece un sombrero.",
+  "Open it into a diamond":
+    "Ábrelo en un rombo",
+  "Open the hat from the bottom and push the two sides together, so it flattens into a diamond. Tuck one end of the strip under the other.":
+    "Abre el sombrero por abajo y junta los dos lados, para que se aplane en un rombo. Mete un extremo de la tira debajo del otro.",
+  "Turn the diamond so the closed point is at the top.":
+    "Gira el rombo para que la punta cerrada quede arriba.",
+  "Fold the front flap’s bottom point up to the top point.":
+    "Dobla la punta de abajo de la solapa de delante hasta la punta de arriba.",
+  "Fold the other side up":
+    "Dobla el otro lado hacia arriba",
+  "Fold this side’s bottom point up to match. It’s a small hat.":
+    "Dobla igual la punta de abajo de este lado. Es un sombrero pequeño.",
+  "Open it into a diamond again":
+    "Ábrelo otra vez en un rombo",
+  "Open the bottom and push the two sides together again, flattening a smaller diamond.":
+    "Abre la parte de abajo y vuelve a juntar los dos lados, aplanando un rombo más pequeño.",
+  "Pull it out into a boat":
+    "Estíralo en un barco",
+  "Hold the two loose points at the top and pull them apart. The middle rises into a sail, and it flattens into a boat.":
+    "Sujeta las dos puntas sueltas de arriba y sepáralas. El centro sube como una vela, y se aplana en un barco.",
+  "Open the boat":
+    "Abre el barco",
+  "Spread the sides a little, and stand the boat up on its bottom. Done!":
+    "Separa un poco los lados y pon el barco de pie sobre su fondo. ¡Listo!",
 };

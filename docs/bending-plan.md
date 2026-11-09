@@ -290,7 +290,8 @@ is behind its guides stage by stage, how deep paper goes through paper, and its 
      0.8%, 1.5% as it plays, paper through paper by at most 0.0025, the file 732 KB.
 7. **The boat.** Pulling the diamond's points apart, as a bend from the small diamond. Done as for the fan.
 
-   **Parked (8 November 2026); not reachable yet.** What the first try found (on `wip/boat`):
+   **In the gallery (9 November 2026)**, as two steps rather than one bend: see "In the gallery" at the end of this
+   step. **Parked (8 November 2026) before that.** What the first try found (on `wip/boat`):
    - **The branch.** Its recipe and collapse change still apply to `dev`, and the boat folds to the small diamond
      (28 faces, 13 layers) with no `problems`. But its two diamond squashes pass paper through paper: the first
      by 14 cm, the second by 1.7 cm. They need the staged and hinged playing other squashes have before the boat
@@ -465,6 +466,28 @@ is behind its guides stage by stage, how deep paper goes through paper, and its 
      pieces jam rather than sort themselves out, so the order above has to be given as guides.
    - **Next.** The end shape rebuilt for this stacking, and guides along that order: the sails standing, S's wall
      under first, the end pieces unfolding, the flaps going in with their middles crumpling.
+   - **In the gallery** (9 November 2026). The last move is two steps, as origami.me draws it: pulled out into a
+     boat lying flat, then opened out and stood up. The flat boat is a collapse of the small diamond: the keel
+     folds (P's wall up in front, S's behind, the flaps reversed inside, between the sails), and the creases
+     along the diamond's lower edges, where the bottom points were folded up, open out flat, so the bow and stern
+     pieces swing out ½ along the keel. It stacks as above, with the brims outside the walls (the folds' directions
+     put them there). At the bow, P's end and its flap's lower half change places, so the crease joining them
+     turns inside out on the way: with P's end flat with its wall and the flap's half flat with the flap, nothing
+     else stacks. The collapse passes paper through paper by 0.019, less than the squash before it (0.032, on
+     `GRAZES` at 0.034). The hooks and the order above are what a single bend from the diamond would need to
+     follow; the collapse leaves them to how it plays (paper bends there in your hands).
+     The opening is a bend from the flat boat (`src/models/recipes/boat-opening.ts`). Every face is guided: the
+     walls lean out 30° about the keel, the end triangles turn about the grey creases until the bow and stern
+     points meet in the middle plane, and the sails and flaps stay in it. Each flap's lower triangle can't: its raw
+     edge is 4% longer than the gap it spans, so it folds a little along the line from the keel's end to its raw
+     edge's middle, its bow half lying against its wall's end. The room beside the wall's end is exactly the bulge
+     that fold makes. Guided as a bulge over the whole triangle instead, the flap went 0.8 cm through the wall near
+     the end. Only those triangles bend; the rest is rigid, so 832 triangles in 12 stages solve in 5 s (every face
+     bending, 2800 triangles took over a minute). Meanwhile the boat stands up about its keel and swings round to
+     lie along x. Every frame is within 0.3%, 1.4% as it plays, at most 0.6 cm behind its guides, and paper goes
+     0.33 cm through paper halfway, a flap through the brim on its wall near the keel's end (the balloon 0.41, the
+     cup 0.47); the file is 257 KB. Fold lines along the flaps' fold (`lines`)
+     made the solve blow up (stretch in the thousands of percent), so it's left to the bending paper.
 
    **The paper balloon** (October 2026). The gallery's water bomb ends flat, with "blow into the hole" in words;
    blowing it up is a bend of its own (Kids Web Japan's balloon, the same model, ends as a rounded cube with a crease

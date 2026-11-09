@@ -51,12 +51,6 @@ Things that can't be settled from the code alone.
   needs its decisions before any work starts.
 - **The Spin Plane's designer** (`docs/foldnfly-planes-plan.md`): Laux's, or Unattributed? Needs his book's
   contents.
-- **How a paper boat's small diamond comes apart.** The boat is parked (8 November 2026): its guided opening
-  tangles where the diamond's two halves interlock (`docs/bending-plan.md`, step 7). On 9 November the small
-  diamond was found stacked wrongly, and with that fixed, an order to unhook the halves was worked out on
-  paper, though not tried yet; a real boat would still confirm it. A real paper boat, folded
-  to the small diamond and opened slowly, would show whether the starboard wall's bow triangle and the port
-  wall's bow brim come apart, and how, or stay tucked round each other in the finished boat.
 - **The bending plan's open questions** (`docs/bending-plan.md`): re-solving bends on replay, the mesh pattern,
   a bend tool in the Studio.
 
@@ -88,14 +82,14 @@ git branch -d claude/lesson-bases-cf4d91 claude/lesson-folds-cc4e1d && git branc
 ### 1. Bending: the three coming-soon models (`docs/bending-plan.md`)
 
 The cup showed the way: work the shape out first and lead the paper there with guides, rather than leaving the
-solver to find it from a few goals. The other `wip/*` branches are 100 to 210 commits behind `dev`; the boat's
-recipe is on `dev` now, not yet in the gallery's list. The fan is in the gallery.
+solver to find it from a few goals. The other `wip/*` branches are 100 to 210 commits behind `dev`. The fan and
+the boat are in the gallery; the iris is still to come.
 
 | # | Work | Needs bending? |
 |---|---|---|
-| 1 | **Boat, as far as the small diamond.** On `dev`. The second squash now stacks the small diamond as paper does (9 November): it had opened the corner flaps and gunwales too, and kept no layer order. The squashes pass paper through paper by 0.007 and 0.032. The second can't fold in step: kept joined, its creases follow another way of folding (bending plan, step 7). Next: live with 0.032 on `GRAZES`, or find what keeps its creases on this way of folding. | No |
+| 1 | ✅ **Boat, as far as the small diamond.** The second squash stacks the small diamond as paper does (9 November). The squashes pass paper through paper by 0.007 and 0.032, the second on `GRAZES` (kept joined, its creases can't all fold in step). | No |
 | 2 | ✅ **Fan.** In the gallery (7 November): redesigned to fold as origami.me does, so it can open at all; the spread guided as a book's pages fanned round a half circle; thin faces now meshed in rows, which also helps the 3D tulip (bending plan, step 6). | Yes |
-| 3 | **Boat's opening.** With the small diamond stacked as paper does (9 November), the halves no longer cross over, but they still hook each other at each side corner. The order they unhook in is worked out by hand, and the corner flaps must bend at their middles (`crumple`) to reverse-fold along the keel (bending plan, step 7, "What the opening has to do"). Next: the end shape rebuilt for the new stacking, and guides along that order; `scripts/boat-opening-lab.ts` is for the old one. | Yes |
+| 3 | ✅ **Boat's opening.** In the gallery (9 November), as two steps: a collapse into a boat lying flat, then a bend opening it out and standing it on its keel, only the corner flaps' lower triangles bending (bending plan, step 7, "In the gallery"). `scripts/boat-opening-lab.ts` was for the old stacking and is no longer needed. | Yes |
 | 4 | ✅ **Balloon blown up** (8 November): the gallery's balloon now blows up into a cube, guided face by face, its ends crumpling on the way (bending plan, "Improving the solver", row 11). The 3D tulip is still blown up by air into a pillow; guiding it the same way would need its own map. | Yes |
 | 5 | **Shallow masu lid's locks.** They come apart by up to 0.08 as the flap goes over the wall; with rigid paper the flap is locked there. | Yes |
 | 6 | **Iris.** Needs paper that bends and then lies flat again. Last. | Yes |
@@ -196,7 +190,7 @@ list can't go stale.
 | Housekeeping | Done but for the branches (above). |
 | Studio, row 5 | Done 8 November: swivel and open sink in the Studio's Named fold (`src/fold/presets.ts`); see `docs/studio-plan.md`. Not yet in the common-folds lesson. |
 | Reverse folds' stacking | Fixed 8 November (see Smaller): points tuck into the middle of the flap; three folds keep the old stacking. |
-| Bending, rows 1 and 3 (boat) | Parked 8 November: its recipe and the opening lab on `dev`, findings in `docs/bending-plan.md` (step 7). Stays Coming soon. |
+| Bending, rows 1 and 3 (boat) | Done 9 November: in the gallery, pulled out flat by a collapse and opened by a bend (`docs/bending-plan.md`, step 7). |
 | Bending, row 2 (fan) | Done 7 November: in the gallery. |
 | Bending, row 4 (balloon) | Done 8 November: guided into the cube (`src/models/recipes/balloon-cube.ts`), folding along its edges, the paper at its ends allowed to crumple on the way (`crumple`), which ended the snapping. |
 | Improving the solver (bending plan, "Improving the solver") | Rows 1 and 2 done 8 November: bent models' files written compactly (a third to a fifth of the size), and `npm run bend-report`. Row 3 tried and dropped: the paper isn't falling behind; each stage ends stretched and the lengths set at its end ignore the guides. Row 6 done 8 November for guided bends: each stage brought to the least of one energy; tuned, the fan and the cup (now in ten stages) are better than with the passes, and were made again with it. The balloon's ends locked (they'd have to crumple): row 11, done the same day, lets them. Row 9's fixed folds done: a bend can name lines on the table to fold along, and the mesh is cut along them. |
