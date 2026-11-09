@@ -57,7 +57,7 @@ export function cup() {
 
 /** How far the cup's sides turn in at the rim as it opens, and the frames it opens through. */
 const SQUEEZE = (8 * Math.PI) / 180;
-const STAGES = 8;
+const STAGES = 10;
 /** Guide points on the sheet: a triangular lattice this far apart, kept this far inside each face. */
 const SPACING = 0.05;
 const MARGIN = 0.008;

@@ -59,7 +59,7 @@ export const BENT_STRAIN = 0.01;
 export const BENT_PLAY_STRAIN = 0.05;
 
 /** Samples taken through a bent step, for its strain while playing. */
-const BEND_SAMPLES = 96;
+export const BEND_SAMPLES = 96;
 
 /**
  * How far bent paper stretches in step k, as a fraction of an edge's length on the sheet, at most: in the step's

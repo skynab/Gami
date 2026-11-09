@@ -1,12 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { basics } from '../models/basics';
+import { squareBase } from '../models/recipes/bird-base';
 import { crane } from '../models/recipes/crane';
 import { foldsLesson } from '../models/recipes/folds-lesson';
 import { toFlat, unplaceLike } from './fold';
+import { frontUp } from './geometry2d';
 import { applyOp } from './ops';
 import { PresetError, presetOp, type Preset } from './presets';
+import { paper, Recipe, table } from './recipe';
 import { inside, locate } from './select';
 import type { FoldFrame, OrigamiModel, Vec2 } from './types';
+import { problems } from './validate';
 
 const lesson = foldsLesson();
 const h = Math.SQRT1_2;
@@ -84,10 +88,55 @@ describe('fold presets elsewhere', () => {
     expectSame(make(before, { kind: 'petal', picks: [corner] }), m.steps[i].frame);
   });
 
+  it('swivels a flap as Recipe.swivel does, the paper it swings across pleated', () => {
+    // A square's corner folded over on a hinge from the middle of the bottom edge, swung 30° about that end.
+    const corner = () => new Recipe({ id: 's', title: 's', sheet: { size: [1, 1], front: '#fff', back: '#000' } }).along(table(0, 0.5), table(0.5, 0), table(0.45, 0.45), { title: 'Fold the corner over' });
+    const flap = ([u, v]: Vec2) => u + v > 0.5;
+    const want = corner().swivel({ title: 'Swivel' }, { pivot: paper(0, 0.5), hinge: paper(0.5, 0), degrees: 30, anchor: paper(-0.4, -0.4), flap }).build();
+    const turned = (deg: number): Vec2 => {
+      const a = (deg * Math.PI) / 180;
+      return [0.5 * Math.cos(a) - 0.5 * Math.sin(a), 0.5 - 0.5 * Math.sin(a) - 0.5 * Math.cos(a)];
+    };
+    const before = corner().build();
+    expectSame(make(before, { kind: 'swivel', picks: [[0, 0.5], [0.5, 0], turned(30)] }), want.steps[1].frame);
+    // Swung the other way there's only the flap's own paper to cross.
+    expect(() => presetOp(before, { kind: 'swivel', picks: [[0, 0.5], [0.5, 0], turned(-20)] })).toThrow(PresetError);
+  });
+
+  it('open-sinks a square base’s point, each layer’s tip tucked into the point’s inside', () => {
+    const r = new Recipe({ id: 'x', title: 'x', sheet: { size: [1, 1], front: '#fff', back: '#000' } });
+    squareBase(r);
+    const before = r.build();
+    const tip = r.where(paper(0, 0));
+    const at: Vec2 = [tip[0], tip[1] + 0.15];
+    const op = presetOp(before, { kind: 'sink', picks: [tip, at] });
+    const made = { ...before, steps: [...before.steps, { ...applyOp(before, op), title: 'Open sink' }] };
+    expect(problems(made)).toEqual([]);
+    const frame = made.steps.at(-1)!.frame;
+    // In each half, under the sunk tip: the four layers as they were, the tips in pairs between them, each beside the
+    // layer it's folded from and on that layer's inside (the paper's white side, all round the point).
+    for (const spot of [[tip[0] - 0.04, at[1] + 0.05], [tip[0] + 0.04, at[1] + 0.05]] as Vec2[]) {
+      const layers = toFlat(frame)
+        .filter((f) => inside(f.world, spot))
+        .sort((a, b) => b.layer - a.layer)
+        .map((f) => ({ p: unplaceLike(f)(spot), up: frontUp(f.world, f.paper) }));
+      expect(layers.map((l) => Math.hypot(...l.p) < 0.15)).toEqual([false, true, true, false, false, true, true, false]);
+      const was = stackAt(before.steps.at(-1)!.frame, spot);
+      [0, 3, 4, 7].forEach((k, i) => expect(Math.hypot(layers[k].p[0] - was[i][0], layers[k].p[1] - was[i][1]), `layer ${k}`).toBeLessThan(1e-6));
+      const quarter = (p: Vec2) => `${Math.sign(p[0])}${Math.sign(p[1])}`;
+      for (const [t, body] of [[1, 0], [2, 3], [5, 4], [6, 7]]) expect(quarter(layers[t].p), `tip ${t}`).toBe(quarter(layers[body].p));
+      // The body layer above a pair of tips lies front side up (white inside facing down to them), the one below it back side up.
+      for (const body of [0, 4]) expect(layers[body].up).toBe(true);
+      for (const body of [3, 7]) expect(layers[body].up).toBe(false);
+    }
+  });
+
   it('says why when there’s nothing to fold', () => {
     const sheet = { ...basics, steps: [] };
     expect(() => presetOp(sheet, { kind: 'squash', picks: [[0, 0], [0.2, 0.2]] })).toThrow(PresetError);
     expect(() => presetOp(sheet, { kind: 'rabbitEar', picks: [[0, 0], [0.1, 0.1], [0.2, 0.2]] })).toThrow(PresetError);
     expect(() => presetOp(sheet, { kind: 'pleat', picks: [[0, 0], [0, 0], [0.1, 0], [0.1, 1]] })).toThrow(PresetError);
+    expect(() => presetOp(sheet, { kind: 'swivel', picks: [[-0.5, 0.5], [0.5, 0.5], [0.5, 0]] })).toThrow(PresetError);
+    expect(() => presetOp(sheet, { kind: 'sink', picks: [[0, 0], [0, 0.1]] })).toThrow(PresetError);
   });
 });

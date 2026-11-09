@@ -45,6 +45,11 @@ A new operation, `bend`, recorded like every other (`gami:op`), so a file folds 
   goals: ({ point: At; to: Vec3 } | { crease: LineSpec; degrees: number })[];
   /** How finely to mesh the bending paper, as the longest triangle edge on the sheet. */
   mesh?: number;
+  /**
+   * Lines the paper will fold along, as segments on the table (paper lying flat only): every face they cross, in
+   * every layer, is cut along them before meshing, so the mesh has edges there (November 2026).
+   */
+  lines?: [Vec2, Vec2][];
 }
 ```
 
@@ -89,11 +94,23 @@ checker; the tolerance for bent steps is set from what the solver reaches.
 - `gami:op` gains `bend` (above), checked by `parseOp` like the rest.
 - Frames gain `gami:soft`: the edges between triangles of bending paper, as pairs of vertex indices. Drawing
   skips their lines and shades across them smoothly; the fold engine and checks treat them as ordinary edges.
-- In-between frames go in `gami:via`, as now.
+- In-between frames go in `gami:via`, as now. A bend's are written compactly (November 2026): they share the
+  step's triangles, points on the sheet and seams, so each is just how far its points move from the frame before,
+  in whole steps of 1e-5 (`gami:moves`); bent paper's points are kept to 1e-5, a seventieth of the gap between
+  layers, not 1e-9. The bend's guides' paths go the same way, losslessly, as recipes round them to millionths
+  (`gami:path`). Files written before still read.
 
 **Size.** A meshed step and its in-between frames are much bigger than a flat one. Budget: a bent model's file
-stays under 1 MB (the largest model now, the frog, is 288 KB). Levers: coarser mesh where the paper barely
-bends, fewer in-between frames (the viewer interpolates between them), and only the bending region meshed.
+stays under 1 MB. Written compactly, the bent models went from 715–975 KB to 170–250 KB (the fan 250 KB, the cup
+249, the balloon 200, the 3D tulip 173): before, the repeated triangles and points on the sheet were over half of
+each, and the fan's guides a third of it. Other levers, if needed: coarser mesh where the paper barely bends, fewer
+in-between frames (the viewer interpolates between them), and only the bending region meshed.
+
+**Looking at a bend.** `npm run bend-report -- <model id, or a .fold file> [step]` (`src/fold/bend/report.ts`)
+says what each bent step does, and where on the sheet: its stretch in its frames and as it plays, the most any
+triangle turns from one frame to the next (paper snapping through turns a long way at once), how far the paper
+is behind its guides stage by stage, how deep paper goes through paper, and its share of the file. The labs in
+`scripts/` print it too.
 
 ## What changes elsewhere
 
@@ -228,9 +245,52 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
    - **Next.** Rather than solving from the flat stack, build the spread shape directly (each half strip a ruled
      surface from the pinch to its place on the arc) and let the solver only settle it and the frames on the
      way; and see where the time goes at this size.
+
+   **Second try: done** (November 2026, `src/models/recipes/fan.ts`).
+   - **The recipe couldn't open.** It turned the paper back over before pleating, so the strip next to the flap
+     was at the bottom of the stack and, folded in half, outermost. The flap's corners fold through both its
+     layers, which locks them together, and so locks that strip's two halves, the outside of the whole stack:
+     shut, bent or not. origami.me collapses the pleats from the back (its step 6 doesn't turn back over), so
+     that strip ends on top, then in the middle once folded in half, and the flap locks the fan's middle, where
+     its photos show a closed rib. The recipe now does the same: pleated from the back, the second strip from
+     the left staying put and the rest going under it.
+   - **The flap stays out.** origami.me's step 10 closes the flap "towards the center of the fan". Its two
+     layers hang from the two middle layers, so folded over either face it would wrap one half of the stack and
+     hold it shut; tucked in between them (an inside reverse fold along its crease) the collapse reshuffled the
+     whole stack. With its corners folded it already holds the middle together, so it stays out, as a tab.
+   - **The shape** (`spread` in the recipe). The fan opens like a book whose spine is the fold at its bottom: the
+     bottom half of the stack fans up from the table on one side, the top half swings over onto the other, the
+     two middle layers and the flap stand upright between them, and each half strip is a page a share of a
+     quarter turn round. Between its creases a page is a ruled surface: at the spine the creases are a strip's
+     width apart across it, as they lie folded; further out they fan apart round the arc and draw in across it
+     to keep the page as wide. Every guided frame keeps the paper within 0.8%, paper passes through paper by
+     at most half a centimetre, and the solved paper stays within 1.5 mm of its guides (0.01 at worst).
+   - **Slivers.** Played, the step stretched 13% (16 stages), 6.5% (32) or 8.5% (48); 5% is allowed. At each
+     stage it was under 0.8%: in between, each triangle takes its own screw from one frame to the next and shared
+     corners are averaged, and the worst were slivers along the pages' edges, 10° at their narrow corner, whose
+     normals swung by 45° from one stage to the next while their corners moved half a millimetre. Splitting the
+     longest edge never splits a face's 10° corner (the diagonal of a strip 0.0875 by 0.5): it's passed down. More
+     stages didn't help either: the last stage's extra polishing jumps, and over 20 stages the file is past 1 MB.
+   - **Thin faces cut in rows** (`meshFrame`). A face narrower than a triangle's edge (twice its area over its
+     perimeter) has its outline cut evenly instead, as do the stretches its neighbours share with it, so outlines
+     still match; ear-clipped, it's a row of triangles across it, 35° at the narrowest. The wider faces beside
+     them, with many points along that edge, have their diagonals swapped until no triangle is needlessly thin
+     (the Delaunay rule). Other faces mesh as before. Tried and dropped: cutting every outline evenly (the cup's
+     big faces filled with slivers where midpoints of different edges landed together), and points on a lattice
+     inside every face, swapped to Delaunay (no slivers anywhere, but no edges along a square's diagonals, which
+     the old mesh has, so a sheet curled about its diagonal couldn't reach its goals within the tests' 0.1%).
+     The cup meshes exactly as before; the 3D tulip has no slivers now and plays within 0.9% (3% before); the
+     balloon passes paper through paper less (0.0054 from 0.0061), its file 998 KB, just inside the budget.
+   - **The creasing.** origami.me creases every strip; done as creases inside one step (fold and unfold at once,
+     as the recipe had them) nothing moves, so there's nothing to show. The recipe creases in half, then both
+     edges to the middle, to those creases, and to the nearest ones, each pair folding together and opening
+     again; the pleating makes the rest. The last pair is the flap's hinge, which a collapse can't add as a
+     crease left open.
+   - **In the gallery** (7 November 2026): 14 steps, 498 triangles, 16 stages, solved in 5 s; every frame within
+     0.8%, 1.5% as it plays, paper through paper by at most 0.0025, the file 732 KB.
 7. **The boat.** Pulling the diamond's points apart, as a bend from the small diamond. Done as for the fan.
 
-   **Started; not reachable yet.** What the first try found (on `wip/boat`):
+   **Parked (8 November 2026); not reachable yet.** What the first try found (on `wip/boat`):
    - **The branch.** Its recipe and collapse change still apply to `dev`, and the boat folds to the small diamond
      (28 faces, 13 layers) with no `problems`. But its two diamond squashes pass paper through paper: the first
      by 14 cm, the second by 1.7 cm. They need the staged and hinged playing other squashes have before the boat
@@ -309,6 +369,66 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      Step 13's squash, played backwards part way, isn't boat-shaped either (it's staged, a flap lifted then moved).
    - **Next.** Work out where each of the diamond's 28 faces goes in the finished boat (a paper model would settle
      it), then give the opening as those faces' crease angles.
+   - **On `dev`** (November 2026: `src/models/recipes/boat.ts`, not yet in the gallery's list, and the collapse
+     change, which only acts where a stacking would otherwise fail). With what's come since (paper joined up
+     sooner, creases round a point folded in step), the squashes into the diamonds pass paper through paper by
+     0.007 and 0.025, not 14 cm and 1.7 cm. The first folds hinged, in step, and grazes only as the strip's ends
+     meet, one tucked under the other. The second can't fold in step: kept joined, its creases follow another
+     way of folding the paper (some stay put, some turn the wrong way) and jump at the end, and nearly halfway
+     it parts by just over the 0.003 allowed. Changing which paper stays put makes no difference (0.029 to
+     0.033 whichever face). It would go on `GRAZES` at about 0.025 if the boat went in as it is.
+   - **The finished boat, from origami.me's diagrams** (November 2026). Its last diagram is the boat side on: a
+     trapezoid hull, the gunwale long and straight from bow point to stern point, the keel half as long, two
+     grey creases from the keel's ends up to the gunwale's middle, and a small sail just showing above it there.
+     On the sheet that reads as: the gunwales are the brim folds (v = ±0.5, each 1.0 long, the striped brims
+     lining the inside); the bow and stern are the hat's corners, (∓0.5, ±0.5); the keel runs between the small
+     diamond's side corners (±0.25, v), 0.5 long, the two walls meeting along it; each wall is the trapezoid of
+     its quarter between gunwale and keel (0.25 high), the grey creases its edges from the keel's ends to the
+     gunwale's middle (0, ±0.5); and the rest of that quarter, past the keel, folds up inside along a new crease
+     (v = ±0.25, across two faces) into half the sail, its tip the sheet's middle, 0.25 above the keel, so just
+     above gunwales whose walls lean out. The quarters at bow and stern join the walls along the stem.
+   - **Why it needs designing, not finding.** At each end of the keel two straight creases cross square (the
+     diamond's diagonal and the line from the gunwale's middle to the raw edge's), and such a vertex can't fold
+     in 3D, only flat; the bow quarter can't lie flat in the middle either (its corner would land under the
+     keel or on the sail's tip). So the paper bends round the keel's ends and the stem, and a guided opening
+     needs a shape that keeps the paper's lengths there, worked out as the cup's was, or measured off a paper
+     boat face by face.
+   - **The shape, nearly rigid.** Each wall is three triangles hinged at the grey creases: the middle one on the
+     keel, (±0.25, v) to the gunwale's middle, and one at each end, (∓0.5, v) to (0, v) to the keel's end. Tilt
+     the middles out by φ and each end triangle turns about its grey crease until its corner reaches the middle
+     plane: at φ = 30° the bow tip is 0.481 along and 0.267 up, both walls' corners meeting there, every length
+     kept, the gunwale two straight halves bowed out 0.125 at the middle, which sags to 0.217. The sail halves
+     stand on the keel, their tip 0.25 up, just above. The two diamond corners at each end hold one hat corner
+     from each wall (the diamond turned about the keel puts each wall's bow at a different end), so the left
+     and right quarters each run the boat's length: folded in half along the keel line they stand in the middle
+     plane, back to back with the sail halves, their raw edges along the top from tip to tip, 4% longer than
+     the 0.962 between the tips, which a little bending takes.
+   - **The motion turns it inside out.** In the flat small diamond both walls' middles lie on the keel's one side
+     (layers 5 and 11, one on the other) and both sail halves on its other side, each wall bent to its sail
+     half across the keel. Stood up, the sail halves meet in the middle and the walls must be either side of
+     them: the upper wall folds up onto its sail, the keel closing as usual, but the lower one has to swing
+     round under the keel and up the far side, its fold at the keel opening right out and closing the other
+     way. On the way it passes the layers under it (the other wall's bow triangle, the quarters, the brims), so
+     a guided path needs staging (the sail halves up first, the swing after) and the paper lifted off the
+     table (`free`).
+   - **Tried: the staged swing** (November 2026, `scripts/boat-opening-lab.ts`, run by `boat-opening-run.ts`).
+     Every face's path is a chain of hinged turns: sail halves and the quarters' inner halves up about the keel,
+     the upper (starboard) wall up onto its sail, the lower (port) wall round under the keel carrying the
+     quarters' outer halves folded inside it, the end triangles turned in about their grey creases until their
+     corners reach the middle plane (found by search), the brims folded down inside, and the brims' smaller
+     pieces turned on their hinges to where their mirror across the gunwale lands. The end shape holds
+     together: every point shared by two faces lands in one place to within 0.026 (the four tips, as above).
+     Solved (1840 triangles, 12 or 24 stages, 15–32 s), the path tangles: 8–10% stretched, and up to 300
+     triangles flipping right over between stages. It starts where the starboard wall's bow triangle has to
+     get past the port wall. The small diamond's halves interlock: that triangle, folded under its wall, wraps
+     round the port wall's middle, while the port wall's own bow triangle and brim wrap round it from below,
+     like two folders each holding a page of the other. That's what holds the diamond together, and a path
+     keeping every face rigid can't take them apart; moving the port wall first only moves the clash. Giving
+     the brims their own phase, after their wall is up, cut the flipping early on but not the clash.
+   - **Parked** (8 November 2026). The boat stays Coming soon, its recipe and the lab on `dev`. What would
+     unpark it: a paper boat opened slowly, watching the starboard wall's bow triangle and the port wall's bow
+     brim, to see how real paper unlocks them. Perhaps they stay interlocked in the finished boat (one tucked
+     round the other at that end), in which case the end shape here is wrong there, not the path.
 
    **The paper balloon** (October 2026). The gallery's water bomb ends flat, with "blow into the hole" in words;
    blowing it up is a bend of its own (Kids Web Japan's balloon, the same model, ends as a rounded cube with a crease
@@ -341,9 +461,47 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      in real paper. Holding points that lie together on the outline from parting stops that, and then it barely
      fills (5 cm): with its outline held, the paper can only bulge by bending. Drawing the outline in to a square
      belt with goals mangles it.
-   - **Next.** Build the blown-up shape first (where each of the flat water bomb's faces goes on the cube) and let
-     the solver settle it, as for the boat. A real balloon, blown up and looked at face by face, would settle where
-     the hole, the tucked corners and the outline end up.
+   - **The cube, face by face** (November 2026, `scripts/balloon-cube-lab.ts`). Flat, the water bomb is a cube
+     pressed flat, and a smaller one than thought: ¼ across, not 0.3. The paper round the sheet's centre, a plus
+     with pointed arms (|u| or |v| under ⅛, inside |u| + |v| = ½), covers it exactly once: the centre square is the
+     face at T (the sheet's centre), the arms the four sides, their points the face at the hole (the edge
+     midpoints meet in its middle). In the stack, the front and back sides lie flat (layers 8 and 15), the left and
+     right sides fold in half between them as a paper bag's gussets do (layers 9 and 14), and both end faces fold
+     up as water bomb bases. The flat outline isn't a belt round the middle: it runs from T across its face to a
+     corner, down an edge and across the hole's face. So the pocket the air fills is between layers 8 and 9 and
+     between 14 and 15, joined in the middle; between 9 and 14 is outside, inside the gussets, where the corners'
+     tips are tucked. The corners lie against the outside of the plus, so each point of the flat model goes where
+     the face it lies on goes, out from it by as many layers. Guided there, the solver does reach a cube (0.27
+     across, its sides clean, the flaps in place but for a corner or two).
+   - **The way there.** The front and back sides part (d = ¼ sin θ), the side faces open as gussets and the end
+     triangles on the front and back turn up. The end triangles on the sides can't: with every face of the plus
+     flat, only the flat stack and the cube fit (worked through for an octagonal box too: the end's eight triangles
+     force it back to one or the other), like a paper bag, which can't be opened rigidly either. The line from T
+     to the middle of a gusset's edge is shorter in 3D than on the sheet. Two ways tried: bulging those triangles
+     out (asks up to 18% stretch of them on the way), and folding each half from its corner to a point on that
+     line (exact; the point is level with T and in line with the gusset's edge, t = 1 − cos θ along it), which
+     moves the fold across the paper as the balloon opens. A fixed fold fits only at θ = 60°; a cone at the corner
+     misses by 1–3 cm.
+   - **Why it doesn't solve smoothly yet.** Either way the paper ends at the cube within about 2–3%, but it plays
+     at 30% or more: at T and at the hole the end triangles lag behind their guides, folded along the creases
+     they have, and then jump, all four together, as a water bomb base pops through (a triangle turning up to
+     150° between two frames). Unchanged with exact guides on the plus alone, without the layers' sides, with the
+     end faces left unguided, with guides right up to T and the hole, with twice the stages, a finer mesh (0.045)
+     or guides held 100 times stiffer. The solver keeps paper folded along creases it has rather than make a fold
+     that moves across it. The file was over budget too, 1.2 MB at 12 stages; 312 KB written compactly.
+   - **Tried: a rolling fold** (`MODE=roll`). The moving fold is sharp: it starts almost flat on the diagonal
+     crease (the path round the corner turning 159°) and eases to the cube's edge from the corner to the middle of
+     the gusset's edge (94° near the end), so in effect it rolls from one to the other, passing within a few
+     centimetres of T (and the hole) while still folded 120°–160°. Rounded, each half is a cone at its corner, its
+     directions turning steadily over a few degrees either side of the fold; solving for how far it turns and
+     which way it sets off keeps it exact and ending at the tip, but the front and back halves then miss along
+     their shared middle line by up to 13 mm (solving for where the turn is instead moves the miss onto the
+     diagonal, 23 mm). Solved: 40% stretch as it plays (rolled over 6°) and 88% (12°), against 29% sharp. With
+     triangles 0.02 across in the end triangles (a finer mesh within given regions, tried as a bend option and
+     taken out again), worse: 120–135%, the small triangles by T and the hole flipping right over.
+   - **Next.** It's the solver, at the ends, that needs to change, or the path found some other way. A real balloon
+     blown up slowly would show how the ends open; the end triangles might also take creases where they fold (a fan
+     from each corner), which the paper doesn't have.
 
 8. **The iris, later.** It needs paper that bends and then lies flat again (a "relax to flat" mode, or using the
    solver to find the crease pattern real paper takes). Revisit once 1–7 are done.
@@ -403,7 +561,8 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
    - **Tried and dropped.** Turning the cup round as it stood up, to show its front with the flaps: it stretched 9.5%
      as it played, and the guide's arrow looped round it.
    - **Where it stands.** The cup: 1528 triangles (mesh 0.07), eight stages, about 9 s to solve, 860 KB. Its frames
-     stretch at most 0.8% and 4.7% as it plays.
+     stretch at most 0.8% and 4.7% as it plays. (November 2026: solved by the energy, in ten stages, it stretches
+     0.7% and 3.5% as it plays, and follows its guides to within 0.8 cm; see "Improving the solver", row 6.)
    - **Paper through paper, looked for again.** Inside the open cup, specks of the flaps showed through the front
      wall. In its last frame, 1050 pairs of triangles pass through a wall by more than a tenth of a millimetre (140
      by over 1 mm), mostly the corner flaps through the front wall, which they lie on, and the flaps' tops through
@@ -427,6 +586,94 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
      shows in these models), and paper that swings past other paper as it bends (a fan's pleats) would need it
      thought about again.
 
+## Improving the solver
+
+Outlined in November 2026, after the boat and the balloon showed its limits (see step 7): paper that falls behind
+its guides and then snaps through, playing that stretches wherever a triangle turns a lot relative to its
+neighbours, paper through paper (points against triangles only, and only at moments), guides worked out by hand
+for each model, finer meshes behaving worse, and no new creases. Tried on the balloon and no help: stiffer guides,
+more stages, a finer mesh, no sides kept by layer, creases free to turn (they're held at the angle they start at,
+folded flat in a stack), a rolled fold. In order:
+
+| # | Work | Size | Status |
+|---|---|---|---|
+| 1 | Smaller files: bends' in-between frames and guides written compactly (see Format) | Small | ✅ November 2026 |
+| 2 | A report on each bent step: stretch, turns between frames, lag behind guides, crossings, where (see Format) | Small | ✅ November 2026 |
+| 3 | Each stage started where the guides put the paper (with dense guides), and the guides moved gradually within a stage rather than all at once, so the paper can't fall behind | Small | Tried November 2026: no help (below) |
+| 4 | A stage split where something snaps (a triangle turning further than a limit, or the paper falling behind), keeping only the frames needed | Medium | |
+| 5 | Paths found, not designed: from the start and a designed end shape, the in-between shapes that stretch the paper least (each fold's angle interpolated and the points rebuilt, as in Kilian, Mitra and Pottmann, "Geometric modeling in shape space", 2007) | Medium–large | |
+| 6 | One energy per stage (stretch, bending, guides, contact) solved to its minimum by Newton's method, in place of passes and three different settlings | Large | ✅ November 2026, for guided bends (below) |
+| 7 | Contact paper can't cross: checked continuously between steps, edge against edge too, ideally a barrier (IPC, Li et al. 2020) | Large | |
+| 8 | Playing that keeps lengths: a few passes setting edge lengths in the viewer after blending | Small–medium | |
+| 9 | A mesh that fits the bend: solved coarsely, refined where any frame bends sharply, coarsened where none does | Medium | Fixed folds ✅ November 2026: `lines` (below); refining where it bends, not yet |
+| 10 | Creases that form: a hinge bent past a limit takes its new angle as its rest | Medium | |
+
+The balloon's snapping wants 3, 4 and 5; crossings (the cup, the 3D tulip, the balloon) 7; the iris 10.
+
+**Row 3, tried** (November 2026, on the balloon's exact guides). Leading the paper to its guides at each stage's
+start (their moves spread over the mesh by its edges, so layers lying over each other aren't dragged along) put it
+within 3–12 mm of them; ramping the guides over half a stage, or both, changed nothing either: the paper was as
+far behind (1.4, 2.3, 3.5, 3.6 cm at stages 2 to 5) and snapped as before. It isn't falling behind as it goes.
+Traced through a stage, the paper ends its passes 10–100% stretched (once 1000%), with bending held or not and
+layers kept apart or not; then setting the edges' lengths at the stage's end, which knows nothing of the guides,
+moves it 1–5 cm, and that's where it's kept. Setting lengths with the guides held softly as well (`keepLengths`
+with guide rows) took the worst of it to 3 cm, no more. Two causes:
+- **Guides the mesh can't follow.** Placed exactly where the cube's map puts them (`scripts/balloon-mesh-fit.ts`),
+  the mesh's own triangles stretch: 80–135 of the 1400 over 1%, up to 48% on the way and 25% at the cube. Folds of
+  the map cross triangles rather than running along their edges: the cube's edges (inside faces of the flat stack:
+  in it, all the cube's top and bottom edges lie on two lines across the table), the end triangles' moving folds,
+  and flaps wrapped round an edge many layers out (a few millimetres longer than the face under them, which is
+  real). Creasing the cube's edges first, across the stack, brought it to 63–120 triangles (9% at most at the cube)
+  and the stretch within a stage to 7–24%, but the paper was still as far behind.
+- **A stage that doesn't settle.** 120 passes, a step solving everything together every 20 (each limited to a few
+  millimetres), and then lengths set alone: where guides and lengths disagree, the paper never reaches a balance
+  between them, and whatever the last setting of lengths finds is the frame. That's row 6: one energy, guides
+  in it, solved to its minimum. A mesh with edges along the folds a bend makes (row 9; for fixed folds, lines on
+  the table cut through every layer before meshing, as the creases above did) would make the guides reachable.
+
+**Row 6** (November 2026). Guided bends now bring each stage to the least of one energy (`src/fold/bend/minimize.ts`): edges kept to their lengths by an augmented
+Lagrangian (stiff springs whose rests move by how far each was off, round by round), bending per hinge as the
+sheet's triangles weight it (Grinspun et al., "Discrete shells", 2003, so it costs the same however fine the mesh),
+guides, goals, contacts and the table, by Newton's method (each step by conjugate gradients, each point's 3 × 3
+block as preconditioner) with a line search; then lengths set exactly and layers parted as before. Contacts had to
+come in only at half their gap (in a flat stack the least squeeze brings thousands in, and their coming and going
+breaks the steps) and leave out points beside the triangle (across a fold lying flat they're almost on it).
+- **The balloon.** No snapping: 0.6% stretch in its frames, 4.4% as it plays, at most 46° turned between frames,
+  and setting lengths at a stage's end moved it half a centimetre, not five. But its ends never close: it stays as
+  long as the flat stack, 15 cm behind its guides by the end. Unchanged with twenty times the steps, a finer mesh
+  (0.045), no contacts, no bending, multipliers started afresh each stage, or guides on the plus alone (the passes,
+  given the plus's guides alone, do reach the cube, snapping on the way). So the plus itself locks: following the
+  cube's path takes the triangles round T and the hole stretching for a moment, which the passes allow (the snap)
+  and exact lengths don't. Real paper crumples there.
+- **The fan and the cup**, first: not as good. The fan 4–6 cm behind its guides (the passes 1.1), 2.6–9.4% as
+  it plays (1.5%); the cup 5.5% as it plays. Tuned (`scripts/energy-tune.ts` solves a model's bend again from its
+  file with the weights changed, in seconds), the contacts were holding the paper back from its guides: with the
+  guides weighing ten times as much (10 against contacts' 10), bending at 1e-4, and a stage's steps ending once one
+  lowers the energy by less than a ten-thousandth, the fan: 0.8% in its frames, 1.2% as it plays (the passes
+  1.5%), 0.6–1.2 cm behind its guides (0.7–1.2), paper through paper 0.14 cm (0.25), 13 s to solve (6 s). The
+  cup still played at 5.6%, from the flat stack into its first frame, which it now reaches nearer its guides; in
+  ten stages rather than eight (270 KB, the files now written compactly): 0.7% in its frames, 3.5% as it plays
+  (the passes, in ten, 3.9%), 0.8 cm behind its guides (1.2), 0.47 cm through paper (0.51), 39 s (16 s). Guides
+  ten times heavier still (30) made the cup worse (12% as it plays). So guided bends use the energy, and the fan
+  and the cup were made again with it. Bends without guides (blown up, goals only) still use the passes. The
+  test suite takes 340 s rather than 240, replaying the two.
+- **The balloon** with those weights reaches nearly the cube (0.31 long) but snaps on the way again (74% as it
+  plays): the guides now outweigh the lock at its ends, which still has to give somewhere.
+- **Next.** For the balloon, a few places (T, the hole) where the paper may crumple, its lengths given way for a
+  while, if the cube's path is to be followed without snapping; for the rest, the energy taking over the bends
+  without guides too, once they're tuned as these were.
+
+**Row 9, fixed folds** (November 2026). A bend can name `lines` on the table it will fold along (`cutAlong` in
+`src/fold/bend/frame.ts`): every face a segment crosses, in every layer, is cut along it before meshing, as scissors
+would but joined still, and the bent frames' faces point back at the frame's. A fold through the middle of a face
+then runs along the mesh's edges: in a test, turning part of one face straight up about a line through it, the
+paper ends within a centimetre of the fold's shape, more than twice as near as without. On the balloon, the cube's
+top and bottom edges lie on two lines across the flat stack (`CUBE_EDGES`): with them, the triangles that can't
+follow the cube's map flat drop from 102 to 76 at the cube (9% at most, from 25%), its frames stretch 0.3% rather
+than 0.8%, and it ends 3.1 cm from its guides rather than 6.4. It still snaps on the way (79% as it plays): that's
+its ends, which have to crumple (above). Refining the mesh where the paper bends most, for folds that move, isn't
+done.
+
 ## Risks
 
 - **Collisions in deep stacks.** Sixteen layers a hair apart, moving a lot: the solver may tangle or jitter. Mitigate
@@ -443,5 +690,6 @@ bends, fewer in-between frames (the viewer interpolates between them), and only 
 - **Replay in other browsers.** Should a bend step's replay in the Studio re-solve (and possibly differ slightly), or
   keep the baked frames and only re-solve when an earlier step changes?
 - **Mesh pattern.** A regular grid of right triangles is simplest; aligned to the paper's creases it meshes cleanly.
-  Is that enough, or does the fan's twist need a finer mesh near the pinched end?
+  Is that enough, or does the fan's twist need a finer mesh near the pinched end? (November 2026: thin faces now
+  have their outlines cut evenly, which the fan's strips needed; see step 6.)
 - **A bend tool in the Studio.** Worth it only if creators ask for curved finishes.

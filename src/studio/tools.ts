@@ -15,7 +15,7 @@ export type Tool = 'onto' | 'through' | 'edges';
 export type Layers = 'all' | 1 | 2 | 3;
 /**
  * What the picked line does: a plain fold, a reverse fold, a crease for a collapse, or lifting into 3D. Or a named
- * compound fold (pleat, crimp, squash, petal, rabbit ear) worked out from a few picks (fold/presets.ts).
+ * compound fold (pleat, crimp, squash, petal, rabbit ear, swivel, open sink) worked out from a few picks (fold/presets.ts).
  * Or popping the model up about a point (picking the point, then which way the first crease points), a
  * scissor cut (picking where it starts and ends), a strip of tape (picking its two ends), drawing on the paper
  * (picking points along the mark), or, for models of several sheets, moving one sheet (picking where its middle goes).
@@ -135,7 +135,7 @@ export function creaseFaces(n: number | undefined, sheet: number | null, faces?:
 
 /** The step a named fold makes: its title and kind, as the collapse it's saved as wouldn't say. */
 export function presetStep(kind: PresetKind, t: TFunction): { title: string; kind: StepKind } {
-  return { title: t(`studio.steps.${kind}`), kind: kind === 'squash' || kind === 'petal' ? kind : kind === 'crimp' ? 'reverse' : 'fold' };
+  return { title: t(`studio.steps.${kind}`), kind: kind === 'squash' || kind === 'petal' || kind === 'sink' ? kind : kind === 'crimp' ? 'reverse' : 'fold' };
 }
 
 /** A step's default title and kind, from what it does. */

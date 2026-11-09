@@ -44,5 +44,7 @@ export default defineConfig({
     environment: 'node',
     // Worktrees of other sessions live under .claude/worktrees, with their own copies of everything.
     exclude: ['e2e/**', 'node_modules/**', '.claude/**'],
+    // CI's machines are slower than a desktop, and some tests take a few seconds even here.
+    testTimeout: process.env.CI ? 30_000 : 5_000,
   },
 });

@@ -12,8 +12,12 @@ export default defineConfig({
   snapshotPathTemplate: '{testDir}/{testFileName}-snapshots/{arg}-{projectName}{ext}',
   fullyParallel: true,
   retries: process.env.CI ? 1 : 0,
+  // On CI, a report to download when something fails (CI's logs are only open to the repository's admins).
+  reporter: process.env.CI ? [['dot'], ['html', { open: 'never' }]] : 'list',
   use: {
     baseURL: 'http://localhost:5190',
+    // A trace of a test that failed once and is run again: what the page showed, did and logged.
+    trace: 'on-first-retry',
     // English, and no saved progress or language from earlier runs: each test gets a fresh browser context.
     locale: 'en-GB',
   },

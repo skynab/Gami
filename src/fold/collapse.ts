@@ -102,19 +102,46 @@ export function collapse(frame: FoldFrame, { creases, anchor, under }: CollapseO
   const overlappedBefore = (f: number, g: number) => overlapArea(faces[f].world, faces[g].world) > 1e-7;
   const wasAbove = (f: number, g: number) => faces[f].layer > faces[g].layer;
 
-  // Where reverse folds tuck in: the middle of the flap's stack (the median layer of the faces the crease
-  // runs through), which is where its two halves meet.
-  const middle = (c: Crease) => {
-    const ls = faces
-      .filter((f) => (!c.only || c.only(f.paper)) && crossesLine(f.world, c.line))
-      .map((f) => f.layer)
-      .sort((a, b) => a - b);
-    return ls.length ? (ls[(ls.length - 1) >> 1] + ls[ls.length >> 1]) / 2 : 0;
+  // Where reverse folds tuck in: the middle of the flap's stack, which is where its two halves meet. Each
+  // edge on the crease asks whether the face staying put there is in the stack's lower half: more of the
+  // faces staying put along the same stretch of the crease lie over it than under it. Only those: layers
+  // compare only where faces overlap, and a crease can run across stacks of different depths.
+  const stillOf = (i: number) => (flipped[edges[i].f] ? edges[i].g : edges[i].f);
+  const stretch = (i: number, c: Crease): [number, number] => {
+    const along = [edges[i].pa, edges[i].pb].map((p) => {
+      const w = apply(old[edges[i].f], p);
+      return (w[0] - c.line.p[0]) * c.line.d[0] + (w[1] - c.line.p[1]) * c.line.d[1];
+    });
+    return [Math.min(...along), Math.max(...along)];
   };
-  const middles = new Map(creases.map((c) => [c, middle(c)]));
+  const lowerHalf = (i: number, c: Crease) => {
+    const [a0, a1] = stretch(i, c);
+    const still = faces[stillOf(i)];
+    let over = 0;
+    let under = 0;
+    edges.forEach((_, j) => {
+      if (change[j] !== c || stillOf(j) === stillOf(i)) return;
+      const [b0, b1] = stretch(j, c);
+      if (Math.min(a1, b1) - Math.max(a0, b0) < 1e-7) return;
+      const other = faces[stillOf(j)];
+      if (other.layer > still.layer) over++;
+      else if (other.layer < still.layer) under++;
+    });
+    return over > under;
+  };
 
+  // How the faces either side of each new crease stack. `aside` is how reverse folds once stacked (the middle
+  // was always taken as 0): every layer's point behind its layer for an inside reverse fold, in front for an
+  // outside one, all to one side of the flap. Kept as a last resort, for where the stacking about the middle
+  // can't keep the paper that stays put in its order (see below).
   const creaseOrder = new Map<number, boolean>();
-  const setOrder = (f: number, g: number, fAbove: boolean) => creaseOrder.set(f * faces.length + g, fAbove);
+  const asideOrder = new Map<number, boolean>();
+  const setOrder = (f: number, g: number, fAbove: boolean, aside = fAbove) => {
+    creaseOrder.set(f * faces.length + g, fAbove);
+    asideOrder.set(f * faces.length + g, aside);
+  };
+  // For paper a reverse fold moves: which half of the flap's stack it comes from (true: the lower half).
+  const halfOf = new Map<number, boolean>();
   edges.forEach((e, i) => {
     const c = change[i];
     if (!c || c.kind === 'flat' || c.kind === 'split') return;
@@ -124,10 +151,39 @@ export function collapse(frame: FoldFrame, { creases, anchor, under }: CollapseO
     } else {
       // Reverse: the face that moved goes to the inner side of the one that stayed (or the outer side).
       const [still, moved] = flipped[e.f] ? [e.g, e.f] : [e.f, e.g];
-      const innerIsAbove = faces[still].layer < middles.get(c)!;
-      setOrder(moved, still, innerIsAbove === (c.kind === 'inside'));
+      const lower = lowerHalf(i, c);
+      setOrder(moved, still, lower === (c.kind === 'inside'), c.kind === 'outside');
+      if (!halfOf.has(moved)) halfOf.set(moved, lower);
     }
   });
+  // Each half of a reverse-folded point turns over on its own, so its layers swap order among themselves but
+  // stay on their side of the other half's. The halves reach out from the crease over the paper moving with
+  // it: first as far as it's joined flat, then across folds to what's left (a flap folded onto one half), as
+  // a fold may also join the two halves (a point's folded edge does).
+  const spread = (acrossFolds: boolean) => {
+    let grew = false;
+    const reach = [...halfOf.keys()];
+    while (reach.length) {
+      const u = reach.shift()!;
+      for (const i of byFace[u]) {
+        const w = edges[i].f === u ? edges[i].g : edges[i].f;
+        if (change[i] || halfOf.has(w) || group[w] !== group[u]) continue;
+        if (frontUp(faces[u].world, faces[u].paper) !== frontUp(faces[w].world, faces[w].paper)) {
+          if (!acrossFolds) continue;
+          halfOf.set(w, halfOf.get(u)!);
+          grew = true;
+          continue;
+        }
+        halfOf.set(w, halfOf.get(u)!);
+        reach.push(w);
+        grew = true;
+      }
+    }
+    return grew;
+  };
+  spread(false);
+  while (spread(true)) spread(false);
+  const apart = (f: number, g: number) => halfOf.has(f) && halfOf.has(g) && halfOf.get(f) !== halfOf.get(g);
 
   const layerEdges: LayerEdge[] = edges.map((e) => ({
     f: e.f,
@@ -137,17 +193,24 @@ export function collapse(frame: FoldFrame, { creases, anchor, under }: CollapseO
     folded: frontUp(now[e.f], faces[e.f].paper) !== frontUp(now[e.g], faces[e.g].paper),
   }));
 
-  let layers: number[];
-  try {
-    layers = solveLayers(
+  // Faces that move together usually keep their order. Not always: opening a pocket and flattening it the
+  // other way (as when a hat becomes a diamond) lets layers swap, so if no stacking keeps the order, the
+  // solver tries again keeping it only for faces still hinged together along an unchanged crease, then only
+  // for the paper that stays put. Then, for reverse folds, the same with their points stacked aside; and
+  // last, about the middle keeping no order.
+  const hinged = new Set(edges.flatMap((e, i) => (change[i] ? [] : [e.f * faces.length + e.g, e.g * faces.length + e.f])));
+  const solve = (keep: 'all' | 'hinged' | 'still' | 'none', aside: boolean) =>
+    solveLayers(
       now.map((world) => ({ world })),
       layerEdges,
       (f, g) => {
-        const k = creaseOrder.get(f * faces.length + g);
+        const order = aside ? asideOrder : creaseOrder;
+        const k = order.get(f * faces.length + g);
         if (k !== undefined) return k;
-        const r = creaseOrder.get(g * faces.length + f);
+        const r = order.get(g * faces.length + f);
         if (r !== undefined) return !r;
-        if (group[f] === group[g] && overlappedBefore(f, g)) return wasAbove(f, g) !== flipped[f];
+        const kept = keep === 'all' || (keep === 'hinged' && hinged.has(f * faces.length + g)) || (keep === 'still' && group[f] === group[start]);
+        if (group[f] === group[g] && overlappedBefore(f, g) && kept) return wasAbove(f, g) !== (flipped[f] && (aside || !apart(f, g)));
         // A tucked flap goes under the faces it slides beneath.
         if (under) {
           const moved = (i: number) => group[i] !== group[start];
@@ -158,9 +221,21 @@ export function collapse(frame: FoldFrame, { creases, anchor, under }: CollapseO
       },
       (f, g) => (overlappedBefore(f, g) ? wasAbove(f, g) : group[f] !== group[start]),
     );
-  } catch (e) {
-    if (e instanceof LayerError) throw new FoldError(e.message);
-    throw e;
+  const keeps = ['all', 'hinged', 'still'] as const;
+  const tries = [
+    ...keeps.map((keep) => [keep, false] as const),
+    ...(halfOf.size ? keeps.map((keep) => [keep, true] as const) : []),
+    ['none', false] as const,
+  ];
+  let layers: number[] = [];
+  for (const [keep, aside] of tries) {
+    try {
+      layers = solve(keep, aside);
+      break;
+    } catch (e) {
+      if (!(e instanceof LayerError)) throw e;
+      if (keep === 'none') throw new FoldError(e.message);
+    }
   }
 
   return fromFlat(faces.map((f, i) => ({ ...f, world: now[i], layer: layers[i] })));
@@ -189,11 +264,6 @@ function contains(poly: Vec2[], p: Vec2): boolean {
     sign = Math.sign(c);
   }
   return true;
-}
-
-function crossesLine(world: Vec2[], line: Line): boolean {
-  const s = world.map((x) => sideOf(line, x));
-  return Math.min(...s) < -1e-7 && Math.max(...s) > 1e-7;
 }
 
 /** Assigns the same number to faces whose moves are the same. */

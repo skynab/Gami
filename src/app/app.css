@@ -318,7 +318,10 @@ a {
   background: rgb(0 0 0 / 0.65);
   color: #fff;
   font-size: 13px;
-  white-space: nowrap;
+  /* One line where it fits; a long hint wraps within the screen rather than running off it. */
+  width: max-content;
+  max-width: calc(100% - 24px);
+  text-align: center;
   pointer-events: none;
 }
 
@@ -1893,18 +1896,57 @@ kbd {
 }
 
 @media (max-width: 760px) {
+  /* A bar with more at its end than fits (the Studio's editor): the end slides sideways, rather than the page
+     running wider than the screen, which a phone shows by zooming the whole page out. On one line still: the
+     Studio has little enough height to spare on a phone. Its page title makes room. */
+  .topbar.crowded .topbar-center {
+    display: none;
+  }
+
+  .topbar.crowded .topbar-start {
+    flex: none;
+  }
+
+  /* Its width is what's left; at the bar's end when it all fits, from its start when it doesn't, so it scrolls to
+     all of it. Positioned, so what's placed inside it (a label only screen readers read) is clipped with the rest,
+     not left out past the screen's edge, widening the page. */
+  .topbar.crowded .topbar-end {
+    position: relative;
+    flex: 1 1 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .topbar.crowded .topbar-end > * {
+    flex: none;
+  }
+
+  .topbar.crowded .topbar-end > :first-child {
+    margin-inline-start: auto;
+  }
+
+  /* Below the editor, the preview and steps take what height is left, down to none; nothing spills out over the
+     tools below (a preview kept its height and covered them, taking their clicks). */
   .studio {
     grid-template-columns: 1fr;
-    grid-template-rows: minmax(260px, 1fr) auto;
+    grid-template-rows: minmax(260px, 1fr) minmax(0, auto);
+    overflow: hidden;
   }
 
   .studio-side {
+    overflow: hidden;
     border-inline-start: 0;
     border-block-start: 1px solid var(--line);
   }
 
   .studio-preview {
-    height: 220px;
+    flex: 0 1 220px;
+    height: auto;
+    min-height: 0;
+  }
+
+  .studio-steps {
+    min-height: 0;
   }
 }
 

@@ -2479,4 +2479,30 @@ export const ja: Record<string, string> = {
     "ボールをとじる",
   "Glue the last red unit on top. Done!":
     "最後の赤いユニットを上にはります。完成です！",
+  "With the paper sideways, fold the left edge over to the right edge, and unfold.":
+    "紙を横長に置き、左の辺を右の辺に合わせて折り、開きます。",
+  "Pleat it":
+    "じゃばらに折る",
+  "Fold the bottom half of the stack up onto the top half, flap and all.":
+    "重ねた紙の下半分を、フラップごと上半分に重ねるように折り上げます。",
+  "Fold in the top corner":
+    "上の角を折りこむ",
+  "Fold the flap’s top outer corner in at a slant, through both layers, so its top edge lies along the flap’s inner edge.":
+    "フラップの上の外側の角を、二枚いっしょに斜めに折りこみ、上の辺がフラップの内側の辺にそうようにします。",
+  "Fold in the bottom corner":
+    "下の角を折りこむ",
+  "And the bottom outer corner, the same way. The flap now holds the two halves of the fan together.":
+    "下の外側の角も同じように折ります。これでフラップが扇の二つの半分をとめます。",
+  "Spread it":
+    "広げる",
+  "Hold the bottom and open the two halves out into a half circle. Done!":
+    "下を持って、二つの半分を半円に広げます。できあがり！",
+  "Fold the edges to the creases":
+    "辺を折り目に合わせて折る",
+  "Fold the left and right edges to the creases you just made.":
+    "左右の辺を、いまつけた折り目に合わせて折ります。",
+  "Fold the left and right edges to the nearest creases.":
+    "左右の辺を、いちばん近い折り目に合わせて折ります。",
+  "Keeping this side up, fold the paper back and forth into sixteen equal strips, using the creases as a guide, leaving the strip on the left open as a flap.":
+    "この面を上にしたまま、折り目を目安に紙をじゃばらに折り、同じ幅の十六本の帯にします。左端の帯は開いたまま、フラップとして残します。",
 };

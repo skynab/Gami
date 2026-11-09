@@ -57,8 +57,6 @@ Easiest and clearest first. Each phase can ship alone.
 
 - **The Spin Plane.** Gami treats it as Laux's because his book is its only reference. If the book's contents
   show no such plane, it could be Unattributed and follow Fold'N Fly's sequence like the navy plane.
-- **Names.** Gami's own spinning plane and saucer should have names of their own, so they don't pass for
-  Laux's or Blackburn's.
 
 ## Progress
 

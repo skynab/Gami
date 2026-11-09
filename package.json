@@ -11,6 +11,7 @@
     "e2e": "playwright test",
     "typecheck": "tsc --noEmit",
     "models": "tsx scripts/build-models.ts",
+    "bend-report": "tsx scripts/bend-report.ts",
     "icons": "tsx scripts/build-icons.ts"
   },
   "dependencies": {

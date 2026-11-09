@@ -1,0 +1,23 @@
+// The balloon blown up by its guides into a cube, and what its bend does (see src/fold/bend/report.ts).
+import { writeFileSync } from 'node:fs';
+import { Recipe } from '../src/fold/recipe';
+import { tuckedSide, waterbombBase } from '../src/models/recipes/waterbomb-base';
+import { CUBE_EDGES, cubeGuides, STAGES } from './balloon-cube-lab';
+import { bendReport, describeBend } from '../src/fold/bend/report';
+import { toFoldFile } from '../src/fold/fold-format';
+const r = waterbombBase(new Recipe({ id: 'balloon', title: 'Balloon', sheet: { size: [1, 1], front: '#4caf50', back: '#f6f3ec' } }));
+tuckedSide(r);
+r.turnOver('Turn it over, and do the same on this side.');
+tuckedSide(r);
+const goals = cubeGuides(r.current);
+const t0 = performance.now();
+// LINES: the mesh cut along the cube's top and bottom edges, which lie on two lines across the flat stack.
+const lines = process.env.LINES ? CUBE_EDGES : undefined;
+r.bend({ title: 'Blow it up', text: 'Blow into the hole.' }, { flex: () => true, anchor: [0, 0], goals, mesh: +(process.env.MESH ?? 0.07), ...(lines && { lines }), stages: STAGES, free: true });
+const model = r.build();
+console.log(`${goals.length} guides, solved in ${Math.round(performance.now() - t0)} ms`);
+console.log(describeBend(bendReport(model, model.steps.length)).join('\n'));
+const f = model.steps.at(-1)!.frame;
+const ext = [0, 1, 2].map((c) => { const xs = f.vertices_coords.map((q) => q[c]); return `${Math.min(...xs).toFixed(3)}..${Math.max(...xs).toFixed(3)}`; });
+console.log('  extent x y z           ', ext.join(' '));
+if (process.env.OUT) writeFileSync(process.env.OUT, JSON.stringify(toFoldFile({ ...model, id: 'balloon-lab' })));

@@ -7,10 +7,14 @@ import { DonateButton } from './Donate';
 import { AutoThemeIcon, MoonIcon, SunIcon } from './icons';
 import { getTheme, setTheme, THEMES } from './theme';
 
-/** The 52px bar at the top of every page. Pages fill the start, middle and end slots. */
-export function TopBar({ start, center, end }: { start?: ReactNode; center?: ReactNode; end?: ReactNode }) {
+/**
+ * The 52px bar at the top of every page. Pages fill the start, middle and end slots. With `crowded`, a page with
+ * more at its end than a phone's width holds (the Studio's editor) lets the end slide sideways there, rather than
+ * run the page off the screen.
+ */
+export function TopBar({ start, center, end, crowded }: { start?: ReactNode; center?: ReactNode; end?: ReactNode; crowded?: boolean }) {
   return (
-    <header className="topbar">
+    <header className={crowded ? 'topbar crowded' : 'topbar'}>
       <div className="topbar-start">{start ?? <Brand />}</div>
       {center && <div className="topbar-center">{center}</div>}
       <div className="topbar-end">
