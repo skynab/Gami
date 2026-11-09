@@ -456,6 +456,13 @@ is behind its guides stage by stage, how deep paper goes through paper, and its 
        the middle.
      - *The brims' corners* (folded at the hat corners) also wrap the end pieces at the stem, and have to come
        round with them.
+   - **Tried: guides only where the path is clear** (on the new stacking). The sails stand up, P's wall rises
+     and S's wall swings down under the keel first. The keel is cut through every layer (`lines`), and the side
+     corners and the diamond's centre may crumple. The flaps, end pieces and brims are left to the solver. With
+     3288 triangles in 12 stages, it took 5½ min to solve. The paper falls behind from the seventh stage, and
+     S's wall ends 7.7 cm short of its place. The frames stretch 2.8%, the paper stretches 120% as it plays (in a
+     brim), and it goes 5 mm through itself. Better than the old stacking's 27 cm behind and 271%, but the hooked
+     pieces jam rather than sort themselves out, so the order above has to be given as guides.
    - **Next.** The end shape rebuilt for this stacking, and guides along that order: the sails standing, S's wall
      under first, the end pieces unfolding, the flaps going in with their middles crumpling.
 
