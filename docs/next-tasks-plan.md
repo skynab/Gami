@@ -141,8 +141,19 @@ list can't go stale.
   allowed), and the swan's neck 0.0135 (0.013 allowed): the animation turns each half of the point about its own
   crease, opposite ways, and tucked into the middle the halves' tips pass through each other by about the
   stack's thickness, where real paper opens the flap a little first. Allowed for now (`GRAZES`: the crane, fox
-  and seal added, the swan's raised; two collision tests leave those steps out), until the animation opens the
-  flap.
+  and seal added, the swan's raised; two collision tests leave those steps out).
+- **Reverse folds' animation, with the point in the middle.** Tried 8 November: the flap's upper half (found from
+  the frames: moving paper ending sandwiched between paper staying put) tilted up about the fold joining it to
+  the lower half, as paper making way does, with the two halves of the point turning opposite ways into the gap.
+  On the crane's neck it passed more paper through paper (117–167 crossings against 97) and pulled the point
+  apart by 0.4: the point's halves are joined along its own folded edge, and turning different ways they part.
+  It's the geometry, not the tilt. Where the reverse crease meets the flap's folded edge, two straight creases
+  cross, and rigid paper can fold only one of two crossing lines at a time: a rigid inside reverse fold opens the
+  flap right out, folds the point and closes it again. Real paper bends a little near that point instead. So the
+  ways on: let the paper near that corner bend as the step plays (as bent frames blend), or play the step as
+  open, fold, close (the whole side of the model opening with the flap, the crane's body included). Until then,
+  the point turning as one block and settling in between, as now, passes through about half the stack at most.
+
 - **Three reverse folds keep the old stacking.** The tulip's stem pulled out, the swan's head, and the flapping
   bird's tail (and so its neck and head, folded over it): stacked about the middle, they can't keep the paper that
   stays put in its order, so `collapse` falls back to the old stacking for them, every order kept, and their frames

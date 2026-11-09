@@ -27,8 +27,9 @@ const GRAZES: Record<string, number> = {
   frog: 0.013, // Lifting the front legs, against the other front quarter (docs/origami-me-plan.md).
   'masu-shallow-lid': 0.0085, // Raising the walls: riding layers sit a little off the faces they ride on.
   'rainbow-chain': 0.034, // Joining the ends: rigid links set on a ring dip into each other where they cross.
-  // Reverse folds, their points tucked in between the flap's halves (November 2026): each half turns about its
-  // own crease, and their tips pass through each other on the way, where real paper opens the flap a little first.
+  // Reverse folds, their points tucked in between the flap's halves (November 2026): the point turns as one and
+  // settles in between, through about half the stack. Real paper bends a little to open the flap; rigid paper
+  // can't without opening it right out (docs/next-tasks-plan.md).
   crane: 0.008, // The neck, tail and head.
   fox: 0.0075, // Folding the tail in.
   seal: 0.0055, // Turning the tail up.

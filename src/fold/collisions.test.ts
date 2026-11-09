@@ -77,7 +77,7 @@ describe('paper passing through paper', () => {
     // Stacks ease off their creases, hinged layers settle into place as they turn, and creases nearer the
     // still paper can fold first.
     // Not yet the crane's reverse folds (the neck, tail and head), whose points tuck in between the flap's halves:
-    // each half turns about its own crease, and their tips pass through each other on the way (models.test.ts).
+    // the point turns as one and settles in between, through about half the stack (models.test.ts).
     const crane = byId('crane');
     const reverse = crane.steps.flatMap((s, i) => (s.kind === 'reverse' ? [i + 1] : []));
     for (const id of ['heart', 'jumping-frog', 'tulip', 'crane']) expect(deep(byId(id)).filter((c) => id !== 'crane' || !reverse.includes(c.step)), id).toEqual([]);
