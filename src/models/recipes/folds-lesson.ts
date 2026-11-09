@@ -5,9 +5,9 @@ import { squareBase, squareBaseFlaps } from './bird-base';
 /**
  * A lesson rather than a model: the common folds, one to a section, each on a fresh square. The choice of
  * folds follows origami.me's beginner's guide; the steps are our own. The swivel fold and the open sink aren't
- * taught yet: the Studio makes both (fold/presets.ts), and `Recipe.swivel` the first. The engine's own reverse
- * folds lay the point behind the flap's layers (docs/next-tasks-plan.md), so a sink here would need the preset's
- * creases, a mountain or valley fold for each layer.
+ * taught yet: the Studio makes both (fold/presets.ts), and `Recipe.swivel` the first. A sink here would need the
+ * preset's creases, a mountain or valley fold for each layer: an inside reverse fold through every layer tucks the
+ * tip into the middle of the stack, which on a square base is between the gusset's layers, outside the point.
  */
 export function foldsLesson() {
   const r = new Recipe({ id: 'folds-lesson', title: 'Common folds', sheet: { size: [1, 1], front: '#f6f3ec', back: '#7fb3d5' } });

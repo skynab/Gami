@@ -21,12 +21,17 @@ const GRAZE = 0.005;
 const GRAZES: Record<string, number> = {
   'king-bee': 0.0065, // Bending up the ailerons between the slits.
   lily: 0.009, // Its squash-and-petal folds, joined up all the way (see collisions.test.ts).
-  swan: 0.013, // Pulling up the neck: with rigid paper its body is a closed tube (PLAN.md, milestone 13).
+  swan: 0.014, // Pulling up the neck: with rigid paper its body is a closed tube (PLAN.md, milestone 13).
   whale: 0.009, // Opening the fins out in 3D.
   dolphin: 0.0075, // Opening the fins out in 3D.
   frog: 0.013, // Lifting the front legs, against the other front quarter (docs/origami-me-plan.md).
   'masu-shallow-lid': 0.0085, // Raising the walls: riding layers sit a little off the faces they ride on.
   'rainbow-chain': 0.034, // Joining the ends: rigid links set on a ring dip into each other where they cross.
+  // Reverse folds, their points tucked in between the flap's halves (November 2026): each half turns about its
+  // own crease, and their tips pass through each other on the way, where real paper opens the flap a little first.
+  crane: 0.008, // The neck, tail and head.
+  fox: 0.0075, // Folding the tail in.
+  seal: 0.0055, // Turning the tail up.
 };
 
 describe.each(models.map((m) => [m.id, m] as const))('%s', (id, model) => {

@@ -126,13 +126,29 @@ list can't go stale.
 
 ### 4. Smaller
 
-- **Reverse folds stack the point wrongly.** Found 8 November making the open sink: `collapse` works out where a
-  reverse fold's point tucks in (the middle of the flap's stack) from the faces the crease crosses, but only after
-  cutting them along it, so none cross and it's always 0. Every `inside` crease then lays the point behind all the
-  flap's layers, and every `outside` one in front: the crane's legs and neck, the seal's, the swan's and the rest
-  look right from the front, wrong from behind and as they play, and an outside reverse fold shows the wrong colour.
-  The fix is to measure the middle before cutting; it changes every model with a reverse fold, so their files are
-  made again (`npm run models`) and the grazes looked at again.
+- ✅ **Reverse folds stacked the point wrongly** (found and fixed 8 November, making the open sink). `collapse`
+  worked out where a reverse fold's point tucks in (the middle of the flap's stack) from the faces the crease
+  crosses, but only after cutting them along it (or after an earlier crease had), so it was always 0: every
+  `inside` crease laid the point behind all the flap's layers, every `outside` one in front. Models looked right
+  from the front but wrong from behind and as they played, and an outside reverse fold showed the wrong colour. Now
+  each face along the crease asks whether more of the faces staying put on the same stretch of it lie over it or
+  under it, and each half of the point turns over on its own (its layers swap among themselves, but stay on their
+  side of the other half's), which the layer solver's "keep the order of paper moving together" now knows. Ten
+  models fold differently from their first reverse fold on (the crane, crow, corkscrew, fox, frog, penguin, seal,
+  swan, whale and the common-folds lesson); nine more only record their squashes' and petal folds' face lists
+  differently, their paper the same. Their files are made again. As they play, though, the crane's three reverse folds, the
+  fox's tail and the seal's tail pass paper through paper further than before (up to 0.0076, against 0.005
+  allowed), and the swan's neck 0.0135 (0.013 allowed): the animation turns each half of the point about its own
+  crease, opposite ways, and tucked into the middle the halves' tips pass through each other by about the
+  stack's thickness, where real paper opens the flap a little first. Allowed for now (`GRAZES`: the crane, fox
+  and seal added, the swan's raised; two collision tests leave those steps out), until the animation opens the
+  flap.
+- **Three reverse folds keep the old stacking.** The tulip's stem pulled out, the swan's head, and the flapping
+  bird's tail (and so its neck and head, folded over it): stacked about the middle, they can't keep the paper that
+  stays put in its order, so `collapse` falls back to the old stacking for them, every order kept, and their frames
+  are as before. Traced on the bird's tail, the four layers of the leg judge their halves rightly, so it's the
+  paper round them (the wings) that won't let the tips into the middle with rigid layers. Worth a look: whether
+  those folds are better made as something other than a plain `inside` crease.
 - The fold engine's error messages are still English only (milestone 9 left them).
 - The recipes make named folds their own way; they could call `src/fold/presets.ts`, which the tests show gives
   the same paper.
@@ -146,6 +162,7 @@ list can't go stale.
 |---|---|
 | Housekeeping | Done but for the branches (above). |
 | Studio, row 5 | Done 8 November: swivel and open sink in the Studio's Named fold (`src/fold/presets.ts`); see `docs/studio-plan.md`. Not yet in the common-folds lesson. |
+| Reverse folds' stacking | Fixed 8 November (see Smaller): points tuck into the middle of the flap; three folds keep the old stacking. |
 | Bending, rows 1 and 3 (boat) | Parked 8 November: its recipe and the opening lab on `dev`, findings in `docs/bending-plan.md` (step 7). Stays Coming soon. |
 | Bending, row 2 (fan) | Done 7 November: in the gallery. |
 | Bending, row 4 (balloon) | Started 8 November: the cube's shape and guides in `scripts/balloon-cube-lab.ts`; the path doesn't solve smoothly yet. |
