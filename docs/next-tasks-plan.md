@@ -91,7 +91,7 @@ the boat are in the gallery; the iris is still to come.
 | 2 | ✅ **Fan.** In the gallery (7 November): redesigned to fold as origami.me does, so it can open at all; the spread guided as a book's pages fanned round a half circle; thin faces now meshed in rows, which also helps the 3D tulip (bending plan, step 6). | Yes |
 | 3 | ✅ **Boat's opening.** In the gallery (9 November), as two steps: a collapse into a boat lying flat, then a bend opening it out and standing it on its keel, only the corner flaps' lower triangles bending (bending plan, step 7, "In the gallery"). `scripts/boat-opening-lab.ts` was for the old stacking and is no longer needed. | Yes |
 | 4 | ✅ **Balloon blown up** (8 November): the gallery's balloon now blows up into a cube, guided face by face, its ends crumpling on the way (bending plan, "Improving the solver", row 11). The 3D tulip is still blown up by air into a pillow; guiding it the same way would need its own map. | Yes |
-| 5 | **Shallow masu lid's locks.** They come apart by up to 0.08 as the flap goes over the wall; with rigid paper the flap is locked there. | Yes |
+| 5 | **Shallow masu lid's locks.** They come apart by up to 0.08 as the flap goes over the wall; with rigid paper the flap is locked there. Tried 9 November, as one bend for both locks from the standing walls: `shape` refuses the locks part-way ("those folds can't all open together without stretching"), so the guides can't be taken from it and would have to be designed by hand, the flap's outer triangles bending between the flap and the corners. A bend can start from the standing walls, but holding still it's already 0.6% stretched (3% as it plays) and 3 mm through itself, where riding layers sit off the faces they ride on. | Yes |
 | 6 | **Iris.** Needs paper that bends and then lies flat again. Last. | Yes |
 
 ### 2. Grazes
@@ -106,7 +106,7 @@ list can't go stale.
 | Swan | 0.013 | Pulling up the neck. With rigid paper its body is a closed tube (milestone 13); likely a dead end without bending. |
 | Frog | 0.013 | Lifting the front legs, against the other front quarter. |
 | Lily | 0.009 | Its squash-and-petal folds, joined up all the way. |
-| Whale | 0.009 | Opening the fins out in 3D. |
+| Whale | 0.009 | Opening the fins out in 3D. Early in the step (a tenth of the way), a fin's bottom-layer faces rise through the top layers near its crease. Bent down instead (9 November), either fin goes deeper (0.012, 0.014) and below the table. |
 | Shallow masu lid | 0.0085 | Raising the walls: riding layers sit a little off the faces they ride on. |
 | Dolphin | 0.0075 | Opening the fins out in 3D. |
 | King bee | 0.0065 | Bending up the ailerons between the slits. |

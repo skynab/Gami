@@ -567,6 +567,13 @@ is behind its guides stage by stage, how deep paper goes through paper, and its 
 
 8. **The iris, later.** It needs paper that bends and then lies flat again (a "relax to flat" mode, or using the
    solver to find the crease pattern real paper takes). Revisit once 1–7 are done.
+   - **Tried again** (9 November 2026, with 1–7 done). `wip/iris` still applies to `dev` (`frog-base.ts` hasn't
+     changed since) and folds to step 32, the third flap's petal folded down. Both of that flap's sides then
+     fail: on each, its quarter-mate (the first or second flap's half) is already narrowed, so there's no paper
+     beyond the kite crease, and the kite flap and the paper it hinges on lie on the crease's other side, under it.
+     Putting the swivel's creases on that side instead (through the kite flap's own half, or its whole quarter)
+     can't fold flat. A flat collapse won't do it; the paper has to give, as it does in your hands, which a bend
+     can't yet do anywhere but the last step.
 
 9. **The cup, opened** (October 2026). Squeezed at its sides, the cup's walls bow apart into a mouth; it's stood up on
    its bottom crease as it opens. In the gallery.
