@@ -113,9 +113,10 @@ export type Op =
    * guides place it) and taking it to its goals. `mesh`: the longest edge of the triangles the bending paper is cut
    * into, on the sheet. `inflate`: air blown in, the volume the paper encloses by the end (a balloon puffed up).
    * `free`: not held up by the table as it bends, and set down on it after. `stages`: how many frames it passes
-   * through.
+   * through. `lines`: lines on the table it folds along; `crumple`: regions on the table where it may crumple on the
+   * way (paper lying flat, both).
    */
-  | { op: 'bend'; flex: Faces; anchor: { paper: Vec2 }; goals: BendGoal[]; mesh?: number; lines?: [Vec2, Vec2][]; inflate?: number; free?: boolean; stages?: number }
+  | { op: 'bend'; flex: Faces; anchor: { paper: Vec2 }; goals: BendGoal[]; mesh?: number; lines?: [Vec2, Vec2][]; crumple?: Vec2[][]; inflate?: number; free?: boolean; stages?: number }
   /** `via`: the rays of shapes it passes through on the way, from flat, so it rises as one rather than each piece its own way. */
   | { op: 'popUp'; centre: At; rays: Ray[]; via?: Ray[][] }
   /** Draws on the paper, leaving it where it is: a face, say. */
@@ -242,6 +243,7 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
         // Not so fine that meshing it takes too long.
         ...opt(o, 'mesh', (v, p) => between(num(v, p), p, 0.02, 10), path),
         ...opt(o, 'lines', (v, p) => list(v, p, (l, q) => pair(l, q, vec2), LIMITS.list), path),
+        ...opt(o, 'crumple', (v, p) => list(v, p, (poly, q) => list(poly, q, vec2, LIMITS.outline), LIMITS.list), path),
         ...opt(o, 'inflate', (v, p) => between(num(v, p), p, 0, 10), path),
         ...opt(o, 'free', bool, path),
         ...opt(o, 'stages', (v, p) => between(count(v, p), p, 1, LIMITS.stages), path),
@@ -774,6 +776,7 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
         guides: op.goals.flatMap((g) => ('guide' in g ? [{ paper: g.guide.paper, path: g.path }] : [])),
         ...(op.mesh !== undefined && { mesh: op.mesh }),
         ...(op.lines?.length && { lines: op.lines }),
+        ...(op.crumple?.length && { crumple: op.crumple }),
         ...(op.inflate && { inflate: op.inflate }),
         ...(op.free && { free: true }),
         ...(op.stages && { stages: op.stages }),

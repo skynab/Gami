@@ -70,6 +70,12 @@ export interface BendProblem {
    * way, 0 not pushed). The volume is what the triangles' outward sides face away from the centre.
    */
   inflate?: { centre: Vec3; outward: number[]; volume: number };
+  /**
+   * Triangles that may crumple on the way (by index), as a balloon's ends do while it's blown up: in every frame but
+   * the last, an edge with only these triangles on it may get shorter than the paper, never longer. A coarse mesh
+   * can't wrinkle, so it shows as the paper there drawing in. Guided bends only.
+   */
+  crumple?: boolean[];
   /** How many stages the goals ramp over, each kept as a frame, and the iterations in each. */
   stages?: number;
   iterations?: number;
@@ -391,6 +397,16 @@ export function solve(problem: BendProblem): BendResult {
   const area = (a: number, b: number, c: number) => len(cross(sub(flatAt(b), flatAt(a)), sub(flatAt(c), flatAt(a)))) / 2;
   const hingeWeight = hinges.map((h) => (3 * dot(sub(flatAt(h.b), flatAt(h.a)), sub(flatAt(h.b), flatAt(h.a)))) / Math.max(1e-12, area(h.a, h.b, h.c) + area(h.b, h.a, h.d)));
   const multipliers = new Float64Array(edges.length);
+  // Edges that may crumple: every triangle on them may.
+  const give = edges.map(() => !!problem.crumple);
+  if (problem.crumple) {
+    const index = new Map(edges.map(([a, b], k) => [hingeKey(a, b), k]));
+    problem.triangles.forEach((t, k) => {
+      if (problem.crumple![k]) return;
+      for (let e = 0; e < 3; e++) give[index.get(hingeKey(t[e], t[(e + 1) % 3]))!] = false;
+    });
+  }
+  const crumpling = give.some(Boolean);
   for (let s = 1; s <= stages; s++) {
     const share = s / stages;
     const goalAt = (problem.goals ?? []).map((g, k): Vec3 => {
@@ -438,6 +454,7 @@ export function solve(problem: BendProblem): BendResult {
           contacts: thickness > 0 ? () => nearPairs(p, problem.triangles, thickness, sides, problem.side) : undefined,
           contact: ENERGY.contact,
           floor,
+          ...(crumpling && s < stages && { give }),
         },
         multipliers,
         // Close enough for setting the lengths exactly after (keepLengths) to move the paper only a little.
@@ -445,9 +462,13 @@ export function solve(problem: BendProblem): BendResult {
       );
       if (stretch === 0) {
         if (s === stages) (problem.goals ?? []).forEach((g, k) => w[g.vertex] && (p[g.vertex] = [...goalAt[k]]));
+        // Crumpling edges kept as short as they've drawn in, for now.
+        const rest = crumpling && s < stages ? lengths.slice() : null;
+        if (rest) edges.forEach(([a, b], k) => give[k] && (lengths[k] = Math.min(rest[k], len(sub(p[b], p[a])))));
         keepLengths(p, s === stages ? held : w, edges, lengths, 5, 1e-3);
         if (s < stages) settle(STAGE_POLISH, STAGE_SETTLED, held);
         settleLayers(LAYERED_POLISH, STAGE_SETTLED, targets, held);
+        if (rest) rest.forEach((l, k) => (lengths[k] = l));
       }
       frames.push(p.map((q) => [...q] as Vec3));
       continue;

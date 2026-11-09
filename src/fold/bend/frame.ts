@@ -1,5 +1,5 @@
 import { clip } from '../cut';
-import { FoldError, fromFlat, toFlat, type FlatFace } from '../fold';
+import { FoldError, fromFlat, placeLike, toFlat, type FlatFace } from '../fold';
 import { facePositions, LAYER_GAP } from '../frames';
 import { joinedAlong, sharedSegment, signedArea, split } from '../geometry2d';
 import type { FoldFrame, Vec2, Vec3 } from '../types';
@@ -248,6 +248,11 @@ export interface BendOptions {
    */
   lines?: [Vec2, Vec2][];
   /**
+   * Regions on the table (polygons), for paper lying flat, where it may crumple on the way, every layer of it: in the
+   * frames in between, it may draw in shorter than the paper, never stretch (see BendProblem.crumple).
+   */
+  crumple?: Vec2[][];
+  /**
    * How readily creases between faces give, as a share of each hinge's own stiffness (see solver.ts); soft mesh edges
    * bend more readily still.
    */
@@ -351,6 +356,7 @@ export function bendFrame(given: FoldFrame, options: BendOptions): { via: FoldFr
     ...(stacked(frame) && { side: sidesByLayer(frame, points, triangles, parent) }),
     ...(options.inflate && { inflate: inflation(frame, points, triangles, parent, options.inflate) }),
     ...(options.stages && { stages: options.stages }),
+    ...(options.crumple?.length && { crumple: crumpling(points, triangles, options.crumple) }),
   });
   const write = (coords: Vec3[], first: boolean): FoldFrame => ({
     vertices_coords: coords,
@@ -390,6 +396,39 @@ export function cutAlong(frame: FoldFrame, lines: [Vec2, Vec2][]): { frame: Fold
     frame: { ...cutUp, faces_parent: undefined, ...(frame.cuts?.length && { cuts: frame.cuts }), ...(frame.tapes?.length && { tapes: frame.tapes }) },
     origin: faces.map((f) => f.parent),
   };
+}
+
+/** Whether a point is inside a polygon. */
+function within(q: Vec2, poly: Vec2[]): boolean {
+  let odd = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [a, b] = [poly[i], poly[j]];
+    if (a[1] > q[1] !== b[1] > q[1] && q[0] < ((b[0] - a[0]) * (q[1] - a[1])) / (b[1] - a[1]) + a[0]) odd = !odd;
+  }
+  return odd;
+}
+
+/** Which triangles lie in the regions on the table where paper may crumple (see BendOptions.crumple), by their middles. */
+function crumpling(points: Vec3[], triangles: Tri[], regions: Vec2[][]): boolean[] {
+  return triangles.map((t) => {
+    const mid: Vec2 = [t.reduce((s, v) => s + points[v][0], 0) / 3, t.reduce((s, v) => s + points[v][2], 0) / 3];
+    return regions.some((poly) => within(mid, poly));
+  });
+}
+
+/**
+ * Which triangles of a bent step's frames may crumple on the way (see BendOptions.crumple), by where their paper lay
+ * on the table in the frame before the step (`before`): `first` is the step's first frame, whose faces point back at
+ * `before`'s. Null if none may.
+ */
+export function crumpleOf(before: FoldFrame, first: FoldFrame, regions: Vec2[][] | undefined): boolean[] | null {
+  const parent = first.faces_parent;
+  if (!regions?.length || !parent || !stacked(before)) return null;
+  const place = toFlat(before).map(placeLike);
+  return first.faces_vertices.map((t, k) => {
+    const mid = t.reduce<Vec2>((m, v) => [m[0] + first.vertices_paper[v][0] / t.length, m[1] + first.vertices_paper[v][1] / t.length], [0, 0]);
+    return regions.some((poly) => within(place[parent[k]](mid), poly));
+  });
 }
 
 /** Whether a frame lies flat, its faces in layers. */

@@ -2,7 +2,7 @@
 import { writeFileSync } from 'node:fs';
 import { Recipe } from '../src/fold/recipe';
 import { tuckedSide, waterbombBase } from '../src/models/recipes/waterbomb-base';
-import { CUBE_EDGES, cubeGuides, STAGES } from './balloon-cube-lab';
+import { CUBE_EDGES, CUBE_ENDS, cubeGuides, STAGES } from './balloon-cube-lab';
 import { bendReport, describeBend } from '../src/fold/bend/report';
 import { toFoldFile } from '../src/fold/fold-format';
 const r = waterbombBase(new Recipe({ id: 'balloon', title: 'Balloon', sheet: { size: [1, 1], front: '#4caf50', back: '#f6f3ec' } }));
@@ -13,7 +13,9 @@ const goals = cubeGuides(r.current);
 const t0 = performance.now();
 // LINES: the mesh cut along the cube's top and bottom edges, which lie on two lines across the flat stack.
 const lines = process.env.LINES ? CUBE_EDGES : undefined;
-r.bend({ title: 'Blow it up', text: 'Blow into the hole.' }, { flex: () => true, anchor: [0, 0], goals, mesh: +(process.env.MESH ?? 0.07), ...(lines && { lines }), stages: STAGES, free: true });
+// CRUMPLE: the ends, past the cube's top and bottom edges, may crumple on the way.
+const crumple = process.env.CRUMPLE ? CUBE_ENDS : undefined;
+r.bend({ title: 'Blow it up', text: 'Blow into the hole.' }, { flex: () => true, anchor: [0, 0], goals, mesh: +(process.env.MESH ?? 0.07), ...(lines && { lines }), ...(crumple && { crumple }), stages: STAGES, free: true });
 const model = r.build();
 console.log(`${goals.length} guides, solved in ${Math.round(performance.now() - t0)} ms`);
 console.log(describeBend(bendReport(model, model.steps.length)).join('\n'));

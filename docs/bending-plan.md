@@ -502,6 +502,9 @@ is behind its guides stage by stage, how deep paper goes through paper, and its 
    - **Next.** It's the solver, at the ends, that needs to change, or the path found some other way. A real balloon
      blown up slowly would show how the ends open; the end triangles might also take creases where they fold (a fan
      from each corner), which the paper doesn't have.
+   - **In the gallery** (8 November 2026). The ends crumple on the way ("Improving the solver", crumpling): guided
+     by the cube's map (now `src/models/recipes/balloon-cube.ts`, the lab keeping its other end shapes), folded
+     along the cube's edges, in 16 stages, it blows up into the cube without snapping. See below for how it does.
 
 8. **The iris, later.** It needs paper that bends and then lies flat again (a "relax to flat" mode, or using the
    solver to find the crease pattern real paper takes). Revisit once 1–7 are done.
@@ -607,6 +610,7 @@ folded flat in a stack), a rolled fold. In order:
 | 8 | Playing that keeps lengths: a few passes setting edge lengths in the viewer after blending | Small–medium | |
 | 9 | A mesh that fits the bend: solved coarsely, refined where any frame bends sharply, coarsened where none does | Medium | Fixed folds ✅ November 2026: `lines` (below); refining where it bends, not yet |
 | 10 | Creases that form: a hinge bent past a limit takes its new angle as its rest | Medium | |
+| 11 | Paper that crumples for a while: regions where it may draw in, never stretch, exact again by the end | Small–medium | ✅ November 2026: `crumple` (below) |
 
 The balloon's snapping wants 3, 4 and 5; crossings (the cup, the 3D tulip, the balloon) 7; the iris 10.
 
@@ -660,8 +664,8 @@ breaks the steps) and leave out points beside the triangle (across a fold lying 
 - **The balloon** with those weights reaches nearly the cube (0.31 long) but snaps on the way again (74% as it
   plays): the guides now outweigh the lock at its ends, which still has to give somewhere.
 - **Next.** For the balloon, a few places (T, the hole) where the paper may crumple, its lengths given way for a
-  while, if the cube's path is to be followed without snapping; for the rest, the energy taking over the bends
-  without guides too, once they're tuned as these were.
+  while, if the cube's path is to be followed without snapping (done: row 11); for the rest, the energy taking over
+  the bends without guides too, once they're tuned as these were.
 
 **Row 9, fixed folds** (November 2026). A bend can name `lines` on the table it will fold along (`cutAlong` in
 `src/fold/bend/frame.ts`): every face a segment crosses, in every layer, is cut along it before meshing, as scissors
@@ -673,6 +677,21 @@ follow the cube's map flat drop from 102 to 76 at the cube (9% at most, from 25%
 than 0.8%, and it ends 3.1 cm from its guides rather than 6.4. It still snaps on the way (79% as it plays): that's
 its ends, which have to crumple (above). Refining the mesh where the paper bends most, for folds that move, isn't
 done.
+
+**Row 11, crumpling** (November 2026). A bend can name regions on the table, for paper lying flat, where it may
+crumple on the way (`crumple`): in every frame but the last, an edge with only those triangles on it may draw in
+shorter than the paper, never stretch. Real paper crumples there (a balloon's ends, where the creases meet at T and
+the hole, crinkle as it's blown up); a mesh this coarse can't wrinkle, so it shows as the paper there drawing in. In
+the energy (minimize.ts) such an edge has no multiplier and, drawn in, a spring 0.003 as stiff as stretching's: with
+none, a few edges took all of it and collapsed (in a test, to nothing), and triangles folded over each other popped up
+as the paper opened out again; at 0.01 the balloon fell 1.6 cm behind its guides and snapped a little. Each stage's
+end keeps them as short as they've drawn in. Checking a model (validate.ts) and the bend report count only how far
+that paper stretches; the report says how far it drew in, separately.
+- **The balloon**, its ends past the cube's edges allowed to crumple (`CUBE_ENDS`): no snapping (no triangle turns
+  more than 33° between frames, from 152°), within 1.4 cm of its guides throughout (from 7 cm), 0.8% stretch in its
+  frames and 4.2% as it plays, paper 4 mm through paper at most (from 1.6 cm), and it ends a cube ¼ across, as the
+  map says. The paper by T and the hole draws in by up to a third on the way. 1152 triangles in 16 stages, 325 KB
+  of its file, about 40 s to solve (12 stages played at 4.9%, too near the 5% allowed).
 
 ## Risks
 

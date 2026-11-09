@@ -484,7 +484,7 @@ export class Recipe {
    */
   bend(
     step: { title: string; text?: string },
-    bend: { flex: (centre: Vec2) => boolean; anchor: Vec2; goals: BendGoal[]; mesh?: number; lines?: [Vec2, Vec2][]; inflate?: number; free?: boolean; stages?: number },
+    bend: { flex: (centre: Vec2) => boolean; anchor: Vec2; goals: BendGoal[]; mesh?: number; lines?: [Vec2, Vec2][]; crumple?: Vec2[][]; inflate?: number; free?: boolean; stages?: number },
   ): this {
     const test = recorder(bend.flex);
     for (const face of this.current.faces_vertices) test(face.map((v) => this.current.vertices_paper[v]));
@@ -495,6 +495,7 @@ export class Recipe {
       goals: bend.goals,
       ...(bend.mesh !== undefined && { mesh: bend.mesh }),
       ...(bend.lines?.length && { lines: bend.lines }),
+      ...(bend.crumple?.length && { crumple: bend.crumple }),
       ...(bend.inflate && { inflate: bend.inflate }),
       ...(bend.free && { free: true }),
       ...(bend.stages && { stages: bend.stages }),
