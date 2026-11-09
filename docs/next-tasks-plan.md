@@ -149,10 +149,30 @@ list can't go stale.
   apart by 0.4: the point's halves are joined along its own folded edge, and turning different ways they part.
   It's the geometry, not the tilt. Where the reverse crease meets the flap's folded edge, two straight creases
   cross, and rigid paper can fold only one of two crossing lines at a time: a rigid inside reverse fold opens the
-  flap right out, folds the point and closes it again. Real paper bends a little near that point instead. So the
-  ways on: let the paper near that corner bend as the step plays (as bent frames blend), or play the step as
-  open, fold, close (the whole side of the model opening with the flap, the crane's body included). Until then,
-  the point turning as one block and settling in between, as now, passes through about half the stack at most.
+  flap right out, folds the point and closes it again. Real paper bends a little near that point instead.
+
+  Open, fold, close was tried next, the same day. The flap's upper side (all the paper joined to the upper half of
+  the point other than across the flap's folded edge) opens out flat, or nearly, about that edge, then everything
+  folds back up from there, the creases round the corner in step (`inStep`, with a little more slack for a thick
+  stack). Bending near the corner wasn't tried: the animator's faces are large polygons, and at a 90° opening the
+  point's halves disagree by about 70°, which dragging corners would smear; a fine mesh there means running the
+  bend solver for every reverse fold. Open, fold, close works on a flap that's free to open: the seal's neck
+  (step 17, not one of the grazing steps) opened cleanly and closed in step, and paper went a tenth as deep
+  (summed over the step), though its deepest graze rose from 0.0043 to 0.0048. But none of the four grazing
+  steps is such a flap:
+  - The crane's neck, tail and head: the legs' folded edges lie on the body's centre line, and the upper side
+    carries on flat across that line into the other half of the body. Opened out, it swings over through that
+    half (the opening alone passed through paper 5.7 deep, summed, against 1.3 for the whole step now).
+  - The fox's tail and the seal's tail: the flap's two sides are joined away from its folded edge too, so it
+    can't open without tearing.
+  - The swan's neck: it opens cleanly, but it can't fold back up in step: the paper comes apart further the
+    further it closes (0.003, 0.008 and 0.012 of slack each ran out mid-way), and the other ways of closing tear
+    it (0.09–0.15).
+
+  So real paper does what these steps need by bending the body (the crane's sides bowing apart), not by swinging
+  a free side open. The way on, if it's worth it, is the bending one: a fine mesh round the corner, solved per
+  step, ahead of time (the gallery's ~20 reverse folds). Until then, the point turning as one block and settling
+  in between, as now, passes through about half the stack at most.
 
 - **Three reverse folds keep the old stacking.** The tulip's stem pulled out, the swan's head, and the flapping
   bird's tail (and so its neck and head, folded over it): stacked about the middle, they can't keep the paper that
