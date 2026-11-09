@@ -3,8 +3,8 @@ import type { Vec2 } from '../../fold/types';
 
 /**
  * The traditional paper boat, from an A4 sheet, following origami.me/traditional-boat, as far as the small
- * diamond. Parked, not in the gallery: opening it into a boat tangles where the diamond's halves interlock
- * (docs/bending-plan.md, step 7).
+ * diamond. Not in the gallery yet: opening it into a boat needs paper that bends, and a path worked out for it
+ * (docs/bending-plan.md, step 7, "The small diamond as paper stacks it").
  */
 export function boat() {
   const h = Math.SQRT2 / 2;
@@ -63,13 +63,19 @@ export function boat() {
     const F2 = r.where(paper(0, -0.5));
     const K2 = r.where(paper(0, 0.5));
     const mid: [number, number] = [(F2[0] + K2[0]) / 2, (F2[1] + K2[1]) / 2];
+    // Opening the small hat unfolds only what joins its front to its back along its sides: the walls' upper
+    // halves (each side's top layer, round the pocket) and the brims' middle creases. Lying along the same sides
+    // are the corner flaps' middle creases and the gunwales (each brim on its wall's lower half), which belong to
+    // one face of the hat, so they stay folded. Unfolding them too stacked the small diamond in a way paper
+    // can't be (no stacking keeps the layers' order, so the solver kept none), with the halves interlocked.
+    const joinsFrontToBack = ([u, v]: Vec2) => Math.abs(v) > 0.5 || Math.abs(u) <= Math.min(Math.abs(v), 0.5 - Math.abs(v));
     r.collapse(
       { title: 'Open it into a diamond again', text: 'Open the bottom and push the two sides together again, flattening a smaller diamond.', kind: 'squash' },
       [
         { through: [table(...A), table(...mid)], kind: 'mountain', only: ([u]) => u < 0 },
         { through: [table(...A), table(...mid)], kind: 'valley', only: ([u]) => u > 0 },
-        { through: [table(...A), table(...F2)], kind: 'flat' },
-        { through: [table(...A), table(...K2)], kind: 'flat' },
+        { through: [table(...A), table(...F2)], kind: 'flat', only: joinsFrontToBack },
+        { through: [table(...A), table(...K2)], kind: 'flat', only: joinsFrontToBack },
       ],
       paper(-0.2, -0.3),
     );

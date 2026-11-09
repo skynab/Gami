@@ -52,7 +52,9 @@ Things that can't be settled from the code alone.
 - **The Spin Plane's designer** (`docs/foldnfly-planes-plan.md`): Laux's, or Unattributed? Needs his book's
   contents.
 - **How a paper boat's small diamond comes apart.** The boat is parked (8 November 2026): its guided opening
-  tangles where the diamond's two halves interlock (`docs/bending-plan.md`, step 7). A real paper boat, folded
+  tangles where the diamond's two halves interlock (`docs/bending-plan.md`, step 7). On 9 November the small
+  diamond was found stacked wrongly, and with that fixed, an order to unhook the halves was worked out on
+  paper, though not tried yet; a real boat would still confirm it. A real paper boat, folded
   to the small diamond and opened slowly, would show whether the starboard wall's bow triangle and the port
   wall's bow brim come apart, and how, or stay tucked round each other in the finished boat.
 - **The bending plan's open questions** (`docs/bending-plan.md`): re-solving bends on replay, the mesh pattern,
@@ -91,9 +93,9 @@ recipe is on `dev` now, not yet in the gallery's list. The fan is in the gallery
 
 | # | Work | Needs bending? |
 |---|---|---|
-| 1 | **Boat, as far as the small diamond.** Parked with row 3 (8 November). On `dev`. The squashes now pass paper through paper by 0.007 and 0.025 (they were 14 cm and 1.7 cm). The second can't fold in step: kept joined, its creases follow another way of folding (bending plan, step 7). Next: live with 0.025 on `GRAZES`, or find what keeps its creases on this way of folding. | No |
+| 1 | **Boat, as far as the small diamond.** On `dev`. The second squash now stacks the small diamond as paper does (9 November): it had opened the corner flaps and gunwales too, and kept no layer order. The squashes pass paper through paper by 0.007 and 0.032. The second can't fold in step: kept joined, its creases follow another way of folding (bending plan, step 7). Next: live with 0.032 on `GRAZES`, or find what keeps its creases on this way of folding. | No |
 | 2 | ✅ **Fan.** In the gallery (7 November): redesigned to fold as origami.me does, so it can open at all; the spread guided as a book's pages fanned round a half circle; thin faces now meshed in rows, which also helps the 3D tulip (bending plan, step 6). | Yes |
-| 3 | **Boat's opening.** Parked (8 November) until a real paper boat has been watched opening (see "Waiting"). Its shape is worked out and holds together, but the guided path tangles where the small diamond's two halves interlock (bending plan, step 7; `scripts/boat-opening-lab.ts`). Next: watch a real paper boat open to see how the interlock comes apart, or whether it stays. | Yes |
+| 3 | **Boat's opening.** With the small diamond stacked as paper does (9 November), the halves no longer cross over, but they still hook each other at each side corner. The order they unhook in is worked out by hand, and the corner flaps must bend at their middles (`crumple`) to reverse-fold along the keel (bending plan, step 7, "What the opening has to do"). Next: the end shape rebuilt for the new stacking, and guides along that order; `scripts/boat-opening-lab.ts` is for the old one. | Yes |
 | 4 | ✅ **Balloon blown up** (8 November): the gallery's balloon now blows up into a cube, guided face by face, its ends crumpling on the way (bending plan, "Improving the solver", row 11). The 3D tulip is still blown up by air into a pillow; guiding it the same way would need its own map. | Yes |
 | 5 | **Shallow masu lid's locks.** They come apart by up to 0.08 as the flap goes over the wall; with rigid paper the flap is locked there. | Yes |
 | 6 | **Iris.** Needs paper that bends and then lies flat again. Last. | Yes |

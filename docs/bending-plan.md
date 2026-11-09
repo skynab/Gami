@@ -429,6 +429,35 @@ is behind its guides stage by stage, how deep paper goes through paper, and its 
      unpark it: a paper boat opened slowly, watching the starboard wall's bow triangle and the port wall's bow
      brim, to see how real paper unlocks them. Perhaps they stay interlocked in the finished boat (one tucked
      round the other at that end), in which case the end shape here is wrong there, not the path.
+   - **The small diamond as paper stacks it** (9 November 2026). The interlock above came partly from the recipe.
+     Opening the small hat, its "flat" creases along the hat's sides also opened the corner flaps' middle creases
+     and the gunwales, which lie along the same lines. No stacking then kept the layers' order, so the collapse
+     quietly kept none, and the diamond came out stacked as paper can't be: each wall's bow at a different end, the
+     brims lying open. Now only what joins the hat's front to its back opens (the walls' upper halves, round the
+     pocket, and the brims' middle creases), and every layer keeps its order. Each half of the sheet now lies on
+     its own side of the slit, the two mirror images. From the table up: S upper, S lower, P lower, Q_p lower, Q_s
+     lower, Q_s upper, Q_p upper, P upper (P and S the walls, Q the corner flap, upper and lower either side of
+     the fold made by folding the bottom points up), with the brims between. P upper on top and S upper
+     underneath are the hat's pocket walls, turned out, as a squash turns them. Both walls' bows are at one end,
+     so the bow comes from the left half of the sheet and the stern from the right. The squash passes paper
+     through paper by 0.032 (0.025 before). `scripts/boat-opening-lab.ts` was written for the old stacking.
+   - **What the opening has to do** (worked out by hand at a side corner, the bow's; the stern mirrors it; not
+     yet tried). The flat boat's stacking is forced: walls outside, then sails, the flap's halves in the middle
+     (S wall, S sail, Q_s upper, its lower half past the keel, Q_p's, Q_p upper, P sail, P wall). At the bow the
+     end pieces stack the same way (S's end, Q_s's, Q_p's, P's), each flat with the piece it hangs from.
+     - *The flaps bend.* Each corner flap is reverse-folded inside along the keel, which crosses the flap's
+       middle crease square. Four creases meeting at right angles fold rigidly only along one line or the other,
+       so the flap has to bend at its middle (the diamond's centre) as it goes in: a place for `crumple`.
+     - *The halves still hook each other at the corner.* P lower folds round Q_s (where the bottom points were
+       folded up), while S lower and Q_s lower fold round P lower and Q_p lower (at the stem). They unhook in
+       this order: S's wall swings down under the keel first, taking S lower with it, which opens the stem fold.
+       Then P lower and Q_p lower unfold together round that first fold's edge, turning over as a pair (their
+       stem fold the other way up afterwards). Then the keel folds: P's wall up, the flaps' lower halves into
+       the middle.
+     - *The brims' corners* (folded at the hat corners) also wrap the end pieces at the stem, and have to come
+       round with them.
+   - **Next.** The end shape rebuilt for this stacking, and guides along that order: the sails standing, S's wall
+     under first, the end pieces unfolding, the flaps going in with their middles crumpling.
 
    **The paper balloon** (October 2026). The gallery's water bomb ends flat, with "blow into the hole" in words;
    blowing it up is a bend of its own (Kids Web Japan's balloon, the same model, ends as a rounded cube with a crease
