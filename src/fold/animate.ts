@@ -589,6 +589,14 @@ function moving(from: FoldFrame, to: FoldFrame, { yielding = false } = {}): Tran
     if (tornBy(hinged!) > TEAR) {
       const closed = inStep(hinged!);
       if (closed) [hinged, fewest] = [closed, passesThrough(closed, WAY_SAMPLES)];
+      else {
+        // A squash about one point, worked out as rigid paper folds it, keeps the paper joined: kept over each piece
+        // making its own way if that pulls the paper apart, whatever the paper passing through says (paper torn
+        // apart passes through less of itself).
+        const vertex = vertexFold(hinged!);
+        if (vertex && tornBy(out) > TEAR) return landInOrder(vertex);
+        if (vertex) [hinged, fewest] = [vertex, passesThrough(vertex, WAY_SAMPLES)];
+      }
     }
     // Each way of moving has cases the other handles better: keep whichever passes through less paper. When
     // neither passes through any, as a collapse's faces all meeting at a point count as touching, judge a
@@ -1352,6 +1360,168 @@ function inStep(t: Transition): Transition | null {
   const most = (4 * Math.max(...end.map(Math.abs))) / STEP_SAMPLES;
   for (let i = 1; i <= STEP_SAMPLES; i++) if (turning.some((f) => Math.abs(turns[i][f] - turns[i - 1][f]) > most)) return null;
   return settled({ ...t, hinges: undefined }, { ...h, stagger: 0, turns, fix: undefined, lift: 0 });
+}
+
+/**
+ * A squash whose paper moves as four panels about one point, as a hat squashed into a diamond: one panel stays put,
+ * two turn over about its creases, and the fourth, hinged to both, turns flat round the point. Rigid paper folds it
+ * with one freedom, but it starts and ends flat, where its two ways of folding meet, and `inStep`, starting from
+ * every crease at its steady rate, can take the other way (the boat's small diamond did, its creases ending far from
+ * their places). Worked out here instead, as a spherical four-bar: the first panel turns steadily about its crease
+ * with the still paper, and the second turns about its own as far as keeps the fourth panel's two creases at the
+ * angle they make on the paper. Null unless the paper moves that way and stays joined.
+ */
+function vertexFold(t: Transition): Transition | null {
+  const h = t.hinges!;
+  // Panels: faces moving alike, give or take the few gaps a layer shifts by as the stack is renumbered.
+  const marks: Vec3[] = [[0, 0, 0], [1, 0, 0], [0, 0, 1]];
+  const ends = t.faces.map((f) => marks.map((q) => move(t.motions[f.motion], q, 1)));
+  const alike = (a: Vec3[], b: Vec3[]) => a.every((p, k) => Math.hypot(p[0] - b[k][0], p[1] - b[k][1], p[2] - b[k][2]) < 40 * LAYER_GAP);
+  // Each face's panel: the first face moving like it.
+  const firsts: number[] = [];
+  const group = ends.map((e, i) => {
+    const like = firsts.find((j) => alike(ends[j], e));
+    if (like !== undefined) return like;
+    firsts.push(i);
+    return i;
+  });
+  const kinds = [...new Set(group)];
+  const stillGroups = new Set(t.faces.flatMap((_, i) => (h.parent[i] === -1 ? [group[i]] : [])));
+  if (kinds.length !== 4 || stillGroups.size !== 1 || h.parent.some((p) => p === -2)) return null;
+  const g1 = [...stillGroups][0];
+  type V = [number, number, number];
+  const sub = (a: V, b: V): V => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+  const dot = (a: V, b: V) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  const cross = (a: V, b: V): V => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+  const scale = (a: V, k: number): V => [a[0] * k, a[1] * k, a[2] * k];
+  const unit = (a: V): V => scale(a, 1 / (Math.hypot(...a) || 1));
+  const flatten = (a: V): V => unit([a[0], 0, a[2]]);
+  // Rodrigues: v turned by `angle` about the unit axis k.
+  const turned = (v: V, k: V, angle: number): V => {
+    const [c, s] = [Math.cos(angle), Math.sin(angle)];
+    return [0, 1, 2].map((n) => v[n] * c + cross(k, v)[n] * s + k[n] * dot(k, v) * (1 - c)) as V;
+  };
+
+  // The creases between panels: from the hinges where a face hangs from another panel's face, and the one that closes
+  // the loop, from where faces of the two panels left meet.
+  const creases = new Map<string, { a: number; b: number; at: V; dir: V; angle?: number }>();
+  const key = (a: number, b: number) => (a < b ? `${a},${b}` : `${b},${a}`);
+  for (const f of h.order) {
+    const p = h.parent[f];
+    if (p < 0 || group[p] === group[f] || creases.has(key(group[p], group[f]))) continue;
+    creases.set(key(group[p], group[f]), { a: group[p], b: group[f], at: h.at[f], dir: h.dir[f], angle: h.angle[f] });
+  }
+  for (const { i, j, shared } of sharedEdges(t.faces)) {
+    const [a, b] = [group[i], group[j]];
+    if (a === b || creases.has(key(a, b))) continue;
+    const [p, q] = shared.map(affine(t.faces[i].paper, t.faces[i].before)) as [V, V];
+    creases.set(key(a, b), { a, b, at: p, dir: unit(sub(q, p)) });
+  }
+  if (creases.size !== 4) return null;
+  // The panels in turn round the point: the still one, the two hanging from it, and the one hinged to those two.
+  const fromStill = [...creases.values()].filter((c) => c.a === g1 || c.b === g1);
+  if (fromStill.length !== 2 || fromStill.some((c) => c.angle === undefined || c.a !== g1)) return null;
+  const [c12, c13] = fromStill;
+  const [g2, g3] = [c12.b, c13.b];
+  const g4 = kinds.find((g) => g !== g1 && g !== g2 && g !== g3)!;
+  const c24 = creases.get(key(g2, g4));
+  const c34 = creases.get(key(g3, g4));
+  if (!c24 || !c34) return null;
+  // The point they turn about: where the two creases from the still panel cross, on the table.
+  const [p, d, q, e] = [c12.at, flatten(c12.dir), c13.at, flatten(c13.dir)];
+  const det = d[0] * e[2] - d[2] * e[0];
+  if (Math.abs(det) < 1e-6) return null;
+  const k1 = ((q[0] - p[0]) * e[2] - (q[2] - p[2]) * e[0]) / det;
+  const apex: V = [p[0] + d[0] * k1, 0, p[2] + d[2] * k1];
+  // Every crease must pass through it (on the table), and each runs out from it towards where its faces meet.
+  const ray = (c: { at: V; dir: V }): V | null => {
+    const off: V = [c.at[0] - apex[0], 0, c.at[2] - apex[2]];
+    const r = flatten(c.dir);
+    if (Math.hypot(...cross(off, r)) > 0.01) return null;
+    return dot(off, r) >= 0 ? r : scale(r, -1);
+  };
+  const rays = [c12, c13, c24, c34].map(ray);
+  if (rays.some((r) => !r)) return null;
+  const [, r13, r24, r34] = rays as V[];
+  const cos4 = dot(r24, r34);
+  const cos3 = dot(r13, r34);
+  // Each panel's turn about the point, as a rotation (a function on directions), at s of the way.
+  const rotations = (s: number, side: number, way: number): ((v: V) => V)[] | null => {
+    const a2 = way * Math.abs(c12.angle as number) * s;
+    const k12 = c12.dir;
+    const c = turned(r24, k12, a2);
+    // r34 carried by panel 3, about c13's crease: on the circle round r13, as far from c as it is from r24.
+    const cosUV = dot(r13, c);
+    const den = 1 - cosUV * cosUV;
+    if (den < 1e-12) return null;
+    const x = (cos3 - cos4 * cosUV) / den;
+    const y = (cos4 - cos3 * cosUV) / den;
+    const inPlane = [0, 1, 2].map((n) => x * r13[n] + y * c[n]) as V;
+    const rest = 1 - dot(inPlane, inPlane);
+    if (rest < -1e-9) return null;
+    const out = unit(cross(r13, c));
+    const dd = [0, 1, 2].map((n) => inPlane[n] + side * Math.sqrt(Math.max(0, rest)) * out[n]) as V;
+    // Panel 3's turn about its crease taking r34 to dd.
+    const k13 = c13.dir;
+    const perp = (v: V) => unit(sub(v, scale(k13, dot(v, k13))));
+    const [u0, u1] = [perp(r34), perp(dd)];
+    const a3 = Math.atan2(dot(k13, cross(u0, u1)), dot(u0, u1));
+    // Panel 4: the rotation taking (r24, r34) to (c, dd).
+    const frame = (a: V, b: V): V[] => {
+      const n = unit(cross(a, b));
+      return [a, unit(cross(n, a)), n];
+    };
+    const [from, to] = [frame(r24, r34), frame(c, dd)];
+    const r4 = (v: V): V => {
+      const w = from.map((f) => dot(f, v));
+      return [0, 1, 2].map((n) => to[0][n] * w[0] + to[1][n] * w[1] + to[2][n] * w[2]) as V;
+    };
+    return [(v) => v, (v) => turned(v, k12, a2), (v) => turned(v, k13, a3), r4];
+  };
+  const panelOf = new Map([[g1, 0], [g2, 1], [g3, 2], [g4, 3]]);
+  // A hinge's angle at s: the turn of the face's panel relative to its parent's, about the hinge's own crease.
+  const hingeAngle = (rot: ((v: V) => V)[], f: number) => {
+    const [pp, pf] = [panelOf.get(group[h.parent[f]])!, panelOf.get(group[f])!];
+    if (pp === pf) return 0;
+    const k = h.dir[f] as V;
+    const w = unit(cross(k, Math.abs(k[1]) < 0.9 ? [0, 1, 0] : [1, 0, 0]));
+    // Relative turn: undo the parent's turn on the child's turned vector. Rotations about the point keep angles,
+    // so the parent's inverse is found by turning back the frame it carries.
+    const [ax, ay, az] = [rot[pp]([1, 0, 0]), rot[pp]([0, 1, 0]), rot[pp]([0, 0, 1])];
+    const back = (v: V): V => [dot(ax, v), dot(ay, v), dot(az, v)];
+    const w1 = back(rot[pf](w));
+    return Math.atan2(dot(k, cross(w, w1)), dot(w, w1));
+  };
+  // Which way the first panel turns (a half turn goes either way round), and which way the second leaves the table.
+  for (const [way, side] of [[1, 1], [1, -1], [-1, 1], [-1, -1]]) {
+    const turns: number[][] = [h.angle.map(() => 0)];
+    let ok = true;
+    // Up to the end, which is folded flat, where the panels' creases line up and the four-bar has no one answer:
+    // it ends where the step does.
+    for (let i = 1; i < STEP_SAMPLES && ok; i++) {
+      const s = i / STEP_SAMPLES;
+      const rot = rotations(s, side, way);
+      if (!rot) {
+        ok = false;
+        break;
+      }
+      const all = h.angle.map((a, f) => (h.parent[f] < 0 ? a * s : 0));
+      for (const f of h.order) if (h.parent[f] >= 0) all[f] = hingeAngle(rot, f);
+      // Carried on from the last point, round past a half turn rather than jumping back.
+      const prev = turns[i - 1];
+      for (const f of h.order) if (h.parent[f] >= 0) all[f] += 2 * Math.PI * Math.round((prev[f] - all[f]) / (2 * Math.PI));
+      turns.push(all);
+    }
+    if (!ok) continue;
+    // Every crease at its angle, or a whole turn off it (the same place), whichever is nearer the way it came.
+    const before = turns[STEP_SAMPLES - 1];
+    turns.push(h.angle.map((a, f) => (h.parent[f] >= 0 ? a + 2 * Math.PI * Math.round((before[f] - a) / (2 * Math.PI)) : a)));
+    const most = (4 * Math.PI) / STEP_SAMPLES;
+    if (h.order.some((f) => turns.some((a, i) => i > 0 && Math.abs(a[f] - turns[i - 1][f]) > most))) continue;
+    const folded = settled({ ...t, hinges: undefined }, { ...h, stagger: 0, turns, fix: undefined, lift: 0 });
+    if (tornBy(folded) <= TEAR) return folded;
+  }
+  return null;
 }
 
 /** Solves a square system given as rows with the right-hand side last (Gaussian elimination); null if singular. */
