@@ -103,12 +103,13 @@ list can't go stale.
 | Model | Depth | Where |
 |---|---|---|
 | Rainbow chain | 0.034 | Joining the ends: rigid links set on a ring dip into each other where they cross. |
+| Boat | 0.032 | The second squash (step 13). Worse than its graze: halfway, the back wall's two halves part by 0.36 at the gunwale's middle, which shows (10 November). Folded in step, the creases keep the paper joined until about a quarter of the way, then drift apart steadily (0.003, 0.0036, 0.0041, ...): with the corner flaps and gunwales staying folded along the small hat's sides, the squash isn't rigidly foldable, so a looser allowance wouldn't help. Real paper bends there; it needs in-between frames (`via`) worked out for it, or bending. |
 | Swan | 0.013 | Pulling up the neck. With rigid paper its body is a closed tube (milestone 13); likely a dead end without bending. |
 | Frog | 0.013 | Lifting the front legs, against the other front quarter. |
 | Lily | 0.009 | Its squash-and-petal folds, joined up all the way. |
-| Whale | 0.009 | Opening the fins out in 3D. Early in the step (a tenth of the way), a fin's bottom-layer faces rise through the top layers near its crease. Bent down instead (9 November), either fin goes deeper (0.012, 0.014) and below the table. |
+| Whale | 0.009 | Opening the fins out in 3D. Both fins lie in pockets (10 November): the top one under the body's top layer, the bottom one between its bottom layer and the layers above, so opening either way passes it through paper; the bottom one, rising, passes the whole body near its crease. Bent down instead (9 November), either fin goes deeper (0.012, 0.014) and below the table. A recipe that freed the fins first would be needed. |
 | Shallow masu lid | 0.0085 | Raising the walls: riding layers sit a little off the faces they ride on. |
-| Dolphin | 0.0075 | Opening the fins out in 3D. |
+| Dolphin | 0.0075 | Opening the fins out in 3D: as the whale. |
 | ✅ King bee | 0 | Off the list (10 November). The first wing is turned right over (by the body's bend and its own), and `shape` lifts paper turned right over so its layers stack upside down. The aileron, turned a little further, wasn't turned right over, so it was lifted along its own slanting way up instead: 49 layers down and to the side, 3 cm off its hinge, and through the wingtip. Paper turned further on paper turned right over is now lifted as that paper is. The first wingtips of the king bee and the corkscrew were off their wings the same way (3.5 and 1.4 mm). |
 
 ### 3. Studio (`docs/studio-plan.md`)
