@@ -149,6 +149,19 @@ export function shape(
   // the other way round, on the table.
   const over = (i: number) => ups[i] !== null && ups[i]![1] < -0.999;
   const overTop = Math.max(0, ...pieces.filter((_, i) => over(i)).map((p) => p.layer));
+  // Paper turned further, at a slant, on paper turned right over (the king bee's aileron, on a wing turned over by
+  // the body's bend and the wing's) is lifted as that paper is, so it stays hinged to it. Lifted along its own way
+  // up, which points down and to the side, it sat as many layers below and beside it (49 layers: 3 cm off).
+  const onOver = (i: number) => {
+    if (cornerOf[i] || over(i)) return false;
+    const mine = order.filter((k) => moves[k][i]);
+    if (mine.length < 2) return false;
+    // Its way up, turned by every bend but its own (the furthest out, turned first).
+    let up: Vec3 = [0, 1, 0];
+    let at: Vec3 = [0, 0, 0];
+    for (const k of mine.slice(1)) [up, at] = [turn(up, bends[k]), turn(at, bends[k])];
+    return up[1] - at[1] < -0.999;
+  };
   // Any other stack turned by one bend turns about its own bottom layer, standing on the paper that stays put
   // beneath it: turned about the table instead, a thick stack's bottom edge would cut down through that
   // paper. Paper turned further, beyond a stack that stands up, is hinged to the stack's far side, so it lies
@@ -182,11 +195,14 @@ export function shape(
     const up = ups[i];
     const b = base.get(nearest(i));
     const stack = b && !over(i) && !cornerOf[i] && turnedBy(i) === 1;
-    if (!up || (!p.layer && !over(i) && !(stack && b.rest) && !b?.beyond)) return;
+    if (!up || (!p.layer && !over(i) && !onOver(i) && !(stack && b.rest) && !b?.beyond)) return;
     const shift = b?.beyond && !stack ? b.beyond : [0, 0, 0];
     const offset = (
       over(i)
         ? [0, (overTop - 2 * p.layer) * LAYER_GAP, 0]
+        : onOver(i)
+          ? // As the paper it's on ends up, which is also lifted by its layer when drawn, flat; this isn't.
+            [0, (overTop - p.layer) * LAYER_GAP, 0]
         : stack
           ? up.map((c, n) => c * (p.layer - b.bottom) * LAYER_GAP + (n === 1 ? b.rest * LAYER_GAP : 0))
           : up.map((c) => c * p.layer * LAYER_GAP)

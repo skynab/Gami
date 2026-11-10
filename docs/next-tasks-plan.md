@@ -96,7 +96,7 @@ the boat are in the gallery; the iris is still to come.
 
 ### 2. Grazes
 
-`GRAZES` in `src/models/models.test.ts` lets eight models pass paper through paper deeper than a few layers
+`GRAZES` in `src/models/models.test.ts` lets models pass paper through paper deeper than a few layers
 (0.005). Each one taken off is a small, tested win; the test fails once a model no longer needs its entry, so the
 list can't go stale.
 
@@ -109,7 +109,7 @@ list can't go stale.
 | Whale | 0.009 | Opening the fins out in 3D. Early in the step (a tenth of the way), a fin's bottom-layer faces rise through the top layers near its crease. Bent down instead (9 November), either fin goes deeper (0.012, 0.014) and below the table. |
 | Shallow masu lid | 0.0085 | Raising the walls: riding layers sit a little off the faces they ride on. |
 | Dolphin | 0.0075 | Opening the fins out in 3D. |
-| King bee | 0.0065 | Bending up the ailerons between the slits. |
+| ✅ King bee | 0 | Off the list (10 November). The first wing is turned right over (by the body's bend and its own), and `shape` lifts paper turned right over so its layers stack upside down. The aileron, turned a little further, wasn't turned right over, so it was lifted along its own slanting way up instead: 49 layers down and to the side, 3 cm off its hinge, and through the wingtip. Paper turned further on paper turned right over is now lifted as that paper is. The first wingtips of the king bee and the corkscrew were off their wings the same way (3.5 and 1.4 mm). |
 
 ### 3. Studio (`docs/studio-plan.md`)
 

@@ -19,7 +19,6 @@ const GRAZE = 0.005;
  * are left to the bending checks: the viewer draws bent paper in its stacking order where layers meet.
  */
 const GRAZES: Record<string, number> = {
-  'king-bee': 0.0065, // Bending up the ailerons between the slits.
   lily: 0.009, // Its squash-and-petal folds, joined up all the way (see collisions.test.ts).
   swan: 0.014, // Pulling up the neck: with rigid paper its body is a closed tube (PLAN.md, milestone 13).
   whale: 0.009, // Opening the fins out in 3D.
