@@ -112,6 +112,33 @@ list can't go stale.
 | Dolphin | 0.0075 | Opening the fins out in 3D: as the whale. |
 | ✅ King bee | 0 | Off the list (10 November). The first wing is turned right over (by the body's bend and its own), and `shape` lifts paper turned right over so its layers stack upside down. The aileron, turned a little further, wasn't turned right over, so it was lifted along its own slanting way up instead: 49 layers down and to the side, 3 cm off its hinge, and through the wingtip. Paper turned further on paper turned right over is now lifted as that paper is. The first wingtips of the king bee and the corkscrew were off their wings the same way (3.5 and 1.4 mm). |
 
+### 2b. Paper coming apart while a step plays
+
+The tests check paper passing through paper as models play, but not joined paper coming apart, which is how the
+boat's small diamond tearing by 0.36 halfway went unnoticed (fixed 10 November). A survey of every step of every
+gallery model on 10 November (the most any corner of the paper and its copy on a neighbouring face part, at 40
+points through the step; bent steps and paper on cuts or tape left out; up to about 0.01 is a stack's thickness
+at a fold) found these over 0.03:
+
+| Model | Step | Apart | When |
+|---|---|---|---|
+| Rainbow chain | 15, Join the ends (assemble) | 0.386 | 0.93 of the way |
+| Rainbow chain | 13, Keep going (together) | 0.165 | 0.68 |
+| Lily | 28, Squash and petal-fold a back flap | 0.071 | 0.95 (known: joined, it would graze 0.009) |
+| Frog | 55, Fold the head | 0.052 | 0.97 |
+| Flapping bird | 23, Pull out the neck | 0.045 | 0.82 |
+| Tulip | 13–15, Pull out the stem, stand it up, put the blossom on | 0.044 | the end of 13 (14 and 15 start where it ended) |
+| Ninja star | 16–17, Tuck in the points | 0.032–0.039 | 0.90–0.97 |
+| Seal | 17, Raise the neck | 0.037 | 0.95 |
+| Frog | 44, 53, 54, Lift a front leg, shape the back feet | 0.034–0.035 | near the end |
+| Navy plane | 18, Open the wings (shape) | 0.035 | 0.40 |
+| Swan | 13, Pull the neck up | 0.034 | 0.68 |
+| Rainbow chain | 12, Add a third (move) | 0.032 | 0.97 |
+
+Most are brief, near a step's end, a few millimetres on a 15 cm sheet. The rainbow chain's links tear well apart
+as the chain is closed. A check like `GRAZES`, failing when a model parts further than it's known to, would keep
+new ones from going unseen.
+
 ### 3. Studio (`docs/studio-plan.md`)
 
 | Row | Work | Size |
