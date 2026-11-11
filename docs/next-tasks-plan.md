@@ -114,30 +114,26 @@ list can't go stale.
 
 ### 2b. Paper coming apart while a step plays
 
-The tests check paper passing through paper as models play, but not joined paper coming apart, which is how the
-boat's small diamond tearing by 0.36 halfway went unnoticed (fixed 10 November). A survey of every step of every
-gallery model on 10 November (the most any corner of the paper and its copy on a neighbouring face part, at 40
-points through the step; bent steps and paper on cuts or tape left out; up to about 0.01 is a stack's thickness
-at a fold) found these over 0.03:
+The tests checked paper passing through paper as models play, but not joined paper coming apart, which is how
+the boat's small diamond tearing by 0.36 halfway went unnoticed (fixed 10 November). Since 11 November they check
+that too (`partings` in `collisions.ts`, `TEARS` in `src/models/models.test.ts`): at 19 points through every step,
+how much further each point of paper on several faces strays from where its corners are on average than it does
+at either end of the step, as the viewer draws it. What's apart at the ends anyway doesn't count: the gaps between
+layers at a fold, paper riding on paper, a cut's two sides. (A first survey, on 10 November, measured the copies'
+whole distance apart and counted those gaps, which made the rainbow chain's links look torn by 0.39; they part by
+0.002.) Up to 0.01 is allowed, about a 14-layer stack's thickness, 1.5 mm on a 15 cm sheet. Four models go further,
+each for a moment near a step's end:
 
-| Model | Step | Apart | When |
-|---|---|---|---|
-| Rainbow chain | 15, Join the ends (assemble) | 0.386 | 0.93 of the way |
-| Rainbow chain | 13, Keep going (together) | 0.165 | 0.68 |
-| Lily | 28, Squash and petal-fold a back flap | 0.071 | 0.95 (known: joined, it would graze 0.009) |
-| Frog | 55, Fold the head | 0.052 | 0.97 |
-| Flapping bird | 23, Pull out the neck | 0.045 | 0.82 |
-| Tulip | 13–15, Pull out the stem, stand it up, put the blossom on | 0.044 | the end of 13 (14 and 15 start where it ended) |
-| Ninja star | 16–17, Tuck in the points | 0.032–0.039 | 0.90–0.97 |
-| Seal | 17, Raise the neck | 0.037 | 0.95 |
-| Frog | 44, 53, 54, Lift a front leg, shape the back feet | 0.034–0.035 | near the end |
-| Navy plane | 18, Open the wings (shape) | 0.035 | 0.40 |
-| Swan | 13, Pull the neck up | 0.034 | 0.68 |
-| Rainbow chain | 12, Add a third (move) | 0.032 | 0.97 |
+| Model | Apart | Where |
+|---|---|---|
+| Lily | 0.033 | Squash and petal-folding a back flap (step 28): joined, it would graze 0.009 there. |
+| Seal | 0.019 | Raising the neck (step 17), a reverse fold. |
+| Frog | 0.019 | Lifting the other front leg (step 44), against the other front quarter. |
+| Fox | 0.012 | Folding the tail in (step 14), a reverse fold. |
 
-Most are brief, near a step's end, a few millimetres on a 15 cm sheet. The rainbow chain's links tear well apart
-as the chain is closed. A check like `GRAZES`, failing when a model parts further than it's known to, would keep
-new ones from going unseen.
+Next highest, under the allowance: the kusudama's assembly and the crane's head (0.0095), the crow's head
+(0.009), the swan's neck (0.008). The check adds about half a second a model, after the crossings have worked out
+each step's motion.
 
 ### 3. Studio (`docs/studio-plan.md`)
 

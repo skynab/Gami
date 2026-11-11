@@ -912,6 +912,20 @@ function touching(faces: FaceTrack[], a: number, b: number): boolean {
   return m[a * faces.length + b] === 1;
 }
 
+/**
+ * How far paper comes apart as a step plays, as the viewer draws it, at the most of `samples` (0–1): for each point
+ * of paper on several faces, how much further its corners stray from where they are on average than at either end
+ * of the step. What's apart at the ends anyway (layers' gaps at a fold, paper riding on paper, the two sides of a
+ * cut) doesn't count.
+ */
+export function partedBy(t: Transition, samples: number[]): number {
+  const groups = cornerGroups(t.faces);
+  if (!groups.length) return 0;
+  const [first, last] = [spreads(poseAt(t, 0), groups), spreads(poseAt(t, 1), groups)];
+  const ends = first.map((d, g) => Math.max(d, last[g]));
+  return Math.max(0, ...samples.flatMap((s) => spreads(poseAt(t, s), groups).map((d, g) => d - ends[g])));
+}
+
 /** Whether two faces move as one through a transition, so they can't pass through each other. Bending paper never does. */
 export function together(t: Transition, a: number, b: number): boolean {
   if (t.blend) return false;

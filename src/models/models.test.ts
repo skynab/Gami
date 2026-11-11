@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { crossings } from '../fold/collisions';
+import { crossings, partings } from '../fold/collisions';
 import { fromFoldFile, toFoldFile } from '../fold/fold-format';
 import { replay } from '../fold/ops';
 import { previewSvg, thumbnailSvg } from '../fold/thumbnail';
@@ -36,6 +36,20 @@ const GRAZES: Record<string, number> = {
   seal: 0.0055, // Turning the tail up.
 };
 
+/**
+ * How far joined paper may come apart as a model plays, beyond what's apart at a step's ends anyway (the gaps
+ * between layers at a fold, paper riding on paper, a cut's two sides): about the thickness of a 14-layer stack,
+ * 1.5 mm on a 15 cm sheet. The boat's small diamond once tore by twelve times that, unseen by the checks above.
+ */
+const TEAR = 0.01;
+/** The models known to come further apart, each a little over what it was measured at (November 2026), and where. */
+const TEARS: Record<string, number> = {
+  lily: 0.035, // Squash and petal-folding a back flap, for a moment near the end: joined, it would graze deeper (PLAN.md).
+  seal: 0.02, // Raising the neck, a reverse fold (docs/next-tasks-plan.md).
+  frog: 0.02, // Lifting the other front leg, against the other front quarter (docs/origami-me-plan.md).
+  fox: 0.013, // Folding the tail in, a reverse fold.
+};
+
 describe.each(models.map((m) => [m.id, m] as const))('%s', (id, model) => {
   // Animating every step of the biggest models (the kusudama's 61 sheets) takes up to 20 s; the later tests reuse it.
   it('folds without stretching, tearing or tangling', () => {
@@ -47,6 +61,14 @@ describe.each(models.map((m) => [m.id, m] as const))('%s', (id, model) => {
     expect(deepest).toBeLessThanOrEqual(GRAZES[id] ?? GRAZE);
     // A model that no longer goes deeper comes off the list.
     if (id in GRAZES) expect(deepest).toBeGreaterThan(GRAZE);
+  }, 60_000);
+
+  // After the crossings, which work out each step's motion: about half a second a model.
+  it('keeps joined paper together as it plays, or no further apart than it’s known to', () => {
+    const most = Math.max(0, ...partings(model).map((p) => p.apart));
+    expect(most).toBeLessThanOrEqual(TEARS[id] ?? TEAR);
+    // A model that no longer comes apart further comes off the list.
+    if (id in TEARS) expect(most).toBeGreaterThan(TEAR);
   }, 60_000);
 
   it('has a title on every step', () => {
