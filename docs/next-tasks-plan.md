@@ -92,7 +92,7 @@ the boat are in the gallery; the iris is still to come.
 | 3 | ✅ **Boat's opening.** In the gallery (9 November), as two steps: a collapse into a boat lying flat, then a bend opening it out and standing it on its keel, only the corner flaps' lower triangles bending (bending plan, step 7, "In the gallery"). `scripts/boat-opening-lab.ts` was for the old stacking and is no longer needed. | Yes |
 | 4 | ✅ **Balloon blown up** (8 November): the gallery's balloon now blows up into a cube, guided face by face, its ends crumpling on the way (bending plan, "Improving the solver", row 11). The 3D tulip is still blown up by air into a pillow; guiding it the same way would need its own map. | Yes |
 | 5 | ✅ **Shallow masu lid's locks** (10 November). They came apart by up to 0.08 as the flap went over the wall, and `shape` refused the locks part-way. It wasn't the paper: the flap's sides, folded over onto it, turned over the wall the same way round as the flap rather than the other way (as they already did going down onto the floor). A half turn either way ends in the same place, so only the way there was wrong. Turned the other way round, every pose on the way holds together; the locks part by 0.005 at most and graze 0.003 (0.0077 before). The box and the plain lid play as before. No bending needed. | No |
-| 6 | **Iris.** Needs paper that bends and then lies flat again. Last. | Yes |
+| 6 | **Iris.** Needs paper that bends and then lies flat again. Last. Surveyed 11 November: five of its eight swivels can be made with rigid paper, and no order makes the rest (`docs/bending-plan.md`, step 8). | Yes |
 
 ### 2. Grazes
 

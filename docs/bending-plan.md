@@ -574,6 +574,17 @@ is behind its guides stage by stage, how deep paper goes through paper, and its 
      Putting the swivel's creases on that side instead (through the kite flap's own half, or its whole quarter)
      can't fold flat. A flat collapse won't do it; the paper has to give, as it does in your hands, which a bend
      can't yet do anywhere but the last step.
+   - **Surveyed** (11 November 2026). `wip/iris` still stops at step 33 on `dev`. Letting each swivel that can't
+     fold be left out and carrying on: both sides of the first two flaps swivel (they're front and back, sharing
+     no quarter); the third flap's first side swivels only if its pleat may run through every layer, the
+     neighbouring flap's narrowed paper included (limited to its quarter, as on the branch, it fails); its other
+     side and both of the fourth flap's can't, whatever the angle (22.5°, 15°, 11.25°), the pleat's reach (the
+     quarter, both quarters, every layer), which side goes first, or the Studio's swivel preset either way round.
+     The wedge the kite flap swings across holds no paper at all. So five of the eight swivels can be made with
+     rigid paper. In any order, neighbouring flaps share a quarter, half each; each flap's swivel pleats the
+     other's half beyond its kite crease, which that flap's own petal fold folds in. So each flap's swivel has to
+     come after its own petal fold and before its neighbour's, which round four flaps is a cycle. Real paper
+     gives where the halves meet; it still waits for paper that bends and then lies flat again.
 
 9. **The cup, opened** (October 2026). Squeezed at its sides, the cup's walls bow apart into a mouth; it's stood up on
    its bottom crease as it opens. In the gallery.
