@@ -42,13 +42,11 @@ const GRAZES: Record<string, number> = {
  * 1.5 mm on a 15 cm sheet. The boat's small diamond once tore by twelve times that, unseen by the checks above.
  */
 const TEAR = 0.01;
-/** The models known to come further apart, each a little over what it was measured at (November 2026), and where. */
-const TEARS: Record<string, number> = {
-  lily: 0.035, // Squash and petal-folding a back flap, for a moment near the end: joined, it would graze deeper (PLAN.md).
-  seal: 0.02, // Raising the neck, a reverse fold (docs/next-tasks-plan.md).
-  frog: 0.02, // Lifting the other front leg, against the other front quarter (docs/origami-me-plan.md).
-  fox: 0.013, // Folding the tail in, a reverse fold.
-};
+/**
+ * The models known to come further apart, each a little over what it was measured at, and where. None since
+ * 11 November 2026: the lily, seal, frog and fox, the last four, are joined up all the way (docs/next-tasks-plan.md).
+ */
+const TEARS: Record<string, number> = {};
 
 describe.each(models.map((m) => [m.id, m] as const))('%s', (id, model) => {
   // Animating every step of the biggest models (the kusudama's 61 sheets) takes up to 20 s; the later tests reuse it.

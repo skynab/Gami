@@ -650,15 +650,52 @@ function landInOrder(t: Transition): Transition {
   let best = t;
   let now = depthThrough(t);
   let torn: number | null = null;
+  let opens: number | null = null;
   for (const spread of LANDS) {
     if (!now) break;
     const ordered = inLandingOrder(t, spread);
     const d = depthThrough(ordered, now);
     if (d >= now) continue;
     torn ??= tornBy(t);
-    if (tornBy(ordered) <= Math.max(torn, TEAR / 2)) [best, now] = [ordered, d];
+    if (tornBy(ordered) > Math.max(torn, TEAR / 2)) continue;
+    // Nor where it opens the paper further than landing all together does, and further than paper is pulled
+    // together from, unless it can be joined up again where it's furthest apart: a frog's leg landing a layer at
+    // a time came apart by 0.019, as joining it up would have passed it through the other front quarter.
+    opens ??= openedBy(t).most;
+    const open = openedBy(ordered);
+    if (open.most > Math.max(opens, JOIN_FROM) && !joinsUpAt(ordered, open.at)) continue;
+    [best, now] = [ordered, d];
   }
   return best;
+}
+
+/**
+ * How much further apart the same point of paper comes as a transition plays than at either end, at most, before
+ * it's joined up, and where.
+ */
+function openedBy(t: Transition): { most: number; at: number } {
+  const groups = cornerGroups(t.faces);
+  if (!groups.length) return { most: 0, at: 0 };
+  const ends: [number[], number[]] = [spreads(rawPose(t, 0), groups), spreads(rawPose(t, 1), groups)];
+  let out = { most: 0, at: 0 };
+  for (const s of JOIN_CHECKS) {
+    const most = opened(t, groups, ends, s);
+    if (most > out.most) out = { most, at: s };
+  }
+  return out;
+}
+
+/**
+ * Whether paper come apart `s` of the way through a transition can be joined up there, as `joinFixes` would:
+ * back to no further apart than it's pulled together from, grazing no deeper than it lets by.
+ */
+function joinsUpAt(t: Transition, s: number): boolean {
+  const groups = cornerGroups(t.faces);
+  const ends: [number[], number[]] = [spreads(rawPose(t, 0), groups), spreads(rawPose(t, 1), groups)];
+  const raw = rawPose(t, s);
+  const joined = joinUp(t.faces, raw.map((face) => face.map((p) => [...p] as Vec3)), groups, raw);
+  const left = (pose: Vec3[][]) => Math.max(0, ...spreads(pose, groups).map((d, g) => d - Math.max(ends[0][g], ends[1][g])));
+  return left(joined) <= JOIN_FROM && deepest(t, joined) <= grazeLetBy(t, raw, groups, left(raw));
 }
 
 /** How far apart the same point of paper comes, at most, as a transition plays (before it's pulled together). */
@@ -1797,8 +1834,14 @@ const JOIN_ROUNDS = 30;
 const FILL_ROUNDS = 4;
 /** How far joined-up paper may graze through other paper (a sheet's width is 1), as the crossing tests allow: far less than a tear shows. */
 const GRAZE = 0.005;
-/** How much more graze is let by, joining paper up, for each sheet width it has come apart beyond a tear. */
+/**
+ * How much more graze is let by, joining paper up, for each sheet width it has come apart beyond a tear; or,
+ * where joining it up less deeply leaves it apart, opened beyond where it's pulled together from.
+ */
 const GRAZE_PER_TEAR = 0.2;
+
+/** How much of the way to join paper up at a point, tried in turn, as far as passes no deeper through paper than let by. */
+const PARTS = [1, 0.75, 0.5, 0.25];
 
 /** How a face is moved to join the paper up: turned by `q` about its middle, then moved by `shift`. */
 interface JoinFix {
@@ -1814,15 +1857,16 @@ function joinFixes(t: Transition): JoinFix[][] | null {
   const groups = cornerGroups(t.faces);
   // Torn, or come apart for a while further than it is at either end (where layers lie a little apart anyway).
   let opens = groups.length > 0 && TEAR_SAMPLES.some((s) => apart(rawPose(t, s), groups) > TEAR);
-  if (groups.length && !opens) {
-    const ends: [number[], number[]] = [spreads(rawPose(t, 0), groups), spreads(rawPose(t, 1), groups)];
-    opens = JOIN_CHECKS.some((s) => opened(t, groups, ends, s) > JOIN_FROM);
-  }
+  const ends: [number[], number[]] = groups.length ? [spreads(rawPose(t, 0), groups), spreads(rawPose(t, 1), groups)] : [[], []];
+  if (groups.length && !opens) opens = JOIN_CHECKS.some((s) => opened(t, groups, ends, s) > JOIN_FROM);
   if (opens) {
     const fixes: JoinFix[][] = [];
     const whole: boolean[] = [];
     const raws: Vec3[][][] = [];
     const allowed: number[] = [];
+    const stretched: number[] = [];
+    // How much further apart the same point of paper is in a pose than at either end of the step, at most.
+    const left = (pose: Vec3[][]) => Math.max(0, ...spreads(pose, groups).map((d, g) => d - Math.max(ends[0][g], ends[1][g])));
     // How deep the paper joined up whole goes through paper elsewhere in the step, at most, and each point's
     // join made whole, whether it was kept or not.
     let grazes = 0;
@@ -1833,8 +1877,11 @@ function joinFixes(t: Transition): JoinFix[][] | null {
       raws.push(raw);
       // Joined up only as far as it can be without passing paper through paper that the faces moving their own
       // ways kept clear of (a flap stood up before it's squashed, say): torn a little rather than tangled. But a
-      // graze shows far less than a tear, so the wider the paper has come apart, the more of a graze is let by.
-      allowed.push(Math.max(deepest(t, raw), GRAZE + GRAZE_PER_TEAR * Math.max(0, apart(raw, groups) - TEAR)));
+      // graze shows far less than a tear, so the wider the paper has come apart, the more of a graze is let by;
+      // and where that still leaves it further apart than it's pulled together from, more again, by how far it
+      // has come apart past that (the seal's neck, landing).
+      allowed.push(grazeLetBy(t, raw, groups, 0));
+      stretched.push(grazeLetBy(t, raw, groups, left(raw)));
       if (i === 0 || i === JOIN_SAMPLES) {
         fixes.push(raw.map(() => ({ q: new Quaternion(), shift: new Vector3() })));
         whole.push(true);
@@ -1848,7 +1895,13 @@ function joinFixes(t: Transition): JoinFix[][] | null {
       const fitted = joinUp(t.faces, start, groups, raw);
       const fix = fitted.map((face, f) => fixFor(t.faces[f].paper, raw[f], face));
       let depth = 0;
-      const part = [1, 0.75, 0.5, 0.25].find((k) => (depth = deepest(t, raw.map((face, f) => applyFix(partly(fix[f], k), face)))) <= allowed[i]) ?? 0;
+      const posed = (k: number) => raw.map((face, f) => applyFix(partly(fix[f], k), face));
+      let part = PARTS.find((k) => (depth = deepest(t, posed(k))) <= allowed[i]) ?? 0;
+      if (part < 1 && stretched[i] > allowed[i] && left(posed(part)) > JOIN_FROM) {
+        let further = 0;
+        const k = PARTS.find((k) => k > part && (further = deepest(t, posed(k))) <= stretched[i]);
+        if (k) [part, depth, allowed[i]] = [k, further, stretched[i]];
+      }
       fixes.push(fix.map((x) => partly(x, part)));
       whole.push(part === 1);
       full.push(fix);
@@ -1858,10 +1911,17 @@ function joinFixes(t: Transition): JoinFix[][] | null {
       if (part === 1) warm = fix;
     }
     // Where the paper couldn't be joined up whole: joined again starting from the joins either side blended,
-    // or failing that, just those blended, if that keeps it clear, or grazes no more than a layer deeper than
-    // the paper joined up elsewhere in the step (so the step looks no worse for it, only joined: the lily's
-    // petal folds came apart for a moment near the end, rather than graze a hair more than a few layers).
+    // or failing that, just those blended, or joined starting from the paper as it moves (a start carried on
+    // from the samples before can hold a face the wrong way round: the fox's tail and the lily's back flap,
+    // near the end), if that keeps it clear, or grazes no more than a layer deeper than the paper joined up
+    // elsewhere in the step (so the step looks no worse for it, only joined: the lily's petal folds came apart
+    // for a moment near the end, rather than graze a hair more than a few layers).
     // Again while that fixes more, as each point fixed gives the ones beside it a better start.
+    const cold: (JoinFix[] | undefined)[] = [];
+    const fromRaw = (i: number) =>
+      (cold[i] ??= joinUp(t.faces, raws[i].map((face) => face.map((p) => [...p] as Vec3)), groups, raws[i]).map((face, f) =>
+        fixFor(t.faces[f].paper, raws[i][f], face),
+      ));
     for (let more = true, round = 0; more && round < FILL_ROUNDS; round++) {
       more = false;
       for (let i = 1; i < JOIN_SAMPLES; i++) {
@@ -1876,11 +1936,14 @@ function joinFixes(t: Transition): JoinFix[][] | null {
         const start = raw.map((face, f) => applyFix(blend[f], face));
         const fitted = joinUp(t.faces, start.map((face) => face.map((p) => [...p] as Vec3)), groups, raw);
         const again = fitted.map((face, f) => fixFor(t.faces[f].paper, raw[f], face));
-        const torn = apart(raw.map((face, f) => applyFix(fixes[i][f], face)), groups);
-        const fix = [again, blend, full[i]].find((x) => {
+        const now = raw.map((face, f) => applyFix(fixes[i][f], face));
+        const torn = apart(now, groups);
+        const limit = Math.max(left(now) > JOIN_FROM ? stretched[i] : allowed[i], grazes + LAYER_GAP);
+        const fits = (x: JoinFix[]) => {
           const pose = raw.map((face, f) => applyFix(x[f], face));
-          return deepest(t, pose) <= Math.max(allowed[i], grazes + LAYER_GAP) && apart(pose, groups) < torn;
-        });
+          return deepest(t, pose) <= limit && apart(pose, groups) < torn;
+        };
+        const fix = [again, blend, full[i]].find(fits) ?? (fits(fromRaw(i)) ? fromRaw(i) : undefined);
         if (fix) {
           fixes[i] = fix;
           whole[i] = true;
@@ -1892,6 +1955,14 @@ function joinFixes(t: Transition): JoinFix[][] | null {
   }
   joined.set(t, out);
   return out;
+}
+
+/**
+ * How deep paper may graze through paper, joined up in a pose `open` further apart than at either end of the step:
+ * as deep as it already goes, or a few layers, and more the further it's come apart (see `joinFixes`).
+ */
+function grazeLetBy(t: Transition, raw: Vec3[][], groups: [number, number][][], open: number): number {
+  return Math.max(deepest(t, raw), GRAZE + GRAZE_PER_TEAR * Math.max(0, apart(raw, groups) - TEAR, open - JOIN_FROM));
 }
 
 /** A fix made only `k` (0–1) of the way. */

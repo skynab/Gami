@@ -121,19 +121,28 @@ how much further each point of paper on several faces strays from where its corn
 at either end of the step, as the viewer draws it. What's apart at the ends anyway doesn't count: the gaps between
 layers at a fold, paper riding on paper, a cut's two sides. (A first survey, on 10 November, measured the copies'
 whole distance apart and counted those gaps, which made the rainbow chain's links look torn by 0.39; they part by
-0.002.) Up to 0.01 is allowed, about a 14-layer stack's thickness, 1.5 mm on a 15 cm sheet. Four models go further,
-each for a moment near a step's end:
+0.002.) Up to 0.01 is allowed, about a 14-layer stack's thickness, 1.5 mm on a 15 cm sheet. Four models went
+further, each for a moment near a step's end; since 11 November none does, and `TEARS` is empty:
 
-| Model | Apart | Where |
-|---|---|---|
-| Lily | 0.033 | Squash and petal-folding a back flap (step 28): joined, it would graze 0.009 there. |
-| Seal | 0.019 | Raising the neck (step 17), a reverse fold. |
-| Frog | 0.019 | Lifting the other front leg (step 44), against the other front quarter. |
-| Fox | 0.012 | Folding the tail in (step 14), a reverse fold. |
+| Model | Apart | Where | Now | Why it parted |
+|---|---|---|---|---|
+| Lily | 0.033 | Squash and petal-folding a back flap (step 28) | 0.004 | Joining up carried on from the moment before, which held a face the wrong way round near the end. |
+| Seal | 0.019 | Raising the neck (step 17), a reverse fold | 0.0045 | Joined, it grazed 0.0066 rather than 0.0047, and only a tear past 0.05 bought a deeper graze. |
+| Frog | 0.019 | Lifting the other front leg (step 44) | 0.006 | Its layers landed one after another, though some are joined across a crease. |
+| Fox | 0.012 | Folding the tail in (step 14), a reverse fold | 0.0015 | As the lily: joined from the paper as it moves, it grazes no deeper than it already does. |
 
-Next highest, under the allowance: the kusudama's assembly and the crane's head (0.0095), the crow's head
-(0.009), the swan's neck (0.008). The check adds about half a second a model, after the crossings have worked out
-each step's motion.
+Three changes in `animate.ts`, none changing a model's files or how long working out the steps takes:
+- Where paper can't be joined up at a point, starting from where the joins either side leave it, it's also
+  joined starting from the paper as it moves.
+- Where joining up within the graze it lets by would still leave the paper more than 0.01 further apart than at
+  either end, a deeper graze is let by, 0.2 of one for each sheet width it has opened past that. (Before, only a
+  tear past 0.05 did. Let by everywhere, it took the crow's feet 0.0002 past a few layers, where a partial join
+  kept them together anyway.)
+- Layers land one after another (`landInOrder`) only if that opens the paper no further than landing all
+  together, or than 0.01, unless it can be joined up again where it's furthest apart within that graze. Checked
+  at that one point, as joining up the whole step for each way of landing doubled the time the crane took.
+
+The frog now grazes a little deeper, 0.0106 at most (step 45) against 0.0094, still inside its `GRAZES` entry.
 
 ### 3. Studio (`docs/studio-plan.md`)
 
