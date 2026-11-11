@@ -2539,4 +2539,30 @@ export const es: Record<string, string> = {
     "Abre el barco",
   "Spread the sides a little, and stand the boat up on its bottom. Done!":
     "Separa un poco los lados y pon el barco de pie sobre su fondo. ¡Listo!",
+  "Swivel fold":
+    "Pliegue de pivote",
+  "A swivel fold swings a flap round on one corner, keeping it flat. The paper it swings across folds into a small pleat to make room. It turns and narrows points, for tails, feet and fins.":
+    "Un pliegue de pivote hace girar una solapa sobre una de sus esquinas, sin levantarla. El papel por el que pasa se dobla en un pequeño plisado para dejarle sitio. Sirve para girar y estrechar puntas, para colas, patas y aletas.",
+  "Fold the corner over":
+    "Dobla la esquina",
+  "Fold the bottom right corner up over a line from the middle of the bottom edge to the middle of the right edge.":
+    "Dobla la esquina de abajo a la derecha hacia arriba por una línea que va del centro del borde inferior al centro del borde derecho.",
+  "Hold the flap’s bottom corner down and swing the flap up towards the top edge, keeping it flat. The paper it swings over folds into a little pleat to make room.":
+    "Sujeta la esquina de abajo de la solapa y gírala hacia el borde de arriba, sin levantarla. El papel por el que pasa se dobla en un pequeño plisado para dejarle sitio.",
+  "Open it out: the pleat left two creases fanning out from the corner the flap swung on, a valley and a mountain.":
+    "Ábrelo: el plisado ha dejado dos pliegues que salen en abanico desde la esquina sobre la que giró la solapa, uno valle y otro montaña.",
+  "Open sink":
+    "Pliegue hundido abierto",
+  "An open sink pushes the tip of a point down inside itself, so the point gets blunter with nothing folded over on the outside. The point opens out flat while you sink it, then closes up again.":
+    "Un pliegue hundido abierto empuja la punta hacia dentro de sí misma, de modo que queda más roma sin nada doblado por fuera. La punta se abre del todo mientras la hundes y luego se vuelve a cerrar.",
+  "Crease the tip":
+    "Marca el extremo",
+  "Fold the closed tip down through all the layers, a little way in, and crease it hard.":
+    "Dobla el extremo cerrado hacia abajo, un poco hacia dentro, a través de todas las capas, y marca bien el pliegue.",
+  "Fold it back up. The crease shows how far the tip sinks.":
+    "Vuelve a subirlo. El pliegue marca hasta dónde se hunde el extremo.",
+  "Open the point out a little and push its tip down inside along the crease, so the paper turns inside out into the point. Close the layers up again and flatten it.":
+    "Abre un poco la punta y empuja su extremo hacia dentro siguiendo el pliegue, para que el papel se dé la vuelta hacia el interior de la punta. Vuelve a cerrar las capas y aplánala.",
+  "Open it out: the sink left a small square of creases round the middle of the sheet.":
+    "Ábrelo: el pliegue hundido ha dejado un pequeño cuadrado de pliegues alrededor del centro de la hoja.",
 };

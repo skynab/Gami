@@ -2539,4 +2539,30 @@ export const ja: Record<string, string> = {
     "ふねを開く",
   "Spread the sides a little, and stand the boat up on its bottom. Done!":
     "側面を少し広げて、ふねを底で立たせます。できあがり！",
+  "Swivel fold":
+    "スイベル折り",
+  "A swivel fold swings a flap round on one corner, keeping it flat. The paper it swings across folds into a small pleat to make room. It turns and narrows points, for tails, feet and fins.":
+    "スイベル折りは、フラップを平らにしたまま一つの角を軸にして回します。フラップが通る部分の紙は、場所をあけるために小さな段折りになります。角の向きを変えたり細くしたりして、しっぽや足、ひれを作ります。",
+  "Fold the corner over":
+    "角を折り返す",
+  "Fold the bottom right corner up over a line from the middle of the bottom edge to the middle of the right edge.":
+    "下の辺の真ん中から右の辺の真ん中までの線で、右下の角を上に折り返します。",
+  "Hold the flap’s bottom corner down and swing the flap up towards the top edge, keeping it flat. The paper it swings over folds into a little pleat to make room.":
+    "フラップの下の角を押さえて、平らなまま上の辺のほうへ回します。通り道の紙は、場所をあけるために小さな段折りになります。",
+  "Open it out: the pleat left two creases fanning out from the corner the flap swung on, a valley and a mountain.":
+    "開きます。フラップを回した角から、谷折りと山折りの二本の折り目が扇のように広がっています。",
+  "Open sink":
+    "開いた沈め折り",
+  "An open sink pushes the tip of a point down inside itself, so the point gets blunter with nothing folded over on the outside. The point opens out flat while you sink it, then closes up again.":
+    "開いた沈め折りは、角の先を角の中へ押し込みます。外側に何も折り重ねずに、角が短く、先が平らになります。沈めるあいだ角はいったん平らに開き、そのあとまた閉じます。",
+  "Crease the tip":
+    "先に折り目をつける",
+  "Fold the closed tip down through all the layers, a little way in, and crease it hard.":
+    "閉じた角の先を、すべての層をいっしょに少し下へ折り、しっかり折り目をつけます。",
+  "Fold it back up. The crease shows how far the tip sinks.":
+    "元に戻します。この折り目が、先を沈める深さになります。",
+  "Open the point out a little and push its tip down inside along the crease, so the paper turns inside out into the point. Close the layers up again and flatten it.":
+    "角を少し開き、折り目に沿って先を中へ押し込みます。紙が裏返って角の中に入ります。層をまた閉じて、平らにします。",
+  "Open it out: the sink left a small square of creases round the middle of the sheet.":
+    "開きます。沈め折りで、紙の中心のまわりに小さな正方形の折り目ができています。",
 };

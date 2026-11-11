@@ -13,6 +13,7 @@ import { sheetOf, startFrame } from './sheets';
 import { keepIn, tape } from './tape';
 import { frontUp, sideOf } from './geometry2d';
 import { applyOp, lastFold, lineOf, reopened, select, type At, type BendGoal, type Faces, type LineSpec, type Op } from './ops';
+import { presetOp, type Preset } from './presets';
 import type { FoldFrame, Mark, OrigamiModel, Sheet, Step, Vec2, Vec3 } from './types';
 
 /**
@@ -294,6 +295,20 @@ export class Recipe {
         anchor: { paper: at },
         ...(tuck && { under: tuck.faces() }),
       });
+    } catch (e) {
+      if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
+      throw e;
+    }
+  }
+
+  /**
+   * A named fold made as the Studio's Named fold makes it (`fold/presets.ts`), from the same picks: points on the
+   * table. Recorded as the collapse it works out, so it replays and opens in the Studio like one.
+   */
+  preset(step: { title: string; text?: string; kind?: Step['kind'] }, preset: Preset): this {
+    try {
+      const op = presetOp(this.build(), preset);
+      return this.push({ title: step.title, text: step.text, kind: step.kind ?? 'fold' }, applyOp(this.build(), op).frame, op);
     } catch (e) {
       if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
       throw e;

@@ -67,7 +67,7 @@ export const es: Messages = {
   },
   models: {
     basics: { title: 'Lo básico', blurb: 'Empieza aquí: cómo avanzar, reproducir, girar y leer cada pliegue.' },
-    'folds-lesson': { title: 'Pliegues comunes', blurb: 'Valle y montaña, pliegues invertidos, aplastado, oreja de conejo, plisado, doble pliegue invertido y pétalo, cada uno en su propio cuadrado.' },
+    'folds-lesson': { title: 'Pliegues comunes', blurb: 'Valle y montaña, pliegues invertidos, aplastado, oreja de conejo, plisado, doble pliegue invertido, pivote, pétalo y hundido, cada uno en su propio cuadrado.' },
     'bases-lesson': { title: 'Bases de origami', blurb: 'Las bases de cometa, preliminar, bomba de agua, pájaro, pez y rana: de ahí parten casi todos los modelos.' },
     'paper-plane': { title: 'Avión de papel', blurb: 'El clásico dardo. Vuela lejos y recto.' },
     glider: { title: 'Planeador', blurb: 'Un avión de morro plano y alas anchas, para planear despacio y lejos.' },

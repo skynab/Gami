@@ -67,7 +67,7 @@ export const fr: Messages = {
   },
   models: {
     basics: { title: 'Les bases', blurb: 'Commencez ici : avancer, lancer la lecture, tourner et lire chaque pli.' },
-    'folds-lesson': { title: 'Les plis courants', blurb: 'Vallée et montagne, plis inversés, écrasé, oreille de lapin, plissé, double pli inversé et pli pétale, chacun sur son propre carré.' },
+    'folds-lesson': { title: 'Les plis courants', blurb: 'Vallée et montagne, plis inversés, écrasé, oreille de lapin, plissé, double pli inversé, pli pivot, pli pétale et pli enfoncé, chacun sur son propre carré.' },
     'bases-lesson': { title: 'Les bases de l’origami', blurb: 'Les bases du cerf-volant, préliminaire, de la bombe à eau, de l’oiseau, du poisson et de la grenouille : le départ de presque tous les modèles.' },
     'paper-plane': { title: 'Avion en papier', blurb: 'La fléchette classique. Vole loin et droit.' },
     glider: { title: 'Planeur', blurb: 'Un avion au nez plat et aux ailes larges, pour planer lentement et longtemps.' },

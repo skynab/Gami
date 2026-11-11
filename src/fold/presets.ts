@@ -332,7 +332,15 @@ function sink(frame: FoldFrame, tip: Vec2, at: Vec2, allowed: (paper: Vec2[]) =>
   const near = s.filter((f) => f.world.some((p) => sideOf(line, p) * tipSide > 1e-7));
   const start = near.filter((f) => f.world.some((p) => dist(p, tip) < 1e-6));
   if (!start.length) throw new PresetError('There’s no point there to sink. Pick the tip of a point.');
-  const crossing = connected(start, near).filter((f) => f.world.some((p) => sideOf(line, p) * tipSide < -1e-7));
+  const point = connected(start, near);
+  // The point's faces the line crosses; or, where the point was creased along the line first (as a sink usually
+  // is), the faces either side of that crease, joined along it.
+  let crossing = point.filter((f) => f.world.some((p) => sideOf(line, p) * tipSide < -1e-7));
+  if (!crossing.length) {
+    const all = stack(frame).filter((f) => allowed(f.paper));
+    const pairs = point.flatMap((f) => all.filter((g) => !point.includes(g) && joins([f], [g], frame.cuts).some((j) => onLine(j.world, line))).map((g) => [f, g]));
+    crossing = [...new Set(pairs.flat())];
+  }
   if (!crossing.length) throw new PresetError('Pick a point on the paper for the tip to sink to.');
   // The point's inside is the same side of the paper all round it: under the face on top, or (sunk from
   // underneath) over the face at the bottom. Faces lying the way that face does fold to the same side of

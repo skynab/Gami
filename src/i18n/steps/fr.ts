@@ -2539,4 +2539,30 @@ export const fr: Record<string, string> = {
     "Ouvrir le bateau",
   "Spread the sides a little, and stand the boat up on its bottom. Done!":
     "Écartez un peu les côtés, et posez le bateau debout sur son fond. C’est fini !",
+  "Swivel fold":
+    "Pli pivot",
+  "A swivel fold swings a flap round on one corner, keeping it flat. The paper it swings across folds into a small pleat to make room. It turns and narrows points, for tails, feet and fins.":
+    "Un pli pivot fait tourner un rabat autour d’un de ses coins, à plat. Le papier qu’il balaie se replie en un petit plissé pour lui faire de la place. Il oriente et affine les pointes, pour les queues, les pattes et les nageoires.",
+  "Fold the corner over":
+    "Rabattez le coin",
+  "Fold the bottom right corner up over a line from the middle of the bottom edge to the middle of the right edge.":
+    "Rabattez le coin en bas à droite vers le haut, le long d’une ligne allant du milieu du bord inférieur au milieu du bord droit.",
+  "Hold the flap’s bottom corner down and swing the flap up towards the top edge, keeping it flat. The paper it swings over folds into a little pleat to make room.":
+    "Maintenez le coin inférieur du rabat et faites-le pivoter vers le bord du haut, à plat. Le papier qu’il balaie se replie en un petit plissé pour lui faire de la place.",
+  "Open it out: the pleat left two creases fanning out from the corner the flap swung on, a valley and a mountain.":
+    "Dépliez : le plissé a laissé deux plis qui partent en éventail du coin sur lequel le rabat a pivoté, un pli vallée et un pli montagne.",
+  "Open sink":
+    "Pli enfoncé ouvert",
+  "An open sink pushes the tip of a point down inside itself, so the point gets blunter with nothing folded over on the outside. The point opens out flat while you sink it, then closes up again.":
+    "Un pli enfoncé ouvert pousse le bout d’une pointe à l’intérieur d’elle-même : la pointe s’émousse sans rien de replié à l’extérieur. Elle s’ouvre à plat pendant qu’on l’enfonce, puis se referme.",
+  "Crease the tip":
+    "Marquez le bout",
+  "Fold the closed tip down through all the layers, a little way in, and crease it hard.":
+    "Rabattez le bout fermé vers le bas à travers toutes les couches, un peu vers l’intérieur, et marquez bien le pli.",
+  "Fold it back up. The crease shows how far the tip sinks.":
+    "Relevez-le. Le pli montre jusqu’où le bout s’enfonce.",
+  "Open the point out a little and push its tip down inside along the crease, so the paper turns inside out into the point. Close the layers up again and flatten it.":
+    "Ouvrez un peu la pointe et enfoncez son bout à l’intérieur le long du pli, pour que le papier se retourne dans la pointe. Refermez les couches et aplatissez.",
+  "Open it out: the sink left a small square of creases round the middle of the sheet.":
+    "Dépliez : le pli enfoncé a laissé un petit carré de plis autour du centre de la feuille.",
 };

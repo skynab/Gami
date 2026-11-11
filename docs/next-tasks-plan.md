@@ -210,7 +210,7 @@ The frog now grazes a little deeper, 0.0106 at most (step 45) against 0.0094, st
   paper round them (the wings) that won't let the tips into the middle with rigid layers. Worth a look: whether
   those folds are better made as something other than a plain `inside` crease.
 - The fold engine's error messages are still English only (milestone 9 left them).
-- The recipes make named folds their own way; they could call `src/fold/presets.ts`, which the tests show gives
+- The recipes make named folds their own way; they could call `src/fold/presets.ts` (through `Recipe.preset`, since 11 November, as the lesson's open sink does), which the tests show gives
   the same paper.
 - CI's actions (`checkout`, `setup-node`, `upload-artifact`, all `@v4`) are built for Node 20, which GitHub has
   deprecated; it runs them on Node 24 for now. Move them on when convenient. `ubuntu-latest` is also moving to
@@ -221,7 +221,7 @@ The frog now grazes a little deeper, 0.0106 at most (step 45) against 0.0094, st
 | Item | Status |
 |---|---|
 | Housekeeping | Done but for the branches (above). |
-| Studio, row 5 | Done 8 November: swivel and open sink in the Studio's Named fold (`src/fold/presets.ts`); see `docs/studio-plan.md`. Not yet in the common-folds lesson. |
+| Studio, row 5 | Done 8 November: swivel and open sink in the Studio's Named fold (`src/fold/presets.ts`); see `docs/studio-plan.md`. In the common-folds lesson since 11 November (two sections, 66 steps), the sink made with `Recipe.preset`. |
 | Reverse folds' stacking | Fixed 8 November (see Smaller): points tuck into the middle of the flap; three folds keep the old stacking. |
 | Bending, rows 1 and 3 (boat) | Done 9 November: in the gallery, pulled out flat by a collapse and opened by a bend (`docs/bending-plan.md`, step 7). |
 | Bending, row 2 (fan) | Done 7 November: in the gallery. |
