@@ -153,7 +153,7 @@ The frog now grazes a little deeper, 0.0106 at most (step 45) against 0.0094, st
 | Row | Work | Size |
 |---|---|---|
 | 5 | ✅ Swivel and open sink as named folds (8 November) | Medium |
-| 6 | Bend with crease goals, solved in a worker, baked on save | Large; after the fan and boat have proved guides |
+| 6 | ✅ Bend with crease goals, solved in a worker, baked on save (11 November; `docs/studio-plan.md`) | Large |
 | 7 | Bend with point goals (3D handles) | Large, and only if 6 shows the need |
 | 8 | Submissions with ownership and licence | Large; needs decisions first |
 

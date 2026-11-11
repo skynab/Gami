@@ -1,7 +1,7 @@
 import type { TFunction } from 'i18next';
 import type { CreaseKind } from '../fold/collapse';
 import { FoldError, type FoldKind } from '../fold/fold';
-import type { Line } from '../fold/geometry2d';
+import { lineThrough, type Line } from '../fold/geometry2d';
 import { applyOp, lineOf, opKind, shapingBase, type At, type Faces, type LineSpec, type Op, type ShapeBend } from '../fold/ops';
 import type { PresetKind } from '../fold/presets';
 import { locate } from '../fold/select';
@@ -16,23 +16,28 @@ export type Layers = 'all' | 1 | 2 | 3;
 /**
  * What the picked line does: a plain fold, a reverse fold, a crease for a collapse, or lifting into 3D. Or a named
  * compound fold (pleat, crimp, squash, petal, rabbit ear, swivel, open sink) worked out from a few picks (fold/presets.ts).
+ * Or bending paper that curves rather than creases (picking the paper that bends, what stays put, and creases to
+ * turn to an angle), solved in a worker.
  * Or popping the model up about a point (picking the point, then which way the first crease points), a
  * scissor cut (picking where it starts and ends), a strip of tape (picking its two ends), drawing on the paper
  * (picking points along the mark), or, for models of several sheets, moving one sheet (picking where its middle goes).
  */
-export type Action = 'fold' | 'reverse' | 'preset' | 'collapse' | 'lift' | 'popUp' | 'cut' | 'tape' | 'draw' | 'move';
+export type Action = 'fold' | 'reverse' | 'preset' | 'collapse' | 'lift' | 'bend' | 'popUp' | 'cut' | 'tape' | 'draw' | 'move';
 
-export const ACTIONS: Action[] = ['fold', 'reverse', 'preset', 'collapse', 'lift', 'popUp', 'cut', 'tape', 'draw', 'move'];
+export const ACTIONS: Action[] = ['fold', 'reverse', 'preset', 'collapse', 'lift', 'bend', 'popUp', 'cut', 'tape', 'draw', 'move'];
 /** How wide a strip of tape can be, on a 1 × 1 sheet: narrow, as it comes, and wide. */
 export const TAPE_WIDTHS = [0.06, TAPE_WIDTH, 0.2];
 /** Actions that can be limited to faces picked by clicking them. */
-export const FACE_ACTIONS: Action[] = ['fold', 'reverse', 'collapse', 'lift', 'cut'];
+export const FACE_ACTIONS: Action[] = ['fold', 'reverse', 'collapse', 'lift', 'bend', 'cut'];
+/** How fine the bending paper's triangles are: quick and rough, the solver's own choice, or smooth and slow (sheet widths; 0 for the solver's). */
+export const MESHES = [0.125, 0, 0.05];
 /** Actions that pick a fold line. */
 export const LINE_ACTIONS: Action[] = ['fold', 'reverse', 'collapse', 'lift'];
 /** What clicks on the paper do: pick points, pick faces, or pick the paper that stays put while posing. */
 export type PickMode = 'points' | 'faces' | 'anchor';
 
 export type CreaseOp = Extract<Op, { op: 'collapse' }>['creases'][number];
+export type BendOp = Extract<Op, { op: 'bend' }>;
 
 /** Everything the tools are set to, and what they've gathered for the next step. */
 export interface ToolState {
@@ -55,6 +60,14 @@ export interface ToolState {
   chained: boolean;
   /** Where that paper was picked on the table, and the point of the sheet it names (kept exactly when loaded from a step). */
   anchorPick: { spot: Vec2; at: At } | null;
+  /** A bend's creases to turn, kept so far: two points on the sheet along each, and the angle (valley positive). */
+  bendGoals: { line: Line; crease: [Vec2, Vec2]; degrees: number }[];
+  /** The angle the next of them turns to. */
+  bendDegrees: number;
+  /** How fine the bending paper's triangles are (see MESHES). */
+  mesh: number;
+  /** What a loaded bend step had that the tools don't show (points or guides to follow, lines, air), kept as it was. */
+  bendKept: Partial<BendOp> | null;
   /** Popping up: how many creases rise from the point, and how steeply every other one rises. */
   rays: number;
   steep: number;
@@ -86,6 +99,8 @@ export const GATHERED = {
   picked: [],
   pickMode: 'points',
   anchorPick: null,
+  bendGoals: [],
+  bendKept: null,
 } satisfies Partial<ToolState>;
 
 export const INITIAL: ToolState = {
@@ -100,6 +115,8 @@ export const INITIAL: ToolState = {
   segments: 1,
   corners: false,
   chained: false,
+  bendDegrees: 90,
+  mesh: 0,
   rays: 8,
   steep: 60,
   fill: false,
@@ -246,6 +263,20 @@ export function toolsFor(made: Op | undefined, m: OrigamiModel): Partial<ToolSta
     // One bend goes in the tools; several are all kept, ready to lift together.
     if (made.bends.length === 1) pick(b.line, flat, b.flip);
     else tryTo(() => (out.bends = made.bends.map((o) => ({ line: lineOf(o.line, flat, o.flip), op: o }))));
+  } else if (made.op === 'bend') {
+    const { flex, anchor, goals, mesh, op: _, ...rest } = made;
+    const others = goals.filter((g) => !('crease' in g));
+    Object.assign(out, { action: 'bend', mesh: mesh ?? 0, bendKept: { ...rest, ...(others.length && { goals: others }) } });
+    limits(flex);
+    tryTo(() => (out.anchorPick = { spot: locate(paperBefore, anchor.paper), at: anchor }));
+    tryTo(
+      () =>
+        (out.bendGoals = goals.flatMap((g) => {
+          if (!('crease' in g)) return [];
+          const [a, b] = g.crease.map((q) => locate(paperBefore, q));
+          return [{ line: lineThrough(a, b), crease: g.crease, degrees: g.degrees }];
+        })),
+    );
   } else if (made.op === 'popUp') {
     out.action = 'popUp';
     const s = popSettings(made.rays);

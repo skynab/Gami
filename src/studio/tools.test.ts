@@ -6,7 +6,9 @@ import { fortuneTeller } from '../models/recipes/fortune-teller';
 import { masuBox } from '../models/recipes/masu-box';
 import { basics } from '../models/basics';
 import { TAPE_WIDTH } from '../fold/tape';
+import { paper, Recipe } from '../fold/recipe';
 import { stepFor, toolsFor } from './tools';
+import { bendsFrom } from './steps';
 
 /** The model before step `i`, as Change loads a step. */
 const before = (m: OrigamiModel, i: number): OrigamiModel => ({ ...m, steps: m.steps.slice(0, i) });
@@ -46,6 +48,28 @@ describe('loading a step into the tools', () => {
     expect(tools.picks?.flat().map((n) => +n.toFixed(9))).toEqual([-0.3, 0.1, 0.3, 0.1]);
     expect(toolsFor({ ...strip, width: undefined }, before(basics, 0)).tapeWidth).toBe(TAPE_WIDTH);
     expect(stepFor(strip, ((key: string) => key) as unknown as TFunction)).toEqual({ title: 'studio.steps.tape', kind: 'tape' });
+  });
+
+  it('sets a bend from its paper, what stays put and its creases, keeping goals it can’t show', () => {
+    const m = new Recipe({ id: 'b', title: 'B', sheet: { size: [1, 1], front: '#fff', back: '#000' } })
+      .crease(paper(0, -0.5), paper(0, 0.5), { title: 'Crease down the middle' })
+      .build();
+    const bend: Op = {
+      op: 'bend',
+      flex: { inPaper: [[[0, -0.5], [0.5, -0.5], [0.5, 0.5], [0, 0.5]]] },
+      anchor: { paper: [-0.25, 0] },
+      goals: [{ crease: [[0, -0.5], [0, 0.5]], degrees: -60 }, { point: { paper: [0.5, 0.5] }, to: [0, 0.5, 0.5] }],
+      mesh: 0.05,
+      free: true,
+    };
+    const tools = toolsFor(bend, m);
+    expect(tools).toMatchObject({ action: 'bend', mesh: 0.05, anchorPick: { at: { paper: [-0.25, 0] } }, bendKept: { free: true, goals: [{ point: { paper: [0.5, 0.5] }, to: [0, 0.5, 0.5] }] } });
+    expect(tools.picked).toEqual([[[0, -0.5], [0.5, -0.5], [0.5, 0.5], [0, 0.5]]]);
+    expect(tools.bendGoals?.map((g) => [g.crease, g.degrees])).toEqual([[[[0, -0.5], [0, 0.5]], -60]]);
+    // Folding again from before a bend solves it again, which the Studio does in a worker.
+    const bent = { ...m, steps: [...m.steps, { ...m.steps[0], op: bend }] };
+    expect(bendsFrom(bent, 0)).toBe(true);
+    expect(bendsFrom(m, 0)).toBe(false);
   });
 });
 

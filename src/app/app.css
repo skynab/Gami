@@ -1930,6 +1930,22 @@ kbd {
   cursor: default;
 }
 
+/* A bend being worked out: how long so far, and stopping it. */
+.bending {
+  position: absolute;
+  inset-block-start: 12px;
+  inset-inline-start: 50%;
+  translate: -50% 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px 6px 14px;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.65);
+  color: #fff;
+  font-size: 13px;
+}
+
 /* The Studio's first-visit tour: a card beside the part it's about, which is outlined. */
 .tour {
   position: fixed;

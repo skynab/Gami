@@ -11,7 +11,9 @@ import { tapeStrip } from '../fold/tape';
 import type { Step } from '../fold/types';
 import { saveDraft, useDraft } from '../studio/draft';
 import { foldRest, unfoldTarget } from '../studio/editor';
-import { canInsert, canRemove, canReplace, insertStep, lastFixed, removeStep, replaceStep } from '../studio/steps';
+import { bendsFrom, canInsert, canRemove, canReplace, lastFixed, withInserted, withRemoved, withReplaced } from '../studio/steps';
+import { replay } from '../fold/ops';
+import { BendCancelled, replayInWorker, solveBend } from '../studio/bendJob';
 import { CloudPanel } from '../studio/CloudPanel';
 import { ShareError, shareText } from '../studio/share';
 import { StudioTour, tourSeen } from '../studio/Tour';
@@ -72,16 +74,54 @@ export default function StudioEditor({ end, cloud = false }: {
   const { s } = tools;
   const [message, setMessage] = useState<string | null>(null);
 
+  // Work being done in a worker (a bend solved, or steps folded again with a bend among them), how long it's taken
+  // so far, and stopping it.
+  const [bending, setBending] = useState<{ cancel(): void; started: number } | null>(null);
+  const [, tick] = useState(0);
+  useEffect(() => {
+    if (!bending) return;
+    const timer = setInterval(() => tick((n) => n + 1), 1000);
+    return () => clearInterval(timer);
+  }, [bending]);
+  // Leaving the editor stops it.
+  useEffect(() => () => bending?.cancel(), [bending]);
+
+  /** Runs worker `job`, showing it's busy until it's done; then `then` with its result. Cancelled, nothing changes. */
+  const busy = <T,>(job: { done: Promise<T>; cancel(): void }, then: (result: T) => void) => {
+    setBending({ cancel: job.cancel, started: Date.now() });
+    setMessage(null);
+    job.done.then(
+      (result) => {
+        setBending(null);
+        then(result);
+      },
+      (e: Error) => {
+        setBending(null);
+        if (!(e instanceof BendCancelled)) setMessage(e.message);
+      },
+    );
+  };
+
+  /** Takes `next`, folded again from step `from`: in a worker when that solves a bend again, which can take a while. */
+  const rebuild = (next: typeof model, from: number, then?: () => void) => {
+    if (!bendsFrom(next, from)) {
+      change(replay(next, from));
+      return then?.();
+    }
+    busy(replayInWorker(next, from), (result) => (change(result), then?.()));
+  };
+
   const add = (step: Step) => {
     if (editing?.mode === 'edit') {
       // The new fold takes the old step's place, keeping its words (its title too, unless it's one the Studio gave it).
       const { title, text, section } = model.steps[editing.index];
       const given = Object.values(t('studio.steps', { returnObjects: true }) as Record<string, string>).includes(title);
-      change(replaceStep(model, editing.index, { ...step, ...(!given && { title }), ...(text && { text }), ...(section && { section }) }));
+      rebuild(withReplaced(model, editing.index, { ...step, ...(!given && { title }), ...(text && { text }), ...(section && { section }) }), editing.index);
       setAt(null);
     } else if (editing) {
-      change(insertStep(model, editing.index, step));
-      setAt({ index: editing.index + 1, mode: 'insert' });
+      const i = editing.index;
+      rebuild(withInserted(model, i, step), i);
+      setAt({ index: i + 1, mode: 'insert' });
     } else addStep(step);
     setHeld([]);
     tools.reset();
@@ -145,11 +185,20 @@ export default function StudioEditor({ end, cloud = false }: {
   };
 
   const remove = (i: number) => {
-    change(removeStep(model, i));
+    rebuild(withRemoved(model, i), i);
     cancel();
   };
 
+  /** Solves the bend the tools describe off the page's thread, then adds it as a step (it can't be held as a part). */
+  const bend = () => {
+    const o = tools.op;
+    if (o?.op !== 'bend' || bending) return;
+    if (held.length) return setMessage(t('studio.bendAlone'));
+    busy(solveBend(start, o), ({ frame: next, via }) => add({ ...stepFor(o, t), frame: next, ...(via && { via }), op: o }));
+  };
+
   const apply = () => {
+    if (tools.s.action === 'bend') return bend();
     if (!tools.preview || !tools.op) return;
     finish(tools.op, s.action === 'preset' ? presetStep(s.preset, t) : undefined);
   };
@@ -289,12 +338,20 @@ export default function StudioEditor({ end, cloud = false }: {
             model={model}
             picks={s.picks}
             labels={
-              s.action === 'draw' ? [''] : s.action === 'popUp' ? ['O', '1'] : s.action === 'preset' ? PRESET_LABELS[s.preset] : s.tool === 'edges' ? ['A', 'A', 'B', 'B'] : undefined
+              s.action === 'draw' ? [''] : s.action === 'popUp' ? ['O', '1'] : s.action === 'bend' ? ['A', 'B'] : s.action === 'preset' ? PRESET_LABELS[s.preset] : s.tool === 'edges' ? ['A', 'A', 'B', 'B'] : undefined
             }
             line={tools.line}
             kind={s.action === 'fold' ? s.kind : s.action === 'collapse' && s.creaseKind === 'mountain' ? 'mountain' : 'valley'}
             preview={result && 'frame' in result ? (result.onFlat ?? result.frame) : null}
-            extra={s.action === 'lift' ? s.bends.map((b) => ({ line: b.line, kind: 'valley' })) : s.action === 'preset' ? tools.presetCreases : s.creases}
+            extra={
+              s.action === 'lift'
+                ? s.bends.map((b) => ({ line: b.line, kind: 'valley' }))
+                : s.action === 'bend'
+                  ? s.bendGoals.map((g) => ({ line: g.line, kind: g.degrees < 0 ? 'mountain' : 'valley' }))
+                  : s.action === 'preset'
+                    ? tools.presetCreases
+                    : s.creases
+            }
             // A cut about to be made, or the way a pop-up's first crease points.
             cut={(s.action === 'cut' || s.action === 'popUp') && s.picks.length === 2 ? [s.picks[0], s.picks[1]] : null}
             tape={s.action === 'tape' && s.picks.length === 2 ? planned(() => tapeStrip(s.picks[0], s.picks[1], s.tapeWidth)) : null}
@@ -306,7 +363,16 @@ export default function StudioEditor({ end, cloud = false }: {
             onPick={tools.pick}
             onFace={s.pickMode === 'faces' ? tools.pickFace : undefined}
           />
-          {(status || tools.hint) && <div className={status ? 'badge error' : 'badge'}>{status ?? tools.hint}</div>}
+          {bending ? (
+            <div className="bending" role="status">
+              <span>{t('studio.bending', { seconds: Math.round((Date.now() - bending.started) / 1000) })}</span>
+              <button type="button" className="secondary" onClick={() => bending.cancel()}>
+                {t('studio.cancel')}
+              </button>
+            </div>
+          ) : (
+            (status || tools.hint) && <div className={status ? 'badge error' : 'badge'}>{status ?? tools.hint}</div>
+          )}
         </section>
 
         <aside className="studio-side">
@@ -412,6 +478,7 @@ export default function StudioEditor({ end, cloud = false }: {
         canUndo={canUndo || held.length > 0}
         unfoldable={unfoldTarget(before.steps) !== null}
         rest={typeof s.sheet === 'number' ? foldRest(before, s.sheet) : null}
+        bending={!!bending}
         onHold={hold}
         onApply={apply}
         onNow={now}

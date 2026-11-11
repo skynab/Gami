@@ -1,14 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import type { Op } from '../fold/ops';
 import { PRESETS, type PresetKind } from '../fold/presets';
-import { ACTIONS, FACE_ACTIONS, LINE_ACTIONS, TAPE_WIDTHS, type Layers } from './tools';
+import { ACTIONS, FACE_ACTIONS, LINE_ACTIONS, MESHES, TAPE_WIDTHS, type Layers } from './tools';
 import type { Tools } from './useTools';
 
 /**
  * The Studio's bottom bar: what the next step does and how (the action, its fold line and settings), keeping it
  * as part of a step or applying it, and the steps that need no picks.
  */
-export function ToolBar({ tools, sheets, canUndo, unfoldable, rest, onHold, onApply, onNow, onUndo }: {
+export function ToolBar({ tools, sheets, canUndo, unfoldable, rest, bending = false, onHold, onApply, onNow, onUndo }: {
   tools: Tools;
   /** How many sheets the model has. */
   sheets: number;
@@ -17,6 +17,8 @@ export function ToolBar({ tools, sheets, canUndo, unfoldable, rest, onHold, onAp
   unfoldable: boolean;
   /** Folding the other sheets like the chosen one (`foldRest`), if there are any to fold. */
   rest: Op | null;
+  /** A bend is being worked out: nothing else can be made meanwhile. */
+  bending?: boolean;
   onHold(): void;
   onApply(): void;
   /** Makes a step that needs no picks. */
@@ -189,6 +191,34 @@ export function ToolBar({ tools, sheets, canUndo, unfoldable, rest, onHold, onAp
                 )}
               </>
             )}
+            {s.action === 'bend' && (
+              <>
+                <button type="button" className="secondary" aria-pressed={s.pickMode === 'anchor'} onClick={() => set({ pickMode: s.pickMode === 'anchor' ? 'points' : 'anchor' })}>
+                  {t('studio.stayPut')}
+                </button>
+                <label className="field inline" title={t('studio.bendAngleTitle')}>
+                  <span>{t('studio.angle')}</span>
+                  <input type="range" min={-180} max={180} step={5} value={s.bendDegrees} onChange={(e) => set({ bendDegrees: Number(e.target.value) })} />
+                  <span className="angle">{s.bendDegrees}°</span>
+                </label>
+                <button type="button" className="secondary" disabled={s.picks.length < 2} onClick={tools.addBendGoal} title={t('studio.addBendCreaseTitle')}>
+                  {t('studio.addCrease')}
+                </button>
+                <button type="button" className="secondary" disabled={!s.bendGoals.length} onClick={() => set({ bendGoals: [] })}>
+                  {t('studio.clearCreases')}
+                </button>
+                <label className="field inline" title={t('studio.meshTitle')}>
+                  <span>{t('studio.mesh')}</span>
+                  <select value={MESHES.includes(s.mesh) ? s.mesh : 0} onChange={(e) => set({ mesh: Number(e.target.value) })}>
+                    {MESHES.map((m, i) => (
+                      <option key={m} value={m}>
+                        {t(`studio.meshes.${(['coarse', 'normal', 'fine'] as const)[i]}`)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </>
+            )}
             {s.action === 'popUp' && (
               <>
                 <label className="field inline">
@@ -218,7 +248,7 @@ export function ToolBar({ tools, sheets, canUndo, unfoldable, rest, onHold, onAp
                 </button>
               </div>
             )}
-            {FACE_ACTIONS.includes(s.action) && (
+            {FACE_ACTIONS.includes(s.action) && s.action !== 'bend' && (
             <label className="field inline">
               <span>{t('studio.layers')}</span>
               <select value={String(s.layers)} onChange={(e) => set({ layers: e.target.value === 'all' ? 'all' : (Number(e.target.value) as Layers) })}>
@@ -287,15 +317,15 @@ export function ToolBar({ tools, sheets, canUndo, unfoldable, rest, onHold, onAp
                 </button>
               </>
             )}
-            <button type="button" className="secondary" disabled={!tools.preview} onClick={onHold} title={t('studio.holdTitle')}>
+            <button type="button" className="secondary" disabled={!tools.preview || bending} onClick={onHold} title={t('studio.holdTitle')}>
               {t('studio.hold')}
             </button>
             <button
               type="button"
               className="primary"
-              disabled={!tools.preview}
+              disabled={bending || (s.action === 'bend' ? !tools.op : !tools.preview)}
               onClick={onApply}
-              title={s.action === 'collapse' ? t('studio.collapseTitle') : t('studio.applyTitle')}
+              title={s.action === 'collapse' ? t('studio.collapseTitle') : s.action === 'bend' ? t('studio.bendTitle') : t('studio.applyTitle')}
             >
               {t(`studio.apply.${s.action}`)}
             </button>

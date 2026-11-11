@@ -157,6 +157,57 @@ test.describe('studio library', () => {
     await expect(page.getByRole('textbox', { name: 'Step 2 title' })).toHaveValue('Swivel fold');
   });
 
+  test('bends half the sheet up about a crease, worked out off the page, and keeps it', async ({ page }) => {
+    test.setTimeout(90_000);
+    await page.goto('/studio');
+    await page.getByRole('button', { name: 'New design' }).click();
+    const editor = page.getByRole('img', { name: 'The paper from above' });
+    const click = async (x: number, z: number) => {
+      const p = await editor.evaluate((svg, [x, z]) => {
+        const p = new DOMPoint(x, z).matrixTransform((svg as SVGSVGElement).getScreenCTM()!);
+        return { x: p.x, y: p.y };
+      }, [x, z] as const);
+      await page.mouse.click(p.x, p.y);
+    };
+
+    // A crease down the middle: folded, and opened again.
+    await page.getByRole('button', { name: 'Through 2 points' }).click();
+    await click(0, -0.5);
+    await click(0, 0.5);
+    await page.keyboard.press('Enter');
+    await page.getByRole('button', { name: 'Unfold' }).click();
+    await expect(page.getByRole('textbox', { name: 'Step 2 title' })).toBeVisible();
+
+    // The right half bends, the left stays put, and the crease turns to 90°.
+    await page.getByRole('button', { name: 'Bend', exact: true }).first().click();
+    await expect(page.getByText('Pick faces: the paper that may bend')).toBeVisible();
+    await page.getByRole('button', { name: 'Pick faces' }).click();
+    await click(0.25, 0);
+    await page.keyboard.press('Escape');
+    await page.getByRole('button', { name: 'Pick paper that stays' }).click();
+    await click(-0.25, 0);
+    await click(0, -0.5);
+    await click(0, 0.5);
+    await page.getByRole('button', { name: 'Add crease' }).click();
+    await expect(page.getByText('1 crease to turn')).toBeVisible();
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('textbox', { name: 'Step 3 title' })).toHaveValue('Bend it', { timeout: 60_000 });
+    await expect(page.getByText('This paper has bent, so it can’t be folded any further.')).toBeVisible();
+
+    // A step put in before it: the bend is worked out again, off the page, and comes after it.
+    await page.getByRole('button', { name: 'Insert' }).nth(2).click();
+    await page.getByRole('button', { name: 'Rotate' }).click();
+    await expect(page.getByRole('textbox', { name: 'Step 4 title' })).toHaveValue('Bend it', { timeout: 60_000 });
+    await page.getByRole('button', { name: 'Cancel', exact: true }).first().click();
+
+    // Kept with the design (leaving the editor writes it): reopened, the bent step is there, not worked out again.
+    await page.getByRole('link', { name: 'My designs' }).click();
+    await expect(card(page, 'Untitled model')).toContainText('4 steps');
+    await page.reload();
+    await card(page, 'Untitled model').getByRole('link', { name: 'Untitled model', exact: true }).click();
+    await expect(page.getByRole('textbox', { name: 'Step 4 title' })).toHaveValue('Bend it');
+  });
+
   test('moves the old single draft into the library', async ({ page }) => {
     const fold = JSON.parse(await readFile('public/models/cup.fold', 'utf8'));
     await page.addInitScript((f) => {
