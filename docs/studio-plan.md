@@ -193,7 +193,10 @@ publishing), and adds what an open gallery needs:
   be folded again (no operation) can't be linked; the hint says to export it. Where the page may not write to the
   clipboard, the link is shown to copy by hand. Tested: the link opens to exactly the same `.fold` file, and a
   damaged link says so.
-- **A short tour for first-timers: yes.** Four or five pointers on the first visit only (the paper, a first fold,
-  the step list, Fold it and export), skippable and reopened from a help button. Not started.
+- **A short tour for first-timers: yes.** Done (`src/studio/Tour.tsx`): on the first visit to the editor, four
+  cards in turn, each beside the part it's about, which is outlined: the paper, the tools, the steps, and Fold it
+  with export and links. Skip, Back, Next and Done, or Escape; seen, it's remembered on the device (and taken as
+  seen where storage is blocked, rather than shown every visit). **Show the tour** at the top of the side panel
+  shows it again. The cards stay on the screen at phone width. The Studio's other end-to-end tests mark it seen.
 - **Phones: desktop-first, and said.** The Studio keeps working at phone width; below 760 px a line at the top of
   the steps says it's easiest with a mouse and a bigger screen. Done.

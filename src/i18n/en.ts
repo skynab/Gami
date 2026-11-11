@@ -155,6 +155,31 @@ export const en = {
     text: 'We couldn’t find what you were looking for.',
     all: 'See all models',
   },
+  tour: {
+    label: 'Studio tour',
+    count: '{{n}} of {{total}}',
+    skip: 'Skip',
+    back: 'Back',
+    next: 'Next',
+    done: 'Done',
+    show: 'Show the tour',
+    paper: {
+      title: 'Choose your paper',
+      text: 'Before the first fold, set the paper’s colours, its size and how many sheets you’ll fold.',
+    },
+    tools: {
+      title: 'Make a fold',
+      text: 'Pick a tool here, then pick points on the paper: a fold needs two. You see it before you add it.',
+    },
+    steps: {
+      title: 'Your steps',
+      text: 'Each fold you add is a step. Give it a title and instructions; Change, Insert and Remove work on earlier steps.',
+    },
+    share: {
+      title: 'Fold it and share it',
+      text: '“Fold it” plays your design step by step. Designs stay in this browser: export a .fold file or copy a link to keep or share one.',
+    },
+  },
   notice: {
     draft: 'Draft · not in the gallery',
     submitted: 'Waiting for review · not in the gallery yet',

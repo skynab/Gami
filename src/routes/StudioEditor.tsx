@@ -14,6 +14,7 @@ import { foldRest, unfoldTarget } from '../studio/editor';
 import { canInsert, canRemove, canReplace, insertStep, lastFixed, removeStep, replaceStep } from '../studio/steps';
 import { CloudPanel } from '../studio/CloudPanel';
 import { ShareError, shareText } from '../studio/share';
+import { StudioTour, tourSeen } from '../studio/Tour';
 import { FoldEditor } from '../studio/FoldEditor';
 import { AboutPanel, SheetsPanel } from '../studio/panels';
 import { ToolBar } from '../studio/ToolBar';
@@ -233,6 +234,8 @@ export default function StudioEditor({ end, cloud = false }: {
 
   // A link that carries the design in its address (studio/share.ts): nothing is uploaded.
   const [copied, setCopied] = useState(false);
+  // The tour shows on a first visit, and again when asked for.
+  const [touring, setTouring] = useState(() => !tourSeen());
   const copyLink = async () => {
     let link: string;
     try {
@@ -266,7 +269,7 @@ export default function StudioEditor({ end, cloud = false }: {
             <Link to="/studio" className="secondary">
               {t('library.heading')}
             </Link>
-            <Link to={`/mine/${designId}`} className="secondary" title={t('library.foldItTitle')}>
+            <Link to={`/mine/${designId}`} className="secondary" title={t('library.foldItTitle')} data-tour="share">
               {t('library.foldIt')}
             </Link>
             <button type="button" className="secondary" onClick={exportFile}>
@@ -314,6 +317,9 @@ export default function StudioEditor({ end, cloud = false }: {
           </div>
           <div className="studio-steps">
             <p className="muted small phone-only">{t('studio.phoneNote')}</p>
+            <button type="button" className="link small" onClick={() => setTouring(true)}>
+              {t('tour.show')}
+            </button>
             {unsaved && (
               <p className="error-text" role="alert">
                 {t('studio.saveFailed')}
@@ -361,7 +367,7 @@ export default function StudioEditor({ end, cloud = false }: {
               </div>
             )}
             {fixed >= 0 && model.steps.length > 0 && <p className="muted small">{t('studio.fixed', { n: fixed + 1 })}</p>}
-            <ol>
+            <ol data-tour="steps">
               {model.steps.map((step, i) => (
                 <li key={i} className={[editing?.index === i && editing.mode, problem && i >= problem.step - 1 && 'stale'].filter(Boolean).join(' ') || undefined}>
                   <div className="step-head">
@@ -391,7 +397,11 @@ export default function StudioEditor({ end, cloud = false }: {
                 </li>
               ))}
             </ol>
-            {!model.steps.length && <p className="muted small">{t('studio.noSteps')}</p>}
+            {!model.steps.length && (
+              <p className="muted small" data-tour="steps">
+                {t('studio.noSteps')}
+              </p>
+            )}
           </div>
         </aside>
       </main>
@@ -407,6 +417,7 @@ export default function StudioEditor({ end, cloud = false }: {
         onNow={now}
         onUndo={undo}
       />
+      {touring && <StudioTour onClose={() => setTouring(false)} />}
     </div>
   );
 }

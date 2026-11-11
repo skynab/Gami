@@ -77,7 +77,7 @@ export function SheetsPanel({ sheets, locked, onChange }: { sheets: Sheet[]; loc
   const { t } = useTranslation();
   const edit = (i: number, patch: Partial<Sheet>) => onChange(sheets.map((s, j) => (j === i ? { ...s, ...patch } : s)));
   return (
-    <fieldset className="sheets" disabled={locked}>
+    <fieldset className="sheets" disabled={locked} data-tour="paper">
       <legend>{sheets.length === 1 ? t('studio.paper') : t('studio.paperSheets', { count: sheets.length })}</legend>
       {sheets.map((s, i) => (
         <div key={i} className="sheet-row">

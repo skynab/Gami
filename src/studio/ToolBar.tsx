@@ -26,7 +26,7 @@ export function ToolBar({ tools, sheets, canUndo, unfoldable, rest, onHold, onAp
   const { t } = useTranslation();
   const { s, set } = tools;
   return (
-        <footer className="bottombar studio-bar">
+        <footer className="bottombar studio-bar" data-tour="tools">
           <div className="group">
             <div className="segmented" role="group" aria-label={t('studio.actions.action')}>
               {ACTIONS.filter((a) => a !== 'move' || tools.many).map((a) => (

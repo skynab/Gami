@@ -7,6 +7,9 @@ const stepHeading = (page: Page) => page.getByRole('main').getByRole('region').g
 const card = (page: Page, title: string) => page.locator('.design-card').filter({ has: page.getByRole('link', { name: title, exact: true }) });
 
 test.describe('studio library', () => {
+  // The first-visit tour (tested below) would sit over the tools.
+  test.beforeEach(({ page }) => page.addInitScript(() => localStorage.setItem('gami.studio.tour', 'seen')));
+
   test('keeps designs in the browser, folds one, and round-trips one through a .fold file', async ({ page }) => {
     page.on('dialog', (d) => void (d.type() === 'prompt' ? d.accept('Second design') : d.accept()));
 
@@ -167,5 +170,56 @@ test.describe('studio library', () => {
     expect(await page.evaluate(() => localStorage.getItem('gami.studio.draft'))).toBeNull();
     await page.reload();
     await expect(card(page, fold.file_title)).toHaveCount(1);
+  });
+});
+
+test.describe('studio tour and links', () => {
+  test('shows a short tour on the first visit only, and again when asked', async ({ page }) => {
+    await page.goto('/studio');
+    await page.getByRole('button', { name: 'New design' }).click();
+    const tour = page.getByRole('dialog', { name: 'Choose your paper' });
+    await expect(tour).toBeVisible();
+    await expect(page.locator('.tour-target')).toHaveCount(1);
+    for (const next of ['Make a fold', 'Your steps', 'Fold it and share it']) {
+      await page.getByRole('button', { name: 'Next' }).click();
+      await expect(page.getByRole('dialog', { name: next })).toBeVisible();
+    }
+    await page.getByRole('button', { name: 'Done' }).click();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    await expect(page.locator('.tour-target')).toHaveCount(0);
+
+    // Seen: not again, unless asked for; Escape skips it.
+    await page.reload();
+    await expect(page.getByRole('button', { name: 'Show the tour' })).toBeVisible();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    await page.getByRole('button', { name: 'Show the tour' }).click();
+    await expect(page.getByRole('dialog', { name: 'Choose your paper' })).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+  });
+
+  test('shares a design by a link that carries it, and saves a copy from it', async ({ page, context, browserName }) => {
+    test.skip(browserName !== 'chromium', 'Granting clipboard access is for Chromium');
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await page.addInitScript(() => localStorage.setItem('gami.studio.tour', 'seen'));
+    await page.goto('/studio');
+    await page.locator('input[type=file]').setInputFiles('public/models/paper-plane.fold');
+    await expect(page).toHaveURL(/\/studio\/[0-9a-f-]{36}$/);
+    const steps = JSON.parse(await readFile('public/models/paper-plane.fold', 'utf8')).file_frames.length;
+    await expect(page.locator('.studio-steps ol li')).toHaveCount(steps);
+
+    await page.getByRole('button', { name: 'Copy link' }).click();
+    await expect(page.getByRole('button', { name: 'Link copied' })).toBeVisible();
+    const link = await page.evaluate(() => navigator.clipboard.readText());
+    expect(link).toMatch(/\/shared#[A-Za-z0-9_-]+$/);
+
+    // Opened, it's folded again and shown in the viewer, the link kept as the step changes.
+    await page.goto(link);
+    await expect(page.getByText(`Step 1 of ${steps}`)).toBeVisible();
+    await page.keyboard.press('ArrowRight');
+    await expect(page).toHaveURL(/step=2#/);
+    await page.getByRole('button', { name: 'Save a copy to my designs' }).click();
+    await expect(page).toHaveURL(/\/studio\/[0-9a-f-]{36}$/);
+    await expect(page.locator('.studio-steps ol li')).toHaveCount(steps);
   });
 });

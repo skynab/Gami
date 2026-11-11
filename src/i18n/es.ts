@@ -153,6 +153,31 @@ export const es: Messages = {
     text: 'No encontramos lo que buscabas.',
     all: 'Ver todos los modelos',
   },
+  tour: {
+    label: 'Recorrido por el Estudio',
+    count: '{{n}} de {{total}}',
+    skip: 'Saltar',
+    back: 'Atrás',
+    next: 'Siguiente',
+    done: 'Hecho',
+    show: 'Ver el recorrido',
+    paper: {
+      title: 'Elige el papel',
+      text: 'Antes del primer pliegue, elige los colores del papel, su tamaño y cuántas hojas vas a plegar.',
+    },
+    tools: {
+      title: 'Haz un pliegue',
+      text: 'Elige aquí una herramienta y luego marca puntos en el papel: un pliegue necesita dos. Lo verás antes de añadirlo.',
+    },
+    steps: {
+      title: 'Tus pasos',
+      text: 'Cada pliegue que añades es un paso. Ponle un título e instrucciones; Cambiar, Insertar y Quitar editan pasos anteriores.',
+    },
+    share: {
+      title: 'Pliégalo y compártelo',
+      text: '«Plegarlo» reproduce tu diseño paso a paso. Los diseños se guardan en este navegador: exporta un archivo .fold o copia un enlace para guardarlo o compartirlo.',
+    },
+  },
   notice: {
     draft: 'Borrador · no está en la galería',
     submitted: 'Pendiente de revisión · aún no está en la galería',

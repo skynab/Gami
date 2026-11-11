@@ -153,6 +153,31 @@ export const fr: Messages = {
     text: 'Nous n’avons pas trouvé ce que vous cherchiez.',
     all: 'Voir tous les modèles',
   },
+  tour: {
+    label: 'Visite du Studio',
+    count: '{{n}} sur {{total}}',
+    skip: 'Passer',
+    back: 'Retour',
+    next: 'Suivant',
+    done: 'Terminé',
+    show: 'Revoir la visite',
+    paper: {
+      title: 'Choisissez votre papier',
+      text: 'Avant le premier pli, choisissez les couleurs du papier, sa taille et le nombre de feuilles à plier.',
+    },
+    tools: {
+      title: 'Faites un pli',
+      text: 'Choisissez un outil ici, puis des points sur le papier : un pli en demande deux. Vous le voyez avant de l’ajouter.',
+    },
+    steps: {
+      title: 'Vos étapes',
+      text: 'Chaque pli ajouté est une étape. Donnez-lui un titre et des instructions ; Modifier, Insérer et Supprimer agissent sur les étapes précédentes.',
+    },
+    share: {
+      title: 'Pliez-la et partagez-la',
+      text: '« Le plier » joue votre création étape par étape. Les créations restent dans ce navigateur : exportez un fichier .fold ou copiez un lien pour la garder ou la partager.',
+    },
+  },
   notice: {
     draft: 'Brouillon · pas dans la galerie',
     submitted: 'En attente de relecture · pas encore dans la galerie',
