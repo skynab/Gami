@@ -1,11 +1,24 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { RECIPES } from '../../models/recipes';
+import { MODELS } from '../../gallery/catalog';
 import { es } from './es';
 import { fr } from './fr';
 import { ja } from './ja';
 
-/** Every built-in step's title, instruction and section name, in English. */
-const english = new Set(RECIPES.flatMap((make) => make().steps.flatMap((s) => [s.title, s.text ?? '', s.section ?? ''])).filter(Boolean));
+/**
+ * Every built-in step's title, instruction and section name, in English: read from the models' files, as the
+ * site reads them (the model checks make sure each file is its recipe's), rather than building every model.
+ */
+const english = new Set(
+  MODELS.filter((m) => m.steps)
+    .flatMap((m) => {
+      const frames: { frame_title?: string; 'gami:text'?: string; 'gami:section'?: string }[] = JSON.parse(
+        readFileSync(new URL(`../../../public/models/${m.id}.fold`, import.meta.url), 'utf8'),
+      ).file_frames;
+      return frames.flatMap((f) => [f.frame_title ?? '', f['gami:text'] ?? '', f['gami:section'] ?? '']);
+    })
+    .filter(Boolean),
+);
 
 describe.each([
   ['ja', ja],

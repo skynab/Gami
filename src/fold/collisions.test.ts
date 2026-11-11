@@ -4,7 +4,24 @@ import { crossings } from './collisions';
 import { clearanceDepth, crossDepth } from './cross3d';
 import { fromFoldFile, toFoldFile } from './fold-format';
 import { paper, Recipe } from './recipe';
-import { RECIPES } from '../models/recipes';
+import { folds as basics } from '../models/recipes/basics';
+import { bulldogDart } from '../models/recipes/bulldog-dart';
+import { crane } from '../models/recipes/crane';
+import { cup } from '../models/recipes/cup';
+import { fish } from '../models/recipes/fish';
+import { fortuneTeller } from '../models/recipes/fortune-teller';
+import { fox } from '../models/recipes/fox';
+import { glider } from '../models/recipes/glider';
+import { heart } from '../models/recipes/heart';
+import { jumpingFrog } from '../models/recipes/jumping-frog';
+import { kingBee } from '../models/recipes/king-bee';
+import { lily } from '../models/recipes/lily';
+import { navyPlane } from '../models/recipes/navy-plane';
+import { ninjaStar } from '../models/recipes/ninja-star';
+import { paperPlane } from '../models/recipes/paper-plane';
+import { samuraiHelmet } from '../models/recipes/samurai-helmet';
+import { sword } from '../models/recipes/sword';
+import { tulip } from '../models/recipes/tulip';
 import { toFlat } from './fold';
 import { overlapArea } from './geometry2d';
 import { locate } from './select';
@@ -12,7 +29,11 @@ import type { Vec2, Vec3 } from './types';
 
 const square = (y: number): Vec3[] => [[-1, y, -1], [1, y, -1], [1, y, 1], [-1, y, 1]];
 const deep = (model: Parameters<typeof crossings>[0]) => crossings(model).filter((c) => c.depth > 0.005);
-const models = RECIPES.map((make) => make());
+// Only the models these tests look at, built before they run: building every model takes minutes.
+const models = [
+  basics, bulldogDart, crane, cup, fish, fortuneTeller, fox, glider, heart, jumpingFrog, kingBee, lily, navyPlane,
+  ninjaStar, paperPlane, samuraiHelmet, sword, tulip,
+].map((make) => make());
 const byId = (id: string) => models.find((m) => m.id === id)!;
 const centre = (poly: Vec2[]): Vec2 => [poly.reduce((a, p) => a + p[0], 0) / poly.length, poly.reduce((a, p) => a + p[1], 0) / poly.length];
 
@@ -77,7 +98,7 @@ describe('paper passing through paper', () => {
     // Stacks ease off their creases, hinged layers settle into place as they turn, and creases nearer the
     // still paper can fold first.
     // Not yet the crane's reverse folds (the neck, tail and head), whose points tuck in between the flap's halves:
-    // the point turns as one and settles in between, through about half the stack (models.test.ts).
+    // the point turns as one and settles in between, through about half the stack (model-checks.ts).
     const crane = byId('crane');
     const reverse = crane.steps.flatMap((s, i) => (s.kind === 'reverse' ? [i + 1] : []));
     for (const id of ['heart', 'jumping-frog', 'tulip', 'crane']) expect(deep(byId(id)).filter((c) => id !== 'crane' || !reverse.includes(c.step)), id).toEqual([]);

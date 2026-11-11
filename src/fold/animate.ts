@@ -1242,8 +1242,12 @@ function centroid(points: Vec3[]): Vec3 {
 /** How far through its own move face `i` is, `s` of the way through the step (see `Transition.landing`). */
 const landed = (t: Transition, i: number, s: number) => (t.landing ? Math.min(1, s / t.landing[i]) : s);
 
-/** How much more of the step the top layer may take to land than the bottom one, when landing in order. */
-const LANDS = [0.2, 0.4];
+/**
+ * How much more of the step the top layer may take to land than the bottom one, when landing in order. Up to
+ * most of the step: tucked in between its flap's halves, the seal's tail grazes no deeper than a few layers
+ * landing over 0.6 of it (0.0048, against 0.0050 over 0.4), for a few per cent more time working out the steps.
+ */
+const LANDS = [0.2, 0.4, 0.6, 0.8];
 
 /** The same moves, landing bottom layer first: each face finishes earlier the lower it ends up, by up to `spread`. */
 function inLandingOrder(t: Transition, spread: number): Transition {

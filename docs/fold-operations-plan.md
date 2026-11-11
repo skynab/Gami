@@ -172,7 +172,7 @@ Imported and shared files are untrusted data:
 ## Tests
 
 - **Every built-in model replays to its baked frames** (to the file's 1e-9 rounding), in
-  `src/models/models.test.ts`. This proves recipes record everything they do.
+  `src/models/model-checks.ts`. This proves recipes record everything they do.
 - Round trip: `toFoldFile` → `fromFoldFile` keeps ops (in `src/fold/fold-format.test.ts`).
 - Editing: change an early fold of the paper plane, replay, and check later steps follow the paper (the
   corner folds still meet the centre crease).
@@ -189,7 +189,7 @@ Imported and shared files are untrusted data:
    and recipes (`locate`, `anchorFor`, `topLayers`, `smallerSideMoves`) moved to `src/fold/select.ts`.
 2. ✅ **Recipes record ops.** Every `Recipe` method records its op; tests on faces are recorded by
    `recorder` as the outlines of the faces they picked, rounded like the frames. Every built-in model
-   replays from its .fold file to the same frames (`src/models/models.test.ts`), and the frames in
+   replays from its .fold file to the same frames (`src/models/model-checks.ts`), and the frames in
    `public/models` didn't change. The files grew by about a third (the tulip, with many picked faces, by
    about 70%). A `moving` point lying on its own line turns the line round, as `along` always did.
 3. ✅ **Studio records ops.** Every Studio step is built from its op (`applyOp`), so what's previewed is

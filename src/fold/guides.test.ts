@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import { basics } from '../models/basics';
-import { RECIPES } from '../models/recipes';
 import { framesOf } from './frames';
 import { guidesFor } from './guides';
 
@@ -29,21 +28,5 @@ describe('fold guides', () => {
     expect(g.arrows).toHaveLength(1);
   });
 
-  it('works out guides for every step of every model', () => {
-    for (const make of RECIPES) {
-      const model = make();
-      const fs = framesOf(model);
-      for (let k = 1; k < fs.length; k++) {
-        // Starting again on a fresh sheet (fewer faces than before) moves nothing, so has nothing to show.
-        if (fs[k].faces_vertices.length < fs[k - 1].faces_vertices.length || model.steps[k - 1].op?.op === 'newSheet') continue;
-        // Drawing on the paper or taping it doesn't fold it.
-        if (model.steps[k - 1].kind === 'draw' || model.steps[k - 1].kind === 'tape') continue;
-        // A bend passes through frames on its way, which its faces point back at.
-        const g = guidesFor(fs[k - 1], fs[k], model.steps[k - 1].via);
-        expect(g.arrows.length + g.creases.length + g.cuts.length, `${model.id} step ${k}`).toBeGreaterThan(0);
-      }
-    }
-    // Every model is built and every step animated here, which takes over a minute (half as long again under a
-    // full run, and more on a slower machine): the kusudama alone takes seconds to build.
-  }, 300_000);
+  // Every step of every built-in model gets guides: checked with each model's other checks (src/models/model-checks.ts).
 });
