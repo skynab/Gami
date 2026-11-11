@@ -183,9 +183,16 @@ publishing), and adds what an open gallery needs:
 - **The cloud Studio stays for creators, without Submit.** Signed-in creators keep cloud saving and private share
   links; Submit for the gallery is hidden until submissions record who designed a model and its licence (part 4).
   Models sent before still show their review. Done.
-- **Share links without accounts: yes.** A Copy link button puts the design's steps, compressed, in the address
-  after `#`; opening it rebuilds the design (replaying its operations, re-solving any bend) and offers to save a
-  copy. Not started.
+- **Share links without accounts: yes.** Done: **Copy link** in the editor's top bar copies `/shared#…`, the
+  design's `.fold` file less every step's paper (each step keeps its words and operation), deflated and in
+  base64url (`src/studio/share.ts`). Browsers don't send what follows `#`, so nothing is uploaded. Opening it folds
+  the design again with `replay` (a bend is solved again, so that opens slower), shows it in the viewer, and offers
+  **Save a copy to my designs**, which opens the copy in the Studio. The fortune teller's link is 1.8 KB (its
+  `.fold` file 42 KB), the crane's 4.3 KB (127 KB). The viewer keeps the step in the address, which drops the `#`
+  part, so the page puts it back each time and a reload still opens the design. A design with a step that can't
+  be folded again (no operation) can't be linked; the hint says to export it. Where the page may not write to the
+  clipboard, the link is shown to copy by hand. Tested: the link opens to exactly the same `.fold` file, and a
+  damaged link says so.
 - **A short tour for first-timers: yes.** Four or five pointers on the first visit only (the paper, a first fold,
   the step list, Fold it and export), skippable and reopened from a help button. Not started.
 - **Phones: desktop-first, and said.** The Studio keeps working at phone width; below 760 px a line at the top of

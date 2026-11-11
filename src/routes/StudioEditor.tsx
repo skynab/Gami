@@ -13,6 +13,7 @@ import { saveDraft, useDraft } from '../studio/draft';
 import { foldRest, unfoldTarget } from '../studio/editor';
 import { canInsert, canRemove, canReplace, insertStep, lastFixed, removeStep, replaceStep } from '../studio/steps';
 import { CloudPanel } from '../studio/CloudPanel';
+import { ShareError, shareText } from '../studio/share';
 import { FoldEditor } from '../studio/FoldEditor';
 import { AboutPanel, SheetsPanel } from '../studio/panels';
 import { ToolBar } from '../studio/ToolBar';
@@ -230,6 +231,26 @@ export default function StudioEditor({ end, cloud = false }: {
     URL.revokeObjectURL(a.href);
   };
 
+  // A link that carries the design in its address (studio/share.ts): nothing is uploaded.
+  const [copied, setCopied] = useState(false);
+  const copyLink = async () => {
+    let link: string;
+    try {
+      link = `${location.origin}${import.meta.env.BASE_URL}shared#${await shareText(model)}`;
+    } catch (e) {
+      return setMessage(e instanceof ShareError ? t('studio.linkFailed', { error: e.message }) : (e as Error).message);
+    }
+    setMessage(null);
+    try {
+      await navigator.clipboard.writeText(link);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Where the browser won't let the page write to the clipboard, the link to copy by hand.
+      window.prompt(t('studio.copyThisLink'), link);
+    }
+  };
+
   const status = message ?? tools.error;
   const onPaper = useMemo(() => marksUpTo(before, before.steps.length).map((m) => m.mark), [before]);
   const { result } = tools;
@@ -250,6 +271,9 @@ export default function StudioEditor({ end, cloud = false }: {
             </Link>
             <button type="button" className="secondary" onClick={exportFile}>
               {t('studio.export')}
+            </button>
+            <button type="button" className="secondary" disabled={!model.steps.length} title={t('studio.copyLinkTitle')} onClick={() => void copyLink()}>
+              {copied ? t('studio.linkCopied') : t('studio.copyLink')}
             </button>
           </>
         }

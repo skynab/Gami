@@ -14,6 +14,8 @@ import { NotFound } from './routes/NotFound';
 // Only people making models need the Studio, so everyone else never downloads it.
 const Studio = lazy(() => import('./routes/Studio'));
 const Admin = lazy(() => import('./routes/Admin'));
+// A design carried in a link's address: opening it folds it again, which needs the whole fold engine.
+const SharedDesign = lazy(() => import('./routes/SharedDesign'));
 
 // Picks up a saved session, or the sign-in link someone just clicked. Does nothing on sites without accounts.
 useAuth.getState().start();
@@ -27,6 +29,14 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/m/:id" element={<CommunityModel />} />
         <Route path="/s/:token" element={<CommunityModel shared />} />
         <Route path="/mine/:id" element={<MyDesign />} />
+        <Route
+          path="/shared"
+          element={
+            <Suspense fallback={null}>
+              <SharedDesign />
+            </Suspense>
+          }
+        />
         <Route
           path="/studio/:id?"
           element={
