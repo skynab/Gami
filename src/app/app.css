@@ -1930,6 +1930,11 @@ kbd {
   cursor: default;
 }
 
+/* Said only on a narrow screen (the Studio's note that it's easiest on a bigger one). */
+.phone-only {
+  display: none;
+}
+
 @media (max-width: 760px) {
   /* A bar with more at its end than fits (the Studio's editor): the end slides sideways, rather than the page
      running wider than the screen, which a phone shows by zooming the whole page out. On one line still: the
@@ -1982,6 +1987,10 @@ kbd {
 
   .studio-steps {
     min-height: 0;
+  }
+
+  .phone-only {
+    display: block;
   }
 }
 

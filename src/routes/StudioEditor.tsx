@@ -289,6 +289,7 @@ export default function StudioEditor({ end, cloud = false }: {
             </Suspense>
           </div>
           <div className="studio-steps">
+            <p className="muted small phone-only">{t('studio.phoneNote')}</p>
             {unsaved && (
               <p className="error-text" role="alert">
                 {t('studio.saveFailed')}
