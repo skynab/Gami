@@ -2671,4 +2671,32 @@ export const ja: Record<string, string> = {
     "目をかく",
   "Draw an eye on the head. Your squirrel is keeping watch!":
     "頭に目をかきます。リスが見はりをしています！",
+  "Start with the big square red side up, a corner pointing towards you.":
+    "大きい正方形を赤い面を上にして、角を手前にむけておきます。",
+  "Fold the left and right corners behind on a slant, from a little way in at the top, so the berry narrows towards the bottom.":
+    "左右の角をななめにうしろへ折ります。上は少し内側から折り、下にいくほど細くなるようにします。",
+  "Fold the top point behind, level with where the side folds start.":
+    "上の先を、横の折り線がはじまる高さでうしろに折ります。",
+  "Blunt the bottom":
+    "下の先を丸める",
+  "Fold the bottom point behind, just a little.":
+    "下の先を、少しだけうしろに折ります。",
+  "Round the corners":
+    "角を丸める",
+  "Fold the four corners round the sides behind, just a little, to round the berry.":
+    "横にある四つの角を少しだけうしろに折って、イチゴを丸くします。",
+  "Fold the leaves’ corners in":
+    "葉の角を折りこむ",
+  "Turn to the small green square, light side up. Fold all four corners to the middle.":
+    "小さい緑の正方形を、明るい面を上にしておきます。四つの角をまん中に合わせて折ります。",
+  "Fold out the leaves":
+    "葉を折り出す",
+  "Fold each point back out, past the middle of its edge: eight pointed leaves.":
+    "それぞれの先を外へ折りもどして、ふちのまん中からとび出るようにします。とがった葉が八まいになります。",
+  "Put the leaves on":
+    "葉をのせる",
+  "Lay the leaves over the top of the berry.":
+    "葉をイチゴの上のほうにのせます。",
+  "Draw little seeds all over the berry. Ready to eat!":
+    "イチゴ全体に小さなたねをかきます。めしあがれ！",
 };

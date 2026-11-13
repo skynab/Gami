@@ -157,6 +157,7 @@ export const en = {
     sunflower: { title: 'Sunflower', blurb: 'Eight yellow petals round a brown middle, on a stem with a leaf, from three squares.' },
     lizard: { title: 'Lizard', blurb: 'A lizard seen from above, legs splayed and a long thin tail, from two squares.' },
     squirrel: { title: 'Squirrel', blurb: 'A squirrel sitting up, its bushy tail curled over its back, from three squares.' },
+    strawberry: { title: 'Strawberry', blurb: 'A plump red strawberry with a crown of green leaves and seeds drawn on, from two squares.' },
   },
   notFound: {
     title: 'This page got folded away',

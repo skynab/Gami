@@ -118,6 +118,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `sunflower` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's sunflower, which names no designer, from three squares and no glue: Gami's own petals and middle, and the flat tulip's traditional stem with a leaf (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
 | `lizard` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the general look of OrigamiOK's lizard, which is Lee Won-pyo's, folded differently: the turtle's narrowed water bomb base with steeper legs, and a separate tail (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
 | `squirrel` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a squirrel sitting up, after the look of OrigamiOK's, which names no designer, from three squares rather than one (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
+| `strawberry` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a flat strawberry, after the look of OrigamiOK's 3D one, which names no designer; its leaves are folded as the sunflower's petals are (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
 
 ### Notes
 
@@ -138,6 +139,10 @@ noted when it was written, and the model was folded from the common traditional 
   three squares: a triangle for the body, a tall kite with its tip flicked over for the tail, and a small triangle for
   the head. From one sheet, as OrigamiOK's is, the tail and head reverse-folded from a triangle's corners came out
   too thin or tucked inside the body.
+  None of the 49 strawberries in Gilad's database is Traditional (the "classic" one is Rae Cooker's), so Gami's is
+  its own, and flat: a red diamond with its sides folded behind on a slant, its top and bottom point folded behind and
+  its corners rounded, with an eight-pointed green star for the leaves. OrigamiOK's is opened into a 3D berry and
+  glued; Gami's blowing up is only led into boxes so far (the balloon, the 3D tulip), not a rounded cone.
 
 - **Modular models from OrigamiOK** (checked 29 October 2026; the plan is `docs/modular-plan.md`). OrigamiOK's
   modular pages name no designer either. Its rainbow chain wasn't found by name; Gami folds the traditional gum

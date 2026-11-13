@@ -2671,4 +2671,32 @@ export const es: Record<string, string> = {
     "Dibuja un ojo",
   "Draw an eye on the head. Your squirrel is keeping watch!":
     "Dibuja un ojo en la cabeza. ¡Tu ardilla está vigilando!",
+  "Start with the big square red side up, a corner pointing towards you.":
+    "Empieza con el cuadrado grande con el lado rojo hacia arriba y una esquina apuntando hacia ti.",
+  "Fold the left and right corners behind on a slant, from a little way in at the top, so the berry narrows towards the bottom.":
+    "Dobla las esquinas izquierda y derecha hacia atrás en diagonal, desde un poco hacia dentro arriba, para que la fresa se estreche hacia abajo.",
+  "Fold the top point behind, level with where the side folds start.":
+    "Dobla la punta de arriba hacia atrás, a la altura donde empiezan los pliegues de los lados.",
+  "Blunt the bottom":
+    "Despunta la parte de abajo",
+  "Fold the bottom point behind, just a little.":
+    "Dobla la punta de abajo hacia atrás, solo un poco.",
+  "Round the corners":
+    "Redondea las esquinas",
+  "Fold the four corners round the sides behind, just a little, to round the berry.":
+    "Dobla hacia atrás un poco las cuatro esquinas de los lados, para redondear la fresa.",
+  "Fold the leaves’ corners in":
+    "Dobla hacia dentro las esquinas de las hojas",
+  "Turn to the small green square, light side up. Fold all four corners to the middle.":
+    "Pasa al cuadrado verde pequeño, con el lado claro hacia arriba. Dobla las cuatro esquinas hasta el centro.",
+  "Fold out the leaves":
+    "Dobla las hojas hacia fuera",
+  "Fold each point back out, past the middle of its edge: eight pointed leaves.":
+    "Vuelve a doblar cada punta hacia fuera, más allá del centro de su borde: ocho hojas puntiagudas.",
+  "Put the leaves on":
+    "Pon las hojas",
+  "Lay the leaves over the top of the berry.":
+    "Coloca las hojas sobre la parte de arriba de la fresa.",
+  "Draw little seeds all over the berry. Ready to eat!":
+    "Dibuja semillitas por toda la fresa. ¡Lista para comer!",
 };

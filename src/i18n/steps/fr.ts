@@ -2671,4 +2671,32 @@ export const fr: Record<string, string> = {
     "Dessiner un œil",
   "Draw an eye on the head. Your squirrel is keeping watch!":
     "Dessine un œil sur la tête. Ton écureuil monte la garde !",
+  "Start with the big square red side up, a corner pointing towards you.":
+    "Commence avec le grand carré face rouge vers le haut, un coin pointé vers toi.",
+  "Fold the left and right corners behind on a slant, from a little way in at the top, so the berry narrows towards the bottom.":
+    "Plie les coins gauche et droit derrière en biais, en partant un peu à l’intérieur en haut, pour que la fraise s’affine vers le bas.",
+  "Fold the top point behind, level with where the side folds start.":
+    "Plie la pointe du haut derrière, au niveau où commencent les plis des côtés.",
+  "Blunt the bottom":
+    "Émousser le bas",
+  "Fold the bottom point behind, just a little.":
+    "Plie la pointe du bas derrière, juste un peu.",
+  "Round the corners":
+    "Arrondir les coins",
+  "Fold the four corners round the sides behind, just a little, to round the berry.":
+    "Plie un peu derrière les quatre coins des côtés, pour arrondir la fraise.",
+  "Fold the leaves’ corners in":
+    "Plier les coins des feuilles",
+  "Turn to the small green square, light side up. Fold all four corners to the middle.":
+    "Passe au petit carré vert, face claire vers le haut. Plie les quatre coins jusqu’au centre.",
+  "Fold out the leaves":
+    "Déplier les feuilles",
+  "Fold each point back out, past the middle of its edge: eight pointed leaves.":
+    "Replie chaque pointe vers l’extérieur, au-delà du milieu de son bord : huit feuilles pointues.",
+  "Put the leaves on":
+    "Poser les feuilles",
+  "Lay the leaves over the top of the berry.":
+    "Pose les feuilles sur le haut de la fraise.",
+  "Draw little seeds all over the berry. Ready to eat!":
+    "Dessine de petites graines sur toute la fraise. Prête à croquer !",
 };

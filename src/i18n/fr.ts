@@ -215,6 +215,7 @@ export const fr: Messages = {
     sunflower: { title: 'Tournesol', blurb: 'Huit pétales jaunes autour d’un cœur marron, sur une tige avec une feuille, à partir de trois carrés.' },
     lizard: { title: 'Lézard', blurb: 'Un lézard vu de dessus, pattes écartées et longue queue fine, à partir de deux carrés.' },
     squirrel: { title: 'Écureuil', blurb: 'Un écureuil assis, sa queue touffue recourbée sur le dos, à partir de trois carrés.' },
+    strawberry: { title: 'Fraise', blurb: 'Une fraise rouge et dodue, couronnée de feuilles vertes, ses graines dessinées, à partir de deux carrés.' },
   },
   notFound: {
     title: 'Cette page a été repliée',

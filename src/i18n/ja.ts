@@ -215,6 +215,7 @@ export const ja: Messages = {
     sunflower: { title: 'ヒマワリ', blurb: '茶色のまん中のまわりに黄色の花びらが八まい。葉のついたくきにのせます。正方形三枚で。' },
     lizard: { title: 'トカゲ', blurb: '上から見たトカゲ。足を広げて、長く細いしっぽ。正方形二枚で。' },
     squirrel: { title: 'リス', blurb: 'ふさふさのしっぽをせなかにかぶせて、すわっているリス。正方形三枚で。' },
+    strawberry: { title: 'イチゴ', blurb: '緑の葉をかぶった、ふっくらした赤いイチゴ。たねをかきます。正方形二枚で。' },
   },
   notFound: {
     title: 'このページは折りたたまれてしまいました',

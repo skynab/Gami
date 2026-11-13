@@ -43,6 +43,7 @@ site's source code, or any other model in the gallery.
 | Sunflower | `src/models/recipes/sunflower.ts` | November 2026 |
 | Lizard | `src/models/recipes/lizard.ts` | November 2026 |
 | Squirrel | `src/models/recipes/squirrel.ts` | November 2026 |
+| Strawberry | `src/models/recipes/strawberry.ts` | November 2026 |
 
 ## Other models in the gallery
 
