@@ -2565,4 +2565,20 @@ export const ja: Record<string, string> = {
     "角を少し開き、折り目に沿って先を中へ押し込みます。紙が裏返って角の中に入ります。層をまた閉じて、平らにします。",
   "Open it out: the sink left a small square of creases round the middle of the sheet.":
     "開きます。沈め折りで、紙の中心のまわりに小さな正方形の折り目ができています。",
+  "Fold out a back flipper":
+    "うしろのひれを折り出す",
+  "Fold the loose point at the top left down and out, so its tip sticks out past the side, low down.":
+    "左上のはなれている先を外側に折り下げて、先が下のほうで横からとび出るようにします。",
+  "Fold out the other back flipper":
+    "もう一つのうしろのひれを折り出す",
+  "Fold out a front flipper":
+    "前のひれを折り出す",
+  "Fold the loose point at the top left down and out, so its tip sticks out past the side.":
+    "左上のはなれている先を外側に折り下げて、先が横からとび出るようにします。",
+  "Fold out the other front flipper":
+    "もう一つの前のひれを折り出す",
+  "Draw the eyes and shell":
+    "目とこうらをかく",
+  "Draw two eyes on the head, and a pattern of plates on the shell. Done!":
+    "頭に目を二つ、こうらにもようをかきます。できあがり！",
 };

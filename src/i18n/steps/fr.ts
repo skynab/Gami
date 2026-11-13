@@ -2565,4 +2565,20 @@ export const fr: Record<string, string> = {
     "Ouvrez un peu la pointe et enfoncez son bout à l’intérieur le long du pli, pour que le papier se retourne dans la pointe. Refermez les couches et aplatissez.",
   "Open it out: the sink left a small square of creases round the middle of the sheet.":
     "Dépliez : le pli enfoncé a laissé un petit carré de plis autour du centre de la feuille.",
+  "Fold out a back flipper":
+    "Plier une nageoire arrière",
+  "Fold the loose point at the top left down and out, so its tip sticks out past the side, low down.":
+    "Rabats vers le bas et l’extérieur la pointe libre en haut à gauche, pour qu’elle dépasse du côté, tout en bas.",
+  "Fold out the other back flipper":
+    "Plier l’autre nageoire arrière",
+  "Fold out a front flipper":
+    "Plier une nageoire avant",
+  "Fold the loose point at the top left down and out, so its tip sticks out past the side.":
+    "Rabats vers le bas et l’extérieur la pointe libre en haut à gauche, pour qu’elle dépasse du côté.",
+  "Fold out the other front flipper":
+    "Plier l’autre nageoire avant",
+  "Draw the eyes and shell":
+    "Dessiner les yeux et la carapace",
+  "Draw two eyes on the head, and a pattern of plates on the shell. Done!":
+    "Dessine deux yeux sur la tête et un motif d’écailles sur la carapace. C’est fini !",
 };

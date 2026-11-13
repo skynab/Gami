@@ -211,6 +211,7 @@ export const fr: Messages = {
     dice: { title: 'Dé', blurb: 'Six cartes blanches emboîtées en un cube, rabats cachés à l’intérieur, points dessinés. Sans colle.' },
     kusudama: { title: 'Kusudama de fleurs', blurb: 'Soixante pétales collés en douze fleurs, les fleurs en une boule, et une boucle pour la suspendre.' },
     chrysanthemum: { title: 'Kusudama chrysanthème', blurb: 'Six modules en moulin collés coin à coin en une boule, leurs bras ouverts en pétales.' },
+    turtle: { title: 'Tortue', blurb: 'Une tortue vue de dessus, nageoires écartées, sa carapace dessinée, à partir de la base de la bombe à eau.' },
   },
   notFound: {
     title: 'Cette page a été repliée',

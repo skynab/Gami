@@ -22,7 +22,7 @@ describe('catalog', () => {
     expect(filterModels(MODELS, { category: 'modular' }).map((m) => m.id)).toEqual(['ninja-star', 'rainbow-chain', 'business-card-cube', 'dice', 'kusudama', 'chrysanthemum']);
     expect(filterModels(MODELS, { level: 'easy', category: 'animal' }).map((m) => m.id)).toEqual([
       'dog-face', 'cat-face', 'cicada', 'jumping-frog', 'fox', 'swan', 'penguin', 'whale', 'pajarita', 'fish', 'peacock', 'cute-cat', 'bat',
-      'bull', 't-rex',
+      'bull', 't-rex', 'turtle',
     ]);
     expect(filterModels(MODELS, {})).toHaveLength(MODELS.length);
   });

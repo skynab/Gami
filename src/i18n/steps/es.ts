@@ -2565,4 +2565,20 @@ export const es: Record<string, string> = {
     "Abre un poco la punta y empuja su extremo hacia dentro siguiendo el pliegue, para que el papel se dé la vuelta hacia el interior de la punta. Vuelve a cerrar las capas y aplánala.",
   "Open it out: the sink left a small square of creases round the middle of the sheet.":
     "Ábrelo: el pliegue hundido ha dejado un pequeño cuadrado de pliegues alrededor del centro de la hoja.",
+  "Fold out a back flipper":
+    "Dobla una aleta trasera",
+  "Fold the loose point at the top left down and out, so its tip sticks out past the side, low down.":
+    "Dobla hacia abajo y hacia fuera la punta suelta de arriba a la izquierda, para que asome por el lado, abajo.",
+  "Fold out the other back flipper":
+    "Dobla la otra aleta trasera",
+  "Fold out a front flipper":
+    "Dobla una aleta delantera",
+  "Fold the loose point at the top left down and out, so its tip sticks out past the side.":
+    "Dobla hacia abajo y hacia fuera la punta suelta de arriba a la izquierda, para que asome por el lado.",
+  "Fold out the other front flipper":
+    "Dobla la otra aleta delantera",
+  "Draw the eyes and shell":
+    "Dibuja los ojos y el caparazón",
+  "Draw two eyes on the head, and a pattern of plates on the shell. Done!":
+    "Dibuja dos ojos en la cabeza y un dibujo de placas en el caparazón. ¡Listo!",
 };

@@ -211,6 +211,7 @@ export const es: Messages = {
     dice: { title: 'Dado', blurb: 'Seis tarjetas blancas encajadas en un cubo, con las solapas escondidas dentro y los puntos dibujados. Sin pegamento.' },
     kusudama: { title: 'Kusudama de flores', blurb: 'Sesenta pétalos pegados en doce flores, las flores en una bola, y una anilla para colgarla.' },
     chrysanthemum: { title: 'Kusudama crisantemo', blurb: 'Seis módulos de molinillo pegados esquina con esquina en una bola, con los brazos abiertos como pétalos.' },
+    turtle: { title: 'Tortuga', blurb: 'Una tortuga vista desde arriba, con las aletas abiertas y el caparazón dibujado, desde la base de bomba de agua.' },
   },
   notFound: {
     title: 'Esta página se ha plegado y ha desaparecido',

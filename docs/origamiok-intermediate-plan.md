@@ -51,19 +51,13 @@ Easiest and clearest first. Each phase can ship alone, and the models within a p
 | 2. **Sunflower** | Sunflower | Gami's own, flat, no scissors or glue. The head is a square with its corners folded to the middle and back out into eight petals, the middle coloured in with the pen for seeds. Check it against `chrysanthemum`, `rose` and `lotus` first so it isn't one of them in yellow. The stem is a second sheet folded thin (as the kunai's handle), with a leaf folded out of each side, and the head tucked or taped on top. OrigamiOK's rolled, glued stem isn't needed. | Low–medium |
 | 3. **Flat animals** | Lizard, squirrel | Both Gami's own, both lying flat. The **lizard** is a long body with four points for legs (a fish base or a narrowed bird base gives four), each foot a crimp, the tail a narrowed point, eyes drawn. The **squirrel** is a kite body folded in half, its big tail a reverse fold up over its back (as the fox's tail and the seal's), the ears a small squash. Standing it up, as OrigamiOK does, is a bonus with `shape`. Long reverse-folded flaps graze: try them early, and shape the steps round what plays cleanly. | Medium |
 | 4. **Strawberry** | Strawberry | Gami's own, 3D, two sheets. The berry is the water bomb base wrapped narrower (as the 3D tulip's blossom), blown up and led by guides into a rounded cone rather than a box (`docs/bending-plan.md`): this is the hard part, as the guides have so far led to boxes. The calyx is a small green square folded into a star (corners to the middle, points out), set on top and taped. Seeds drawn with the pen. If the cone can't be reached, stop at the tulip's box shape and leave it out until it can. | Medium–high |
-| — | Fox, creeper | Waiting on a decision. | — |
+| 5. **3D fox** | Fox (`fox-3d`) | Gami's own, standing up beside Okuda's flat sitting fox (decided 13 November). Folded flat first, as the squirrel, then stood up with `shape`: the body opened a little along its back fold so it stands on its legs, the face pressed out, the tail raised. Make it differ from the squirrel in the head (pointed ears and snout, as the flat fox's) and a long low tail rather than one curled over the back. | Medium–high |
+
+Left out (13 November): the **Minecraft creeper**. The creeper is Mojang's character, and the model is its face
+drawn on a block; Gami's open-designs rule turns away models that proprietary, as it did the named modulars.
 
 ## Open questions
 
-- **Fox.** OrigamiOK's is Hoàng Tiến Quyết's, so it can't be followed. Gami already has a sitting fox (Okuda's,
-  flat, 15 steps). Either leave it at that, or add a Gami's own fox that stands up in 3D (pressed-out face, raised
-  tail) to sit beside the flat one. Leaning towards leaving it: the new one would mostly repeat the squirrel's
-  folds.
-- **Creeper.** The creeper is Mojang's character; a model called "Minecraft creeper" with its face drawn on is
-  their character, whoever designed the folds. Gami's open-designs rule has already turned away models that were
-  "too proprietary" (the named modulars, 29 October). Choices: leave it out; or a Gami's own blocky figure (a
-  square head unit on a box body with four stubby feet, from the business card cube's units) with a face of its
-  own, under a name of its own. Leaning towards leaving it out.
 - **The New cutoff.** `NEW_SINCE` is `2026-10-28`. When phase 1 ships, move it forward so only this batch shows
   as New, or leave it.
 
@@ -71,8 +65,9 @@ Easiest and clearest first. Each phase can ship alone, and the models within a p
 
 | Phase | Status |
 |---|---|
-| 1. Turtle | Not started |
+| 1. Turtle | Done (13 November), Gami's own: no traditional turtle's order of folds could be checked against OrigamiOK's. A water bomb base narrowed on each side as the water bomb is (corners up, corners in) into a tall six-sided shell, the loose points folded down and out as flippers rather than tucked: the back side's at 30°, low down, the front side's at 55°, high up. The base's top point is the head; eyes and the shell's plates are drawn with the pen. The flaps are two layers, so the paper's other colour never shows. Pen lines are split where the paper on top changes (`onTop` in `face.ts`), as a mark only draws on the layer under its first point. |
 | 2. Sunflower | Not started |
 | 3. Flat animals | Not started |
 | 4. Strawberry | Not started |
-| Fox, creeper | Waiting on a decision |
+| 5. 3D fox | Not started |
+| Creeper | Left out |

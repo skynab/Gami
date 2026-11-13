@@ -39,6 +39,7 @@ site's source code, or any other model in the gallery.
 | Corkscrew | `src/models/recipes/corkscrew.ts` | October 2026 |
 | Flying saucer | `src/models/recipes/flying-saucer.ts` | October 2026 |
 | Chrysanthemum kusudama | `src/models/recipes/chrysanthemum.ts` | October 2026 |
+| Turtle | `src/models/recipes/turtle.ts` | November 2026 |
 
 ## Other models in the gallery
 

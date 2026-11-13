@@ -1,3 +1,4 @@
+import type { Recipe } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 
 /** What a drawn face has: closed (smiling) or open eyes, and whether it gets a nose and whiskers. */
@@ -63,6 +64,39 @@ export function halves(line: Vec2[], mid: number): Vec2[][] {
       const z = a[1] + t * (b[1] - a[1]);
       pieces.at(-1)!.push([mid + side(a) * gap, z]);
       pieces.push([[mid + side(b) * gap, z]]);
+    }
+    pieces.at(-1)!.push(b);
+  }
+  return pieces.filter((p) => p.length > 1);
+}
+
+/**
+ * A line split wherever the paper on top changes under it (a crease, a flap's edge), each piece ending just short
+ * of the change, so each is drawn on the paper it lies on. For marks that cross more than one flap.
+ */
+export function onTop(r: Recipe, line: Vec2[]): Vec2[][] {
+  const gap = 1e-3;
+  const top = (p: Vec2) => r.stackAt(p)[0]?.join(',') ?? '';
+  const at = (a: Vec2, b: Vec2, t: number): Vec2 => [a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1])];
+  const pieces: Vec2[][] = [[line[0]]];
+  for (let i = 1; i < line.length; i++) {
+    const [a, b] = [line[i - 1], line[i]];
+    const len = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    // Walked in short steps, so a thin face between a and b isn't missed; each change found by halving.
+    const n = Math.max(1, Math.ceil(len / 0.005));
+    for (let k = 1; k <= n; k++) {
+      const [t0, t1] = [(k - 1) / n, k / n];
+      if (top(at(a, b, t0)) !== top(at(a, b, t1))) {
+        let [lo, hi] = [t0, t1];
+        for (let j = 0; j < 30; j++) {
+          const mid = (lo + hi) / 2;
+          if (top(at(a, b, mid)) === top(at(a, b, t0))) lo = mid;
+          else hi = mid;
+        }
+        const g = gap / len;
+        pieces.at(-1)!.push(at(a, b, lo - g));
+        pieces.push([at(a, b, hi + g)]);
+      }
     }
     pieces.at(-1)!.push(b);
   }
