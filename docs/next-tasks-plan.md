@@ -109,14 +109,18 @@ more (the frog's tightened from 0.013 to 0.011):
 | Boat | 0.0099 | The second squash (step 13), its twelve layers grazing as they turn: about a hundred pairs of faces, none deeper. Pulling the small diamond out into a boat was the deepest (0.019) until 12 November, when the small diamond was folded right side out and the pull played as rigid paper folds it (0.003; bending plan, step 7). Before that the second squash tore by 0.36 halfway (the back wall's halves apart at the gunwale's middle) and grazed 0.032: its paper moves as four panels about the small hat's top, a squash rigid paper folds with one freedom, but it starts and ends flat, where its two ways of folding meet, and folding in step took the other way. Fixed 10 November: when folding in step fails, the animator works such a squash out as a spherical four-bar (`vertexFold` in `animate.ts`), one panel turning steadily and the next as far as keeps the fourth's two creases at their angle, and keeps it over paper tearing apart. It stays joined (0.008, the stack's thickness) and grazes 0.008. |
 | Swan | 0.013 | Pulling up the neck. With rigid paper its body is a closed tube (milestone 13); likely a dead end without bending. |
 | Frog | 0.0106 | Turning out a back leg (step 45); 0.0094 lifting the other front leg against the other front quarter (44) and bending the front legs (47, 48). Landing the leg's layers one after another grazes 0.0086 there, but needs the whole step joined up to show it doesn't tear, which more than doubled the frog's time (tried 11 November). |
-| Lily | 0.0085 | Its squash-and-petal folds (steps 22, 25, 28), joined up all the way. |
+| Lily | 0.0085 | Its squash-and-petal folds (steps 22, 25, 28), joined up all the way. Step 25 deepest; 22 at 0.0075, 28 at 0.0068, 31 at 0.0061. |
 | Whale | 0.0087 | Opening the fins out in 3D. Both fins lie in pockets (10 November): the top one under the body's top layer, the bottom one between its bottom layer and the layers above, so opening either way passes it through paper; the bottom one, rising, passes the whole body near its crease. Bent down instead (9 November), either fin goes deeper (0.012, 0.014) and below the table. A recipe that freed the fins first would be needed. |
-| Shallow masu lid | 0.0080 | Raising the walls (step 30): riding layers sit a little off the faces they ride on. |
+| Shallow masu lid | 0.0072 | Raising the walls (step 30): riding layers sit a little off the faces they ride on. Measured 12 November: about s = 0.6–0.75, faces by the corners (on the sheet near (±0.33, ±0.02) against (±0.14, ±0.44)). |
 | Crane | 0.0076 | Reverse-folding the neck (step 27); the tail 0.0056 and head 0.0050. The point turns as one and settles in between the flap's halves (see "Reverse folds' animation" under Smaller). |
 | Fox | 0.0070 | Folding the tail in (step 14), a reverse fold as the crane's. |
 | Dolphin | 0.0071 | Opening the fins out in 3D: as the whale. |
 | ✅ Seal | 0.0048 | Off the list (11 November). Its tail's reverse fold (step 18) grazed 0.0050: layers may now land one after another over up to 0.8 of a step, not 0.4 (`LANDS` in `animate.ts`), and over 0.6 the tail grazes 0.0048. No other model goes deeper, or comes further apart than 0.01; working out every model's steps takes about 3% longer. |
 | ✅ King bee | 0 | Off the list (10 November). The first wing is turned right over (by the body's bend and its own), and `shape` lifts paper turned right over so its layers stack upside down. The aileron, turned a little further, wasn't turned right over, so it was lifted along its own slanting way up instead: 49 layers down and to the side, 3 cm off its hinge, and through the wingtip. Paper turned further on paper turned right over is now lifted as that paper is. The first wingtips of the king bee and the corkscrew were off their wings the same way (3.5 and 1.4 mm). |
+
+Tried 12 November on the frog, lily and shallow lid: landing layers over up to 0.9 of a step as well (`LANDS`) changes
+none of their depths, and the frog then comes apart by 0.011, over `TEAR`. Each still on the list needs its own look at
+the step, as the seal's and the king bee's had; a wider landing spread doesn't take them off.
 
 ### 2b. Paper coming apart while a step plays
 
@@ -230,6 +234,13 @@ The frog now grazes a little deeper, 0.0106 at most (step 45) against 0.0094, st
   are as before. Traced on the bird's tail, the four layers of the leg judge their halves rightly, so it's the
   paper round them (the wings) that won't let the tips into the middle with rigid layers. Worth a look: whether
   those folds are better made as something other than a plain `inside` crease.
+
+  Looked at 12 November: kept as they are. Logging each stacking `collapse` tries shows all three folds fail every
+  stacking about the middle, keeping the order of all the paper moving together, only of paper still hinged
+  together, or only of the paper staying put. So it isn't one order that's too strict: no flat stacking has
+  the points in the middle. Something other than a plain `inside` crease would mean teaching a different fold: the flapping bird's
+  tail and neck, and the swan's head, are inside reverse folds as people fold them. The tulip's stem is pulled
+  out, which also ends as an inside reverse fold.
 - ✅ **The unit tests took seven and a half minutes** (444 s on four cores, 11 November), nearly all of it one file:
   `models.test.ts` built every model (136 s) and checked each in turn (308 s) in one test worker, while
   `guides.test.ts` built them all again to work out every step's guides (185 s), and `collisions.test.ts` and
@@ -241,8 +252,15 @@ The frog now grazes a little deeper, 0.0106 at most (step 45) against 0.0094, st
   The kusudama alone takes 84 s of checks, so its shard sets the pace; three or six shards would put the
   kusudama, rainbow chain, balloon and cup in one.
 - The fold engine's error messages are still English only (milestone 9 left them).
-- The recipes make named folds their own way; they could call `src/fold/presets.ts` (through `Recipe.preset`, since 11 November, as the lesson's open sink does), which the tests show gives
-  the same paper.
+- ✅ **Recipes making named folds with the presets** (12 November), where a preset makes the same fold. The bird
+  base's petal folds (`squareBaseFlaps` in `bird-base.ts`) are now `Recipe.preset` picked at the flap's free corner,
+  in the crane, crow, flapping bird and both lessons. Their paper is identical; only each step's recorded collapse
+  differs, plus noise in the 16th decimal of later steps' points. A search (each preset, picked at every corner of the
+  top layer, against every collapse in the gallery) found no other fold a preset makes the same way. The frog
+  base's squashes open an unfolded top layer, which the squash preset doesn't (it wants a flap folded over at the
+  corner). The lily's folds are a squash and a petal in one step. The boat's and fox's squashes, and the
+  reverse folds, have no preset, and the crimps, pleats and swivels were left as they are (the swivels already go
+  through `Recipe.swivel`, which the swivel preset matches).
 - ✅ **CI's actions on Node 24** (12 November): `checkout`, `setup-node` and `upload-artifact` moved from `@v4`
   (built for Node 20, which GitHub has deprecated) to `@v7`, and Pages' `upload-pages-artifact@v3` and
   `deploy-pages@v4` to `@v5`. None of the breaking changes on the way reach these workflows: they don't use
