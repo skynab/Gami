@@ -5,22 +5,23 @@ import { bendsOpening, openingGuides, STAGES } from './boat-opening';
 /**
  * The traditional paper boat, from an A4 sheet, following origami.me/traditional-boat: the newspaper hat squashed
  * into a diamond twice, then pulled apart into a boat lying flat, as origami.me's last diagram shows it, and opened
- * out to stand on its keel. The opening is a bend (see docs/bending-plan.md, step 7): the walls lean out, and the
- * corner flaps folded in at the bow and stern bend a little, as they do in your hands (./boat-opening.ts).
+ * out to stand on its keel. The opening is a bend (see docs/bending-plan.md, step 7), though nothing has to: the
+ * walls lean out and their ends turn in to meet at the bow and stern, every face rigid (./boat-opening.ts).
  */
 export function boat() {
   const r = smallDiamond();
   // Pulled apart at the top, the diamond flattens into a boat lying on its side, its keel the diamond's other
-  // diagonal (from (−¼, ±¼) to (¼, ±¼) on the sheet). Each wall's bottom half folds up about the keel, P's in front
-  // (the quarter v < 0, on top) and S's behind; the corner flaps fold up inside, between the sails; and the creases
-  // made by folding the bottom points up open out, so the bow and stern pieces swing out, ½ along the keel either
-  // way. Paper does it in one pull, bending as it goes; here it's one collapse. Its pieces at each end turn round,
-  // so the crease joining P's end to its corner flap turns inside out on the way.
+  // diagonal (from (−¼, ±¼) to (¼, ±¼) on the sheet). The bottom half of everything folds up about the keel: S's
+  // wall (the quarter v > 0, on top) in front, and P's behind, with the corner flaps, which lie on P's side of the
+  // sails all along and so line its wall. And the creases made by folding the bottom points up open out, so the
+  // bow and stern pieces swing out, ½ along the keel either way. Rigid paper does it in one move, as it does in
+  // your hands: as the walls fold up, each end piece turns about its crease with its wall so its point stays in
+  // the sails' plane, where the two walls' ends meet along the stem.
   const keelEnd = table(...r.where(paper(-0.25, -0.25)));
   const otherEnd = table(...r.where(paper(0.25, -0.25)));
   const bottom = table(...r.where(paper(0, -0.5)));
-  const quarter = ([u, v]: Vec2) => Math.abs(u) < Math.abs(v) && Math.abs(u) + Math.abs(v) < 0.5;
-  const flap = ([u, v]: Vec2) => Math.abs(v) < Math.abs(u) && Math.abs(u) + Math.abs(v) < 0.5;
+  const upper = ([u, v]: Vec2) => Math.abs(u) + Math.abs(v) < 0.5;
+  const starboard = ([u, v]: Vec2) => v > 0 && Math.abs(u) < Math.abs(v);
   r.collapse(
     {
       title: 'Pull it out into a boat',
@@ -28,9 +29,8 @@ export function boat() {
       kind: 'squash',
     },
     [
-      { through: [keelEnd, otherEnd], kind: 'valley', only: (c) => quarter(c) && c[1] < 0 },
-      { through: [keelEnd, otherEnd], kind: 'mountain', only: (c) => quarter(c) && c[1] > 0 },
-      { through: [keelEnd, otherEnd], kind: 'inside', only: flap },
+      { through: [keelEnd, otherEnd], kind: 'valley', only: (c) => upper(c) && starboard(c) },
+      { through: [keelEnd, otherEnd], kind: 'mountain', only: (c) => upper(c) && !starboard(c) },
       { through: [keelEnd, bottom], kind: 'flat' },
       { through: [otherEnd, bottom], kind: 'flat' },
     ],
@@ -107,12 +107,18 @@ export function smallDiamond() {
     // are the corner flaps' middle creases and the gunwales (each brim on its wall's lower half), which belong to
     // one face of the hat, so they stay folded. Unfolding them too stacked the small diamond in a way paper
     // can't be (no stacking keeps the layers' order, so the solver kept none), with the halves interlocked.
+    //
+    // Each face of the hat folds in half with its outside out, as the first squash's did, so the pocket stays
+    // inside: the face underneath (u < 0) as a valley seen from above, the one on top as a mountain. The points
+    // folded up in steps 10 and 12 end on the outside, a slit between them down each face. Folded the other way,
+    // the pocket's walls came out on top and the points were shut inside, hooked round the other half's layers,
+    // and no way of pulling it out into a boat kept paper from passing through paper.
     const joinsFrontToBack = ([u, v]: Vec2) => Math.abs(v) > 0.5 || Math.abs(u) <= Math.min(Math.abs(v), 0.5 - Math.abs(v));
     r.collapse(
       { title: 'Open it into a diamond again', text: 'Open the bottom and push the two sides together again, flattening a smaller diamond.', kind: 'squash' },
       [
-        { through: [table(...A), table(...mid)], kind: 'mountain', only: ([u]) => u < 0 },
-        { through: [table(...A), table(...mid)], kind: 'valley', only: ([u]) => u > 0 },
+        { through: [table(...A), table(...mid)], kind: 'valley', only: ([u]) => u < 0 },
+        { through: [table(...A), table(...mid)], kind: 'mountain', only: ([u]) => u > 0 },
         { through: [table(...A), table(...F2)], kind: 'flat', only: joinsFrontToBack },
         { through: [table(...A), table(...K2)], kind: 'flat', only: joinsFrontToBack },
       ],

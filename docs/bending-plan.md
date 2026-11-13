@@ -488,6 +488,40 @@ is behind its guides stage by stage, how deep paper goes through paper, and its 
      0.33 cm through paper halfway, a flap through the brim on its wall near the keel's end (the balloon 0.41, the
      cup 0.47); the file is 257 KB. Fold lines along the flaps' fold (`lines`)
      made the solve blow up (stretch in the thousands of percent), so it's left to the bending paper.
+   - **The small diamond, right side out** (12 November 2026). Pulling the diamond out into the boat still passed
+     paper through paper by 0.019, across some 120 pairs of faces: every piece made its own way. The cause was two
+     steps back. The second squash folded each face of the small hat with its outside in, so the pocket's walls came
+     out on top and the points folded up in steps 10 and 12 were shut inside, each hooked round the other half's
+     layers (the "hooks" above). A squash keeps the outside out, as the first one does: folded that way
+     (`src/models/recipes/boat.ts`, the same creases the other way up), the points lie on the outside with a slit
+     between them down each face, as on a paper boat, and the corner flaps lie on P's side of the sails all along.
+     From there the pull is one rigid move, the last step's mechanism run from its far end: as the walls fold up
+     about the keel, each end piece turns about the crease it shares with its wall so its point stays in the sails'
+     plane, where P's end and S's meet along the stem (with the walls at φ from the sails, the stem is at
+     atan2(1, cos φ) from the keel: 135° in the diamond, 45° in the flat boat). The flat boat stacks as paper does:
+     S's wall, its brim, the two sails, the flaps' upper halves, then P's brim, the flaps' lower halves and P's wall,
+     the brims inside the hull, each one's corner round the stem. It grazes 0.003 and parts 0.006. Three things in
+     the engine kept it from being found:
+     - *Which way round a flap opens* (`hingesFor` in `animate.ts`). A half turn goes the way that brings the face
+       down on the side of its neighbour it ends up on. A flap opening out flat ends beside its neighbour, not on
+       it, so that said nothing, and half the boat's end pieces went the wrong way round. An opening flap now lifts
+       off the side it lay on.
+     - *Layers' gaps, folding in step* (`inStep`). Points of paper shared by stacked layers are a few gaps apart at
+       the step's ends, and those gaps were blended as they lie on the table, though they turn with the paper. A
+       twelve-layer stack turning over was held back, then hurried through, and thrown out as jumping. Each point
+       is now allowed as far off as its layers are apart at the ends. That lets folding in step take the small
+       diamond's other way of folding again (0.035 deep), so a squash about one point is worked out as a
+       four-bar whenever that cuts less deep; and a step isn't staged if staging cuts much deeper at its deepest
+       (twice as deep, and by more than a few layers).
+     - *Flaps turning opposite ways about one line* (`collapse.ts`). The boat's two walls move alike on the table
+       (mirrored in the keel) but one goes over and one under, so their layers swap order among themselves, not
+       with each other's; paper lying on such a flap goes its way (each brim with its wall), and paper riding on
+       one folded behind lands under what it comes to lie on. Before, no stacking kept the layers' order, and the
+       brims ended outside the hull.
+     The opening (`boat-opening.ts`) needs no bending now: the flaps' halves go with the faces they lie on, the
+     sail and P's wall and its ends, every face rigid. A bend must have some paper free, so the flaps' halves on
+     the sail are, guided like the rest: 612 triangles, every frame within 0.3%, 1.2% as it plays, at most 0.5 cm
+     behind its guides, 0.19 cm through itself; the file is 253 KB. No other model's file changed; the boat's first squash grazes 0.004 (0.007 before).
 
    **The paper balloon** (October 2026). The gallery's water bomb ends flat, with "blow into the hole" in words;
    blowing it up is a bend of its own (Kids Web Japan's balloon, the same model, ends as a rounded cube with a crease

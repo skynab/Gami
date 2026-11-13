@@ -221,7 +221,8 @@ noted when it was written, and the model was folded from the common traditional 
   listed yet are in `docs/origami-me-candidates.md`.
 - **Boat** (checked 9 November 2026). Gami follows origami.me's order of folds, from an A4 sheet. Its last move,
   pulling the small diamond's top points apart, is shown as two steps: pulled out into a boat lying flat (as
-  origami.me's last diagram shows it), then opened a little and stood up, the paper bending at the bow and stern.
+  origami.me's last diagram shows it), then opened a little and stood up. (Since 12 November 2026 no paper bends
+  there: see `docs/bending-plan.md`, step 7.)
 - **Fan** (checked 7 November 2026). Gami follows origami.me's order of folds, pleated from the back so the strip
   beside the flap ends in the middle of the stack, but leaves the flap out where origami.me closes it towards
   the middle: its two layers hang from the two middle layers, so closed over either face it would hold half the

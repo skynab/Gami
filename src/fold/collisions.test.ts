@@ -5,6 +5,7 @@ import { clearanceDepth, crossDepth } from './cross3d';
 import { fromFoldFile, toFoldFile } from './fold-format';
 import { paper, Recipe } from './recipe';
 import { folds as basics } from '../models/recipes/basics';
+import { boat } from '../models/recipes/boat';
 import { bulldogDart } from '../models/recipes/bulldog-dart';
 import { crane } from '../models/recipes/crane';
 import { cup } from '../models/recipes/cup';
@@ -31,7 +32,7 @@ const square = (y: number): Vec3[] => [[-1, y, -1], [1, y, -1], [1, y, 1], [-1, 
 const deep = (model: Parameters<typeof crossings>[0]) => crossings(model).filter((c) => c.depth > 0.005);
 // Only the models these tests look at, built before they run: building every model takes minutes.
 const models = [
-  basics, bulldogDart, crane, cup, fish, fortuneTeller, fox, glider, heart, jumpingFrog, kingBee, lily, navyPlane,
+  basics, boat, bulldogDart, crane, cup, fish, fortuneTeller, fox, glider, heart, jumpingFrog, kingBee, lily, navyPlane,
   ninjaStar, paperPlane, samuraiHelmet, sword, tulip,
 ].map((make) => make());
 const byId = (id: string) => models.find((m) => m.id === id)!;
@@ -141,6 +142,30 @@ describe('paper passing through paper', () => {
     expect(Math.max(0, ...opening.map((c) => c.depth))).toBeLessThan(0.002);
     // And nothing else in the whole lily goes deeper than a few layers.
     expect(deep(lily).filter((c) => lily.steps[c.step - 1].kind !== 'petal')).toEqual([]);
+  });
+
+  it('pulls the boat out of its small diamond as rigid paper folds it', () => {
+    const boat = byId('boat');
+    const pull = boat.steps.findIndex((s) => s.title === 'Pull it out into a boat') + 1;
+    // Every piece once made its own way, some 120 pairs of faces passing through each other by up to 0.019. The
+    // walls fold up about the keel as each end turns about its crease, the creases in step, and the paper stays
+    // joined.
+    expect(stepTransition(boat, pull).hinges?.turns).toBeDefined();
+    expect(deep(boat).filter((c) => c.step === pull)).toEqual([]);
+    // The small diamond is right side out: the points folded up lie outside, P's underneath and S's on top.
+    const diamond = toFlat(boat.steps[pull - 2].frame);
+    const at = (faces: typeof diamond, q: Vec2) => faces.find((f) => Math.hypot(centre(f.paper)[0] - q[0], centre(f.paper)[1] - q[1]) < 0.02)!;
+    const layers = diamond.map((f) => f.layer);
+    expect(at(diamond, [-0.25, -0.417]).layer).toBe(Math.min(...layers));
+    expect(at(diamond, [-0.25, 0.417]).layer).toBe(Math.max(...layers));
+    // The flat boat stacks as paper does: each wall outside its brim, and P's brim, like the corner flap it's
+    // folded over, on P's side of the sails.
+    const flat = toFlat(boat.steps[pull - 1].frame);
+    const [wallP, brimP, flapLow, flapHigh, sailP, sailS, brimS, wallS] = (
+      [[-0.083, -0.333], [-0.069, -0.638], [-0.333, 0.083], [-0.167, 0.083], [-0.083, -0.167], [-0.083, 0.167], [-0.069, 0.638], [-0.083, 0.333]] as Vec2[]
+    ).map((q) => at(flat, q).layer);
+    const up = [wallP, flapLow, brimP, flapHigh, sailP, sailS, brimS, wallS];
+    expect(up).toEqual([...up].sort((a, b) => a - b));
   });
 
   it('unfolds several folds one at a time, and keeps that in .fold files', () => {

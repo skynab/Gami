@@ -11,20 +11,20 @@ import type { FoldFrame, Vec2, Vec3 } from '../../fold/types';
  *
  * Flat, the boat lies on its side. Its keel runs between the small diamond's side corners, (±¼, ±¼) on the sheet. The
  * sail's tip (the sheet's middle) and the gunwales' middles (0, ±½) are ¼ above the keel, and the bow and stern
- * points (the hat's corners) are at that height, ½ along it either way. From the front: P's wall (the quarter v < 0,
- * between its gunwale and the keel), the sails (the quarters' triangles past the keel), the corner flaps folded in
- * between them, and S's wall at the back. The brims lie on the walls' outsides.
+ * points (the hat's corners) are at that height, ½ along it either way. From one side to the other: P's wall (the
+ * quarter v < 0, between its gunwale and the keel), the corner flaps, folded in half along the keel with their lower
+ * halves lining P's wall and their upper halves on its sail, the two sails (the quarters' triangles past the keel),
+ * and S's wall. The brims line the walls inside the hull, each one's corner folded round the stem onto the other
+ * wall's end.
  *
  * Opening it, each wall's middle triangle (from the keel up to the gunwale's middle) leans out by `LEAN` about the
  * keel. Each end triangle (the keel's end, the gunwale's middle and the bow point) turns with it, then about the
  * crease it shares with the middle until its point is back in the middle plane, where P's and S's meet (at 30°, 0.481
- * along and 0.267 up, every length kept). The sails and the flaps' triangles past the keel stay in the middle plane.
- * The flaps' lower triangles (the keel's end, the sail's tip and the bow point) can't: their raw edge is half the
- * sheet wide, 4% longer than the sail's tip is from the bow point by then. So each folds a little along the line from
- * the keel's end to its raw edge's middle: its bow half lies against its wall's end, and its other half spans from
- * there to the sail's tip, the paper bending (only these triangles bend; the rest stays rigid). The brims go with the
- * faces they lie on. All the while the boat stands up about its keel, a quarter turn, and swings round to lie along
- * the table's x.
+ * along and 0.267 up, every length kept). The sails and the flaps' halves on them stay in the middle plane. All the
+ * rest goes with the face it lies on: the flaps' other halves with P's wall, their corners with its ends, the brims
+ * with their walls. Every face stays rigid, as it does in your hands. (It's the way the small diamond is pulled out
+ * into the boat, run a little way back.) All the while the boat stands up about its keel, a quarter turn, and swings
+ * round to lie along the table's x.
  */
 
 /** How far each wall leans out from the middle plane, finished. */
@@ -83,25 +83,13 @@ function endTurn(phi: number): number {
 const wall = (p: V, phi: number) => turn(p, [0, 0, 0], KEEL, phi);
 const end = (p: V, phi: number) => turn(wall(p, phi), KEEL_END, unit(sub(gunwaleMiddle(phi), KEEL_END)), endTurn(phi));
 
-/**
- * A flap's lower triangle (the keel's end at (¼, 0), the sail's tip at (0, ¼), the bow point at (½, ¼), flat): past
- * the line from the keel's end to its raw edge's middle M (along = ¼) it lies against the wall's end; short of it,
- * it spans from that line to the sail's tip.
- */
-function flap(p: V, phi: number): V {
-  if (p[0] >= 0.25) return end(p, phi);
-  const [keelEnd, middle, tip]: V[] = [[0.25, 0, p[2]], end([0.25, 0.25, p[2]], phi), [0, 0.25, p[2]]];
-  const wTip = (0.25 - p[0]) / 0.25;
-  const wMiddle = p[1] / 0.25 - wTip;
-  return add(add(mul(keelEnd, 1 - wTip - wMiddle), mul(middle, wMiddle)), mul(tip, wTip));
-}
-
-type Part = 'sail' | 'wall' | 'end' | 'flap';
+type Part = 'sail' | 'wall' | 'end';
 
 /**
  * Which part of the boat paper goes with (by a face's centre on the sheet), and on which side: 1 for P's wall
- * (v < 0), −1 for S's. A brim's middle piece lies on its wall's middle triangle, its long piece on its wall's end, and
- * its corner, folded round the stem, on the other wall's end.
+ * (v < 0), −1 for S's. The corner flaps lie on P's side: the half of each past the keel on the sail, the rest on P's
+ * wall, its corner on the wall's end. A brim's middle piece lies on its wall's middle triangle, its long piece on its
+ * wall's end, and its corner, folded round the stem, on the other wall's end.
  */
 function partOf([u, v]: Vec2): { part: Part; side: number } {
   const [au, av] = [Math.abs(u), Math.abs(v)];
@@ -115,17 +103,21 @@ function partOf([u, v]: Vec2): { part: Part; side: number } {
     if (av < 0.25) return { part: 'sail', side };
     return { part: au + av < 0.5 ? 'wall' : 'end', side };
   }
-  return { part: au + av < 0.5 ? 'sail' : 'flap', side };
+  if (au < 0.25) return { part: 'sail', side: 1 };
+  return { part: au + av < 0.5 ? 'wall' : 'end', side: 1 };
 }
 
-/** The paper that bends as the boat opens: the flaps' lower triangles. */
-export const bendsOpening = (centre: Vec2) => partOf(centre).part === 'flap';
+/**
+ * The paper left free to bend as the boat opens. None needs to, but a bend must have some: so the paper that moves
+ * least, the corner flaps' halves lying on the sail. Guided like the rest, they stay flat.
+ */
+export const bendsOpening = ([u, v]: Vec2) => Math.abs(v) < Math.abs(u) && Math.abs(u) < 0.25;
 
 /** Where a point of the flat boat (in the boat's frame) goes with the walls leaning out by φ. */
 function opened({ part, side }: { part: Part; side: number }, [k, up, n]: V, phi: number): V {
   const [mk, mn] = [k < 0 ? -1 : 1, side];
   const p: V = [k * mk, up, n * mn];
-  const q = part === 'wall' ? wall(p, phi) : part === 'end' ? end(p, phi) : part === 'flap' ? flap(p, phi) : p;
+  const q = part === 'wall' ? wall(p, phi) : part === 'end' ? end(p, phi) : p;
   return [q[0] * mk, q[1], q[2] * mn];
 }
 
@@ -138,10 +130,15 @@ export function openingGuides(frame: FoldFrame, stages = STAGES): BendGoal[] {
   const heights = facePositions(frame).map((points) => points.reduce((sum, q) => sum + q[1], 0) / points.length);
   const [s1, s2, tip] = ([[-0.25, -0.25], [0.25, -0.25], [0, 0]] as Vec2[]).map((q) => locate(frame, q));
   const origin: V = [(s1[0] + s2[0]) / 2, (Math.max(...heights) + Math.min(...heights)) / 2, (s1[1] + s2[1]) / 2];
-  const along = unit([s1[0] - s2[0], 0, s1[1] - s2[1]]);
   const up = unit([tip[0] - origin[0], 0, tip[1] - origin[2]]);
+  // P's wall is on the frame's `out` side whichever way up the boat lies: on top, or (as it's folded) underneath.
+  const centres = faces.map((face): Vec2 => [face.paper.reduce((s, q) => s + q[0], 0) / face.paper.length, face.paper.reduce((s, q) => s + q[1], 0) / face.paper.length]);
+  const wallHeight = (v: number) => heights[centres.findIndex((c) => Math.abs(c[0]) < 0.1 && Math.abs(c[1] - v) < 0.1)];
+  const way = wallHeight(-0.4) > wallHeight(0.4) ? 1 : -1;
+  const keel = unit([s1[0] - s2[0], 0, s1[1] - s2[1]]);
+  const along = cross(keel, up)[1] * way > 0 ? keel : mul(keel, -1);
   const out = cross(along, up);
-  if (out[1] < 0.99) throw new Error('The flat boat should lie with P’s wall on top.');
+  if (out[1] * way < 0.99) throw new Error('The flat boat should lie flat on its side.');
   const local = (p: V): V => [dot(sub(p, origin), along), dot(sub(p, origin), up), dot(sub(p, origin), out)];
   const world = ([k, u, n]: V): V => add(origin, add(add(mul(along, k), mul(up, u)), mul(out, n)));
   // Turned as it stands up, so its keel ends along the table's x (the way nearer to its bow), and the side view
@@ -151,15 +148,15 @@ export function openingGuides(frame: FoldFrame, stages = STAGES): BendGoal[] {
   if (turn(along, [0, 0, 0], VERTICAL, yaw)[0] < 0.99) yaw = -yaw;
 
   return faces.flatMap((face, f) => {
-    const centre: Vec2 = [face.paper.reduce((s, q) => s + q[0], 0) / face.paper.length, face.paper.reduce((s, q) => s + q[1], 0) / face.paper.length];
-    const part = partOf(centre);
+    const part = partOf(centres[f]);
     const place = placeLike(face);
     return lattice(face.paper).map((q): BendGoal => {
       const [x, z] = place(q);
       const start = local([x, heights[f], z]);
       const path = Array.from({ length: stages }, (_, i): V => {
         const s = smooth((i + 1) / stages);
-        const stood = turn(opened(part, start, LEAN * s), [0, 0, 0], KEEL, (Math.PI / 2) * s);
+        // Stood up the way that brings the sail's tip up.
+        const stood = turn(opened(part, start, LEAN * s), [0, 0, 0], KEEL, way * (Math.PI / 2) * s);
         return turn(world(stood), origin, VERTICAL, yaw * s).map(round6) as V;
       });
       return { guide: { paper: q.map(round6) as Vec2 }, path };

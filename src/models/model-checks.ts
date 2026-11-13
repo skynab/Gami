@@ -35,8 +35,8 @@ const GRAZES: Record<string, number> = {
   frog: 0.011, // Turning out a back leg, and lifting the front legs against the other front quarter (docs/origami-me-plan.md).
   'masu-shallow-lid': 0.0085, // Raising the walls: riding layers sit a little off the faces they ride on.
   'rainbow-chain': 0.034, // Joining the ends: rigid links set on a ring dip into each other where they cross.
-  // Pulling the small diamond out into a boat, where paper bends in your hands (docs/bending-plan.md, step 7).
-  boat: 0.02,
+  // The second squash, its twelve layers grazing as they turn (docs/bending-plan.md, step 7).
+  boat: 0.0105,
   // Reverse folds, their points tucked in between the flap's halves (November 2026): the point turns as one and
   // settles in between, through about half the stack. Real paper bends a little to open the flap; rigid paper
   // can't without opening it right out (docs/next-tasks-plan.md).

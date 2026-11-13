@@ -1,7 +1,7 @@
 import { Matrix4, Quaternion, Vector3 } from 'three';
 import { box, clearanceDepth, cornerKeys, crossDepth, overlapping } from './cross3d';
 import { facePositions, framesOf, LAYER_GAP, normal, sphereAround } from './frames';
-import { joinedSegment, overlapArea, type Cut } from './geometry2d';
+import { joinedSegment, overlapArea, signedArea, type Cut } from './geometry2d';
 import { applyOp, lastFold, reopened, select, type Op } from './ops';
 import { inside } from './select';
 import { sheetOf } from './sheets';
@@ -125,6 +125,8 @@ export function transition(from: FoldFrame, to: FoldFrame, { makeWay = true, sta
 
 /** How many times over a step can be split into stages (a stage can itself be staged). */
 const STAGES = 2;
+/** How much deeper staged paper may cut than paper going straight there, whatever that cuts: a few layers. */
+const DEEPER = 0.005;
 
 function transitionStaged(from: FoldFrame, to: FoldFrame, makeWay: boolean, stages: number): Transition {
   const cache = known[(makeWay ? 1 : 0) + (makeWay && stages ? 2 : 0)];
@@ -150,13 +152,18 @@ function workOut(from: FoldFrame, to: FoldFrame, makeWay: boolean, stages: numbe
   if (fewest && stages) {
     // Judged by how deep paper goes through, closely: staged moves are quicker, and slip through in a moment.
     // Not if staging pulls joined paper apart: paper lifted out of the way and put back, its neighbours left.
+    // Nor if it cuts much deeper at its deepest (twice as deep, and by more than a few layers): a few faces well
+    // through each other show more than many grazing, as the boat's second squash would, staged.
     let deepest = depthThrough(best);
+    let cut = deepestThrough(best);
     const torn = tornBy(best);
     for (const staged of stagedWays(from, to, t, stages - 1)) {
       const way = staged();
       if (!way) continue;
       const d = depthThrough(way, deepest);
-      if (d < deepest && tornBy(way) <= Math.max(torn, TEAR / 2)) [best, deepest] = [way, d];
+      if (d >= deepest || tornBy(way) > Math.max(torn, TEAR / 2)) continue;
+      const c = deepestThrough(way);
+      if (c <= Math.max(2 * cut, cut + DEEPER)) [best, deepest, cut] = [way, d, c];
       if (!deepest) break;
     }
   }
@@ -587,13 +594,16 @@ function moving(from: FoldFrame, to: FoldFrame, { yielding = false } = {}): Tran
     // Where creases folding each at their own rate pull the paper apart (round a swivel's point, say), they fold
     // in step instead, if that keeps it joined.
     if (tornBy(hinged!) > TEAR) {
-      const closed = inStep(hinged!);
+      let closed = inStep(hinged!);
+      // A squash about one point is worked out as rigid paper folds it, where that's all there is, or cuts less
+      // deep than the creases in step: starting flat, where the paper's two ways of folding meet, in step can take
+      // the other (the boat's small diamond does, a third of a tenth of the sheet through itself).
+      const vertex = vertexFold(hinged!);
+      if (closed && vertex && deepestCut(vertex) < deepestCut(closed)) closed = null;
       if (closed) [hinged, fewest] = [closed, passesThrough(closed, WAY_SAMPLES)];
       else {
-        // A squash about one point, worked out as rigid paper folds it, keeps the paper joined: kept over each piece
-        // making its own way if that pulls the paper apart, whatever the paper passing through says (paper torn
-        // apart passes through less of itself).
-        const vertex = vertexFold(hinged!);
+        // It keeps the paper joined: kept over each piece making its own way if that pulls the paper apart,
+        // whatever the paper passing through says (paper torn apart passes through less of itself).
         if (vertex && tornBy(out) > TEAR) return landInOrder(vertex);
         if (vertex) [hinged, fewest] = [vertex, passesThrough(vertex, WAY_SAMPLES)];
       }
@@ -713,6 +723,23 @@ function deepestCut(t: Transition): number {
     for (let a = 0; a < pose.length; a++) {
       for (let b = a + 1; b < pose.length; b++) {
         if (together(t, a, b) || !overlapping(boxes[a], boxes[b])) continue;
+        deepest = Math.max(deepest, crossDepth(pose[a], pose[b]));
+      }
+    }
+  }
+  return deepest;
+}
+
+/** The deepest paper passes through paper, closely (as `depthThrough` adds up). */
+function deepestThrough(t: Transition): number {
+  let deepest = 0;
+  for (const s of STAGE_SAMPLES) {
+    const pose = rawPose(t, s);
+    const boxes = pose.map(box);
+    for (let a = 0; a < pose.length; a++) {
+      for (let b = a + 1; b < pose.length; b++) {
+        if (together(t, a, b) || !overlapping(boxes[a], boxes[b])) continue;
+        if (touching(t.faces, a, b)) continue;
         deepest = Math.max(deepest, crossDepth(pose[a], pose[b]));
       }
     }
@@ -1050,9 +1077,12 @@ function hingesFor(faces: FaceTrack[], reps: { q: Quaternion; t: Vector3; faces:
       if (turn > 1e-9) {
         const axis = new Vector3(q.x, q.y, q.z).normalize();
         if (axis.dot(edge) < 0) turn = -turn;
-        // A half turn can go either way round: the way that brings w down on the side of u it ends up on.
+        // A half turn can go either way round: the way that brings w down on the side of u it ends up on. Or,
+        // opening out flat with u, the way that lifts it off the side of u it lay on: where it ends up says
+        // nothing then (the boat's ends, opening out as its sides fold up, went half of them the wrong way).
         if (Math.abs(Math.abs(turn) - Math.PI) < 1e-3) {
-          const wanted = Math.sign(sideAfter(faces, u, w)) || 1;
+          const opening = foldedOnto(faces, u, w, 'before') && !foldedOnto(faces, u, w, 'after');
+          const wanted = Math.sign(opening ? sideBefore(faces, u, w) : sideAfter(faces, u, w)) || 1;
           if (Math.sign(sideHalfway(faces, u, w, a, edge, Math.sign(turn))) !== wanted) turn = -turn;
         }
       }
@@ -1221,6 +1251,20 @@ function sideAfter(faces: FaceTrack[], u: number, w: number): number {
   return nu.dot(new Vector3(cw[0] - cu[0], cw[1] - cu[1], cw[2] - cu[2]));
 }
 
+/** Which side of u's plane w starts on (by the gap between stacked layers): positive is u's front. */
+function sideBefore(faces: FaceTrack[], u: number, w: number): number {
+  const nu = planeNormal(faces[u].before);
+  const cu = centroid(faces[u].before);
+  const cw = centroid(faces[w].before);
+  return nu.dot(new Vector3(cw[0] - cu[0], cw[1] - cu[1], cw[2] - cu[2]));
+}
+
+/** Whether w lies folded over onto u, before or after the step: the same side of the sheet faces opposite ways. */
+function foldedOnto(faces: FaceTrack[], u: number, w: number, when: 'before' | 'after'): boolean {
+  const front = (f: FaceTrack) => planeNormal(f[when]).multiplyScalar(Math.sign(signedArea(f.paper)) || 1);
+  return front(faces[u]).dot(front(faces[w])) < 0;
+}
+
 /** Which side of u's plane (before the step) w is on, turned a quarter turn about the edge, `way` round. */
 function sideHalfway(faces: FaceTrack[], u: number, w: number, a: Vec3, edge: Vector3, way: number): number {
   const nu = planeNormal(faces[u].before);
@@ -1331,7 +1375,21 @@ function inStep(t: Transition): Transition | null {
   pose(end, 1);
   const last = offsets();
 
-  const residual = (s: number) => offsets().map((o, r) => o - ((1 - s) * first[r] + s * last[r]));
+  // Layers stacked at a fold start and end a few gaps apart, and on the way each swings round its crease that far
+  // out, which the ends' offsets (blended) don't follow. So a point may be as far off as its layers are apart at
+  // the step's ends, at no cost: held to the blend exactly, a deep stack turning over (the boat's twelve layers)
+  // was held back, then hurried through, and counted as coming apart.
+  const gap = (o: number[], i: number) => Math.hypot(o[3 * i], o[3 * i + 1], o[3 * i + 2]);
+  const loose = Array.from({ length: first.length / 3 }, (_, i) => gap(first, i) + gap(last, i));
+  const residual = (s: number) => {
+    const res = offsets().map((o, r) => o - ((1 - s) * first[r] + s * last[r]));
+    for (let i = 0; i < loose.length; i++) {
+      const off = gap(res, i);
+      const k = off > loose[i] ? (off - loose[i]) / off : 0;
+      for (let x = 0; x < 3; x++) res[3 * i + x] *= k;
+    }
+    return res;
+  };
   // The normal equations' matrix JᵀJ and JᵀR. Each point of paper moves only with the creases it hangs from, so
   // each row of J has a few entries: added up row by row, not as a whole matrix.
   const d = new Vector3();
@@ -1343,6 +1401,11 @@ function inStep(t: Transition): Transition | null {
     for (const g of groups) {
       const [f0, c0] = g[0];
       for (const [f, c] of g.slice(1)) {
+        // A point within its slack pulls on nothing.
+        if (!res[r] && !res[r + 1] && !res[r + 2]) {
+          r += 3;
+          continue;
+        }
         row.clear();
         for (const [face, corner, sign] of [[f, c, 1], [f0, c0, -1]] as const) {
           for (const k of chain[face]) {

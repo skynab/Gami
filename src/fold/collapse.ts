@@ -142,12 +142,15 @@ export function collapse(frame: FoldFrame, { creases, anchor, under }: CollapseO
   };
   // For paper a reverse fold moves: which half of the flap's stack it comes from (true: the lower half).
   const halfOf = new Map<number, boolean>();
+  // For paper a valley or mountain fold turns over: which way round it goes (true: up and over, a valley's way).
+  const wayOf = new Map<number, boolean>();
   edges.forEach((e, i) => {
     const c = change[i];
     if (!c || c.kind === 'flat' || c.kind === 'split') return;
     if (c.kind === 'valley' || c.kind === 'mountain') {
       // Valley: g lands on the side of f that faced up before the step.
       setOrder(e.g, e.f, (c.kind === 'valley') !== flipped[e.f]);
+      if (flipped[e.f] !== flipped[e.g]) wayOf.set(flipped[e.f] ? e.f : e.g, c.kind === 'valley');
     } else {
       // Reverse: the face that moved goes to the inner side of the one that stayed (or the outer side).
       const [still, moved] = flipped[e.f] ? [e.g, e.f] : [e.f, e.g];
@@ -184,6 +187,24 @@ export function collapse(frame: FoldFrame, { creases, anchor, under }: CollapseO
   spread(false);
   while (spread(true)) spread(false);
   const apart = (f: number, g: number) => halfOf.has(f) && halfOf.has(g) && halfOf.get(f) !== halfOf.get(g);
+  // Paper lying on a flap that turns over goes round with it: of the faces moving as it does, each takes the way of
+  // the nearest in the stack it lies on. Flaps turning over opposite ways about one line (a boat's two sides, one
+  // folded up in front and one behind) move alike, but each keeps to its own side of the other: their layers swap
+  // order among themselves, not with the other's.
+  const turned = [...wayOf];
+  const riding = new Set<number>();
+  for (const f of faces.keys()) {
+    if (wayOf.has(f)) continue;
+    let near = Infinity;
+    for (const [g, way] of turned) {
+      const d = Math.abs(faces[g].layer - faces[f].layer);
+      if (group[g] !== group[f] || d >= near || !overlappedBefore(f, g)) continue;
+      near = d;
+      wayOf.set(f, way);
+      riding.add(f);
+    }
+  }
+  const otherWay = (f: number, g: number) => wayOf.has(f) && wayOf.has(g) && wayOf.get(f) !== wayOf.get(g);
 
   const layerEdges: LayerEdge[] = edges.map((e) => ({
     f: e.f,
@@ -210,7 +231,7 @@ export function collapse(frame: FoldFrame, { creases, anchor, under }: CollapseO
         const r = order.get(g * faces.length + f);
         if (r !== undefined) return !r;
         const kept = keep === 'all' || (keep === 'hinged' && hinged.has(f * faces.length + g)) || (keep === 'still' && group[f] === group[start]);
-        if (group[f] === group[g] && overlappedBefore(f, g) && kept) return wasAbove(f, g) !== (flipped[f] && (aside || !apart(f, g)));
+        if (group[f] === group[g] && overlappedBefore(f, g) && kept) return wasAbove(f, g) !== (flipped[f] && !otherWay(f, g) && (aside || !apart(f, g)));
         // A tucked flap goes under the faces it slides beneath.
         if (under) {
           const moved = (i: number) => group[i] !== group[start];
@@ -219,7 +240,14 @@ export function collapse(frame: FoldFrame, { creases, anchor, under }: CollapseO
         }
         return undefined;
       },
-      (f, g) => (overlappedBefore(f, g) ? wasAbove(f, g) : group[f] !== group[start]),
+      (f, g) => {
+        if (overlappedBefore(f, g)) return wasAbove(f, g);
+        // Paper riding on a flap folded behind lands under what it comes to lie on, as its flap does; the rest
+        // that moves, on top. (Not the flap's own faces, which its creases place: a point tucked into a pocket
+        // goes behind one layer and in front of the next.)
+        const behind = (i: number) => riding.has(i) && wayOf.get(i) === false;
+        return behind(f) !== behind(g) ? behind(g) : group[f] !== group[start];
+      },
     );
   const keeps = ['all', 'hinged', 'still'] as const;
   const tries = [
