@@ -69,7 +69,7 @@ export function collapse(frame: FoldFrame, { creases, anchor, under }: CollapseO
 
   // Walk out from the anchor, placing each face from a neighbour already placed.
   const start = faces.findIndex((f) => contains(f.paper, anchor));
-  if (start < 0) throw new FoldError('The anchor point isn’t on the paper.');
+  if (start < 0) throw new FoldError('anchorOffPaper');
   const placed: (Affine | null)[] = faces.map(() => null);
   placed[start] = old[start];
   const queue = [start];
@@ -89,7 +89,7 @@ export function collapse(frame: FoldFrame, { creases, anchor, under }: CollapseO
         placed[w] = t;
         queue.push(w);
       } else if (!sameMap(placed[w]!, t, faces[w].paper)) {
-        throw new FoldError('Those creases can’t all fold flat at once.');
+        throw new FoldError('creasesNotFlat');
       }
     }
   }
@@ -262,7 +262,7 @@ export function collapse(frame: FoldFrame, { creases, anchor, under }: CollapseO
       break;
     } catch (e) {
       if (!(e instanceof LayerError)) throw e;
-      if (keep === 'none') throw new FoldError(e.message);
+      if (keep === 'none') throw new FoldError(e.code ?? e.message, e.params);
     }
   }
 

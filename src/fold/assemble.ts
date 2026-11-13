@@ -37,7 +37,7 @@ export function assemble(base: FoldFrame, pieces: Piece[], { settled = false } =
   const bends = pieces.flatMap((p, i) =>
     held.has(i) ? (p.bends ?? []).map((b): Bend => ({ ...b, only: (paper) => pieceOf(paper) === i && (!b.only || b.only(paper)) })) : [],
   );
-  if (settled && bends.length) throw new FoldError('Paper pressed flat can’t be bent as it’s put together.');
+  if (settled && bends.length) throw new FoldError('flatCantBend');
   const shaped = bends.length ? shape(base, bends) : base;
   const placed = facePositions(settled ? settle(base) : shaped);
   const moves = pieces.map((p) => p.pose && rigidMove(p.pose));
@@ -74,7 +74,7 @@ export function assemble(base: FoldFrame, pieces: Piece[], { settled = false } =
 function rigidMove({ from, to, x, up }: Pose): (p: Vec3) => Vec3 {
   const unit = (v: Vec3): Vec3 => {
     const len = Math.hypot(...v);
-    if (len < 1e-12) throw new FoldError('A pose needs directions that aren’t zero.');
+    if (len < 1e-12) throw new FoldError('poseZero');
     return v.map((c) => c / len) as Vec3;
   };
   const cross = (a: Vec3, b: Vec3): Vec3 => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];

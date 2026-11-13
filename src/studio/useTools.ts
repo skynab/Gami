@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { sayFold } from '../i18n';
 import { FoldError } from '../fold/fold';
 import { lineThrough, type Line } from '../fold/geometry2d';
 import { applyOp, atOf, lineOf, NoStillError, OpError, shapingBase, type At, type Faces, type LineSpec, type Op, type ShapeBend } from '../fold/ops';
@@ -86,10 +87,11 @@ export function useTools(before: OrigamiModel) {
     try {
       return { op: presetOp(before, { kind: s.preset, picks, flip: flipped, ...(inSheet && { only: inSheet }) }) };
     } catch (e) {
-      if (e instanceof FoldError || e instanceof OpError) return { error: e.message };
+      if (e instanceof FoldError || e instanceof OpError) return { error: sayFold(e) };
       throw e;
     }
-  }, [action, picks, needs, before, s.preset, flipped, chosen]);
+    // `t` too: what it says changes with the language.
+  }, [action, picks, needs, before, s.preset, flipped, chosen, t]);
 
   // The step the tools describe now, if they describe one.
   const op = useMemo((): Op | null => {
@@ -155,7 +157,7 @@ export function useTools(before: OrigamiModel) {
       return { frame: next, ...(flat && { onFlat: flat }), ...(via && { via }), ...(drawn && { marks: drawn }) };
     } catch (e) {
       if (e instanceof NoStillError) return { error: t('studio.errors.noStill') };
-      if (e instanceof FoldError || e instanceof OpError) return { error: e.message };
+      if (e instanceof FoldError || e instanceof OpError) return { error: sayFold(e) };
       throw e;
     }
     // `op` is followed by its key, so a tool change that leaves the step as it was doesn't fold it again.

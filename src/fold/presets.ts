@@ -54,7 +54,7 @@ const TOL = 1e-6;
 export function presetOp(model: OrigamiModel, preset: Preset): CollapseOp {
   const frame = model.steps.at(-1)?.frame ?? model.start;
   const { kind, picks } = preset;
-  if (picks.length < PRESET_PICKS[kind]) throw new PresetError('Not enough points picked yet.');
+  if (picks.length < PRESET_PICKS[kind]) throw new PresetError('notEnoughPicks');
   // Each candidate in turn, the first that folds flat (and passes `check`): the kinds that depend on the layers
   // aren't known in advance.
   const first = (candidates: CollapseOp[], check?: (made: FoldFrame) => PresetError | null): CollapseOp => {
@@ -86,7 +86,7 @@ export function presetOp(model: OrigamiModel, preset: Preset): CollapseOp {
     case 'swivel':
       // Creases that cross no paper but the flap leave everything where it was: that's no swivel.
       return first(swivel(frame, picks[0], picks[1], picks[2], allowed), (made) =>
-        made.vertices_coords.length === frame.vertices_coords.length ? new PresetError('There’s no paper for the flap to swing across that way.') : null,
+        made.vertices_coords.length === frame.vertices_coords.length ? new PresetError('swivelNoPaper') : null,
       );
     case 'sink':
       return first(sink(frame, picks[0], picks[1], allowed));
@@ -97,7 +97,7 @@ export function presetOp(model: OrigamiModel, preset: Preset): CollapseOp {
 function pair(frame: FoldFrame, { kind, picks, flip, only }: Preset): CollapseOp {
   const kinds: [CreaseKind, CreaseKind] = kind === 'pleat' ? ['valley', 'mountain'] : ['inside', 'outside'];
   const [a, b] = flip ? [kinds[1], kinds[0]] : kinds;
-  if (dist(picks[0], picks[1]) < TOL || dist(picks[2], picks[3]) < TOL) throw new PresetError('Each crease needs two different points.');
+  if (dist(picks[0], picks[1]) < TOL || dist(picks[2], picks[3]) < TOL) throw new PresetError('creaseNeedsTwoPoints');
   return {
     op: 'collapse',
     creases: [
@@ -119,7 +119,7 @@ function squash(frame: FoldFrame, corner: Vec2, to: Vec2): CollapseOp[] {
   const at = (f: Face) => f.world.some((p) => dist(p, corner) < 1e-6);
   const tops = s.filter((f) => f.rank === 0 && at(f));
   const seconds = s.filter((f) => f.rank === 1 && at(f));
-  const noFlap = () => new PresetError('There’s no flap to squash there. Pick the corner of a flap where its folded edges meet.');
+  const noFlap = () => new PresetError('squashNoFlap');
   // The flap's folded edge joins the top layer to the one under it, and runs from the corner.
   const spine = joins(tops, seconds).find((j) => onLineFrom(j.world, corner));
   if (!spine) throw noFlap();
@@ -128,7 +128,7 @@ function squash(frame: FoldFrame, corner: Vec2, to: Vec2): CollapseOp[] {
   if (!hinge) throw noFlap();
   const hingeLine = lineFrom(corner, hinge.world);
   const side = Math.sign(sideOf(hingeLine, far(corner, spine.world)));
-  if (Math.sign(sideOf(hingeLine, to)) !== side || dist(corner, to) < TOL) throw new PresetError('Pick a point on the flap for its folded edge to land on.');
+  if (Math.sign(sideOf(hingeLine, to)) !== side || dist(corner, to) < TOL) throw new PresetError('squashLanding');
   // The flap: the two layers on top on the folded edge's side of the hinge.
   const flapSide = (f: Face) => Math.sign(sideOf(hingeLine, centre(f.world))) === side;
   const top = s.filter((f) => f.rank === 0 && flapSide(f));
@@ -162,7 +162,7 @@ function squash(frame: FoldFrame, corner: Vec2, to: Vec2): CollapseOp[] {
 function petal(frame: FoldFrame, corner: Vec2): CollapseOp[] {
   const s = stack(frame);
   const start = s.filter((f) => f.rank === 0 && f.world.some((p) => dist(p, corner) < 1e-6));
-  if (!start.length) throw new PresetError('There’s no flap there. Pick the free corner of the flap on top.');
+  if (!start.length) throw new PresetError('petalNoFlap');
   // The flap: the top layer's paper joined to the corner without crossing a fold.
   const flap = connected(start, s.filter((f) => f.rank === 0));
   const outline = flap.flatMap((f) => f.world);
@@ -174,7 +174,7 @@ function petal(frame: FoldFrame, corner: Vec2): CollapseOp[] {
   };
   const left = sideCorner(1);
   const right = sideCorner(-1);
-  if (!left || !right) throw new PresetError('That flap has no sides to fold in. Pick the free corner of a diamond-shaped flap.');
+  if (!left || !right) throw new PresetError('petalNoSides');
   // Each kite crease halves the angle at the corner, and runs to the edge from the side corner to the tip.
   const kiteTop = (side: Vec2): Vec2 | null => {
     const d = normalize(add(normalize(sub(side, corner)), normalize(sub(tip, corner))));
@@ -182,7 +182,7 @@ function petal(frame: FoldFrame, corner: Vec2): CollapseOp[] {
   };
   const k1 = kiteTop(left);
   const k2 = kiteTop(right);
-  if (!k1 || !k2) throw new PresetError('That flap can’t be petal-folded.');
+  if (!k1 || !k2) throw new PresetError('petalCant');
   const lift = lineThrough(k1, k2);
   const below = (f: Face) => Math.sign(sideOf(lift, centre(f.world))) === Math.sign(sideOf(lift, corner));
   const inFlap = (f: Face) => inside(hull(outline), centre(f.world));
@@ -213,14 +213,14 @@ function petal(frame: FoldFrame, corner: Vec2): CollapseOp[] {
  */
 function rabbitEar(frame: FoldFrame, corner: Vec2, a: Vec2, b: Vec2): CollapseOp[] {
   const tri = [corner, a, b];
-  if (Math.abs(cross(sub(a, corner), sub(b, corner))) < 1e-6) throw new PresetError('Pick three corners of a triangle.');
+  if (Math.abs(cross(sub(a, corner), sub(b, corner))) < 1e-6) throw new PresetError('rabbitTriangle');
   // Where the halving lines meet: the triangle's incentre.
   const [la, lb, lc] = [dist(a, b), dist(corner, b), dist(corner, a)];
   const centreIn = scale(add(add(scale(corner, la), scale(a, lb)), scale(b, lc)), 1 / (la + lb + lc));
   const ab = normalize(sub(b, a));
   const foot = add(a, scale(ab, dot(sub(centreIn, a), ab)));
   const s = stack(frame).filter((f) => inside(tri, centre(f.world)));
-  if (!s.length) throw new PresetError('There’s no paper in that triangle.');
+  if (!s.length) throw new PresetError('rabbitNoPaper');
   // Each crease runs out from the middle point; it folds only the paper between the creases either side of its
   // own stretch of line, so a face bordering two creases takes both, and none takes the line's other half.
   const rays = [corner, a, b, foot].map((p) => Math.atan2(p[1] - centreIn[1], p[0] - centreIn[0]));
@@ -265,11 +265,11 @@ function rabbitEar(frame: FoldFrame, corner: Vec2, a: Vec2, b: Vec2): CollapseOp
  */
 function swivel(frame: FoldFrame, pivot: Vec2, hingeAt: Vec2, to: Vec2, allowed: (paper: Vec2[]) => boolean): CollapseOp[] {
   const len = dist(pivot, hingeAt);
-  if (len < TOL || dist(pivot, to) < TOL) throw new PresetError('Pick the pivot, a point along the flap’s folded edge, then where that point should swing to.');
+  if (len < TOL || dist(pivot, to) < TOL) throw new PresetError('swivelPicks');
   const h = normalize(sub(hingeAt, pivot));
   const t = normalize(sub(to, pivot));
   const turn = cross(h, t);
-  if (Math.abs(turn) < 1e-6) throw new PresetError('Pick where the folded edge swings to off the line it’s on now.');
+  if (Math.abs(turn) < 1e-6) throw new PresetError('swivelOffLine');
   const s = stack(frame);
   const hinge = lineThrough(pivot, hingeAt);
   // The hinge: folds joining two faces along its line, the face on top first.
@@ -280,7 +280,7 @@ function swivel(frame: FoldFrame, pivot: Vec2, hingeAt: Vec2, to: Vec2, allowed:
       if (joins([f], [g], frame.cuts).some((j) => onLine(j.world, hinge))) folds.push([f, g]);
     }
   }
-  if (!folds.length) throw new PresetError('There’s no flap hinged there. Pick the pivot at the end of a folded edge, then a point along it.');
+  if (!folds.length) throw new PresetError('swivelNoHinge');
   // The flap: joined to its side of the hinge without crossing it. If that reaches the other side, it isn't free.
   const flapFrom = (start: Face[], other: Face[]) => {
     const flap = connectedOff(start, s, hinge, frame.cuts);
@@ -311,7 +311,7 @@ function swivel(frame: FoldFrame, pivot: Vec2, hingeAt: Vec2, to: Vec2, allowed:
       });
     }
   }
-  if (!out.length) throw new PresetError('There’s no paper for the flap to swing across that way.');
+  if (!out.length) throw new PresetError('swivelNoPaper');
   return out;
 }
 
@@ -324,14 +324,14 @@ function swivel(frame: FoldFrame, pivot: Vec2, hingeAt: Vec2, to: Vec2, allowed:
  * it's an inside reverse fold. A closed sink, the layers re-stacked inside a point that can't open, can't be made.
  */
 function sink(frame: FoldFrame, tip: Vec2, at: Vec2, allowed: (paper: Vec2[]) => boolean): CollapseOp[] {
-  if (dist(tip, at) < TOL) throw new PresetError('Pick the tip of the point, then a point further in for it to sink to.');
+  if (dist(tip, at) < TOL) throw new PresetError('sinkPicks');
   const d = normalize(sub(at, tip));
   const line: Line = { p: at, d: [-d[1], d[0]] };
   const tipSide = Math.sign(sideOf(line, tip));
   const s = stack(frame).filter((f) => allowed(f.paper));
   const near = s.filter((f) => f.world.some((p) => sideOf(line, p) * tipSide > 1e-7));
   const start = near.filter((f) => f.world.some((p) => dist(p, tip) < 1e-6));
-  if (!start.length) throw new PresetError('There’s no point there to sink. Pick the tip of a point.');
+  if (!start.length) throw new PresetError('sinkNoPoint');
   const point = connected(start, near);
   // The point's faces the line crosses; or, where the point was creased along the line first (as a sink usually
   // is), the faces either side of that crease, joined along it.
@@ -341,7 +341,7 @@ function sink(frame: FoldFrame, tip: Vec2, at: Vec2, allowed: (paper: Vec2[]) =>
     const pairs = point.flatMap((f) => all.filter((g) => !point.includes(g) && joins([f], [g], frame.cuts).some((j) => onLine(j.world, line))).map((g) => [f, g]));
     crossing = [...new Set(pairs.flat())];
   }
-  if (!crossing.length) throw new PresetError('Pick a point on the paper for the tip to sink to.');
+  if (!crossing.length) throw new PresetError('sinkOffPaper');
   // The point's inside is the same side of the paper all round it: under the face on top, or (sunk from
   // underneath) over the face at the bottom. Faces lying the way that face does fold to the same side of
   // themselves, the others to the other side.
@@ -491,6 +491,6 @@ function through(frame: FoldFrame, p: Vec2, q: Vec2): CollapseCrease['line'] {
 
 function paperAt(frame: FoldFrame, spot: Vec2): Vec2 {
   const at = atOf(frame, spot);
-  if (!('paper' in at)) throw new PresetError('There’s no paper there.');
+  if (!('paper' in at)) throw new PresetError('noPaperThere');
   return at.paper;
 }

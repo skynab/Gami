@@ -29,7 +29,7 @@ export interface PlaceOptions {
 export function place(frame: FoldFrame, { only, to, angle = 0, flip = false, under = false, into = [] }: PlaceOptions): FoldFrame {
   const faces = toFlat(frame);
   const moving = faces.filter((f) => only(f.paper));
-  if (!moving.length) throw new FoldError('Nothing to move.');
+  if (!moving.length) throw new FoldError('nothingToMove');
 
   const pts = moving.flatMap((f) => f.world);
   const cx = (Math.min(...pts.map((p) => p[0])) + Math.max(...pts.map((p) => p[0]))) / 2;
@@ -61,10 +61,10 @@ export function place(frame: FoldFrame, { only, to, angle = 0, flip = false, und
   const still = placed.filter((f) => !only(f.paper));
   for (const { part, under: over } of into) {
     const parts = placed.filter((f) => only(f.paper) && part(f.paper));
-    if (!parts.length) throw new FoldError('No part of the piece to slide in.');
+    if (!parts.length) throw new FoldError('nothingToSlide');
     const beneath = still.filter((f) => parts.some((p) => overlapArea(p.world, f.world) > 1e-7));
     const above = beneath.filter((f) => over(f.paper)).map((f) => f.layer);
-    if (!above.length) throw new FoldError('There’s no paper there for that part to slide under.');
+    if (!above.length) throw new FoldError('nothingToSlideUnder');
     const ceiling = Math.min(...above);
     const floor = Math.max(bottom - 1, ...beneath.filter((f) => !over(f.paper) && f.layer < ceiling).map((f) => f.layer));
     const order = [...new Set(parts.map((p) => p.layer))].sort((a, b) => a - b);

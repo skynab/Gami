@@ -23,7 +23,7 @@ export const TAPE_OPACITY = 0.7;
 /** The outline on the table of a strip of tape from `from` to `to`, `width` wide. */
 export function tapeStrip(from: Vec2, to: Vec2, width = TAPE_WIDTH): Vec2[] {
   const length = Math.hypot(to[0] - from[0], to[1] - from[1]);
-  if (length < 1e-6) throw new FoldError('A piece of tape needs two different ends.');
+  if (length < 1e-6) throw new FoldError('tapeEnds');
   const across: Vec2 = [(-(to[1] - from[1]) / length) * (width / 2), ((to[0] - from[0]) / length) * (width / 2)];
   return [
     [from[0] + across[0], from[1] + across[1]],
@@ -46,7 +46,7 @@ export function tape(frame: FoldFrame, from: Vec2, to: Vec2, width = TAPE_WIDTH)
         return { side: frontUp(f.world, f.paper) ? 'front' : 'back', points: part.map((p) => toSheet(p).map(roundCoord) as Vec2), fill: true };
       }),
   );
-  if (!pieces.length) throw new FoldError('There’s no paper under that tape.');
+  if (!pieces.length) throw new FoldError('noPaperUnderTape');
   return { ...frame, faces_parent: undefined, tapes: [...(frame.tapes ?? []), { pieces }] };
 }
 

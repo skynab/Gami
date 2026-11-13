@@ -1,9 +1,13 @@
+import { FOLD_MESSAGES } from '../fold/messages';
+
 /**
  * The interface in English, which every other language follows key for key (their types are checked against
  * this one). Model instructions aren't here: they're part of each model and stay in English for now.
  * Plurals use i18next's `_one` / `_other` endings, and {{name}} fills in a value.
  */
 export const en = {
+  /** The fold engine's messages, by code (src/fold/messages.ts, where the English lives). */
+  fold: FOLD_MESSAGES,
   common: {
     close: 'Close',
     loading: 'Loading…',

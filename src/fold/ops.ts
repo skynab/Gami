@@ -12,6 +12,7 @@ import { sheetOf } from './sheets';
 import { bendFrame } from './bend/frame';
 import { keepIn, tape } from './tape';
 import type { FoldFrame, Mark, OrigamiModel, Step, StepKind, Tool, Vec2, Vec3 } from './types';
+import { CodedError, said, type Said } from './messages';
 
 /**
  * Fold operations: how each step was made, as plain data, so a model can be folded again from the start
@@ -128,7 +129,7 @@ export type Op =
   /** Several operations shown as one step. */
   | { op: 'together'; ops: Op[] };
 
-export class OpError extends Error {}
+export class OpError extends CodedError {}
 
 /** A compound fold where no part of the paper stays still, so there's nothing to fold it from. */
 export class NoStillError extends FoldError {}
@@ -559,8 +560,8 @@ export type StepStatus = 'kept' | 'replayed' | 'failed' | 'baked' | 'skipped';
 export interface Replay {
   model: OrigamiModel;
   status: StepStatus[];
-  /** Why the failed step failed, numbered from 1 as the Studio shows steps. */
-  error?: { step: number; message: string };
+  /** Why the failed step failed, numbered from 1 as the Studio shows steps, as `said` gives it. */
+  error?: { step: number } & Said;
 }
 
 /**
@@ -570,12 +571,12 @@ export interface Replay {
 export function replay(model: OrigamiModel, from = 0): Replay {
   const steps: Step[] = [];
   const status: StepStatus[] = [];
-  const stop = (k: number, why: StepStatus, message?: string): Replay => {
+  const stop = (k: number, why: StepStatus, failure?: unknown): Replay => {
     status.push(why, ...model.steps.slice(k + 1).map((): StepStatus => 'skipped'));
     steps.push(...model.steps.slice(k));
-    return { model: { ...model, steps }, status, ...(message !== undefined && { error: { step: k + 1, message } }) };
+    return { model: { ...model, steps }, status, ...(failure !== undefined && { error: { step: k + 1, ...said(failure) } }) };
   };
-  if (model.steps.length > LIMITS.steps) return stop(Math.min(from, model.steps.length - 1), 'failed', `more than ${LIMITS.steps} steps`);
+  if (model.steps.length > LIMITS.steps) return stop(Math.min(from, model.steps.length - 1), 'failed', new OpError('tooManySteps', { n: LIMITS.steps }));
 
   for (let k = 0; k < model.steps.length; k++) {
     const step = model.steps[k];
@@ -587,13 +588,13 @@ export function replay(model: OrigamiModel, from = 0): Replay {
     if (!step.op) return stop(k, 'baked');
     try {
       const { frame, via, marks } = run(step.op, { model, steps });
-      if (frame.faces_vertices.length > LIMITS.faces) throw new OpError(`more than ${LIMITS.faces} faces`);
+      if (frame.faces_vertices.length > LIMITS.faces) throw new OpError('tooManyFaces', { n: LIMITS.faces });
       const { via: _, marks: __, ...rest } = step;
       steps.push({ ...rest, frame, ...(via && { via }), ...(marks?.length && { marks }) });
       status.push('replayed');
     } catch (e) {
       if (!(e instanceof Error)) throw e;
-      return stop(k, 'failed', e.message);
+      return stop(k, 'failed', e);
     }
   }
   return { model: { ...model, steps }, status };
@@ -651,7 +652,7 @@ const radians = (degrees: number) => (degrees * Math.PI) / 180;
 function run(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; flat?: FoldFrame; marks?: Mark[] } {
   const before = ctx.steps.length ? ctx.steps[ctx.steps.length - 1].frame : ctx.model.start;
   // The fold engine works on flat faces: bent paper (its mesh of triangles) can be drawn on, but not folded again yet.
-  if (before.soft && op.op !== 'draw') throw new OpError('Paper that has bent can’t be folded any further.');
+  if (before.soft && op.op !== 'draw') throw new OpError('bent');
   const out = runOp(op, ctx);
   if (op.op === 'newSheet') return out;
   const keep = (f: FoldFrame): FoldFrame => keepIn(f, before);
@@ -678,7 +679,7 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
       if ('paper' in op.anchor) anchor = op.anchor.paper;
       else {
         const found = anchorFor(frame, creases.map((c) => c.line), test(op.anchor.among));
-        if (!found) throw new NoStillError('No part of the paper stays still.');
+        if (!found) throw new NoStillError('noStill');
         anchor = found;
       }
       return { frame: collapse(frame, { creases, anchor, under: test(op.under) }) };
@@ -687,10 +688,10 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
       let to = op.to;
       if (to === undefined) {
         const last = lastFold(ctx.steps);
-        if (last === null) throw new FoldError('Nothing to unfold.');
+        if (last === null) throw new FoldError('nothingToUnfold');
         to = last;
       }
-      if (to >= frames.length - 1) throw new OpError(`Can’t unfold to step ${to}, which hasn’t happened yet.`);
+      if (to >= frames.length - 1) throw new OpError('unfoldAhead', { step: to });
       return unfoldStep(frames, to, reopened(ctx.steps));
     }
     case 'turnOver':
@@ -733,7 +734,7 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
       const faces_parent = start.faces_vertices.map((face) => {
         const c = centre(face.map((v) => start.vertices_paper[v]));
         const at = frame.faces_vertices.findIndex((g) => inside(g.map((v) => frame.vertices_paper[v]), c));
-        if (at < 0) throw new FoldError('No paper to replace with a fresh sheet.');
+        if (at < 0) throw new FoldError('noPaperToReplace');
         return at;
       });
       return { frame: { ...start, faces_parent } };
@@ -742,7 +743,7 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
       // The run of shaping steps this one adds to, and the flat state before it.
       const first = shapingRun(ctx.steps);
       if (first > 0 && !ctx.steps[first - 1].op && ctx.steps[first - 1].kind === 'pose')
-        throw new OpError('Can’t add to a 3D step that has no operation saved.');
+        throw new OpError('noSavedOp');
       const base = frames[first];
       const run = [...ctx.steps.slice(first).map((s) => s.op as Extract<Op, { op: 'shape' }>), op];
       const bends = run.flatMap((o) => o.bends.flatMap((b) => bendsOf(b, base, ctx.model.sheets)));
@@ -767,7 +768,7 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
     case 'bend': {
       const test = select(op.flex, { frame, sheets: ctx.model.sheets });
       const flex = frame.faces_vertices.flatMap((face, f) => (test(face.map((v) => frame.vertices_paper[v])) ? [f] : []));
-      if (!flex.length) throw new OpError('Nothing to bend: no faces were picked.');
+      if (!flex.length) throw new OpError('nothingToBend');
       const { frame: bent, via } = bendFrame(frame, {
         flex,
         anchor: op.anchor.paper,
@@ -817,7 +818,7 @@ export function lineOf(spec: LineSpec, frame: FoldFrame, flip = false): Line {
   else if ('edgeOnto' in spec) {
     const [[a1, a2], [b1, b2]] = spec.edgeOnto;
     const l = lineEdgeOnto(where(a1), where(a2), where(b1), where(b2));
-    if (!l) throw new FoldError('That edge is already on that line.');
+    if (!l) throw new FoldError('edgeOnLine');
     line = l;
   } else if ('through' in spec) {
     line = lineThrough(where(spec.through[0]), where(spec.through[1]));

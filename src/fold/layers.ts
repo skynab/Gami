@@ -1,5 +1,6 @@
 import { cross, dot, overlapArea, sub } from './geometry2d';
 import type { Vec2 } from './types';
+import { CodedError } from './messages';
 
 /**
  * Works out the stacking order of flat-folded paper once every face's position is known.
@@ -28,7 +29,7 @@ export interface LayerEdge {
   folded: boolean;
 }
 
-export class LayerError extends Error {}
+export class LayerError extends CodedError {}
 
 const AREA = 1e-7;
 const LEN = 1e-7;
@@ -186,9 +187,9 @@ export function solveLayers(
   for (let v = 0; v < pairs.length; v++) {
     const [f, g] = pairs[v];
     const k = known(f, g);
-    if (k !== undefined && !set({ v, neg: false }, k)) throw new LayerError('The known stacking contradicts itself.');
+    if (k !== undefined && !set({ v, neg: false }, k)) throw new LayerError('stackContradicts');
   }
-  if (!propagate()) throw new LayerError('These folds can’t lie flat in any stacking order.');
+  if (!propagate()) throw new LayerError('noStacking');
 
   // Backtracking search over whatever is still free, preferred order first.
   const search = (from: number): boolean => {
@@ -204,7 +205,7 @@ export function solveLayers(
     }
     return false;
   };
-  if (!search(0)) throw new LayerError('These folds can’t lie flat in any stacking order.');
+  if (!search(0)) throw new LayerError('noStacking');
 
   // Layers: each face sits one above the highest face it covers.
   const below: number[][] = faces.map(() => []);
@@ -213,7 +214,7 @@ export function solveLayers(
   const state = new Uint8Array(n);
   const visit = (f: number): number => {
     if (state[f] === 2) return layer[f];
-    if (state[f] === 1) throw new LayerError('These faces overlap in a circle, which a stack of layers can’t show.');
+    if (state[f] === 1) throw new LayerError('stackCircle');
     state[f] = 1;
     let l = 0;
     for (const g of below[f]) l = Math.max(l, visit(g) + 1);

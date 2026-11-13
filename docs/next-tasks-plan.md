@@ -251,7 +251,18 @@ The frog now grazes a little deeper, 0.0106 at most (step 45) against 0.0094, st
   translations are checked against the models' files. 217 s, with 1075 tests (80 more: one guides check a model).
   The kusudama alone takes 84 s of checks, so its shard sets the pace; three or six shards would put the
   kusudama, rainbow chain, balloon and cup in one.
-- The fold engine's error messages are still English only (milestone 9 left them).
+- ✅ **The fold engine's messages in every language** (13 November; milestone 9 had left them English only). The
+  62 things the engine says when a fold can't be made (a squash with no flap there, a cut that misses the paper,
+  folds that can't lie flat) are kept by code in `src/fold/messages.ts`, in English, which `en.ts` takes as its
+  `fold` section, and are translated in `ja.ts`, `es.ts` and `fr.ts`. An error is made from its code
+  (`new FoldError('cutMissesPaper')`), with any values it fills in, and its message is still the English, so recipes,
+  tests and logs read as before. It keeps its code through a model folded again (`replay`'s `error`, kept with a
+  design as its problem), the bend worker (`said` posts it as plain data) and share links (a step's error inside the
+  link's). The Studio says it with `sayFold` (`src/i18n`), in the language chosen at the time, and a named fold's
+  message follows a change of language. Left in English: messages for recipe authors (naming the model and step),
+  for malformed `.fold` files (naming the path in the file), and the bend solver's checks on its own goals. A test
+  checks every code used in the source is one the engine knows, so a misspelt one can't quietly show as English.
+  Noticed on the way: the 2D editor's label, "The paper from above", is English in every language.
 - ✅ **Recipes making named folds with the presets** (12 November), where a preset makes the same fold. The bird
   base's petal folds (`squareBaseFlaps` in `bird-base.ts`) are now `Recipe.preset` picked at the flap's free corner,
   in the crane, crow, flapping bird and both lessons. Their paper is identical; only each step's recorded collapse

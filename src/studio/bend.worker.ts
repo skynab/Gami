@@ -1,4 +1,5 @@
 /// <reference lib="webworker" />
+import { said } from '../fold/messages';
 import { applyOp, replay, type Op } from '../fold/ops';
 import type { OrigamiModel } from '../fold/types';
 
@@ -15,6 +16,7 @@ self.onmessage = (e: MessageEvent<{ model: OrigamiModel; op: Op } | { model: Ori
     const { frame, via } = applyOp(e.data.model, e.data.op);
     self.postMessage({ ok: true, frame, via });
   } catch (err) {
-    self.postMessage({ ok: false, message: err instanceof Error ? err.message : String(err) });
+    // What went wrong, as plain data that keeps its message code, so the page can say it in its language.
+    self.postMessage({ ok: false, said: said(err) });
   }
 };

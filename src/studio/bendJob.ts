@@ -1,3 +1,5 @@
+import { FoldError } from '../fold/fold';
+import type { Said } from '../fold/messages';
 import type { Op, Replay } from '../fold/ops';
 import type { FoldFrame, OrigamiModel } from '../fold/types';
 
@@ -29,14 +31,14 @@ function inWorker<T>(message: unknown, read: (data: { frame: FoldFrame; via?: Fo
   let fail: (e: Error) => void = () => {};
   const done = new Promise<T>((resolve, reject) => {
     fail = reject;
-    worker.onmessage = (e: MessageEvent<({ ok: true } & Parameters<typeof read>[0]) | { ok: false; message: string }>) => {
+    worker.onmessage = (e: MessageEvent<({ ok: true } & Parameters<typeof read>[0]) | { ok: false; said: Said }>) => {
       worker.terminate();
       if (e.data.ok) resolve(read(e.data));
-      else reject(new Error(e.data.message));
+      else reject(new FoldError(e.data.said.code ?? e.data.said.message, e.data.said.params));
     };
     worker.onerror = (e) => {
       worker.terminate();
-      reject(new Error(e.message || 'The bend couldn’t be worked out.'));
+      reject(e.message ? new Error(e.message) : new FoldError('bendFailed'));
     };
   });
   worker.postMessage(message);

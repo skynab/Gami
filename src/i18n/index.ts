@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import { said, type Said } from '../fold/messages';
 import { en } from './en';
 import { es } from './es';
 import { fr } from './fr';
@@ -56,6 +57,17 @@ export function setLanguage(code: Language) {
   } catch {
     // Storage blocked: it still applies for this visit.
   }
+}
+
+/**
+ * What the fold engine said, in the interface's language: an error, or the parts of one `said` gives (posted from
+ * a worker, or kept with a design). Plain English messages, for authors and files, stay as they are.
+ */
+export function sayFold(what: unknown): string {
+  const s: Said = what instanceof Error || !what || typeof what !== 'object' || !('message' in what) ? said(what) : (what as Said);
+  if (!s.code) return s.message;
+  const params = Object.fromEntries(Object.entries(s.params ?? {}).map(([k, v]) => [k, typeof v === 'object' ? sayFold(v) : v]));
+  return i18n.t(`fold.${s.code}`, params);
 }
 
 export default i18n;

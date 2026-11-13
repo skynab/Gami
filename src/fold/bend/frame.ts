@@ -381,7 +381,7 @@ export function bendFrame(given: FoldFrame, options: BendOptions): { via: FoldFr
  * face it's cut from (`origin`). The paper stays joined: unlike scissors, no cut is kept.
  */
 export function cutAlong(frame: FoldFrame, lines: [Vec2, Vec2][]): { frame: FoldFrame; origin: number[] } {
-  if (!frame.vertices_coords.every((q) => Math.abs(q[1]) < 1e-9)) throw new FoldError('Lines to fold along are on the table: the paper has to lie flat.');
+  if (!frame.vertices_coords.every((q) => Math.abs(q[1]) < 1e-9)) throw new FoldError('linesNeedFlat');
   let faces: FlatFace[] = toFlat(frame);
   for (const [a, b] of lines) {
     const line = { p: a, d: [b[0] - a[0], b[1] - a[1]] as Vec2 };

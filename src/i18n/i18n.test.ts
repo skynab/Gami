@@ -35,3 +35,24 @@ describe.each([
     }
   });
 });
+
+describe('the fold engine’s messages', () => {
+  it('are said in the interface’s language, values and all', async () => {
+    const { default: i18n, sayFold } = await import('./index');
+    const { FoldError } = await import('../fold/fold');
+    const { ShareError } = await import('../studio/share');
+    const { said } = await import('../fold/messages');
+    await i18n.changeLanguage('ja');
+    try {
+      expect(sayFold(new FoldError('noSheetToCopyOnto', { sheet: 2 }))).toBe(ja.fold.noSheetToCopyOnto.replace('{{sheet}}', '2'));
+      // As posted from a worker or kept with a design, and with a step's error inside a share link's.
+      expect(sayFold(said(new FoldError('nothingToMove')))).toBe(ja.fold.nothingToMove);
+      const inner = said(new FoldError('cutMissesPaper'));
+      expect(sayFold(new ShareError('shareStep', { step: 3, error: inner }))).toBe(`手順 3:${ja.fold.cutMissesPaper}`);
+      // Plain English, for authors and files, stays as it is.
+      expect(sayFold(new Error('steps.2.op: expected a number'))).toBe('steps.2.op: expected a number');
+    } finally {
+      await i18n.changeLanguage('en');
+    }
+  });
+});

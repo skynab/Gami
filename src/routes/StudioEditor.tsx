@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { sayFold } from '../i18n';
 import { Link } from 'react-router';
 import { TopBar } from '../app/TopBar';
 import { FoldError } from '../fold/fold';
@@ -97,7 +98,7 @@ export default function StudioEditor({ end, cloud = false }: {
       },
       (e: Error) => {
         setBending(null);
-        if (!(e instanceof BendCancelled)) setMessage(e.message);
+        if (!(e instanceof BendCancelled)) setMessage(sayFold(e));
       },
     );
   };
@@ -135,7 +136,7 @@ export default function StudioEditor({ end, cloud = false }: {
       add({ ...(named ?? stepFor(o, t)), frame: next, ...(via && { via }), ...(drawn && { marks: drawn }), op: o });
     } catch (e) {
       if (!(e instanceof FoldError || e instanceof OpError)) throw e;
-      setMessage(e.message);
+      setMessage(sayFold(e));
     }
   };
 
@@ -216,7 +217,7 @@ export default function StudioEditor({ end, cloud = false }: {
       applyOp(before, o);
     } catch (e) {
       if (!(e instanceof FoldError || e instanceof OpError)) throw e;
-      return setMessage(e.message);
+      return setMessage(sayFold(e));
     }
     if (held.length) setHeld((h) => [...h, o]);
     else addOp(o);
@@ -290,7 +291,7 @@ export default function StudioEditor({ end, cloud = false }: {
     try {
       link = `${location.origin}${import.meta.env.BASE_URL}shared#${await shareText(model)}`;
     } catch (e) {
-      return setMessage(e instanceof ShareError ? t('studio.linkFailed', { error: e.message }) : (e as Error).message);
+      return setMessage(e instanceof ShareError ? t('studio.linkFailed', { error: sayFold(e) }) : sayFold(e));
     }
     setMessage(null);
     try {
@@ -423,7 +424,7 @@ export default function StudioEditor({ end, cloud = false }: {
             )}
             {problem && (
               <div className="studio-note error" role="alert">
-                <span>{t('studio.problem', { n: problem.step, error: problem.message })}</span>
+                <span>{t('studio.problem', { n: problem.step, error: sayFold(problem) })}</span>
                 <button type="button" className="link small" onClick={() => startEdit(problem.step - 1)}>
                   {t('studio.fixStep')}
                 </button>

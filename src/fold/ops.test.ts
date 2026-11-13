@@ -81,7 +81,8 @@ describe('replaying fold operations', () => {
     model.steps[3] = { ...model.steps[3], op: { op: 'fold', line: { onto: [{ paper: [5, 5] }, { table: [0, 0] }] } } };
     const { model: again, status, error } = replay(model);
     expect(status.slice(2, 5)).toEqual(['replayed', 'failed', 'skipped']);
-    expect(error).toEqual({ step: 4, message: expect.stringContaining('isn’t on the paper') });
+    // With its message code, so the Studio can say it in its own language.
+    expect(error).toEqual({ step: 4, message: expect.stringContaining('isn’t on the paper'), code: 'notOnPaper', params: { point: '5, 5' } });
     expect(again.steps[3]).toBe(model.steps[3]);
     expect(again.steps).toHaveLength(model.steps.length);
   });
