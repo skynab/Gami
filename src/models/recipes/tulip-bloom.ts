@@ -1,12 +1,18 @@
 import { paper, Recipe, table } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
+import { boxEdges, boxEnds, cubeGuides } from './balloon-cube';
 import { cornersUp, moved, waterbombBase } from './waterbomb-base';
+
+/** How far out from the middle the diamond's side corners fold over: a third of the way to them. */
+const WRAP = 0.25 / 3;
 
 /**
  * The traditional 3D tulip blossom: a water bomb base, its bottom corners folded up to the top on both sides, the
  * side corners overlapped and one tucked into the other, then blown up through the hole at the bottom, as
- * OrigamiOK's tulip does. Blowing up is a bend, as in the balloon (see docs/bending-plan.md); like the balloon, it
- * puffs into a rounded bud rather than a cup, so the petals aren't peeled down.
+ * OrigamiOK's tulip does. Blowing up is a bend, as in the balloon (see docs/bending-plan.md), and led the same way,
+ * face by face (./balloon-cube.ts): wrapped at a third rather than a half, the paper round the sheet's centre
+ * covers a box a sixth of the sheet square and twice as tall, which stands up on the hole's end as it opens, its
+ * petals' points together on top. A bud rather than a cup: the petals aren't peeled down.
  */
 export function tulipBloom() {
   const r = waterbombBase(new Recipe({ id: 'tulip-bloom', title: 'Tulip in 3D', sheet: { size: [1, 1], front: '#e8578a', back: '#f6f3ec' } }));
@@ -14,12 +20,14 @@ export function tulipBloom() {
   wrapped(r, ([u, v]) => u > 0 && v < 0);
   r.turnOver('Turn it over, and do the same on this side.');
   wrapped(r, ([u, v]) => u < 0 && v > 0);
-  // Held, as the balloon is, by a corner tucked inside. Wrapped narrower than the balloon, it's blown up harder
-  // (`inflate`), until it's about as thick as it is wide.
+  // Held, as the balloon is, by a corner tucked inside, and blown up as it is: folding along the box's top and
+  // bottom edges, the paper at its ends crumpling on the way. (Blown up by air alone it stopped at a pillow, thinner
+  // than it was wide, lying where it fell.)
+  const stages = 16;
   return r
     .bend(
       { title: 'Blow it up', text: 'Blow gently into the hole at the bottom, and the blossom puffs up. Done!' },
-      { flex: () => true, anchor: [-0.4167, 0.4583], goals: [], mesh: 0.07, inflate: 0.06 },
+      { flex: () => true, anchor: [0, 0], goals: cubeGuides(r.current, { stages, e: WRAP, stand: true }), mesh: 0.07, lines: boxEdges(WRAP), crumple: boxEnds(WRAP), stages, free: true },
     )
     .build();
 }
@@ -32,7 +40,7 @@ export function tulipBloom() {
 function wrapped(r: Recipe, left: (c: Vec2) => boolean) {
   cornersUp(r);
   // The diamond's side corners are at x = ±¼; each folds on a line a third of the way out from the middle.
-  const third = 0.25 / 3;
+  const third = WRAP;
   const right = moved(r, () =>
     r.along(table(third, -1), table(third, 1), table(0.2, -0.25), {
       title: 'Fold the right corner over',

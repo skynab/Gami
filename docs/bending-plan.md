@@ -717,6 +717,19 @@ is behind its guides stage by stage, how deep paper goes through paper, and its 
      on (the balloon clean, but a flap drawn forward shows through another pile's wall close in front, at the
      boat's bow); and places worked out at each corner and blended across the triangle (a layer could come out
      ahead of its cover where several flaps' edges cross).
+   - **The tulip bloom, led as the balloon is** (12 November 2026). Blown up by air alone it stopped at a pillow,
+     thinner than it was wide, lying tilted where it fell. It's the balloon's base wrapped at a third, not a
+     half, so the balloon's map fits it with one number changed (`balloon-cube.ts`, the arms' half width `e`, ⅛
+     for the water bomb): the plus round the sheet's centre, its arms 1/12 either side of the creases, covers a box
+     a sixth of the sheet square and a third long, the arms' straight stretches (from e out to ½ − e) its sides.
+     Guided there with the same lines and crumpling, it also stands up on the hole's end as it opens (`stand`), the
+     petals' points together on top. 1200 triangles in 16 stages, 34 s to solve: every frame within 0.8%, 3.1% as
+     it plays, at most 1.3 cm behind its guides, 0.41 cm through itself (as the balloon); the file is 375 KB. The
+     balloon's own file is unchanged. Standing, its sides meet its ends' flaps at the corners, and a side triangle
+     that touched a pile of flaps at one corner was drawn the whole pile's depth back, showing what's behind it:
+     so a triangle counts as covered only where most of it is (three of the four points looked at). Its back then
+     shows over 0.29% (0.73% without, 4.3% drawn the old way), nothing drawn from over a centimetre behind; the
+     balloon 0.05%, the fan's far-off paper 0.03%.
 
 ## Improving the solver
 

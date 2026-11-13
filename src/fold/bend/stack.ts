@@ -15,7 +15,8 @@ import type { FoldFrame, Vec2, Vec3 } from '../types';
  * outermost of a pile, from the side it's seen, is drawn where it is, and each one under it as many places further
  * back as there are layers up to the top of what covers it (and of what covers that, so one that's covered is
  * always further back than its cover). What's on show is never moved, so nothing far off can be drawn over it;
- * only what's covered is, to keep it covered.
+ * only what's covered is, to keep it covered. Covered means most of it: a triangle that only meets another pile at
+ * a corner is left where it is.
  */
 export interface StackLifts {
   /** Each triangle's layer in the flat stack, signed by which way up it lay (minus if its back faced up). */
@@ -34,6 +35,8 @@ const STACKED = 12 * LAYER_GAP;
 const FACING = 0.8;
 /** The paper over and under a triangle is looked for at its middle, and this far in from each corner towards it. */
 const INSET = 0.1;
+/** How many of those four points make most of them. */
+const MOST = 3;
 
 type V = Vec3;
 const sub = (a: V, b: V): V => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
@@ -74,10 +77,13 @@ export function stackLifts(before: FoldFrame, parent: number[], bent: FoldFrame)
   };
 
   // For each triangle, the triangles lying next over it and next under it, still stacked with it: looked for at
-  // a few of its points, among the paper that lay over and under each, in the stack's order.
+  // a few of its points, among the paper that lay over and under each, in the stack's order. It counts as covered
+  // (or lying on something) only if most of those points are: a triangle that only touches another pile at a
+  // corner, as a box's side does its end's flaps, isn't pushed back the whole depth of that pile.
   const over: number[][] = Array.from({ length: n }, () => []);
   const under: number[][] = Array.from({ length: n }, () => []);
   for (let f = 0; f < n; f++) {
+    const [above, below]: number[][] = [[], []];
     const middle: Vec2 = [(table[f][0][0] + table[f][1][0] + table[f][2][0]) / 3, (table[f][0][1] + table[f][1][1] + table[f][2][1]) / 3];
     const spots: Vec2[] = [middle, ...table[f].map((corner): Vec2 => [corner[0] + INSET * (middle[0] - corner[0]), corner[1] + INSET * (middle[1] - corner[1])])];
     for (const [x, z] of spots) {
@@ -92,15 +98,11 @@ export function stackLifts(before: FoldFrame, parent: number[], bent: FoldFrame)
       // Stacked: close by, facing the same way. (Not the halves of a fold that has opened out, which face opposite
       // ways now, nor a wall and the side that stood up from it.)
       const stacked = (a: number, b: number) => Math.hypot(...sub(column[a].at, column[b].at)) <= STACKED && dot(upward[column[a].face], upward[column[b].face]) >= FACING;
-      if (here + 1 < column.length && stacked(here, here + 1)) {
-        over[f].push(column[here + 1].face);
-        under[column[here + 1].face].push(f);
-      }
-      if (here > 0 && stacked(here, here - 1)) {
-        under[f].push(column[here - 1].face);
-        over[column[here - 1].face].push(f);
-      }
+      if (here + 1 < column.length && stacked(here, here + 1)) above.push(column[here + 1].face);
+      if (here > 0 && stacked(here, here - 1)) below.push(column[here - 1].face);
     }
+    if (above.length >= MOST) over[f] = above;
+    if (below.length >= MOST) under[f] = below;
   }
   // The highest layer covering each triangle, through whatever covers its cover; and the lowest under it likewise.
   const reach = (next: number[][], further: (a: number, b: number) => number) => {

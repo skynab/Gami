@@ -21,9 +21,13 @@ import type { FoldFrame, Vec2, Vec3 } from '../../fold/types';
  * triangles on the sides can't follow rigidly (no path between flat and cube keeps every face of the plus flat, as a
  * paper bag can't open rigidly): they bulge out, and where they meet at T and the hole the paper crumples on the way
  * (the bend's `crumple`, over `CUBE_ENDS`). θ runs from 0 (flat) to a quarter turn (the cube).
+ *
+ * The same goes for a base wrapped narrower than the water bomb, as the 3D tulip's is: with the plus's arms `e`
+ * either side of the creases (|u| or |v| under e), it covers a box 2e square and ½ − 2e long, the arms' straight
+ * stretches (from e out to ½ − e) its sides. The water bomb's e is ⅛, which makes the box a cube.
  */
 
-/** Half the width of the plus's arms, and a quarter of the cube's side. */
+/** Half the width of the water bomb's arms, and half its cube's side. */
 const E = 0.125;
 /** How far in from a face's edges the lattice of guides keeps. */
 const MARGIN = 0.006;
@@ -52,6 +56,8 @@ export function bary(q: Vec2, a: Vec2, b: Vec2, c: Vec2): [number, number, numbe
 export interface EndHalf {
   q: Vec2;
   theta: number;
+  /** Half the width of the plus's arms. */
+  e: number;
   /** T's end (rather than the hole's), and the half on the front side (rather than the back). */
   top: boolean;
   front: boolean;
@@ -74,7 +80,7 @@ export type EndShape = (half: EndHalf) => { at: V; out: V };
  * middle of the gusset's edge is shorter in 3D than on the sheet, so it bulges out by about the sag of an arc that
  * long (stretching them up to about 18% on the way, which crumpling at the ends takes up).
  */
-export const bulge: EndShape = ({ q, tip, corner, middle, other, pt, pc, pm, front, outward }) => {
+export const bulge: EndShape = ({ q, e, tip, corner, middle, other, pt, pc, pm, front, outward }) => {
   const [wt, wc, wm] = bary(q, pt, pc, pm);
   const flat = add(add(mul(tip, wt), mul(corner, wc)), mul(middle, wm));
   const n = outward(unit(cross(sub(corner, tip), sub(middle, tip))));
@@ -82,70 +88,75 @@ export const bulge: EndShape = ({ q, tip, corner, middle, other, pt, pc, pm, fro
   const along = unit(sub(mul(add(tip, middle), 0.5), mul(add(corner, other), 0.5)));
   const towards = unit(add(add(n, m), mul(along, 0.5)));
   const chord = Math.hypot(...sub(middle, tip));
-  const sag = Math.sqrt(Math.max(0, (3 * chord * (E - chord)) / 8));
+  const sag = Math.sqrt(Math.max(0, (3 * chord * (e - chord)) / 8));
   return { at: add(flat, mul(towards, 4 * wt * wm * sag)), out: n };
 };
 
 /**
- * Where a point of the plus (on the sheet) is at θ, with the way out of the cube there. The cube's front side lies
- * on the table (y = 0), x across, the end at T towards −z: x ∈ [−⅛, ⅛], z ∈ [−⅜, −⅛], y ∈ [0, d].
+ * Where a point of the plus (on the sheet) is at θ, with the way out of the box there. The box's front side lies
+ * on the table (y = 0), x across, the end at T towards −z: x ∈ [−e, e], z ∈ [e − ½, −e], y ∈ [0, d]. (The water
+ * bomb's cube: x ∈ [−⅛, ⅛], z ∈ [−⅜, −⅛].)
  */
-export function plus(q: Vec2, theta: number, end: EndShape = bulge): { at: V; out: V } {
+export function plus(q: Vec2, theta: number, end: EndShape = bulge, e = E): { at: V; out: V } {
   const [u, v] = q;
-  if (Math.abs(u) > Math.abs(v) + 1e-12 && Math.abs(v) <= E + 1e-12) {
+  // Where the arms' straight stretches end, at the hole's end of the box.
+  const far = 0.5 - e;
+  if (Math.abs(u) > Math.abs(v) + 1e-12 && Math.abs(v) <= e + 1e-12) {
     // The left and right sides and their ends, worked out for the left and mirrored.
     if (u > 0) {
-      const { at, out } = side([-u, v], theta, end);
+      const { at, out } = side([-u, v], theta, end, e);
       return { at: [-at[0], at[1], at[2]], out: [-out[0], out[1], out[2]] };
     }
-    return side(q, theta, end);
+    return side(q, theta, end, e);
   }
   const s = Math.sin(theta);
   const c = Math.cos(theta);
-  const d = 2 * E * s;
+  const d = 2 * e * s;
   if (v < 0) {
-    if (v >= -E) {
-      const r = v + E;
-      return { at: [u, r * s, -3 * E - r * c], out: [0, -c, -s] };
+    if (v >= -e) {
+      const r = v + e;
+      return { at: [u, r * s, -far - r * c], out: [0, -c, -s] };
     }
-    if (v >= -3 * E) return { at: [u, 0, -0.5 - v], out: [0, -1, 0] };
-    const r = -3 * E - v;
-    return { at: [u, r * s, -E + r * c], out: [0, -c, s] };
+    if (v >= -far) return { at: [u, 0, -0.5 - v], out: [0, -1, 0] };
+    const r = -far - v;
+    return { at: [u, r * s, -e + r * c], out: [0, -c, s] };
   }
-  if (v <= E) {
-    const r = E - v;
-    return { at: [u, d - r * s, -3 * E - r * c], out: [0, c, -s] };
+  if (v <= e) {
+    const r = e - v;
+    return { at: [u, d - r * s, -far - r * c], out: [0, c, -s] };
   }
-  if (v <= 3 * E) return { at: [u, d, -0.5 + v], out: [0, 1, 0] };
-  const r = v - 3 * E;
-  return { at: [u, d - r * s, -E + r * c], out: [0, c, s] };
+  if (v <= far) return { at: [u, d, -0.5 + v], out: [0, 1, 0] };
+  const r = v - far;
+  return { at: [u, d - r * s, -e + r * c], out: [0, c, s] };
 }
 
 /** The left side (u < 0, |v| < |u|): the gusset's halves, and the end triangles at either end. */
-function side(q: Vec2, theta: number, end: EndShape): { at: V; out: V } {
+function side(q: Vec2, theta: number, end: EndShape, e: number): { at: V; out: V } {
   const [u, v] = q;
+  const far = 0.5 - e;
   const s = Math.sin(theta);
   const c = Math.cos(theta);
-  const d = 2 * E * s;
+  const d = 2 * e * s;
   const front = v < 0;
-  const w = E - Math.abs(v);
-  if (u <= -E && u >= -3 * E) {
-    return { at: [-E + w * c, front ? w * s : d - w * s, -0.5 - u], out: front ? [-s, c, 0] : [-s, -c, 0] };
+  const w = e - Math.abs(v);
+  if (u <= -e && u >= -far) {
+    return { at: [-e + w * c, front ? w * s : d - w * s, -0.5 - u], out: front ? [-s, c, 0] : [-s, -c, 0] };
   }
-  // An end: T's (u > −⅛) or the hole's (u < −⅜). The triangle T (or H), its corner on the front (or back) and the
+  // An end: T's (u > −e) or the hole's (u < e − ½). The triangle T (or H), its corner on the front (or back) and the
   // middle of the gusset's edge, which its two halves meet along.
-  const top = u > -E;
-  const zEdge = top ? -3 * E : -E;
-  const [pt, pc, pm]: Vec2[] = top ? [[0, 0], [-E, front ? -E : E], [-E, 0]] : [[-0.5, 0], [-3 * E, front ? -E : E], [-3 * E, 0]];
+  const top = u > -e;
+  const zEdge = top ? -far : -e;
+  const [pt, pc, pm]: Vec2[] = top ? [[0, 0], [-e, front ? -e : e], [-e, 0]] : [[-0.5, 0], [-far, front ? -e : e], [-far, 0]];
   return end({
     q,
     theta,
+    e,
     top,
     front,
-    tip: [0, E * s, top ? -3 * E - E * c : -E + E * c],
-    corner: [-E, front ? 0 : d, zEdge],
-    middle: [-E + E * c, E * s, zEdge],
-    other: [-E, front ? d : 0, zEdge],
+    tip: [0, e * s, top ? -far - e * c : -e + e * c],
+    corner: [-e, front ? 0 : d, zEdge],
+    middle: [-e + e * c, e * s, zEdge],
+    other: [-e, front ? d : 0, zEdge],
     pt,
     pc,
     pm,
@@ -206,12 +217,12 @@ function lattice(poly: Vec2[], spacing: number): Vec2[] {
  * the table to that face's sheet (`back`): of the faces stacked at its middle, the plus's nearest in the stack; and
  * how far out from it it is (`gap`), by the layers between.
  */
-function placements(frame: FoldFrame) {
+function placements(frame: FoldFrame, e: number) {
   const faces = toFlat(frame);
   const layers = frame.faces_layer!;
   const core = faces.map((f) => {
     const [u, v] = f.paper.reduce((m, q) => [m[0] + Math.abs(q[0]) / f.paper.length, m[1] + Math.abs(q[1]) / f.paper.length], [0, 0]);
-    return (u < E || v < E) && u + v < 0.5;
+    return (u < e || v < e) && u + v < 0.5;
   });
   const covers = (poly: Vec2[], q: Vec2) => {
     let odd = false;
@@ -232,32 +243,36 @@ function placements(frame: FoldFrame) {
 }
 
 /** Where each point of the flat water bomb (`frame`) goes on the cube at θ, by the face of the frame it's on. */
-export function onCube(frame: FoldFrame, end: EndShape = bulge): (face: number, q: Vec2, theta: number) => V {
-  const all = placements(frame);
+export function onCube(frame: FoldFrame, end: EndShape = bulge, e = E): (face: number, q: Vec2, theta: number) => V {
+  const all = placements(frame, e);
   return (face, q, theta) => {
     const { place, back, gap } = all[face];
-    const p = plus(back(place(q)), theta, end);
+    const p = plus(back(place(q)), theta, end, e);
     return add(p.at, mul(p.out, gap));
   };
 }
 
 /**
- * The cube's top and bottom edges in the flat stack: every face of the plus folds onto the end faces at one of
+ * The box's top and bottom edges in the flat stack: every face of the plus folds onto the end faces at one of
  * these two lines across the table, and so does whatever lies on it (see the bend's `lines`).
  */
-export const CUBE_EDGES: [Vec2, Vec2][] = [
-  [[-1, -3 * E], [1, -3 * E]],
-  [[-1, -E], [1, -E]],
+export const boxEdges = (e: number): [Vec2, Vec2][] => [
+  [[-1, e - 0.5], [1, e - 0.5]],
+  [[-1, -e], [1, -e]],
 ];
 
 /**
- * The cube's ends in the flat stack, past its top and bottom edges (T's end towards −z, the hole's towards +z):
+ * The box's ends in the flat stack, past its top and bottom edges (T's end towards −z, the hole's towards +z):
  * where the paper may crumple on the way (see the bend's `crumple`).
  */
-export const CUBE_ENDS: Vec2[][] = [
-  [[-1, -1], [1, -1], [1, -3 * E], [-1, -3 * E]],
-  [[-1, -E], [1, -E], [1, 1], [-1, 1]],
+export const boxEnds = (e: number): Vec2[][] => [
+  [[-1, -1], [1, -1], [1, e - 0.5], [-1, e - 0.5]],
+  [[-1, -e], [1, -e], [1, 1], [-1, 1]],
 ];
+
+/** The water bomb's cube's. */
+export const CUBE_EDGES = boxEdges(E);
+export const CUBE_ENDS = boxEnds(E);
 
 export interface CubeGuideOptions {
   /** The bend's stages: each guide has a place for each. */
@@ -270,25 +285,36 @@ export interface CubeGuideOptions {
   skip?: (onPlus: Vec2, core: boolean) => boolean;
   /** Guides close in to T and the hole too (see `tips`). */
   tips?: boolean;
+  /** Half the width of the plus's arms: ⅛, the water bomb's, unless given. */
+  e?: number;
+  /** Stood up on the hole's end as it opens, T's end on top, rather than left lying on its front. */
+  stand?: boolean;
 }
 
 /** Guides taking the flat water bomb (`frame`) to the cube, from where it lies flat, layers and all, eased into the shape as it opens. */
-export function cubeGuides(frame: FoldFrame, { stages, spacing = 0.04, end = bulge, skip, tips: nearTips = true }: CubeGuideOptions): BendGoal[] {
+export function cubeGuides(frame: FoldFrame, { stages, spacing = 0.04, end = bulge, skip, tips: nearTips = true, e = E, stand = false }: CubeGuideOptions): BendGoal[] {
   const round = (x: number) => Math.round(x * 1e6) / 1e6 || 0;
-  return placements(frame).flatMap(({ face: f, core, layer, place, back, gap }) =>
+  // Standing up: a quarter turn about the line across the box's middle, eased in and out, T's end rising.
+  const upright = (p: V, s: number): V => {
+    const turn = (Math.PI / 2) * s * s * (3 - 2 * s);
+    const [y, z] = [p[1] - e, p[2] + 0.25];
+    return [p[0], e + y * Math.cos(turn) - z * Math.sin(turn), -0.25 + y * Math.sin(turn) + z * Math.cos(turn)];
+  };
+  return placements(frame, e).flatMap(({ face: f, core, layer, place, back, gap }) =>
     [...lattice(f.paper, spacing), ...(core && nearTips ? tips(f.paper) : [])].flatMap((q): BendGoal[] => {
       const xz = place(q);
       const onPlus = back(xz);
       if (skip?.(onPlus, core)) return [];
       const at = (theta: number) => {
-        const p = plus(onPlus, theta, end);
+        const p = plus(onPlus, theta, end, e);
         return add(p.at, mul(p.out, gap));
       };
       const start = at(0);
       const lying: V = [xz[0], layer * LAYER_GAP, xz[1]];
       const path = Array.from({ length: stages }, (_, k): Vec3 => {
         const s = (k + 1) / stages;
-        return add(at((s * Math.PI) / 2), mul(sub(lying, start), 1 - s)).map(round) as Vec3;
+        const opening = add(at((s * Math.PI) / 2), mul(sub(lying, start), 1 - s));
+        return (stand ? upright(opening, s) : opening).map(round) as Vec3;
       });
       return [{ guide: { paper: q.map(round) as Vec2 }, path }];
     }),
