@@ -2699,4 +2699,38 @@ export const es: Record<string, string> = {
     "Coloca las hojas sobre la parte de arriba de la fresa.",
   "Draw little seeds all over the berry. Ready to eat!":
     "Dibuja semillitas por toda la fresa. ¡Lista para comer!",
+  "Orange side up, cut two snips up from the bottom edge of the big square and two down from the top edge, a little in from each side.":
+    "Con el lado naranja hacia arriba, haz dos cortes hacia arriba desde el borde inferior del cuadrado grande y dos hacia abajo desde el borde superior, un poco hacia dentro de cada lado.",
+  "Fold the bellies behind":
+    "Dobla las barrigas hacia atrás",
+  "Fold the strips between the snips behind, at the top and at the bottom.":
+    "Dobla hacia atrás las tiras entre los cortes, arriba y abajo.",
+  "Fold the top half behind, so the strips are inside and four legs hang down.":
+    "Dobla la mitad de arriba hacia atrás, para que las tiras queden dentro y cuelguen cuatro patas.",
+  "Take the small square, white side up, and turn it so a corner points towards you.":
+    "Toma el cuadrado pequeño, con el lado blanco hacia arriba, y gíralo para que una esquina apunte hacia ti.",
+  "Turn the head over":
+    "Da la vuelta a la cabeza",
+  "Turn the head over, left to right.":
+    "Da la vuelta a la cabeza, de izquierda a derecha.",
+  "Draw two eyes and a nose on the face.":
+    "Dibuja dos ojos y una nariz en la cara.",
+  "Turn the tail square":
+    "Gira el cuadrado de la cola",
+  "Take the last square, white side up, and turn it so a corner points towards you.":
+    "Toma el último cuadrado, con el lado blanco hacia arriba, y gíralo para que una esquina apunte hacia ti.",
+  "Fold its lower edges to the middle crease. The long point is the tip of the tail.":
+    "Dobla sus bordes inferiores hasta el pliegue del centro. La punta larga es la punta de la cola.",
+  "Fold the tail in half":
+    "Dobla la cola por la mitad",
+  "Fold the left half behind, so the tail is orange on both sides.":
+    "Dobla la mitad izquierda hacia atrás, para que la cola sea naranja por los dos lados.",
+  "Stand the body up":
+    "Pon el cuerpo de pie",
+  "Open the body’s two sides a little and stand it on its four legs.":
+    "Abre un poco los dos lados del cuerpo y ponlo de pie sobre sus cuatro patas.",
+  "Slip the head over the front of the body, facing forwards.":
+    "Encaja la cabeza en la parte delantera del cuerpo, mirando hacia delante.",
+  "Tuck the tail’s wide end between the back legs, so it sticks out behind. Your fox is ready to explore!":
+    "Mete el extremo ancho de la cola entre las patas traseras, para que asome por detrás. ¡Tu zorro está listo para explorar!",
 };

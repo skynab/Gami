@@ -140,6 +140,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'lizard', title: 'Lizard', blurb: 'A lizard seen from above, legs splayed and a long thin tail, from two squares.', difficulty: 3, category: 'animal', steps: 30, minutes: 15, sheets: 2, needs: ['pen'], added: '2026-11-13' },
   { id: 'squirrel', title: 'Squirrel', blurb: 'A squirrel sitting up, its bushy tail curled over its back, from three squares.', difficulty: 2, category: 'animal', steps: 13, minutes: 10, sheets: 3, needs: ['pen'], added: '2026-11-13' },
   { id: 'strawberry', title: 'Strawberry', blurb: 'A plump red strawberry with a crown of green leaves and seeds drawn on, from two squares.', difficulty: 1, category: 'flower', steps: 9, minutes: 8, sheets: 2, needs: ['pen'], added: '2026-11-13' },
+  { id: 'fox-3d', title: 'Standing fox', blurb: 'A fox standing on four legs in 3D, its tail out behind, from three squares and four snips.', difficulty: 3, category: 'animal', steps: 17, minutes: 15, sheets: 3, needs: ['scissors', 'pen'], added: '2026-11-13' },
   { id: 'fan', title: 'Fan', blurb: 'Pleat a sheet back and forth, fold it in half and lock the middle, then spread it into a half circle.', difficulty: 1, category: 'object', steps: 14, minutes: 10, sheets: 1, paper: 1.4, added: '2026-11-07' },
   { id: 'boat', title: 'Boat', blurb: 'The classic paper boat. It really floats, for a while.', difficulty: 2, category: 'object', steps: 15, minutes: 6, sheets: 1, paper: 1.41, added: '2026-11-09' },
   // Coming soon: listed, with no steps yet.

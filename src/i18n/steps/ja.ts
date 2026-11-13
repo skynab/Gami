@@ -2699,4 +2699,38 @@ export const ja: Record<string, string> = {
     "葉をイチゴの上のほうにのせます。",
   "Draw little seeds all over the berry. Ready to eat!":
     "イチゴ全体に小さなたねをかきます。めしあがれ！",
+  "Orange side up, cut two snips up from the bottom edge of the big square and two down from the top edge, a little in from each side.":
+    "大きい正方形をオレンジの面を上にして、下のふちから上へ二か所、上のふちから下へ二か所、それぞれ左右のはしから少し内側に切りこみを入れます。",
+  "Fold the bellies behind":
+    "おなかをうしろに折る",
+  "Fold the strips between the snips behind, at the top and at the bottom.":
+    "切りこみのあいだの細長い部分を、上と下でうしろに折ります。",
+  "Fold the top half behind, so the strips are inside and four legs hang down.":
+    "上半分をうしろに折って、細長い部分を内側にし、四本の足が下にたれるようにします。",
+  "Take the small square, white side up, and turn it so a corner points towards you.":
+    "小さい正方形を白い面を上にして、角を手前にむけます。",
+  "Turn the head over":
+    "頭を裏返す",
+  "Turn the head over, left to right.":
+    "頭を左右に裏返します。",
+  "Draw two eyes and a nose on the face.":
+    "顔に目を二つと鼻をかきます。",
+  "Turn the tail square":
+    "しっぽの正方形をまわす",
+  "Take the last square, white side up, and turn it so a corner points towards you.":
+    "のこりの正方形を白い面を上にして、角を手前にむけます。",
+  "Fold its lower edges to the middle crease. The long point is the tip of the tail.":
+    "下の二つのふちを、まん中の折りすじに合わせて折ります。長い先がしっぽの先です。",
+  "Fold the tail in half":
+    "しっぽを半分に折る",
+  "Fold the left half behind, so the tail is orange on both sides.":
+    "左半分をうしろに折って、しっぽが両面オレンジになるようにします。",
+  "Stand the body up":
+    "体を立たせる",
+  "Open the body’s two sides a little and stand it on its four legs.":
+    "体の両側を少し開いて、四本の足で立たせます。",
+  "Slip the head over the front of the body, facing forwards.":
+    "頭を体の前にかぶせて、前をむかせます。",
+  "Tuck the tail’s wide end between the back legs, so it sticks out behind. Your fox is ready to explore!":
+    "しっぽの広いほうのはしをうしろ足のあいだにさしこんで、うしろにつき出るようにします。キツネが探検に出かけます！",
 };

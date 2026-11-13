@@ -216,6 +216,7 @@ export const fr: Messages = {
     lizard: { title: 'Lézard', blurb: 'Un lézard vu de dessus, pattes écartées et longue queue fine, à partir de deux carrés.' },
     squirrel: { title: 'Écureuil', blurb: 'Un écureuil assis, sa queue touffue recourbée sur le dos, à partir de trois carrés.' },
     strawberry: { title: 'Fraise', blurb: 'Une fraise rouge et dodue, couronnée de feuilles vertes, ses graines dessinées, à partir de deux carrés.' },
+    'fox-3d': { title: 'Renard debout', blurb: 'Un renard debout sur ses quatre pattes, en 3D, la queue tendue derrière, à partir de trois carrés et quatre entailles.' },
   },
   notFound: {
     title: 'Cette page a été repliée',

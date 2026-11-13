@@ -2699,4 +2699,38 @@ export const fr: Record<string, string> = {
     "Pose les feuilles sur le haut de la fraise.",
   "Draw little seeds all over the berry. Ready to eat!":
     "Dessine de petites graines sur toute la fraise. Prête à croquer !",
+  "Orange side up, cut two snips up from the bottom edge of the big square and two down from the top edge, a little in from each side.":
+    "Face orange vers le haut, fais deux entailles vers le haut depuis le bord du bas du grand carré, et deux vers le bas depuis le bord du haut, un peu à l’intérieur de chaque côté.",
+  "Fold the bellies behind":
+    "Plier les ventres derrière",
+  "Fold the strips between the snips behind, at the top and at the bottom.":
+    "Plie derrière les bandes entre les entailles, en haut et en bas.",
+  "Fold the top half behind, so the strips are inside and four legs hang down.":
+    "Plie la moitié du haut derrière, pour que les bandes soient à l’intérieur et que quatre pattes pendent.",
+  "Take the small square, white side up, and turn it so a corner points towards you.":
+    "Prends le petit carré, face blanche vers le haut, et tourne-le pour qu’un coin pointe vers toi.",
+  "Turn the head over":
+    "Retourner la tête",
+  "Turn the head over, left to right.":
+    "Retourne la tête, de gauche à droite.",
+  "Draw two eyes and a nose on the face.":
+    "Dessine deux yeux et un nez sur le visage.",
+  "Turn the tail square":
+    "Tourner le carré de la queue",
+  "Take the last square, white side up, and turn it so a corner points towards you.":
+    "Prends le dernier carré, face blanche vers le haut, et tourne-le pour qu’un coin pointe vers toi.",
+  "Fold its lower edges to the middle crease. The long point is the tip of the tail.":
+    "Plie ses bords du bas jusqu’au pli du milieu. La longue pointe est le bout de la queue.",
+  "Fold the tail in half":
+    "Plier la queue en deux",
+  "Fold the left half behind, so the tail is orange on both sides.":
+    "Plie la moitié gauche derrière, pour que la queue soit orange des deux côtés.",
+  "Stand the body up":
+    "Mettre le corps debout",
+  "Open the body’s two sides a little and stand it on its four legs.":
+    "Écarte un peu les deux côtés du corps et mets-le debout sur ses quatre pattes.",
+  "Slip the head over the front of the body, facing forwards.":
+    "Glisse la tête sur l’avant du corps, tournée vers l’avant.",
+  "Tuck the tail’s wide end between the back legs, so it sticks out behind. Your fox is ready to explore!":
+    "Glisse le bout large de la queue entre les pattes arrière, pour qu’elle dépasse derrière. Ton renard est prêt à explorer !",
 };

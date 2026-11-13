@@ -44,6 +44,7 @@ site's source code, or any other model in the gallery.
 | Lizard | `src/models/recipes/lizard.ts` | November 2026 |
 | Squirrel | `src/models/recipes/squirrel.ts` | November 2026 |
 | Strawberry | `src/models/recipes/strawberry.ts` | November 2026 |
+| Standing fox | `src/models/recipes/fox-3d.ts` | November 2026 |
 
 ## Other models in the gallery
 

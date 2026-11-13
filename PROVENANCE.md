@@ -119,6 +119,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `lizard` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the general look of OrigamiOK's lizard, which is Lee Won-pyo's, folded differently: the turtle's narrowed water bomb base with steeper legs, and a separate tail (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
 | `squirrel` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a squirrel sitting up, after the look of OrigamiOK's, which names no designer, from three squares rather than one (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
 | `strawberry` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a flat strawberry, after the look of OrigamiOK's 3D one, which names no designer; its leaves are folded as the sunflower's petals are (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
+| `fox-3d` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a fox standing in 3D, in place of OrigamiOK's, which is Hoàng Tiến Quyết's; its head is the traditional cat face's folds (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
 
 ### Notes
 
@@ -143,6 +144,10 @@ noted when it was written, and the model was folded from the common traditional 
   its own, and flat: a red diamond with its sides folded behind on a slant, its top and bottom point folded behind and
   its corners rounded, with an eight-pointed green star for the leaves. OrigamiOK's is opened into a 3D berry and
   glued; Gami's blowing up is only led into boxes so far (the balloon, the 3D tulip), not a rounded cone.
+  OrigamiOK's fox is Hoàng Tiến Quyết's, so the standing fox (decided 13 November, to sit beside Okuda's flat one) is
+  Gami's own, from three squares: the body snipped for four legs, its belly strips folded inside, folded in half and
+  opened a little to stand; the head the traditional cat face's folds, set facing forwards; the tail a kite folded in
+  half, held out behind.
 
 - **Modular models from OrigamiOK** (checked 29 October 2026; the plan is `docs/modular-plan.md`). OrigamiOK's
   modular pages name no designer either. Its rainbow chain wasn't found by name; Gami folds the traditional gum
