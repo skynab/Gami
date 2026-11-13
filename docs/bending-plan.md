@@ -848,9 +848,11 @@ that paper stretches; the report says how far it drew in, separately.
 
 ## Open questions
 
-- **Replay in other browsers.** Should a bend step's replay in the Studio re-solve (and possibly differ slightly), or
-  keep the baked frames and only re-solve when an earlier step changes?
+- ✅ **Replay in other browsers.** Settled with the Studio's bend tool (11 November 2026): a saved design keeps its
+  baked frames and re-solves only when an earlier step changes, so opening it never waits on the solver. A share
+  link carries no frames, so opening one solves its bends again (`docs/studio-plan.md`).
 - **Mesh pattern.** A regular grid of right triangles is simplest; aligned to the paper's creases it meshes cleanly.
   Is that enough, or does the fan's twist need a finer mesh near the pinched end? (November 2026: thin faces now
   have their outlines cut evenly, which the fan's strips needed; see step 6.)
-- **A bend tool in the Studio.** Worth it only if creators ask for curved finishes.
+- ✅ **A bend tool in the Studio.** Done 11 November 2026 with crease goals (Studio row 6). Point goals (row 7) wait
+  until creators ask for them.

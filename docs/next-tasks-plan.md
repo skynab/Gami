@@ -1,6 +1,6 @@
 # Plan: what's next (November 2026)
 
-Where Gami stands on 7 November 2026: the housekeeping done, what's waiting on a decision or on something
+Where Gami stands on 7 November 2026 (brought up to date 12 November): the housekeeping done, what's waiting on a decision or on something
 only the owner can see, and the order of work after that. Each area keeps its detail in its own plan; this
 one points to them and is kept up to date as items close.
 
@@ -46,13 +46,15 @@ Things that can't be settled from the code alone.
   ninja star. It's 79 commits behind `dev`. "Creases round a point fold in step" and "Paper joined up sooner, and
   to the end" (November) took on the same problem, so it's probably done with. Check its list against `dev`,
   then delete it here and on GitHub, or pick it up.
-- **The Studio's open questions** (`docs/studio-plan.md`): keep the cloud panel for creators, share links that
-  carry a design in the address, a first-fold tour, phones. Part 4 (submissions with ownership and licence)
-  needs its decisions before any work starts.
+- **The Studio's submissions** (`docs/studio-plan.md`, part 4: ownership and licence) need their decisions before
+  any work starts. Its other open questions are settled and done: the cloud panel stays for creators with Submit
+  hidden, share links carry a design in the address, a short tour on the first visit, and phones get a note
+  that the Studio is easiest on a bigger screen.
 - **The Spin Plane's designer** (`docs/foldnfly-planes-plan.md`): Laux's, or Unattributed? Needs his book's
   contents.
-- **The bending plan's open questions** (`docs/bending-plan.md`): re-solving bends on replay, the mesh pattern,
-  a bend tool in the Studio.
+- **The bending plan's last open question** (`docs/bending-plan.md`): whether the mesh pattern needs to be finer
+  near the fan's pinched end. Re-solving bends on replay and a bend tool in the Studio were both settled by
+  Studio row 6.
 
 ## Branches to delete by hand
 
@@ -226,15 +228,18 @@ The frog now grazes a little deeper, 0.0106 at most (step 45) against 0.0094, st
 - The fold engine's error messages are still English only (milestone 9 left them).
 - The recipes make named folds their own way; they could call `src/fold/presets.ts` (through `Recipe.preset`, since 11 November, as the lesson's open sink does), which the tests show gives
   the same paper.
-- CI's actions (`checkout`, `setup-node`, `upload-artifact`, all `@v4`) are built for Node 20, which GitHub has
-  deprecated; it runs them on Node 24 for now. Move them on when convenient. `ubuntu-latest` is also moving to
-  Ubuntu 26.
+- ✅ **CI's actions on Node 24** (12 November): `checkout`, `setup-node` and `upload-artifact` moved from `@v4`
+  (built for Node 20, which GitHub has deprecated) to `@v7`, and Pages' `upload-pages-artifact@v3` and
+  `deploy-pages@v4` to `@v5`. None of the breaking changes on the way reach these workflows: they don't use
+  `pull_request_target`, a registry token or dotfiles in `dist`. To confirm on CI's next run, after a push.
+  `ubuntu-latest` is also moving to Ubuntu 26.
 
 ## Progress
 
 | Item | Status |
 |---|---|
-| Housekeeping | Done but for the branches (above). |
+| Housekeeping | Done but for the branches (above). 12 November: settled questions taken off "Waiting", CI's actions moved to Node 24 (see Smaller). |
+| Studio, rows 6 and the open questions | Done 11 November: bend with crease goals, share links, a first-visit tour, a note on phones, Submit hidden (`docs/studio-plan.md`). |
 | Unit tests' speed | Done 11 November: 444 s to 217 s, the model checks in four shards (see Smaller). |
 | Grazes | 11 November: the seal off the list (landing in order over up to 0.8 of a step), the frog's entry tightened, every depth measured again (see 2). |
 | Studio, row 5 | Done 8 November: swivel and open sink in the Studio's Named fold (`src/fold/presets.ts`); see `docs/studio-plan.md`. In the common-folds lesson since 11 November (two sections, 66 steps), the sink made with `Recipe.preset`. |
