@@ -699,6 +699,24 @@ is behind its guides stage by stage, how deep paper goes through paper, and its 
      each other across a pocket get an order that needn't be right within a few centimetres of where they meet (none
      shows in these models), and paper that swings past other paper as it bends (a fan's pleats) would need it
      thought about again.
+   - **Only against paper still stacked** (12 November 2026). It did show, in the balloon: blown up, its inside
+     showed through its outside along every edge, in strips up to an eighth of a face wide. Its walls are layers 8
+     and 15 of 24 and its sides 9 and 14, so the near wall's outside was drawn up to 14 places back and the far
+     wall's inside 14 forward, 8 cm between them where the two are a centimetre or two apart. Now each triangle
+     counts only against the paper still stacked with it once bent (`src/fold/bend/stack.ts`): where one lay over
+     another on the table, and that point of each is still within twelve layer gaps, the two still facing the same
+     way (not the halves of a fold opened out, nor a wall and the side stood up from it). The outermost of a pile,
+     from the side it's seen, is drawn where it is, and each one under it as many places back as there are layers
+     up to the top of what covers it, and of what covers that, so a covered triangle is always behind its cover.
+     Nothing on show is moved, so nothing far off can be drawn over it. While the bend plays, the order goes from
+     the flat stack's to this, in step. Looked at from eighteen directions, paper drawn from more than a centimetre
+     behind what's in front went from 4.3% of the balloon to 0.01%, with its back showing over 0.08% (5.7% before);
+     the fan from 0.18% to 0.07%, the tulip bloom 0.38% to 0.20%, the cup 0.07% to 0.01%, and the boat none
+     either way. Tried first: each side counted from its own end of the stack (the strips go, slivers stay along
+     the silhouette, where a wall is seen edge on through its own bulge); piles ranked from the face the rest lie
+     on (the balloon clean, but a flap drawn forward shows through another pile's wall close in front, at the
+     boat's bow); and places worked out at each corner and blended across the triangle (a layer could come out
+     ahead of its cover where several flaps' edges cross).
 
 ## Improving the solver
 

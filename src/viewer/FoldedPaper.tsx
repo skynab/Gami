@@ -13,9 +13,10 @@ import {
   type Mesh,
 } from 'three';
 import { affine, poseAt, stepTransition, transition, type Transition } from '../fold/animate';
-import { toFlat } from '../fold/fold';
+import { stackLifts, type StackLifts } from '../fold/bend/stack';
+import { FoldError } from '../fold/fold';
 import { framesOf, LAYER_GAP, normal } from '../fold/frames';
-import { frontUp, joinedSegment } from '../fold/geometry2d';
+import { joinedSegment } from '../fold/geometry2d';
 import { MARK_COLOUR, MARK_WIDTH, marksUpTo, onFace } from '../fold/marks';
 import { sheetOf } from '../fold/sheets';
 import { laidAlong, TAPE_COLOUR, TAPE_OPACITY } from '../fold/tape';
@@ -171,7 +172,7 @@ function build(t: Transition, model: OrigamiModel, k: number): Built {
   // Faces either side of a scissor cut aren't joined: no bend is drawn between them. The step's faces are its frame's.
   const frame = k ? model.steps[k - 1].frame : model.start;
   const ranks = stackRanks(model, k, t.faces.length);
-  const parts = bySheet.map((faces) => buildPart(t, faces, frame, ranks));
+  const parts = bySheet.map((faces) => buildPart(t, faces, frame, ranks?.lifts));
   const marks = buildMarks(t, model, k);
   const tape = buildTape(t, model, k);
   return {
@@ -180,7 +181,9 @@ function build(t: Transition, model: OrigamiModel, k: number): Built {
     tape: tape.geometry,
     update(s) {
       const pose = poseAt(t, s);
-      for (const p of parts) p.update(pose);
+      // Bending, the paper goes from the flat stack's order to that of what's still stacked (see `stackLifts`).
+      const bent = ranks?.bending ? Math.min(1, Math.max(0, s)) : 1;
+      for (const p of parts) p.update(pose, bent);
       marks.update(pose, s);
       tape.update(pose, s);
     },
@@ -341,27 +344,29 @@ function laidSoFar(pts: Vec3[], reach: number[], upTo: number, size: number): Ve
   return out.length ? [...out, ...Array<Vec3>(size - out.length).fill(out[out.length - 1])] : Array<Vec3>(size).fill(pts[0]);
 }
 
-function buildPart(t: Transition, faceIndices: number[], frame: FoldFrame, ranks?: number[]): { part: Part; update(pose: ReturnType<typeof poseAt>): void; dispose(): void } {
+function buildPart(t: Transition, faceIndices: number[], frame: FoldFrame, lifts?: StackLifts): { part: Part; update(pose: ReturnType<typeof poseAt>, bent: number): void; dispose(): void } {
   const { cuts } = frame;
   const tracks = faceIndices.map((i) => t.faces[i]);
   const corners = tracks.reduce((n, f) => n + f.paper.length, 0);
   const positions = new Float32Array(corners * 3);
   const normals = new Float32Array(corners * 3);
   const uvs = new Float32Array(corners * 2);
+  // How many places nearer the eye each corner's face is drawn, seen from its front and from its back (see LIFT).
   const rank = new Float32Array(corners);
+  const rankBack = new Float32Array(corners);
   const index: number[] = [];
   const { lines, smooth, softly } = softness(frame, faceIndices);
   const edgePositions = new Float32Array(lines.length * 6);
-  // Each line drawn as near the eye as its face's side facing it (see LIFT).
-  const edgeRanks = Float32Array.from(lines.flatMap(([a]) => [ranks?.[faceIndices[a]] ?? 0, ranks?.[faceIndices[a]] ?? 0]));
+  // Each line drawn as near the eye as its face's side facing it.
+  const edgeRanks = new Float32Array(lines.length * 2);
+  const edgeRanksBack = new Float32Array(lines.length * 2);
   const edgeNormals = new Float32Array(lines.length * 6);
 
   let base = 0;
-  tracks.forEach((f, a) => {
+  tracks.forEach((f) => {
     f.paper.forEach(([u, v], i) => {
       uvs[(base + i) * 2] = u + 0.5;
       uvs[(base + i) * 2 + 1] = v + 0.5;
-      rank[base + i] = ranks?.[faceIndices[a]] ?? 0;
     });
     // Faces are convex (straight folds of a convex sheet), so a fan triangulates them.
     for (let i = 1; i < f.paper.length - 1; i++) index.push(base, base + i, base + i + 1);
@@ -454,15 +459,39 @@ function buildPart(t: Transition, faceIndices: number[], frame: FoldFrame, ranks
   surface.setAttribute('normal', new BufferAttribute(normals, 3));
   surface.setAttribute('uv', new BufferAttribute(uvs, 2));
   surface.setAttribute('rank', new BufferAttribute(rank, 1));
+  surface.setAttribute('rankBack', new BufferAttribute(rankBack, 1));
   surface.setIndex(index);
   const edges = new BufferGeometry();
   edges.setAttribute('position', new BufferAttribute(edgePositions, 3));
   edges.setAttribute('rank', new BufferAttribute(edgeRanks, 1));
+  edges.setAttribute('rankBack', new BufferAttribute(edgeRanksBack, 1));
   edges.setAttribute('faceNormal', new BufferAttribute(edgeNormals, 3));
+
+  // The places each face is drawn nearer the eye, `bent` of the way from the flat stack's order (its layer from
+  // one side, less its layer from the other) to its place in what it's still stacked with.
+  let ranked = -1;
+  const rankFaces = (bent: number) => {
+    if (!lifts || bent === ranked) return;
+    ranked = bent;
+    const from = (f: number, back: boolean) => (1 - bent) * (back ? -lifts.layer[f] : lifts.layer[f]) + bent * (back ? lifts.back[f] : lifts.front[f]);
+    let c = 0;
+    faceIndices.forEach((f, a) => {
+      for (let i = 0; i < tracks[a].paper.length; i++, c++) {
+        rank[c] = from(f, false);
+        rankBack[c] = from(f, true);
+      }
+    });
+    lines.forEach(([a], e) => {
+      edgeRanks[2 * e] = edgeRanks[2 * e + 1] = from(faceIndices[a], false);
+      edgeRanksBack[2 * e] = edgeRanksBack[2 * e + 1] = from(faceIndices[a], true);
+    });
+    for (const attribute of [surface.attributes.rank, surface.attributes.rankBack, edges.attributes.rank, edges.attributes.rankBack]) attribute.needsUpdate = true;
+  };
 
   return {
     part: { surface, edges, bends },
-    update(pose) {
+    update(pose, bent) {
+      rankFaces(bent);
       let c = 0;
       const faceNormals = faceIndices.map((i) => normal(pose[i]));
       faceIndices.forEach((i, a) => {
@@ -583,50 +612,50 @@ function paperGrain(): CanvasTexture {
 }
 
 /**
- * For bent paper (step k's frame cut into triangles by a bend): each triangle's place in the stack it was bent from,
- * its layer, signed by which way up it lay there (minus if its back faced up). Undefined for paper that isn't bent.
+ * For bent paper (step k's frame cut into triangles by a bend): how each triangle is ranked against the paper it's
+ * stacked with (see `stackLifts`), and whether this is the step that bends it. Undefined for paper that isn't bent.
  */
-function stackRanks(model: OrigamiModel, k: number, faces: number): number[] | undefined {
+function stackRanks(model: OrigamiModel, k: number, faces: number): { lifts: StackLifts; bending: boolean } | undefined {
   const frames = framesOf(model);
   if (!k || !frames[k].soft?.length) return undefined;
   let b = k;
   while (b > 1 && frames[b - 1].soft?.length) b--;
   const parent = model.steps[b - 1].via?.[0]?.faces_parent;
   const before = frames[b - 1];
-  if (!parent || parent.length !== faces || !before.faces_layer) return undefined;
+  if (!parent || parent.length !== faces || frames[k].faces_vertices.length !== faces || !before.faces_layer) return undefined;
   try {
-    const flat = toFlat(before);
-    return parent.map((f) => (frontUp(flat[f].world, flat[f].paper) ? 1 : -1) * flat[f].layer);
-  } catch {
+    return { lifts: stackLifts(before, parent, frames[k]), bending: b === k };
+  } catch (e) {
     // Bent from paper that wasn't lying flat: no stack to draw it in the order of.
-    return undefined;
+    if (e instanceof FoldError) return undefined;
+    throw e;
   }
 }
 
 /**
  * Stacked layers of bent paper are kept apart at their triangles' corners, but between them, and where a fold wraps
  * round other layers, they can pass a millimetre or two into one another (see docs/bending-plan.md), which would show
- * as specks of one through the other. So each is drawn nearer the eye by its place in the stack (`rank`) times this,
- * along the line of sight, which changes only which shows where they meet: the side that faced up in the stack in the
- * stack's order, the other side in reverse. Bent paper only: a flat stack's layers are drawn apart as it is.
+ * as specks of one through the other. So each is drawn nearer the eye, or further, by its place among the paper it's
+ * stacked with (`rank` seen from its front, `rankBack` from its back) times this, along the line of sight, which
+ * changes only which shows where they meet. Bent paper only: a flat stack's layers are drawn apart as it is.
  */
 const LIFT = 4 * LAYER_GAP;
-const lift = (sign: number) => (shader: { vertexShader: string }) => {
+const lift = (rank: string) => (shader: { vertexShader: string }) => {
   shader.vertexShader = shader.vertexShader
-    .replace('#include <common>', '#include <common>\nattribute float rank;')
-    .replace('#include <project_vertex>', `#include <project_vertex>\nmvPosition.xyz *= 1.0 - rank * ${(sign * LIFT).toFixed(6)} / max(length(mvPosition.xyz), 1e-6);\ngl_Position = projectionMatrix * mvPosition;`);
+    .replace('#include <common>', `#include <common>\nattribute float ${rank};`)
+    .replace('#include <project_vertex>', `#include <project_vertex>\nmvPosition.xyz *= 1.0 - ${rank} * ${LIFT.toFixed(6)} / max(length(mvPosition.xyz), 1e-6);\ngl_Position = projectionMatrix * mvPosition;`);
 };
-const liftFront = lift(1);
-const liftBack = lift(-1);
+const liftFront = lift('rank');
+const liftBack = lift('rankBack');
 /** Lines take their face's lift, by which of its sides faces the eye. */
 const liftLines = (shader: { vertexShader: string }) => {
   shader.vertexShader = shader.vertexShader
-    .replace('#include <common>', '#include <common>\nattribute float rank;\nattribute vec3 faceNormal;')
+    .replace('#include <common>', '#include <common>\nattribute float rank;\nattribute float rankBack;\nattribute vec3 faceNormal;')
     .replace(
       '#include <project_vertex>',
-      `#include <project_vertex>\nfloat facing = dot(normalMatrix * faceNormal, -mvPosition.xyz) >= 0.0 ? 1.0 : -1.0;\nmvPosition.xyz *= 1.0 - facing * rank * ${LIFT.toFixed(6)} / max(length(mvPosition.xyz), 1e-6);\ngl_Position = projectionMatrix * mvPosition;`,
+      `#include <project_vertex>\nfloat lifted = dot(normalMatrix * faceNormal, -mvPosition.xyz) >= 0.0 ? rank : rankBack;\nmvPosition.xyz *= 1.0 - lifted * ${LIFT.toFixed(6)} / max(length(mvPosition.xyz), 1e-6);\ngl_Position = projectionMatrix * mvPosition;`,
     );
 };
-const liftLinesKey = () => 'lift-lines';
-const liftFrontKey = () => 'lift-front';
-const liftBackKey = () => 'lift-back';
+const liftLinesKey = () => 'lift-lines-by-side';
+const liftFrontKey = () => 'lift-front-by-side';
+const liftBackKey = () => 'lift-back-by-side';
