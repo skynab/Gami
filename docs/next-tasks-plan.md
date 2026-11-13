@@ -209,6 +209,21 @@ The frog now grazes a little deeper, 0.0106 at most (step 45) against 0.0094, st
   step, ahead of time (the gallery's ~20 reverse folds). Until then, the point turning as one block and settling
   in between, as now, passes through about half the stack at most.
 
+  Measured again 12 November, face by face, on the three steps still on `GRAZES` (the crane's neck and tail, the
+  fox's tail; the crane's head is at 0.0051): the grazes all come at the end of the step, from s ≈ 0.75 for the neck and 0.9 for
+  the tails, and stay at their depth until the point lands. They aren't the point's tip slipping between the
+  flap's halves. On the crane's neck the point (eight layers, as one block) swings round under the stack and
+  comes up into place, so every layer of it passes up through the four layers that stay below it (the body's,
+  faces 48–54). The depth, 0.0077, is how high the point's top layer is hinged above the bottom layer: just past its
+  hinge that layer lies under the bottom one for the whole last stretch of the swing. Swung round over the top
+  instead (`moving`'s `yielding` way, forced), the depths are the same to four places, as the four layers above
+  (the flap's near half, which already shift up to make room) are as thick. Neither side's layers can get out of
+  the way rigidly: they're joined to the body along the flap's folded edge, and the point lies along that edge,
+  so tilting them about it lifts nothing where the point passes. That leaves the bending way above. It needs
+  frames on the way with a finer mesh than the step's end, which `transitionVia` can't place (each final face
+  has to be a piece of one face of each frame on the way), so it's work on the format and the animator before
+  any model.
+
 - **Three reverse folds keep the old stacking.** The tulip's stem pulled out, the swan's head, and the flapping
   bird's tail (and so its neck and head, folded over it): stacked about the middle, they can't keep the paper that
   stays put in its order, so `collapse` falls back to the old stacking for them, every order kept, and their frames
