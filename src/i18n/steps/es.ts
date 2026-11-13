@@ -2581,4 +2581,28 @@ export const es: Record<string, string> = {
     "Dibuja los ojos y el caparazón",
   "Draw two eyes on the head, and a pattern of plates on the shell. Done!":
     "Dibuja dos ojos en la cabeza y un dibujo de placas en el caparazón. ¡Listo!",
+  "Start with three squares":
+    "Empieza con tres cuadrados",
+  "A yellow square, orange side up; a bigger green one turned so a corner points towards you; and a small brown one.":
+    "Un cuadrado amarillo, con el lado naranja hacia arriba; uno verde más grande, girado para que una esquina apunte hacia ti; y uno marrón pequeño.",
+  "Fold all four corners of the yellow square to the middle.":
+    "Dobla las cuatro esquinas del cuadrado amarillo hasta el centro.",
+  "Fold each point back out, so it sticks out past the middle of its edge.":
+    "Vuelve a doblar cada punta hacia fuera, para que asome por el centro de su borde.",
+  "Fold the middle’s corners behind":
+    "Dobla hacia atrás las esquinas del centro",
+  "Fold each corner of the small brown square behind, a little way in, for the middle of the flower.":
+    "Dobla hacia atrás un poco cada esquina del cuadrado marrón pequeño, para el centro de la flor.",
+  "Put the middle on":
+    "Pon el centro",
+  "Lay the brown middle on top of the petals.":
+    "Coloca el centro marrón encima de los pétalos.",
+  "Put the flower on the stem":
+    "Pon la flor en el tallo",
+  "Set the flower on top of the stem.":
+    "Coloca la flor en lo alto del tallo.",
+  "Draw the seeds":
+    "Dibuja las semillas",
+  "Draw dots in a spiral on the middle for the seeds. Your sunflower is in bloom!":
+    "Dibuja puntos en espiral en el centro para las semillas. ¡Tu girasol ha florecido!",
 };

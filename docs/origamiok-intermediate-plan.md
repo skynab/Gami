@@ -66,7 +66,7 @@ drawn on a block; Gami's open-designs rule turns away models that proprietary, a
 | Phase | Status |
 |---|---|
 | 1. Turtle | Done (13 November), Gami's own: no traditional turtle's order of folds could be checked against OrigamiOK's. A water bomb base narrowed on each side as the water bomb is (corners up, corners in) into a tall six-sided shell, the loose points folded down and out as flippers rather than tucked: the back side's at 30°, low down, the front side's at 55°, high up. The base's top point is the head; eyes and the shell's plates are drawn with the pen. The flaps are two layers, so the paper's other colour never shows. Pen lines are split where the paper on top changes (`onTop` in `face.ts`), as a mark only draws on the layer under its first point. |
-| 2. Sunflower | Not started |
+| 2. Sunflower | Done (13 November), Gami's own, three squares and no glue. The petals are a yellow square, orange side up, its corners folded to the middle and their points folded back out past the edges: eight petals, the square's corners and the points. The folded-in flaps leave an orange square, so the brown middle (a square half as wide, its corners folded behind into an octagon) is big enough to leave only a thin orange ring and the square's corners between the petals. Seeds are 40 dots in a sunflower's golden-angle spiral. The stem is the flat tulip's traditional stem with a leaf, now shared (`leafyStem` in `tulip.ts`); the tulip's files didn't change. It isn't `chrysanthemum`, `rose` or `lotus`: the rose's points twist and it has no middle. |
 | 3. Flat animals | Not started |
 | 4. Strawberry | Not started |
 | 5. 3D fox | Not started |

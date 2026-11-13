@@ -2581,4 +2581,28 @@ export const ja: Record<string, string> = {
     "目とこうらをかく",
   "Draw two eyes on the head, and a pattern of plates on the shell. Done!":
     "頭に目を二つ、こうらにもようをかきます。できあがり！",
+  "Start with three squares":
+    "正方形を三枚用意する",
+  "A yellow square, orange side up; a bigger green one turned so a corner points towards you; and a small brown one.":
+    "黄色の正方形をオレンジの面を上にして、それより大きい緑の正方形を角が手前にくるようにして、そして小さい茶色の正方形を用意します。",
+  "Fold all four corners of the yellow square to the middle.":
+    "黄色の正方形の四つの角を、まん中に合わせて折ります。",
+  "Fold each point back out, so it sticks out past the middle of its edge.":
+    "それぞれの先を外へ折りもどして、ふちのまん中からとび出るようにします。",
+  "Fold the middle’s corners behind":
+    "まん中の角をうしろに折る",
+  "Fold each corner of the small brown square behind, a little way in, for the middle of the flower.":
+    "小さい茶色の正方形の角を、それぞれ少しだけうしろに折ります。これが花のまん中です。",
+  "Put the middle on":
+    "まん中をのせる",
+  "Lay the brown middle on top of the petals.":
+    "茶色のまん中を花びらの上にのせます。",
+  "Put the flower on the stem":
+    "花をくきにのせる",
+  "Set the flower on top of the stem.":
+    "花をくきの上にのせます。",
+  "Draw the seeds":
+    "たねをかく",
+  "Draw dots in a spiral on the middle for the seeds. Your sunflower is in bloom!":
+    "まん中に、うずまきのように点をかいて、たねにします。ヒマワリがさきました！",
 };

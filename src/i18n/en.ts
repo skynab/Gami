@@ -154,6 +154,7 @@ export const en = {
     kusudama: { title: 'Kusudama flower ball', blurb: 'Sixty petals glued into twelve flowers, the flowers into a ball, and a loop to hang it from.' },
     chrysanthemum: { title: 'Chrysanthemum kusudama', blurb: 'Six windmill units glued corner to corner into a ball, their arms opened out as petals.' },
     turtle: { title: 'Turtle', blurb: 'A turtle seen from above, flippers out, its shell drawn on, from the water bomb base.' },
+    sunflower: { title: 'Sunflower', blurb: 'Eight yellow petals round a brown middle, on a stem with a leaf, from three squares.' },
   },
   notFound: {
     title: 'This page got folded away',

@@ -136,6 +136,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'kusudama', title: 'Kusudama flower ball', blurb: 'Sixty petals glued into twelve flowers, the flowers into a ball, and a loop to hang it from.', difficulty: 3, category: 'modular', steps: 15, minutes: 120, sheets: 61, paper: 13.33, needs: ['glue'], added: '2026-10-29' },
   { id: 'chrysanthemum', title: 'Chrysanthemum kusudama', blurb: 'Six windmill units glued corner to corner into a ball, their arms opened out as petals.', difficulty: 2, category: 'modular', steps: 16, minutes: 30, sheets: 6, needs: ['glue'], added: '2026-10-29' },
   { id: 'turtle', title: 'Turtle', blurb: 'A turtle seen from above, flippers out, its shell drawn on, from the water bomb base.', difficulty: 2, category: 'animal', steps: 24, minutes: 10, sheets: 1, needs: ['pen'], added: '2026-11-13' },
+  { id: 'sunflower', title: 'Sunflower', blurb: 'Eight yellow petals round a brown middle, on a stem with a leaf, from three squares.', difficulty: 2, category: 'flower', steps: 17, minutes: 12, sheets: 3, needs: ['pen'], added: '2026-11-13' },
   { id: 'fan', title: 'Fan', blurb: 'Pleat a sheet back and forth, fold it in half and lock the middle, then spread it into a half circle.', difficulty: 1, category: 'object', steps: 14, minutes: 10, sheets: 1, paper: 1.4, added: '2026-11-07' },
   { id: 'boat', title: 'Boat', blurb: 'The classic paper boat. It really floats, for a while.', difficulty: 2, category: 'object', steps: 15, minutes: 6, sheets: 1, paper: 1.41, added: '2026-11-09' },
   // Coming soon: listed, with no steps yet.

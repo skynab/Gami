@@ -115,6 +115,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `kusudama` | Traditional: the flower kusudama (Gilad's database: "Flower Kusudama", Traditional, in *Charming Flower Origami*), as OrigamiOK's kusudama flower ball, which names no designer (see the notes) | None needed: nobody owns it | [OrigamiOK: kusudama flower ball](https://origamiok.com/origami-kusudama-flower-ball/), for the order of folds | Clear | 29 Oct 2026 |
 | `chrysanthemum` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of origami.me's kusudama chrysanthemum (Traditional), whose text doesn't say where its petals' squashed flaps go or which corners are glued; Gami's units are windmill bases with their arms opened as petals, glued corner to corner on a cube (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami, after the look of [origami.me/kusudama-chrysanthemum](https://origami.me/kusudama-chrysanthemum/) | Clear | 29 Oct 2026 |
 | `turtle` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a turtle seen from above, folded from the water bomb base, after the look of OrigamiOK's turtle, which names no designer (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
+| `sunflower` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's sunflower, which names no designer, from three squares and no glue: Gami's own petals and middle, and the flat tulip's traditional stem with a leaf (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
 
 ### Notes
 
@@ -123,6 +124,9 @@ noted when it was written, and the model was folded from the common traditional 
   photographer. Gilad's database lists about ten Traditional square turtles (Gross's *Zoogami*, Momotani, NOA 493 and
   others), but none whose order of folds could be checked against OrigamiOK's, so Gami's turtle is its own: the water
   bomb base narrowed on each side as the water bomb is, its loose points folded out as flippers rather than tucked.
+  Every one of the 81 sunflowers in Gilad's database has a named designer (Yoshizawa, Kasahara, Petty, Yamaguchi and
+  others), so Gami's is its own: corners to the middle and back out for eight petals, a brown octagon for the middle,
+  set on the flat tulip's stem. OrigamiOK's head is cut, opened and pushed into a hollow, and its stem rolled and glued.
 
 - **Modular models from OrigamiOK** (checked 29 October 2026; the plan is `docs/modular-plan.md`). OrigamiOK's
   modular pages name no designer either. Its rainbow chain wasn't found by name; Gami folds the traditional gum

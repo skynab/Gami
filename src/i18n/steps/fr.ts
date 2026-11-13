@@ -2581,4 +2581,28 @@ export const fr: Record<string, string> = {
     "Dessiner les yeux et la carapace",
   "Draw two eyes on the head, and a pattern of plates on the shell. Done!":
     "Dessine deux yeux sur la tête et un motif d’écailles sur la carapace. C’est fini !",
+  "Start with three squares":
+    "Commencer avec trois carrés",
+  "A yellow square, orange side up; a bigger green one turned so a corner points towards you; and a small brown one.":
+    "Un carré jaune, face orange vers le haut ; un carré vert plus grand, tourné pour qu’un coin pointe vers toi ; et un petit carré marron.",
+  "Fold all four corners of the yellow square to the middle.":
+    "Plie les quatre coins du carré jaune jusqu’au centre.",
+  "Fold each point back out, so it sticks out past the middle of its edge.":
+    "Replie chaque pointe vers l’extérieur, pour qu’elle dépasse du milieu de son bord.",
+  "Fold the middle’s corners behind":
+    "Plier les coins du cœur derrière",
+  "Fold each corner of the small brown square behind, a little way in, for the middle of the flower.":
+    "Plie chaque coin du petit carré marron un peu vers l’arrière, pour le cœur de la fleur.",
+  "Put the middle on":
+    "Poser le cœur",
+  "Lay the brown middle on top of the petals.":
+    "Pose le cœur marron sur les pétales.",
+  "Put the flower on the stem":
+    "Poser la fleur sur la tige",
+  "Set the flower on top of the stem.":
+    "Pose la fleur en haut de la tige.",
+  "Draw the seeds":
+    "Dessiner les graines",
+  "Draw dots in a spiral on the middle for the seeds. Your sunflower is in bloom!":
+    "Dessine des points en spirale sur le cœur pour les graines. Ton tournesol est en fleur !",
 };
