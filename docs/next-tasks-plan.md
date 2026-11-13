@@ -12,6 +12,7 @@ request.
 
 | Item | Status |
 |---|---|
+| OrigamiOK's intermediate folds | Done 13 November (`docs/origamiok-intermediate-plan.md`): turtle, sunflower, lizard, squirrel, a flat strawberry and a standing 3D fox, all Gami's own; the creeper left out. A 3D strawberry waits on a bend guide for a rounded shape. |
 | The decision on `PROVENANCE.md` was in the `PLAN.md` decisions log twice | Done: one copy removed. |
 | Fold'N Fly plan: "Gami's own planes need names of their own" | Done: they're the corkscrew and the flying saucer. Taken off the open questions. |
 | A link here from `PLAN.md` | Done, under the milestones. |
@@ -33,9 +34,9 @@ Things that can't be settled from the code alone.
   editor's crowded top bar scrolls sideways in one line (its "Studio" title hidden; a screen-reader label inside it
   had been left past the screen's edge); a long hint wraps. A new test checks the editor fits the screen and its
   tools take taps (it fails on the old layout). Passes here; confirm on CI's next run, after a push.
-- **The New cutoff.** `NEW_SINCE` is `2026-10-28`, so 34 models show as New: 24 added on 28 October and 10 on
-  29 October. Nothing has been added since, so moving it past the 29th leaves the New filter empty. Either leave
-  it until the next batch, or move it to `2026-10-29` to keep only the last batch's stars.
+- **The New cutoff.** `NEW_SINCE` is `2026-10-28`, so 40 models show as New: 24 added on 28 October, 10 on
+  29 October and 6 on 13 November (OrigamiOK's intermediate batch, `docs/origamiok-intermediate-plan.md`). Move it
+  to `2026-11-13` to keep only the new batch's stars, or leave it.
 - **Sword or easy sword.** `easy-sword` (one square, 9 steps, difficulty 1) went in on 29 October "to compare
   with `sword` and keep the better one" (`sword`: a 1 × 4 strip, 14 steps, difficulty 2). Keep both, or drop one
   (its recipe, catalog entry, files, step translations and `PROVENANCE.md` row, and its line in
