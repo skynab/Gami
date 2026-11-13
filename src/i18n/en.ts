@@ -156,6 +156,7 @@ export const en = {
     turtle: { title: 'Turtle', blurb: 'A turtle seen from above, flippers out, its shell drawn on, from the water bomb base.' },
     sunflower: { title: 'Sunflower', blurb: 'Eight yellow petals round a brown middle, on a stem with a leaf, from three squares.' },
     lizard: { title: 'Lizard', blurb: 'A lizard seen from above, legs splayed and a long thin tail, from two squares.' },
+    squirrel: { title: 'Squirrel', blurb: 'A squirrel sitting up, its bushy tail curled over its back, from three squares.' },
   },
   notFound: {
     title: 'This page got folded away',

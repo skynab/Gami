@@ -214,6 +214,7 @@ export const es: Messages = {
     turtle: { title: 'Tortuga', blurb: 'Una tortuga vista desde arriba, con las aletas abiertas y el caparazón dibujado, desde la base de bomba de agua.' },
     sunflower: { title: 'Girasol', blurb: 'Ocho pétalos amarillos alrededor de un centro marrón, sobre un tallo con una hoja, con tres cuadrados.' },
     lizard: { title: 'Lagartija', blurb: 'Una lagartija vista desde arriba, con las patas abiertas y una cola larga y fina, con dos cuadrados.' },
+    squirrel: { title: 'Ardilla', blurb: 'Una ardilla sentada, con la cola peluda rizada sobre la espalda, con tres cuadrados.' },
   },
   notFound: {
     title: 'Esta página se ha plegado y ha desaparecido',

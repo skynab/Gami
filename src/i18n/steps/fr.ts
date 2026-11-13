@@ -2633,4 +2633,42 @@ export const fr: Record<string, string> = {
     "Glisse le bout large de la queue sous le corps, jusqu’aux pattes arrière.",
   "Draw two eyes on the head. Your lizard is ready to scurry off!":
     "Dessine deux yeux sur la tête. Ton lézard est prêt à filer !",
+  "Start with three diamonds":
+    "Commencer avec trois losanges",
+  "Three squares, light side up, each turned so a corner points towards you: a middle-sized one, a big one and a small one.":
+    "Trois carrés, face claire vers le haut, chacun tourné pour qu’un coin pointe vers toi : un moyen, un grand et un petit.",
+  "Fold the middle square’s right corner over to its left corner.":
+    "Plie le coin droit du carré moyen sur son coin gauche.",
+  "Fold the feet behind":
+    "Plier les pieds derrière",
+  "Fold the bottom point behind, so the body sits on a flat edge.":
+    "Plie la pointe du bas derrière, pour que le corps repose sur un bord plat.",
+  "Fold the big square’s left corner to its right corner, then unfold.":
+    "Plie le coin gauche du grand carré sur son coin droit, puis déplie.",
+  "Fold the tail into a kite":
+    "Plier la queue en cerf-volant",
+  "Fold its lower edges to the middle crease.":
+    "Plie ses bords du bas jusqu’au pli du milieu.",
+  "Turn the tail over":
+    "Retourner la queue",
+  "Turn the kite over, left to right.":
+    "Retourne le cerf-volant, de gauche à droite.",
+  "Flick the tail’s tip":
+    "Recourber le bout de la queue",
+  "Fold the top point down, so the tail’s tip curls over.":
+    "Rabats la pointe du haut, pour que le bout de la queue se recourbe.",
+  "Fold the small square’s right corner over to its left corner. The point on the left is the nose; the top corner is the ear.":
+    "Plie le coin droit du petit carré sur son coin gauche. La pointe à gauche est le nez ; le coin du haut, l’oreille.",
+  "Fold the bottom corner behind.":
+    "Plie le coin du bas derrière.",
+  "Put the tail on":
+    "Mettre la queue",
+  "Slip the tail’s point behind the body, so the tail rises up behind its back and leans over it.":
+    "Glisse la pointe de la queue derrière le corps, pour que la queue se dresse derrière le dos et se penche dessus.",
+  "Set the head on top of the body, its nose to the front.":
+    "Pose la tête sur le corps, le nez vers l’avant.",
+  "Draw an eye":
+    "Dessiner un œil",
+  "Draw an eye on the head. Your squirrel is keeping watch!":
+    "Dessine un œil sur la tête. Ton écureuil monte la garde !",
 };

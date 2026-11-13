@@ -2633,4 +2633,42 @@ export const es: Record<string, string> = {
     "Mete el extremo ancho de la cola bajo el cuerpo, hasta las patas traseras.",
   "Draw two eyes on the head. Your lizard is ready to scurry off!":
     "Dibuja dos ojos en la cabeza. ¡Tu lagartija está lista para salir corriendo!",
+  "Start with three diamonds":
+    "Empieza con tres rombos",
+  "Three squares, light side up, each turned so a corner points towards you: a middle-sized one, a big one and a small one.":
+    "Tres cuadrados, con el lado claro hacia arriba, cada uno girado para que una esquina apunte hacia ti: uno mediano, uno grande y uno pequeño.",
+  "Fold the middle square’s right corner over to its left corner.":
+    "Dobla la esquina derecha del cuadrado mediano sobre su esquina izquierda.",
+  "Fold the feet behind":
+    "Dobla los pies hacia atrás",
+  "Fold the bottom point behind, so the body sits on a flat edge.":
+    "Dobla la punta de abajo hacia atrás, para que el cuerpo se apoye en un borde plano.",
+  "Fold the big square’s left corner to its right corner, then unfold.":
+    "Dobla la esquina izquierda del cuadrado grande sobre la derecha y desdobla.",
+  "Fold the tail into a kite":
+    "Dobla la cola en forma de cometa",
+  "Fold its lower edges to the middle crease.":
+    "Dobla sus bordes inferiores hasta el pliegue del centro.",
+  "Turn the tail over":
+    "Da la vuelta a la cola",
+  "Turn the kite over, left to right.":
+    "Da la vuelta a la cometa, de izquierda a derecha.",
+  "Flick the tail’s tip":
+    "Riza la punta de la cola",
+  "Fold the top point down, so the tail’s tip curls over.":
+    "Dobla la punta de arriba hacia abajo, para que la punta de la cola se rice.",
+  "Fold the small square’s right corner over to its left corner. The point on the left is the nose; the top corner is the ear.":
+    "Dobla la esquina derecha del cuadrado pequeño sobre su esquina izquierda. La punta de la izquierda es la nariz; la esquina de arriba, la oreja.",
+  "Fold the bottom corner behind.":
+    "Dobla la esquina de abajo hacia atrás.",
+  "Put the tail on":
+    "Pon la cola",
+  "Slip the tail’s point behind the body, so the tail rises up behind its back and leans over it.":
+    "Mete la punta de la cola detrás del cuerpo, para que la cola suba por detrás de la espalda y se incline sobre ella.",
+  "Set the head on top of the body, its nose to the front.":
+    "Coloca la cabeza encima del cuerpo, con la nariz hacia delante.",
+  "Draw an eye":
+    "Dibuja un ojo",
+  "Draw an eye on the head. Your squirrel is keeping watch!":
+    "Dibuja un ojo en la cabeza. ¡Tu ardilla está vigilando!",
 };

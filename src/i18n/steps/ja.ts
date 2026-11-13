@@ -2633,4 +2633,42 @@ export const ja: Record<string, string> = {
     "しっぽの広いほうのはしを、うしろ足のところまで体の下にさしこみます。",
   "Draw two eyes on the head. Your lizard is ready to scurry off!":
     "頭に目を二つかきます。トカゲがちょろちょろ走りだしそう！",
+  "Start with three diamonds":
+    "ひし形を三つ用意する",
+  "Three squares, light side up, each turned so a corner points towards you: a middle-sized one, a big one and a small one.":
+    "正方形を三枚、明るい面を上にして、それぞれ角を手前にむけておきます。中くらいのもの、大きいもの、小さいものです。",
+  "Fold the middle square’s right corner over to its left corner.":
+    "中くらいの正方形の右の角を、左の角に合わせて折ります。",
+  "Fold the feet behind":
+    "足をうしろに折る",
+  "Fold the bottom point behind, so the body sits on a flat edge.":
+    "下の先をうしろに折って、体が平らなふちですわれるようにします。",
+  "Fold the big square’s left corner to its right corner, then unfold.":
+    "大きい正方形の左の角を右の角に合わせて折り、開きます。",
+  "Fold the tail into a kite":
+    "しっぽをたこの形に折る",
+  "Fold its lower edges to the middle crease.":
+    "下の二つのふちを、まん中の折りすじに合わせて折ります。",
+  "Turn the tail over":
+    "しっぽを裏返す",
+  "Turn the kite over, left to right.":
+    "たこの形を左右に裏返します。",
+  "Flick the tail’s tip":
+    "しっぽの先をはねさせる",
+  "Fold the top point down, so the tail’s tip curls over.":
+    "上の先を折りさげて、しっぽの先がくるんと曲がるようにします。",
+  "Fold the small square’s right corner over to its left corner. The point on the left is the nose; the top corner is the ear.":
+    "小さい正方形の右の角を、左の角に合わせて折ります。左の先が鼻、上の角が耳です。",
+  "Fold the bottom corner behind.":
+    "下の角をうしろに折ります。",
+  "Put the tail on":
+    "しっぽをつける",
+  "Slip the tail’s point behind the body, so the tail rises up behind its back and leans over it.":
+    "しっぽの先を体のうしろにさしこんで、しっぽがせなかのうしろに立ち、せなかにかぶさるようにします。",
+  "Set the head on top of the body, its nose to the front.":
+    "頭を体の上にのせて、鼻を前にむけます。",
+  "Draw an eye":
+    "目をかく",
+  "Draw an eye on the head. Your squirrel is keeping watch!":
+    "頭に目をかきます。リスが見はりをしています！",
 };

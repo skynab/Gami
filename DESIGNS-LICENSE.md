@@ -42,6 +42,7 @@ site's source code, or any other model in the gallery.
 | Turtle | `src/models/recipes/turtle.ts` | November 2026 |
 | Sunflower | `src/models/recipes/sunflower.ts` | November 2026 |
 | Lizard | `src/models/recipes/lizard.ts` | November 2026 |
+| Squirrel | `src/models/recipes/squirrel.ts` | November 2026 |
 
 ## Other models in the gallery
 
