@@ -2605,4 +2605,32 @@ export const es: Record<string, string> = {
     "Dibuja las semillas",
   "Draw dots in a spiral on the middle for the seeds. Your sunflower is in bloom!":
     "Dibuja puntos en espiral en el centro para las semillas. ¡Tu girasol ha florecido!",
+  "Fold out a back leg":
+    "Dobla una pata trasera",
+  "Fold out the other back leg":
+    "Dobla la otra pata trasera",
+  "Turn the body over, left to right.":
+    "Da la vuelta al cuerpo, de izquierda a derecha.",
+  "Fold out a front leg":
+    "Dobla una pata delantera",
+  "Fold the loose point at the top left down and out, so its tip sticks out past the side, reaching forwards.":
+    "Dobla hacia abajo y hacia fuera la punta suelta de arriba a la izquierda, para que asome por el lado, estirada hacia delante.",
+  "Fold out the other front leg":
+    "Dobla la otra pata delantera",
+  "Start the tail":
+    "Empieza la cola",
+  "Turn the small square over, light side up, with a corner pointing towards you.":
+    "Da la vuelta al cuadrado pequeño, con el lado claro hacia arriba y una esquina apuntando hacia ti.",
+  "Crease the tail down the middle":
+    "Marca el centro de la cola",
+  "Fold its left corner to its right corner, then unfold.":
+    "Dobla su esquina izquierda sobre la derecha y desdobla.",
+  "Fold the new lower edges to the middle again. The bottom is a long thin point: the tail.":
+    "Vuelve a doblar los nuevos bordes inferiores hasta el centro. Abajo queda una punta larga y fina: la cola.",
+  "Add the tail":
+    "Añade la cola",
+  "Slip the tail’s wide end under the body, as far as the back legs.":
+    "Mete el extremo ancho de la cola bajo el cuerpo, hasta las patas traseras.",
+  "Draw two eyes on the head. Your lizard is ready to scurry off!":
+    "Dibuja dos ojos en la cabeza. ¡Tu lagartija está lista para salir corriendo!",
 };

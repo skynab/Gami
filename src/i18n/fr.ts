@@ -213,6 +213,7 @@ export const fr: Messages = {
     chrysanthemum: { title: 'Kusudama chrysanthème', blurb: 'Six modules en moulin collés coin à coin en une boule, leurs bras ouverts en pétales.' },
     turtle: { title: 'Tortue', blurb: 'Une tortue vue de dessus, nageoires écartées, sa carapace dessinée, à partir de la base de la bombe à eau.' },
     sunflower: { title: 'Tournesol', blurb: 'Huit pétales jaunes autour d’un cœur marron, sur une tige avec une feuille, à partir de trois carrés.' },
+    lizard: { title: 'Lézard', blurb: 'Un lézard vu de dessus, pattes écartées et longue queue fine, à partir de deux carrés.' },
   },
   notFound: {
     title: 'Cette page a été repliée',

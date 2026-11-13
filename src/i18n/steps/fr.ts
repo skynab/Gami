@@ -2605,4 +2605,32 @@ export const fr: Record<string, string> = {
     "Dessiner les graines",
   "Draw dots in a spiral on the middle for the seeds. Your sunflower is in bloom!":
     "Dessine des points en spirale sur le cœur pour les graines. Ton tournesol est en fleur !",
+  "Fold out a back leg":
+    "Plier une patte arrière",
+  "Fold out the other back leg":
+    "Plier l’autre patte arrière",
+  "Turn the body over, left to right.":
+    "Retourne le corps, de gauche à droite.",
+  "Fold out a front leg":
+    "Plier une patte avant",
+  "Fold the loose point at the top left down and out, so its tip sticks out past the side, reaching forwards.":
+    "Rabats vers le bas et l’extérieur la pointe libre en haut à gauche, pour qu’elle dépasse du côté, tendue vers l’avant.",
+  "Fold out the other front leg":
+    "Plier l’autre patte avant",
+  "Start the tail":
+    "Commencer la queue",
+  "Turn the small square over, light side up, with a corner pointing towards you.":
+    "Retourne le petit carré, face claire vers le haut, un coin pointé vers toi.",
+  "Crease the tail down the middle":
+    "Marquer le milieu de la queue",
+  "Fold its left corner to its right corner, then unfold.":
+    "Plie son coin gauche sur son coin droit, puis déplie.",
+  "Fold the new lower edges to the middle again. The bottom is a long thin point: the tail.":
+    "Plie encore les nouveaux bords du bas jusqu’au milieu. En bas, une longue pointe fine : la queue.",
+  "Add the tail":
+    "Ajouter la queue",
+  "Slip the tail’s wide end under the body, as far as the back legs.":
+    "Glisse le bout large de la queue sous le corps, jusqu’aux pattes arrière.",
+  "Draw two eyes on the head. Your lizard is ready to scurry off!":
+    "Dessine deux yeux sur la tête. Ton lézard est prêt à filer !",
 };

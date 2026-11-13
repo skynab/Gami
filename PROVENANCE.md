@@ -116,6 +116,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `chrysanthemum` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of origami.me's kusudama chrysanthemum (Traditional), whose text doesn't say where its petals' squashed flaps go or which corners are glued; Gami's units are windmill bases with their arms opened as petals, glued corner to corner on a cube (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami, after the look of [origami.me/kusudama-chrysanthemum](https://origami.me/kusudama-chrysanthemum/) | Clear | 29 Oct 2026 |
 | `turtle` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a turtle seen from above, folded from the water bomb base, after the look of OrigamiOK's turtle, which names no designer (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
 | `sunflower` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's sunflower, which names no designer, from three squares and no glue: Gami's own petals and middle, and the flat tulip's traditional stem with a leaf (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
+| `lizard` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the general look of OrigamiOK's lizard, which is Lee Won-pyo's, folded differently: the turtle's narrowed water bomb base with steeper legs, and a separate tail (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
 
 ### Notes
 
@@ -127,6 +128,11 @@ noted when it was written, and the model was folded from the common traditional 
   Every one of the 81 sunflowers in Gilad's database has a named designer (Yoshizawa, Kasahara, Petty, Yamaguchi and
   others), so Gami's is its own: corners to the middle and back out for eight petals, a brown octagon for the middle,
   set on the flat tulip's stem. OrigamiOK's head is cut, opened and pushed into a hollow, and its stem rolled and glued.
+  OrigamiOK's lizard is Lee Won-pyo's, and none of the 147 lizards in Gilad's database is Traditional, so Gami's is
+  its own, from two squares: the body is the turtle's narrowed water bomb base, its legs folded out steeper (the front
+  ones reaching forwards), and the tail a smaller square narrowed twice into a long point, slipped under it. Lee's
+  shapes four legs with zigzag folds from one sheet; the fish base's side flaps, the first thing tried, can't swing
+  out flat as legs (as the whale's fins can't).
 
 - **Modular models from OrigamiOK** (checked 29 October 2026; the plan is `docs/modular-plan.md`). OrigamiOK's
   modular pages name no designer either. Its rainbow chain wasn't found by name; Gami folds the traditional gum

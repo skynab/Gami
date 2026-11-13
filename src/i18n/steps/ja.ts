@@ -2605,4 +2605,32 @@ export const ja: Record<string, string> = {
     "たねをかく",
   "Draw dots in a spiral on the middle for the seeds. Your sunflower is in bloom!":
     "まん中に、うずまきのように点をかいて、たねにします。ヒマワリがさきました！",
+  "Fold out a back leg":
+    "うしろ足を折り出す",
+  "Fold out the other back leg":
+    "もう一本のうしろ足を折り出す",
+  "Turn the body over, left to right.":
+    "体を左右に裏返します。",
+  "Fold out a front leg":
+    "前足を折り出す",
+  "Fold the loose point at the top left down and out, so its tip sticks out past the side, reaching forwards.":
+    "左上のはなれている先を外側に折り下げて、先が横からとび出て前にのびるようにします。",
+  "Fold out the other front leg":
+    "もう一本の前足を折り出す",
+  "Start the tail":
+    "しっぽを折りはじめる",
+  "Turn the small square over, light side up, with a corner pointing towards you.":
+    "小さい正方形を裏返して明るい面を上にし、角を手前にむけます。",
+  "Crease the tail down the middle":
+    "しっぽのまん中に折りすじをつける",
+  "Fold its left corner to its right corner, then unfold.":
+    "左の角を右の角に合わせて折り、開きます。",
+  "Fold the new lower edges to the middle again. The bottom is a long thin point: the tail.":
+    "新しくできた下のふちを、もう一度まん中に合わせて折ります。下が長くて細い先になります。これがしっぽです。",
+  "Add the tail":
+    "しっぽをつける",
+  "Slip the tail’s wide end under the body, as far as the back legs.":
+    "しっぽの広いほうのはしを、うしろ足のところまで体の下にさしこみます。",
+  "Draw two eyes on the head. Your lizard is ready to scurry off!":
+    "頭に目を二つかきます。トカゲがちょろちょろ走りだしそう！",
 };
