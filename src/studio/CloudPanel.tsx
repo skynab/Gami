@@ -12,9 +12,8 @@ const status = (s: Status) => `cloud.status.${s}` as const;
 
 /**
  * Saving the Studio's model to the cloud: save, share a private link, and open other saved models. Models in
- * review or published are locked; "Save as a copy" carries on from them. Submitting for the gallery isn't offered
- * until a submission records who designed the model and its licence (docs/studio-plan.md, part 4); models sent
- * before still show their review.
+ * review or published are locked; "Save as a copy" carries on from them. Submitting for the gallery is the Submit
+ * panel's (SubmitPanel.tsx), as for anyone signed in, so every submission records whose design it is.
  */
 export function CloudPanel() {
   const { t } = useTranslation();

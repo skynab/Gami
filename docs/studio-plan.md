@@ -1,6 +1,6 @@
 # Plan: the Studio for everyone
 
-Status: **steps 1 to 6 done** (11 November 2026): the local library, the open Studio, tape, every fold preset, and bending with crease goals, solved in a worker. Bend with point goals and submissions not started.
+Status: **steps 1 to 6 and 8 done** (13 November 2026): the local library, the open Studio, tape, every fold preset, bending with crease goals, solved in a worker, and submissions with ownership and licence. Bend with point goals not started.
 
 The Studio today is for approved creators only (`docs/accounts.md`): it needs Supabase, a sign-in and the creator
 role, keeps one draft in the browser, and saves to the cloud, where a model can be shared by link and submitted for
@@ -137,9 +137,10 @@ without the page freezing.
 Done when: the boat's or the fan's last step (on the `wip/boat` and `wip/fan` branches) can be made in the Studio with crease goals, saved,
 reloaded without re-solving, and changed (an earlier step edited) with a re-solve that finishes or can be cancelled.
 
-## Part 4 (later): submitting your own designs
+## Part 4: submitting your own designs
 
-Not in the first pass. When it comes, it builds on the cloud Studio that exists (milestone 7a: saving, review,
+Done 13 November 2026 (decided that day: CC BY 4.0 only, anyone signed in, a Report button feeding the admin queue;
+see the end of this part). Not in the first pass. When it comes, it builds on the cloud Studio that exists (milestone 7a: saving, review,
 publishing), and adds what an open gallery needs:
 
 - **Ownership**: on submitting, the person certifies the design is their own (or traditional, with no known
@@ -153,6 +154,32 @@ publishing), and adds what an open gallery needs:
 - **Takedown**: a way to report a design that isn't the submitter's, and to unpublish it.
 - **Accounts**: submitting needs a sign-in (designing doesn't). Local designs move to the cloud only when submitted.
 
+As made:
+- **Database** (`supabase/migrations/20261113000000_submissions.sql`): models gain `ownership` (`own` or
+  `traditional`), `credit`, `first_published`, `licence` (only `CC-BY-4.0`) and `certified_at`. `submit_design`
+  submits a new design straight into review for anyone signed in (learners still can't save drafts), or the caller's
+  own draft or sent-back model, replacing its title and file, and certifies it afresh each time. A model can't be put
+  into review any other way: setting its status by hand is refused, as its owner can't write `certified_at`.
+  `model_reports` takes a report from anyone, signed in or not, about a published model only, as its reporter or
+  no one. Only admins read reports, so a reporter's contact stays private. `decide_report` dismisses a report or
+  unpublishes the model, sending it back to its owner with a note and settling its other open reports. Tested in
+  `supabase/tests/rls.test.ts` as each kind of user.
+- **Studio** (`studio/SubmitPanel.tsx`): **Submit to the gallery…** in the side panel for everyone (once there are
+  steps). Signed out, it says why an account is needed and offers sign-in. Signed in, a dialog asks whose design it
+  is, how to credit it (the person's name to start with; "Shared by" for a traditional one) and where it was first
+  published, says it's published under CC BY 4.0 (they keep the copyright), and needs a tick to certify it. The
+  design then belongs to the cloud model it was sent as, so the panel shows its review, and the admin's note if
+  it's sent back, with **Submit it again…**. Creators see where it stands in the cloud panel instead; submitting
+  replaces their saved draft with the design as it is now.
+- **Model page** (`/m/<id>`): "Designed by …" or "Traditional · shared by …", where it was first published, the
+  licence linked, and **Report**: what's wrong (someone else's design, copies copyrighted work, offensive, other),
+  details and an optional contact.
+- **Admin**: each submission shows what was certified (or that it predates certification, to send back), with a
+  reminder to check it isn't a known copyrighted design and a link to Gilad's Origami Database. **Reports** lists
+  open reports with the model, reason, details and contact: **Unpublish** with a note to the owner, or **Dismiss**.
+- Not done: email to the submitter when a design is reviewed (they see it in the Studio), and limits on how often
+  someone can report.
+
 ## Order of work
 
 | # | Work | Size |
@@ -164,7 +191,7 @@ publishing), and adds what an open gallery needs:
 | 5 | Presets: swivel, open sink | Medium |
 | 6 | Bend with crease goals, solved in a worker, baked on save | Large |
 | 7 | Bend with point goals (3D handles) | Large, and only if 6 shows the need |
-| 8 | Submissions with ownership and licence (part 4) | Large; needs decisions first |
+| 8 | Submissions with ownership and licence (part 4) | Large; decided 13 November 2026 |
 
 1 and 2 together make a useful release on their own. Each later row ships separately.
 

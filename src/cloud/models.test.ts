@@ -5,11 +5,13 @@ import { basics } from '../models/basics';
 /** Records the calls a query builder receives, and answers with `next`. */
 const calls: { table: string; op: string; args: unknown[] }[] = [];
 let next: { data: unknown; error: { message: string } | null } = { data: null, error: null };
+/** What a database function answers, where it differs from the query after it. */
+let rpcNext: typeof next | null = null;
 
 vi.mock('../auth/store', () => {
   const builder = (table: string) => {
     const b: Record<string, unknown> = {};
-    for (const op of ['select', 'insert', 'update', 'delete', 'eq', 'order', 'limit']) {
+    for (const op of ['select', 'insert', 'update', 'delete', 'eq', 'in', 'order', 'limit']) {
       b[op] = (...args: unknown[]) => {
         calls.push({ table, op, args });
         return b;
@@ -24,19 +26,20 @@ vi.mock('../auth/store', () => {
       from: (table: string) => builder(table),
       rpc: async (fn: string, args: unknown) => {
         calls.push({ table: fn, op: 'rpc', args: [args] });
-        return next;
+        return rpcNext ?? next;
       },
     }),
   };
 });
 
-const { openShared, saveModel, submitModel } = await import('./models');
+const { openShared, reportModel, saveModel, submitDesign } = await import('./models');
 
 const row = { id: 'm1', title: 'Folding basics', status: 'draft', review_note: null, share_token: 'abc', updated_at: '', fold: toFoldFile(basics) };
 
 beforeEach(() => {
   calls.length = 0;
   next = { data: row, error: null };
+  rpcNext = null;
 });
 
 describe('cloud models', () => {
@@ -52,10 +55,25 @@ describe('cloud models', () => {
     expect(calls.find((c) => c.op === 'eq')?.args).toEqual(['id', 'm1']);
   });
 
-  it('submits for review', async () => {
-    next = { data: { ...row, status: 'submitted' }, error: null };
-    expect((await submitModel('m1')).status).toBe('submitted');
-    expect(calls.find((c) => c.op === 'update')?.args[0]).toEqual({ status: 'submitted' });
+  it('submits a design through the database, saying whose it is, then reads it back', async () => {
+    // The function answers with the id; then the model is read, as submitted.
+    rpcNext = { data: 'm1', error: null };
+    next = { data: { ...row, status: 'submitted', ownership: 'traditional', credit: 'Gami', first_published: null, licence: 'CC-BY-4.0' }, error: null };
+    const saved = await submitDesign(basics, { ownership: 'traditional', credit: ' Gami ', firstPublished: '' });
+    expect(calls.find((c) => c.op === 'rpc')).toMatchObject({
+      table: 'submit_design',
+      args: [{ model_id: null, title: 'Folding basics', ownership: 'traditional', credit: 'Gami', first_published: null }],
+    });
+    expect(saved.status).toBe('submitted');
+    expect(saved.submission).toEqual({ ownership: 'traditional', credit: 'Gami', firstPublished: '', licence: 'CC-BY-4.0' });
+    // Nothing is put into review by setting its status directly.
+    expect(calls.some((c) => c.op === 'update')).toBe(false);
+  });
+
+  it('reports a published model', async () => {
+    next = { data: null, error: null };
+    await reportModel('m1', 'notTheirs', ' Not theirs ', '');
+    expect(calls.find((c) => c.op === 'insert')).toMatchObject({ table: 'model_reports', args: [{ model: 'm1', reason: 'notTheirs', details: 'Not theirs', contact: '' }] });
   });
 
   it('passes on what the database refused', async () => {

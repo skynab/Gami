@@ -46,8 +46,9 @@ Things that can't be settled from the code alone.
   ninja star. It's 79 commits behind `dev`. "Creases round a point fold in step" and "Paper joined up sooner, and
   to the end" (November) took on the same problem, so it's probably done with. Check its list against `dev`,
   then delete it here and on GitHub, or pick it up.
-- **The Studio's submissions** (`docs/studio-plan.md`, part 4: ownership and licence) need their decisions before
-  any work starts. Its other open questions are settled and done: the cloud panel stays for creators with Submit
+- ✅ **The Studio's submissions** (`docs/studio-plan.md`, part 4: ownership and licence): decided and made 13
+  November. **Before deploying**, run the new migration (`20261113000000_submissions.sql`) on the Supabase project
+  (`docs/accounts.md`). Its other open questions are settled and done: the cloud panel stays for creators with Submit
   hidden, share links carry a design in the address, a short tour on the first visit, and phones get a note
   that the Studio is easiest on a bigger screen.
 - **The Spin Plane's designer** (`docs/foldnfly-planes-plan.md`): Laux's, or Unattributed? Needs his book's
@@ -161,7 +162,7 @@ The frog now grazes a little deeper, 0.0106 at most (step 45) against 0.0094, st
 | 5 | ✅ Swivel and open sink as named folds (8 November) | Medium |
 | 6 | ✅ Bend with crease goals, solved in a worker, baked on save (11 November; `docs/studio-plan.md`) | Large |
 | 7 | Bend with point goals (3D handles) | Large, and only if 6 shows the need |
-| 8 | Submissions with ownership and licence | Large; needs decisions first |
+| 8 | ✅ Submissions with ownership and licence (13 November): decided that day as CC BY 4.0 only, anyone signed in, and a Report button feeding the admin queue; see `docs/studio-plan.md`, part 4, and `docs/accounts.md` | Large |
 
 ### 4. Smaller
 

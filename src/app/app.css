@@ -1832,6 +1832,7 @@ kbd {
 .studio input:not([type]),
 .studio textarea,
 .field input,
+.field textarea,
 .field select {
   width: 100%;
   padding: 6px 10px;
@@ -1851,6 +1852,34 @@ kbd {
 
 .field.inline select {
   width: auto;
+}
+
+/* A choice of one (radio buttons) or a box to tick, each with its words beside it. */
+fieldset.choice {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0 0 8px;
+  padding: 0;
+  border: 0;
+}
+
+fieldset.choice legend {
+  margin-block-end: 4px;
+  padding: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.check input {
+  margin-block-start: 3px;
 }
 
 .bottombar .group {

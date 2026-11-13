@@ -16,6 +16,7 @@ import { bendsFrom, canInsert, canRemove, canReplace, lastFixed, withInserted, w
 import { replay } from '../fold/ops';
 import { BendCancelled, replayInWorker, solveBend } from '../studio/bendJob';
 import { CloudPanel } from '../studio/CloudPanel';
+import { SubmitPanel } from '../studio/SubmitPanel';
 import { ShareError, shareText } from '../studio/share';
 import { StudioTour, tourSeen } from '../studio/Tour';
 import { FoldEditor } from '../studio/FoldEditor';
@@ -393,6 +394,8 @@ export default function StudioEditor({ end, cloud = false }: {
               </p>
             )}
             {cloud && <CloudPanel />}
+            {/* Sending it to the gallery, for anyone signed in; creators see where it stands in the cloud panel. */}
+            <SubmitPanel status={!cloud} />
             <label className="field">
               <span>{t('studio.title')}</span>
               <input value={model.title} onChange={(e) => setInfo({ title: e.target.value })} />
