@@ -14,7 +14,7 @@ import type { FoldFrame, Vec2, Vec3 } from './types';
  */
 export function settle(frame: FoldFrame): FoldFrame {
   const faces = toFlat(frame);
-  if (faces.length < 2) throw new FoldError('There’s nothing to press down.');
+  if (faces.length < 2) throw new FoldError('nothingToPress');
   const boxes = faces.map((f) => {
     const xs = f.world.map((p) => p[0]);
     const zs = f.world.map((p) => p[1]);

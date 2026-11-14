@@ -6,6 +6,7 @@ import { fromFoldFile, toFoldFile } from './fold-format';
 import { framesOf } from './frames';
 import { applyOp, toolsNeeded } from './ops';
 import { paper, Recipe, table } from './recipe';
+import { pyramidRays, SLOPE } from '../models/recipes/pyramid';
 import type { FoldFrame, Vec2, Vec3 } from './types';
 import { problems } from './validate';
 
@@ -154,5 +155,17 @@ describe('pressing paper flat', () => {
     expect(Math.max(...ys)).toBeLessThan(1 + 4 * 0.0007);
     expect(problems(raised)).toEqual([]);
     expect(replayLast(raised).vertices_coords.length).toBe(raised.steps.at(-1)!.frame.vertices_coords.length);
+  });
+
+  it('moves a flat sheet onto a popped-up one, but bends nothing after a pop-up', () => {
+    const rising = pyramidRays(-SLOPE);
+    const r = two().popUp({ title: 'Pop' }, paper(0, 0), rising, undefined, ([u]) => u < 5);
+    const top = Math.max(...r.current.vertices_coords.map((p) => p[1]));
+    const model = r.assemble({ title: 'On top' }, [{ only: ([u]) => u > 5, pose: { from: table(1, 0), to: [0, top, 0], x: [1, 0, 0], up: [0, 1, 0] } }]).build();
+    const last = model.steps.at(-1)!.frame;
+    near(pointAt(last, [10.5, 0.5]), [0.5, top, 0.5]);
+    // Replayed from its file, it lands in the same place.
+    near(pointAt(replayLast(model), [10.5, 0.5]), [0.5, top, 0.5]);
+    expect(() => two().popUp({ title: 'Pop' }, paper(0, 0), rising, undefined, ([u]) => u < 5).assemble({ title: 'Bend' }, [{ only: ([u]) => u > 5, bends: [{ through: [table(1, -1), table(1, 1)], moving: table(1.4, 0), degrees: 90 }] }])).toThrow();
   });
 });

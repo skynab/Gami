@@ -95,9 +95,12 @@ describe('models', () => {
     expect(await as(db, null, 'select title from public.shared_model($1)', ['not-a-token'])).toHaveLength(0);
   });
 
-  it('can be submitted by their owner, but not published', async () => {
+  it('can be submitted by their owner, saying whose design it is, but not published', async () => {
     await expect(as(db, CREATOR, `update public.models set status = 'published' where id = $1`, [draft])).rejects.toThrow(/row-level security/);
-    await as(db, CREATOR, `update public.models set status = 'submitted' where id = $1`, [draft]);
+    // Not without certifying it: only submit_design does that.
+    await expect(as(db, CREATOR, `update public.models set status = 'submitted' where id = $1`, [draft])).rejects.toThrow(/submit_design/);
+    await expect(as(db, CREATOR, `update public.models set certified_at = now() where id = $1`, [draft])).rejects.toThrow(/permission denied/);
+    await as(db, CREATOR, `select public.submit_design($1, 'Swan', $2, 'own', 'Cam')`, [draft, fold]);
     // Locked while in review.
     await as(db, CREATOR, `update public.models set title = 'Changed' where id = $1`, [draft]);
     const [m] = await as<{ title: string; status: string }>(db, CREATOR, 'select title, status from public.models where id = $1', [draft]);
@@ -111,10 +114,10 @@ describe('models', () => {
 
   it('go back to draft when a rejected one is edited, and can be resubmitted', async () => {
     const [{ id }] = await as<{ id: string }>(db, CREATOR, `insert into public.models (title, fold) values ('Frog', $1) returning id`, [fold]);
-    await as(db, CREATOR, `update public.models set status = 'submitted' where id = $1`, [id]);
+    await as(db, CREATOR, `select public.submit_design($1, 'Frog', $2, 'traditional', 'Traditional')`, [id, fold]);
     await as(db, ADMIN, `update public.models set status = 'rejected', review_note = 'Step 3 is unclear' where id = $1`, [id]);
     await as(db, CREATOR, `update public.models set title = 'Frog 2', status = 'draft' where id = $1`, [id]);
-    await as(db, CREATOR, `update public.models set status = 'submitted' where id = $1`, [id]);
+    await as(db, CREATOR, `select public.submit_design($1, 'Frog 2', $2, 'traditional', 'Traditional')`, [id, fold]);
     const [m] = await as<{ title: string; status: string; review_note: string }>(db, CREATOR, 'select title, status, review_note from public.models where id = $1', [id]);
     expect(m).toEqual({ title: 'Frog 2', status: 'submitted', review_note: 'Step 3 is unclear' });
   });
@@ -129,5 +132,78 @@ describe('models', () => {
     await as(db, OTHER, `update public.models set title = 'Mine now' where id = $1`, [draft]);
     await as(db, OTHER, 'delete from public.models where id = $1', [draft]);
     expect(await as(db, null, 'select title from public.models where id = $1', [draft])).toEqual([{ title: 'Swan' }]);
+  });
+});
+
+describe('submissions', () => {
+  let mine: string;
+
+  it('can come from anyone signed in, straight into review, with whose design it is and its licence', async () => {
+    [{ submit_design: mine }] = await as<{ submit_design: string }>(db, LEARNER, `select public.submit_design(null, 'Crane', $1, 'own', ' Lee ', 'My blog, 2025')`, [fold]);
+    const [m] = await as(db, LEARNER, 'select owner, status, ownership, credit, first_published, licence from public.models where id = $1', [mine]);
+    expect(m).toEqual({ owner: LEARNER, status: 'submitted', ownership: 'own', credit: 'Lee', first_published: 'My blog, 2025', licence: 'CC-BY-4.0' });
+    // Learners still can't save drafts to the cloud.
+    await expect(as(db, LEARNER, `insert into public.models (title, fold) values ('Nope', $1)`, [fold])).rejects.toThrow(/row-level security/);
+  });
+
+  it('need a sign-in, whose design it is, and a credit', async () => {
+    await expect(as(db, null, `select public.submit_design(null, 'Crane', $1, 'own', 'Me')`, [fold])).rejects.toThrow();
+    await expect(as(db, LEARNER, `select public.submit_design(null, 'Crane', $1, 'borrowed', 'Me')`, [fold])).rejects.toThrow(/whose design/);
+    await expect(as(db, LEARNER, `select public.submit_design(null, 'Crane', $1, 'own', '  ')`, [fold])).rejects.toThrow(/credit/);
+  });
+
+  it('can’t replace someone else’s model, or one in review', async () => {
+    await expect(as(db, OTHER, `select public.submit_design($1, 'Mine', $2, 'own', 'Ola')`, [mine, fold])).rejects.toThrow(/isn't yours/);
+    await expect(as(db, LEARNER, `select public.submit_design($1, 'Again', $2, 'own', 'Lee')`, [mine, fold])).rejects.toThrow(/already in review/);
+  });
+
+  it('are certified afresh when sent back and submitted again', async () => {
+    await as(db, ADMIN, `update public.models set status = 'rejected', review_note = 'Too blurry' where id = $1`, [mine]);
+    // Editing it by hand back into review is refused; submitting it again certifies it.
+    await expect(as(db, LEARNER, `update public.models set status = 'submitted' where id = $1`, [mine])).rejects.toThrow(/submit_design/);
+    await as(db, LEARNER, `select public.submit_design($1, 'Crane 2', $2, 'traditional', 'Traditional')`, [mine, fold]);
+    const [m] = await as(db, LEARNER, 'select title, status, ownership, first_published from public.models where id = $1', [mine]);
+    expect(m).toEqual({ title: 'Crane 2', status: 'submitted', ownership: 'traditional', first_published: null });
+  });
+});
+
+describe('reports', () => {
+  let published: string;
+  let report: string;
+
+  beforeAll(async () => {
+    [{ submit_design: published }] = await as<{ submit_design: string }>(db, LEARNER, `select public.submit_design(null, 'Lily', $1, 'own', 'Lee')`, [fold]);
+  });
+
+  it('can only be made about a published model', async () => {
+    await expect(as(db, null, `insert into public.model_reports (model, reason) values ($1, 'notTheirs')`, [published])).rejects.toThrow(/row-level security/);
+    await as(db, ADMIN, `update public.models set status = 'published' where id = $1`, [published]);
+  });
+
+  it('can be made by anyone, signed in or not, but read only by admins', async () => {
+    await as(db, null, `insert into public.model_reports (model, reason, details, contact) values ($1, 'notTheirs', 'A known design', 'rose@example.com')`, [published]);
+    await as(db, OTHER, `insert into public.model_reports (model, reason) values ($1, 'copyrighted')`, [published]);
+    expect(await as(db, null, 'select id from public.model_reports')).toHaveLength(0);
+    expect(await as(db, LEARNER, 'select id from public.model_reports')).toHaveLength(0);
+    const rows = await as<{ id: string; reporter: string | null; contact: string }>(db, ADMIN, 'select id, reporter, contact from public.model_reports');
+    expect(rows.map((r) => r.reporter ?? 'guest').sort()).toEqual([OTHER, 'guest'].sort());
+    report = rows.find((r) => r.contact)!.id;
+  });
+
+  it('can’t be made already decided, or in someone else’s name', async () => {
+    await expect(as(db, null, `insert into public.model_reports (model, reason, status) values ($1, 'other', 'dismissed')`, [published])).rejects.toThrow(/row-level security/);
+    await expect(as(db, OTHER, `insert into public.model_reports (model, reason, reporter) values ($1, 'other', $2)`, [published, LEARNER])).rejects.toThrow(/row-level security/);
+    await expect(as(db, OTHER, `update public.model_reports set status = 'dismissed'`)).rejects.toThrow(/permission denied/);
+  });
+
+  it('are decided by admins, unpublishing the model back to its owner with a note', async () => {
+    await expect(as(db, LEARNER, 'select public.decide_report($1, true)', [report])).rejects.toThrow(/Only admins/);
+    await as(db, ADMIN, 'select public.decide_report($1, true, $2)', [report, 'A known design that isn’t open.']);
+    expect(await as(db, null, 'select id from public.models where id = $1', [published])).toHaveLength(0);
+    const [m] = await as(db, LEARNER, 'select status, review_note from public.models where id = $1', [published]);
+    expect(m).toEqual({ status: 'rejected', review_note: 'A known design that isn’t open.' });
+    // Every open report on it is settled with it.
+    expect(await as(db, ADMIN, `select id from public.model_reports where model = $1 and status = 'open'`, [published])).toHaveLength(0);
+    await expect(as(db, ADMIN, 'select public.decide_report($1, false)', [report])).rejects.toThrow(/No open report/);
   });
 });

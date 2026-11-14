@@ -176,10 +176,11 @@ function pose(r: Recipe, h: number, e: number, done: string, ride?: (centre: Vec
     bend([-1, t * e], [1, t * e], [0, t * 2 * e], 180, (x) => Math.abs(x) < h),
     bend([-1, t * (2 * e - h)], [1, t * (2 * e - h)], [0, t * 2 * e], -90, (x) => Math.abs(x) < h),
     // The end flap's sides, folded in onto it as the walls rose, go with it: over the wall, and where the flap is
-    // long enough to reach (the shallow lid's), down onto the floor.
+    // long enough to reach (the shallow lid's), down onto the floor. Folded over onto the flap, they turn the other
+    // way round for the same turn, over the wall too: a half turn either way ends in the same place, but turned
+    // the same way round as the flap, they'd part from it all the way over (by up to 0.08 in the shallow lid).
     ...[-1, 1].flatMap((s) => [
-      bend([-1, t * e], [1, t * e], [(s * (h + e)) / 2, t * 2 * e], 180, (x) => s * x > h && s * x < e),
-      // Folded over onto the flap, they turn the other way round for the same turn.
+      bend([-1, t * e], [1, t * e], [(s * (h + e)) / 2, t * 2 * e], -180, (x) => s * x > h && s * x < e),
       ...(ride ? [bend([-1, t * (2 * e - h)], [1, t * (2 * e - h)], [(s * (h + e)) / 2, t * 2 * e], 90, (x) => s * x > h && s * x < e)] : []),
     ]),
   ];

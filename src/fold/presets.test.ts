@@ -131,6 +131,23 @@ describe('fold presets elsewhere', () => {
     }
   });
 
+  it('open-sinks a point creased along the line first as it does one that isn’t', () => {
+    const base = () => {
+      const r = new Recipe({ id: 'x', title: 'x', sheet: { size: [1, 1], front: '#fff', back: '#000' } });
+      squareBase(r);
+      return r;
+    };
+    // (A recipe's build shares its list of steps, so each model gets a recipe of its own.)
+    const r = base();
+    const tip = r.where(paper(0, 0));
+    const at: Vec2 = [tip[0], tip[1] + 0.15];
+    const creased = r.along(table(at[0] - 1, at[1]), table(at[0] + 1, at[1]), table(...tip), { title: 'Crease the tip' }).unfold().build();
+    const sunk = make(creased, { kind: 'sink', picks: [tip, at] });
+    expectSame(sunk, make(base().build(), { kind: 'sink', picks: [tip, at] }));
+    // The tip is inside the point, not where it was.
+    expect(Math.min(...toFlat(sunk).flatMap((f) => f.world.map((p) => p[1])))).toBeCloseTo(at[1], 6);
+  });
+
   it('says why when there’s nothing to fold', () => {
     const sheet = { ...basics, steps: [] };
     expect(() => presetOp(sheet, { kind: 'squash', picks: [[0, 0], [0.2, 0.2]] })).toThrow(PresetError);

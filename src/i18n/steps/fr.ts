@@ -1028,8 +1028,6 @@ export const fr: Record<string, string> = {
     "Sors le cou",
   "The same with the right point, for the neck.":
     "Pareil avec la pointe droite, pour le cou.",
-  "Push the tip of the neck down between its layers for the head. Hold the base of the neck and pull the tail gently: the wings flap!":
-    "Pousse le bout du cou entre ses couches pour faire la tête. Tiens la base du cou et tire doucement la queue : les ailes battent !",
   "Fold out an ear":
     "Sors une oreille",
   "Fold the loose point at the top left out a little to the side, for an ear.":
@@ -1775,8 +1773,8 @@ export const fr: Record<string, string> = {
     "Pliez le bord supérieur vers le centre en vous arrêtant un peu avant, puis dépliez.",
   "Blow it up":
     "Gonflez-le",
-  "Blow gently into the hole at the bottom, and the balloon puffs up. Done!":
-    "Soufflez doucement dans le trou du bas, et le ballon se gonfle. C’est fini !",
+  "Blow gently into the hole at the bottom, and the balloon puffs up into a cube. Done!":
+    "Soufflez doucement dans le trou du bas, et le ballon se gonfle en cube. C’est fini !",
   "Fold the left corner over to the right corner and unfold, to mark the middle.":
     "Rabattez le coin gauche sur le coin droit puis dépliez, pour marquer le milieu.",
   "Fold the top layer of the bottom point up, so its tip goes a little past the base of the horns.":
@@ -1787,16 +1785,6 @@ export const fr: Record<string, string> = {
     "Rabattez la pointe vers le bas le long de la base des cornes, pour former un petit rebord.",
   "Fold the band up along the bottom of the helmet, lip and all, making the brim.":
     "Remontez la bande le long du bas du casque, rebord compris, pour former la visière.",
-  "Crease the back point":
-    "Marquer la pointe arrière",
-  "Fold the last point up behind the helmet and crease it well…":
-    "Remontez la dernière pointe derrière le casque et marquez bien le pli…",
-  "…then fold it back down.":
-    "…puis rabattez-la de nouveau.",
-  "Tuck the back point inside":
-    "Rentrer la pointe arrière à l’intérieur",
-  "Fold the back point up on its crease, tucking it inside the helmet, behind the brim. Open the bottom to wear it.":
-    "Remontez la pointe arrière sur son pli en la rentrant dans le casque, derrière la visière. Ouvrez le bas pour le porter.",
   "Open the flap back out":
     "Rouvrir le rabat",
   "Fold the middle flap back to the right, leaving its crease.":
@@ -2073,8 +2061,6 @@ export const fr: Record<string, string> = {
     "Poser la tête",
   "Set the head on top of the body, its chin over the neck.":
     "Posez la tête sur le corps, le menton sur le cou.",
-  "Draw on eyes, a nose and whiskers. Your cat is sitting pretty!":
-    "Dessinez les yeux, le nez et les moustaches. Votre chat est sage comme une image !",
   "Fold up the wings":
     "Relever les ailes",
   "Fold each bottom corner up and out, from just beside the middle, so the wings rise.":
@@ -2091,10 +2077,6 @@ export const fr: Record<string, string> = {
     "Découper les pattes",
   "Cut two snips up from the bottom edge, through both layers, a little in from each end.":
     "Faites deux entailles vers le haut depuis le bord du bas, à travers les deux couches, un peu en retrait de chaque bout.",
-  "Fold up the belly":
-    "Relever le ventre",
-  "Fold the paper between the snips up behind, leaving four legs.":
-    "Repliez le papier entre les entailles derrière vers le haut : il reste quatre pattes.",
   "Turn the head square":
     "Tourner le carré de la tête",
   "Turn the small square so a corner points towards you.":
@@ -2113,8 +2095,6 @@ export const fr: Record<string, string> = {
     "Rabattez la pointe de chaque rabat devant, du milieu jusqu’au bord, pour qu’une corne se dresse de chaque côté.",
   "Set the head on the front of the body, its muzzle a little below the back.":
     "Posez la tête à l’avant du corps, le museau un peu plus bas que le dos.",
-  "Draw two eyes and two nostrils on the head. Your bull is ready to charge!":
-    "Dessinez deux yeux et deux naseaux sur la tête. Votre taureau est prêt à charger !",
   "Start with a diamond":
     "Commencer avec un losange",
   "Start with the big square, dark side up, a corner pointing towards you.":
@@ -2133,8 +2113,6 @@ export const fr: Record<string, string> = {
     "Repliez le coin en haut à droite derrière, pour que le museau descende vers l’avant.",
   "Set the head on the front of the body, a little higher than its back.":
     "Posez la tête à l’avant du corps, un peu plus haut que le dos.",
-  "Draw an eye and a row of sharp teeth on the head. Roar!":
-    "Dessinez un œil et une rangée de dents pointues sur la tête. Grrr !",
   "Fold the edges to the middle":
     "Rabattre les bords au milieu",
   "Start dark side up. Fold the top and bottom edges to the middle.":
@@ -2505,4 +2483,266 @@ export const fr: Record<string, string> = {
     "Pliez les bords gauche et droit sur les plis les plus proches.",
   "Keeping this side up, fold the paper back and forth into sixteen equal strips, using the creases as a guide, leaving the strip on the left open as a flap.":
     "Cette face vers le haut, pliez le papier en accordéon en seize bandes égales, en vous guidant sur les plis, et laissez la bande de gauche ouverte comme un rabat.",
+  "Fold the top edge down to the bottom edge.":
+    "Pliez le bord du haut sur le bord du bas.",
+  "And the right one. It’s a triangle with a strip underneath.":
+    "Et le coin droit. C’est un triangle avec une bande en dessous.",
+  "Fold the top layer of the strip up over the triangle.":
+    "Relevez l’épaisseur du dessus de la bande sur le triangle.",
+  "Fold the back strip up":
+    "Pliez la bande de derrière vers le haut",
+  "Fold the other layer of the strip up behind. It looks like a hat.":
+    "Relevez l’autre épaisseur de la bande, derrière. On dirait un chapeau.",
+  "Open it into a diamond":
+    "L’ouvrir en losange",
+  "Open the hat from the bottom and push the two sides together, so it flattens into a diamond. Tuck one end of the strip under the other.":
+    "Ouvrez le chapeau par le bas et rapprochez les deux côtés, pour qu’il s’aplatisse en losange. Glissez un bout de la bande sous l’autre.",
+  "Turn the diamond so the closed point is at the top.":
+    "Tournez le losange pour que la pointe fermée soit en haut.",
+  "Fold the front flap’s bottom point up to the top point.":
+    "Relevez la pointe du bas du rabat de devant jusqu’à la pointe du haut.",
+  "Fold the other side up":
+    "Relever l’autre côté",
+  "Fold this side’s bottom point up to match. It’s a small hat.":
+    "Relevez de même la pointe du bas de ce côté. C’est un petit chapeau.",
+  "Open it into a diamond again":
+    "L’ouvrir de nouveau en losange",
+  "Open the bottom and push the two sides together again, flattening a smaller diamond.":
+    "Ouvrez le bas et rapprochez de nouveau les deux côtés, pour aplatir un losange plus petit.",
+  "Pull it out into a boat":
+    "L’étirer en bateau",
+  "Hold the two loose points at the top and pull them apart. The middle rises into a sail, and it flattens into a boat.":
+    "Tenez les deux pointes libres du haut et écartez-les. Le milieu monte en voile, et il s’aplatit en bateau.",
+  "Open the boat":
+    "Ouvrir le bateau",
+  "Spread the sides a little, and stand the boat up on its bottom. Done!":
+    "Écartez un peu les côtés, et posez le bateau debout sur son fond. C’est fini !",
+  "Swivel fold":
+    "Pli pivot",
+  "A swivel fold swings a flap round on one corner, keeping it flat. The paper it swings across folds into a small pleat to make room. It turns and narrows points, for tails, feet and fins.":
+    "Un pli pivot fait tourner un rabat autour d’un de ses coins, à plat. Le papier qu’il balaie se replie en un petit plissé pour lui faire de la place. Il oriente et affine les pointes, pour les queues, les pattes et les nageoires.",
+  "Fold the corner over":
+    "Rabattez le coin",
+  "Fold the bottom right corner up over a line from the middle of the bottom edge to the middle of the right edge.":
+    "Rabattez le coin en bas à droite vers le haut, le long d’une ligne allant du milieu du bord inférieur au milieu du bord droit.",
+  "Hold the flap’s bottom corner down and swing the flap up towards the top edge, keeping it flat. The paper it swings over folds into a little pleat to make room.":
+    "Maintenez le coin inférieur du rabat et faites-le pivoter vers le bord du haut, à plat. Le papier qu’il balaie se replie en un petit plissé pour lui faire de la place.",
+  "Open it out: the pleat left two creases fanning out from the corner the flap swung on, a valley and a mountain.":
+    "Dépliez : le plissé a laissé deux plis qui partent en éventail du coin sur lequel le rabat a pivoté, un pli vallée et un pli montagne.",
+  "Open sink":
+    "Pli enfoncé ouvert",
+  "An open sink pushes the tip of a point down inside itself, so the point gets blunter with nothing folded over on the outside. The point opens out flat while you sink it, then closes up again.":
+    "Un pli enfoncé ouvert pousse le bout d’une pointe à l’intérieur d’elle-même : la pointe s’émousse sans rien de replié à l’extérieur. Elle s’ouvre à plat pendant qu’on l’enfonce, puis se referme.",
+  "Crease the tip":
+    "Marquez le bout",
+  "Fold the closed tip down through all the layers, a little way in, and crease it hard.":
+    "Rabattez le bout fermé vers le bas à travers toutes les couches, un peu vers l’intérieur, et marquez bien le pli.",
+  "Fold it back up. The crease shows how far the tip sinks.":
+    "Relevez-le. Le pli montre jusqu’où le bout s’enfonce.",
+  "Open the point out a little and push its tip down inside along the crease, so the paper turns inside out into the point. Close the layers up again and flatten it.":
+    "Ouvrez un peu la pointe et enfoncez son bout à l’intérieur le long du pli, pour que le papier se retourne dans la pointe. Refermez les couches et aplatissez.",
+  "Open it out: the sink left a small square of creases round the middle of the sheet.":
+    "Dépliez : le pli enfoncé a laissé un petit carré de plis autour du centre de la feuille.",
+  "Fold out a back flipper":
+    "Plier une nageoire arrière",
+  "Fold the loose point at the top left down and out, so its tip sticks out past the side, low down.":
+    "Rabats vers le bas et l’extérieur la pointe libre en haut à gauche, pour qu’elle dépasse du côté, tout en bas.",
+  "Fold out the other back flipper":
+    "Plier l’autre nageoire arrière",
+  "Fold out a front flipper":
+    "Plier une nageoire avant",
+  "Fold the loose point at the top left down and out, so its tip sticks out past the side.":
+    "Rabats vers le bas et l’extérieur la pointe libre en haut à gauche, pour qu’elle dépasse du côté.",
+  "Fold out the other front flipper":
+    "Plier l’autre nageoire avant",
+  "Draw the eyes and shell":
+    "Dessiner les yeux et la carapace",
+  "Draw two eyes on the head, and a pattern of plates on the shell. Done!":
+    "Dessine deux yeux sur la tête et un motif d’écailles sur la carapace. C’est fini !",
+  "Start with three squares":
+    "Commencer avec trois carrés",
+  "A yellow square, orange side up; a bigger green one turned so a corner points towards you; and a small brown one.":
+    "Un carré jaune, face orange vers le haut ; un carré vert plus grand, tourné pour qu’un coin pointe vers toi ; et un petit carré marron.",
+  "Fold all four corners of the yellow square to the middle.":
+    "Plie les quatre coins du carré jaune jusqu’au centre.",
+  "Fold each point back out, so it sticks out past the middle of its edge.":
+    "Replie chaque pointe vers l’extérieur, pour qu’elle dépasse du milieu de son bord.",
+  "Fold the middle’s corners behind":
+    "Plier les coins du cœur derrière",
+  "Fold each corner of the small brown square behind, a little way in, for the middle of the flower.":
+    "Plie chaque coin du petit carré marron un peu vers l’arrière, pour le cœur de la fleur.",
+  "Put the middle on":
+    "Poser le cœur",
+  "Lay the brown middle on top of the petals.":
+    "Pose le cœur marron sur les pétales.",
+  "Put the flower on the stem":
+    "Poser la fleur sur la tige",
+  "Set the flower on top of the stem.":
+    "Pose la fleur en haut de la tige.",
+  "Draw the seeds":
+    "Dessiner les graines",
+  "Draw dots in a spiral on the middle for the seeds. Your sunflower is in bloom!":
+    "Dessine des points en spirale sur le cœur pour les graines. Ton tournesol est en fleur !",
+  "Fold out a back leg":
+    "Plier une patte arrière",
+  "Fold out the other back leg":
+    "Plier l’autre patte arrière",
+  "Turn the body over, left to right.":
+    "Retourne le corps, de gauche à droite.",
+  "Fold out a front leg":
+    "Plier une patte avant",
+  "Fold the loose point at the top left down and out, so its tip sticks out past the side, reaching forwards.":
+    "Rabats vers le bas et l’extérieur la pointe libre en haut à gauche, pour qu’elle dépasse du côté, tendue vers l’avant.",
+  "Fold out the other front leg":
+    "Plier l’autre patte avant",
+  "Start the tail":
+    "Commencer la queue",
+  "Turn the small square over, light side up, with a corner pointing towards you.":
+    "Retourne le petit carré, face claire vers le haut, un coin pointé vers toi.",
+  "Crease the tail down the middle":
+    "Marquer le milieu de la queue",
+  "Fold its left corner to its right corner, then unfold.":
+    "Plie son coin gauche sur son coin droit, puis déplie.",
+  "Fold the new lower edges to the middle again. The bottom is a long thin point: the tail.":
+    "Plie encore les nouveaux bords du bas jusqu’au milieu. En bas, une longue pointe fine : la queue.",
+  "Add the tail":
+    "Ajouter la queue",
+  "Slip the tail’s wide end under the body, as far as the back legs.":
+    "Glisse le bout large de la queue sous le corps, jusqu’aux pattes arrière.",
+  "Draw two eyes on the head. Your lizard is ready to scurry off!":
+    "Dessine deux yeux sur la tête. Ton lézard est prêt à filer !",
+  "Start with three diamonds":
+    "Commencer avec trois losanges",
+  "Three squares, light side up, each turned so a corner points towards you: a middle-sized one, a big one and a small one.":
+    "Trois carrés, face claire vers le haut, chacun tourné pour qu’un coin pointe vers toi : un moyen, un grand et un petit.",
+  "Fold the middle square’s right corner over to its left corner.":
+    "Plie le coin droit du carré moyen sur son coin gauche.",
+  "Fold the big square’s left corner to its right corner, then unfold.":
+    "Plie le coin gauche du grand carré sur son coin droit, puis déplie.",
+  "Fold the tail into a kite":
+    "Plier la queue en cerf-volant",
+  "Fold its lower edges to the middle crease.":
+    "Plie ses bords du bas jusqu’au pli du milieu.",
+  "Turn the tail over":
+    "Retourner la queue",
+  "Turn the kite over, left to right.":
+    "Retourne le cerf-volant, de gauche à droite.",
+  "Flick the tail’s tip":
+    "Recourber le bout de la queue",
+  "Fold the top point down, so the tail’s tip curls over.":
+    "Rabats la pointe du haut, pour que le bout de la queue se recourbe.",
+  "Fold the small square’s right corner over to its left corner. The point on the left is the nose; the top corner is the ear.":
+    "Plie le coin droit du petit carré sur son coin gauche. La pointe à gauche est le nez ; le coin du haut, l’oreille.",
+  "Fold the bottom corner behind.":
+    "Plie le coin du bas derrière.",
+  "Put the tail on":
+    "Mettre la queue",
+  "Slip the tail’s point behind the body, so the tail rises up behind its back and leans over it.":
+    "Glisse la pointe de la queue derrière le corps, pour que la queue se dresse derrière le dos et se penche dessus.",
+  "Set the head on top of the body, its nose to the front.":
+    "Pose la tête sur le corps, le nez vers l’avant.",
+  "Draw an eye":
+    "Dessiner un œil",
+  "Fold the leaves’ corners in":
+    "Plier les coins des feuilles",
+  "Fold out the leaves":
+    "Déplier les feuilles",
+  "Fold each point back out, past the middle of its edge: eight pointed leaves.":
+    "Replie chaque pointe vers l’extérieur, au-delà du milieu de son bord : huit feuilles pointues.",
+  "Put the leaves on":
+    "Poser les feuilles",
+  "Orange side up, cut two snips up from the bottom edge of the big square and two down from the top edge, a little in from each side.":
+    "Face orange vers le haut, fais deux entailles vers le haut depuis le bord du bas du grand carré, et deux vers le bas depuis le bord du haut, un peu à l’intérieur de chaque côté.",
+  "Fold the bellies behind":
+    "Plier les ventres derrière",
+  "Fold the strips between the snips behind, at the top and at the bottom.":
+    "Plie derrière les bandes entre les entailles, en haut et en bas.",
+  "Fold the top half behind, so the strips are inside and four legs hang down.":
+    "Plie la moitié du haut derrière, pour que les bandes soient à l’intérieur et que quatre pattes pendent.",
+  "Take the small square, white side up, and turn it so a corner points towards you.":
+    "Prends le petit carré, face blanche vers le haut, et tourne-le pour qu’un coin pointe vers toi.",
+  "Turn the head over":
+    "Retourner la tête",
+  "Turn the head over, left to right.":
+    "Retourne la tête, de gauche à droite.",
+  "Draw two eyes and a nose on the face.":
+    "Dessine deux yeux et un nez sur le visage.",
+  "Turn the tail square":
+    "Tourner le carré de la queue",
+  "Take the last square, white side up, and turn it so a corner points towards you.":
+    "Prends le dernier carré, face blanche vers le haut, et tourne-le pour qu’un coin pointe vers toi.",
+  "Fold its lower edges to the middle crease. The long point is the tip of the tail.":
+    "Plie ses bords du bas jusqu’au pli du milieu. La longue pointe est le bout de la queue.",
+  "Fold the tail in half":
+    "Plier la queue en deux",
+  "Fold the left half behind, so the tail is orange on both sides.":
+    "Plie la moitié gauche derrière, pour que la queue soit orange des deux côtés.",
+  "Stand the body up":
+    "Mettre le corps debout",
+  "Open the body’s two sides a little and stand it on its four legs.":
+    "Écarte un peu les deux côtés du corps et mets-le debout sur ses quatre pattes.",
+  "Slip the head over the front of the body, facing forwards.":
+    "Glisse la tête sur l’avant du corps, tournée vers l’avant.",
+  "Tuck the tail’s wide end between the back legs, so it sticks out behind. Your fox is ready to explore!":
+    "Glisse le bout large de la queue entre les pattes arrière, pour qu’elle dépasse derrière. Ton renard est prêt à explorer !",
+  "Pink side up, fold all four corners over a little way, so the berry’s rim is rounder.":
+    "Face rose vers le haut, replie un peu les quatre coins, pour que le bord de la fraise soit plus rond.",
+  "Turn the berry over":
+    "Retourner la fraise",
+  "Turn the berry over, red side up.":
+    "Retourne la fraise, face rouge vers le haut.",
+  "Draw little seeds on the red side, in rows either side of each diagonal crease.":
+    "Dessine de petites graines sur la face rouge, en rangées de part et d’autre de chaque pli en diagonale.",
+  "Turn it back":
+    "La retourner à nouveau",
+  "Turn the berry back over, pink side up.":
+    "Retourne de nouveau la fraise, face rose vers le haut.",
+  "Take the green square, light side up. Fold all four corners to the middle.":
+    "Prends le carré vert, face claire vers le haut. Plie les quatre coins jusqu’au centre.",
+  "Pop up the berry":
+    "Ouvrir la fraise",
+  "Push the berry’s middle down and lift its edges, pinching each diagonal into a ridge and pushing the creases between them inside, so it comes to a point underneath, red side out.":
+    "Enfonce le milieu de la fraise et soulève ses bords, en pinçant chaque diagonale en arête et en rentrant les plis entre elles, pour qu’elle finisse en pointe en dessous, face rouge à l’extérieur.",
+  "Set the leaves on top of the berry, their points between its corners. Your strawberry is ripe!":
+    "Pose les feuilles sur la fraise, leurs pointes entre ses coins. Ta fraise est mûre !",
+  "Push the tip of the neck down between its layers for the head.":
+    "Pousse le bout du cou entre ses couches pour faire la tête.",
+  "Lift the wings apart into a V and stand the bird on its body. Hold the base of the neck and pull the tail gently: the wings flap!":
+    "Écarte les ailes en V et mets l’oiseau debout sur son corps. Tiens la base du cou et tire doucement la queue : les ailes battent !",
+  "Tuck in the feet":
+    "Rentrer les pieds",
+  "Push the bottom point up inside, between the layers, so the body sits on a flat edge.":
+    "Rentre la pointe du bas vers le haut, entre les couches, pour que le corps repose sur un bord plat.",
+  "Draw an eye on the head.":
+    "Dessine un œil sur la tête.",
+  "Stand it up":
+    "Le mettre debout",
+  "Open the body’s two sides a little and stand it on its feet. Turn the tail out behind it, and the head to look out. Your squirrel is keeping watch!":
+    "Écarte un peu les deux côtés du corps et mets-le debout sur ses pieds. Tourne la queue vers l’extérieur derrière lui, et la tête pour qu’elle regarde dehors. Ton écureuil monte la garde !",
+  "Draw an eye and a row of sharp teeth on the head.":
+    "Dessine un œil et une rangée de dents pointues sur la tête.",
+  "Open the body’s two sides a little and stand it on its legs, the head turned to look out. Roar!":
+    "Écarte un peu les deux côtés du corps et mets-le debout sur ses pattes, la tête tournée pour regarder dehors. Grrr !",
+  "Draw on eyes, a nose and whiskers.":
+    "Dessine les yeux, le nez et les moustaches.",
+  "Bend the body’s sides back a little, so it stands up, its face looking out. Your cat is sitting pretty!":
+    "Plie un peu les côtés du corps vers l’arrière, pour qu’il tienne debout, le visage tourné vers toi. Ton chat est bien sage !",
+  "Fold the back point up":
+    "Plier la pointe arrière vers le haut",
+  "Fold the last bottom point up in the same way, so its tip goes a little past the base of the horns.":
+    "Plie de la même façon la dernière pointe du bas vers le haut, pour que son bout dépasse un peu la base des cornes.",
+  "Fold its tip back down along the base of the horns.":
+    "Replie son bout vers le bas le long de la base des cornes.",
+  "Fold the band up along the bottom, lip and all, for the back of the brim.":
+    "Plie la bande vers le haut le long du bas, rebord compris, pour l’arrière du bord du casque.",
+  "Turn it back over. Open the bottom to wear it.":
+    "Retourne-le à nouveau. Ouvre le bas pour le porter.",
+  "Tuck up the belly":
+    "Rentrer le ventre",
+  "Push the paper between the snips up inside, between the layers, leaving four legs.":
+    "Rentre vers le haut, entre les couches, le papier entre les entailles, pour laisser quatre pattes.",
+  "Draw two eyes and two nostrils on the head.":
+    "Dessine deux yeux et deux naseaux sur la tête.",
+  "Open the body’s two sides a little and stand it on its four legs, its face looking forwards. Your bull is ready to charge!":
+    "Écarte un peu les deux côtés du corps et mets-le debout sur ses quatre pattes, la tête tournée vers l’avant. Ton taureau est prêt à charger !",
 };

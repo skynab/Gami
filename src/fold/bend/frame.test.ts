@@ -4,7 +4,7 @@ import { fromFoldFile, toFoldFile } from '../fold-format';
 import { LAYER_GAP } from '../frames';
 import { signedArea } from '../geometry2d';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from '../types';
-import { bendFrame, meshFrame, type FrameMesh } from './frame';
+import { bendFrame, crumpleOf, meshFrame, type FrameMesh } from './frame';
 import { topology } from './mesh';
 import { paper, Recipe, table } from '../recipe';
 
@@ -287,6 +287,36 @@ describe('bending a frame', () => {
     // Folding along it, the paper takes the fold's shape; without it, triangles across the line can't.
     expect(off(along.frame)).toBeLessThan(0.01);
     expect(off(bend().frame)).toBeGreaterThan(2 * off(along.frame));
+  });
+
+  it('lets paper crumple where it may: drawn in on the way, never stretched, and exact at the end', { timeout: 30000 }, () => {
+    // The right of the sheet drawn in towards the left on the table and back out again. Paper that can't crumple
+    // stays where it is, short of its guides; a strip down the middle that may crumple draws in to let it follow.
+    const drawn = [0.05, 0.1, 0.05, 0];
+    const guides = [-0.4, -0.2, 0.2, 0.3, 0.4].flatMap((u) => [-0.4, 0, 0.4].map((v): { paper: Vec2; path: Vec3[] } => ({ paper: [u, v], path: drawn.map((d): Vec3 => [u > 0 ? u - d : u, 0, v]) })));
+    const strip: Vec2[][] = [[[-0.1, -1], [0.15, -1], [0.15, 1], [-0.1, 1]]];
+    const sheet: FoldFrame = { ...flat, faces_layer: [0] };
+    const bend = (crumple?: Vec2[][]) => bendFrame(sheet, { flex: [0], anchor: [0, 0], goals: [], guides, mesh: 0.1, stages: 4, ...(crumple && { crumple }) });
+    const strains = (f: FoldFrame) =>
+      f.faces_vertices.flatMap((t) => [0, 1, 2].map((e) => dist(f.vertices_coords[t[e]], f.vertices_coords[t[(e + 1) % 3]]) / dist(f.vertices_paper[t[e]], f.vertices_paper[t[(e + 1) % 3]]) - 1));
+    const height = (f: FoldFrame) => Math.max(...f.vertices_coords.map((q) => q[1]));
+    // How far the right edge is short of where the guides take it, drawn in furthest.
+    const short = (f: FoldFrame) => Math.max(...f.vertices_coords.map((q) => q[0])) - 0.4;
+    const crumpled = bend(strip);
+    const middle = crumpled.via[1];
+    for (const f of [...crumpled.via, crumpled.frame]) {
+      expect(height(f)).toBeLessThan(0.01);
+      expect(Math.max(...strains(f))).toBeLessThan(0.01);
+    }
+    expect(Math.min(...strains(middle))).toBeLessThan(-0.1);
+    expect(Math.max(...strains(crumpled.frame).map(Math.abs))).toBeLessThan(1e-3);
+    expect(short(middle)).toBeLessThan(0.025);
+    expect(short(bend().via[1])).toBeGreaterThan(0.035);
+    // The triangles that may crumple, found again from the frame before (as checking a model does): the strip's.
+    const give = crumpleOf(sheet, crumpled.via[0], strip)!;
+    const mids = middle.faces_vertices.map((t) => t.reduce((s, v) => s + middle.vertices_paper[v][0] / 3, 0));
+    expect(give.some(Boolean)).toBe(true);
+    give.forEach((g, k) => expect(g).toBe(mids[k] > -0.1 && mids[k] < 0.15));
   });
 
   it('can’t fold along lines unless the paper lies flat', () => {

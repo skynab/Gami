@@ -10,7 +10,7 @@ import type { FoldFrame, Vec2 } from './types';
 /** Where a point of the sheet is on the table in a flat frame. */
 export function locate(frame: FoldFrame, p: Vec2): Vec2 {
   for (const face of toFlat(frame)) if (inside(face.paper, p)) return placeLike(face)(p);
-  throw new FoldError(`(${p.join(', ')}) isn’t on the paper.`);
+  throw new FoldError('notOnPaper', { point: p.join(', ') });
 }
 
 /**

@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { fromFoldFile, toFoldFile } from './fold-format';
-import { parseOp, toolsNeeded } from './ops';
+import { parseOp, toolsNeeded, type Op } from './ops';
 import { locate } from './select';
 import { paper, Recipe, table } from './recipe';
-import { stuckTogether } from './tape';
+import { laidAlong, stuckTogether } from './tape';
 import { toFlat } from './fold';
 import type { Vec2 } from './types';
 
@@ -48,6 +48,22 @@ describe('tape', () => {
     expect(read.steps.at(-1)!.frame.tapes).toEqual(model.steps.at(-1)!.frame.tapes);
     expect(read.steps[1].op).toEqual({ op: 'tape', from: { table: [0, 0.2] }, to: { table: [0, 0.4] } });
     expect(toolsNeeded(model.steps)).toEqual(['tape']);
+  });
+
+  it('says where a step lays its tape, so the viewer can lay it on as the step plays', () => {
+    const model = flap(true).build();
+    const [fold, taping] = model.steps;
+    expect(laidAlong(taping.op, fold.frame)).toEqual([
+      [
+        [0, 0.2],
+        [0, 0.4],
+      ],
+    ]);
+    // A point on the paper is where that bit of paper is on the table.
+    const onPaper: Op = { op: 'tape', from: { paper: [0, 0.2] }, to: { table: [0, 0.4] } };
+    expect(laidAlong(onPaper, fold.frame)![0][0]).toEqual(locate(fold.frame, [0, 0.2]));
+    expect(laidAlong(fold.op, model.start)).toBeNull();
+    expect(laidAlong(undefined, fold.frame)).toBeNull();
   });
 
   it('is gone on a fresh sheet', () => {

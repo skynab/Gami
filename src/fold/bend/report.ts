@@ -1,6 +1,8 @@
 import { poseAt, stepTransition } from '../animate';
 import { crossingAt } from '../collisions';
 import { toFoldFile } from '../fold-format';
+import { framesOf } from '../frames';
+import { crumpleOf } from './frame';
 import type { OrigamiModel, Vec2, Vec3 } from '../types';
 import { BEND_SAMPLES } from '../validate';
 
@@ -19,6 +21,11 @@ export interface BendReport {
   still: { strain: number; frame: number; at: Vec2 };
   /** The same while it plays, and when (0 to 1 through the step). */
   playing: { strain: number; time: number; at: Vec2 };
+  /**
+   * For a bend whose paper may crumple on the way (its `crumple`), the most that paper draws in, shorter than the
+   * sheet, in its frames: which frame, and where. Stretch leaves it out (it may draw in, never stretch).
+   */
+  drawnIn?: { strain: number; frame: number; at: Vec2 };
   /**
    * The most a triangle turns between one frame and the next, in degrees, between which (from 0), and its middle on
    * the sheet; and how many times a triangle turns more than 45° or 90° from one frame to the next.
@@ -47,15 +54,20 @@ export function bendReport(model: OrigamiModel, k: number, { samples = 24 }: { s
   const tris = step.frame.faces_vertices;
   const paper = step.frame.vertices_paper;
 
-  // Stretch: each edge against its length on the sheet.
-  const stretchOf = (world: Vec3[][], sheet: Vec2[][]) => {
+  // Stretch: each edge against its length on the sheet. Paper that may crumple only counts longer; shorter, it's
+  // drawn in.
+  const give = step.op?.op === 'bend' ? crumpleOf(framesOf(model)[k - 1], frames[0], step.op.crumple) : null;
+  let drawn = { strain: 0, frame: 0, at: [0, 0] as Vec2 };
+  const stretchOf = (world: Vec3[][], sheet: Vec2[][], n = -1) => {
     let worst = { strain: 0, at: [0, 0] as Vec2 };
     world.forEach((pts, f) =>
       pts.forEach((p, i) => {
         const j = (i + 1) % pts.length;
         const [q, a, b] = [pts[j], sheet[f][i], sheet[f][j]];
-        const strain = Math.abs(Math.hypot(...sub(p, q)) / Math.hypot(a[0] - b[0], a[1] - b[1]) - 1);
+        const s = Math.hypot(...sub(p, q)) / Math.hypot(a[0] - b[0], a[1] - b[1]) - 1;
+        const strain = give?.[f] ? s : Math.abs(s);
         if (strain > worst.strain) worst = { strain, at: middle([a, b]) };
+        if (give?.[f] && n >= 0 && -s > drawn.strain) drawn = { strain: -s, frame: n, at: middle([a, b]) };
       }),
     );
     return worst;
@@ -65,6 +77,7 @@ export function bendReport(model: OrigamiModel, k: number, { samples = 24 }: { s
     const w = stretchOf(
       f.faces_vertices.map((face) => face.map((v) => f.vertices_coords[v] as Vec3)),
       f.faces_vertices.map((face) => face.map((v) => f.vertices_paper[v])),
+      n,
     );
     if (w.strain > still.strain) still = { ...w, frame: n };
   });
@@ -146,6 +159,7 @@ export function bendReport(model: OrigamiModel, k: number, { samples = 24 }: { s
     frames: frames.length,
     still,
     playing,
+    ...(give && { drawnIn: drawn }),
     turns,
     ...(guides && { guides }),
     crossing,
@@ -162,6 +176,7 @@ export function describeBend(r: BendReport): string[] {
     `Step ${r.step}: ${r.triangles} triangles, ${r.frames} frames, ${(r.bytes / 1024).toFixed(0)} KB of the file`,
     `  stretch in its frames  ${pct(r.still.strain)} in frame ${r.still.frame}, at ${at(r.still.at)}`,
     `  stretch as it plays    ${pct(r.playing.strain)} at ${r.playing.time.toFixed(3)}, at ${at(r.playing.at)}`,
+    ...(r.drawnIn ? [`  crumpling, drawn in    ${pct(r.drawnIn.strain)} in frame ${r.drawnIn.frame}, at ${at(r.drawnIn.at)}`] : []),
     `  turn between frames    ${r.turns.degrees.toFixed(0)}° from frame ${r.turns.frames[0]} to ${r.turns.frames[1]}, at ${at(r.turns.at)}; ${r.turns.over45} over 45°, ${r.turns.over90} over 90°`,
     ...(r.guides
       ? [`  behind its guides      ${cm(r.guides.lag)} at stage ${r.guides.stage}, at ${at(r.guides.at)}; by stage ${r.guides.stages.map((s) => (100 * s.lag).toFixed(1)).join(' ')} (cm)`]

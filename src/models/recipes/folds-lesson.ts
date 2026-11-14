@@ -4,10 +4,10 @@ import { squareBase, squareBaseFlaps } from './bird-base';
 
 /**
  * A lesson rather than a model: the common folds, one to a section, each on a fresh square. The choice of
- * folds follows origami.me's beginner's guide; the steps are our own. The swivel fold and the open sink aren't
- * taught yet: the Studio makes both (fold/presets.ts), and `Recipe.swivel` the first. A sink here would need the
- * preset's creases, a mountain or valley fold for each layer: an inside reverse fold through every layer tucks the
- * tip into the middle of the stack, which on a square base is between the gusset's layers, outside the point.
+ * folds follows origami.me's beginner's guide; the steps are our own. The swivel fold and the open sink are made
+ * as the Studio's named folds make them (`Recipe.swivel`, and `fold/presets.ts` through `Recipe.preset`): a sink
+ * needs a mountain or valley fold for each layer, as an inside reverse fold through every layer would tuck the tip
+ * into the middle of the stack, which on a square base is between the gusset's layers, outside the point.
  */
 export function foldsLesson() {
   const r = new Recipe({ id: 'folds-lesson', title: 'Common folds', sheet: { size: [1, 1], front: '#f6f3ec', back: '#7fb3d5' } });
@@ -215,7 +215,26 @@ export function foldsLesson() {
     );
   openUp(crimp, 'Open it out: on each layer, the two creases are a pleat.');
 
-  // 8. Petal fold: on a square base, the bird base's petal fold, as the crane folds it. Origami bases teaches the
+  // 8. Swivel fold: a corner folded over, then swung round on the end of its folded edge, as the Studio's named
+  // fold and its test make it. The paper the flap swings across pleats underneath.
+  const swivel = start(
+    'Swivel fold',
+    'Swivel fold',
+    'A swivel fold swings a flap round on one corner, keeping it flat. The paper it swings across folds into a small pleat to make room. It turns and narrows points, for tails, feet and fins.',
+  );
+  r.along(table(0, 0.5), table(0.5, 0), table(0.45, 0.45), {
+    title: 'Fold the corner over',
+    text: 'Fold the bottom right corner up over a line from the middle of the bottom edge to the middle of the right edge.',
+  }).swivel(
+    {
+      title: 'Swivel fold',
+      text: 'Hold the flap’s bottom corner down and swing the flap up towards the top edge, keeping it flat. The paper it swings over folds into a little pleat to make room.',
+    },
+    { pivot: paper(0, 0.5), hinge: paper(0.5, 0), degrees: 30, anchor: paper(-0.4, -0.4), flap: ([u, v]) => u + v > 0.5 },
+  );
+  openUp(swivel, 'Open it out: the pleat left two creases fanning out from the corner the flap swung on, a valley and a mountain.');
+
+  // 9. Petal fold: on a square base, the bird base's petal fold, as the crane folds it. Origami bases teaches the
   // square base, so here it's folded in one step, to keep this section about the petal fold.
   const petal = start(
     'Petal fold',
@@ -232,6 +251,38 @@ export function foldsLesson() {
   );
   squareBaseFlaps(r).petal(false);
   openUp(petal, 'Open it out to see the creases the petal fold left behind.');
+
+  // 10. Open sink: a square base's closed point pushed down inside itself, as the Studio's named fold makes it.
+  const sink = start(
+    'Open sink',
+    'Open sink',
+    'An open sink pushes the tip of a point down inside itself, so the point gets blunter with nothing folded over on the outside. The point opens out flat while you sink it, then closes up again.',
+  );
+  r.together(
+    {
+      title: 'Fold a square base',
+      text: 'Start from a square base: crease both diagonals and both halves, then collapse it so the four corners meet, loose corners towards you. Origami bases shows it step by step.',
+      kind: 'fold',
+    },
+    () => squareBase(r),
+  );
+  const tip = r.where(paper(0, 0));
+  // A quarter of the way down the point: sunk less deep, the layers graze past each other a little more as they go in.
+  const sunk: Vec2 = [tip[0], tip[1] + 0.2];
+  r.along(table(sunk[0] - 1, sunk[1]), table(sunk[0] + 1, sunk[1]), table(...tip), {
+    title: 'Crease the tip',
+    text: 'Fold the closed tip down through all the layers, a little way in, and crease it hard.',
+  })
+    .unfold({ title: 'Unfold', text: 'Fold it back up. The crease shows how far the tip sinks.' })
+    .preset(
+      {
+        title: 'Open sink',
+        text: 'Open the point out a little and push its tip down inside along the crease, so the paper turns inside out into the point. Close the layers up again and flatten it.',
+        kind: 'sink',
+      },
+      { kind: 'sink', picks: [tip, sunk] },
+    );
+  openUp(sink, 'Open it out: the sink left a small square of creases round the middle of the sheet.');
 
   return r.build();
 }

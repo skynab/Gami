@@ -11,9 +11,9 @@ const ROTATING = ACTION.ROTATE | ACTION.TOUCH_ROTATE | ACTION.TOUCH_DOLLY_ROTATE
 const PADDING = 1.25;
 
 /**
- * Orbit, zoom and pan, plus the view presets, lock and reset from the viewer store. The camera stays where it is
- * from step to step, so a close look at one part carries on into the next fold; following, whenever `fit` changes
- * (a new step), it glides to frame it instead, keeping the angle you're looking from.
+ * Orbit, zoom and pan, plus the view presets, lock and reset from the viewer store. Following (as it does to begin
+ * with), whenever `fit` changes (a new step) the camera glides to frame it, keeping the angle you're looking from;
+ * not following, it stays where it is from step to step, so a close look at one part carries on into the next fold.
  * Mouse: left drag rotates, right drag pans, wheel zooms. Touch: one finger rotates, two pinch and pan.
  * When locked, left drag and one finger pan instead, so the view can't be turned by accident.
  */

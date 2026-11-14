@@ -25,6 +25,11 @@ interface PlaybackState {
   replay(): void;
   /** Plays on to the next half step: halfway through the fold being shown, or to its end. Stops playback. */
   half(): void;
+  /**
+   * Back a step: plays the fold being shown in reverse, from wherever the paper is, to the step before's end.
+   * Pressed again while it does, it carries on unfolding the step before that too. Stops playback.
+   */
+  back(): void;
   /** Moves the paper to any point, as when dragging the scrubber. Stops playback. */
   scrub(pos: number): void;
   togglePlay(): void;
@@ -37,11 +42,14 @@ let frame = 0;
 let hold = 0;
 /** A fold is moving the paper right now. */
 let folding = false;
+/** The step being unfolded back to, while `back` plays a fold in reverse; otherwise null. */
+let rewinding: number | null = null;
 
 function stop() {
   cancelAnimationFrame(frame);
   clearTimeout(hold);
   folding = false;
+  rewinding = null;
 }
 
 const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -68,7 +76,7 @@ export const usePlayback = create<PlaybackState>()((set, get) => {
     const start = performance.now();
     const length = STEP_MS * (to - from);
     const tick = (now: number) => {
-      const t = Math.min(1, ((now - start) * get().speed) / length);
+      const t = length > 0 ? Math.min(1, ((now - start) * get().speed) / length) : 1;
       set({ pos: from + (to - from) * ease(t) });
       if (t < 1) {
         frame = requestAnimationFrame(tick);
@@ -79,6 +87,35 @@ export const usePlayback = create<PlaybackState>()((set, get) => {
         if (k < get().total) hold = window.setTimeout(() => animate(k + 1), HOLD_MS / get().speed);
         else set({ playing: false });
       }
+    };
+    folding = true;
+    frame = requestAnimationFrame(tick);
+  }
+
+  /**
+   * Unfolds the paper from where it is back to the end of step `to`, through as many steps as that takes. The
+   * step shown is the one the paper is part way through, as when scrubbing, so it changes as each fold is undone.
+   */
+  function rewind(to: number) {
+    const from = get().pos;
+    stop();
+    if (reducedMotion() || from <= to) {
+      set({ step: to, pos: Math.min(from, to) });
+      return;
+    }
+    rewinding = to;
+    const start = performance.now();
+    const length = STEP_MS * (from - to);
+    const tick = (now: number) => {
+      const t = Math.min(1, ((now - start) * get().speed) / length);
+      const pos = from - (from - to) * ease(t);
+      set({ pos, step: t < 1 ? Math.max(to, Math.ceil(pos)) : to });
+      if (t < 1) {
+        frame = requestAnimationFrame(tick);
+        return;
+      }
+      folding = false;
+      rewinding = null;
     };
     folding = true;
     frame = requestAnimationFrame(tick);
@@ -116,6 +153,14 @@ export const usePlayback = create<PlaybackState>()((set, get) => {
       const k = Math.ceil(to);
       // Into a new step: start from its beginning.
       animate(k, Math.max(pos, k - 1), to);
+    },
+    back() {
+      if (!get().total) return;
+      // Already going back: one step further than where it was headed.
+      const to = (rewinding ?? get().step) - 1;
+      if (to < 0) return;
+      set({ playing: false });
+      rewind(to);
     },
     scrub(pos) {
       stop();

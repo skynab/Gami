@@ -25,7 +25,7 @@ export function cut(frame: FoldFrame, { from, to, layers, only }: CutOptions): F
   const faces = toFlat(frame);
   const reach = faces.map((f) => clip(f.world, from, to));
   const crossed = faces.map((_, i) => reach[i] !== null && (!only || only(faces[i].paper)));
-  if (!crossed.some(Boolean)) throw new FoldError('That cut doesn’t cross any paper.');
+  if (!crossed.some(Boolean)) throw new FoldError('cutMissesPaper');
   const top = Math.max(...faces.filter((_, i) => crossed[i]).map((f) => f.layer));
   const lowest = layers === undefined ? -Infinity : top - layers + 1;
 

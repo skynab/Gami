@@ -1028,8 +1028,6 @@ export const es: Record<string, string> = {
     "Saca el cuello",
   "The same with the right point, for the neck.":
     "Lo mismo con la punta derecha, para el cuello.",
-  "Push the tip of the neck down between its layers for the head. Hold the base of the neck and pull the tail gently: the wings flap!":
-    "Empuja la punta del cuello hacia abajo entre sus capas para hacer la cabeza. Sujeta la base del cuello y tira suavemente de la cola: ¡las alas aletean!",
   "Fold out an ear":
     "Saca una oreja",
   "Fold the loose point at the top left out a little to the side, for an ear.":
@@ -1775,8 +1773,8 @@ export const es: Record<string, string> = {
     "Dobla el borde superior hacia el centro, quedándote un poco antes, y desdobla.",
   "Blow it up":
     "Ínflalo",
-  "Blow gently into the hole at the bottom, and the balloon puffs up. Done!":
-    "Sopla suavemente por el agujero de abajo y el globo se infla. ¡Listo!",
+  "Blow gently into the hole at the bottom, and the balloon puffs up into a cube. Done!":
+    "Sopla suavemente por el agujero de abajo y el globo se infla hasta formar un cubo. ¡Listo!",
   "Fold the left corner over to the right corner and unfold, to mark the middle.":
     "Lleva la esquina izquierda sobre la derecha y desdobla, para marcar el centro.",
   "Fold the top layer of the bottom point up, so its tip goes a little past the base of the horns.":
@@ -1787,16 +1785,6 @@ export const es: Record<string, string> = {
     "Dobla la punta hacia abajo a lo largo de la base de los cuernos, formando un pequeño reborde.",
   "Fold the band up along the bottom of the helmet, lip and all, making the brim.":
     "Dobla la banda hacia arriba a lo largo de la base del casco, con el reborde, formando el ala.",
-  "Crease the back point":
-    "Marca la punta de atrás",
-  "Fold the last point up behind the helmet and crease it well…":
-    "Dobla la última punta hacia arriba por detrás del casco y marca bien el pliegue…",
-  "…then fold it back down.":
-    "…y luego vuelve a bajarla.",
-  "Tuck the back point inside":
-    "Mete la punta de atrás por dentro",
-  "Fold the back point up on its crease, tucking it inside the helmet, behind the brim. Open the bottom to wear it.":
-    "Dobla la punta de atrás hacia arriba por su pliegue y métela dentro del casco, detrás del ala. Abre la parte de abajo para ponértelo.",
   "Open the flap back out":
     "Vuelve a abrir la solapa",
   "Fold the middle flap back to the right, leaving its crease.":
@@ -2073,8 +2061,6 @@ export const es: Record<string, string> = {
     "Pon la cabeza",
   "Set the head on top of the body, its chin over the neck.":
     "Pon la cabeza encima del cuerpo, con la barbilla sobre el cuello.",
-  "Draw on eyes, a nose and whiskers. Your cat is sitting pretty!":
-    "Dibuja los ojos, la nariz y los bigotes. ¡Tu gato está sentado muy elegante!",
   "Fold up the wings":
     "Dobla las alas hacia arriba",
   "Fold each bottom corner up and out, from just beside the middle, so the wings rise.":
@@ -2091,10 +2077,6 @@ export const es: Record<string, string> = {
     "Corta las patas",
   "Cut two snips up from the bottom edge, through both layers, a little in from each end.":
     "Haz dos cortes hacia arriba desde el borde de abajo, por las dos capas, un poco hacia dentro de cada extremo.",
-  "Fold up the belly":
-    "Dobla la barriga hacia arriba",
-  "Fold the paper between the snips up behind, leaving four legs.":
-    "Dobla el papel entre los cortes hacia atrás y hacia arriba: quedan cuatro patas.",
   "Turn the head square":
     "Gira el cuadrado de la cabeza",
   "Turn the small square so a corner points towards you.":
@@ -2113,8 +2095,6 @@ export const es: Record<string, string> = {
     "Dobla la punta de cada solapa hacia delante, desde el centro hasta el borde, para que se levante un cuerno a cada lado.",
   "Set the head on the front of the body, its muzzle a little below the back.":
     "Pon la cabeza en la parte delantera del cuerpo, con el hocico un poco por debajo del lomo.",
-  "Draw two eyes and two nostrils on the head. Your bull is ready to charge!":
-    "Dibuja dos ojos y dos orificios nasales en la cabeza. ¡Tu toro está listo para embestir!",
   "Start with a diamond":
     "Empieza con un rombo",
   "Start with the big square, dark side up, a corner pointing towards you.":
@@ -2133,8 +2113,6 @@ export const es: Record<string, string> = {
     "Dobla la esquina de arriba a la derecha hacia atrás, para que el hocico baje hacia delante.",
   "Set the head on the front of the body, a little higher than its back.":
     "Pon la cabeza en la parte delantera del cuerpo, un poco más alta que el lomo.",
-  "Draw an eye and a row of sharp teeth on the head. Roar!":
-    "Dibuja un ojo y una fila de dientes afilados en la cabeza. ¡Grrr!",
   "Fold the edges to the middle":
     "Dobla los bordes hasta el centro",
   "Start dark side up. Fold the top and bottom edges to the middle.":
@@ -2505,4 +2483,266 @@ export const es: Record<string, string> = {
     "Dobla los bordes izquierdo y derecho hasta los pliegues más cercanos.",
   "Keeping this side up, fold the paper back and forth into sixteen equal strips, using the creases as a guide, leaving the strip on the left open as a flap.":
     "Con esta cara hacia arriba, dobla el papel de un lado a otro en dieciséis franjas iguales, guiándote por los pliegues, y deja abierta la franja de la izquierda como solapa.",
+  "Fold the top edge down to the bottom edge.":
+    "Dobla el borde de arriba hasta el borde de abajo.",
+  "And the right one. It’s a triangle with a strip underneath.":
+    "Y la esquina derecha. Es un triángulo con una tira debajo.",
+  "Fold the top layer of the strip up over the triangle.":
+    "Dobla la capa de arriba de la tira hacia arriba, sobre el triángulo.",
+  "Fold the back strip up":
+    "Dobla la tira de atrás hacia arriba",
+  "Fold the other layer of the strip up behind. It looks like a hat.":
+    "Dobla la otra capa de la tira hacia arriba, por detrás. Parece un sombrero.",
+  "Open it into a diamond":
+    "Ábrelo en un rombo",
+  "Open the hat from the bottom and push the two sides together, so it flattens into a diamond. Tuck one end of the strip under the other.":
+    "Abre el sombrero por abajo y junta los dos lados, para que se aplane en un rombo. Mete un extremo de la tira debajo del otro.",
+  "Turn the diamond so the closed point is at the top.":
+    "Gira el rombo para que la punta cerrada quede arriba.",
+  "Fold the front flap’s bottom point up to the top point.":
+    "Dobla la punta de abajo de la solapa de delante hasta la punta de arriba.",
+  "Fold the other side up":
+    "Dobla el otro lado hacia arriba",
+  "Fold this side’s bottom point up to match. It’s a small hat.":
+    "Dobla igual la punta de abajo de este lado. Es un sombrero pequeño.",
+  "Open it into a diamond again":
+    "Ábrelo otra vez en un rombo",
+  "Open the bottom and push the two sides together again, flattening a smaller diamond.":
+    "Abre la parte de abajo y vuelve a juntar los dos lados, aplanando un rombo más pequeño.",
+  "Pull it out into a boat":
+    "Estíralo en un barco",
+  "Hold the two loose points at the top and pull them apart. The middle rises into a sail, and it flattens into a boat.":
+    "Sujeta las dos puntas sueltas de arriba y sepáralas. El centro sube como una vela, y se aplana en un barco.",
+  "Open the boat":
+    "Abre el barco",
+  "Spread the sides a little, and stand the boat up on its bottom. Done!":
+    "Separa un poco los lados y pon el barco de pie sobre su fondo. ¡Listo!",
+  "Swivel fold":
+    "Pliegue de pivote",
+  "A swivel fold swings a flap round on one corner, keeping it flat. The paper it swings across folds into a small pleat to make room. It turns and narrows points, for tails, feet and fins.":
+    "Un pliegue de pivote hace girar una solapa sobre una de sus esquinas, sin levantarla. El papel por el que pasa se dobla en un pequeño plisado para dejarle sitio. Sirve para girar y estrechar puntas, para colas, patas y aletas.",
+  "Fold the corner over":
+    "Dobla la esquina",
+  "Fold the bottom right corner up over a line from the middle of the bottom edge to the middle of the right edge.":
+    "Dobla la esquina de abajo a la derecha hacia arriba por una línea que va del centro del borde inferior al centro del borde derecho.",
+  "Hold the flap’s bottom corner down and swing the flap up towards the top edge, keeping it flat. The paper it swings over folds into a little pleat to make room.":
+    "Sujeta la esquina de abajo de la solapa y gírala hacia el borde de arriba, sin levantarla. El papel por el que pasa se dobla en un pequeño plisado para dejarle sitio.",
+  "Open it out: the pleat left two creases fanning out from the corner the flap swung on, a valley and a mountain.":
+    "Ábrelo: el plisado ha dejado dos pliegues que salen en abanico desde la esquina sobre la que giró la solapa, uno valle y otro montaña.",
+  "Open sink":
+    "Pliegue hundido abierto",
+  "An open sink pushes the tip of a point down inside itself, so the point gets blunter with nothing folded over on the outside. The point opens out flat while you sink it, then closes up again.":
+    "Un pliegue hundido abierto empuja la punta hacia dentro de sí misma, de modo que queda más roma sin nada doblado por fuera. La punta se abre del todo mientras la hundes y luego se vuelve a cerrar.",
+  "Crease the tip":
+    "Marca el extremo",
+  "Fold the closed tip down through all the layers, a little way in, and crease it hard.":
+    "Dobla el extremo cerrado hacia abajo, un poco hacia dentro, a través de todas las capas, y marca bien el pliegue.",
+  "Fold it back up. The crease shows how far the tip sinks.":
+    "Vuelve a subirlo. El pliegue marca hasta dónde se hunde el extremo.",
+  "Open the point out a little and push its tip down inside along the crease, so the paper turns inside out into the point. Close the layers up again and flatten it.":
+    "Abre un poco la punta y empuja su extremo hacia dentro siguiendo el pliegue, para que el papel se dé la vuelta hacia el interior de la punta. Vuelve a cerrar las capas y aplánala.",
+  "Open it out: the sink left a small square of creases round the middle of the sheet.":
+    "Ábrelo: el pliegue hundido ha dejado un pequeño cuadrado de pliegues alrededor del centro de la hoja.",
+  "Fold out a back flipper":
+    "Dobla una aleta trasera",
+  "Fold the loose point at the top left down and out, so its tip sticks out past the side, low down.":
+    "Dobla hacia abajo y hacia fuera la punta suelta de arriba a la izquierda, para que asome por el lado, abajo.",
+  "Fold out the other back flipper":
+    "Dobla la otra aleta trasera",
+  "Fold out a front flipper":
+    "Dobla una aleta delantera",
+  "Fold the loose point at the top left down and out, so its tip sticks out past the side.":
+    "Dobla hacia abajo y hacia fuera la punta suelta de arriba a la izquierda, para que asome por el lado.",
+  "Fold out the other front flipper":
+    "Dobla la otra aleta delantera",
+  "Draw the eyes and shell":
+    "Dibuja los ojos y el caparazón",
+  "Draw two eyes on the head, and a pattern of plates on the shell. Done!":
+    "Dibuja dos ojos en la cabeza y un dibujo de placas en el caparazón. ¡Listo!",
+  "Start with three squares":
+    "Empieza con tres cuadrados",
+  "A yellow square, orange side up; a bigger green one turned so a corner points towards you; and a small brown one.":
+    "Un cuadrado amarillo, con el lado naranja hacia arriba; uno verde más grande, girado para que una esquina apunte hacia ti; y uno marrón pequeño.",
+  "Fold all four corners of the yellow square to the middle.":
+    "Dobla las cuatro esquinas del cuadrado amarillo hasta el centro.",
+  "Fold each point back out, so it sticks out past the middle of its edge.":
+    "Vuelve a doblar cada punta hacia fuera, para que asome por el centro de su borde.",
+  "Fold the middle’s corners behind":
+    "Dobla hacia atrás las esquinas del centro",
+  "Fold each corner of the small brown square behind, a little way in, for the middle of the flower.":
+    "Dobla hacia atrás un poco cada esquina del cuadrado marrón pequeño, para el centro de la flor.",
+  "Put the middle on":
+    "Pon el centro",
+  "Lay the brown middle on top of the petals.":
+    "Coloca el centro marrón encima de los pétalos.",
+  "Put the flower on the stem":
+    "Pon la flor en el tallo",
+  "Set the flower on top of the stem.":
+    "Coloca la flor en lo alto del tallo.",
+  "Draw the seeds":
+    "Dibuja las semillas",
+  "Draw dots in a spiral on the middle for the seeds. Your sunflower is in bloom!":
+    "Dibuja puntos en espiral en el centro para las semillas. ¡Tu girasol ha florecido!",
+  "Fold out a back leg":
+    "Dobla una pata trasera",
+  "Fold out the other back leg":
+    "Dobla la otra pata trasera",
+  "Turn the body over, left to right.":
+    "Da la vuelta al cuerpo, de izquierda a derecha.",
+  "Fold out a front leg":
+    "Dobla una pata delantera",
+  "Fold the loose point at the top left down and out, so its tip sticks out past the side, reaching forwards.":
+    "Dobla hacia abajo y hacia fuera la punta suelta de arriba a la izquierda, para que asome por el lado, estirada hacia delante.",
+  "Fold out the other front leg":
+    "Dobla la otra pata delantera",
+  "Start the tail":
+    "Empieza la cola",
+  "Turn the small square over, light side up, with a corner pointing towards you.":
+    "Da la vuelta al cuadrado pequeño, con el lado claro hacia arriba y una esquina apuntando hacia ti.",
+  "Crease the tail down the middle":
+    "Marca el centro de la cola",
+  "Fold its left corner to its right corner, then unfold.":
+    "Dobla su esquina izquierda sobre la derecha y desdobla.",
+  "Fold the new lower edges to the middle again. The bottom is a long thin point: the tail.":
+    "Vuelve a doblar los nuevos bordes inferiores hasta el centro. Abajo queda una punta larga y fina: la cola.",
+  "Add the tail":
+    "Añade la cola",
+  "Slip the tail’s wide end under the body, as far as the back legs.":
+    "Mete el extremo ancho de la cola bajo el cuerpo, hasta las patas traseras.",
+  "Draw two eyes on the head. Your lizard is ready to scurry off!":
+    "Dibuja dos ojos en la cabeza. ¡Tu lagartija está lista para salir corriendo!",
+  "Start with three diamonds":
+    "Empieza con tres rombos",
+  "Three squares, light side up, each turned so a corner points towards you: a middle-sized one, a big one and a small one.":
+    "Tres cuadrados, con el lado claro hacia arriba, cada uno girado para que una esquina apunte hacia ti: uno mediano, uno grande y uno pequeño.",
+  "Fold the middle square’s right corner over to its left corner.":
+    "Dobla la esquina derecha del cuadrado mediano sobre su esquina izquierda.",
+  "Fold the big square’s left corner to its right corner, then unfold.":
+    "Dobla la esquina izquierda del cuadrado grande sobre la derecha y desdobla.",
+  "Fold the tail into a kite":
+    "Dobla la cola en forma de cometa",
+  "Fold its lower edges to the middle crease.":
+    "Dobla sus bordes inferiores hasta el pliegue del centro.",
+  "Turn the tail over":
+    "Da la vuelta a la cola",
+  "Turn the kite over, left to right.":
+    "Da la vuelta a la cometa, de izquierda a derecha.",
+  "Flick the tail’s tip":
+    "Riza la punta de la cola",
+  "Fold the top point down, so the tail’s tip curls over.":
+    "Dobla la punta de arriba hacia abajo, para que la punta de la cola se rice.",
+  "Fold the small square’s right corner over to its left corner. The point on the left is the nose; the top corner is the ear.":
+    "Dobla la esquina derecha del cuadrado pequeño sobre su esquina izquierda. La punta de la izquierda es la nariz; la esquina de arriba, la oreja.",
+  "Fold the bottom corner behind.":
+    "Dobla la esquina de abajo hacia atrás.",
+  "Put the tail on":
+    "Pon la cola",
+  "Slip the tail’s point behind the body, so the tail rises up behind its back and leans over it.":
+    "Mete la punta de la cola detrás del cuerpo, para que la cola suba por detrás de la espalda y se incline sobre ella.",
+  "Set the head on top of the body, its nose to the front.":
+    "Coloca la cabeza encima del cuerpo, con la nariz hacia delante.",
+  "Draw an eye":
+    "Dibuja un ojo",
+  "Fold the leaves’ corners in":
+    "Dobla hacia dentro las esquinas de las hojas",
+  "Fold out the leaves":
+    "Dobla las hojas hacia fuera",
+  "Fold each point back out, past the middle of its edge: eight pointed leaves.":
+    "Vuelve a doblar cada punta hacia fuera, más allá del centro de su borde: ocho hojas puntiagudas.",
+  "Put the leaves on":
+    "Pon las hojas",
+  "Orange side up, cut two snips up from the bottom edge of the big square and two down from the top edge, a little in from each side.":
+    "Con el lado naranja hacia arriba, haz dos cortes hacia arriba desde el borde inferior del cuadrado grande y dos hacia abajo desde el borde superior, un poco hacia dentro de cada lado.",
+  "Fold the bellies behind":
+    "Dobla las barrigas hacia atrás",
+  "Fold the strips between the snips behind, at the top and at the bottom.":
+    "Dobla hacia atrás las tiras entre los cortes, arriba y abajo.",
+  "Fold the top half behind, so the strips are inside and four legs hang down.":
+    "Dobla la mitad de arriba hacia atrás, para que las tiras queden dentro y cuelguen cuatro patas.",
+  "Take the small square, white side up, and turn it so a corner points towards you.":
+    "Toma el cuadrado pequeño, con el lado blanco hacia arriba, y gíralo para que una esquina apunte hacia ti.",
+  "Turn the head over":
+    "Da la vuelta a la cabeza",
+  "Turn the head over, left to right.":
+    "Da la vuelta a la cabeza, de izquierda a derecha.",
+  "Draw two eyes and a nose on the face.":
+    "Dibuja dos ojos y una nariz en la cara.",
+  "Turn the tail square":
+    "Gira el cuadrado de la cola",
+  "Take the last square, white side up, and turn it so a corner points towards you.":
+    "Toma el último cuadrado, con el lado blanco hacia arriba, y gíralo para que una esquina apunte hacia ti.",
+  "Fold its lower edges to the middle crease. The long point is the tip of the tail.":
+    "Dobla sus bordes inferiores hasta el pliegue del centro. La punta larga es la punta de la cola.",
+  "Fold the tail in half":
+    "Dobla la cola por la mitad",
+  "Fold the left half behind, so the tail is orange on both sides.":
+    "Dobla la mitad izquierda hacia atrás, para que la cola sea naranja por los dos lados.",
+  "Stand the body up":
+    "Pon el cuerpo de pie",
+  "Open the body’s two sides a little and stand it on its four legs.":
+    "Abre un poco los dos lados del cuerpo y ponlo de pie sobre sus cuatro patas.",
+  "Slip the head over the front of the body, facing forwards.":
+    "Encaja la cabeza en la parte delantera del cuerpo, mirando hacia delante.",
+  "Tuck the tail’s wide end between the back legs, so it sticks out behind. Your fox is ready to explore!":
+    "Mete el extremo ancho de la cola entre las patas traseras, para que asome por detrás. ¡Tu zorro está listo para explorar!",
+  "Pink side up, fold all four corners over a little way, so the berry’s rim is rounder.":
+    "Con el lado rosa hacia arriba, dobla un poco las cuatro esquinas, para que el borde de la fresa quede más redondo.",
+  "Turn the berry over":
+    "Da la vuelta a la fresa",
+  "Turn the berry over, red side up.":
+    "Da la vuelta a la fresa, con el lado rojo hacia arriba.",
+  "Draw little seeds on the red side, in rows either side of each diagonal crease.":
+    "Dibuja semillitas en el lado rojo, en filas a ambos lados de cada pliegue diagonal.",
+  "Turn it back":
+    "Vuelve a darle la vuelta",
+  "Turn the berry back over, pink side up.":
+    "Vuelve a dar la vuelta a la fresa, con el lado rosa hacia arriba.",
+  "Take the green square, light side up. Fold all four corners to the middle.":
+    "Toma el cuadrado verde, con el lado claro hacia arriba. Dobla las cuatro esquinas hasta el centro.",
+  "Pop up the berry":
+    "Abre la fresa",
+  "Push the berry’s middle down and lift its edges, pinching each diagonal into a ridge and pushing the creases between them inside, so it comes to a point underneath, red side out.":
+    "Empuja hacia abajo el centro de la fresa y levanta sus bordes, pellizcando cada diagonal en una arista y metiendo hacia dentro los pliegues entre ellas, para que acabe en punta por debajo, con el lado rojo por fuera.",
+  "Set the leaves on top of the berry, their points between its corners. Your strawberry is ripe!":
+    "Coloca las hojas encima de la fresa, con las puntas entre sus esquinas. ¡Tu fresa está madura!",
+  "Push the tip of the neck down between its layers for the head.":
+    "Empuja la punta del cuello hacia abajo entre sus capas para hacer la cabeza.",
+  "Lift the wings apart into a V and stand the bird on its body. Hold the base of the neck and pull the tail gently: the wings flap!":
+    "Separa las alas en forma de V y pon el pájaro de pie sobre su cuerpo. Sujeta la base del cuello y tira suavemente de la cola: ¡las alas aletean!",
+  "Tuck in the feet":
+    "Mete los pies hacia dentro",
+  "Push the bottom point up inside, between the layers, so the body sits on a flat edge.":
+    "Empuja la punta de abajo hacia arriba por dentro, entre las capas, para que el cuerpo se apoye en un borde plano.",
+  "Draw an eye on the head.":
+    "Dibuja un ojo en la cabeza.",
+  "Stand it up":
+    "Ponlo de pie",
+  "Open the body’s two sides a little and stand it on its feet. Turn the tail out behind it, and the head to look out. Your squirrel is keeping watch!":
+    "Abre un poco los dos lados del cuerpo y ponlo de pie sobre sus pies. Gira la cola hacia fuera por detrás, y la cabeza para que mire hacia ti. ¡Tu ardilla está vigilando!",
+  "Draw an eye and a row of sharp teeth on the head.":
+    "Dibuja un ojo y una fila de dientes afilados en la cabeza.",
+  "Open the body’s two sides a little and stand it on its legs, the head turned to look out. Roar!":
+    "Abre un poco los dos lados del cuerpo y ponlo de pie sobre sus patas, con la cabeza girada para mirar hacia ti. ¡Grrr!",
+  "Draw on eyes, a nose and whiskers.":
+    "Dibuja los ojos, la nariz y los bigotes.",
+  "Bend the body’s sides back a little, so it stands up, its face looking out. Your cat is sitting pretty!":
+    "Dobla un poco hacia atrás los lados del cuerpo, para que se ponga de pie mirando hacia ti. ¡Tu gato está sentado muy formal!",
+  "Fold the back point up":
+    "Dobla la punta de atrás hacia arriba",
+  "Fold the last bottom point up in the same way, so its tip goes a little past the base of the horns.":
+    "Dobla hacia arriba la última punta de abajo de la misma manera, para que su punta pase un poco de la base de los cuernos.",
+  "Fold its tip back down along the base of the horns.":
+    "Dobla su punta de nuevo hacia abajo a lo largo de la base de los cuernos.",
+  "Fold the band up along the bottom, lip and all, for the back of the brim.":
+    "Dobla la banda hacia arriba por la parte de abajo, con el borde incluido, para la parte de atrás del ala.",
+  "Turn it back over. Open the bottom to wear it.":
+    "Vuelve a darle la vuelta. Abre la parte de abajo para ponértelo.",
+  "Tuck up the belly":
+    "Mete la barriga hacia dentro",
+  "Push the paper between the snips up inside, between the layers, leaving four legs.":
+    "Empuja hacia arriba por dentro, entre las capas, el papel que hay entre los cortes, dejando cuatro patas.",
+  "Draw two eyes and two nostrils on the head.":
+    "Dibuja dos ojos y dos orificios nasales en la cabeza.",
+  "Open the body’s two sides a little and stand it on its four legs, its face looking forwards. Your bull is ready to charge!":
+    "Abre un poco los dos lados del cuerpo y ponlo de pie sobre sus cuatro patas, con la cara mirando hacia delante. ¡Tu toro está listo para embestir!",
 };

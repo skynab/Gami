@@ -892,6 +892,18 @@ kbd {
   display: flex;
   flex: 1;
   min-width: 140px;
+  cursor: pointer;
+  /* A drag along it is the scrubber's, not the page's. */
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Presses are the scrubber's own (ModelViewer): near the thumb they jog the paper, elsewhere they jump. A little
+   above and below the thin track counts too, for a finger. */
+.scrubber::before {
+  content: '';
+  position: absolute;
+  inset: -8px 0;
 }
 
 .scrubber input {
@@ -899,6 +911,16 @@ kbd {
   min-width: 0;
   margin: 0;
   accent-color: var(--accent);
+  pointer-events: none;
+}
+
+/* Jogging: the thumb glows, and the pointer says it moves side to side. */
+.scrubber[data-jogging] {
+  cursor: ew-resize;
+}
+
+.scrubber[data-jogging] input {
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--accent) 60%, transparent));
 }
 
 /* A small diamond above the track where a section starts. The range thumb is 16px, so its centre travels
@@ -1154,6 +1176,23 @@ kbd {
   background: var(--surface);
   color: var(--fg);
   box-shadow: 0 0 0 1px var(--line);
+}
+
+.form-tag {
+  display: inline-block;
+  margin-inline-end: 6px;
+  padding: 0 6px;
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 1px var(--line);
+  color: var(--fg);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 18px;
+}
+
+.form-tag.form-3d {
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1px var(--accent);
 }
 
 .card-badge.soon {
@@ -1810,6 +1849,7 @@ kbd {
 .studio input:not([type]),
 .studio textarea,
 .field input,
+.field textarea,
 .field select {
   width: 100%;
   padding: 6px 10px;
@@ -1829,6 +1869,34 @@ kbd {
 
 .field.inline select {
   width: auto;
+}
+
+/* A choice of one (radio buttons) or a box to tick, each with its words beside it. */
+fieldset.choice {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0 0 8px;
+  padding: 0;
+  border: 0;
+}
+
+fieldset.choice legend {
+  margin-block-end: 4px;
+  padding: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.check input {
+  margin-block-start: 3px;
 }
 
 .bottombar .group {
@@ -1888,11 +1956,84 @@ kbd {
   .views-toggle[aria-expanded='true'] {
     background: var(--surface);
   }
+
+  /* The views and their buttons a little closer together, so they still share one line on a phone. */
+  .playback .view-controls {
+    gap: 2px;
+  }
+
+  .view-controls .segmented button {
+    padding-inline: 7px;
+  }
+
+  .view-controls .icon {
+    width: 38px;
+  }
 }
 
 .secondary:disabled {
   opacity: 0.45;
   cursor: default;
+}
+
+/* A bend being worked out: how long so far, and stopping it. */
+.bending {
+  position: absolute;
+  inset-block-start: 12px;
+  inset-inline-start: 50%;
+  translate: -50% 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px 6px 14px;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.65);
+  color: #fff;
+  font-size: 13px;
+}
+
+/* The Studio's first-visit tour: a card beside the part it's about, which is outlined. */
+.tour {
+  position: fixed;
+  z-index: 50;
+  width: min(320px, calc(100vw - 24px));
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--fg);
+  box-shadow: 0 8px 30px rgb(0 0 0 / 0.18);
+}
+
+.tour h2 {
+  margin: 2px 0 6px;
+  font-size: 16px;
+}
+
+.tour p {
+  margin: 0 0 10px;
+}
+
+.tour-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.tour-actions .link {
+  margin-inline-end: auto;
+}
+
+.tour-target {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* Said only on a narrow screen (the Studio's note that it's easiest on a bigger one). */
+.phone-only {
+  display: none;
 }
 
 @media (max-width: 760px) {
@@ -1947,6 +2088,10 @@ kbd {
 
   .studio-steps {
     min-height: 0;
+  }
+
+  .phone-only {
+    display: block;
   }
 }
 

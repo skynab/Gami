@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import { TopBar } from '../app/TopBar';
 import { AccountButton } from '../auth/AccountButton';
 import { supabase, useAuth } from '../auth/store';
-import { modelsToReview, review, type SavedModel } from '../cloud/models';
+import { decideReport, LICENCE, modelsToReview, openReports, review, type Report, type SavedModel } from '../cloud/models';
 
 interface Request {
   user_id: string;
@@ -13,8 +13,11 @@ interface Request {
   name: string;
 }
 
+/** Where admins check a submission isn't a known copyrighted design before publishing it. */
+const KNOWN_DESIGNS = 'https://www.giladorigami.com/';
+
 /**
- * For admins: models submitted for the gallery, and people asking to become creators. The database checks
+ * For admins: models submitted for the gallery, reports about published ones, and people asking to become creators. The database checks
  * the caller is an admin for every action here, so this page is only a convenience.
  */
 export default function Admin() {
@@ -54,6 +57,7 @@ export default function Admin() {
         ) : (
           <>
             <ReviewQueue />
+            <Reports />
             <h1>{t('admin.requests')}</h1>
             {error && (
               <p className="error-text" role="alert">
@@ -124,6 +128,12 @@ function ReviewQueue() {
           {error}
         </p>
       )}
+      <p className="muted small">
+        {t('admin.checkKnown')}{' '}
+        <a href={KNOWN_DESIGNS} target="_blank" rel="noreferrer">
+          {t('admin.knownDesigns')}
+        </a>
+      </p>
       {!models && !error && <p className="muted">{t('common.loading')}</p>}
       {models?.length === 0 && <p className="muted">{t('admin.none')}</p>}
       {models && models.length > 0 && (
@@ -137,6 +147,7 @@ function ReviewQueue() {
                 <Link to={`/m/${m.id}`} target="_blank" className="small">
                   {t('admin.preview')}
                 </Link>
+                <Certified model={m} />
                 <label className="field">
                   <span>{t('admin.note')}</span>
                   <textarea rows={2} value={notes[m.id] ?? ''} onChange={(e) => setNotes({ ...notes, [m.id]: e.target.value })} />
@@ -148,6 +159,86 @@ function ReviewQueue() {
                 </button>
                 <button type="button" className="secondary" onClick={() => void decide(m.id, false)}>
                   {t('admin.sendBack')}
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+/** What the submitter certified: whose design it is, the credit, where it was first published, and its licence. */
+function Certified({ model }: { model: SavedModel }) {
+  const { t } = useTranslation();
+  const s = model.submission;
+  if (!s) return <p className="error-text small">{t('admin.uncertified')}</p>;
+  return (
+    <p className="small">
+      {s.ownership === 'own' ? t('credit.designedBy', { name: s.credit }) : t('credit.traditional', { name: s.credit })}
+      {s.firstPublished && ` · ${t('credit.firstPublished', { where: s.firstPublished })}`} · {s.licence === LICENCE.id ? LICENCE.name : s.licence}
+    </p>
+  );
+}
+
+/** Reports about published models: dismiss, or unpublish the model, sending it back to its owner with a note. */
+function Reports() {
+  const { t } = useTranslation();
+  const [reports, setReports] = useState<Report[] | null>(null);
+  const [notes, setNotes] = useState<Record<string, string>>({});
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    openReports().then(setReports, (e: Error) => setError(e.message));
+  }, []);
+
+  const decide = async (r: Report, unpublish: boolean) => {
+    try {
+      await decideReport(r.id, unpublish, notes[r.id] ?? '');
+      // Unpublishing settles every report about that model.
+      setReports((rs) => rs?.filter((x) => x.id !== r.id && !(unpublish && x.model === r.model)) ?? null);
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  };
+
+  return (
+    <section>
+      <h1>{t('admin.reports')}</h1>
+      {error && (
+        <p className="error-text" role="alert">
+          {error}
+        </p>
+      )}
+      {!reports && !error && <p className="muted">{t('common.loading')}</p>}
+      {reports?.length === 0 && <p className="muted">{t('admin.noReports')}</p>}
+      {reports && reports.length > 0 && (
+        <ul className="requests">
+          {reports.map((r) => (
+            <li key={r.id}>
+              <div className="stack">
+                <div>
+                  <Link to={`/m/${r.model}`} target="_blank">
+                    <strong>{r.title || t('library.untitled')}</strong>
+                  </Link>{' '}
+                  <span className="muted small">
+                    {t(`report.reasons.${r.reason}`)} · {new Date(r.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+                {r.details && <p className="small">{r.details}</p>}
+                {r.contact && <p className="muted small">{t('admin.contact', { contact: r.contact })}</p>}
+                <label className="field">
+                  <span>{t('admin.unpublishNote')}</span>
+                  <textarea rows={2} value={notes[r.id] ?? ''} onChange={(e) => setNotes({ ...notes, [r.id]: e.target.value })} />
+                </label>
+              </div>
+              <div className="request-actions">
+                <button type="button" className="primary small-button" onClick={() => void decide(r, true)}>
+                  {t('admin.unpublish')}
+                </button>
+                <button type="button" className="secondary" onClick={() => void decide(r, false)}>
+                  {t('admin.dismiss')}
                 </button>
               </div>
             </li>

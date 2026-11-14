@@ -13,8 +13,8 @@ export function copyUnit(frame: FoldFrame, sheets: Sheet[], from: number, to: nu
   const faces = toFlat(frame);
   const sheet = (f: FlatFace) => sheetOf(sheets, f.paper);
   const unit = faces.filter((f) => sheet(f) === from);
-  if (!unit.length) throw new FoldError(`Sheet ${from} isn’t there to copy.`);
-  if (at && at.length !== to.length) throw new FoldError('Each copy needs its own place.');
+  if (!unit.length) throw new FoldError('sheetMissingToCopy', { sheet: from });
+  if (at && at.length !== to.length) throw new FoldError('copyPlaces');
   const middle = (fs: FlatFace[]): Vec2 => {
     const pts = fs.flatMap((f) => f.world);
     const xs = pts.map((p) => p[0]);
@@ -29,13 +29,13 @@ export function copyUnit(frame: FoldFrame, sheets: Sheet[], from: number, to: nu
 
   const out: FlatFace[] = faces.flatMap((f, i) => (to.includes(sheet(f)) ? [] : [{ ...f, parent: i }]));
   to.forEach((t, k) => {
-    if (t === from) throw new FoldError('A sheet can’t be copied onto itself.');
+    if (t === from) throw new FoldError('copyOntoItself');
     const target = sheets[t];
-    if (!target) throw new FoldError(`There’s no sheet ${t} to copy onto.`);
+    if (!target) throw new FoldError('noSheetToCopyOnto', { sheet: t });
     const [w, h] = sheets[from].size;
-    if (Math.abs(target.size[0] - w) > 1e-9 || Math.abs(target.size[1] - h) > 1e-9) throw new FoldError('Copies must be folded from sheets the same size.');
+    if (Math.abs(target.size[0] - w) > 1e-9 || Math.abs(target.size[1] - h) > 1e-9) throw new FoldError('copySameSize');
     const old = faces.map((f, i) => [f, i] as const).filter(([f]) => sheet(f) === t);
-    if (!old.length) throw new FoldError(`Sheet ${t} isn’t there to fold.`);
+    if (!old.length) throw new FoldError('sheetMissingToFold', { sheet: t });
     const [tx, tz] = at?.[k] ?? middle(old.map(([f]) => f));
     const [tu, tv] = target.origin ?? [0, 0];
     for (const f of unit) {

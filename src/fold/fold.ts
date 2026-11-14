@@ -16,6 +16,7 @@ import { facePositions } from './frames';
 import { withTaped } from './stuck';
 import type { FoldFrame, Vec2, Vec3 } from './types';
 import type { CreaseKind } from './collapse';
+import { CodedError } from './messages';
 
 /**
  * The fold engine: works out the paper after a fold, for models that lie flat on the table between steps.
@@ -42,7 +43,8 @@ export interface FoldOptions {
   only?: (paper: Vec2[]) => boolean;
 }
 
-export class FoldError extends Error {}
+/** Paper that can't be folded as asked. Made from a message code (see messages.ts), or plain English for authors. */
+export class FoldError extends CodedError {}
 
 const FLAT = 1e-6;
 
@@ -51,7 +53,7 @@ export function toFlat(frame: FoldFrame): FlatFace[] {
   return frame.faces_vertices.map((face, f) => {
     const world = face.map((v): Vec2 => {
       const [x, y, z] = frame.vertices_coords[v];
-      if (Math.abs(y) > FLAT) throw new FoldError('This step isn’t flat, so it can’t be folded further here.');
+      if (Math.abs(y) > FLAT) throw new FoldError('notFlat');
       return [x, z];
     });
     return { world, paper: face.map((v) => frame.vertices_paper[v]), layer: frame.faces_layer?.[f] ?? 0, parent: f };
@@ -94,7 +96,7 @@ export function fromFlat(faces: FlatFace[]): FoldFrame {
 export function fold(frame: FoldFrame, { line, kind, layers, only }: FoldOptions): FoldFrame {
   const faces = toFlat(frame);
   const movingSideLayers = faces.filter((f) => f.world.some((x) => sideOf(line, x) > 1e-7)).map((f) => f.layer);
-  if (!movingSideLayers.length) throw new FoldError('Nothing is on the folding side of that line.');
+  if (!movingSideLayers.length) throw new FoldError('nothingOnFoldingSide');
   const from = layers === undefined ? -Infinity : Math.max(...movingSideLayers) - layers + 1;
 
   // Cut every face that takes part along the line. Paper taped to paper that takes part does too.
@@ -115,7 +117,7 @@ export function fold(frame: FoldFrame, { line, kind, layers, only }: FoldOptions
   });
 
   const moving = pieces.filter((p) => p.moves);
-  if (!moving.length) throw new FoldError('Nothing is on the folding side of that line.');
+  if (!moving.length) throw new FoldError('nothingOnFoldingSide');
   if (layers !== undefined || only) checkNoTear(pieces, line, frame.cuts);
 
   // New stacking. Turning a pile over reverses it: in a valley fold the old top lands lowest of the
@@ -258,7 +260,7 @@ export function checkNoTear(pieces: (FlatFace & { moves: boolean })[], line: Lin
         for (let j = 0; j < s.paper.length; j++) {
           const shared = segmentsOverlap(m.paper[i], m.paper[i1], s.paper[j], s.paper[(j + 1) % s.paper.length]) && sharedSegment([m.paper[i], m.paper[i1]], [s.paper[j], s.paper[(j + 1) % s.paper.length]]);
           if (shared && joinedAlong(shared[0], shared[1], cuts)) {
-            throw new FoldError('Those layers are joined to the ones below, so folding only them would tear the paper. Try more layers.');
+            throw new FoldError('layersJoined');
           }
         }
       }

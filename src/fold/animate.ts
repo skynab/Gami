@@ -1,7 +1,7 @@
 import { Matrix4, Quaternion, Vector3 } from 'three';
 import { box, clearanceDepth, cornerKeys, crossDepth, overlapping } from './cross3d';
 import { facePositions, framesOf, LAYER_GAP, normal, sphereAround } from './frames';
-import { joinedSegment, overlapArea, type Cut } from './geometry2d';
+import { joinedSegment, overlapArea, signedArea, type Cut } from './geometry2d';
 import { applyOp, lastFold, reopened, select, type Op } from './ops';
 import { inside } from './select';
 import { sheetOf } from './sheets';
@@ -125,6 +125,8 @@ export function transition(from: FoldFrame, to: FoldFrame, { makeWay = true, sta
 
 /** How many times over a step can be split into stages (a stage can itself be staged). */
 const STAGES = 2;
+/** How much deeper staged paper may cut than paper going straight there, whatever that cuts: a few layers. */
+const DEEPER = 0.005;
 
 function transitionStaged(from: FoldFrame, to: FoldFrame, makeWay: boolean, stages: number): Transition {
   const cache = known[(makeWay ? 1 : 0) + (makeWay && stages ? 2 : 0)];
@@ -150,13 +152,18 @@ function workOut(from: FoldFrame, to: FoldFrame, makeWay: boolean, stages: numbe
   if (fewest && stages) {
     // Judged by how deep paper goes through, closely: staged moves are quicker, and slip through in a moment.
     // Not if staging pulls joined paper apart: paper lifted out of the way and put back, its neighbours left.
+    // Nor if it cuts much deeper at its deepest (twice as deep, and by more than a few layers): a few faces well
+    // through each other show more than many grazing, as the boat's second squash would, staged.
     let deepest = depthThrough(best);
+    let cut = deepestThrough(best);
     const torn = tornBy(best);
     for (const staged of stagedWays(from, to, t, stages - 1)) {
       const way = staged();
       if (!way) continue;
       const d = depthThrough(way, deepest);
-      if (d < deepest && tornBy(way) <= Math.max(torn, TEAR / 2)) [best, deepest] = [way, d];
+      if (d >= deepest || tornBy(way) > Math.max(torn, TEAR / 2)) continue;
+      const c = deepestThrough(way);
+      if (c <= Math.max(2 * cut, cut + DEEPER)) [best, deepest, cut] = [way, d, c];
       if (!deepest) break;
     }
   }
@@ -587,8 +594,19 @@ function moving(from: FoldFrame, to: FoldFrame, { yielding = false } = {}): Tran
     // Where creases folding each at their own rate pull the paper apart (round a swivel's point, say), they fold
     // in step instead, if that keeps it joined.
     if (tornBy(hinged!) > TEAR) {
-      const closed = inStep(hinged!);
+      let closed = inStep(hinged!);
+      // A squash about one point is worked out as rigid paper folds it, where that's all there is, or cuts less
+      // deep than the creases in step: starting flat, where the paper's two ways of folding meet, in step can take
+      // the other (the boat's small diamond does, a third of a tenth of the sheet through itself).
+      const vertex = vertexFold(hinged!);
+      if (closed && vertex && deepestCut(vertex) < deepestCut(closed)) closed = null;
       if (closed) [hinged, fewest] = [closed, passesThrough(closed, WAY_SAMPLES)];
+      else {
+        // It keeps the paper joined: kept over each piece making its own way if that pulls the paper apart,
+        // whatever the paper passing through says (paper torn apart passes through less of itself).
+        if (vertex && tornBy(out) > TEAR) return landInOrder(vertex);
+        if (vertex) [hinged, fewest] = [vertex, passesThrough(vertex, WAY_SAMPLES)];
+      }
     }
     // Each way of moving has cases the other handles better: keep whichever passes through less paper. When
     // neither passes through any, as a collapse's faces all meeting at a point count as touching, judge a
@@ -642,15 +660,52 @@ function landInOrder(t: Transition): Transition {
   let best = t;
   let now = depthThrough(t);
   let torn: number | null = null;
+  let opens: number | null = null;
   for (const spread of LANDS) {
     if (!now) break;
     const ordered = inLandingOrder(t, spread);
     const d = depthThrough(ordered, now);
     if (d >= now) continue;
     torn ??= tornBy(t);
-    if (tornBy(ordered) <= Math.max(torn, TEAR / 2)) [best, now] = [ordered, d];
+    if (tornBy(ordered) > Math.max(torn, TEAR / 2)) continue;
+    // Nor where it opens the paper further than landing all together does, and further than paper is pulled
+    // together from, unless it can be joined up again where it's furthest apart: a frog's leg landing a layer at
+    // a time came apart by 0.019, as joining it up would have passed it through the other front quarter.
+    opens ??= openedBy(t).most;
+    const open = openedBy(ordered);
+    if (open.most > Math.max(opens, JOIN_FROM) && !joinsUpAt(ordered, open.at)) continue;
+    [best, now] = [ordered, d];
   }
   return best;
+}
+
+/**
+ * How much further apart the same point of paper comes as a transition plays than at either end, at most, before
+ * it's joined up, and where.
+ */
+function openedBy(t: Transition): { most: number; at: number } {
+  const groups = cornerGroups(t.faces);
+  if (!groups.length) return { most: 0, at: 0 };
+  const ends: [number[], number[]] = [spreads(rawPose(t, 0), groups), spreads(rawPose(t, 1), groups)];
+  let out = { most: 0, at: 0 };
+  for (const s of JOIN_CHECKS) {
+    const most = opened(t, groups, ends, s);
+    if (most > out.most) out = { most, at: s };
+  }
+  return out;
+}
+
+/**
+ * Whether paper come apart `s` of the way through a transition can be joined up there, as `joinFixes` would:
+ * back to no further apart than it's pulled together from, grazing no deeper than it lets by.
+ */
+function joinsUpAt(t: Transition, s: number): boolean {
+  const groups = cornerGroups(t.faces);
+  const ends: [number[], number[]] = [spreads(rawPose(t, 0), groups), spreads(rawPose(t, 1), groups)];
+  const raw = rawPose(t, s);
+  const joined = joinUp(t.faces, raw.map((face) => face.map((p) => [...p] as Vec3)), groups, raw);
+  const left = (pose: Vec3[][]) => Math.max(0, ...spreads(pose, groups).map((d, g) => d - Math.max(ends[0][g], ends[1][g])));
+  return left(joined) <= JOIN_FROM && deepest(t, joined) <= grazeLetBy(t, raw, groups, left(raw));
 }
 
 /** How far apart the same point of paper comes, at most, as a transition plays (before it's pulled together). */
@@ -668,6 +723,23 @@ function deepestCut(t: Transition): number {
     for (let a = 0; a < pose.length; a++) {
       for (let b = a + 1; b < pose.length; b++) {
         if (together(t, a, b) || !overlapping(boxes[a], boxes[b])) continue;
+        deepest = Math.max(deepest, crossDepth(pose[a], pose[b]));
+      }
+    }
+  }
+  return deepest;
+}
+
+/** The deepest paper passes through paper, closely (as `depthThrough` adds up). */
+function deepestThrough(t: Transition): number {
+  let deepest = 0;
+  for (const s of STAGE_SAMPLES) {
+    const pose = rawPose(t, s);
+    const boxes = pose.map(box);
+    for (let a = 0; a < pose.length; a++) {
+      for (let b = a + 1; b < pose.length; b++) {
+        if (together(t, a, b) || !overlapping(boxes[a], boxes[b])) continue;
+        if (touching(t.faces, a, b)) continue;
         deepest = Math.max(deepest, crossDepth(pose[a], pose[b]));
       }
     }
@@ -904,6 +976,20 @@ function touching(faces: FaceTrack[], a: number, b: number): boolean {
   return m[a * faces.length + b] === 1;
 }
 
+/**
+ * How far paper comes apart as a step plays, as the viewer draws it, at the most of `samples` (0–1): for each point
+ * of paper on several faces, how much further its corners stray from where they are on average than at either end
+ * of the step. What's apart at the ends anyway (layers' gaps at a fold, paper riding on paper, the two sides of a
+ * cut) doesn't count.
+ */
+export function partedBy(t: Transition, samples: number[]): number {
+  const groups = cornerGroups(t.faces);
+  if (!groups.length) return 0;
+  const [first, last] = [spreads(poseAt(t, 0), groups), spreads(poseAt(t, 1), groups)];
+  const ends = first.map((d, g) => Math.max(d, last[g]));
+  return Math.max(0, ...samples.flatMap((s) => spreads(poseAt(t, s), groups).map((d, g) => d - ends[g])));
+}
+
 /** Whether two faces move as one through a transition, so they can't pass through each other. Bending paper never does. */
 export function together(t: Transition, a: number, b: number): boolean {
   if (t.blend) return false;
@@ -991,9 +1077,12 @@ function hingesFor(faces: FaceTrack[], reps: { q: Quaternion; t: Vector3; faces:
       if (turn > 1e-9) {
         const axis = new Vector3(q.x, q.y, q.z).normalize();
         if (axis.dot(edge) < 0) turn = -turn;
-        // A half turn can go either way round: the way that brings w down on the side of u it ends up on.
+        // A half turn can go either way round: the way that brings w down on the side of u it ends up on. Or,
+        // opening out flat with u, the way that lifts it off the side of u it lay on: where it ends up says
+        // nothing then (the boat's ends, opening out as its sides fold up, went half of them the wrong way).
         if (Math.abs(Math.abs(turn) - Math.PI) < 1e-3) {
-          const wanted = Math.sign(sideAfter(faces, u, w)) || 1;
+          const opening = foldedOnto(faces, u, w, 'before') && !foldedOnto(faces, u, w, 'after');
+          const wanted = Math.sign(opening ? sideBefore(faces, u, w) : sideAfter(faces, u, w)) || 1;
           if (Math.sign(sideHalfway(faces, u, w, a, edge, Math.sign(turn))) !== wanted) turn = -turn;
         }
       }
@@ -1162,6 +1251,20 @@ function sideAfter(faces: FaceTrack[], u: number, w: number): number {
   return nu.dot(new Vector3(cw[0] - cu[0], cw[1] - cu[1], cw[2] - cu[2]));
 }
 
+/** Which side of u's plane w starts on (by the gap between stacked layers): positive is u's front. */
+function sideBefore(faces: FaceTrack[], u: number, w: number): number {
+  const nu = planeNormal(faces[u].before);
+  const cu = centroid(faces[u].before);
+  const cw = centroid(faces[w].before);
+  return nu.dot(new Vector3(cw[0] - cu[0], cw[1] - cu[1], cw[2] - cu[2]));
+}
+
+/** Whether w lies folded over onto u, before or after the step: the same side of the sheet faces opposite ways. */
+function foldedOnto(faces: FaceTrack[], u: number, w: number, when: 'before' | 'after'): boolean {
+  const front = (f: FaceTrack) => planeNormal(f[when]).multiplyScalar(Math.sign(signedArea(f.paper)) || 1);
+  return front(faces[u]).dot(front(faces[w])) < 0;
+}
+
 /** Which side of u's plane (before the step) w is on, turned a quarter turn about the edge, `way` round. */
 function sideHalfway(faces: FaceTrack[], u: number, w: number, a: Vec3, edge: Vector3, way: number): number {
   const nu = planeNormal(faces[u].before);
@@ -1183,8 +1286,12 @@ function centroid(points: Vec3[]): Vec3 {
 /** How far through its own move face `i` is, `s` of the way through the step (see `Transition.landing`). */
 const landed = (t: Transition, i: number, s: number) => (t.landing ? Math.min(1, s / t.landing[i]) : s);
 
-/** How much more of the step the top layer may take to land than the bottom one, when landing in order. */
-const LANDS = [0.2, 0.4];
+/**
+ * How much more of the step the top layer may take to land than the bottom one, when landing in order. Up to
+ * most of the step: tucked in between its flap's halves, the seal's tail grazes no deeper than a few layers
+ * landing over 0.6 of it (0.0048, against 0.0050 over 0.4), for a few per cent more time working out the steps.
+ */
+const LANDS = [0.2, 0.4, 0.6, 0.8];
 
 /** The same moves, landing bottom layer first: each face finishes earlier the lower it ends up, by up to `spread`. */
 function inLandingOrder(t: Transition, spread: number): Transition {
@@ -1268,7 +1375,21 @@ function inStep(t: Transition): Transition | null {
   pose(end, 1);
   const last = offsets();
 
-  const residual = (s: number) => offsets().map((o, r) => o - ((1 - s) * first[r] + s * last[r]));
+  // Layers stacked at a fold start and end a few gaps apart, and on the way each swings round its crease that far
+  // out, which the ends' offsets (blended) don't follow. So a point may be as far off as its layers are apart at
+  // the step's ends, at no cost: held to the blend exactly, a deep stack turning over (the boat's twelve layers)
+  // was held back, then hurried through, and counted as coming apart.
+  const gap = (o: number[], i: number) => Math.hypot(o[3 * i], o[3 * i + 1], o[3 * i + 2]);
+  const loose = Array.from({ length: first.length / 3 }, (_, i) => gap(first, i) + gap(last, i));
+  const residual = (s: number) => {
+    const res = offsets().map((o, r) => o - ((1 - s) * first[r] + s * last[r]));
+    for (let i = 0; i < loose.length; i++) {
+      const off = gap(res, i);
+      const k = off > loose[i] ? (off - loose[i]) / off : 0;
+      for (let x = 0; x < 3; x++) res[3 * i + x] *= k;
+    }
+    return res;
+  };
   // The normal equations' matrix JᵀJ and JᵀR. Each point of paper moves only with the creases it hangs from, so
   // each row of J has a few entries: added up row by row, not as a whole matrix.
   const d = new Vector3();
@@ -1280,6 +1401,11 @@ function inStep(t: Transition): Transition | null {
     for (const g of groups) {
       const [f0, c0] = g[0];
       for (const [f, c] of g.slice(1)) {
+        // A point within its slack pulls on nothing.
+        if (!res[r] && !res[r + 1] && !res[r + 2]) {
+          r += 3;
+          continue;
+        }
         row.clear();
         for (const [face, corner, sign] of [[f, c, 1], [f0, c0, -1]] as const) {
           for (const k of chain[face]) {
@@ -1352,6 +1478,168 @@ function inStep(t: Transition): Transition | null {
   const most = (4 * Math.max(...end.map(Math.abs))) / STEP_SAMPLES;
   for (let i = 1; i <= STEP_SAMPLES; i++) if (turning.some((f) => Math.abs(turns[i][f] - turns[i - 1][f]) > most)) return null;
   return settled({ ...t, hinges: undefined }, { ...h, stagger: 0, turns, fix: undefined, lift: 0 });
+}
+
+/**
+ * A squash whose paper moves as four panels about one point, as a hat squashed into a diamond: one panel stays put,
+ * two turn over about its creases, and the fourth, hinged to both, turns flat round the point. Rigid paper folds it
+ * with one freedom, but it starts and ends flat, where its two ways of folding meet, and `inStep`, starting from
+ * every crease at its steady rate, can take the other way (the boat's small diamond did, its creases ending far from
+ * their places). Worked out here instead, as a spherical four-bar: the first panel turns steadily about its crease
+ * with the still paper, and the second turns about its own as far as keeps the fourth panel's two creases at the
+ * angle they make on the paper. Null unless the paper moves that way and stays joined.
+ */
+function vertexFold(t: Transition): Transition | null {
+  const h = t.hinges!;
+  // Panels: faces moving alike, give or take the few gaps a layer shifts by as the stack is renumbered.
+  const marks: Vec3[] = [[0, 0, 0], [1, 0, 0], [0, 0, 1]];
+  const ends = t.faces.map((f) => marks.map((q) => move(t.motions[f.motion], q, 1)));
+  const alike = (a: Vec3[], b: Vec3[]) => a.every((p, k) => Math.hypot(p[0] - b[k][0], p[1] - b[k][1], p[2] - b[k][2]) < 40 * LAYER_GAP);
+  // Each face's panel: the first face moving like it.
+  const firsts: number[] = [];
+  const group = ends.map((e, i) => {
+    const like = firsts.find((j) => alike(ends[j], e));
+    if (like !== undefined) return like;
+    firsts.push(i);
+    return i;
+  });
+  const kinds = [...new Set(group)];
+  const stillGroups = new Set(t.faces.flatMap((_, i) => (h.parent[i] === -1 ? [group[i]] : [])));
+  if (kinds.length !== 4 || stillGroups.size !== 1 || h.parent.some((p) => p === -2)) return null;
+  const g1 = [...stillGroups][0];
+  type V = [number, number, number];
+  const sub = (a: V, b: V): V => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+  const dot = (a: V, b: V) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  const cross = (a: V, b: V): V => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+  const scale = (a: V, k: number): V => [a[0] * k, a[1] * k, a[2] * k];
+  const unit = (a: V): V => scale(a, 1 / (Math.hypot(...a) || 1));
+  const flatten = (a: V): V => unit([a[0], 0, a[2]]);
+  // Rodrigues: v turned by `angle` about the unit axis k.
+  const turned = (v: V, k: V, angle: number): V => {
+    const [c, s] = [Math.cos(angle), Math.sin(angle)];
+    return [0, 1, 2].map((n) => v[n] * c + cross(k, v)[n] * s + k[n] * dot(k, v) * (1 - c)) as V;
+  };
+
+  // The creases between panels: from the hinges where a face hangs from another panel's face, and the one that closes
+  // the loop, from where faces of the two panels left meet.
+  const creases = new Map<string, { a: number; b: number; at: V; dir: V; angle?: number }>();
+  const key = (a: number, b: number) => (a < b ? `${a},${b}` : `${b},${a}`);
+  for (const f of h.order) {
+    const p = h.parent[f];
+    if (p < 0 || group[p] === group[f] || creases.has(key(group[p], group[f]))) continue;
+    creases.set(key(group[p], group[f]), { a: group[p], b: group[f], at: h.at[f], dir: h.dir[f], angle: h.angle[f] });
+  }
+  for (const { i, j, shared } of sharedEdges(t.faces)) {
+    const [a, b] = [group[i], group[j]];
+    if (a === b || creases.has(key(a, b))) continue;
+    const [p, q] = shared.map(affine(t.faces[i].paper, t.faces[i].before)) as [V, V];
+    creases.set(key(a, b), { a, b, at: p, dir: unit(sub(q, p)) });
+  }
+  if (creases.size !== 4) return null;
+  // The panels in turn round the point: the still one, the two hanging from it, and the one hinged to those two.
+  const fromStill = [...creases.values()].filter((c) => c.a === g1 || c.b === g1);
+  if (fromStill.length !== 2 || fromStill.some((c) => c.angle === undefined || c.a !== g1)) return null;
+  const [c12, c13] = fromStill;
+  const [g2, g3] = [c12.b, c13.b];
+  const g4 = kinds.find((g) => g !== g1 && g !== g2 && g !== g3)!;
+  const c24 = creases.get(key(g2, g4));
+  const c34 = creases.get(key(g3, g4));
+  if (!c24 || !c34) return null;
+  // The point they turn about: where the two creases from the still panel cross, on the table.
+  const [p, d, q, e] = [c12.at, flatten(c12.dir), c13.at, flatten(c13.dir)];
+  const det = d[0] * e[2] - d[2] * e[0];
+  if (Math.abs(det) < 1e-6) return null;
+  const k1 = ((q[0] - p[0]) * e[2] - (q[2] - p[2]) * e[0]) / det;
+  const apex: V = [p[0] + d[0] * k1, 0, p[2] + d[2] * k1];
+  // Every crease must pass through it (on the table), and each runs out from it towards where its faces meet.
+  const ray = (c: { at: V; dir: V }): V | null => {
+    const off: V = [c.at[0] - apex[0], 0, c.at[2] - apex[2]];
+    const r = flatten(c.dir);
+    if (Math.hypot(...cross(off, r)) > 0.01) return null;
+    return dot(off, r) >= 0 ? r : scale(r, -1);
+  };
+  const rays = [c12, c13, c24, c34].map(ray);
+  if (rays.some((r) => !r)) return null;
+  const [, r13, r24, r34] = rays as V[];
+  const cos4 = dot(r24, r34);
+  const cos3 = dot(r13, r34);
+  // Each panel's turn about the point, as a rotation (a function on directions), at s of the way.
+  const rotations = (s: number, side: number, way: number): ((v: V) => V)[] | null => {
+    const a2 = way * Math.abs(c12.angle as number) * s;
+    const k12 = c12.dir;
+    const c = turned(r24, k12, a2);
+    // r34 carried by panel 3, about c13's crease: on the circle round r13, as far from c as it is from r24.
+    const cosUV = dot(r13, c);
+    const den = 1 - cosUV * cosUV;
+    if (den < 1e-12) return null;
+    const x = (cos3 - cos4 * cosUV) / den;
+    const y = (cos4 - cos3 * cosUV) / den;
+    const inPlane = [0, 1, 2].map((n) => x * r13[n] + y * c[n]) as V;
+    const rest = 1 - dot(inPlane, inPlane);
+    if (rest < -1e-9) return null;
+    const out = unit(cross(r13, c));
+    const dd = [0, 1, 2].map((n) => inPlane[n] + side * Math.sqrt(Math.max(0, rest)) * out[n]) as V;
+    // Panel 3's turn about its crease taking r34 to dd.
+    const k13 = c13.dir;
+    const perp = (v: V) => unit(sub(v, scale(k13, dot(v, k13))));
+    const [u0, u1] = [perp(r34), perp(dd)];
+    const a3 = Math.atan2(dot(k13, cross(u0, u1)), dot(u0, u1));
+    // Panel 4: the rotation taking (r24, r34) to (c, dd).
+    const frame = (a: V, b: V): V[] => {
+      const n = unit(cross(a, b));
+      return [a, unit(cross(n, a)), n];
+    };
+    const [from, to] = [frame(r24, r34), frame(c, dd)];
+    const r4 = (v: V): V => {
+      const w = from.map((f) => dot(f, v));
+      return [0, 1, 2].map((n) => to[0][n] * w[0] + to[1][n] * w[1] + to[2][n] * w[2]) as V;
+    };
+    return [(v) => v, (v) => turned(v, k12, a2), (v) => turned(v, k13, a3), r4];
+  };
+  const panelOf = new Map([[g1, 0], [g2, 1], [g3, 2], [g4, 3]]);
+  // A hinge's angle at s: the turn of the face's panel relative to its parent's, about the hinge's own crease.
+  const hingeAngle = (rot: ((v: V) => V)[], f: number) => {
+    const [pp, pf] = [panelOf.get(group[h.parent[f]])!, panelOf.get(group[f])!];
+    if (pp === pf) return 0;
+    const k = h.dir[f] as V;
+    const w = unit(cross(k, Math.abs(k[1]) < 0.9 ? [0, 1, 0] : [1, 0, 0]));
+    // Relative turn: undo the parent's turn on the child's turned vector. Rotations about the point keep angles,
+    // so the parent's inverse is found by turning back the frame it carries.
+    const [ax, ay, az] = [rot[pp]([1, 0, 0]), rot[pp]([0, 1, 0]), rot[pp]([0, 0, 1])];
+    const back = (v: V): V => [dot(ax, v), dot(ay, v), dot(az, v)];
+    const w1 = back(rot[pf](w));
+    return Math.atan2(dot(k, cross(w, w1)), dot(w, w1));
+  };
+  // Which way the first panel turns (a half turn goes either way round), and which way the second leaves the table.
+  for (const [way, side] of [[1, 1], [1, -1], [-1, 1], [-1, -1]]) {
+    const turns: number[][] = [h.angle.map(() => 0)];
+    let ok = true;
+    // Up to the end, which is folded flat, where the panels' creases line up and the four-bar has no one answer:
+    // it ends where the step does.
+    for (let i = 1; i < STEP_SAMPLES && ok; i++) {
+      const s = i / STEP_SAMPLES;
+      const rot = rotations(s, side, way);
+      if (!rot) {
+        ok = false;
+        break;
+      }
+      const all = h.angle.map((a, f) => (h.parent[f] < 0 ? a * s : 0));
+      for (const f of h.order) if (h.parent[f] >= 0) all[f] = hingeAngle(rot, f);
+      // Carried on from the last point, round past a half turn rather than jumping back.
+      const prev = turns[i - 1];
+      for (const f of h.order) if (h.parent[f] >= 0) all[f] += 2 * Math.PI * Math.round((prev[f] - all[f]) / (2 * Math.PI));
+      turns.push(all);
+    }
+    if (!ok) continue;
+    // Every crease at its angle, or a whole turn off it (the same place), whichever is nearer the way it came.
+    const before = turns[STEP_SAMPLES - 1];
+    turns.push(h.angle.map((a, f) => (h.parent[f] >= 0 ? a + 2 * Math.PI * Math.round((before[f] - a) / (2 * Math.PI)) : a)));
+    const most = (4 * Math.PI) / STEP_SAMPLES;
+    if (h.order.some((f) => turns.some((a, i) => i > 0 && Math.abs(a[f] - turns[i - 1][f]) > most))) continue;
+    const folded = settled({ ...t, hinges: undefined }, { ...h, stagger: 0, turns, fix: undefined, lift: 0 });
+    if (tornBy(folded) <= TEAR) return folded;
+  }
+  return null;
 }
 
 /** Solves a square system given as rows with the right-hand side last (Gaussian elimination); null if singular. */
@@ -1613,8 +1901,14 @@ const JOIN_ROUNDS = 30;
 const FILL_ROUNDS = 4;
 /** How far joined-up paper may graze through other paper (a sheet's width is 1), as the crossing tests allow: far less than a tear shows. */
 const GRAZE = 0.005;
-/** How much more graze is let by, joining paper up, for each sheet width it has come apart beyond a tear. */
+/**
+ * How much more graze is let by, joining paper up, for each sheet width it has come apart beyond a tear; or,
+ * where joining it up less deeply leaves it apart, opened beyond where it's pulled together from.
+ */
 const GRAZE_PER_TEAR = 0.2;
+
+/** How much of the way to join paper up at a point, tried in turn, as far as passes no deeper through paper than let by. */
+const PARTS = [1, 0.75, 0.5, 0.25];
 
 /** How a face is moved to join the paper up: turned by `q` about its middle, then moved by `shift`. */
 interface JoinFix {
@@ -1630,15 +1924,16 @@ function joinFixes(t: Transition): JoinFix[][] | null {
   const groups = cornerGroups(t.faces);
   // Torn, or come apart for a while further than it is at either end (where layers lie a little apart anyway).
   let opens = groups.length > 0 && TEAR_SAMPLES.some((s) => apart(rawPose(t, s), groups) > TEAR);
-  if (groups.length && !opens) {
-    const ends: [number[], number[]] = [spreads(rawPose(t, 0), groups), spreads(rawPose(t, 1), groups)];
-    opens = JOIN_CHECKS.some((s) => opened(t, groups, ends, s) > JOIN_FROM);
-  }
+  const ends: [number[], number[]] = groups.length ? [spreads(rawPose(t, 0), groups), spreads(rawPose(t, 1), groups)] : [[], []];
+  if (groups.length && !opens) opens = JOIN_CHECKS.some((s) => opened(t, groups, ends, s) > JOIN_FROM);
   if (opens) {
     const fixes: JoinFix[][] = [];
     const whole: boolean[] = [];
     const raws: Vec3[][][] = [];
     const allowed: number[] = [];
+    const stretched: number[] = [];
+    // How much further apart the same point of paper is in a pose than at either end of the step, at most.
+    const left = (pose: Vec3[][]) => Math.max(0, ...spreads(pose, groups).map((d, g) => d - Math.max(ends[0][g], ends[1][g])));
     // How deep the paper joined up whole goes through paper elsewhere in the step, at most, and each point's
     // join made whole, whether it was kept or not.
     let grazes = 0;
@@ -1649,8 +1944,11 @@ function joinFixes(t: Transition): JoinFix[][] | null {
       raws.push(raw);
       // Joined up only as far as it can be without passing paper through paper that the faces moving their own
       // ways kept clear of (a flap stood up before it's squashed, say): torn a little rather than tangled. But a
-      // graze shows far less than a tear, so the wider the paper has come apart, the more of a graze is let by.
-      allowed.push(Math.max(deepest(t, raw), GRAZE + GRAZE_PER_TEAR * Math.max(0, apart(raw, groups) - TEAR)));
+      // graze shows far less than a tear, so the wider the paper has come apart, the more of a graze is let by;
+      // and where that still leaves it further apart than it's pulled together from, more again, by how far it
+      // has come apart past that (the seal's neck, landing).
+      allowed.push(grazeLetBy(t, raw, groups, 0));
+      stretched.push(grazeLetBy(t, raw, groups, left(raw)));
       if (i === 0 || i === JOIN_SAMPLES) {
         fixes.push(raw.map(() => ({ q: new Quaternion(), shift: new Vector3() })));
         whole.push(true);
@@ -1664,7 +1962,13 @@ function joinFixes(t: Transition): JoinFix[][] | null {
       const fitted = joinUp(t.faces, start, groups, raw);
       const fix = fitted.map((face, f) => fixFor(t.faces[f].paper, raw[f], face));
       let depth = 0;
-      const part = [1, 0.75, 0.5, 0.25].find((k) => (depth = deepest(t, raw.map((face, f) => applyFix(partly(fix[f], k), face)))) <= allowed[i]) ?? 0;
+      const posed = (k: number) => raw.map((face, f) => applyFix(partly(fix[f], k), face));
+      let part = PARTS.find((k) => (depth = deepest(t, posed(k))) <= allowed[i]) ?? 0;
+      if (part < 1 && stretched[i] > allowed[i] && left(posed(part)) > JOIN_FROM) {
+        let further = 0;
+        const k = PARTS.find((k) => k > part && (further = deepest(t, posed(k))) <= stretched[i]);
+        if (k) [part, depth, allowed[i]] = [k, further, stretched[i]];
+      }
       fixes.push(fix.map((x) => partly(x, part)));
       whole.push(part === 1);
       full.push(fix);
@@ -1674,10 +1978,17 @@ function joinFixes(t: Transition): JoinFix[][] | null {
       if (part === 1) warm = fix;
     }
     // Where the paper couldn't be joined up whole: joined again starting from the joins either side blended,
-    // or failing that, just those blended, if that keeps it clear, or grazes no more than a layer deeper than
-    // the paper joined up elsewhere in the step (so the step looks no worse for it, only joined: the lily's
-    // petal folds came apart for a moment near the end, rather than graze a hair more than a few layers).
+    // or failing that, just those blended, or joined starting from the paper as it moves (a start carried on
+    // from the samples before can hold a face the wrong way round: the fox's tail and the lily's back flap,
+    // near the end), if that keeps it clear, or grazes no more than a layer deeper than the paper joined up
+    // elsewhere in the step (so the step looks no worse for it, only joined: the lily's petal folds came apart
+    // for a moment near the end, rather than graze a hair more than a few layers).
     // Again while that fixes more, as each point fixed gives the ones beside it a better start.
+    const cold: (JoinFix[] | undefined)[] = [];
+    const fromRaw = (i: number) =>
+      (cold[i] ??= joinUp(t.faces, raws[i].map((face) => face.map((p) => [...p] as Vec3)), groups, raws[i]).map((face, f) =>
+        fixFor(t.faces[f].paper, raws[i][f], face),
+      ));
     for (let more = true, round = 0; more && round < FILL_ROUNDS; round++) {
       more = false;
       for (let i = 1; i < JOIN_SAMPLES; i++) {
@@ -1692,11 +2003,14 @@ function joinFixes(t: Transition): JoinFix[][] | null {
         const start = raw.map((face, f) => applyFix(blend[f], face));
         const fitted = joinUp(t.faces, start.map((face) => face.map((p) => [...p] as Vec3)), groups, raw);
         const again = fitted.map((face, f) => fixFor(t.faces[f].paper, raw[f], face));
-        const torn = apart(raw.map((face, f) => applyFix(fixes[i][f], face)), groups);
-        const fix = [again, blend, full[i]].find((x) => {
+        const now = raw.map((face, f) => applyFix(fixes[i][f], face));
+        const torn = apart(now, groups);
+        const limit = Math.max(left(now) > JOIN_FROM ? stretched[i] : allowed[i], grazes + LAYER_GAP);
+        const fits = (x: JoinFix[]) => {
           const pose = raw.map((face, f) => applyFix(x[f], face));
-          return deepest(t, pose) <= Math.max(allowed[i], grazes + LAYER_GAP) && apart(pose, groups) < torn;
-        });
+          return deepest(t, pose) <= limit && apart(pose, groups) < torn;
+        };
+        const fix = [again, blend, full[i]].find(fits) ?? (fits(fromRaw(i)) ? fromRaw(i) : undefined);
         if (fix) {
           fixes[i] = fix;
           whole[i] = true;
@@ -1708,6 +2022,14 @@ function joinFixes(t: Transition): JoinFix[][] | null {
   }
   joined.set(t, out);
   return out;
+}
+
+/**
+ * How deep paper may graze through paper, joined up in a pose `open` further apart than at either end of the step:
+ * as deep as it already goes, or a few layers, and more the further it's come apart (see `joinFixes`).
+ */
+function grazeLetBy(t: Transition, raw: Vec3[][], groups: [number, number][][], open: number): number {
+  return Math.max(deepest(t, raw), GRAZE + GRAZE_PER_TEAR * Math.max(0, apart(raw, groups) - TEAR, open - JOIN_FROM));
 }
 
 /** A fix made only `k` (0–1) of the way. */

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
 import { Modal } from '../app/Modal';
 import { useAuth } from '../auth/store';
-import { deleteModel, myModels, openModel, saveModel, shareLink, submitModel, type SavedModel, type Status } from '../cloud/models';
+import { deleteModel, myModels, openModel, saveModel, shareLink, type SavedModel, type Status } from '../cloud/models';
 import { toFoldFile } from '../fold/fold-format';
 import { cloudInfo, saveDraft, useDraft } from './draft';
 import { designOf, listDesigns, putDesign } from './library';
@@ -11,8 +11,9 @@ import { designOf, listDesigns, putDesign } from './library';
 const status = (s: Status) => `cloud.status.${s}` as const;
 
 /**
- * Saving the Studio's model to the cloud: save, share a private link, submit it for the gallery, and open
- * other saved models. Models in review or published are locked; "Save as a copy" carries on from them.
+ * Saving the Studio's model to the cloud: save, share a private link, and open other saved models. Models in
+ * review or published are locked; "Save as a copy" carries on from them. Submitting for the gallery is the Submit
+ * panel's (SubmitPanel.tsx), as for anyone signed in, so every submission records whose design it is.
  */
 export function CloudPanel() {
   const { t } = useTranslation();
@@ -35,7 +36,6 @@ export function CloudPanel() {
       () => {},
     );
   }, [cloudId]);
-  const hasSteps = model.steps.length > 0;
 
   const run = async (what: () => Promise<string | void>) => {
     setBusy(true);
@@ -55,13 +55,6 @@ export function CloudPanel() {
       const saved = await saveModel(model, asCopy ? undefined : cloud?.id);
       useDraft.getState().fromCloud(saved);
       return asCopy ? t('cloud.savedCopy') : t('cloud.saved');
-    });
-
-  const submit = () =>
-    run(async () => {
-      if (!cloud) return;
-      useDraft.getState().fromCloud(await submitModel(cloud.id));
-      return t('cloud.sent');
     });
 
   const share = () =>
@@ -93,17 +86,6 @@ export function CloudPanel() {
         {cloud?.shareToken && (
           <button type="button" className="secondary" disabled={busy} onClick={() => void share()}>
             {t('cloud.share')}
-          </button>
-        )}
-        {cloud && (cloud.status === 'draft' || cloud.status === 'rejected') && (
-          <button
-            type="button"
-            className="secondary"
-            disabled={busy || dirty || !hasSteps}
-            title={dirty ? t('cloud.saveChangesFirst') : !hasSteps ? t('cloud.addStepsFirst') : t('cloud.askAdmin')}
-            onClick={() => void submit()}
-          >
-            {t('cloud.submit')}
           </button>
         )}
         <button type="button" className="secondary" onClick={() => setBrowsing(true)}>

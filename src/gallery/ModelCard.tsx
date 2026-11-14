@@ -7,7 +7,7 @@ import { modelUrl } from '../models';
 import { useFavorite, useFavorites } from '../state/favorites';
 import { readProgress } from '../state/progress';
 import type { Sheet } from '../fold/types';
-import { isNew, levelOf, type Difficulty, type ModelInfo, type Tool } from './catalog';
+import { formOf, isNew, levelOf, type Difficulty, type ModelInfo, type Tool } from './catalog';
 
 export function ModelCard({ model }: { model: ModelInfo }) {
   const { t } = useTranslation();
@@ -27,7 +27,10 @@ export function ModelCard({ model }: { model: ModelInfo }) {
             <Dots difficulty={model.difficulty} />
           </div>
           <p className="muted small">{model.blurb}</p>
-          <p className="muted small">{details(model, t)}</p>
+          <p className="muted small">
+            <FormTag model={model} />
+            {details(model, t)}
+          </p>
         </div>
       </Link>
       <FavoriteButton id={model.id} name={model.title} />
@@ -73,7 +76,10 @@ export function PairCard({ models }: { models: [ModelInfo, ModelInfo] }) {
               <NewStar model={model} />
               <Dots difficulty={model.difficulty} />
             </Link>
-            <p className="muted small">{details(model, t)}</p>
+            <p className="muted small">
+              <FormTag model={model} />
+              {details(model, t)}
+            </p>
             <FavoriteButton id={model.id} name={model.title} />
           </div>
         ))}
@@ -225,6 +231,18 @@ export function Needs({ tools, paper }: { tools?: Tool[]; paper?: number }) {
 
 const TOOL_LABELS = { scissors: 'card.needsScissors', pen: 'card.needsPen', tape: 'card.needsTape', glue: 'card.needsGlue' } as const satisfies Record<Tool, string>;
 const TOOL_ICONS = { scissors: ScissorsIcon, pen: PenIcon, tape: TapeIcon, glue: GlueIcon } satisfies Record<Tool, unknown>;
+
+/** Whether a model ends flat or in 3D, as a small tag before its details. Lessons don't get one. */
+export function FormTag({ model }: { model: ModelInfo }) {
+  const { t } = useTranslation();
+  if (model.category === 'lesson') return null;
+  const form = formOf(model);
+  return (
+    <span className={`form-tag form-${form}`} title={t(form === '3d' ? 'card.form3d' : 'card.form2d')}>
+      {t(`forms.${form}`)}
+    </span>
+  );
+}
 
 /** A purple origami star by the title of a model that's new (`NEW_SINCE`). */
 export function NewStar({ model }: { model: ModelInfo }) {

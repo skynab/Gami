@@ -22,9 +22,15 @@ describe('catalog', () => {
     expect(filterModels(MODELS, { category: 'modular' }).map((m) => m.id)).toEqual(['ninja-star', 'rainbow-chain', 'business-card-cube', 'dice', 'kusudama', 'chrysanthemum']);
     expect(filterModels(MODELS, { level: 'easy', category: 'animal' }).map((m) => m.id)).toEqual([
       'dog-face', 'cat-face', 'cicada', 'jumping-frog', 'fox', 'swan', 'penguin', 'whale', 'pajarita', 'fish', 'peacock', 'cute-cat', 'bat',
-      'bull', 't-rex',
+      'bull', 't-rex', 'turtle', 'squirrel',
     ]);
     expect(filterModels(MODELS, {})).toHaveLength(MODELS.length);
+    const flat = filterModels(MODELS, { form: '2d' });
+    const standing = filterModels(MODELS, { form: '3d' });
+    expect(flat.length + standing.length).toBe(MODELS.length);
+    expect(standing.map((m) => m.id)).toContain('strawberry');
+    expect(flat.map((m) => m.id)).toContain('turtle');
+    expect(filterModels(MODELS, { form: '3d', category: 'plane' }).every((m) => m.form === '3d' && m.category === 'plane')).toBe(true);
   });
 
   it('sorts, keeping the catalog order among equals', () => {

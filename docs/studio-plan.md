@@ -1,6 +1,6 @@
 # Plan: the Studio for everyone
 
-Status: **steps 1 to 5 done** (8 November 2026): the local library, the open Studio, tape, and every fold preset (swivel and open sink added 8 November). Bend and submissions not started.
+Status: **steps 1 to 6 and 8 done** (13 November 2026): the local library, the open Studio, tape, every fold preset, bending with crease goals, solved in a worker, and submissions with ownership and licence. Bend with point goals not started.
 
 The Studio today is for approved creators only (`docs/accounts.md`): it needs Supabase, a sign-in and the creator
 role, keeps one draft in the browser, and saves to the cloud, where a model can be shared by link and submitted for
@@ -137,9 +137,10 @@ without the page freezing.
 Done when: the boat's or the fan's last step (on the `wip/boat` and `wip/fan` branches) can be made in the Studio with crease goals, saved,
 reloaded without re-solving, and changed (an earlier step edited) with a re-solve that finishes or can be cancelled.
 
-## Part 4 (later): submitting your own designs
+## Part 4: submitting your own designs
 
-Not in the first pass. When it comes, it builds on the cloud Studio that exists (milestone 7a: saving, review,
+Done 13 November 2026 (decided that day: CC BY 4.0 only, anyone signed in, a Report button feeding the admin queue;
+see the end of this part). Not in the first pass. When it comes, it builds on the cloud Studio that exists (milestone 7a: saving, review,
 publishing), and adds what an open gallery needs:
 
 - **Ownership**: on submitting, the person certifies the design is their own (or traditional, with no known
@@ -153,6 +154,32 @@ publishing), and adds what an open gallery needs:
 - **Takedown**: a way to report a design that isn't the submitter's, and to unpublish it.
 - **Accounts**: submitting needs a sign-in (designing doesn't). Local designs move to the cloud only when submitted.
 
+As made:
+- **Database** (`supabase/migrations/20261113000000_submissions.sql`): models gain `ownership` (`own` or
+  `traditional`), `credit`, `first_published`, `licence` (only `CC-BY-4.0`) and `certified_at`. `submit_design`
+  submits a new design straight into review for anyone signed in (learners still can't save drafts), or the caller's
+  own draft or sent-back model, replacing its title and file, and certifies it afresh each time. A model can't be put
+  into review any other way: setting its status by hand is refused, as its owner can't write `certified_at`.
+  `model_reports` takes a report from anyone, signed in or not, about a published model only, as its reporter or
+  no one. Only admins read reports, so a reporter's contact stays private. `decide_report` dismisses a report or
+  unpublishes the model, sending it back to its owner with a note and settling its other open reports. Tested in
+  `supabase/tests/rls.test.ts` as each kind of user.
+- **Studio** (`studio/SubmitPanel.tsx`): **Submit to the gallery…** in the side panel for everyone (once there are
+  steps). Signed out, it says why an account is needed and offers sign-in. Signed in, a dialog asks whose design it
+  is, how to credit it (the person's name to start with; "Shared by" for a traditional one) and where it was first
+  published, says it's published under CC BY 4.0 (they keep the copyright), and needs a tick to certify it. The
+  design then belongs to the cloud model it was sent as, so the panel shows its review, and the admin's note if
+  it's sent back, with **Submit it again…**. Creators see where it stands in the cloud panel instead; submitting
+  replaces their saved draft with the design as it is now.
+- **Model page** (`/m/<id>`): "Designed by …" or "Traditional · shared by …", where it was first published, the
+  licence linked, and **Report**: what's wrong (someone else's design, copies copyrighted work, offensive, other),
+  details and an optional contact.
+- **Admin**: each submission shows what was certified (or that it predates certification, to send back), with a
+  reminder to check it isn't a known copyrighted design and a link to Gilad's Origami Database. **Reports** lists
+  open reports with the model, reason, details and contact: **Unpublish** with a note to the owner, or **Dismiss**.
+- Not done: email to the submitter when a design is reviewed (they see it in the Studio), and limits on how often
+  someone can report.
+
 ## Order of work
 
 | # | Work | Size |
@@ -164,7 +191,7 @@ publishing), and adds what an open gallery needs:
 | 5 | Presets: swivel, open sink | Medium |
 | 6 | Bend with crease goals, solved in a worker, baked on save | Large |
 | 7 | Bend with point goals (3D handles) | Large, and only if 6 shows the need |
-| 8 | Submissions with ownership and licence (part 4) | Large; needs decisions first |
+| 8 | Submissions with ownership and licence (part 4) | Large; decided 13 November 2026 |
 
 1 and 2 together make a useful release on their own. Each later row ships separately.
 
@@ -173,20 +200,31 @@ publishing), and adds what an open gallery needs:
 | # | Status |
 |---|---|
 | 1. Local library | Done. `src/studio/library.ts` keeps designs in IndexedDB (`list`, `get`, `put`, `remove`, all failing quietly) with each one's title, step count and thumbnail beside its `.fold` file, so the list reads no models. The draft store (`studio/draft.ts`) edits one design at a time and writes it 400 ms after each change, and on leaving the page. The old `gami.studio.draft` becomes the first design, its key removed only once that's written. `navigator.storage.persist()` is asked once a visit. |
-| 2. Open the Studio | Done. `/studio` is the library for everyone (New, Import, and on each card Fold it, Duplicate, Rename, Export, Delete), `/studio/<id>` the editor, `/mine/<id>` the viewer (progress kept as `mine-<id>`). `/studio/dev` is gone. Signed-in creators get the cloud panel in the editor as before; opening a cloud model makes it a design of its own, or reopens the one made from it. People who aren't creators see how to ask on the library page. Submit is still shown to creators (the open question below). Favourites aren't offered for designs: the gallery's favourites list only shows gallery models. Tested end to end in `e2e/studio.e2e.ts`. |
+| 2. Open the Studio | Done. `/studio` is the library for everyone (New, Import, and on each card Fold it, Duplicate, Rename, Export, Delete), `/studio/<id>` the editor, `/mine/<id>` the viewer (progress kept as `mine-<id>`). `/studio/dev` is gone. Signed-in creators get the cloud panel in the editor as before; opening a cloud model makes it a design of its own, or reopens the one made from it. People who aren't creators see how to ask on the library page. Submit is hidden until submissions record ownership and licence (see below). Favourites aren't offered for designs: the gallery's favourites list only shows gallery models. Tested end to end in `e2e/studio.e2e.ts`. |
 | 3. Tape | Done. **Tape** is an action beside Cut: pick its two ends, anywhere on the paper, and a width (narrow, normal or wide; a step made with another width keeps it). The strip about to be laid shows outlined on the 2D editor, and laid tape shows there from then on, drawn with the face it's stuck to so the paper above covers it (`tapeOnFace` in `studio/editor.ts`). Change opens a tape step with its ends and width. |
 | 4. Presets: pleat, crimp, squash, petal, rabbit ear | Done. `src/fold/presets.ts` turns a few picks into an ordinary collapse: a pleat or crimp from its two crease lines; a squash from the flap's corner (where its hinge and folded edge meet) and a point on the line the folded edge lands on; a petal from the flap's free corner alone (the kite creases halve the angles at it and run to the far edges); a rabbit ear from the corner that stands up and the other two (its creases meet at the triangle's incentre). Which paper each crease folds comes from the stack: each face's rank (how many faces lie over it), which faces are joined along a folded edge, and for a rabbit ear, the sector round the middle point a face lies in. Where a crease's kind depends on the layers, each way is tried and the first that folds flat is kept (Other way picks the next). `presets.test.ts` makes each one on the common-folds lesson's paper and finds the lesson's own frame, every sample point in the same place and the layers stacked the same; the petal also matches the crane's second petal fold, turned over. In the Studio it's one action, **Named fold**, its creases shown on the paper before it's made; the step is saved as a collapse titled after the fold, so it opens in Collapse to adjust. The recipes still make these folds their own way; they could call the presets, which would change no frame (the tests show the same paper). The Studio's actions now wrap on a phone, where Draw and Move had run off the screen. |
-| 5. Presets: swivel, open sink | Done (8 November 2026). **Swivel**: the pivot, a point along the flap's hinge, and where that point swings to. The flap is found from the stack (the faces on top at a fold along that line, and everything joined to them other than across it; Other way swings the paper underneath instead), and the paper it swings across folds into a pleat as `Recipe.swivel` makes it: the new hinge, and a gusset halfway back folded the other way. The paper beyond the new hinge stays put. `presets.test.ts` makes it on `swivel.test.ts`'s folded corner and finds `Recipe.swivel`'s own frame. **Open sink**: the tip, and a point on the line it sinks to (square across the point from the tip). Every layer of the point folds along the line into the point's inside, which is the same side of the paper all round it: a mountain fold for the faces lying the way the top one does, a valley fold for the others. So the tip's layers tuck into the pockets between the point's layers, as a real open sink does, rather than all to one side. On a square base each half then stacks front, its tip, the gusset's tip, gusset, gusset, the gusset's tip, the back's tip, back (tested). On a point of two layers it's an inside reverse fold. It plays with paper up to 0.0052 through paper (the gallery allows 0.005): the tips swing in through the point's layers rather than the point opening out first. A closed sink still can't be made, and the hint says only open sinks. Not yet in the common-folds lesson, so part 2's "done when" isn't met yet. Found on the way, and fixed the same day: the engine's reverse folds (`inside`, `outside`) took the middle of the stack as 0, so every inside reverse fold laid the point behind all the flap's layers and every outside one in front (`docs/next-tasks-plan.md`, Smaller). The open sink doesn't use them: an inside reverse fold through every layer tucks the tip into the middle of the stack, which on a square base is between the gusset's layers, outside the point. |
+| 5. Presets: swivel, open sink | Done (8 November 2026). **Swivel**: the pivot, a point along the flap's hinge, and where that point swings to. The flap is found from the stack (the faces on top at a fold along that line, and everything joined to them other than across it; Other way swings the paper underneath instead), and the paper it swings across folds into a pleat as `Recipe.swivel` makes it: the new hinge, and a gusset halfway back folded the other way. The paper beyond the new hinge stays put. `presets.test.ts` makes it on `swivel.test.ts`'s folded corner and finds `Recipe.swivel`'s own frame. **Open sink**: the tip, and a point on the line it sinks to (square across the point from the tip). Every layer of the point folds along the line into the point's inside, which is the same side of the paper all round it: a mountain fold for the faces lying the way the top one does, a valley fold for the others. So the tip's layers tuck into the pockets between the point's layers, as a real open sink does, rather than all to one side. On a square base each half then stacks front, its tip, the gusset's tip, gusset, gusset, the gusset's tip, the back's tip, back (tested). On a point of two layers it's an inside reverse fold. It plays with paper up to 0.0052 through paper sunk 0.15 into a square base (the gallery allows 0.005): the tips swing in through the point's layers rather than the point opening out first; sunk 0.2 in, 0.0034. A closed sink still can't be made, and the hint says only open sinks. Since 11 November both are in the common-folds lesson, made as the presets make them (`Recipe.swivel`, and `Recipe.preset` for the sink, which the recipes can now use for any named fold), so part 2's "done when" is met. The lesson creases the tip before sinking it, as a sink usually is, which the sink preset hadn't allowed for: the point's faces then end at the line rather than crossing it, so it found nothing to sink. It now folds the faces either side of that crease, and the paper comes out the same as sinking an uncreased point (tested). Found on the way, and fixed the same day: the engine's reverse folds (`inside`, `outside`) took the middle of the stack as 0, so every inside reverse fold laid the point behind all the flap's layers and every outside one in front (`docs/next-tasks-plan.md`, Smaller). The open sink doesn't use them: an inside reverse fold through every layer tucks the tip into the middle of the stack, which on a square base is between the gusset's layers, outside the point. |
+| 6. Bend with crease goals | Done (11 November 2026). **Bend** among the Studio's actions: Pick faces for the paper that may bend, Pick paper that stays, then two points along a crease, an angle (−180° to 180°, negative for a mountain fold) and Add crease, as many as it needs; Detail sets the mesh (Quick, Normal, Fine). **Bend** works the shape out in a Web Worker (`studio/bend.worker.ts`, `studio/bendJob.ts`), showing how long it has taken, with Cancel, and adds the step; a bend can't be held as a part of a step. A change to an earlier step with a bend after it folds the model again in the worker too (`bendsFrom` in `studio/steps.ts`), so the Studio never freezes, and Cancel leaves the design as it was. The solved frames are saved with the design, so reopening it solves nothing. Change opens a bend with its paper, anchor, creases and detail; goals the tools can't show (points, guides) and its other settings (lines, crumpling, air, free) are kept as they were. Once paper has bent, the hint says it can't be folded further (drawing still can). Quick detail stands in for a separate coarse preview. Not done: point goals (row 7), and progress as a share of the work, which the solver doesn't report. Tested end to end: half a creased sheet bent up 90°, a step put in before it (the bend solved again in the worker), saved and reopened. The "done when" above named the fan's or boat's last step; both now follow guides worked out beforehand (`docs/bending-plan.md`), which crease goals can't make, though Change keeps them. |
 
-## Open questions
+## Decided (11 November 2026)
 
-- **Keep the cloud Studio during the first pass?** Creators could keep cloud saving and share links while everyone
-  else saves locally, or the cloud panel could be hidden for everyone until part 4. Leaning: keep save and share
-  links for creators, hide Submit.
-- **Sharing without accounts.** Exporting a `.fold` file works today. A share link without a server could carry
-  the design in the address itself (compressed), which is fine for small designs and can't hold a bend's frames.
-  Worth it?
-- **A tour for first-timers.** The Studio has many tools. A short "make your first fold" walkthrough, like the
-  Basics lesson does for the viewer?
-- **Phones.** The 2D editor works with a finger, but picking small faces is fiddly. Is the Studio a desktop-first
-  tool for now?
+- **The cloud Studio stays for creators, without Submit.** Signed-in creators keep cloud saving and private share
+  links; Submit for the gallery is hidden until submissions record who designed a model and its licence (part 4).
+  Models sent before still show their review. Done.
+- **Share links without accounts: yes.** Done: **Copy link** in the editor's top bar copies `/shared#…`, the
+  design's `.fold` file less every step's paper (each step keeps its words and operation), deflated and in
+  base64url (`src/studio/share.ts`). Browsers don't send what follows `#`, so nothing is uploaded. Opening it folds
+  the design again with `replay` (a bend is solved again, so that opens slower), shows it in the viewer, and offers
+  **Save a copy to my designs**, which opens the copy in the Studio. The fortune teller's link is 1.8 KB (its
+  `.fold` file 42 KB), the crane's 4.3 KB (127 KB). The viewer keeps the step in the address, which drops the `#`
+  part, so the page puts it back each time and a reload still opens the design. A design with a step that can't
+  be folded again (no operation) can't be linked; the hint says to export it. Where the page may not write to the
+  clipboard, the link is shown to copy by hand. Tested: the link opens to exactly the same `.fold` file, and a
+  damaged link says so.
+- **A short tour for first-timers: yes.** Done (`src/studio/Tour.tsx`): on the first visit to the editor, four
+  cards in turn, each beside the part it's about, which is outlined: the paper, the tools, the steps, and Fold it
+  with export and links. Skip, Back, Next and Done, or Escape; seen, it's remembered on the device (and taken as
+  seen where storage is blocked, rather than shown every visit). **Show the tour** at the top of the side panel
+  shows it again. The cards stay on the screen at phone width. The Studio's other end-to-end tests mark it seen.
+- **Phones: desktop-first, and said.** The Studio keeps working at phone width; below 760 px a line at the top of
+  the steps says it's easiest with a mouse and a bigger screen. Done.

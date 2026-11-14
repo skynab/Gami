@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import type { Said } from '../fold/messages';
 import type { SavedModel, Status } from '../cloud/models';
 import { fromFoldFile, toFoldFile } from '../fold/fold-format';
 import type { Replay } from '../fold/ops';
@@ -22,11 +23,10 @@ export interface CloudInfo {
 }
 
 /** A step that couldn't be folded again after an earlier one changed. It and the steps after it are as they were. */
-export interface Problem {
+export type Problem = {
   /** Numbered from 1, as the Studio shows steps. */
   step: number;
-  message: string;
-}
+} & Said;
 
 interface DraftState {
   /** The library design being edited, or null before one is opened. */

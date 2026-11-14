@@ -44,7 +44,7 @@ export function shape(
   // Which of the flat state's faces each bend turns (before cutting them along the bend lines).
   const turns = bends.map((b) => {
     const movingSide = faces.filter((f) => f.world.some((x) => sideOf(b.line, x) > 1e-7));
-    if (!movingSide.length) throw new FoldError('Nothing is on the lifting side of that line.');
+    if (!movingSide.length) throw new FoldError('nothingOnLiftingSide');
     const from = b.layers === undefined ? -Infinity : Math.max(...movingSide.map((f) => f.layer)) - b.layers + 1;
     return faces.map((f) => f.layer >= from && (!b.only || b.only(f.paper)));
   });
@@ -97,7 +97,7 @@ export function shape(
     }
   }
   bends.forEach((b, k) => {
-    if (!moves[k].some(Boolean)) throw new FoldError('Nothing is on the lifting side of that line.');
+    if (!moves[k].some(Boolean)) throw new FoldError('nothingOnLiftingSide');
     if (b.layers !== undefined || b.only) checkNoTear(pieces.map((p, i) => ({ ...p, moves: moves[k][i] })), b.line, frame.cuts);
   });
 
@@ -129,7 +129,7 @@ export function shape(
         index.set(key, v);
       } else if (Math.hypot(...vertices_coords[v].map((c, n) => c - at[n])) > 1e-6) {
         // On a scissor cut, the paper either side is free to part: the pieces get a corner each.
-        if (!onCut(q, frame.cuts)) throw new FoldError('Those bends cross on the paper, so they’d stretch it. Shape one part at a time.');
+        if (!onCut(q, frame.cuts)) throw new FoldError('bendsCross');
         v = vertices_paper.push(q) - 1;
         vertices_coords.push(at);
       }
@@ -149,6 +149,19 @@ export function shape(
   // the other way round, on the table.
   const over = (i: number) => ups[i] !== null && ups[i]![1] < -0.999;
   const overTop = Math.max(0, ...pieces.filter((_, i) => over(i)).map((p) => p.layer));
+  // Paper turned further, at a slant, on paper turned right over (the king bee's aileron, on a wing turned over by
+  // the body's bend and the wing's) is lifted as that paper is, so it stays hinged to it. Lifted along its own way
+  // up, which points down and to the side, it sat as many layers below and beside it (49 layers: 3 cm off).
+  const onOver = (i: number) => {
+    if (cornerOf[i] || over(i)) return false;
+    const mine = order.filter((k) => moves[k][i]);
+    if (mine.length < 2) return false;
+    // Its way up, turned by every bend but its own (the furthest out, turned first).
+    let up: Vec3 = [0, 1, 0];
+    let at: Vec3 = [0, 0, 0];
+    for (const k of mine.slice(1)) [up, at] = [turn(up, bends[k]), turn(at, bends[k])];
+    return up[1] - at[1] < -0.999;
+  };
   // Any other stack turned by one bend turns about its own bottom layer, standing on the paper that stays put
   // beneath it: turned about the table instead, a thick stack's bottom edge would cut down through that
   // paper. Paper turned further, beyond a stack that stands up, is hinged to the stack's far side, so it lies
@@ -182,11 +195,14 @@ export function shape(
     const up = ups[i];
     const b = base.get(nearest(i));
     const stack = b && !over(i) && !cornerOf[i] && turnedBy(i) === 1;
-    if (!up || (!p.layer && !over(i) && !(stack && b.rest) && !b?.beyond)) return;
+    if (!up || (!p.layer && !over(i) && !onOver(i) && !(stack && b.rest) && !b?.beyond)) return;
     const shift = b?.beyond && !stack ? b.beyond : [0, 0, 0];
     const offset = (
       over(i)
         ? [0, (overTop - 2 * p.layer) * LAYER_GAP, 0]
+        : onOver(i)
+          ? // As the paper it's on ends up, which is also lifted by its layer when drawn, flat; this isn't.
+            [0, (overTop - p.layer) * LAYER_GAP, 0]
         : stack
           ? up.map((c, n) => c * (p.layer - b.bottom) * LAYER_GAP + (n === 1 ? b.rest * LAYER_GAP : 0))
           : up.map((c) => c * p.layer * LAYER_GAP)
@@ -239,7 +255,7 @@ function cornerPlacer(a: Bend, b: Bend): { diagonal: Line; place(at: Vec2): (p: 
   const [da, db] = [unit(a.line.d), unit(b.line.d)];
   const det = da[0] * db[1] - da[1] * db[0];
   if (Math.abs(det) < 1e-9) return null;
-  if (Math.abs(a.angle - b.angle) > 1e-9) throw new FoldError('Walls meeting at a corner must turn by the same angle.');
+  if (Math.abs(a.angle - b.angle) > 1e-9) throw new FoldError('wallsAngle');
   // Where the lines cross: a.p + t da = b.p + u db.
   const t = ((b.line.p[0] - a.line.p[0]) * db[1] - (b.line.p[1] - a.line.p[1]) * db[0]) / det;
   const O: Vec2 = [a.line.p[0] + t * da[0], a.line.p[1] + t * da[1]];
@@ -323,7 +339,7 @@ function opened(frame: FoldFrame, bends: Bend[], anchor: Vec2, ride?: (paper: Ve
   // it lies on, found once the rest have moved.
   const riding = faces.map((f) => !!ride && ride(f.paper));
   const start = faces.findIndex((f, i) => !riding[i] && contains(f.paper, anchor));
-  if (start < 0) throw new FoldError('The anchor point isn’t on the paper.');
+  if (start < 0) throw new FoldError('anchorOffPaper');
   const n = faces.length;
   // Faces joined along an edge, and that edge on the sheet.
   const joins: { other: number; shared: [Vec2, Vec2] }[][] = faces.map(() => []);
@@ -426,7 +442,7 @@ function opened(frame: FoldFrame, bends: Bend[], anchor: Vec2, ride?: (paper: Ve
       if (riding[j] || !moved[j] || faces[j].layer >= faces[i].layer || !contains(faces[j].world, c)) continue;
       if (under < 0 || faces[j].layer > faces[under].layer) under = j;
     }
-    if (under < 0) throw new FoldError('A riding layer has nothing beneath it to ride on.');
+    if (under < 0) throw new FoldError('ridingOnNothing');
     moved[i] = moved[under];
   }
   const index = new Map<string, number>();
@@ -453,7 +469,7 @@ function opened(frame: FoldFrame, bends: Bend[], anchor: Vec2, ride?: (paper: Ve
         // (And a layer where paper turned right over lands a layer off.)
         const slack = riding[i] || riding[j] ? RIDING_SLACK : 1;
         if (Math.hypot(p1[0] - p2[0], p1[1] - p2[1], p1[2] - p2[2]) > LAYER_GAP * (Math.abs(faces[i].layer - faces[j].layer) + slack) + 1e-6) {
-          throw new FoldError('Those folds can’t all open together without stretching the paper.');
+          throw new FoldError('foldsStretch');
         }
       }
     }
@@ -541,7 +557,7 @@ export function reparent(previous: FoldFrame, next: FoldFrame): FoldFrame {
   const faces_parent = next.faces_vertices.map((face) => {
     const c = centre(face.map((v) => next.vertices_paper[v]));
     const f = faces.findIndex((poly) => contains(poly, c));
-    if (f < 0) throw new FoldError(`(${c.join(', ')}) isn’t on the paper.`);
+    if (f < 0) throw new FoldError('notOnPaper', { point: c.join(', ') });
     return f;
   });
   return { ...next, faces_parent };
@@ -579,7 +595,7 @@ export interface Ray {
  * straight up: the popped surface never stands past upright, so copies of it raised by different amounts
  * never cross, where gaps measured off each sector would cross in its valleys.
  */
-export function radial(frame: FoldFrame, apex: Vec2, rays: Ray[]): FoldFrame {
+export function radial(frame: FoldFrame, apex: Vec2, rays: Ray[], only?: (paper: Vec2[]) => boolean): FoldFrame {
   const dir = ({ azimuth, elevation, heading = azimuth }: Ray): Vec3 => [Math.cos(elevation) * Math.cos(heading), Math.sin(elevation), Math.cos(elevation) * Math.sin(heading)];
   const n = rays.length;
   for (let k = 0; k < n; k++) {
@@ -587,11 +603,15 @@ export function radial(frame: FoldFrame, apex: Vec2, rays: Ray[]): FoldFrame {
     const flat = (((b.azimuth - a.azimuth) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
     const [p, q] = [dir(a), dir(b)];
     if (Math.abs(Math.acos(Math.min(1, p[0] * q[0] + p[1] * q[1] + p[2] * q[2])) - flat) > 1e-6) {
-      throw new FoldError('Those creases would stretch the paper between them.');
+      throw new FoldError('creasesStretch');
     }
   }
-  // Cut every face along each ray's line, so each piece lies in one sector.
-  let pieces: (FlatFace & { source: number })[] = toFlat(frame).map((f, i) => ({ ...f, parent: i, source: i }));
+  // Cut every face along each ray's line, so each piece lies in one sector. Faces `only` leaves out (another sheet
+  // beside the one popping up) stay as they lie, uncut.
+  const all = toFlat(frame).map((f, i) => ({ ...f, parent: i, source: i }));
+  const popping = (f: FlatFace) => !only || only(f.paper);
+  const still = all.filter((f) => !popping(f));
+  let pieces: (FlatFace & { source: number })[] = all.filter(popping);
   for (const r of rays) {
     const line = { p: apex, d: [Math.cos(r.azimuth), Math.sin(r.azimuth)] as Vec2 };
     pieces = pieces.flatMap((p) => {
@@ -628,7 +648,15 @@ export function radial(frame: FoldFrame, apex: Vec2, rays: Ray[]): FoldFrame {
       return vertices_coords.push([0, 1, 2].map((c) => (c === 0 ? apex[0] : c === 2 ? apex[1] : 0) + a * da[c] + b * db[c] + rise * up[c]) as Vec3) - 1;
     });
   });
-  return { vertices_paper, vertices_coords, faces_vertices, faces_parent: pieces.map((p) => p.parent) };
+  for (const p of still) {
+    faces_vertices.push(
+      p.world.map((w, j) => {
+        vertices_paper.push(p.paper[j]);
+        return vertices_coords.push([w[0], p.layer * LAYER_GAP, w[1]]) - 1;
+      }),
+    );
+  }
+  return { vertices_paper, vertices_coords, faces_vertices, faces_parent: [...pieces, ...still].map((p) => p.parent) };
 }
 
 

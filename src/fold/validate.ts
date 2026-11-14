@@ -1,4 +1,5 @@
 import { poseAt, stepTransition } from './animate';
+import { crumpleOf } from './bend/frame';
 import { toFlat } from './fold';
 import { framesOf } from './frames';
 import { overlapArea, signedArea } from './geometry2d';
@@ -68,21 +69,25 @@ export const BEND_SAMPLES = 96;
 export function bendStrain(model: OrigamiModel, k: number): { still: number; playing: number } {
   const step = model.steps[k - 1];
   const frames = [...(step.via ?? []), step.frame];
-  const still = Math.max(...frames.map((f) => strainOf(f.faces_vertices.map((face) => face.map((v) => f.vertices_coords[v])), f.faces_vertices.map((face) => face.map((v) => f.vertices_paper[v])))));
+  // Paper the step lets crumple on the way may draw in, never stretch.
+  const give = step.op?.op === 'bend' ? crumpleOf(framesOf(model)[k - 1], frames[0], step.op.crumple) : null;
+  const still = Math.max(...frames.map((f) => strainOf(f.faces_vertices.map((face) => face.map((v) => f.vertices_coords[v])), f.faces_vertices.map((face) => face.map((v) => f.vertices_paper[v])), give)));
   const t = stepTransition(model, k);
   const paper = t.faces.map((f) => f.paper);
   let playing = 0;
-  for (let i = 1; i < BEND_SAMPLES; i++) playing = Math.max(playing, strainOf(poseAt(t, i / BEND_SAMPLES), paper));
+  for (let i = 1; i < BEND_SAMPLES; i++) playing = Math.max(playing, strainOf(poseAt(t, i / BEND_SAMPLES), paper, give));
   return { still, playing };
 }
 
-function strainOf(world: Vec3[][], sheet: Vec2[][]): number {
+/** How far any edge is off its length on the sheet, as a share of it; faces `give` picks only if they're longer. */
+function strainOf(world: Vec3[][], sheet: Vec2[][], give?: boolean[] | null): number {
   let worst = 0;
   world.forEach((pts, f) =>
     pts.forEach((p, i) => {
       const j = (i + 1) % pts.length;
       const [q, a, b] = [pts[j], sheet[f][i], sheet[f][j]];
-      worst = Math.max(worst, Math.abs(Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]) / Math.hypot(a[0] - b[0], a[1] - b[1]) - 1));
+      const s = Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]) / Math.hypot(a[0] - b[0], a[1] - b[1]) - 1;
+      worst = Math.max(worst, give?.[f] ? s : Math.abs(s));
     }),
   );
   return worst;

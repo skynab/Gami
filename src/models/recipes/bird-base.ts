@@ -1,5 +1,4 @@
-import type { CreaseKind } from '../../fold/collapse';
-import { paper, Recipe, table, type At } from '../../fold/recipe';
+import { paper, Recipe, table } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 
 /**
@@ -56,8 +55,6 @@ export function squareBaseFlaps(r: Recipe) {
   const side = (Math.SQRT2 - 1) / 2;
   const K: Vec2 = [B[0] - side, P[1]];
   const K2: Vec2 = [B[0] + side, P[1]];
-  const L = r.where(paper(0.5, 0));
-  const R = r.where(paper(0, -0.5));
 
   const front = ([u, v]: Vec2) => u > 0 && v < 0;
   const back = ([u, v]: Vec2) => u < 0 && v > 0;
@@ -65,8 +62,11 @@ export function squareBaseFlaps(r: Recipe) {
   const innerFront = ([u, v]: Vec2) => (u > 0 && v > 0 && u > v) || (u < 0 && v < 0 && u > v);
   const innerBack = ([u, v]: Vec2) => (u > 0 && v > 0 && v > u) || (u < 0 && v < 0 && v > u);
 
-  /** Kite folds, top triangle, unfold, then the petal fold, for whichever flap is on top. */
-  const petalFold = (flap: (c: Vec2) => boolean, inner: (c: Vec2) => boolean, seam: (c: Vec2) => boolean, second: boolean) => {
+  /**
+   * Kite folds, top triangle, unfold, then the petal fold, for whichever flap is on top: `second`, the back flap
+   * once the paper is turned over. The petal fold is the Studio's Named fold, picked at the flap's free corner.
+   */
+  const petal = (second: boolean) => {
     const left = r.where(paper(...(second ? ([0, 0.5] as Vec2) : ([0.5, 0] as Vec2))));
     const right = r.where(paper(...(second ? ([-0.5, 0] as Vec2) : ([0, -0.5] as Vec2))));
     const before = r.mark();
@@ -85,31 +85,15 @@ export function squareBaseFlaps(r: Recipe) {
         text: 'Fold the top triangle down over the kite flaps, crease hard, then…',
       })
       .unfold({ title: 'Unfold the last three folds', text: 'Open the kite flaps and the top back out to the square base.', to: before });
-    const kite = (kind: CreaseKind, only: (c: Vec2) => boolean) =>
-      [K, K2].map((k) => ({ through: [table(...B), table(...k)] as [At, At], kind, only }));
-    r.collapse(
+    r.preset(
       {
         title: 'Petal fold',
         text: 'Lift the bottom corner of the top layer up along the horizontal crease. The sides fold in along the kite creases and meet in the middle.',
         kind: 'petal',
       },
-      [
-        { through: [table(...K), table(...K2)], kind: 'valley', only: flap },
-        ...kite('mountain', flap),
-        ...kite('valley', inner),
-        // The seams joining the flap to the inner flaps, below the kite corners, open out flat.
-        { through: [table(...T), table(...L)], kind: 'flat', only: seam },
-        { through: [table(...T), table(...R)], kind: 'flat', only: seam },
-      ],
-      paper(...(second ? ([0.3, -0.3] as Vec2) : ([-0.3, 0.3] as Vec2))),
+      { kind: 'petal', picks: [r.where(paper(...(second ? ([-0.5, 0.5] as Vec2) : ([0.5, -0.5] as Vec2))))] },
     );
   };
-
-  // The seams lie along the sheet's middle lines, far from the centre.
-  const petal = (second: boolean) =>
-    second
-      ? petalFold(back, innerBack, ([u, v]) => v > 0.3 || u < -0.3, true)
-      : petalFold(front, innerFront, ([u, v]) => u > 0.3 || v < -0.3, false);
 
   return { T, B, P, K, K2, side, up, front, back, innerFront, innerBack, petal };
 }

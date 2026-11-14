@@ -63,7 +63,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `folds-lesson` | Folding techniques: valley and mountain, inside and outside reverse, squash, rabbit ear, pleat, crimp and petal folds (the choice of folds after origami.me's beginner's guide, its words and pictures not used) | None needed: nobody owns them | [origami.me/beginners-guide](https://origami.me/beginners-guide/), for the choice of folds only | Clear | 21 Oct 2026 |
 | `bases-lesson` | Traditional: the kite, square, water bomb, bird, fish and frog bases (the choice of bases after origami.me's beginner's guide, its words and pictures not used) | None needed: nobody owns them | [origami.me/beginners-guide](https://origami.me/beginners-guide/), for the choice of bases only | Clear | 21 Oct 2026 |
 | `seal` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/seal](https://origami.me/seal/) | Clear | 22 Oct 2026 |
-| `boat` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/traditional-boat](https://origami.me/traditional-boat/) | Clear | Coming soon |
+| `boat` | Traditional (origami.me: "Traditional"; Gilad's database lists the boat as "Traditional" in many books, from a rectangle in Palacios's *Beginning Origami*) | None needed: nobody owns it | [origami.me/traditional-boat](https://origami.me/traditional-boat/), for the order of folds; its last move is shown as two steps (see the notes) | Clear | 9 Nov 2026 |
 | `waterbomb` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/waterbomb](https://origami.me/waterbomb/) | Clear | 21 Oct 2026 |
 | `balloon` | Traditional (Gilad's database lists the paper balloon as "Traditional" in many books; Kids Web Japan names no designer) | None needed: nobody owns it | [Kids Web Japan: Balloon](https://web-japan.org/kidsweb/virtual/origami/exploring02g.html), for the last step (blowing it up); the folds are the water bomb's | Clear | 23 Oct 2026 |
 | `balloon-rabbit` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/balloon-rabbit](https://origami.me/balloon-rabbit/) | Clear | 21 Oct 2026 |
@@ -114,8 +114,41 @@ noted when it was written, and the model was folded from the common traditional 
 | `dice` | Traditional: the business card cube (Gilad's database: "Business card cube", Traditional) put together with its flaps inside, the dots drawn on, in place of OrigamiOK's dice, which is Stéphane Gigandet's (see the notes) | None needed: nobody owns it | none recorded: as `business-card-cube` | Clear | 29 Oct 2026 |
 | `kusudama` | Traditional: the flower kusudama (Gilad's database: "Flower Kusudama", Traditional, in *Charming Flower Origami*), as OrigamiOK's kusudama flower ball, which names no designer (see the notes) | None needed: nobody owns it | [OrigamiOK: kusudama flower ball](https://origamiok.com/origami-kusudama-flower-ball/), for the order of folds | Clear | 29 Oct 2026 |
 | `chrysanthemum` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of origami.me's kusudama chrysanthemum (Traditional), whose text doesn't say where its petals' squashed flaps go or which corners are glued; Gami's units are windmill bases with their arms opened as petals, glued corner to corner on a cube (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami, after the look of [origami.me/kusudama-chrysanthemum](https://origami.me/kusudama-chrysanthemum/) | Clear | 29 Oct 2026 |
+| `turtle` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a turtle seen from above, folded from the water bomb base, after the look of OrigamiOK's turtle, which names no designer (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
+| `sunflower` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's sunflower, which names no designer, from three squares and no glue: Gami's own petals and middle, and the flat tulip's traditional stem with a leaf (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
+| `lizard` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the general look of OrigamiOK's lizard, which is Lee Won-pyo's, folded differently: the turtle's narrowed water bomb base with steeper legs, and a separate tail (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
+| `squirrel` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a squirrel sitting up, after the look of OrigamiOK's, which names no designer, from three squares rather than one (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
+| `strawberry` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a strawberry in 3D, after the look of OrigamiOK's, which names no designer: the berry popped point down as Gami's diamond is, the leaves folded as the sunflower's petals are (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
+| `fox-3d` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a fox standing in 3D, in place of OrigamiOK's, which is Hoàng Tiến Quyết's; its head is the traditional cat face's folds (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
 
 ### Notes
+
+- **Intermediate models from OrigamiOK** (checked 13 November 2026; the plan is `docs/origamiok-intermediate-plan.md`).
+  Its fox page credits Hoàng Tiến Quyết and its lizard page Lee Won-pyo; the rest name only their writer and
+  photographer. Gilad's database lists about ten Traditional square turtles (Gross's *Zoogami*, Momotani, NOA 493 and
+  others), but none whose order of folds could be checked against OrigamiOK's, so Gami's turtle is its own: the water
+  bomb base narrowed on each side as the water bomb is, its loose points folded out as flippers rather than tucked.
+  Every one of the 81 sunflowers in Gilad's database has a named designer (Yoshizawa, Kasahara, Petty, Yamaguchi and
+  others), so Gami's is its own: corners to the middle and back out for eight petals, a brown octagon for the middle,
+  set on the flat tulip's stem. OrigamiOK's head is cut, opened and pushed into a hollow, and its stem rolled and glued.
+  OrigamiOK's lizard is Lee Won-pyo's, and none of the 147 lizards in Gilad's database is Traditional, so Gami's is
+  its own, from two squares: the body is the turtle's narrowed water bomb base, its legs folded out steeper (the front
+  ones reaching forwards), and the tail a smaller square narrowed twice into a long point, slipped under it. Lee's
+  shapes four legs with zigzag folds from one sheet; the fish base's side flaps, the first thing tried, can't swing
+  out flat as legs (as the whale's fins can't).
+  None of the squirrels read in Gilad's database (276 found) is Traditional, so Gami's squirrel is its own, from
+  three squares: a triangle for the body, a tall kite with its tip flicked over for the tail, and a small triangle for
+  the head. From one sheet, as OrigamiOK's is, the tail and head reverse-folded from a triangle's corners came out
+  too thin or tucked inside the body.
+  None of the 49 strawberries in Gilad's database is Traditional (the "classic" one is Rae Cooker's), so Gami's is
+  its own: a red square creased as Gami's pyramid is, its corners folded in, popped point down as Gami's diamond is,
+  red side out, seeds drawn on, with an eight-pointed green star for the leaves set on its rim. OrigamiOK's is a
+  square base opened into a berry, with a cut calyx and a rolled stalk glued on. (A flat strawberry went in first,
+  the same day; the 3D one replaced it.)
+  OrigamiOK's fox is Hoàng Tiến Quyết's, so the standing fox (decided 13 November, to sit beside Okuda's flat one) is
+  Gami's own, from three squares: the body snipped for four legs, its belly strips folded inside, folded in half and
+  opened a little to stand; the head the traditional cat face's folds, set facing forwards; the tail a kite folded in
+  half, held out behind.
 
 - **Modular models from OrigamiOK** (checked 29 October 2026; the plan is `docs/modular-plan.md`). OrigamiOK's
   modular pages name no designer either. Its rainbow chain wasn't found by name; Gami folds the traditional gum
@@ -215,10 +248,14 @@ noted when it was written, and the model was folded from the common traditional 
   UFO, Gami has its own flying saucer: the top folded down to the middle for a thick front edge, the front
   corners turned in, and the back corners folded behind and rounded off with smaller folds, so it's nearly round
   from above. The UFO cuts a corner round with scissors and folds a dart's nose first; the saucer cuts nothing.
-- **Coming soon.** The boat and the models listed on 21 October 2026 are gallery placeholders with no recipe
+- **Coming soon.** The models listed on 21 October 2026 are gallery placeholders with no recipe
   yet. Each is credited "Traditional" on origami.me. When one gets a recipe, set its reference to what was
   actually followed and its date to when it shipped. Other traditional models on origami.me that aren't
   listed yet are in `docs/origami-me-candidates.md`.
+- **Boat** (checked 9 November 2026). Gami follows origami.me's order of folds, from an A4 sheet. Its last move,
+  pulling the small diamond's top points apart, is shown as two steps: pulled out into a boat lying flat (as
+  origami.me's last diagram shows it), then opened a little and stood up. (Since 12 November 2026 no paper bends
+  there: see `docs/bending-plan.md`, step 7.)
 - **Fan** (checked 7 November 2026). Gami follows origami.me's order of folds, pleated from the back so the strip
   beside the flap ends in the middle of the stack, but leaves the flap out where origami.me closes it towards
   the middle: its two layers hang from the two middle layers, so closed over either face it would hold half the

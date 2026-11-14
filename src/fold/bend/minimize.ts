@@ -18,6 +18,12 @@ import type { Hinge, Tri } from './mesh';
 export interface Energy {
   edges: [number, number][];
   lengths: number[];
+  /**
+   * Edges that may get shorter but not longer: paper crumpling for a while, as a balloon's ends do while it's blown
+   * up (see BendProblem.crumple). Shorter, their springs are `GIVE` as stiff, so the paper draws in evenly rather
+   * than a few edges collapsing; longer, as stiff as any.
+   */
+  give?: boolean[];
   /** Each edge's spring, per unit of its strain squared and its length (so the energy is about the area's). */
   stretch: number;
   hinges: Hinge[];
@@ -51,6 +57,12 @@ export interface Minimized {
  * right at the end of the stage (solver.ts's \`settleLayers\`).
  */
 const SLACK = 0.5;
+/**
+ * How stiffly crumpling paper resists drawing in, against stretching (see Energy.give). Softer, a few triangles fold
+ * over each other and pop up as the paper opens out again; stiffer, the paper lags behind its guides (tuned on the
+ * balloon: at 1e-2 it fell 1.6 cm behind and snapped a little).
+ */
+const GIVE = 3e-3;
 /** A step lowering the energy by less than this share of it ends the round. */
 const LEVEL = 1e-4;
 const sub = (a: Vec3, b: Vec3): Vec3 => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
@@ -113,7 +125,7 @@ export function minimize(
   { rounds = 8, steps = 12, settled = 1e-4 }: { rounds?: number; steps?: number; settled?: number } = {},
 ): Minimized {
   const n = p.length;
-  const { edges, lengths, stretch, hinges, angles, stiffness, guides, guide, goals, goal, triangles, contact, floor } = energy;
+  const { edges, lengths, stretch, hinges, angles, stiffness, guides, guide, goals, goal, triangles, contact, floor, give } = energy;
   const spring = edges.map((_, k) => stretch * lengths[k]);
   // Points next to a triangle (on an edge with one of its corners): across a fold lying flat they're almost on it,
   // and that's the fold, not paper touching paper.
@@ -125,7 +137,18 @@ export function minimize(
   const beside = (v: number, t: number) => triangles[t].some((c) => c === v || next[c].has(v));
   let used = 0;
   let round = 0;
-  const strainNow = () => Math.max(0, ...edges.map(([a, b], k) => Math.abs(len(sub(p[b], p[a])) - lengths[k]) / lengths[k]));
+  /** An edge's strain as its spring sees it: a crumpling edge's only when it's longer than the paper. */
+  const strainOf = (k: number, dl: number) => {
+    const s = (dl - lengths[k]) / lengths[k];
+    return give?.[k] ? Math.max(0, s) : s;
+  };
+  const strainNow = () => Math.max(0, ...edges.map(([a, b], k) => Math.abs(strainOf(k, len(sub(p[b], p[a]))))));
+  /** An edge's term in the energy at length `dl`: its strain, offset by its multiplier, and its spring. */
+  const edgeTerm = (k: number, dl: number) => {
+    const s = (dl - lengths[k]) / lengths[k];
+    if (give?.[k]) return { c: s, stiff: s < 0 ? GIVE * spring[k] : spring[k] };
+    return { c: s + multipliers[k] / spring[k], stiff: spring[k] };
+  };
 
   for (; round < rounds; round++) {
     let moved = 0;
@@ -142,14 +165,15 @@ export function minimize(
         const d = sub(p[b], p[a]);
         const dl = len(d) || 1e-12;
         const u = d.map((x) => x / dl) as Vec3;
-        // Strain, offset by the multiplier: the spring's rest moved by how far it was off before.
-        const c = (dl - lengths[k]) / lengths[k] + multipliers[k] / spring[k];
-        const s = spring[k] / lengths[k];
+        // Strain, offset by the multiplier: the spring's rest moved by how far it was off before. A crumpling edge's
+        // has no multiplier, and drawn in, it's soft.
+        const { c, stiff } = edgeTerm(k, dl);
+        const s = stiff / lengths[k];
         for (let i = 0; i < 3; i++) {
           grad[3 * b + i] += s * c * u[i] * 1;
           grad[3 * a + i] -= s * c * u[i];
         }
-        const k2 = spring[k] / (lengths[k] * lengths[k]);
+        const k2 = stiff / (lengths[k] * lengths[k]);
         addDiag(a, u, k2);
         addDiag(b, u, k2);
         return { u, k2 };
@@ -295,8 +319,8 @@ export function minimize(
       const value = () => {
         let e = 0;
         edges.forEach(([a, b], k) => {
-          const c = (len(sub(p[b], p[a])) - lengths[k]) / lengths[k] + multipliers[k] / spring[k];
-          e += (spring[k] / 2) * c * c;
+          const { c, stiff } = edgeTerm(k, len(sub(p[b], p[a])));
+          e += (stiff / 2) * c * c;
         });
         hinges.forEach((h, k) => {
           if (stiffness[k]) e += (stiffness[k] / 2) * wrap(angleOf(p, h) - angles[k]) ** 2;
@@ -338,7 +362,9 @@ export function minimize(
       if (far < 1e-7 || settling) break;
     }
     // The springs' rests moved by how far each edge is off.
-    edges.forEach(([a, b], k) => (multipliers[k] += spring[k] * ((len(sub(p[b], p[a])) - lengths[k]) / lengths[k])));
+    edges.forEach(([a, b], k) => {
+      if (!give?.[k]) multipliers[k] += spring[k] * ((len(sub(p[b], p[a])) - lengths[k]) / lengths[k]);
+    });
     if (strainNow() <= settled) {
       round++;
       break;

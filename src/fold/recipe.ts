@@ -13,6 +13,7 @@ import { sheetOf, startFrame } from './sheets';
 import { keepIn, tape } from './tape';
 import { frontUp, sideOf } from './geometry2d';
 import { applyOp, lastFold, lineOf, reopened, select, type At, type BendGoal, type Faces, type LineSpec, type Op } from './ops';
+import { presetOp, type Preset } from './presets';
 import type { FoldFrame, Mark, OrigamiModel, Sheet, Step, Vec2, Vec3 } from './types';
 
 /**
@@ -301,6 +302,20 @@ export class Recipe {
   }
 
   /**
+   * A named fold made as the Studio's Named fold makes it (`fold/presets.ts`), from the same picks: points on the
+   * table. Recorded as the collapse it works out, so it replays and opens in the Studio like one.
+   */
+  preset(step: { title: string; text?: string; kind?: Step['kind'] }, preset: Preset): this {
+    try {
+      const op = presetOp(this.build(), preset);
+      return this.push({ title: step.title, text: step.text, kind: step.kind ?? 'fold' }, applyOp(this.build(), op).frame, op);
+    } catch (e) {
+      if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
+      throw e;
+    }
+  }
+
+  /**
    * A swivel fold: a flap swings round flat on the table about a point on its hinge, `degrees` anticlockwise as
    * seen from above. The wedge of paper the flap swings across folds into a pleat: a new crease where the hinge
    * ends up, and one halfway back to the old hinge, the other way (the gusset). The flap keeps its own hinge,
@@ -458,13 +473,19 @@ export class Recipe {
 
   /**
    * Pops the model up about a point, creases from it rising along `rays` (see `radial`), passing through the
-   * shapes `via` gives on the way. Nothing can be folded after.
+   * shapes `via` gives on the way. With `only`, just the faces it picks (by their centre on the sheet) pop up, and
+   * the rest (another sheet) stay as they lie. Nothing can be folded after.
    */
-  popUp(step: { title: string; text?: string }, centre: At, rays: Ray[], via?: Ray[][]): this {
+  popUp(step: { title: string; text?: string }, centre: At, rays: Ray[], via?: Ray[][], only?: (centre: Vec2) => boolean): this {
     try {
-      if (!via?.length) return this.push({ ...step, kind: 'pose' }, radial(this.current, this.where(centre), rays), { op: 'popUp', centre, rays });
+      const test = only && recorder(only);
+      if (!via?.length) {
+        const frame = radial(this.current, this.where(centre), rays, test);
+        return this.push({ ...step, kind: 'pose' }, frame, { op: 'popUp', centre, rays, ...(test && { only: test.faces() }) });
+      }
+      if (test) for (const face of this.current.faces_vertices) test(face.map((v) => this.current.vertices_paper[v]));
       // Made as replaying makes it, so the model and its file agree exactly.
-      const op: Op = { op: 'popUp', centre, rays, via };
+      const op: Op = { op: 'popUp', centre, rays, via, ...(test && { only: test.faces() }) };
       const made = applyOp(this.build(), op);
       this.push({ ...step, kind: 'pose' }, made.frame, op);
       this.steps.at(-1)!.via = made.via;
@@ -484,7 +505,7 @@ export class Recipe {
    */
   bend(
     step: { title: string; text?: string },
-    bend: { flex: (centre: Vec2) => boolean; anchor: Vec2; goals: BendGoal[]; mesh?: number; lines?: [Vec2, Vec2][]; inflate?: number; free?: boolean; stages?: number },
+    bend: { flex: (centre: Vec2) => boolean; anchor: Vec2; goals: BendGoal[]; mesh?: number; lines?: [Vec2, Vec2][]; crumple?: Vec2[][]; inflate?: number; free?: boolean; stages?: number },
   ): this {
     const test = recorder(bend.flex);
     for (const face of this.current.faces_vertices) test(face.map((v) => this.current.vertices_paper[v]));
@@ -495,6 +516,7 @@ export class Recipe {
       goals: bend.goals,
       ...(bend.mesh !== undefined && { mesh: bend.mesh }),
       ...(bend.lines?.length && { lines: bend.lines }),
+      ...(bend.crumple?.length && { crumple: bend.crumple }),
       ...(bend.inflate && { inflate: bend.inflate }),
       ...(bend.free && { free: true }),
       ...(bend.stages && { stages: bend.stages }),

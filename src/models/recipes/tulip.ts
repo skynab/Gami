@@ -41,16 +41,41 @@ export function tulip() {
   petal(-1, 'Fold up a petal', 'Fold the left corner up, so it points up just to the left of the top point.');
   petal(1, 'Fold up the other petal', 'And the right corner, to match. That’s the blossom.');
 
-  // The stem: narrowed into a long kite, folded in half both ways, then the stem pulled out of the leaf.
+  leafyStem(r, stem, 10);
+
+  // Stand the stem up straight, and put the blossom on top.
+  r.move({ title: 'Stand the stem up', text: 'Turn it so the stem is upright and the leaf leans out.' }, stem, { degrees: -45 });
   const h = 0.75;
-  const [sx, sz] = r.where(paper(10, 0));
+  const tip = r.where(paper(10 - h, h));
+  const bottom = r.where(paper(0, 0));
+  const pts = toFlat(r.current)
+    .filter((f) => blossom(f.paper[0]))
+    .flatMap((f) => f.world);
+  const cx = (Math.min(...pts.map((p) => p[0])) + Math.max(...pts.map((p) => p[0]))) / 2;
+  const cz = (Math.min(...pts.map((p) => p[1])) + Math.max(...pts.map((p) => p[1]))) / 2;
+  const sink = 0.08;
+  r.move({ title: 'Put the blossom on the stem', text: 'Slide the blossom onto the top of the stem.' }, blossom, {
+    to: table(tip[0] + cx - bottom[0], tip[1] + sink + cz - bottom[1]),
+  });
+  return r.build();
+}
+
+/**
+ * The flat tulip's stem with a leaf, from a square 1.5 across whose sheet origin is (`o`, 0), turned to a diamond:
+ * narrowed into a long kite, folded in half both ways, then the stem pulled out of the leaf. Shared with the
+ * sunflower.
+ */
+export function leafyStem(r: Recipe, stem: (c: Vec2) => boolean, o: number) {
+  const d = Math.SQRT1_2;
+  const h = 0.75;
+  const [sx, sz] = r.where(paper(o, 0));
   const B: Vec2 = [sx, sz + 2 * h * d];
-  r.crease(paper(10 - h, -h), paper(10 + h, h), { title: 'Crease the stem square', text: 'Fold the green square’s left corner to its right corner, then unfold.', only: stem });
-  r.onto(paper(10 - h, -h), table(sx, B[1] - 2 * h), { title: 'Fold the lower edges in', text: 'Fold the lower left edge to the centre crease…', only: stem })
-    .onto(paper(10 + h, h), table(sx, B[1] - 2 * h), { title: 'Fold the lower edges in', text: '…and the lower right edge. A kite.', only: stem });
+  r.crease(paper(o - h, -h), paper(o + h, h), { title: 'Crease the stem square', text: 'Fold the green square’s left corner to its right corner, then unfold.', only: stem });
+  r.onto(paper(o - h, -h), table(sx, B[1] - 2 * h), { title: 'Fold the lower edges in', text: 'Fold the lower left edge to the centre crease…', only: stem })
+    .onto(paper(o + h, h), table(sx, B[1] - 2 * h), { title: 'Fold the lower edges in', text: '…and the lower right edge. A kite.', only: stem });
   // The kite's side corners, a tan 22.5° of the way along the upper edges from the old side corners.
   const t = Math.tan(Math.PI / 8);
-  const V = r.where(paper(10 - h + 2 * h * t, -h));
+  const V = r.where(paper(o - h + 2 * h * t, -h));
   const reach = Math.hypot(V[0] - B[0], V[1] - B[1]);
   r.onto(table(...V), table(sx, B[1] - reach), { title: 'Narrow it again', text: 'Fold the lower edges to the centre again…', only: stem }).onto(
     table(2 * sx - V[0], V[1]),
@@ -71,21 +96,7 @@ export function tulip() {
   r.collapse(
     { title: 'Pull out the stem', text: 'Pull the thin inner point out and up, away from the leaf, and press it flat at the bottom.', kind: 'reverse' },
     [{ through: [table(sx, sz), table(sx + Math.sin(lean), sz - Math.cos(lean))], kind: 'inside', only: stem }],
-    paper(10.3, -0.7),
+    paper(o + 0.3, -0.7),
   );
 
-  // Stand the stem up straight, and put the blossom on top.
-  r.move({ title: 'Stand the stem up', text: 'Turn it so the stem is upright and the leaf leans out.' }, stem, { degrees: -45 });
-  const tip = r.where(paper(10 - h, h));
-  const bottom = r.where(paper(0, 0));
-  const pts = toFlat(r.current)
-    .filter((f) => blossom(f.paper[0]))
-    .flatMap((f) => f.world);
-  const cx = (Math.min(...pts.map((p) => p[0])) + Math.max(...pts.map((p) => p[0]))) / 2;
-  const cz = (Math.min(...pts.map((p) => p[1])) + Math.max(...pts.map((p) => p[1]))) / 2;
-  const sink = 0.08;
-  r.move({ title: 'Put the blossom on the stem', text: 'Slide the blossom onto the top of the stem.' }, blossom, {
-    to: table(tip[0] + cx - bottom[0], tip[1] + sink + cz - bottom[1]),
-  });
-  return r.build();
 }

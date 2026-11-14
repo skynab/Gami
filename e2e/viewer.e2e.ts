@@ -78,6 +78,53 @@ test.describe('viewer', () => {
     await expect(page.getByRole('button', { name: 'Free', exact: true })).toHaveAttribute('aria-pressed', 'true');
   });
 
+  test('goes back a step by playing its fold in reverse', async ({ page }) => {
+    await page.goto('/learn/paper-plane?step=3');
+    const progress = page.getByRole('slider', { name: 'Progress through the steps' });
+    await expect(progress).toHaveValue('3');
+    await page.getByRole('button', { name: 'Previous step' }).click();
+    // Still step 3 while its fold undoes, then step 2, the paper where step 2 left it.
+    await expect.poll(async () => Number(await progress.inputValue())).toBeLessThan(3);
+    await expect(progress).toHaveValue('2');
+    await expect(stepHeading(page)).toHaveText(/^2\. /);
+    await expect(page).toHaveURL(/step=2/);
+  });
+
+  test('jogs the paper slowly from the thumb, and jumps from anywhere else on the track', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'Dragged with a mouse; a finger works the same, from a little further off the thumb.');
+    await page.goto('/learn/paper-plane?step=3');
+    const progress = page.getByRole('slider', { name: 'Progress through the steps' });
+    await expect(progress).toHaveValue('3');
+    // The thumb's centre runs from 8px in at either end (it's 16px wide); paper-plane has 13 steps.
+    const box = (await progress.boundingBox())!;
+    const left = box.x + 8;
+    const width = box.width - 16;
+    const y = box.y + box.height / 2;
+    const thumb = left + (3 / 13) * width;
+    await page.mouse.move(thumb, y);
+    await page.mouse.down();
+    await page.mouse.move(thumb + 100, y, { steps: 5 });
+    await page.mouse.up();
+    // 200px a step: half of step 4's fold.
+    await expect(progress).toHaveValue('3.5');
+    await expect(stepHeading(page)).toHaveText(/^4\. /);
+
+    await page.mouse.click(left + 0.9 * width, y);
+    expect(Number(await progress.inputValue())).toBeCloseTo(0.9 * 13, 1);
+  });
+
+  test('turns the grid on the table off, and remembers it', async ({ page, isMobile }) => {
+    await page.goto('/learn/basics');
+    if (isMobile) await page.getByRole('button', { name: 'View controls' }).click();
+    const grid = page.getByRole('button', { name: 'Table grid' });
+    await expect(grid).toHaveAttribute('aria-pressed', 'true');
+    await grid.click();
+    await expect(grid).toHaveAttribute('aria-pressed', 'false');
+    await page.reload();
+    if (isMobile) await page.getByRole('button', { name: 'View controls' }).click();
+    await expect(page.getByRole('button', { name: 'Table grid' })).toHaveAttribute('aria-pressed', 'false');
+  });
+
   test('marks where each part of a lesson starts, and goes there', async ({ page }) => {
     await page.goto('/learn/folding-geometry');
     await expect(page.getByRole('button', { name: /^Go to: / })).toHaveCount(8);

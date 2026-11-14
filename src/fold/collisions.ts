@@ -1,4 +1,4 @@
-import { poseAt, stepTransition, together, type Transition } from './animate';
+import { partedBy, poseAt, stepTransition, together, type Transition } from './animate';
 import { framesOf } from './frames';
 import { box, clearanceDepth, cornerKeys, overlapping } from './cross3d';
 import type { OrigamiModel } from './types';
@@ -28,6 +28,21 @@ export function crossings(model: OrigamiModel, samples = SAMPLES): Crossing[] {
     const t = stepTransition(model, k);
     for (const at of samples) for (const { faces, depth } of crossingAt(t, at)) out.push({ step: k, at, faces, depth });
   }
+  return out;
+}
+
+/** Points through a step to look for paper coming apart: often, as paper can part for a moment near the end. */
+const PART_SAMPLES = Array.from({ length: 19 }, (_, i) => (i + 1) / 20);
+
+/**
+ * Paper coming apart while each step animates, as the viewer draws it: for each step (1-based), how much further
+ * the same point of paper strays from where its corners are on average than it is at either end of the step
+ * (see `partedBy`). A sheet's width is 1.
+ */
+export function partings(model: OrigamiModel, samples = PART_SAMPLES): { step: number; apart: number }[] {
+  const frames = framesOf(model);
+  const out: { step: number; apart: number }[] = [];
+  for (let k = 1; k < frames.length; k++) out.push({ step: k, apart: partedBy(stepTransition(model, k), samples) });
   return out;
 }
 

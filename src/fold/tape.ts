@@ -2,7 +2,8 @@ import { FoldError, toFlat, unplaceLike, type FlatFace } from './fold';
 import { roundCoord } from './fold-format';
 import { frontUp } from './geometry2d';
 import { onFace } from './marks';
-import { inside } from './select';
+import type { At, Op } from './ops';
+import { inside, locate } from './select';
 import type { FoldFrame, Mark, Vec2 } from './types';
 export { stuckTogether, withTaped } from './stuck';
 
@@ -22,7 +23,7 @@ export const TAPE_OPACITY = 0.7;
 /** The outline on the table of a strip of tape from `from` to `to`, `width` wide. */
 export function tapeStrip(from: Vec2, to: Vec2, width = TAPE_WIDTH): Vec2[] {
   const length = Math.hypot(to[0] - from[0], to[1] - from[1]);
-  if (length < 1e-6) throw new FoldError('A piece of tape needs two different ends.');
+  if (length < 1e-6) throw new FoldError('tapeEnds');
   const across: Vec2 = [(-(to[1] - from[1]) / length) * (width / 2), ((to[0] - from[0]) / length) * (width / 2)];
   return [
     [from[0] + across[0], from[1] + across[1]],
@@ -45,8 +46,25 @@ export function tape(frame: FoldFrame, from: Vec2, to: Vec2, width = TAPE_WIDTH)
         return { side: frontUp(f.world, f.paper) ? 'front' : 'back', points: part.map((p) => toSheet(p).map(roundCoord) as Vec2), fill: true };
       }),
   );
-  if (!pieces.length) throw new FoldError('There’s no paper under that tape.');
+  if (!pieces.length) throw new FoldError('noPaperUnderTape');
   return { ...frame, faces_parent: undefined, tapes: [...(frame.tapes ?? []), { pieces }] };
+}
+
+/**
+ * Where on the table each strip a step lays runs, from the end it's laid from to the other, in the order they're
+ * laid: the paper doesn't move while it's taped, so the viewer can lay each strip along this as the step plays.
+ * Null when the step doesn't say: no op (an older file), or tape laid together with folds that move the paper.
+ */
+export function laidAlong(op: Op | undefined, before: FoldFrame): [Vec2, Vec2][] | null {
+  const isTape = (o: Op): o is Extract<Op, { op: 'tape' }> => o.op === 'tape';
+  const strips = op && isTape(op) ? [op] : op?.op === 'together' && op.ops.every(isTape) ? op.ops : null;
+  if (!strips) return null;
+  const where = (a: At): Vec2 => ('table' in a ? a.table : locate(before, a.paper));
+  try {
+    return strips.map((o) => [where(o.from), where(o.to)]);
+  } catch {
+    return null;
+  }
 }
 
 /** Points across a piece of tape, to tell whether any of it is showing. */

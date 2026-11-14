@@ -13,12 +13,13 @@ import {
   type Mesh,
 } from 'three';
 import { affine, poseAt, stepTransition, transition, type Transition } from '../fold/animate';
-import { toFlat } from '../fold/fold';
+import { stackLifts, type StackLifts } from '../fold/bend/stack';
+import { FoldError } from '../fold/fold';
 import { framesOf, LAYER_GAP, normal } from '../fold/frames';
-import { frontUp, joinedSegment } from '../fold/geometry2d';
+import { joinedSegment } from '../fold/geometry2d';
 import { MARK_COLOUR, MARK_WIDTH, marksUpTo, onFace } from '../fold/marks';
 import { sheetOf } from '../fold/sheets';
-import { TAPE_COLOUR, TAPE_OPACITY } from '../fold/tape';
+import { laidAlong, TAPE_COLOUR, TAPE_OPACITY } from '../fold/tape';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from '../fold/types';
 import { usePlayback } from '../state/playback';
 
@@ -28,7 +29,7 @@ import { usePlayback } from '../state/playback';
  * Stacked layers are drawn a little apart, so where a fold joins two of them a rounded bend closes the gap, in
  * the colour of the paper's outside there: seen from the side, it shows which layers are one piece.
  * Marks drawn on the paper ride on their faces, and a step that draws them draws them stroke by stroke. Tape
- * rides on its faces the same way, see-through, a step that lays it laying it strip by strip.
+ * rides on its faces the same way, see-through, a step that lays it laying each strip on from one end to the other.
  * Paper that bends is many small triangles: the edges between them (soft) get no lines, and it's shaded smoothly
  * across them. Where its stacked layers meet, they show in the order they were stacked (see LIFT).
  * Geometry is rebuilt when the step changes (folds add faces) and updated in place on every frame.
@@ -171,7 +172,7 @@ function build(t: Transition, model: OrigamiModel, k: number): Built {
   // Faces either side of a scissor cut aren't joined: no bend is drawn between them. The step's faces are its frame's.
   const frame = k ? model.steps[k - 1].frame : model.start;
   const ranks = stackRanks(model, k, t.faces.length);
-  const parts = bySheet.map((faces) => buildPart(t, faces, frame, ranks));
+  const parts = bySheet.map((faces) => buildPart(t, faces, frame, ranks?.lifts));
   const marks = buildMarks(t, model, k);
   const tape = buildTape(t, model, k);
   return {
@@ -180,7 +181,9 @@ function build(t: Transition, model: OrigamiModel, k: number): Built {
     tape: tape.geometry,
     update(s) {
       const pose = poseAt(t, s);
-      for (const p of parts) p.update(pose);
+      // Bending, the paper goes from the flat stack's order to that of what's still stacked (see `stackLifts`).
+      const bent = ranks?.bending ? Math.min(1, Math.max(0, s)) : 1;
+      for (const p of parts) p.update(pose, bent);
       marks.update(pose, s);
       tape.update(pose, s);
     },
@@ -223,7 +226,10 @@ function buildMarks(t: Transition, model: OrigamiModel, k: number): { geometry: 
   return onFaces(t, parts, turn, width, MARK_LIFT);
 }
 
-/** The tape on the paper by step k's end, its pieces on each face placed with it; tape the step lays appears as it plays. */
+/**
+ * The tape on the paper by step k's end, its pieces on each face placed with it. Tape the step lays goes on as it
+ * plays, each strip from one end to the other in its share of the step.
+ */
 function buildTape(t: Transition, model: OrigamiModel, k: number): { geometry: BufferGeometry; update(pose: Vec3[][], s: number): void } {
   const frameAt = (i: number) => (i ? model.steps[i - 1].frame : model.start);
   const tapes = frameAt(k).tapes ?? [];
@@ -237,16 +243,22 @@ function buildTape(t: Transition, model: OrigamiModel, k: number): { geometry: B
       t.faces.flatMap((face, f) => onFace(piece, face.paper).map((points) => ({ points, fill: true, front: piece.side === 'front', face: f, turn: turns[i] }))),
     ),
   );
-  return onFaces(t, parts, turn, 0, TAPE_LIFT);
+  // Where each of the step's strips runs; without that (an older file), each just appears at the end of its share.
+  const along = turn ? laidAlong(model.steps[k - 1].op, frameAt(k - 1)) : null;
+  return onFaces(t, parts, turn, 0, TAPE_LIFT, along?.length === turn ? along : undefined);
 }
 
 /**
  * Geometry for marks or tape on the paper's faces, `lift` off them: lines as strips `width` wide through their
- * points, fills as their outline filled in. The step's own (`turns` of them) appear one after another as it plays.
+ * points, fills as their outline filled in. The step's own (`turns` of them) appear one after another as it plays,
+ * each in an equal share of it: all at once at the end of its share, or, given the line on the table it runs
+ * along (`along`, one per turn), spreading over the paper along it from one end to the other.
  */
-function onFaces(t: Transition, parts: Drawn[], turn: number, width: number, lift: number): { geometry: BufferGeometry; update(pose: Vec3[][], s: number): void } {
-  // Vertices: a strip's two edges at each point, or a fill's corners.
-  const sizes = parts.map(({ points, fill }) => (fill ? points.length : points.length * 2));
+function onFaces(t: Transition, parts: Drawn[], turn: number, width: number, lift: number, along?: [Vec2, Vec2][]): { geometry: BufferGeometry; update(pose: Vec3[][], s: number): void } {
+  // Vertices: a strip's two edges at each point, or a fill's corners; one more for a fill cut short across the
+  // line it's laid along (a convex outline cut by a line gains at most one corner).
+  const laying = parts.map(({ fill, turn: at }) => (fill && at >= 0 && along?.[at]) || null);
+  const sizes = parts.map(({ points, fill }, i) => (fill ? points.length + (laying[i] ? 1 : 0) : points.length * 2));
   const starts = sizes.map((_, i) => sizes.slice(0, i).reduce((a, b) => a + b, 0));
   const total = sizes.reduce((a, b) => a + b, 0);
   const positions = new Float32Array(total * 3);
@@ -254,7 +266,7 @@ function onFaces(t: Transition, parts: Drawn[], turn: number, width: number, lif
   const index: number[] = [];
   parts.forEach(({ points, fill }, i) => {
     const first = starts[i];
-    const n = points.length;
+    const n = fill ? sizes[i] : points.length;
     if (fill) for (let j = 1; j < n - 1; j++) index.push(first, first + j, first + j + 1);
     else for (let j = 0; j < n - 1; j++) index.push(first + 2 * j, first + 2 * j + 1, first + 2 * j + 2, first + 2 * j + 2, first + 2 * j + 1, first + 2 * j + 3);
   });
@@ -266,13 +278,35 @@ function onFaces(t: Transition, parts: Drawn[], turn: number, width: number, lif
   return {
     geometry,
     update(pose, s) {
-      parts.forEach(({ points, fill, front, face, turn: at }, i) => {
-        const first = starts[i];
+      const placed = parts.map(({ points, front, face }) => {
         const up = scale(normal(pose[face]), front ? 1 : -1);
         const place = affine(t.faces[face].paper, pose[face]);
-        let pts = points.map((p) => add(place(p), scale(up, lift)));
+        return { up, pts: points.map((p) => add(place(p), scale(up, lift))) };
+      });
+      // How far along its line each corner of a strip being laid is, and how much of the line the strip covers
+      // paper on, so it's laid from where it first touches the paper: it can hang off an edge, where nothing holds it.
+      const spans = (along ?? []).map(() => [Infinity, -Infinity]);
+      const reach = placed.map(({ pts }, i) => {
+        const lay = laying[i];
+        if (!lay) return null;
+        const d: Vec2 = [lay[1][0] - lay[0][0], lay[1][1] - lay[0][1]];
+        // The table is x and z.
+        const a = pts.map((p) => p[0] * d[0] + p[2] * d[1]);
+        const span = spans[parts[i].turn];
+        span[0] = Math.min(span[0], ...a);
+        span[1] = Math.max(span[1], ...a);
+        return a;
+      });
+      parts.forEach(({ fill, turn: at }, i) => {
+        const first = starts[i];
+        const { up } = placed[i];
+        let { pts } = placed[i];
         // While this step plays, its marks appear in turn, each in an equal share of it.
-        if (at >= 0 && s * turn < at + 1) pts = pts.map(() => pts[0]);
+        const a = reach[i];
+        if (a) {
+          const [lo, hi] = spans[at];
+          pts = laidSoFar(pts, a, lo + (hi - lo) * (s * turn - at), sizes[i]);
+        } else if (at >= 0 && s * turn < at + 1) pts = pts.map(() => pts[0]);
         if (fill) {
           pts.forEach((p, j) => {
             positions.set(p, (first + j) * 3);
@@ -295,27 +329,44 @@ function onFaces(t: Transition, parts: Drawn[], turn: number, width: number, lif
   };
 }
 
-function buildPart(t: Transition, faceIndices: number[], frame: FoldFrame, ranks?: number[]): { part: Part; update(pose: ReturnType<typeof poseAt>): void; dispose(): void } {
+/**
+ * The part of a convex outline laid so far along a line, its corners `reach` along it: those up to `upTo`, as
+ * `size` corners (the last repeated to make up the number), or all at one point when none of it is laid yet.
+ */
+function laidSoFar(pts: Vec3[], reach: number[], upTo: number, size: number): Vec3[] {
+  const out: Vec3[] = [];
+  pts.forEach((p, j) => {
+    const next = (j + 1) % pts.length;
+    const [here, there] = [reach[j] - upTo, reach[next] - upTo];
+    if (here <= 0) out.push(p);
+    if ((here <= 0) !== (there <= 0)) out.push(lerp(p, pts[next], here / (here - there)));
+  });
+  return out.length ? [...out, ...Array<Vec3>(size - out.length).fill(out[out.length - 1])] : Array<Vec3>(size).fill(pts[0]);
+}
+
+function buildPart(t: Transition, faceIndices: number[], frame: FoldFrame, lifts?: StackLifts): { part: Part; update(pose: ReturnType<typeof poseAt>, bent: number): void; dispose(): void } {
   const { cuts } = frame;
   const tracks = faceIndices.map((i) => t.faces[i]);
   const corners = tracks.reduce((n, f) => n + f.paper.length, 0);
   const positions = new Float32Array(corners * 3);
   const normals = new Float32Array(corners * 3);
   const uvs = new Float32Array(corners * 2);
+  // How many places nearer the eye each corner's face is drawn, seen from its front and from its back (see LIFT).
   const rank = new Float32Array(corners);
+  const rankBack = new Float32Array(corners);
   const index: number[] = [];
   const { lines, smooth, softly } = softness(frame, faceIndices);
   const edgePositions = new Float32Array(lines.length * 6);
-  // Each line drawn as near the eye as its face's side facing it (see LIFT).
-  const edgeRanks = Float32Array.from(lines.flatMap(([a]) => [ranks?.[faceIndices[a]] ?? 0, ranks?.[faceIndices[a]] ?? 0]));
+  // Each line drawn as near the eye as its face's side facing it.
+  const edgeRanks = new Float32Array(lines.length * 2);
+  const edgeRanksBack = new Float32Array(lines.length * 2);
   const edgeNormals = new Float32Array(lines.length * 6);
 
   let base = 0;
-  tracks.forEach((f, a) => {
+  tracks.forEach((f) => {
     f.paper.forEach(([u, v], i) => {
       uvs[(base + i) * 2] = u + 0.5;
       uvs[(base + i) * 2 + 1] = v + 0.5;
-      rank[base + i] = ranks?.[faceIndices[a]] ?? 0;
     });
     // Faces are convex (straight folds of a convex sheet), so a fan triangulates them.
     for (let i = 1; i < f.paper.length - 1; i++) index.push(base, base + i, base + i + 1);
@@ -408,15 +459,39 @@ function buildPart(t: Transition, faceIndices: number[], frame: FoldFrame, ranks
   surface.setAttribute('normal', new BufferAttribute(normals, 3));
   surface.setAttribute('uv', new BufferAttribute(uvs, 2));
   surface.setAttribute('rank', new BufferAttribute(rank, 1));
+  surface.setAttribute('rankBack', new BufferAttribute(rankBack, 1));
   surface.setIndex(index);
   const edges = new BufferGeometry();
   edges.setAttribute('position', new BufferAttribute(edgePositions, 3));
   edges.setAttribute('rank', new BufferAttribute(edgeRanks, 1));
+  edges.setAttribute('rankBack', new BufferAttribute(edgeRanksBack, 1));
   edges.setAttribute('faceNormal', new BufferAttribute(edgeNormals, 3));
+
+  // The places each face is drawn nearer the eye, `bent` of the way from the flat stack's order (its layer from
+  // one side, less its layer from the other) to its place in what it's still stacked with.
+  let ranked = -1;
+  const rankFaces = (bent: number) => {
+    if (!lifts || bent === ranked) return;
+    ranked = bent;
+    const from = (f: number, back: boolean) => (1 - bent) * (back ? -lifts.layer[f] : lifts.layer[f]) + bent * (back ? lifts.back[f] : lifts.front[f]);
+    let c = 0;
+    faceIndices.forEach((f, a) => {
+      for (let i = 0; i < tracks[a].paper.length; i++, c++) {
+        rank[c] = from(f, false);
+        rankBack[c] = from(f, true);
+      }
+    });
+    lines.forEach(([a], e) => {
+      edgeRanks[2 * e] = edgeRanks[2 * e + 1] = from(faceIndices[a], false);
+      edgeRanksBack[2 * e] = edgeRanksBack[2 * e + 1] = from(faceIndices[a], true);
+    });
+    for (const attribute of [surface.attributes.rank, surface.attributes.rankBack, edges.attributes.rank, edges.attributes.rankBack]) attribute.needsUpdate = true;
+  };
 
   return {
     part: { surface, edges, bends },
-    update(pose) {
+    update(pose, bent) {
+      rankFaces(bent);
       let c = 0;
       const faceNormals = faceIndices.map((i) => normal(pose[i]));
       faceIndices.forEach((i, a) => {
@@ -537,50 +612,50 @@ function paperGrain(): CanvasTexture {
 }
 
 /**
- * For bent paper (step k's frame cut into triangles by a bend): each triangle's place in the stack it was bent from,
- * its layer, signed by which way up it lay there (minus if its back faced up). Undefined for paper that isn't bent.
+ * For bent paper (step k's frame cut into triangles by a bend): how each triangle is ranked against the paper it's
+ * stacked with (see `stackLifts`), and whether this is the step that bends it. Undefined for paper that isn't bent.
  */
-function stackRanks(model: OrigamiModel, k: number, faces: number): number[] | undefined {
+function stackRanks(model: OrigamiModel, k: number, faces: number): { lifts: StackLifts; bending: boolean } | undefined {
   const frames = framesOf(model);
   if (!k || !frames[k].soft?.length) return undefined;
   let b = k;
   while (b > 1 && frames[b - 1].soft?.length) b--;
   const parent = model.steps[b - 1].via?.[0]?.faces_parent;
   const before = frames[b - 1];
-  if (!parent || parent.length !== faces || !before.faces_layer) return undefined;
+  if (!parent || parent.length !== faces || frames[k].faces_vertices.length !== faces || !before.faces_layer) return undefined;
   try {
-    const flat = toFlat(before);
-    return parent.map((f) => (frontUp(flat[f].world, flat[f].paper) ? 1 : -1) * flat[f].layer);
-  } catch {
+    return { lifts: stackLifts(before, parent, frames[k]), bending: b === k };
+  } catch (e) {
     // Bent from paper that wasn't lying flat: no stack to draw it in the order of.
-    return undefined;
+    if (e instanceof FoldError) return undefined;
+    throw e;
   }
 }
 
 /**
  * Stacked layers of bent paper are kept apart at their triangles' corners, but between them, and where a fold wraps
  * round other layers, they can pass a millimetre or two into one another (see docs/bending-plan.md), which would show
- * as specks of one through the other. So each is drawn nearer the eye by its place in the stack (`rank`) times this,
- * along the line of sight, which changes only which shows where they meet: the side that faced up in the stack in the
- * stack's order, the other side in reverse. Bent paper only: a flat stack's layers are drawn apart as it is.
+ * as specks of one through the other. So each is drawn nearer the eye, or further, by its place among the paper it's
+ * stacked with (`rank` seen from its front, `rankBack` from its back) times this, along the line of sight, which
+ * changes only which shows where they meet. Bent paper only: a flat stack's layers are drawn apart as it is.
  */
 const LIFT = 4 * LAYER_GAP;
-const lift = (sign: number) => (shader: { vertexShader: string }) => {
+const lift = (rank: string) => (shader: { vertexShader: string }) => {
   shader.vertexShader = shader.vertexShader
-    .replace('#include <common>', '#include <common>\nattribute float rank;')
-    .replace('#include <project_vertex>', `#include <project_vertex>\nmvPosition.xyz *= 1.0 - rank * ${(sign * LIFT).toFixed(6)} / max(length(mvPosition.xyz), 1e-6);\ngl_Position = projectionMatrix * mvPosition;`);
+    .replace('#include <common>', `#include <common>\nattribute float ${rank};`)
+    .replace('#include <project_vertex>', `#include <project_vertex>\nmvPosition.xyz *= 1.0 - ${rank} * ${LIFT.toFixed(6)} / max(length(mvPosition.xyz), 1e-6);\ngl_Position = projectionMatrix * mvPosition;`);
 };
-const liftFront = lift(1);
-const liftBack = lift(-1);
+const liftFront = lift('rank');
+const liftBack = lift('rankBack');
 /** Lines take their face's lift, by which of its sides faces the eye. */
 const liftLines = (shader: { vertexShader: string }) => {
   shader.vertexShader = shader.vertexShader
-    .replace('#include <common>', '#include <common>\nattribute float rank;\nattribute vec3 faceNormal;')
+    .replace('#include <common>', '#include <common>\nattribute float rank;\nattribute float rankBack;\nattribute vec3 faceNormal;')
     .replace(
       '#include <project_vertex>',
-      `#include <project_vertex>\nfloat facing = dot(normalMatrix * faceNormal, -mvPosition.xyz) >= 0.0 ? 1.0 : -1.0;\nmvPosition.xyz *= 1.0 - facing * rank * ${LIFT.toFixed(6)} / max(length(mvPosition.xyz), 1e-6);\ngl_Position = projectionMatrix * mvPosition;`,
+      `#include <project_vertex>\nfloat lifted = dot(normalMatrix * faceNormal, -mvPosition.xyz) >= 0.0 ? rank : rankBack;\nmvPosition.xyz *= 1.0 - lifted * ${LIFT.toFixed(6)} / max(length(mvPosition.xyz), 1e-6);\ngl_Position = projectionMatrix * mvPosition;`,
     );
 };
-const liftLinesKey = () => 'lift-lines';
-const liftFrontKey = () => 'lift-front';
-const liftBackKey = () => 'lift-back';
+const liftLinesKey = () => 'lift-lines-by-side';
+const liftFrontKey = () => 'lift-front-by-side';
+const liftBackKey = () => 'lift-back-by-side';
