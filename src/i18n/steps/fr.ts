@@ -2731,8 +2731,6 @@ export const fr: Record<string, string> = {
     "Replie son bout vers le bas le long de la base des cornes.",
   "Fold the band up along the bottom, lip and all, for the back of the brim.":
     "Plie la bande vers le haut le long du bas, rebord compris, pour l’arrière du bord du casque.",
-  "Turn it back over. Open the bottom to wear it.":
-    "Retourne-le à nouveau. Ouvre le bas pour le porter.",
   "Tuck up the belly":
     "Rentrer le ventre",
   "Push the paper between the snips up inside, between the layers, leaving four legs.":
@@ -2749,4 +2747,8 @@ export const fr: Record<string, string> = {
     "L’ouvrir et le poser debout",
   "Open the bottom, pushing the front and back apart, and stand the hat on its brim. Put it on. Arr!":
     "Ouvrez le bas en écartant l’avant et l’arrière, et posez le chapeau debout sur son bord. Mettez-le. Arrr !",
+  "Turn it back over.":
+    "Retourne-le à nouveau.",
+  "Open the bottom, pushing the front and back apart, and stand the helmet on its brim. Done!":
+    "Ouvre le bas en écartant l’avant et l’arrière, et pose le casque debout sur son bord. C’est fini !",
 };

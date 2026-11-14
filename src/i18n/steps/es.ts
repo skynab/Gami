@@ -2731,8 +2731,6 @@ export const es: Record<string, string> = {
     "Dobla su punta de nuevo hacia abajo a lo largo de la base de los cuernos.",
   "Fold the band up along the bottom, lip and all, for the back of the brim.":
     "Dobla la banda hacia arriba por la parte de abajo, con el borde incluido, para la parte de atrás del ala.",
-  "Turn it back over. Open the bottom to wear it.":
-    "Vuelve a darle la vuelta. Abre la parte de abajo para ponértelo.",
   "Tuck up the belly":
     "Mete la barriga hacia dentro",
   "Push the paper between the snips up inside, between the layers, leaving four legs.":
@@ -2749,4 +2747,8 @@ export const es: Record<string, string> = {
     "Ábrelo y ponlo de pie",
   "Open the bottom, pushing the front and back apart, and stand the hat on its brim. Put it on. Arr!":
     "Abre la parte de abajo, separando la parte delantera de la trasera, y pon el sombrero de pie sobre su ala. Póntelo. ¡Arrr!",
+  "Turn it back over.":
+    "Vuelve a darle la vuelta.",
+  "Open the bottom, pushing the front and back apart, and stand the helmet on its brim. Done!":
+    "Abre la parte de abajo, separando la parte delantera de la trasera, y pon el casco de pie sobre su ala. ¡Listo!",
 };

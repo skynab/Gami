@@ -2731,8 +2731,6 @@ export const ja: Record<string, string> = {
     "その先を、角のつけねにそって折りもどします。",
   "Fold the band up along the bottom, lip and all, for the back of the brim.":
     "下のところで帯を、ふちごと折りあげて、つばのうしろにします。",
-  "Turn it back over. Open the bottom to wear it.":
-    "もう一度裏返します。下を開けば、かぶれます。",
   "Tuck up the belly":
     "おなかを中に折りこむ",
   "Push the paper between the snips up inside, between the layers, leaving four legs.":
@@ -2749,4 +2747,8 @@ export const ja: Record<string, string> = {
     "開いて立たせる",
   "Open the bottom, pushing the front and back apart, and stand the hat on its brim. Put it on. Arr!":
     "下を開いて前とうしろをはなし、ぼうしをつばで立たせます。かぶりましょう。アーッ！",
+  "Turn it back over.":
+    "もう一度裏返します。",
+  "Open the bottom, pushing the front and back apart, and stand the helmet on its brim. Done!":
+    "下を開いて前とうしろをはなし、かぶとをつばで立たせます。できあがり！",
 };
