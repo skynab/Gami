@@ -1028,8 +1028,6 @@ export const fr: Record<string, string> = {
     "Sors le cou",
   "The same with the right point, for the neck.":
     "Pareil avec la pointe droite, pour le cou.",
-  "Push the tip of the neck down between its layers for the head. Hold the base of the neck and pull the tail gently: the wings flap!":
-    "Pousse le bout du cou entre ses couches pour faire la tête. Tiens la base du cou et tire doucement la queue : les ailes battent !",
   "Fold out an ear":
     "Sors une oreille",
   "Fold the loose point at the top left out a little to the side, for an ear.":
@@ -2733,4 +2731,8 @@ export const fr: Record<string, string> = {
     "Enfonce le milieu de la fraise et soulève ses bords, en pinçant chaque diagonale en arête et en rentrant les plis entre elles, pour qu’elle finisse en pointe en dessous, face rouge à l’extérieur.",
   "Set the leaves on top of the berry, their points between its corners. Your strawberry is ripe!":
     "Pose les feuilles sur la fraise, leurs pointes entre ses coins. Ta fraise est mûre !",
+  "Push the tip of the neck down between its layers for the head.":
+    "Pousse le bout du cou entre ses couches pour faire la tête.",
+  "Lift the wings apart into a V and stand the bird on its body. Hold the base of the neck and pull the tail gently: the wings flap!":
+    "Écarte les ailes en V et mets l’oiseau debout sur son corps. Tiens la base du cou et tire doucement la queue : les ailes battent !",
 };

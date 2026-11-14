@@ -1028,8 +1028,6 @@ export const ja: Record<string, string> = {
     "首を引き出す",
   "The same with the right point, for the neck.":
     "右の先も同じようにして、首にします。",
-  "Push the tip of the neck down between its layers for the head. Hold the base of the neck and pull the tail gently: the wings flap!":
-    "首の先を重なりのあいだに押しこんで、頭にします。首のつけねを持って、しっぽをそっと引くと、羽がぱたぱた動きます！",
   "Fold out an ear":
     "耳を折り出す",
   "Fold the loose point at the top left out a little to the side, for an ear.":
@@ -2733,4 +2731,8 @@ export const ja: Record<string, string> = {
     "イチゴのまん中をおし下げて、ふちを持ち上げます。ななめの折りすじをつまんで山にし、そのあいだの折りすじを内側におしこむと、下がとがって、赤い面が外になります。",
   "Set the leaves on top of the berry, their points between its corners. Your strawberry is ripe!":
     "葉をイチゴの上にのせて、葉の先をイチゴの角のあいだにむけます。イチゴがじゅくしました！",
+  "Push the tip of the neck down between its layers for the head.":
+    "首の先を重なりのあいだに押しこんで、頭にします。",
+  "Lift the wings apart into a V and stand the bird on its body. Hold the base of the neck and pull the tail gently: the wings flap!":
+    "羽をV字に開いて、鳥を体で立たせます。首のつけねを持って、しっぽをそっと引くと、羽がぱたぱた動きます！",
 };

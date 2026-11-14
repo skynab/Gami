@@ -1028,8 +1028,6 @@ export const es: Record<string, string> = {
     "Saca el cuello",
   "The same with the right point, for the neck.":
     "Lo mismo con la punta derecha, para el cuello.",
-  "Push the tip of the neck down between its layers for the head. Hold the base of the neck and pull the tail gently: the wings flap!":
-    "Empuja la punta del cuello hacia abajo entre sus capas para hacer la cabeza. Sujeta la base del cuello y tira suavemente de la cola: ¡las alas aletean!",
   "Fold out an ear":
     "Saca una oreja",
   "Fold the loose point at the top left out a little to the side, for an ear.":
@@ -2733,4 +2731,8 @@ export const es: Record<string, string> = {
     "Empuja hacia abajo el centro de la fresa y levanta sus bordes, pellizcando cada diagonal en una arista y metiendo hacia dentro los pliegues entre ellas, para que acabe en punta por debajo, con el lado rojo por fuera.",
   "Set the leaves on top of the berry, their points between its corners. Your strawberry is ripe!":
     "Coloca las hojas encima de la fresa, con las puntas entre sus esquinas. ¡Tu fresa está madura!",
+  "Push the tip of the neck down between its layers for the head.":
+    "Empuja la punta del cuello hacia abajo entre sus capas para hacer la cabeza.",
+  "Lift the wings apart into a V and stand the bird on its body. Hold the base of the neck and pull the tail gently: the wings flap!":
+    "Separa las alas en forma de V y pon el pájaro de pie sobre su cuerpo. Sujeta la base del cuello y tira suavemente de la cola: ¡las alas aletean!",
 };

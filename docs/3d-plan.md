@@ -68,3 +68,9 @@ the rose, the sunflower, the lizard, the cactus, the peacock and the lessons are
 - **The water bomb**: blow it up too, or leave it flat beside the balloon?
 - **Planes**: they count as 3D, as their wings end opened. Keep them in the 3D filter, or should "3D" mean models that
   stand up as objects? If the latter, the rule (and the model check) needs a sharper test than "not flat at the end".
+
+## Progress
+
+| Model | Status |
+|---|---|
+| Flapping bird | Done (13 November): a last step spreads the wings into a V, 50° either way, and stands the bird on its body (`assemble`, one piece bent and posed). The wings can only spread from above the highest of the neck's and tail's paper, which lies between them low down, joined to them along their edges; below that, rigid paper would tear. So the V opens partway up the wings, about two fifths of the way from the body to the tips. |
