@@ -11,6 +11,9 @@ import type { FoldFrame, Vec2, Vec3 } from './types';
  * the point `from` on the table to `to`, the table's +x to `x` and its up to `up`. Everything is worked out
  * from the paper's last flat state, so a later step can move a piece again or add more. A face goes with the
  * last piece that picks it; faces no piece picks stay as they lie. Nothing can be folded afterwards.
+ *
+ * After a pose that isn't flat (a pop-up), pieces can still be picked up and set down, but not bent: a sheet left
+ * flat beside a popped one, say, set on top of it.
  */
 export interface Piece {
   only: (paper: Vec2[]) => boolean;
@@ -30,7 +33,8 @@ export interface Pose {
  * as thick as the paper there, rather than stacked by layer. Pieces can't be bent then.
  */
 export function assemble(base: FoldFrame, pieces: Piece[], { settled = false } = {}): FoldFrame {
-  toFlat(base);
+  const flat = base.vertices_coords.every((p) => Math.abs(p[1]) <= 1e-6);
+  if (flat || settled || pieces.some((p) => p.bends?.length)) toFlat(base);
   const pieceOf = (paper: Vec2[]) => pieces.findLastIndex((p) => p.only(paper));
   // Each piece's bends turn only the faces it has, so a piece placed again later isn't bent by its old bends.
   const held = new Set(base.faces_vertices.map((face) => pieceOf(face.map((v) => base.vertices_paper[v]))));

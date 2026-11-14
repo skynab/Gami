@@ -595,7 +595,7 @@ export interface Ray {
  * straight up: the popped surface never stands past upright, so copies of it raised by different amounts
  * never cross, where gaps measured off each sector would cross in its valleys.
  */
-export function radial(frame: FoldFrame, apex: Vec2, rays: Ray[]): FoldFrame {
+export function radial(frame: FoldFrame, apex: Vec2, rays: Ray[], only?: (paper: Vec2[]) => boolean): FoldFrame {
   const dir = ({ azimuth, elevation, heading = azimuth }: Ray): Vec3 => [Math.cos(elevation) * Math.cos(heading), Math.sin(elevation), Math.cos(elevation) * Math.sin(heading)];
   const n = rays.length;
   for (let k = 0; k < n; k++) {
@@ -606,8 +606,12 @@ export function radial(frame: FoldFrame, apex: Vec2, rays: Ray[]): FoldFrame {
       throw new FoldError('creasesStretch');
     }
   }
-  // Cut every face along each ray's line, so each piece lies in one sector.
-  let pieces: (FlatFace & { source: number })[] = toFlat(frame).map((f, i) => ({ ...f, parent: i, source: i }));
+  // Cut every face along each ray's line, so each piece lies in one sector. Faces `only` leaves out (another sheet
+  // beside the one popping up) stay as they lie, uncut.
+  const all = toFlat(frame).map((f, i) => ({ ...f, parent: i, source: i }));
+  const popping = (f: FlatFace) => !only || only(f.paper);
+  const still = all.filter((f) => !popping(f));
+  let pieces: (FlatFace & { source: number })[] = all.filter(popping);
   for (const r of rays) {
     const line = { p: apex, d: [Math.cos(r.azimuth), Math.sin(r.azimuth)] as Vec2 };
     pieces = pieces.flatMap((p) => {
@@ -644,7 +648,15 @@ export function radial(frame: FoldFrame, apex: Vec2, rays: Ray[]): FoldFrame {
       return vertices_coords.push([0, 1, 2].map((c) => (c === 0 ? apex[0] : c === 2 ? apex[1] : 0) + a * da[c] + b * db[c] + rise * up[c]) as Vec3) - 1;
     });
   });
-  return { vertices_paper, vertices_coords, faces_vertices, faces_parent: pieces.map((p) => p.parent) };
+  for (const p of still) {
+    faces_vertices.push(
+      p.world.map((w, j) => {
+        vertices_paper.push(p.paper[j]);
+        return vertices_coords.push([w[0], p.layer * LAYER_GAP, w[1]]) - 1;
+      }),
+    );
+  }
+  return { vertices_paper, vertices_coords, faces_vertices, faces_parent: [...pieces, ...still].map((p) => p.parent) };
 }
 
 

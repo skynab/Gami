@@ -473,13 +473,19 @@ export class Recipe {
 
   /**
    * Pops the model up about a point, creases from it rising along `rays` (see `radial`), passing through the
-   * shapes `via` gives on the way. Nothing can be folded after.
+   * shapes `via` gives on the way. With `only`, just the faces it picks (by their centre on the sheet) pop up, and
+   * the rest (another sheet) stay as they lie. Nothing can be folded after.
    */
-  popUp(step: { title: string; text?: string }, centre: At, rays: Ray[], via?: Ray[][]): this {
+  popUp(step: { title: string; text?: string }, centre: At, rays: Ray[], via?: Ray[][], only?: (centre: Vec2) => boolean): this {
     try {
-      if (!via?.length) return this.push({ ...step, kind: 'pose' }, radial(this.current, this.where(centre), rays), { op: 'popUp', centre, rays });
+      const test = only && recorder(only);
+      if (!via?.length) {
+        const frame = radial(this.current, this.where(centre), rays, test);
+        return this.push({ ...step, kind: 'pose' }, frame, { op: 'popUp', centre, rays, ...(test && { only: test.faces() }) });
+      }
+      if (test) for (const face of this.current.faces_vertices) test(face.map((v) => this.current.vertices_paper[v]));
       // Made as replaying makes it, so the model and its file agree exactly.
-      const op: Op = { op: 'popUp', centre, rays, via };
+      const op: Op = { op: 'popUp', centre, rays, via, ...(test && { only: test.faces() }) };
       const made = applyOp(this.build(), op);
       this.push({ ...step, kind: 'pose' }, made.frame, op);
       this.steps.at(-1)!.via = made.via;

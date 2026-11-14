@@ -119,7 +119,7 @@ export type Op =
    */
   | { op: 'bend'; flex: Faces; anchor: { paper: Vec2 }; goals: BendGoal[]; mesh?: number; lines?: [Vec2, Vec2][]; crumple?: Vec2[][]; inflate?: number; free?: boolean; stages?: number }
   /** `via`: the rays of shapes it passes through on the way, from flat, so it rises as one rather than each piece its own way. */
-  | { op: 'popUp'; centre: At; rays: Ray[]; via?: Ray[][] }
+  | { op: 'popUp'; centre: At; rays: Ray[]; via?: Ray[][]; only?: Faces }
   /** Draws on the paper, leaving it where it is: a face, say. */
   | { op: 'draw'; marks: Mark[] }
   /** A scissor cut along a segment, through every layer it crosses, the top N, or the faces `only` picks. */
@@ -264,6 +264,7 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
         centre: at(o.centre, `${path}.centre`),
         rays: rays(o.rays, `${path}.rays`),
         ...opt(o, 'via', (v, p) => list(v, p, rays), path),
+        ...opt(o, 'only', (v, p) => faces(v, p, 0), path),
       };
     }
     case 'draw':
@@ -758,7 +759,8 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
     }
     case 'popUp': {
       const centre = where(op.centre);
-      const shapes = [...(op.via ?? []), op.rays].map((rays) => radial(frame, centre, rays));
+      const only = test(op.only);
+      const shapes = [...(op.via ?? []), op.rays].map((rays) => radial(frame, centre, rays, only));
       if (shapes.length === 1) return { frame: shapes[0] };
       // Every shape has the same pieces: after the first, each comes from the same piece of the shape before.
       const [first, ...rest] = shapes;

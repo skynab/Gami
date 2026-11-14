@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { basics } from '../models/basics';
+import { pyramidRays, SLOPE } from '../models/recipes/pyramid';
 import { fold, FoldError } from './fold';
 import { lineOnto } from './geometry2d';
 import { paper, Recipe, table } from './recipe';
@@ -212,5 +213,27 @@ describe('radial', () => {
     expect(corner).toBeDefined();
     // A heading that doesn't keep the angle between neighbouring creases would stretch the paper.
     expect(() => radial(square(), [0, 0], quarters((k) => (k ? (k * Math.PI) / 2 : 0.3)))).toThrow(FoldError);
+  });
+
+  it('leaves the faces `only` doesn’t pick where they lie', () => {
+    const two = new Recipe({
+      id: 't',
+      title: 't',
+      sheets: [
+        { size: [1, 1], front: '#fff', back: '#000', at: [0, 0] },
+        { size: [0.5, 0.5], front: '#fff', back: '#000', origin: [10, 0], at: [2, 0] },
+      ],
+    }).current;
+    const popped = radial(two, [0, 0], pyramidRays(SLOPE), (poly) => poly.every(([u]) => u < 5));
+    const corners = popped.vertices_coords.filter((_, v) => popped.vertices_paper[v][0] > 5);
+    // The small square: untouched, flat at its place, not cut along the creases.
+    expect(corners).toHaveLength(4);
+    for (const [x, y, z] of corners) {
+      expect(Math.abs(x - 2)).toBeCloseTo(0.25, 9);
+      expect(Math.abs(z)).toBeCloseTo(0.25, 9);
+      expect(y).toBe(0);
+    }
+    // The big one popped up: its corners dropped below its middle.
+    expect(Math.min(...popped.vertices_coords.filter((_, v) => popped.vertices_paper[v][0] < 5).map((p) => p[1]))).toBeLessThan(-0.1);
   });
 });

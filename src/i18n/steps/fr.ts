@@ -2671,34 +2671,14 @@ export const fr: Record<string, string> = {
     "Dessiner un œil",
   "Draw an eye on the head. Your squirrel is keeping watch!":
     "Dessine un œil sur la tête. Ton écureuil monte la garde !",
-  "Start with the big square red side up, a corner pointing towards you.":
-    "Commence avec le grand carré face rouge vers le haut, un coin pointé vers toi.",
-  "Fold the left and right corners behind on a slant, from a little way in at the top, so the berry narrows towards the bottom.":
-    "Plie les coins gauche et droit derrière en biais, en partant un peu à l’intérieur en haut, pour que la fraise s’affine vers le bas.",
-  "Fold the top point behind, level with where the side folds start.":
-    "Plie la pointe du haut derrière, au niveau où commencent les plis des côtés.",
-  "Blunt the bottom":
-    "Émousser le bas",
-  "Fold the bottom point behind, just a little.":
-    "Plie la pointe du bas derrière, juste un peu.",
-  "Round the corners":
-    "Arrondir les coins",
-  "Fold the four corners round the sides behind, just a little, to round the berry.":
-    "Plie un peu derrière les quatre coins des côtés, pour arrondir la fraise.",
   "Fold the leaves’ corners in":
     "Plier les coins des feuilles",
-  "Turn to the small green square, light side up. Fold all four corners to the middle.":
-    "Passe au petit carré vert, face claire vers le haut. Plie les quatre coins jusqu’au centre.",
   "Fold out the leaves":
     "Déplier les feuilles",
   "Fold each point back out, past the middle of its edge: eight pointed leaves.":
     "Replie chaque pointe vers l’extérieur, au-delà du milieu de son bord : huit feuilles pointues.",
   "Put the leaves on":
     "Poser les feuilles",
-  "Lay the leaves over the top of the berry.":
-    "Pose les feuilles sur le haut de la fraise.",
-  "Draw little seeds all over the berry. Ready to eat!":
-    "Dessine de petites graines sur toute la fraise. Prête à croquer !",
   "Orange side up, cut two snips up from the bottom edge of the big square and two down from the top edge, a little in from each side.":
     "Face orange vers le haut, fais deux entailles vers le haut depuis le bord du bas du grand carré, et deux vers le bas depuis le bord du haut, un peu à l’intérieur de chaque côté.",
   "Fold the bellies behind":
@@ -2733,4 +2713,24 @@ export const fr: Record<string, string> = {
     "Glisse la tête sur l’avant du corps, tournée vers l’avant.",
   "Tuck the tail’s wide end between the back legs, so it sticks out behind. Your fox is ready to explore!":
     "Glisse le bout large de la queue entre les pattes arrière, pour qu’elle dépasse derrière. Ton renard est prêt à explorer !",
+  "Pink side up, fold all four corners over a little way, so the berry’s rim is rounder.":
+    "Face rose vers le haut, replie un peu les quatre coins, pour que le bord de la fraise soit plus rond.",
+  "Turn the berry over":
+    "Retourner la fraise",
+  "Turn the berry over, red side up.":
+    "Retourne la fraise, face rouge vers le haut.",
+  "Draw little seeds on the red side, in rows either side of each diagonal crease.":
+    "Dessine de petites graines sur la face rouge, en rangées de part et d’autre de chaque pli en diagonale.",
+  "Turn it back":
+    "La retourner à nouveau",
+  "Turn the berry back over, pink side up.":
+    "Retourne de nouveau la fraise, face rose vers le haut.",
+  "Take the green square, light side up. Fold all four corners to the middle.":
+    "Prends le carré vert, face claire vers le haut. Plie les quatre coins jusqu’au centre.",
+  "Pop up the berry":
+    "Ouvrir la fraise",
+  "Push the berry’s middle down and lift its edges, pinching each diagonal into a ridge and pushing the creases between them inside, so it comes to a point underneath, red side out.":
+    "Enfonce le milieu de la fraise et soulève ses bords, en pinçant chaque diagonale en arête et en rentrant les plis entre elles, pour qu’elle finisse en pointe en dessous, face rouge à l’extérieur.",
+  "Set the leaves on top of the berry, their points between its corners. Your strawberry is ripe!":
+    "Pose les feuilles sur la fraise, leurs pointes entre ses coins. Ta fraise est mûre !",
 };

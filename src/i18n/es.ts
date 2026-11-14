@@ -215,7 +215,7 @@ export const es: Messages = {
     sunflower: { title: 'Girasol', blurb: 'Ocho pétalos amarillos alrededor de un centro marrón, sobre un tallo con una hoja, con tres cuadrados.' },
     lizard: { title: 'Lagartija', blurb: 'Una lagartija vista desde arriba, con las patas abiertas y una cola larga y fina, con dos cuadrados.' },
     squirrel: { title: 'Ardilla', blurb: 'Una ardilla sentada, con la cola peluda rizada sobre la espalda, con tres cuadrados.' },
-    strawberry: { title: 'Fresa', blurb: 'Una fresa roja y regordeta con una corona de hojas verdes y semillas dibujadas, con dos cuadrados.' },
+    strawberry: { title: 'Fresa', blurb: 'Una fresa en 3D, abierta con la punta hacia abajo y las semillas dibujadas, con una estrella de hojas verdes encima. Con dos cuadrados.' },
     'fox-3d': { title: 'Zorro de pie', blurb: 'Un zorro de pie sobre cuatro patas, en 3D, con la cola hacia atrás, con tres cuadrados y cuatro cortes.' },
   },
   notFound: {

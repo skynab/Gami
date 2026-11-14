@@ -1,5 +1,6 @@
 import { paper, Recipe, table } from '../../fold/recipe';
 import type { Ray } from '../../fold/shape';
+import type { Vec2 } from '../../fold/types';
 
 /**
  * A pyramid, Gami's own, popped up from a creased square as the fortune teller opens, but point up: the diagonals
@@ -30,13 +31,14 @@ export const SLOPE = Math.asin(Math.sqrt(Math.SQRT1_2));
 /**
  * A square creased for the pyramid's pop: folded in half four times through its middle, each fold halving the
  * wedge left, then opened out, leaving sixteen creases from the middle (diagonals, middles and halfway between).
+ * `only` keeps the folds to one sheet of several.
  */
-export function creased(r: Recipe): Recipe {
+export function creased(r: Recipe, only?: (c: Vec2) => boolean): Recipe {
   const start = r.mark();
   // Each fold runs through the middle at `deg` (from +x towards +z), moving the side `towards` is on.
   const half = (deg: number, towards: [number, number], step: { title: string; text: string }) => {
     const a = (deg * Math.PI) / 180;
-    return r.along(table(-Math.cos(a), -Math.sin(a)), table(Math.cos(a), Math.sin(a)), table(...towards), step);
+    return r.along(table(-Math.cos(a), -Math.sin(a)), table(Math.cos(a), Math.sin(a)), table(...towards), { ...step, only });
   };
   half(45, [-0.4, 0.4], { title: 'Fold in half diagonally', text: 'Fold the square in half corner to corner.' });
   half(135, [-0.3, -0.35], { title: 'Fold in half again', text: 'Fold the triangle in half, point to point.' });

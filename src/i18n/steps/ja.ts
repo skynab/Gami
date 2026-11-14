@@ -2671,34 +2671,14 @@ export const ja: Record<string, string> = {
     "目をかく",
   "Draw an eye on the head. Your squirrel is keeping watch!":
     "頭に目をかきます。リスが見はりをしています！",
-  "Start with the big square red side up, a corner pointing towards you.":
-    "大きい正方形を赤い面を上にして、角を手前にむけておきます。",
-  "Fold the left and right corners behind on a slant, from a little way in at the top, so the berry narrows towards the bottom.":
-    "左右の角をななめにうしろへ折ります。上は少し内側から折り、下にいくほど細くなるようにします。",
-  "Fold the top point behind, level with where the side folds start.":
-    "上の先を、横の折り線がはじまる高さでうしろに折ります。",
-  "Blunt the bottom":
-    "下の先を丸める",
-  "Fold the bottom point behind, just a little.":
-    "下の先を、少しだけうしろに折ります。",
-  "Round the corners":
-    "角を丸める",
-  "Fold the four corners round the sides behind, just a little, to round the berry.":
-    "横にある四つの角を少しだけうしろに折って、イチゴを丸くします。",
   "Fold the leaves’ corners in":
     "葉の角を折りこむ",
-  "Turn to the small green square, light side up. Fold all four corners to the middle.":
-    "小さい緑の正方形を、明るい面を上にしておきます。四つの角をまん中に合わせて折ります。",
   "Fold out the leaves":
     "葉を折り出す",
   "Fold each point back out, past the middle of its edge: eight pointed leaves.":
     "それぞれの先を外へ折りもどして、ふちのまん中からとび出るようにします。とがった葉が八まいになります。",
   "Put the leaves on":
     "葉をのせる",
-  "Lay the leaves over the top of the berry.":
-    "葉をイチゴの上のほうにのせます。",
-  "Draw little seeds all over the berry. Ready to eat!":
-    "イチゴ全体に小さなたねをかきます。めしあがれ！",
   "Orange side up, cut two snips up from the bottom edge of the big square and two down from the top edge, a little in from each side.":
     "大きい正方形をオレンジの面を上にして、下のふちから上へ二か所、上のふちから下へ二か所、それぞれ左右のはしから少し内側に切りこみを入れます。",
   "Fold the bellies behind":
@@ -2733,4 +2713,24 @@ export const ja: Record<string, string> = {
     "頭を体の前にかぶせて、前をむかせます。",
   "Tuck the tail’s wide end between the back legs, so it sticks out behind. Your fox is ready to explore!":
     "しっぽの広いほうのはしをうしろ足のあいだにさしこんで、うしろにつき出るようにします。キツネが探検に出かけます！",
+  "Pink side up, fold all four corners over a little way, so the berry’s rim is rounder.":
+    "ピンクの面を上にして、四つの角を少しだけ折ります。イチゴのふちが丸くなります。",
+  "Turn the berry over":
+    "イチゴを裏返す",
+  "Turn the berry over, red side up.":
+    "イチゴを裏返して、赤い面を上にします。",
+  "Draw little seeds on the red side, in rows either side of each diagonal crease.":
+    "赤い面に、ななめの折りすじの両側にならべて、小さなたねをかきます。",
+  "Turn it back":
+    "もとにもどす",
+  "Turn the berry back over, pink side up.":
+    "イチゴをもう一度裏返して、ピンクの面を上にします。",
+  "Take the green square, light side up. Fold all four corners to the middle.":
+    "緑の正方形を明るい面を上にしておきます。四つの角をまん中に合わせて折ります。",
+  "Pop up the berry":
+    "イチゴをふくらませる",
+  "Push the berry’s middle down and lift its edges, pinching each diagonal into a ridge and pushing the creases between them inside, so it comes to a point underneath, red side out.":
+    "イチゴのまん中をおし下げて、ふちを持ち上げます。ななめの折りすじをつまんで山にし、そのあいだの折りすじを内側におしこむと、下がとがって、赤い面が外になります。",
+  "Set the leaves on top of the berry, their points between its corners. Your strawberry is ripe!":
+    "葉をイチゴの上にのせて、葉の先をイチゴの角のあいだにむけます。イチゴがじゅくしました！",
 };

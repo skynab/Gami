@@ -118,7 +118,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `sunflower` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's sunflower, which names no designer, from three squares and no glue: Gami's own petals and middle, and the flat tulip's traditional stem with a leaf (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
 | `lizard` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the general look of OrigamiOK's lizard, which is Lee Won-pyo's, folded differently: the turtle's narrowed water bomb base with steeper legs, and a separate tail (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
 | `squirrel` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a squirrel sitting up, after the look of OrigamiOK's, which names no designer, from three squares rather than one (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
-| `strawberry` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a flat strawberry, after the look of OrigamiOK's 3D one, which names no designer; its leaves are folded as the sunflower's petals are (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
+| `strawberry` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a strawberry in 3D, after the look of OrigamiOK's, which names no designer: the berry popped point down as Gami's diamond is, the leaves folded as the sunflower's petals are (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
 | `fox-3d` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a fox standing in 3D, in place of OrigamiOK's, which is Hoàng Tiến Quyết's; its head is the traditional cat face's folds (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
 
 ### Notes
@@ -141,9 +141,10 @@ noted when it was written, and the model was folded from the common traditional 
   the head. From one sheet, as OrigamiOK's is, the tail and head reverse-folded from a triangle's corners came out
   too thin or tucked inside the body.
   None of the 49 strawberries in Gilad's database is Traditional (the "classic" one is Rae Cooker's), so Gami's is
-  its own, and flat: a red diamond with its sides folded behind on a slant, its top and bottom point folded behind and
-  its corners rounded, with an eight-pointed green star for the leaves. OrigamiOK's is opened into a 3D berry and
-  glued; Gami's blowing up is only led into boxes so far (the balloon, the 3D tulip), not a rounded cone.
+  its own: a red square creased as Gami's pyramid is, its corners folded in, popped point down as Gami's diamond is,
+  red side out, seeds drawn on, with an eight-pointed green star for the leaves set on its rim. OrigamiOK's is a
+  square base opened into a berry, with a cut calyx and a rolled stalk glued on. (A flat strawberry went in first,
+  the same day; the 3D one replaced it.)
   OrigamiOK's fox is Hoàng Tiến Quyết's, so the standing fox (decided 13 November, to sit beside Okuda's flat one) is
   Gami's own, from three squares: the body snipped for four legs, its belly strips folded inside, folded in half and
   opened a little to stand; the head the traditional cat face's folds, set facing forwards; the tail a kite folded in
