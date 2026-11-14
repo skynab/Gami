@@ -129,6 +129,12 @@ function checks(id: string, model: ReturnType<(typeof RECIPES)[number]>) {
     expect(MODELS.find((m) => m.id === id)?.needs ?? []).toEqual(needs);
   });
 
+  it('says in the gallery whether it ends flat or in 3D', () => {
+    const last = model.steps.at(-1)?.frame ?? model.start;
+    const standing = last.vertices_coords.some((p) => Math.abs(p[1]) > 1e-6);
+    expect(MODELS.find((m) => m.id === id)?.form === '3d').toBe(standing);
+  });
+
   it('says in the gallery when it starts from a rectangle rather than a square', () => {
     const ratio = paperRatio(model.sheets);
     const listed = MODELS.find((m) => m.id === id)?.paper;

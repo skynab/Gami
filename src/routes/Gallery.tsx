@@ -5,7 +5,7 @@ import { OrigamiHeartIcon, OrigamiStarIcon, SearchIcon, SortIcon, StudioIcon } f
 import { TopBar } from '../app/TopBar';
 import { AccountButton } from '../auth/AccountButton';
 import { accountsEnabled } from '../auth/store';
-import { CATEGORIES, filterModels, isNew, LEVELS, MODELS, SORTS, sortModels, withPairs, type Category, type Level, type Sort } from '../gallery/catalog';
+import { CATEGORIES, filterModels, FORMS, isNew, LEVELS, MODELS, SORTS, sortModels, withPairs, type Category, type Form, type Level, type Sort } from '../gallery/catalog';
 import { ModelCard, PairCard } from '../gallery/ModelCard';
 import { useFavorites } from '../state/favorites';
 import { readHideFolded, readProgress, saveHideFolded } from '../state/progress';
@@ -21,6 +21,7 @@ interface Place {
   query: string;
   level: Level | null;
   category: Category | null;
+  form: Form | null;
   sort: Sort;
   favorites: boolean;
   onlyNew: boolean;
@@ -52,14 +53,15 @@ export function Gallery() {
   const [query, setQuery] = useState(place.query ?? '');
   const [level, setLevel] = useState<Level | null>(place.level ?? null);
   const [category, setCategory] = useState<Category | null>(place.category ?? null);
+  const [form, setForm] = useState<Form | null>(FORMS.includes(place.form as Form) ? place.form! : null);
   const [sort, setSort] = useState<Sort>(SORTS.includes(place.sort as Sort) ? place.sort! : 'natural');
   const [onlyFavorites, setOnlyFavorites] = useState(place.favorites === true);
   const [onlyNew, setOnlyNew] = useState(anyNew && place.onlyNew === true);
   const favorites = useFavorites((s) => s.ids);
   const [hideFolded, setHideFolded] = useState(readHideFolded);
   useEffect(
-    () => savePlace({ query, level, category, sort, favorites: onlyFavorites, onlyNew }),
-    [query, level, category, sort, onlyFavorites, onlyNew],
+    () => savePlace({ query, level, category, form, sort, favorites: onlyFavorites, onlyNew }),
+    [query, level, category, form, sort, onlyFavorites, onlyNew],
   );
   // Before the first paint, so the page doesn't flash at the top first.
   useLayoutEffect(() => {
@@ -70,7 +72,7 @@ export function Gallery() {
   }, [place]);
   const named = MODELS.map((m) => ({ ...m, title: t(`models.${m.id}.title`, { defaultValue: m.title }), blurb: t(`models.${m.id}.blurb`, { defaultValue: m.blurb }) }));
   const models = sortModels(
-    filterModels(named, { query, level, category, onlyNew }).filter(
+    filterModels(named, { query, level, category, form, onlyNew }).filter(
       (m) => (!hideFolded || !readProgress(m.id)?.done) && (!onlyFavorites || favorites.includes(m.id)),
     ),
     sort,
@@ -124,6 +126,13 @@ export function Gallery() {
                 onClick={() => setCategory(category === c.id ? null : c.id)}
               >
                 {t(`categories.${c.id}`)}
+              </button>
+            ))}
+          </div>
+          <div className="chips" role="group" aria-label={t('gallery.form')}>
+            {FORMS.map((f) => (
+              <button key={f} type="button" className="chip" aria-pressed={form === f} title={t(f === '3d' ? 'card.form3d' : 'card.form2d')} onClick={() => setForm(form === f ? null : f)}>
+                {t(`forms.${f}`)}
               </button>
             ))}
           </div>

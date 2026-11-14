@@ -25,6 +25,12 @@ describe('catalog', () => {
       'bull', 't-rex', 'turtle', 'squirrel',
     ]);
     expect(filterModels(MODELS, {})).toHaveLength(MODELS.length);
+    const flat = filterModels(MODELS, { form: '2d' });
+    const standing = filterModels(MODELS, { form: '3d' });
+    expect(flat.length + standing.length).toBe(MODELS.length);
+    expect(standing.map((m) => m.id)).toContain('strawberry');
+    expect(flat.map((m) => m.id)).toContain('turtle');
+    expect(filterModels(MODELS, { form: '3d', category: 'plane' }).every((m) => m.form === '3d' && m.category === 'plane')).toBe(true);
   });
 
   it('sorts, keeping the catalog order among equals', () => {
