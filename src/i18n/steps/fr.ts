@@ -1785,16 +1785,6 @@ export const fr: Record<string, string> = {
     "Rabattez la pointe vers le bas le long de la base des cornes, pour former un petit rebord.",
   "Fold the band up along the bottom of the helmet, lip and all, making the brim.":
     "Remontez la bande le long du bas du casque, rebord compris, pour former la visière.",
-  "Crease the back point":
-    "Marquer la pointe arrière",
-  "Fold the last point up behind the helmet and crease it well…":
-    "Remontez la dernière pointe derrière le casque et marquez bien le pli…",
-  "…then fold it back down.":
-    "…puis rabattez-la de nouveau.",
-  "Tuck the back point inside":
-    "Rentrer la pointe arrière à l’intérieur",
-  "Fold the back point up on its crease, tucking it inside the helmet, behind the brim. Open the bottom to wear it.":
-    "Remontez la pointe arrière sur son pli en la rentrant dans le casque, derrière la visière. Ouvrez le bas pour le porter.",
   "Open the flap back out":
     "Rouvrir le rabat",
   "Fold the middle flap back to the right, leaving its crease.":
@@ -2743,4 +2733,14 @@ export const fr: Record<string, string> = {
     "Dessine les yeux, le nez et les moustaches.",
   "Bend the body’s sides back a little, so it stands up, its face looking out. Your cat is sitting pretty!":
     "Plie un peu les côtés du corps vers l’arrière, pour qu’il tienne debout, le visage tourné vers toi. Ton chat est bien sage !",
+  "Fold the back point up":
+    "Plier la pointe arrière vers le haut",
+  "Fold the last bottom point up in the same way, so its tip goes a little past the base of the horns.":
+    "Plie de la même façon la dernière pointe du bas vers le haut, pour que son bout dépasse un peu la base des cornes.",
+  "Fold its tip back down along the base of the horns.":
+    "Replie son bout vers le bas le long de la base des cornes.",
+  "Fold the band up along the bottom, lip and all, for the back of the brim.":
+    "Plie la bande vers le haut le long du bas, rebord compris, pour l’arrière du bord du casque.",
+  "Turn it back over. Open the bottom to wear it.":
+    "Retourne-le à nouveau. Ouvre le bas pour le porter.",
 };

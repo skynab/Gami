@@ -13,8 +13,6 @@ export function samuraiHelmet() {
   const BL: Vec2 = [-0.5, 0.5];
   // Each horn is the tip of a corner flap: the part of the sheet near that corner.
   const near = (corner: Vec2) => (centre: Vec2) => dist(centre, corner) < 0.3;
-  // The back point: the half of the sheet left behind by the first fold, below the brim.
-  const back = ([u, v]: Vec2) => v > u && dist([u, v], BL) < 0.45;
   // A horn swings 45° out from straight up, about the middle of the helmet's base.
   const base = r / 2;
   const tilt = Math.PI / 8;
@@ -56,20 +54,25 @@ export function samuraiHelmet() {
       text: 'Fold the band up along the bottom of the helmet, lip and all, making the brim.',
       layers: 3,
     })
-    .along(table(-1, base), table(1, base), table(0, r), {
-      title: 'Crease the back point',
-      text: 'Fold the last point up behind the helmet and crease it well…',
-      kind: 'mountain',
+    .turnOver('Turn it over.')
+    // The back point, folded as the front one was: up past the base of the horns, its tip back down, then the band
+    // up for the back of the brim.
+    .along(table(-1, 0.7 * r), table(1, 0.7 * r), table(0, r), {
+      title: 'Fold the back point up',
+      text: 'Fold the last bottom point up in the same way, so its tip goes a little past the base of the horns.',
+      layers: 1,
     })
-    .unfold({ title: 'Unfold', text: '…then fold it back down.' })
-    .collapse(
-      {
-        title: 'Tuck the back point inside',
-        text: 'Fold the back point up on its crease, tucking it inside the helmet, behind the brim. Open the bottom to wear it.',
-      },
-      [{ through: [table(-1, base), table(1, base)], kind: 'valley' }],
-      paper(-0.1, 0.1),
-      (c) => !back(c),
-    )
+    .along(table(-1, base), table(1, base), table(0, 0.4 * r), {
+      title: 'Fold the tip back down',
+      text: 'Fold its tip back down along the base of the horns.',
+      layers: 1,
+      only: near(BL),
+    })
+    .along(table(-1, base), table(1, base), table(0, r), {
+      title: 'Fold up again',
+      text: 'Fold the band up along the bottom, lip and all, for the back of the brim.',
+      layers: 3,
+    })
+    .turnOver('Turn it back over. Open the bottom to wear it.')
     .build();
 }

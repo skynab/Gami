@@ -1785,16 +1785,6 @@ export const ja: Record<string, string> = {
     "先を角のつけ根に沿って折り下げ、小さなふちを作ります。",
   "Fold the band up along the bottom of the helmet, lip and all, making the brim.":
     "ふちごと帯を兜の下の線に沿って折り上げ、つばを作ります。",
-  "Crease the back point":
-    "後ろの角に折り目をつける",
-  "Fold the last point up behind the helmet and crease it well…":
-    "最後の角を兜の後ろへ折り上げ、しっかり折り目をつけて…",
-  "…then fold it back down.":
-    "…それから元に戻します。",
-  "Tuck the back point inside":
-    "後ろの角を中に差しこむ",
-  "Fold the back point up on its crease, tucking it inside the helmet, behind the brim. Open the bottom to wear it.":
-    "後ろの角を折り目で折り上げ、つばの裏側、兜の内側に差しこみます。下を開けばかぶれます。",
   "Open the flap back out":
     "フラップを元に戻す",
   "Fold the middle flap back to the right, leaving its crease.":
@@ -2743,4 +2733,14 @@ export const ja: Record<string, string> = {
     "目と鼻とひげをかきます。",
   "Bend the body’s sides back a little, so it stands up, its face looking out. Your cat is sitting pretty!":
     "体の両側を少しうしろに曲げて立たせ、顔をこちらにむけます。ネコがちょこんとすわりました！",
+  "Fold the back point up":
+    "うしろの先を折りあげる",
+  "Fold the last bottom point up in the same way, so its tip goes a little past the base of the horns.":
+    "のこりの下の先も同じように折りあげて、先が角のつけねより少し上に出るようにします。",
+  "Fold its tip back down along the base of the horns.":
+    "その先を、角のつけねにそって折りもどします。",
+  "Fold the band up along the bottom, lip and all, for the back of the brim.":
+    "下のところで帯を、ふちごと折りあげて、つばのうしろにします。",
+  "Turn it back over. Open the bottom to wear it.":
+    "もう一度裏返します。下を開けば、かぶれます。",
 };

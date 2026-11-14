@@ -1785,16 +1785,6 @@ export const es: Record<string, string> = {
     "Dobla la punta hacia abajo a lo largo de la base de los cuernos, formando un pequeño reborde.",
   "Fold the band up along the bottom of the helmet, lip and all, making the brim.":
     "Dobla la banda hacia arriba a lo largo de la base del casco, con el reborde, formando el ala.",
-  "Crease the back point":
-    "Marca la punta de atrás",
-  "Fold the last point up behind the helmet and crease it well…":
-    "Dobla la última punta hacia arriba por detrás del casco y marca bien el pliegue…",
-  "…then fold it back down.":
-    "…y luego vuelve a bajarla.",
-  "Tuck the back point inside":
-    "Mete la punta de atrás por dentro",
-  "Fold the back point up on its crease, tucking it inside the helmet, behind the brim. Open the bottom to wear it.":
-    "Dobla la punta de atrás hacia arriba por su pliegue y métela dentro del casco, detrás del ala. Abre la parte de abajo para ponértelo.",
   "Open the flap back out":
     "Vuelve a abrir la solapa",
   "Fold the middle flap back to the right, leaving its crease.":
@@ -2743,4 +2733,14 @@ export const es: Record<string, string> = {
     "Dibuja los ojos, la nariz y los bigotes.",
   "Bend the body’s sides back a little, so it stands up, its face looking out. Your cat is sitting pretty!":
     "Dobla un poco hacia atrás los lados del cuerpo, para que se ponga de pie mirando hacia ti. ¡Tu gato está sentado muy formal!",
+  "Fold the back point up":
+    "Dobla la punta de atrás hacia arriba",
+  "Fold the last bottom point up in the same way, so its tip goes a little past the base of the horns.":
+    "Dobla hacia arriba la última punta de abajo de la misma manera, para que su punta pase un poco de la base de los cuernos.",
+  "Fold its tip back down along the base of the horns.":
+    "Dobla su punta de nuevo hacia abajo a lo largo de la base de los cuernos.",
+  "Fold the band up along the bottom, lip and all, for the back of the brim.":
+    "Dobla la banda hacia arriba por la parte de abajo, con el borde incluido, para la parte de atrás del ala.",
+  "Turn it back over. Open the bottom to wear it.":
+    "Vuelve a darle la vuelta. Abre la parte de abajo para ponértelo.",
 };
