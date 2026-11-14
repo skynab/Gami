@@ -1,11 +1,11 @@
 import { toFlat } from '../../fold/fold';
-import { paper, Recipe, table } from '../../fold/recipe';
-import type { Vec2 } from '../../fold/types';
+import { paper, Recipe, table, type ShapeBend } from '../../fold/recipe';
+import type { Vec2, Vec3 } from '../../fold/types';
 
 /**
- * A T-rex seen from the side, Gami's own, from two squares: a big one for the body, a kite folded in half and
- * laid on its side, its long point the tail and its corner the legs, and a small one for the head, folded in
- * half with its snout's top corner folded behind, set high on the body's front end.
+ * A T-rex, Gami's own, from two squares: a big one for the body, a kite folded in half and laid on its side, its long
+ * point the tail and its corner the legs, and a small one for the head, folded in half with its snout's top corner
+ * folded behind, set high on the body's front end. Then stood up in 3D, the body's halves opened a little.
  */
 export function tRex() {
   const r = new Recipe({
@@ -62,7 +62,33 @@ export function tRex() {
   const ring = (x: number, z: number, rad: number) => Array.from({ length: 10 }, (_, i): Vec2 => [x + rad * Math.cos((i / 10) * 2 * Math.PI), z + rad * Math.sin((i / 10) * 2 * Math.PI)]);
   // A zigzag of teeth just above the head's bottom edge, from the snout back.
   const teeth = Array.from({ length: 9 }, (_, i): Vec2 => [k.right - 0.03 - i * 0.03, k.bottom - (i % 2 ? 0.045 : 0.012)]);
+  r.draw({ title: 'Draw a face', text: 'Draw an eye and a row of sharp teeth on the head.' }, [{ fill: ring(k.left + 0.1, k.top + 0.06, 0.02) }, { line: teeth }]);
+
+  // Standing it up: the body's halves open `open` either side of its back (the kite's middle, folded), and it
+  // stands on its legs, the table's +z going down and its up towards the viewer. The head goes where it lay, turned
+  // a little about the upright to look out.
+  const [A, B] = [r.where(paper(0.5, -0.5)), r.where(paper(-0.5, 0.5))];
+  // A point on the body off its back, on the legs' side, and the legs' tip, its lowest point.
+  const side = r.where(paper(0.3, 0));
+  const legs = box(body).bottom;
+  const open = 14;
+  const right = ([u, v]: Vec2) => u + v > 0;
+  const halves: ShapeBend[] = [1, -1].map((s) => ({
+    through: [table(...A), table(...B)],
+    moving: table(...side),
+    degrees: s * open,
+    only: (c: Vec2) => body(c) && (s > 0 ? right(c) : !right(c)),
+  }));
+  // The back is level: A and B share a z. The legs reach down from it, shortened by the opening.
+  const back = A[1];
+  const high = (legs - back) * Math.cos((open * Math.PI) / 180) + 0.003;
+  const at = ([x, z]: Vec2): Vec3 => [x - bx, high - (z - back), 0];
+  const a = (20 * Math.PI) / 180;
+  const middle: Vec2 = [(k.left + k.right) / 2, (k.top + k.bottom) / 2];
   return r
-    .draw({ title: 'Draw a face', text: 'Draw an eye and a row of sharp teeth on the head. Roar!' }, [{ fill: ring(k.left + 0.1, k.top + 0.06, 0.02) }, { line: teeth }])
+    .assemble({ title: 'Stand it up', text: 'Open the body’s two sides a little and stand it on its legs, the head turned to look out. Roar!' }, [
+      { only: body, bends: halves, pose: { from: table(bx, back), to: at([bx, back]), x: [1, 0, 0], up: [0, 0, 1] } },
+      { only: head, pose: { from: table(...middle), to: at(middle), x: [Math.cos(a), 0, -Math.sin(a)], up: [Math.sin(a), 0, Math.cos(a)] } },
+    ])
     .build();
 }

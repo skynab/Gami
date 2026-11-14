@@ -2071,8 +2071,6 @@ export const ja: Record<string, string> = {
     "頭をのせる",
   "Set the head on top of the body, its chin over the neck.":
     "頭を体の上にのせて、あごを首にかさねます。",
-  "Draw on eyes, a nose and whiskers. Your cat is sitting pretty!":
-    "目と鼻とひげをかきます。ネコがちょこんとすわりました！",
   "Fold up the wings":
     "つばさを折りあげる",
   "Fold each bottom corner up and out, from just beside the middle, so the wings rise.":
@@ -2131,8 +2129,6 @@ export const ja: Record<string, string> = {
     "右上の角をうしろに折って、鼻先が前にむかって下がるようにします。",
   "Set the head on the front of the body, a little higher than its back.":
     "頭を体の前に、背中より少し高くおきます。",
-  "Draw an eye and a row of sharp teeth on the head. Roar!":
-    "頭に目を一つと、とがった歯をならべてかきます。ガオー！",
   "Fold the edges to the middle":
     "ふちをまん中に合わせて折る",
   "Start dark side up. Fold the top and bottom edges to the middle.":
@@ -2637,10 +2633,6 @@ export const ja: Record<string, string> = {
     "正方形を三枚、明るい面を上にして、それぞれ角を手前にむけておきます。中くらいのもの、大きいもの、小さいものです。",
   "Fold the middle square’s right corner over to its left corner.":
     "中くらいの正方形の右の角を、左の角に合わせて折ります。",
-  "Fold the feet behind":
-    "足をうしろに折る",
-  "Fold the bottom point behind, so the body sits on a flat edge.":
-    "下の先をうしろに折って、体が平らなふちですわれるようにします。",
   "Fold the big square’s left corner to its right corner, then unfold.":
     "大きい正方形の左の角を右の角に合わせて折り、開きます。",
   "Fold the tail into a kite":
@@ -2667,8 +2659,6 @@ export const ja: Record<string, string> = {
     "頭を体の上にのせて、鼻を前にむけます。",
   "Draw an eye":
     "目をかく",
-  "Draw an eye on the head. Your squirrel is keeping watch!":
-    "頭に目をかきます。リスが見はりをしています！",
   "Fold the leaves’ corners in":
     "葉の角を折りこむ",
   "Fold out the leaves":
@@ -2735,4 +2725,22 @@ export const ja: Record<string, string> = {
     "首の先を重なりのあいだに押しこんで、頭にします。",
   "Lift the wings apart into a V and stand the bird on its body. Hold the base of the neck and pull the tail gently: the wings flap!":
     "羽をV字に開いて、鳥を体で立たせます。首のつけねを持って、しっぽをそっと引くと、羽がぱたぱた動きます！",
+  "Tuck in the feet":
+    "足を中に折りこむ",
+  "Push the bottom point up inside, between the layers, so the body sits on a flat edge.":
+    "下の先を、重なりのあいだに上へおしこんで、体が平らなふちですわれるようにします。",
+  "Draw an eye on the head.":
+    "頭に目をかきます。",
+  "Stand it up":
+    "立たせる",
+  "Open the body’s two sides a little and stand it on its feet. Turn the tail out behind it, and the head to look out. Your squirrel is keeping watch!":
+    "体の両側を少し開いて、足で立たせます。しっぽをうしろに外へむけ、頭をこちらにむけます。リスが見はりをしています！",
+  "Draw an eye and a row of sharp teeth on the head.":
+    "頭に目と、とがった歯をかきます。",
+  "Open the body’s two sides a little and stand it on its legs, the head turned to look out. Roar!":
+    "体の両側を少し開いて足で立たせ、頭をこちらにむけます。ガオー！",
+  "Draw on eyes, a nose and whiskers.":
+    "目と鼻とひげをかきます。",
+  "Bend the body’s sides back a little, so it stands up, its face looking out. Your cat is sitting pretty!":
+    "体の両側を少しうしろに曲げて立たせ、顔をこちらにむけます。ネコがちょこんとすわりました！",
 };

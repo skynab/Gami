@@ -2071,8 +2071,6 @@ export const fr: Record<string, string> = {
     "Poser la tête",
   "Set the head on top of the body, its chin over the neck.":
     "Posez la tête sur le corps, le menton sur le cou.",
-  "Draw on eyes, a nose and whiskers. Your cat is sitting pretty!":
-    "Dessinez les yeux, le nez et les moustaches. Votre chat est sage comme une image !",
   "Fold up the wings":
     "Relever les ailes",
   "Fold each bottom corner up and out, from just beside the middle, so the wings rise.":
@@ -2131,8 +2129,6 @@ export const fr: Record<string, string> = {
     "Repliez le coin en haut à droite derrière, pour que le museau descende vers l’avant.",
   "Set the head on the front of the body, a little higher than its back.":
     "Posez la tête à l’avant du corps, un peu plus haut que le dos.",
-  "Draw an eye and a row of sharp teeth on the head. Roar!":
-    "Dessinez un œil et une rangée de dents pointues sur la tête. Grrr !",
   "Fold the edges to the middle":
     "Rabattre les bords au milieu",
   "Start dark side up. Fold the top and bottom edges to the middle.":
@@ -2637,10 +2633,6 @@ export const fr: Record<string, string> = {
     "Trois carrés, face claire vers le haut, chacun tourné pour qu’un coin pointe vers toi : un moyen, un grand et un petit.",
   "Fold the middle square’s right corner over to its left corner.":
     "Plie le coin droit du carré moyen sur son coin gauche.",
-  "Fold the feet behind":
-    "Plier les pieds derrière",
-  "Fold the bottom point behind, so the body sits on a flat edge.":
-    "Plie la pointe du bas derrière, pour que le corps repose sur un bord plat.",
   "Fold the big square’s left corner to its right corner, then unfold.":
     "Plie le coin gauche du grand carré sur son coin droit, puis déplie.",
   "Fold the tail into a kite":
@@ -2667,8 +2659,6 @@ export const fr: Record<string, string> = {
     "Pose la tête sur le corps, le nez vers l’avant.",
   "Draw an eye":
     "Dessiner un œil",
-  "Draw an eye on the head. Your squirrel is keeping watch!":
-    "Dessine un œil sur la tête. Ton écureuil monte la garde !",
   "Fold the leaves’ corners in":
     "Plier les coins des feuilles",
   "Fold out the leaves":
@@ -2735,4 +2725,22 @@ export const fr: Record<string, string> = {
     "Pousse le bout du cou entre ses couches pour faire la tête.",
   "Lift the wings apart into a V and stand the bird on its body. Hold the base of the neck and pull the tail gently: the wings flap!":
     "Écarte les ailes en V et mets l’oiseau debout sur son corps. Tiens la base du cou et tire doucement la queue : les ailes battent !",
+  "Tuck in the feet":
+    "Rentrer les pieds",
+  "Push the bottom point up inside, between the layers, so the body sits on a flat edge.":
+    "Rentre la pointe du bas vers le haut, entre les couches, pour que le corps repose sur un bord plat.",
+  "Draw an eye on the head.":
+    "Dessine un œil sur la tête.",
+  "Stand it up":
+    "Le mettre debout",
+  "Open the body’s two sides a little and stand it on its feet. Turn the tail out behind it, and the head to look out. Your squirrel is keeping watch!":
+    "Écarte un peu les deux côtés du corps et mets-le debout sur ses pieds. Tourne la queue vers l’extérieur derrière lui, et la tête pour qu’elle regarde dehors. Ton écureuil monte la garde !",
+  "Draw an eye and a row of sharp teeth on the head.":
+    "Dessine un œil et une rangée de dents pointues sur la tête.",
+  "Open the body’s two sides a little and stand it on its legs, the head turned to look out. Roar!":
+    "Écarte un peu les deux côtés du corps et mets-le debout sur ses pattes, la tête tournée pour regarder dehors. Grrr !",
+  "Draw on eyes, a nose and whiskers.":
+    "Dessine les yeux, le nez et les moustaches.",
+  "Bend the body’s sides back a little, so it stands up, its face looking out. Your cat is sitting pretty!":
+    "Plie un peu les côtés du corps vers l’arrière, pour qu’il tienne debout, le visage tourné vers toi. Ton chat est bien sage !",
 };

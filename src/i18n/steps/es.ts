@@ -2071,8 +2071,6 @@ export const es: Record<string, string> = {
     "Pon la cabeza",
   "Set the head on top of the body, its chin over the neck.":
     "Pon la cabeza encima del cuerpo, con la barbilla sobre el cuello.",
-  "Draw on eyes, a nose and whiskers. Your cat is sitting pretty!":
-    "Dibuja los ojos, la nariz y los bigotes. ¡Tu gato está sentado muy elegante!",
   "Fold up the wings":
     "Dobla las alas hacia arriba",
   "Fold each bottom corner up and out, from just beside the middle, so the wings rise.":
@@ -2131,8 +2129,6 @@ export const es: Record<string, string> = {
     "Dobla la esquina de arriba a la derecha hacia atrás, para que el hocico baje hacia delante.",
   "Set the head on the front of the body, a little higher than its back.":
     "Pon la cabeza en la parte delantera del cuerpo, un poco más alta que el lomo.",
-  "Draw an eye and a row of sharp teeth on the head. Roar!":
-    "Dibuja un ojo y una fila de dientes afilados en la cabeza. ¡Grrr!",
   "Fold the edges to the middle":
     "Dobla los bordes hasta el centro",
   "Start dark side up. Fold the top and bottom edges to the middle.":
@@ -2637,10 +2633,6 @@ export const es: Record<string, string> = {
     "Tres cuadrados, con el lado claro hacia arriba, cada uno girado para que una esquina apunte hacia ti: uno mediano, uno grande y uno pequeño.",
   "Fold the middle square’s right corner over to its left corner.":
     "Dobla la esquina derecha del cuadrado mediano sobre su esquina izquierda.",
-  "Fold the feet behind":
-    "Dobla los pies hacia atrás",
-  "Fold the bottom point behind, so the body sits on a flat edge.":
-    "Dobla la punta de abajo hacia atrás, para que el cuerpo se apoye en un borde plano.",
   "Fold the big square’s left corner to its right corner, then unfold.":
     "Dobla la esquina izquierda del cuadrado grande sobre la derecha y desdobla.",
   "Fold the tail into a kite":
@@ -2667,8 +2659,6 @@ export const es: Record<string, string> = {
     "Coloca la cabeza encima del cuerpo, con la nariz hacia delante.",
   "Draw an eye":
     "Dibuja un ojo",
-  "Draw an eye on the head. Your squirrel is keeping watch!":
-    "Dibuja un ojo en la cabeza. ¡Tu ardilla está vigilando!",
   "Fold the leaves’ corners in":
     "Dobla hacia dentro las esquinas de las hojas",
   "Fold out the leaves":
@@ -2735,4 +2725,22 @@ export const es: Record<string, string> = {
     "Empuja la punta del cuello hacia abajo entre sus capas para hacer la cabeza.",
   "Lift the wings apart into a V and stand the bird on its body. Hold the base of the neck and pull the tail gently: the wings flap!":
     "Separa las alas en forma de V y pon el pájaro de pie sobre su cuerpo. Sujeta la base del cuello y tira suavemente de la cola: ¡las alas aletean!",
+  "Tuck in the feet":
+    "Mete los pies hacia dentro",
+  "Push the bottom point up inside, between the layers, so the body sits on a flat edge.":
+    "Empuja la punta de abajo hacia arriba por dentro, entre las capas, para que el cuerpo se apoye en un borde plano.",
+  "Draw an eye on the head.":
+    "Dibuja un ojo en la cabeza.",
+  "Stand it up":
+    "Ponlo de pie",
+  "Open the body’s two sides a little and stand it on its feet. Turn the tail out behind it, and the head to look out. Your squirrel is keeping watch!":
+    "Abre un poco los dos lados del cuerpo y ponlo de pie sobre sus pies. Gira la cola hacia fuera por detrás, y la cabeza para que mire hacia ti. ¡Tu ardilla está vigilando!",
+  "Draw an eye and a row of sharp teeth on the head.":
+    "Dibuja un ojo y una fila de dientes afilados en la cabeza.",
+  "Open the body’s two sides a little and stand it on its legs, the head turned to look out. Roar!":
+    "Abre un poco los dos lados del cuerpo y ponlo de pie sobre sus patas, con la cabeza girada para mirar hacia ti. ¡Grrr!",
+  "Draw on eyes, a nose and whiskers.":
+    "Dibuja los ojos, la nariz y los bigotes.",
+  "Bend the body’s sides back a little, so it stands up, its face looking out. Your cat is sitting pretty!":
+    "Dobla un poco hacia atrás los lados del cuerpo, para que se ponga de pie mirando hacia ti. ¡Tu gato está sentado muy formal!",
 };

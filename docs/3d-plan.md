@@ -74,3 +74,6 @@ the rose, the sunflower, the lizard, the cactus, the peacock and the lessons are
 | Model | Status |
 |---|---|
 | Flapping bird | Done (13 November): a last step spreads the wings into a V, 50° either way, and stands the bird on its body (`assemble`, one piece bent and posed). The wings can only spread from above the highest of the neck's and tail's paper, which lies between them low down, joined to them along their edges; below that, rigid paper would tear. So the V opens partway up the wings, about two fifths of the way from the body to the tips. |
+| Squirrel | Done (13 November): its feet are now tucked up inside (an inside reverse fold) rather than folded behind through both layers, so its two sides can part. A last step opens them 12° either side of the back and stands it on its feet, the tail turned 35° out behind and the head 25° to look out (`assemble`, three pieces). |
+| T-rex | Done (13 November): a last step opens the body's halves 14° either side of its back (the kite's folded middle) and stands it on its legs, the tail out level behind, the head turned 20° to look out. |
+| Cute cat | Done (13 November): a last step bends the body's sides back 40°, from 0.18 either side of its middle, so it stands like a tent on its bottom edge, the tail turning back with its side; the face stands on top, just in front. |

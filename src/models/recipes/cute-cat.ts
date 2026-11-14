@@ -1,12 +1,13 @@
 import { toFlat } from '../../fold/fold';
-import { paper, Recipe, table } from '../../fold/recipe';
+import { paper, Recipe, table, type ShapeBend } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 import { faceMarks } from './face';
 
 /**
  * A sitting cat seen from the front, Gami's own, after the look of OrigamiOK's cute cat but from two squares: a big
  * one for the body, a tall kite with its bottom point folded up behind for a tail, and a small one for the head, the
- * cat face (a triangle with its corners folded up into ears), set on top.
+ * cat face (a triangle with its corners folded up into ears), set on top. Then stood up in 3D, the body's sides bent
+ * back so it stands like a tent.
  */
 export function cuteCat() {
   const r = new Recipe({
@@ -86,10 +87,27 @@ export function cuteCat() {
   // The face: from the brow, between the ears, down to the chin.
   const [, faceChin] = span(head);
   const faceTop = faceChin - (chin - brow);
+  r.draw(
+    { title: 'Draw a face', text: 'Draw on eyes, a nose and whiskers.' },
+    faceMarks([bx, faceTop], [bx, faceChin], { eyes: 'open', nose: true, whiskers: true, eyesAt: 0.35, eyeGap: 0.2, noseAt: 0.62 }),
+  );
+
+  // Standing it up: the body's sides, out past `front` either side of its middle, bend back by `back`, so it stands
+  // like a tent on its bottom edge, the table's +z going down and its up towards the viewer. The head stands on top,
+  // just in front.
+  const front = 0.18;
+  const back = 40;
+  const sides: ShapeBend[] = [-1, 1].map((s) => ({
+    through: [table(bx + s * front, bz - 3), table(bx + s * front, bz + 3)],
+    moving: table(bx + s * (front + 0.1), bz),
+    degrees: -back,
+    only: body,
+  }));
+  const ground = Math.max(...toFlat(r.current).filter((f) => body(f.paper[0])).flatMap((f) => f.world.map((p) => p[1])));
   return r
-    .draw(
-      { title: 'Draw a face', text: 'Draw on eyes, a nose and whiskers. Your cat is sitting pretty!' },
-      faceMarks([bx, faceTop], [bx, faceChin], { eyes: 'open', nose: true, whiskers: true, eyesAt: 0.35, eyeGap: 0.2, noseAt: 0.62 }),
-    )
+    .assemble({ title: 'Stand it up', text: 'Bend the body’s sides back a little, so it stands up, its face looking out. Your cat is sitting pretty!' }, [
+      { only: body, bends: sides, pose: { from: table(bx, ground), to: [0, 0.003, 0], x: [1, 0, 0], up: [0, 0, 1] } },
+      { only: head, pose: { from: table(bx, ground), to: [0, 0.003, 0.012], x: [1, 0, 0], up: [0, 0, 1] } },
+    ])
     .build();
 }
