@@ -12,7 +12,7 @@ request.
 
 | Item | Status |
 |---|---|
-| OrigamiOK's intermediate folds | Done 13 November (`docs/origamiok-intermediate-plan.md`): turtle, sunflower, lizard, squirrel, a flat strawberry and a standing 3D fox, all Gami's own; the creeper left out. A 3D strawberry waits on a bend guide for a rounded shape. |
+| OrigamiOK's intermediate folds | Done 13 November (`docs/origamiok-intermediate-plan.md`): turtle, sunflower, lizard, squirrel, strawberry and a standing fox, all Gami's own; the creeper left out. The strawberry and fox are 3D: the strawberry pops up point down, which needed `popUp`'s `only` and `assemble` after a pop-up (both new). |
 | The decision on `PROVENANCE.md` was in the `PLAN.md` decisions log twice | Done: one copy removed. |
 | Fold'N Fly plan: "Gami's own planes need names of their own" | Done: they're the corkscrew and the flying saucer. Taken off the open questions. |
 | A link here from `PLAN.md` | Done, under the milestones. |
