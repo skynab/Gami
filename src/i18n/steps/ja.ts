@@ -1991,8 +1991,6 @@ export const ja: Record<string, string> = {
     "…もう一度折りあげます。",
   "Draw a skull and crossbones":
     "どくろの印をかく",
-  "Draw a skull and crossbones on the front. Open the bottom and put it on. Arr!":
-    "前にどくろと、交差した二本の骨をかきます。下を開いて、かぶりましょう。アーッ！",
   "Start dark side up, with a corner pointing towards you.":
     "こい色の面を上にして、角を手前にむけて始めます。",
   "Fold the top layer’s point down to the middle of the bottom edge. This makes the pocket.":
@@ -2745,4 +2743,10 @@ export const ja: Record<string, string> = {
     "体の両側を少し開いて四本足で立たせ、顔を前にむけます。ウシが突進しそう！",
   "Blow gently into the hole at the bottom to puff up the rabbit. Done!":
     "下の穴にそっと息を吹きこんで、うさぎをふくらませます。できあがり！",
+  "Draw a skull and crossbones on the front.":
+    "前にどくろと、交差した二本の骨をかきます。",
+  "Open it and stand it up":
+    "開いて立たせる",
+  "Open the bottom, pushing the front and back apart, and stand the hat on its brim. Put it on. Arr!":
+    "下を開いて前とうしろをはなし、ぼうしをつばで立たせます。かぶりましょう。アーッ！",
 };

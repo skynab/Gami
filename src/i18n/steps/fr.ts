@@ -1991,8 +1991,6 @@ export const fr: Record<string, string> = {
     "…et encore une fois.",
   "Draw a skull and crossbones":
     "Dessiner une tête de mort",
-  "Draw a skull and crossbones on the front. Open the bottom and put it on. Arr!":
-    "Dessinez une tête de mort et deux os croisés devant. Ouvrez le bas et mettez-le. Arrr !",
   "Start dark side up, with a corner pointing towards you.":
     "Commencez face foncée dessus, un coin pointé vers vous.",
   "Fold the top layer’s point down to the middle of the bottom edge. This makes the pocket.":
@@ -2745,4 +2743,10 @@ export const fr: Record<string, string> = {
     "Écarte un peu les deux côtés du corps et mets-le debout sur ses quatre pattes, la tête tournée vers l’avant. Ton taureau est prêt à charger !",
   "Blow gently into the hole at the bottom to puff up the rabbit. Done!":
     "Souffle doucement dans le trou du bas pour gonfler le lapin. C’est fini !",
+  "Draw a skull and crossbones on the front.":
+    "Dessinez une tête de mort et deux os croisés devant.",
+  "Open it and stand it up":
+    "L’ouvrir et le poser debout",
+  "Open the bottom, pushing the front and back apart, and stand the hat on its brim. Put it on. Arr!":
+    "Ouvrez le bas en écartant l’avant et l’arrière, et posez le chapeau debout sur son bord. Mettez-le. Arrr !",
 };
