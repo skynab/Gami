@@ -2077,10 +2077,6 @@ export const fr: Record<string, string> = {
     "Découper les pattes",
   "Cut two snips up from the bottom edge, through both layers, a little in from each end.":
     "Faites deux entailles vers le haut depuis le bord du bas, à travers les deux couches, un peu en retrait de chaque bout.",
-  "Fold up the belly":
-    "Relever le ventre",
-  "Fold the paper between the snips up behind, leaving four legs.":
-    "Repliez le papier entre les entailles derrière vers le haut : il reste quatre pattes.",
   "Turn the head square":
     "Tourner le carré de la tête",
   "Turn the small square so a corner points towards you.":
@@ -2099,8 +2095,6 @@ export const fr: Record<string, string> = {
     "Rabattez la pointe de chaque rabat devant, du milieu jusqu’au bord, pour qu’une corne se dresse de chaque côté.",
   "Set the head on the front of the body, its muzzle a little below the back.":
     "Posez la tête à l’avant du corps, le museau un peu plus bas que le dos.",
-  "Draw two eyes and two nostrils on the head. Your bull is ready to charge!":
-    "Dessinez deux yeux et deux naseaux sur la tête. Votre taureau est prêt à charger !",
   "Start with a diamond":
     "Commencer avec un losange",
   "Start with the big square, dark side up, a corner pointing towards you.":
@@ -2743,4 +2737,12 @@ export const fr: Record<string, string> = {
     "Plie la bande vers le haut le long du bas, rebord compris, pour l’arrière du bord du casque.",
   "Turn it back over. Open the bottom to wear it.":
     "Retourne-le à nouveau. Ouvre le bas pour le porter.",
+  "Tuck up the belly":
+    "Rentrer le ventre",
+  "Push the paper between the snips up inside, between the layers, leaving four legs.":
+    "Rentre vers le haut, entre les couches, le papier entre les entailles, pour laisser quatre pattes.",
+  "Draw two eyes and two nostrils on the head.":
+    "Dessine deux yeux et deux naseaux sur la tête.",
+  "Open the body’s two sides a little and stand it on its four legs, its face looking forwards. Your bull is ready to charge!":
+    "Écarte un peu les deux côtés du corps et mets-le debout sur ses quatre pattes, la tête tournée vers l’avant. Ton taureau est prêt à charger !",
 };

@@ -2077,10 +2077,6 @@ export const es: Record<string, string> = {
     "Corta las patas",
   "Cut two snips up from the bottom edge, through both layers, a little in from each end.":
     "Haz dos cortes hacia arriba desde el borde de abajo, por las dos capas, un poco hacia dentro de cada extremo.",
-  "Fold up the belly":
-    "Dobla la barriga hacia arriba",
-  "Fold the paper between the snips up behind, leaving four legs.":
-    "Dobla el papel entre los cortes hacia atrás y hacia arriba: quedan cuatro patas.",
   "Turn the head square":
     "Gira el cuadrado de la cabeza",
   "Turn the small square so a corner points towards you.":
@@ -2099,8 +2095,6 @@ export const es: Record<string, string> = {
     "Dobla la punta de cada solapa hacia delante, desde el centro hasta el borde, para que se levante un cuerno a cada lado.",
   "Set the head on the front of the body, its muzzle a little below the back.":
     "Pon la cabeza en la parte delantera del cuerpo, con el hocico un poco por debajo del lomo.",
-  "Draw two eyes and two nostrils on the head. Your bull is ready to charge!":
-    "Dibuja dos ojos y dos orificios nasales en la cabeza. ¡Tu toro está listo para embestir!",
   "Start with a diamond":
     "Empieza con un rombo",
   "Start with the big square, dark side up, a corner pointing towards you.":
@@ -2743,4 +2737,12 @@ export const es: Record<string, string> = {
     "Dobla la banda hacia arriba por la parte de abajo, con el borde incluido, para la parte de atrás del ala.",
   "Turn it back over. Open the bottom to wear it.":
     "Vuelve a darle la vuelta. Abre la parte de abajo para ponértelo.",
+  "Tuck up the belly":
+    "Mete la barriga hacia dentro",
+  "Push the paper between the snips up inside, between the layers, leaving four legs.":
+    "Empuja hacia arriba por dentro, entre las capas, el papel que hay entre los cortes, dejando cuatro patas.",
+  "Draw two eyes and two nostrils on the head.":
+    "Dibuja dos ojos y dos orificios nasales en la cabeza.",
+  "Open the body’s two sides a little and stand it on its four legs, its face looking forwards. Your bull is ready to charge!":
+    "Abre un poco los dos lados del cuerpo y ponlo de pie sobre sus cuatro patas, con la cara mirando hacia delante. ¡Tu toro está listo para embestir!",
 };

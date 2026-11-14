@@ -2077,10 +2077,6 @@ export const ja: Record<string, string> = {
     "足を切り出す",
   "Cut two snips up from the bottom edge, through both layers, a little in from each end.":
     "両はしから少し内がわで、下のふちから上へ二か所、二枚いっしょに切りこみを入れます。",
-  "Fold up the belly":
-    "おなかを折りあげる",
-  "Fold the paper between the snips up behind, leaving four legs.":
-    "切りこみのあいだの紙をうしろに折りあげます。足が四本のこります。",
   "Turn the head square":
     "頭の正方形をまわす",
   "Turn the small square so a corner points towards you.":
@@ -2099,8 +2095,6 @@ export const ja: Record<string, string> = {
     "それぞれのフラップの先を、まん中からふちまで前に折りさげて、左右に角を立てます。",
   "Set the head on the front of the body, its muzzle a little below the back.":
     "頭を体の前におき、鼻先を背中より少し下にします。",
-  "Draw two eyes and two nostrils on the head. Your bull is ready to charge!":
-    "頭に目を二つと、鼻のあなを二つかきます。ウシが今にも走り出しそう！",
   "Start with a diamond":
     "ひし形から始める",
   "Start with the big square, dark side up, a corner pointing towards you.":
@@ -2743,4 +2737,12 @@ export const ja: Record<string, string> = {
     "下のところで帯を、ふちごと折りあげて、つばのうしろにします。",
   "Turn it back over. Open the bottom to wear it.":
     "もう一度裏返します。下を開けば、かぶれます。",
+  "Tuck up the belly":
+    "おなかを中に折りこむ",
+  "Push the paper between the snips up inside, between the layers, leaving four legs.":
+    "切りこみのあいだの紙を、重なりのあいだに上へおしこんで、四本の足にします。",
+  "Draw two eyes and two nostrils on the head.":
+    "頭に目を二つと鼻のあなを二つかきます。",
+  "Open the body’s two sides a little and stand it on its four legs, its face looking forwards. Your bull is ready to charge!":
+    "体の両側を少し開いて四本足で立たせ、顔を前にむけます。ウシが突進しそう！",
 };

@@ -1,11 +1,12 @@
 import { toFlat } from '../../fold/fold';
-import { paper, Recipe, table } from '../../fold/recipe';
+import { paper, Recipe, table, type ShapeBend } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 
 /**
  * A bull, Gami's own, from two squares: a big one for the body, folded in half with two snips up from its bottom
- * edge and the paper between them folded up behind, leaving four legs, and a small one for the head, folded like
- * the heart bookmark so its two humps stand up as horns, set at the front.
+ * edge and the paper between them tucked up inside, leaving four legs, and a small one for the head, folded like
+ * the heart bookmark so its two humps stand up as horns, set at the front. Then stood up in 3D, the body's sides
+ * opened a little and the face looking forwards.
  */
 export function bull() {
   const r = new Recipe({
@@ -32,12 +33,13 @@ export function bull() {
   });
   // The snips split the paper into strips down the body: the belly is the middle one.
   const belly = r.lying(([x]) => Math.abs(x - bx) < gap);
-  r.along(table(bx - 1, knees), table(bx + 1, knees), table(bx, feet - 0.02), {
-    title: 'Fold up the belly',
-    text: 'Fold the paper between the snips up behind, leaving four legs.',
-    kind: 'mountain',
-    only: (c) => body(c) && belly(c),
-  });
+  // Pushed up inside, between the layers, rather than folded behind both: each side keeps its own belly, so the
+  // sides can open apart at the end.
+  r.collapse(
+    { title: 'Tuck up the belly', text: 'Push the paper between the snips up inside, between the layers, leaving four legs.', kind: 'reverse' },
+    [{ through: [table(bx - 1, knees), table(bx + 1, knees)], kind: 'inside', only: (c) => body(c) && belly(c) }],
+    paper(0.4, 0.1),
+  );
 
   // The head, from the front, folded like the heart bookmark: a diamond `h` from its middle to each corner, folded
   // bottom to top into a triangle, its top point folded behind at `notch`, its side corners folded up to where the
@@ -85,12 +87,29 @@ export function bull() {
   // The face is the square between the horns, its bottom corner the muzzle: eyes `up` its height above that,
   // nostrils near it, drawn either side of the middle, where the flaps meet.
   const at = (up: number) => k.bottom - up * h;
-  return r
-    .draw({ title: 'Draw a face', text: 'Draw two eyes and two nostrils on the head. Your bull is ready to charge!' }, [
+  r.draw({ title: 'Draw a face', text: 'Draw two eyes and two nostrils on the head.' }, [
       { fill: ring(cx - 0.08, at(0.5), 0.022) },
       { fill: ring(cx + 0.08, at(0.5), 0.022) },
       { fill: ring(cx - 0.04, at(0.18), 0.014) },
       { fill: ring(cx + 0.04, at(0.18), 0.014) },
+  ]);
+
+  // Standing it up: the body's sides open `open` either side of its back (the fold, along z = bz), and it stands on
+  // its four legs, the table's +z going down and its up towards the viewer. The head, a face seen from the front,
+  // turns to look forwards (+x), its horns up, at the front of the body.
+  const open = 14;
+  const sides: ShapeBend[] = [1, -1].map((s) => ({
+    through: [table(bx - 1, bz), table(bx + 1, bz)],
+    moving: table(bx, bz + 0.2),
+    degrees: s * open,
+    only: (c: Vec2) => body(c) && s * c[1] < 0,
+  }));
+  const high = (feet - bz) * Math.cos((open * Math.PI) / 180) + 0.003;
+  const middle: Vec2 = [cx, (k.top + k.bottom) / 2];
+  return r
+    .assemble({ title: 'Stand it up', text: 'Open the body’s two sides a little and stand it on its four legs, its face looking forwards. Your bull is ready to charge!' }, [
+      { only: body, bends: sides, pose: { from: table(bx, bz), to: [0, high, 0], x: [1, 0, 0], up: [0, 0, 1] } },
+      { only: head, pose: { from: table(...middle), to: [b.right - bx + 0.02, high - (middle[1] - bz), 0], x: [0, 0, -1], up: [1, 0, 0] } },
     ])
     .build();
 }
