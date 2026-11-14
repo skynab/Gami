@@ -1034,8 +1034,6 @@ export const ja: Record<string, string> = {
     "左上のはなれている先を、少し横に折り出して耳にします。",
   "Fold out the other ear":
     "もう一つの耳を折り出す",
-  "And the other one. Blow gently into the hole at the bottom to puff up the rabbit, then open out the ears. Done!":
-    "もう一つも折ります。下の穴にそっと息を吹きこんでうさぎをふくらませ、耳を開きます。できあがり！",
   "Fold in half side to side, then unfold.":
     "左右に半分に折って、開きます。",
   "And top to bottom, then unfold.":
@@ -2745,4 +2743,6 @@ export const ja: Record<string, string> = {
     "頭に目を二つと鼻のあなを二つかきます。",
   "Open the body’s two sides a little and stand it on its four legs, its face looking forwards. Your bull is ready to charge!":
     "体の両側を少し開いて四本足で立たせ、顔を前にむけます。ウシが突進しそう！",
+  "Blow gently into the hole at the bottom to puff up the rabbit. Done!":
+    "下の穴にそっと息を吹きこんで、うさぎをふくらませます。できあがり！",
 };

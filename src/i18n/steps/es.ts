@@ -1034,8 +1034,6 @@ export const es: Record<string, string> = {
     "Dobla un poco hacia el lado la punta suelta de arriba a la izquierda, para hacer una oreja.",
   "Fold out the other ear":
     "Saca la otra oreja",
-  "And the other one. Blow gently into the hole at the bottom to puff up the rabbit, then open out the ears. Done!":
-    "Y la otra. Sopla suavemente por el agujero de abajo para inflar el conejo y luego abre las orejas. ¡Listo!",
   "Fold in half side to side, then unfold.":
     "Dobla por la mitad de lado a lado y desdobla.",
   "And top to bottom, then unfold.":
@@ -2745,4 +2743,6 @@ export const es: Record<string, string> = {
     "Dibuja dos ojos y dos orificios nasales en la cabeza.",
   "Open the body’s two sides a little and stand it on its four legs, its face looking forwards. Your bull is ready to charge!":
     "Abre un poco los dos lados del cuerpo y ponlo de pie sobre sus cuatro patas, con la cara mirando hacia delante. ¡Tu toro está listo para embestir!",
+  "Blow gently into the hole at the bottom to puff up the rabbit. Done!":
+    "Sopla suavemente por el agujero de abajo para inflar el conejo. ¡Listo!",
 };

@@ -102,7 +102,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'waterbomb', title: 'Water bomb', blurb: 'A paper balloon. Blow into the hole and it puffs up.', difficulty: 2, category: 'toy', steps: 27, minutes: 8, sheets: 1, added: '2026-10-21' },
   { id: 'balloon', title: 'Balloon', blurb: 'The water bomb, blown up into a cube.', difficulty: 2, category: 'toy', form: '3d', steps: 28, minutes: 8, sheets: 1, added: '2026-10-23' },
   { id: 'flapping-bird', title: 'Flapping bird', blurb: 'Pull its tail and the wings flap.', difficulty: 3, category: 'toy', form: '3d', steps: 25, minutes: 12, sheets: 1, added: '2026-10-21' },
-  { id: 'balloon-rabbit', title: 'Balloon rabbit', blurb: 'A water bomb with long ears, puffed up round.', difficulty: 3, category: 'animal', steps: 25, minutes: 10, sheets: 1, added: '2026-10-21' },
+  { id: 'balloon-rabbit', title: 'Balloon rabbit', blurb: 'A water bomb with long ears, puffed up round.', difficulty: 3, category: 'animal', form: '3d', steps: 26, minutes: 10, sheets: 1, added: '2026-10-21' },
   { id: 'pinwheel', title: 'Pinwheel', blurb: 'A windmill with four sails. Pin it to a stick and blow.', difficulty: 2, category: 'toy', steps: 12, minutes: 6, sheets: 1, added: '2026-10-21' },
   { id: 'butterfly', title: 'Butterfly', blurb: 'Wings folded out from a squashed square, lifted for flight.', difficulty: 3, category: 'animal', form: '3d', steps: 28, minutes: 10, sheets: 1, added: '2026-10-21' },
   { id: 'dolphin', title: 'Dolphin', blurb: 'A traditional dolphin, leaping.', difficulty: 3, category: 'animal', form: '3d', steps: 24, minutes: 12, sheets: 1, needs: ['scissors'], added: '2026-10-21' },
