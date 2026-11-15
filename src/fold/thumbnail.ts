@@ -1,5 +1,6 @@
-import { placeLike, toFlat } from './fold';
-import { facePositions, normal } from './frames';
+import { stackLifts, type StackLifts } from './bend/stack';
+import { FoldError, placeLike, toFlat } from './fold';
+import { facePositions, framesOf, LAYER_GAP, normal } from './frames';
 import { frontUp } from './geometry2d';
 import { MARK_COLOUR, MARK_WIDTH, marksUpTo, onFace, type Mark } from './marks';
 import { faceColour } from './sheets';
@@ -120,6 +121,7 @@ export function previewSvg(model: OrigamiModel, size = 240): string {
 const SLANT = (55 * Math.PI) / 180;
 
 function slanted(model: OrigamiModel, frame: FoldFrame, size: number, marks: Mark[] = []): string {
+  const lifts = frame === model.steps.at(-1)?.frame ? finishedLifts(model) : undefined;
   // Looking down from above and in front: screen right is +x, screen up tilts back with the view.
   const toViewer: Vec3 = [0, Math.sin(SLANT), Math.cos(SLANT)];
   const up: Vec3 = [0, Math.cos(SLANT), -Math.sin(SLANT)];
@@ -130,9 +132,12 @@ function slanted(model: OrigamiModel, frame: FoldFrame, size: number, marks: Mar
   const key = (u: number, v: number) => (u < v ? `${u} ${v}` : `${v} ${u}`);
   const soft = new Set((frame.soft ?? []).map(([u, v]) => key(u, v)));
   const faces = frame.faces_vertices.map((face, f) => {
-    const world = placed[f];
-    const n = normal(world);
+    const n = normal(placed[f]);
     const front = dot(n, toViewer) > 0;
+    // Bent paper's layers can pass a little into each other: each is drawn as far back as the viewer draws it, by
+    // its place among the paper it's stacked with (see `stackLifts`), so the inside doesn't show through.
+    const back = (lifts ? (front ? lifts.front[f] : lifts.back[f]) : 0) * LIFT;
+    const world = placed[f].map((p): Vec3 => [p[0] + toViewer[0] * back, p[1] + toViewer[1] * back, p[2] + toViewer[2] * back]);
     // The face's plane, its normal turned towards the viewer, and how far along that normal the plane lies.
     const facing: Vec3 = front ? n : [-n[0], -n[1], -n[2]];
     return {
@@ -198,6 +203,30 @@ function slanted(model: OrigamiModel, frame: FoldFrame, size: number, marks: Mar
     `<g stroke="#2b2a33" stroke-opacity=".45" stroke-width="${stroke}" stroke-linejoin="round">${polys}</g></svg>
 `
   );
+}
+
+/** How far back each place among stacked bent paper is drawn: the viewer's `LIFT` (FoldedPaper.tsx). */
+const LIFT = 4 * LAYER_GAP;
+
+/**
+ * For a model finishing in bent paper (a balloon blown up), how far back to draw each of its last frame's triangles,
+ * as the viewer does (`stackRanks` in FoldedPaper.tsx). Undefined if it doesn't end bent, or not from a flat stack.
+ */
+function finishedLifts(model: OrigamiModel): StackLifts | undefined {
+  const frames = framesOf(model);
+  const k = frames.length - 1;
+  if (!k || !frames[k].soft?.length) return undefined;
+  let b = k;
+  while (b > 1 && frames[b - 1].soft?.length) b--;
+  const parent = model.steps[b - 1].via?.[0]?.faces_parent;
+  const before = frames[b - 1];
+  if (!parent || parent.length !== frames[k].faces_vertices.length || !before.faces_layer) return undefined;
+  try {
+    return stackLifts(before, parent, frames[k]);
+  } catch (e) {
+    if (e instanceof FoldError) return undefined;
+    throw e;
+  }
 }
 
 /**
