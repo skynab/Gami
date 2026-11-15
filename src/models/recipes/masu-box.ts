@@ -12,7 +12,12 @@ export function masuBox() {
     id: 'masu-box',
     title: 'Masu box',
     colour: '#2f6f8f',
-    gap: 0,
+    // To the middle, give or take the paper's thickness: a hairline short of it (on a 15 cm sheet, under half a
+    // millimetre), as the corners of real paper end up. Folded right to the middle, the four points meet there,
+    // and the end flaps' points land on the side flaps' points in the same place: the viewer can't keep them
+    // apart, so they cut into each other, and the end flaps, grazing them on the way in, swing out over the
+    // walls instead.
+    gap: 0.003,
     corners: [
       'Fold the bottom left corner to the middle, where the creases cross.',
       'And the bottom right corner.',
@@ -101,7 +106,7 @@ export function masuShallowLid() {
   return r.build();
 }
 
-/** The box with its corners folded `gap` short of the middle (0 for the box itself). */
+/** The box with its corners folded `gap` short of the middle (a hairline for the box itself). */
 function masu({ id, title, colour, gap, corners: cornerTexts, done }: { id: string; title: string; colour: string; gap: number; corners: [string, string, string, string]; done: string }) {
   // Folded white side up, so the box is coloured outside and white inside.
   const r = new Recipe({ id, title, card: 'finished', sheet: { size: [1, 1], front: '#f6f3ec', back: colour } })
