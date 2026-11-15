@@ -11,13 +11,13 @@ test.describe('gallery', () => {
     await expect(page.getByRole('link', { name: /Crane/ })).toHaveCount(0);
 
     await page.getByRole('searchbox', { name: 'Search models' }).fill('');
-    await page.getByRole('button', { name: 'Lessons' }).click();
+    await page.getByRole('button', { name: 'Lessons', exact: true }).click();
     await expect(page.getByRole('link', { name: /^Lesson Basics/ })).toBeVisible();
     await expect(page.getByRole('link', { name: /Geometry by folding/ })).toBeVisible();
     await expect(page.getByRole('link', { name: /Crane/ })).toHaveCount(0);
 
     // Flat or 3D: the crane ends with its wings spread, the cat face lies flat.
-    await page.getByRole('button', { name: 'Lessons' }).click();
+    await page.getByRole('button', { name: 'Lessons', exact: true }).click();
     await page.getByRole('button', { name: '3D', exact: true }).click();
     await expect(page.getByRole('link', { name: /Crane/ })).toBeVisible();
     await expect(page.getByRole('link', { name: /Cat face/ })).toHaveCount(0);
