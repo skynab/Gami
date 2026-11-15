@@ -99,6 +99,7 @@ export const fr: Messages = {
     new: 'Nouveautés',
     noFavorites: 'Pas encore de favoris. Appuyez sur le cœur d’un modèle pour le garder ici.',
     sortLabel: 'Trier les modèles',
+    without: 'Tout sauf {{name}}',
     noMatch: 'Aucun modèle ne correspond. Essayez une autre recherche ou un autre filtre.',
     studioTitle: 'Créez vos propres modèles, gardés dans ce navigateur',
     community: 'De la communauté',
@@ -111,6 +112,9 @@ export const fr: Messages = {
   brandMenu: {
     title: 'Menu Gami',
     previews: 'Montrer les plis sur les cartes',
+    paper: 'Papier',
+    experimental: 'expérimental',
+    patterns: { plain: 'Uni', asanoha: 'Feuille de chanvre (asanoha)', seigaiha: 'Vagues (seigaiha)', shippo: 'Cercles entrelacés (shippō)', ichimatsu: 'Damier (ichimatsu)', kikko: 'Écaille de tortue (kikkō)', same: 'Points peau de requin (same komon)', sakura: 'Fleur de cerisier (sakura)', washi: 'Fibres de washi' },
   },
   card: {
     favorite: 'Favori : {{name}}',

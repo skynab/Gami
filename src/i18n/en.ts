@@ -41,6 +41,7 @@ export const en = {
     new: 'New',
     noFavorites: 'No favourites yet. Press the heart on a model to keep it here.',
     sortLabel: 'Sort models',
+    without: 'Everything but {{name}}',
     noMatch: 'No models match. Try another search or filter.',
     studioTitle: 'Design your own models, kept in this browser',
     community: 'From the community',
@@ -53,6 +54,9 @@ export const en = {
   brandMenu: {
     title: 'Gami menu',
     previews: 'Play the cards’ folds',
+    paper: 'Paper',
+    experimental: 'experimental',
+    patterns: { plain: 'Plain', asanoha: 'Hemp leaf (asanoha)', seigaiha: 'Waves (seigaiha)', shippo: 'Linked circles (shippō)', ichimatsu: 'Checks (ichimatsu)', kikko: 'Tortoiseshell (kikkō)', same: 'Shark skin dots (same komon)', sakura: 'Cherry blossom (sakura)', washi: 'Washi fibres' },
   },
   card: {
     favorite: 'Favourite: {{name}}',

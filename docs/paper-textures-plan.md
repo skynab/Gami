@@ -2,7 +2,14 @@
 
 A hidden choice in the menu behind the Gami name (on the gallery, `Brand` in `src/app/TopBar.tsx`): fold every model
 on patterned paper instead of plain coloured paper. Like real patterned origami paper (chiyogami, washi), the pattern
-is printed on one side and the other side stays plain white. A plan to talk through; nothing is built yet.
+is printed on one side and the other side stays plain white.
+
+**Built (15 November 2026), as an experiment:** steps 1–4 below. The Gami menu has a *Paper* row (marked
+experimental) of swatches: plain and the eight patterns. The choice is kept in this browser and prints the pattern on
+each sheet's coloured side wherever the viewer folds a model (`src/viewer/patterns.ts` draws the tiles,
+`pattern-texture.ts` makes them textures, `FoldedPaper.tsx` puts them on the side `printedSide` picks). The cards'
+pictures stay plain (step 5), and the seam test (step 6) isn't written: canvas drawing doesn't run in the unit
+tests, so the tiles were checked by eye, tiled 2×2 in three colours. The questions under "To decide" are still open.
 
 ## What's there to build on
 

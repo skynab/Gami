@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { OrigamiHeartIcon, OrigamiStarIcon, SearchIcon, SortIcon, StudioIcon } from '../app/icons';
+import { NotIcon, OrigamiHeartIcon, OrigamiStarIcon, SearchIcon, SortIcon, StudioIcon } from '../app/icons';
 import { TopBar } from '../app/TopBar';
 import { AccountButton } from '../auth/AccountButton';
 import { accountsEnabled } from '../auth/store';
@@ -21,6 +21,7 @@ interface Place {
   query: string;
   level: Level | null;
   category: Category | null;
+  without: Category[];
   form: Form | null;
   sort: Sort;
   favorites: boolean;
@@ -53,6 +54,8 @@ export function Gallery() {
   const [query, setQuery] = useState(place.query ?? '');
   const [level, setLevel] = useState<Level | null>(place.level ?? null);
   const [category, setCategory] = useState<Category | null>(place.category ?? null);
+  // Categories left out, each by the small ⊘ at the end of its chip. Picking one category to show clears them.
+  const [without, setWithout] = useState<Category[]>(() => (Array.isArray(place.without) ? place.without.filter((c) => CATEGORIES.some((k) => k.id === c)) : []));
   const [form, setForm] = useState<Form | null>(FORMS.includes(place.form as Form) ? place.form! : null);
   const [sort, setSort] = useState<Sort>(SORTS.includes(place.sort as Sort) ? place.sort! : 'natural');
   const [onlyFavorites, setOnlyFavorites] = useState(place.favorites === true);
@@ -60,8 +63,8 @@ export function Gallery() {
   const favorites = useFavorites((s) => s.ids);
   const [hideFolded, setHideFolded] = useState(readHideFolded);
   useEffect(
-    () => savePlace({ query, level, category, form, sort, favorites: onlyFavorites, onlyNew }),
-    [query, level, category, form, sort, onlyFavorites, onlyNew],
+    () => savePlace({ query, level, category, without, form, sort, favorites: onlyFavorites, onlyNew }),
+    [query, level, category, without, form, sort, onlyFavorites, onlyNew],
   );
   // Before the first paint, so the page doesn't flash at the top first.
   useLayoutEffect(() => {
@@ -72,7 +75,7 @@ export function Gallery() {
   }, [place]);
   const named = MODELS.map((m) => ({ ...m, title: t(`models.${m.id}.title`, { defaultValue: m.title }), blurb: t(`models.${m.id}.blurb`, { defaultValue: m.blurb }) }));
   const models = sortModels(
-    filterModels(named, { query, level, category, form, onlyNew }).filter(
+    filterModels(named, { query, level, category, without, form, onlyNew }).filter(
       (m) => (!hideFolded || !readProgress(m.id)?.done) && (!onlyFavorites || favorites.includes(m.id)),
     ),
     sort,
@@ -117,17 +120,39 @@ export function Gallery() {
             ))}
           </div>
           <div className="chips" role="group" aria-label={t('gallery.category')}>
-            {CATEGORIES.map((c) => (
-              <button
-                key={c.id}
-                type="button"
-                className="chip"
-                aria-pressed={category === c.id}
-                onClick={() => setCategory(category === c.id ? null : c.id)}
-              >
-                {t(`categories.${c.id}`)}
-              </button>
-            ))}
+            {CATEGORIES.map((c) => {
+              const name = t(`categories.${c.id}`);
+              const left = without.includes(c.id);
+              return (
+                // One pill in two parts: its name shows only that category, the ⊘ at its end everything but it.
+                <span key={c.id} className={left ? 'chip-pair without' : 'chip-pair'}>
+                  <button
+                    type="button"
+                    className="chip"
+                    aria-pressed={category === c.id}
+                    onClick={() => {
+                      setCategory(category === c.id ? null : c.id);
+                      setWithout([]);
+                    }}
+                  >
+                    {name}
+                  </button>
+                  <button
+                    type="button"
+                    className="chip chip-not"
+                    aria-pressed={left}
+                    aria-label={t('gallery.without', { name })}
+                    title={t('gallery.without', { name })}
+                    onClick={() => {
+                      setWithout(left ? without.filter((w) => w !== c.id) : [...without, c.id]);
+                      setCategory(null);
+                    }}
+                  >
+                    <NotIcon width={14} height={14} />
+                  </button>
+                </span>
+              );
+            })}
           </div>
           <div className="chips" role="group" aria-label={t('gallery.form')}>
             {FORMS.map((f) => (

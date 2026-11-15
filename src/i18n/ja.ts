@@ -99,6 +99,7 @@ export const ja: Messages = {
     new: '新着',
     noFavorites: 'お気に入りはまだありません。モデルのハートを押すと、ここに表示されます。',
     sortLabel: 'モデルの並べ替え',
+    without: '{{name}}以外',
     noMatch: '該当する作品がありません。検索語や絞り込みを変えてみてください。',
     studioTitle: '自分の作品を作る(このブラウザに保存)',
     community: 'コミュニティの作品',
@@ -111,6 +112,9 @@ export const ja: Messages = {
   brandMenu: {
     title: 'Gami メニュー',
     previews: 'カードで折り方を再生する',
+    paper: '紙',
+    experimental: '試験中',
+    patterns: { plain: '無地', asanoha: '麻の葉', seigaiha: '青海波', shippo: '七宝', ichimatsu: '市松', kikko: '亀甲', same: '鮫小紋', sakura: '桜', washi: '和紙' },
   },
   card: {
     favorite: 'お気に入り：{{name}}',

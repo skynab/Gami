@@ -22,6 +22,9 @@ import { sheetOf } from '../fold/sheets';
 import { laidAlong, TAPE_COLOUR, TAPE_OPACITY } from '../fold/tape';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from '../fold/types';
 import { usePlayback } from '../state/playback';
+import { useSettings } from '../state/settings';
+import { patternTexture } from './pattern-texture';
+import { printedSide } from './patterns';
 
 /**
  * The paper, posed wherever playback is. Each sheet has two meshes sharing one geometry, one per side, so each
@@ -44,6 +47,14 @@ export function FoldedPaper({ model, edgeColor }: { model: OrigamiModel; edgeCol
   const tape = useRef<Mesh | null>(null);
   const invalidate = useThree((s) => s.invalidate);
   const grain = useMemo(paperGrain, []);
+  // Patterned paper (an experiment, chosen in the Gami menu): printed on each sheet's coloured side, in its colour.
+  const paper = useSettings((s) => s.paper);
+  const sides = model.sheets.map((sheet) => {
+    const printed = paper === 'plain' ? null : printedSide(sheet.front, sheet.back);
+    const side = (which: 'front' | 'back') =>
+      printed === which && paper !== 'plain' ? { color: '#ffffff', map: patternTexture(paper, sheet[which]) } : { color: sheet[which], map: grain };
+    return { front: side('front'), back: side('back') };
+  });
 
   useEffect(() => {
     const frames = framesOf(model);
@@ -103,10 +114,10 @@ export function FoldedPaper({ model, edgeColor }: { model: OrigamiModel; edgeCol
         <group key={i}>
           {/* Pushed back a touch in depth so the edge lines always draw on top. */}
           <mesh ref={(m) => void (front.current[i] = m)} frustumCulled={false}>
-            <meshStandardMaterial color={sheet.front} map={grain} side={FrontSide} roughness={0.8} polygonOffset polygonOffsetFactor={1} polygonOffsetUnits={1} onBeforeCompile={liftFront} customProgramCacheKey={liftFrontKey} />
+            <meshStandardMaterial {...sides[i].front} side={FrontSide} roughness={0.8} polygonOffset polygonOffsetFactor={1} polygonOffsetUnits={1} onBeforeCompile={liftFront} customProgramCacheKey={liftFrontKey} />
           </mesh>
           <mesh ref={(m) => void (back.current[i] = m)} frustumCulled={false}>
-            <meshStandardMaterial color={sheet.back} map={grain} side={BackSide} roughness={0.85} polygonOffset polygonOffsetFactor={1} polygonOffsetUnits={1} onBeforeCompile={liftBack} customProgramCacheKey={liftBackKey} />
+            <meshStandardMaterial {...sides[i].back} side={BackSide} roughness={0.85} polygonOffset polygonOffsetFactor={1} polygonOffsetUnits={1} onBeforeCompile={liftBack} customProgramCacheKey={liftBackKey} />
           </mesh>
           {/* Fold bends, by which side of the paper is on their outside. */}
           <mesh ref={(m) => void (bendsFront.current[i] = m)} frustumCulled={false}>

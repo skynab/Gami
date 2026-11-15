@@ -204,6 +204,8 @@ export interface Filter {
   query?: string;
   level?: Level | null;
   category?: Category | null;
+  /** Everything but the models in these categories. */
+  without?: Category[];
   /** Only the models marked New. */
   onlyNew?: boolean;
   /** Only the flat models, or only the 3D ones. */
@@ -235,12 +237,13 @@ export function sortModels<M extends ModelInfo>(models: M[], sort: Sort, locale?
   return by ? [...models].sort(by) : models;
 }
 
-export function filterModels(models: ModelInfo[], { query = '', level, category, onlyNew, form }: Filter): ModelInfo[] {
+export function filterModels(models: ModelInfo[], { query = '', level, category, without, onlyNew, form }: Filter): ModelInfo[] {
   const q = query.trim().toLowerCase();
   return models.filter(
     (m) =>
       (!level || levelOf(m.difficulty) === level) &&
       (!category || m.category === category) &&
+      !without?.includes(m.category) &&
       (!onlyNew || isNew(m)) &&
       (!form || formOf(m) === form) &&
       (!q || m.title.toLowerCase().includes(q) || m.blurb.toLowerCase().includes(q)),
