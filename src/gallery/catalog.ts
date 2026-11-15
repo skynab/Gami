@@ -99,7 +99,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'whale', title: 'Whale', blurb: 'A fish base folded into a whale, with fins and a flicked-up tail.', difficulty: 2, category: 'animal', form: '3d', steps: 22, minutes: 8, sheets: 1, added: '2026-10-21' },
   { id: 'crow', title: 'Crow', blurb: 'A traditional crow with a sharp beak.', difficulty: 3, category: 'animal', steps: 26, minutes: 12, sheets: 1, added: '2026-10-21' },
   { id: 'christmas-tree', title: 'Christmas tree', blurb: 'A fir tree in a white pot, nice on a card.', difficulty: 1, category: 'object', steps: 11, minutes: 5, sheets: 1, added: '2026-10-21' },
-  { id: 'waterbomb', title: 'Water bomb', blurb: 'A paper balloon. Blow into the hole and it puffs up.', difficulty: 2, category: 'toy', steps: 27, minutes: 8, sheets: 1, added: '2026-10-21' },
+  { id: 'waterbomb', title: 'Water bomb', blurb: 'A paper balloon. Blow into the hole and it puffs up.', difficulty: 2, category: 'toy', form: '3d', steps: 28, minutes: 8, sheets: 1, added: '2026-10-21' },
   { id: 'balloon', title: 'Balloon', blurb: 'The water bomb, blown up into a cube.', difficulty: 2, category: 'toy', form: '3d', steps: 28, minutes: 8, sheets: 1, added: '2026-10-23' },
   { id: 'flapping-bird', title: 'Flapping bird', blurb: 'Pull its tail and the wings flap.', difficulty: 3, category: 'toy', form: '3d', steps: 25, minutes: 12, sheets: 1, added: '2026-10-21' },
   { id: 'balloon-rabbit', title: 'Balloon rabbit', blurb: 'A water bomb with long ears, puffed up round.', difficulty: 3, category: 'animal', form: '3d', steps: 26, minutes: 10, sheets: 1, added: '2026-10-21' },

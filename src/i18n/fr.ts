@@ -108,6 +108,10 @@ export const fr: Messages = {
   levels: { easy: 'Facile', medium: 'Moyen', hard: 'Difficile' },
   categories: { lesson: 'Leçons', animal: 'Animaux', object: 'Objets', toy: 'Jouets', plane: 'Avions', modular: 'Modulaires', flower: 'Fleurs' },
   forms: { '2d': '2D', '3d': '3D' },
+  brandMenu: {
+    title: 'Menu Gami',
+    previews: 'Montrer les plis sur les cartes',
+  },
   card: {
     favorite: 'Favori : {{name}}',
     favoriteTitle: 'Ajouter aux favoris',

@@ -90,18 +90,25 @@ const PREVIEW_SECONDS = 0.9;
 export function previewSvg(model: OrigamiModel, size = 240): string {
   // Each flat state, with how many steps it's after (for the marks drawn by then).
   const frames = [model.start, ...model.steps.map((s) => s.frame)].map((frame, k) => ({ frame, k })).filter(({ frame }) => flat(frame));
-  const n = Math.min(PREVIEW_FRAMES, frames.length);
-  const picked = Array.from({ length: n }, (_, i) => frames[Math.round((i * (frames.length - 1)) / Math.max(1, n - 1))]);
-  const cycle = n * PREVIEW_SECONDS;
-  const share = +(100 / n).toFixed(3);
+  // A model whose card shows it finished in 3D (a balloon blown up) ends on that, as its card does, rather than on
+  // its last flat state: the flat moments lead up to it.
+  const last = model.steps.at(-1)?.frame ?? model.start;
+  const finished = model.card === 'finished' && !flat(last);
+  const n = Math.min(PREVIEW_FRAMES - (finished ? 1 : 0), frames.length);
+  const flats = Array.from({ length: n }, (_, i) => frames[Math.round((i * (frames.length - 1)) / Math.max(1, n - 1))]);
+  const picked: ({ frame: FoldFrame; k: number } | null)[] = finished ? [...flats, null] : flats;
+  const shown = picked.length;
+  const cycle = shown * PREVIEW_SECONDS;
+  const share = +(100 / shown).toFixed(3);
   const style =
     `.f{opacity:0;animation:show ${cycle}s step-end infinite}` +
     `@keyframes show{0%{opacity:1}${share}%{opacity:0}100%{opacity:0}}` +
     picked.map((_, i) => `.f${i}{animation-delay:${(i * PREVIEW_SECONDS).toFixed(2)}s}`).join('') +
-    `@media (prefers-reduced-motion:reduce){.f{animation:none}.f${n - 1}{opacity:1}}`;
+    `@media (prefers-reduced-motion:reduce){.f{animation:none}.f${shown - 1}{opacity:1}}`;
   const views = picked
-    .map(({ frame, k }, i) => {
-      const { box, body } = fromAbove(model, frame, marksAt(model, k));
+    .map((p, i) => {
+      if (!p) return slanted(model, last, size, marksAt(model, model.steps.length)).trim().replace('<svg xmlns="http://www.w3.org/2000/svg"', `<svg class="f f${i}"`);
+      const { box, body } = fromAbove(model, p.frame, marksAt(model, p.k));
       return `<svg class="f f${i}" viewBox="${box.join(' ')}" width="${size}" height="${size}">${body}</svg>`;
     })
     .join('');

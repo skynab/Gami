@@ -1018,8 +1018,8 @@ export const ja: Record<string, string> = {
     "右の先も差しこみます。",
   "Turn it over, and do the same on this side.":
     "裏返して、こちら側も同じように折ります。",
-  "And the last one. Now blow gently into the hole at the bottom, and the water bomb puffs up into a ball. Done!":
-    "最後の一つも差しこみます。下の穴にそっと息を吹きこむと、水風船がふくらんで玉になります。できあがり！",
+  "Blow gently into the hole at the bottom, and the water bomb puffs up. Done!":
+    "下の穴にそっと息を吹きこむと、水風船がふくらみます。できあがり！",
   "Pull out the tail":
     "しっぽを引き出す",
   "Hold the body, and pull the left lower point out and up between the wings. Flatten it at an angle. This is the tail.":

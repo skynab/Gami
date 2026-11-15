@@ -6,6 +6,7 @@ import { GlueIcon, OrigamiHeartIcon, OrigamiStarIcon, PaperIcon, PenIcon, Scisso
 import { modelUrl } from '../models';
 import { useFavorite, useFavorites } from '../state/favorites';
 import { readProgress } from '../state/progress';
+import { useSettings } from '../state/settings';
 import type { Sheet } from '../fold/types';
 import { formOf, isNew, levelOf, type Difficulty, type ModelInfo, type Tool } from './catalog';
 
@@ -96,31 +97,50 @@ type Preview = 'off' | 'on' | 'loaded';
 /**
  * A model's looping preview: it loads the first time the card is hovered or focused, and plays while it is. Touch
  * screens can't hover (a finger scrolling past would start it), so there it plays while `ref` is mid-screen
- * instead. `play` goes on whatever should start it.
+ * instead, after the finished model has had a moment to be seen (`TOUCH_HOLD`): starting straight away, from the
+ * bare sheet, it was hard to tell what the card was. `play` goes on whatever should start it. None of it plays when
+ * turned off in the menu behind the Gami name.
  */
 function usePreview(model: ModelInfo) {
   const [preview, setPreview] = useState<Preview>('off');
+  const on = useSettings((s) => s.previews);
   const show = () => setPreview('on');
   const hide = () => setPreview((p) => (p === 'off' ? 'off' : 'loaded'));
-  const hover = (e: PointerEvent, then: () => void) => e.pointerType !== 'touch' && then();
+  const hover = (e: PointerEvent, then: () => void) => on && e.pointerType !== 'touch' && then();
   const ref = useRef<HTMLAnchorElement>(null);
   useEffect(() => {
+    if (!on) {
+      hide();
+      return;
+    }
     if (!model.steps || !ref.current || !matchMedia('(hover: none)').matches) return;
+    let wait: ReturnType<typeof setTimeout> | undefined;
     // A thin line across the middle of the screen, so one card at a time crosses it.
-    const seen = new IntersectionObserver(([entry]) => (entry.isIntersecting ? show() : hide()), {
-      rootMargin: '-49.5% 0px -49.5% 0px',
-    });
+    const seen = new IntersectionObserver(
+      ([entry]) => {
+        clearTimeout(wait);
+        if (entry.isIntersecting) wait = setTimeout(show, TOUCH_HOLD);
+        else hide();
+      },
+      { rootMargin: '-49.5% 0px -49.5% 0px' },
+    );
     seen.observe(ref.current);
-    return () => seen.disconnect();
-  }, [model.steps]);
+    return () => {
+      clearTimeout(wait);
+      seen.disconnect();
+    };
+  }, [model.steps, on]);
   const play = {
     onPointerEnter: (e: PointerEvent) => hover(e, show),
     onPointerLeave: (e: PointerEvent) => hover(e, hide),
-    onFocus: show,
+    onFocus: () => on && show(),
     onBlur: hide,
   };
   return { preview, ref, play };
 }
+
+/** How long, in milliseconds, a touch screen shows a card's finished model mid-screen before playing its folds. */
+const TOUCH_HOLD = 1500;
 
 /** A model's picture on its card, with its badge and what it needs. */
 function Thumb({ model, preview }: { model: ModelInfo; preview: Preview }) {

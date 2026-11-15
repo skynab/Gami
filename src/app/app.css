@@ -181,6 +181,40 @@ a {
   text-decoration: none;
 }
 
+/* On the gallery the name opens a small menu (TopBar.tsx), so it's a button there that looks just the same. */
+button.brand {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.brand-box {
+  position: relative;
+}
+
+.brand-menu {
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+  min-width: 220px;
+}
+
+.brand-menu button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-menu .check {
+  display: inline-block;
+  width: 1em;
+  color: var(--accent);
+  font-weight: 700;
+  text-align: center;
+}
+
 .page-title {
   overflow: hidden;
   font-weight: 650;

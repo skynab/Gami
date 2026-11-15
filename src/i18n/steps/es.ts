@@ -1018,8 +1018,8 @@ export const es: Record<string, string> = {
     "Y la punta derecha.",
   "Turn it over, and do the same on this side.":
     "Dale la vuelta y haz lo mismo por este lado.",
-  "And the last one. Now blow gently into the hole at the bottom, and the water bomb puffs up into a ball. Done!":
-    "Y la última. Ahora sopla suavemente por el agujero de abajo y la bomba de agua se infla como una bola. ¡Listo!",
+  "Blow gently into the hole at the bottom, and the water bomb puffs up. Done!":
+    "Sopla suavemente por el agujero de abajo y la bomba de agua se infla. ¡Listo!",
   "Pull out the tail":
     "Saca la cola",
   "Hold the body, and pull the left lower point out and up between the wings. Flatten it at an angle. This is the tail.":

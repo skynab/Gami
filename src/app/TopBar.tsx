@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { LANGUAGES, setLanguage, type Language } from '../i18n';
+import { useSettings } from '../state/settings';
 import { DonateButton } from './Donate';
 import { AutoThemeIcon, MoonIcon, SunIcon } from './icons';
 import { getTheme, setTheme, THEMES } from './theme';
@@ -67,11 +68,63 @@ function LanguageMenu() {
   );
 }
 
+/**
+ * The Gami name and logo. Elsewhere it goes back to the gallery; on the gallery itself, where that would go
+ * nowhere, it opens a small menu of quieter settings, kept out of the way: whether the cards play their folds.
+ */
 export function Brand() {
-  return (
-    <Link to="/" className="brand">
+  const home = useLocation().pathname === '/';
+  const face = (
+    <>
       <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" width="26" height="26" />
       <span>Gami</span>
-    </Link>
+    </>
+  );
+  if (!home) {
+    return (
+      <Link to="/" className="brand">
+        {face}
+      </Link>
+    );
+  }
+  return <BrandMenu>{face}</BrandMenu>;
+}
+
+function BrandMenu({ children }: { children: ReactNode }) {
+  const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+  const box = useRef<HTMLDivElement>(null);
+  const previews = useSettings((s) => s.previews);
+
+  // Close when clicking anywhere else, or pressing Escape.
+  useEffect(() => {
+    if (!open) return;
+    const away = (e: Event) => {
+      if (e instanceof KeyboardEvent ? e.key === 'Escape' : !box.current?.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('pointerdown', away);
+    document.addEventListener('keydown', away);
+    return () => {
+      document.removeEventListener('pointerdown', away);
+      document.removeEventListener('keydown', away);
+    };
+  }, [open]);
+
+  return (
+    <div className="brand-box" ref={box}>
+      <button type="button" className="brand" aria-haspopup="menu" aria-expanded={open} title={t('brandMenu.title')} onClick={() => setOpen(!open)}>
+        {children}
+      </button>
+      {open && (
+        <div className="menu brand-menu" role="menu" aria-label={t('brandMenu.title')}>
+          <button type="button" role="menuitemcheckbox" aria-checked={previews} onClick={() => useSettings.getState().set({ previews: !previews })}>
+            <span className="check" aria-hidden="true">
+              {previews ? '✓' : ''}
+            </span>
+            {t('brandMenu.previews')}
+          </button>
+        </div>
+      )}
+    </div>
   );
 }

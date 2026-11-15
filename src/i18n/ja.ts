@@ -108,6 +108,10 @@ export const ja: Messages = {
   levels: { easy: 'やさしい', medium: 'ふつう', hard: 'むずかしい' },
   categories: { lesson: 'レッスン', animal: '動物', object: 'もの', toy: 'おもちゃ', plane: '飛行機', modular: 'ユニット', flower: '花' },
   forms: { '2d': '平面', '3d': '立体' },
+  brandMenu: {
+    title: 'Gami メニュー',
+    previews: 'カードで折り方を再生する',
+  },
   card: {
     favorite: 'お気に入り：{{name}}',
     favoriteTitle: 'お気に入りに追加',

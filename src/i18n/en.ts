@@ -50,6 +50,10 @@ export const en = {
   levels: { easy: 'Easy', medium: 'Medium', hard: 'Hard' },
   categories: { lesson: 'Lessons', animal: 'Animals', object: 'Objects', toy: 'Toys', plane: 'Planes', modular: 'Modular', flower: 'Flowers' },
   forms: { '2d': '2D', '3d': '3D' },
+  brandMenu: {
+    title: 'Gami menu',
+    previews: 'Play the cards’ folds',
+  },
   card: {
     favorite: 'Favourite: {{name}}',
     favoriteTitle: 'Add to favourites',
