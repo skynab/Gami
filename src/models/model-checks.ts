@@ -1,8 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { crossings, partings } from '../fold/collisions';
+import { crossings, partings, restingCrossings } from '../fold/collisions';
 import { fromFoldFile, toFoldFile } from '../fold/fold-format';
-import { framesOf } from '../fold/frames';
+import { framesOf, LAYER_GAP } from '../fold/frames';
 import { guidesFor } from '../fold/guides';
 import { replay } from '../fold/ops';
 import { previewSvg, thumbnailSvg } from '../fold/thumbnail';
@@ -45,6 +45,28 @@ const GRAZES: Record<string, number> = {
 };
 
 /**
+ * How deep paper may pass through paper where a step comes to rest, which is what's on screen most of the time:
+ * two and a half layers, as deep as the motions themselves allow (see animate.ts). Bent stacked layers are left
+ * out, as the viewer draws those in their stacking order where they meet. `npm run clip-report` says where.
+ */
+const REST = 2.5 * LAYER_GAP;
+/**
+ * The models known to go deeper at rest, each a little over what it was measured at (on 15 November 2026), and
+ * where. Each shows as the inside of one piece of paper poking out through another: to be fixed, not added to.
+ */
+const RESTS: Record<string, number> = {
+  kusudama: 0.067, // Its units, rigid, set into the ball: each tab passes through the next unit (steps 13–15).
+  't-rex': 0.052, // Standing it up: the body through the head and neck's sheet.
+  squirrel: 0.05, // Standing it up: the body through the tail's sheet.
+  chrysanthemum: 0.0275, // Starting the ball: one unit through the next.
+  'rainbow-chain': 0.017, // Pressing it flat and joining the ends: links dip into each other where they cross.
+  'pirate-hat': 0.0105, // Opening it and standing it up: one side's brim through the other.
+  'fox-3d': 0.0035, // Putting the tail on: the tail's sheet through the body.
+  butterfly: 0.0026, // Lifting the wings.
+  'masu-shallow-lid': 0.0022, // Raising and locking the walls: riding layers through the walls they ride on.
+};
+
+/**
  * How far joined paper may come apart as a model plays, beyond what's apart at a step's ends anyway (the gaps
  * between layers at a fold, paper riding on paper, a cut's two sides): about the thickness of a 14-layer stack,
  * 1.5 mm on a 15 cm sheet. The boat's small diamond once tore by twelve times that, unseen by the checks above.
@@ -74,6 +96,13 @@ function checks(id: string, model: ReturnType<(typeof RECIPES)[number]>) {
     // A model that no longer goes deeper comes off the list.
     if (id in GRAZES) expect(deepest).toBeGreaterThan(GRAZE);
   }, 60_000);
+
+  it('rests without paper through paper deeper than a few layers, or than it’s known to', () => {
+    const deepest = Math.max(0, ...restingCrossings(model).filter((c) => !c.stacked).map((c) => c.depth));
+    expect(deepest).toBeLessThanOrEqual(RESTS[id] ?? REST);
+    // A model that no longer goes deeper comes off the list.
+    if (id in RESTS) expect(deepest).toBeGreaterThan(REST);
+  });
 
   // After the crossings, which work out each step's motion: about half a second a model.
   it('keeps joined paper together as it plays, or no further apart than it’s known to', () => {

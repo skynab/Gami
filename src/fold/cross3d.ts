@@ -34,10 +34,22 @@ export function clearanceDepth(a: Vec3[], b: Vec3[]): number {
   return Math.max(edgesThrough(a, b, true), edgesThrough(b, a, true));
 }
 
+/** As `clearanceDepth`, with where the deepest edge passes through the other polygon; null if they don't cross. */
+export function clearanceAt(a: Vec3[], b: Vec3[]): { depth: number; at: Vec3 } | null {
+  const [one, other] = [deepestThrough(a, b, true), deepestThrough(b, a, true)];
+  const best = one.depth >= other.depth ? one : other;
+  return best.depth > 0 ? { depth: best.depth, at: best.at! } : null;
+}
+
 function edgesThrough(edges: Vec3[], face: Vec3[], rim: boolean): number {
+  return deepestThrough(edges, face, rim).depth;
+}
+
+function deepestThrough(edges: Vec3[], face: Vec3[], rim: boolean): { depth: number; at?: Vec3 } {
   const n = normalOf(face);
-  if (!n) return 0;
+  if (!n) return { depth: 0 };
   let deepest = 0;
+  let at: Vec3 | undefined;
   const d = dot(n, face[0]);
   for (let i = 0; i < edges.length; i++) {
     const p = edges[i];
@@ -49,9 +61,10 @@ function edgesThrough(edges: Vec3[], face: Vec3[], rim: boolean): number {
     const t = sp / (sp - sq);
     const hit: Vec3 = [p[0] + t * (q[0] - p[0]), p[1] + t * (q[1] - p[1]), p[2] + t * (q[2] - p[2])];
     const within = inside(face, n, hit);
-    if (within) deepest = Math.max(deepest, Math.min(Math.abs(sp), Math.abs(sq), rim ? within : Infinity));
+    const depth = within ? Math.min(Math.abs(sp), Math.abs(sq), rim ? within : Infinity) : 0;
+    if (depth > deepest) (deepest = depth), (at = hit);
   }
-  return deepest;
+  return { depth: deepest, at };
 }
 
 /** How far inside the polygon a point in its plane is, from its nearest edge: 0 if it's outside, or within a hair of an edge. */
@@ -72,7 +85,8 @@ function inside(face: Vec3[], n: Vec3, p: Vec3): number {
   return nearest;
 }
 
-function normalOf(points: Vec3[]): Vec3 | null {
+/** A flat polygon's unit normal, by its corners' turn; null for one with no area. */
+export function normalOf(points: Vec3[]): Vec3 | null {
   let n: Vec3 = [0, 0, 0];
   for (let i = 0; i < points.length; i++) n = add(n, cross(points[i], points[(i + 1) % points.length]));
   const len = Math.hypot(...n);

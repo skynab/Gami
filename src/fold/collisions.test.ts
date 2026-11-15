@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { stepTransition } from './animate';
-import { crossings } from './collisions';
-import { clearanceDepth, crossDepth } from './cross3d';
+import { crossings, restingCrossings } from './collisions';
+import { clearanceAt, clearanceDepth, crossDepth } from './cross3d';
 import { fromFoldFile, toFoldFile } from './fold-format';
 import { paper, Recipe } from './recipe';
 import { folds as basics } from '../models/recipes/basics';
@@ -26,7 +26,8 @@ import { tulip } from '../models/recipes/tulip';
 import { toFlat } from './fold';
 import { overlapArea } from './geometry2d';
 import { locate } from './select';
-import type { Vec2, Vec3 } from './types';
+import { LAYER_GAP } from './frames';
+import type { FoldFrame, Vec2, Vec3 } from './types';
 
 const square = (y: number): Vec3[] => [[-1, y, -1], [1, y, -1], [1, y, 1], [-1, y, 1]];
 const deep = (model: Parameters<typeof crossings>[0]) => crossings(model).filter((c) => c.depth > 0.005);
@@ -52,6 +53,43 @@ describe('paper passing through paper', () => {
     const edge: Vec3[] = [[0.999, -0.5, -0.5], [0.999, 0.5, -0.5], [1.5, 0.5, -0.5], [1.5, -0.5, -0.5]];
     expect(crossDepth(square(0), edge)).toBeCloseTo(0.5);
     expect(clearanceDepth(square(0), edge)).toBeCloseTo(0.001);
+  });
+
+  it('says where one face pokes through another', () => {
+    const upright: Vec3[] = [[0, -0.5, -0.5], [0, 0.5, -0.5], [0, 0.5, 0.5], [0, -0.5, 0.5]];
+    const hit = clearanceAt(square(0), upright)!;
+    expect(hit.depth).toBeCloseTo(0.5);
+    expect(hit.at[0]).toBeCloseTo(0);
+    expect(hit.at[1]).toBeCloseTo(0);
+    expect(Math.abs(hit.at[2])).toBeCloseTo(0.5);
+    expect(clearanceAt(square(0), square(0.1))).toBeNull();
+  });
+
+  it('finds paper through paper where a step comes to rest, a point tucked through what it meets there too', () => {
+    // Two pieces of a sheet, apart on it: one lying on the table, the other standing up through it.
+    const model = byId('paper-plane');
+    const rest = (corner: Vec2): FoldFrame => ({
+      ...model.steps[0].frame,
+      vertices_coords: [[-0.5, 0, -0.5], [-0.05, 0, -0.5], [-0.05, 0, 0.5], [-0.5, 0, 0.5], [-0.3, -0.2, -0.2], [-0.3, 0.3, -0.2], [-0.3, 0.3, 0.2], [-0.3, -0.2, 0.2]],
+      vertices_paper: [[-0.5, -0.5], [-0.05, -0.5], [-0.05, 0.5], [-0.5, 0.5], corner, [0.5, -0.5], [0.5, 0.5], [0.05, 0.5]],
+      faces_vertices: [[0, 1, 2, 3], [4, 5, 6, 7]],
+      faces_layer: [0, 0],
+      soft: undefined,
+    });
+    const at = (frame: FoldFrame) => ({ ...model, steps: [{ ...model.steps[0], frame }] });
+    const [apart] = restingCrossings(at(rest([0.05, -0.5])));
+    expect(apart).toMatchObject({ step: 1, faces: [0, 1], pointJoined: false, stacked: false });
+    expect(apart.depth).toBeCloseTo(0.2);
+    // Meeting the lying piece at a corner on the sheet: left alone by the checks as they were, found now.
+    const joined = at(rest([-0.05, -0.5]));
+    expect(restingCrossings(joined, 'point')).toEqual([]);
+    expect(restingCrossings(joined)).toMatchObject([{ pointJoined: true }]);
+  });
+
+  it('rests the simple models without paper through paper', () => {
+    for (const id of ['basics', 'paper-plane', 'cup', 'fortune-teller', 'sword', 'fish']) {
+      expect(restingCrossings(byId(id)).filter((c) => !c.stacked && c.depth > LAYER_GAP), id).toEqual([]);
+    }
   });
 
   it('keeps the simple models clean', () => {

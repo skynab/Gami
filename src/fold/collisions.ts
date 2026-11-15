@@ -1,12 +1,15 @@
 import { partedBy, poseAt, stepTransition, together, type Transition } from './animate';
-import { framesOf } from './frames';
-import { box, clearanceDepth, cornerKeys, overlapping } from './cross3d';
-import type { OrigamiModel } from './types';
+import { facePositions, framesOf } from './frames';
+import { box, clearanceAt, clearanceDepth, cornerKeys, normalOf, overlapping } from './cross3d';
+import { sheetOf } from './sheets';
+import type { OrigamiModel, Vec2, Vec3 } from './types';
 
 /**
- * Finding paper passing through paper while a step animates. Faces that move together can't cross each
- * other, so only faces moving differently are compared, and faces that share a corner on the sheet (joined
- * along a crease, or meeting at a point) are left alone, since they touch where they're joined.
+ * Finding paper passing through paper while a step animates, and where it comes to rest. Faces that move together
+ * can't cross each other, so only faces moving differently are compared, and faces that share a corner on the sheet
+ * (joined along a crease, or meeting at a point) are left alone, since they touch where they're joined. At rest, and
+ * with `joined` 'edge', only those joined along a crease are: a flap's point can pass through the paper it meets
+ * at that point.
  */
 
 export interface Crossing {
@@ -21,13 +24,89 @@ export interface Crossing {
 
 const SAMPLES = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];
 
-export function crossings(model: OrigamiModel, samples = SAMPLES): Crossing[] {
+/**
+ * Which faces count as joined, and so are never compared: those sharing any corner on the sheet ('point', as the
+ * checks have always had it), or only those sharing two, joined along a crease ('edge'), which also finds a flap's
+ * point tucked through the layers it meets at that point.
+ */
+export type Joined = 'point' | 'edge';
+
+export function crossings(model: OrigamiModel, samples = SAMPLES, joined: Joined = 'point'): Crossing[] {
   const frames = framesOf(model);
   const out: Crossing[] = [];
   for (let k = 1; k < frames.length; k++) {
     const t = stepTransition(model, k);
-    for (const at of samples) for (const { faces, depth } of crossingAt(t, at)) out.push({ step: k, at, faces, depth });
+    for (const at of samples) for (const { faces, depth } of crossingAt(t, at, joined)) out.push({ step: k, at, faces, depth });
   }
+  return out;
+}
+
+/** Paper through paper where a step comes to rest, as the viewer shows it once the step has played. */
+export interface RestingCrossing {
+  /** The step (1-based) whose frame it is. */
+  step: number;
+  /** The two faces of the step's frame that cross. */
+  faces: [number, number];
+  /** How far an edge pokes through (see `clearanceDepth`). A sheet's width is 1, a layer `LAYER_GAP`. */
+  depth: number;
+  /** Where the deepest edge passes through, in the frame. */
+  at: Vec3;
+  /** Each face's middle on the sheet, to find it by. */
+  paper: [Vec2, Vec2];
+  /** Which sheet each face is part of. */
+  sheets: [number, number];
+  /** The faces meet at a corner on the sheet (a point tucked in), rather than not at all. */
+  pointJoined: boolean;
+  /**
+   * Bent paper lying nearly the same way (or opposite), as stacked layers do: these can pass a little into each
+   * other (docs/bending-plan.md), and the viewer draws them in their stacking order where they meet (`LIFT`), so a
+   * shallow one doesn't show.
+   */
+  stacked: boolean;
+}
+
+/** How nearly bent faces have to face the same way, or opposite, to count as stacked: as `stackLifts` has it. */
+const STACKED_FACING = 0.8;
+
+/**
+ * Paper passing through paper in the frame each step comes to rest on, which `crossings` (sampled while steps play)
+ * never looks at, though it's what's on screen most. Every pair of faces is compared, bent paper's triangles too,
+ * except those joined along a crease (`joined`, 'edge' by default).
+ */
+export function restingCrossings(model: OrigamiModel, joined: Joined = 'edge'): RestingCrossing[] {
+  const out: RestingCrossing[] = [];
+  const middle = (p: Vec2[]): Vec2 => [p.reduce((s, q) => s + q[0], 0) / p.length, p.reduce((s, q) => s + q[1], 0) / p.length];
+  framesOf(model).forEach((frame, k) => {
+    if (!k) return;
+    const bent = !!frame.soft?.length;
+    const pose = facePositions(frame);
+    const paper = frame.faces_vertices.map((face) => face.map((v) => frame.vertices_paper[v]));
+    const keys = paper.map(cornerKeys);
+    const boxes = pose.map(box);
+    const normals = bent ? pose.map(normalOf) : [];
+    for (let a = 0; a < pose.length; a++) {
+      for (let b = a + 1; b < pose.length; b++) {
+        if (!overlapping(boxes[a], boxes[b])) continue;
+        let shared = 0;
+        for (const key of keys[a]) if (keys[b].has(key)) shared++;
+        if (shared >= (joined === 'point' ? 1 : 2)) continue;
+        const hit = clearanceAt(pose[a], pose[b]);
+        if (!hit) continue;
+        const [na, nb] = [normals[a], normals[b]];
+        const stacked = bent && !!na && !!nb && Math.abs(na[0] * nb[0] + na[1] * nb[1] + na[2] * nb[2]) >= STACKED_FACING;
+        out.push({
+          step: k,
+          faces: [a, b],
+          depth: hit.depth,
+          at: hit.at,
+          paper: [middle(paper[a]), middle(paper[b])],
+          sheets: [sheetOf(model.sheets, paper[a]), sheetOf(model.sheets, paper[b])],
+          pointJoined: shared === 1,
+          stacked,
+        });
+      }
+    }
+  });
   return out;
 }
 
@@ -47,7 +126,7 @@ export function partings(model: OrigamiModel, samples = PART_SAMPLES): { step: n
 }
 
 /** Pairs of faces that cross `s` of the way through a step. */
-export function crossingAt(t: Transition, s: number): { faces: [number, number]; depth: number }[] {
+export function crossingAt(t: Transition, s: number, joined: Joined = 'point'): { faces: [number, number]; depth: number }[] {
   const pose = poseAt(t, s);
   const keys = t.faces.map((f) => cornerKeys(f.paper));
   const boxes = pose.map(box);
@@ -56,7 +135,9 @@ export function crossingAt(t: Transition, s: number): { faces: [number, number];
     for (let b = a + 1; b < pose.length; b++) {
       if (together(t, a, b)) continue;
       if (!overlapping(boxes[a], boxes[b])) continue;
-      if ([...keys[a]].some((key) => keys[b].has(key))) continue;
+      let shared = 0;
+      for (const key of keys[a]) if (keys[b].has(key)) shared++;
+      if (shared >= (joined === 'point' ? 1 : 2)) continue;
       const depth = clearanceDepth(pose[a], pose[b]);
       if (depth > 0) out.push({ faces: [a, b], depth });
     }
