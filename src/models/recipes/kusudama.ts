@@ -97,7 +97,7 @@ export function kusudama() {
   const out = across(sub(scale(add(m, n3), 0.5), a), axis);
   // A petal set in a flower: its point at the flower's middle `centre`, its axis tilted `TILT` out from the flower's
   // `up` towards `towards`, its flaps facing out of the flower.
-  const TILT = (70 * Math.PI) / 180;
+  const TILT = (78 * Math.PI) / 180;
   const pose = (n: number, centre: Vec3, up: Vec3, towards: Vec3) => {
     const P = unit(add(scale(up, Math.cos(TILT)), scale(across(towards, up), Math.sin(TILT))));
     const U = across(up, P);
@@ -126,8 +126,8 @@ export function kusudama() {
     return placed.map((p, i) => ({ sheet: 5 * k + i, bends: cone(5 * k + i), pose: { ...p, to: add(p.to, [0, lift, 0]) } }));
   };
 
-  // The ball: a flower on each face of a dodecahedron, its petals towards that face's corners, where three
-  // flowers' petals meet. Its faces' middles are the corners of an icosahedron: the one turned to match `corners`
+  // The ball: a flower on each face of a dodecahedron, its petals towards that face's corners (turned a little
+  // round from them, below), where three flowers' petals meet. Its faces' middles are the corners of an icosahedron: the one turned to match `corners`
   // below, each face's five corners all as near its middle. (Turned the other way, as it once was, a face's nearest
   // five were no face at all, and its petals, pointed at them unevenly, went through one another.)
   const g = (1 + Math.sqrt(5)) / 2;
@@ -142,16 +142,23 @@ export function kusudama() {
     ...[-1, 1].flatMap((x) => [-1, 1].flatMap((y) => [-1, 1].map((z): Vec3 => [x, y, z]))),
     ...[-1, 1].flatMap((s) => [-1, 1].flatMap((t): Vec3[] => [[0, s / g, t * g], [s / g, t * g, 0], [t * g, 0, s / g]])),
   ].map(unit);
-  // How far each flower's middle is from the ball's: as near as their petals let them, meeting where they reach the
-  // face's corners. Any nearer and each petal's side passes into the next flower's.
-  const DEPTH = 0.96;
+  // How far each flower's middle is from the ball's, and how far each is turned about its middle from pointing its
+  // petals straight at its face's corners: turned, the flowers' petals slip in beside their neighbours' rather than
+  // meeting them tip to tip, so the flowers sit close, the ball shut but for a few gaps, and no petal passes into
+  // another. (Pointed straight at the corners, they had to sit 0.96 out to clear each other, the ball half gaps.)
+  const DEPTH = 0.76;
+  const TWIST = (20 * Math.PI) / 180;
   const ball = (k: number, middle: Vec3) => {
     const up = faces[k];
     const near = [...corners].sort((p, q) => dot(q, up) - dot(p, up)).slice(0, 5);
     // Round the face in order.
     const [e1, e2] = [across(near[0], up), cross(up, across(near[0], up))];
     near.sort((p, q) => Math.atan2(dot(p, e2), dot(p, e1)) - Math.atan2(dot(q, e2), dot(q, e1)));
-    return flower(k, add(middle, scale(up, DEPTH)), up, near);
+    const turned = near.map((c) => {
+      const t = across(c, up);
+      return add(scale(t, Math.cos(TWIST)), scale(cross(up, t), Math.sin(TWIST)));
+    });
+    return flower(k, add(middle, scale(up, DEPTH)), up, turned);
   };
   const BALL: Vec3 = [BALL_AT[0], 0, BALL_AT[1]];
   const all = Array.from({ length: FLOWERS }, (_, k) => ball(k, BALL));
