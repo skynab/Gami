@@ -127,12 +127,14 @@ export function kusudama() {
   };
 
   // The ball: a flower on each face of a dodecahedron, its petals towards that face's corners, where three
-  // flowers' petals meet. Its faces' middles are the corners of an icosahedron.
+  // flowers' petals meet. Its faces' middles are the corners of an icosahedron: the one turned to match `corners`
+  // below, each face's five corners all as near its middle. (Turned the other way, as it once was, a face's nearest
+  // five were no face at all, and its petals, pointed at them unevenly, went through one another.)
   const g = (1 + Math.sqrt(5)) / 2;
   const faces: Vec3[] = [
-    [0, 1, g], [0, -1, g], [0, 1, -g], [0, -1, -g],
-    [1, g, 0], [-1, g, 0], [1, -g, 0], [-1, -g, 0],
-    [g, 0, 1], [-g, 0, 1], [g, 0, -1], [-g, 0, -1],
+    [1, 0, g], [-1, 0, g], [1, 0, -g], [-1, 0, -g],
+    [0, g, 1], [0, g, -1], [0, -g, 1], [0, -g, -1],
+    [g, 1, 0], [-g, 1, 0], [g, -1, 0], [-g, -1, 0],
   ].map((v) => unit(v as Vec3));
   // Lowest faces first, so the ball is built up from the bottom.
   faces.sort((p, q) => p[1] - q[1]);
@@ -140,7 +142,9 @@ export function kusudama() {
     ...[-1, 1].flatMap((x) => [-1, 1].flatMap((y) => [-1, 1].map((z): Vec3 => [x, y, z]))),
     ...[-1, 1].flatMap((s) => [-1, 1].flatMap((t): Vec3[] => [[0, s / g, t * g], [s / g, t * g, 0], [t * g, 0, s / g]])),
   ].map(unit);
-  const DEPTH = 0.5;
+  // How far each flower's middle is from the ball's: as near as their petals let them, meeting where they reach the
+  // face's corners. Any nearer and each petal's side passes into the next flower's.
+  const DEPTH = 0.96;
   const ball = (k: number, middle: Vec3) => {
     const up = faces[k];
     const near = [...corners].sort((p, q) => dot(q, up) - dot(p, up)).slice(0, 5);
@@ -160,20 +164,23 @@ export function kusudama() {
 
   const strip = (p: { sheet: number; bends: ShapeBend[]; pose: ReturnType<typeof pose> }) => ({ sheet: p.sheet, bends: p.bends, pose: { from: p.pose.from, to: p.pose.to, x: p.pose.x, up: p.pose.up } });
   const range = (from: number, to: number) => Array.from({ length: to - from }, (_, i) => from + i);
+  // The strip curled right round from its left end into a loop, that end, at the bottom of the loop, set at `end`:
+  // where it lies on the table, then tucked in at the top of the ball.
+  const loop = (end: Vec3) => ({
+    sheet: PETALS,
+    bends: [{ through: [table(loopEnd, -1), table(loopEnd, 1)], moving: table(loopEnd + LOOP, LOOP_AT[1]), degrees: 360, segments: 24 }] as ShapeBend[],
+    pose: { from: table(loopEnd, LOOP_AT[1]), to: end, x: [1, 0, 0] as Vec3, up: [0, 1, 0] as Vec3 },
+  });
   return r
     .assemble({ glue: true, title: 'Glue a petal', text: 'Glue the two folded flaps together, so the petal closes into a cone.' }, [{ sheet: 0, bends: cone(0) }])
     .assemble({ glue: true, title: 'Glue five into a flower', text: 'Glue five petals side by side, their points together, into a flower.' }, onTable(0).map(strip))
     .assemble({ glue: true, title: 'Make the other flowers', text: `Glue the other petals into ${FLOWERS - 1} more flowers the same way.` }, range(1, FLOWERS).flatMap(onTable).map(strip))
     .assemble({ glue: true, title: 'Start the ball', text: 'Glue the flowers together where their petals meet: one in the middle and five round it, a bowl.' }, inBall(range(0, 6)).map(strip))
     .assemble({ glue: true, title: 'Finish the ball', text: 'Glue on the other six flowers, the last one on top, to close the ball.' }, inBall(range(6, FLOWERS)).map(strip))
-    .assemble({ glue: true, title: 'Add a loop', text: 'Glue the ends of a strip together into a loop, and glue it in between the top flowers to hang the ball. Done!' }, [
-      {
-        sheet: PETALS,
-        // Curled right round from its left end, which stays put at the bottom of the loop, tucked in at the top of the ball.
-        bends: [{ through: [table(loopEnd, -1), table(loopEnd, 1)], moving: table(loopEnd + LOOP, LOOP_AT[1]), degrees: 360, segments: 24 }],
-        pose: { from: table(loopEnd, LOOP_AT[1]), to: [BALL[0], top - 0.06, BALL[2]], x: [1, 0, 0], up: [0, 1, 0] },
-      },
-    ])
+    // The loop glued first where it lies, then set on the ball whole: curling it right round on its way up, the
+    // strip's pieces strayed apart.
+    .assemble({ glue: true, title: 'Make a loop', text: 'Glue the ends of a strip together into a loop.' }, [loop([loopEnd, 0, LOOP_AT[1]])])
+    .assemble({ glue: true, title: 'Add the loop', text: 'Glue the loop in between the top flowers to hang the ball. Done!' }, [loop([BALL[0], top - 0.06, BALL[2]])])
     .build();
 }
 

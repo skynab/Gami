@@ -2425,10 +2425,14 @@ export const ja: Record<string, string> = {
     "くさりを丸め、最初の輪を最後の輪のさやに差しこんで、ブレスレットにします。",
   "Glue on the other six flowers, the last one on top, to close the ball.":
     "残りの六つの花をはり、最後のひとつを上にのせてボールをとじます。",
-  "Add a loop":
-    "ひもの輪をつける",
-  "Glue the ends of a strip together into a loop, and glue it in between the top flowers to hang the ball. Done!":
-    "帯の両端をはり合わせて輪にし、上の花のあいだにはって、ボールをつるせるようにします。完成です！",
+  "Make a loop":
+    "ひもの輪を作る",
+  "Glue the ends of a strip together into a loop.":
+    "帯の両端をはり合わせて輪にします。",
+  "Add the loop":
+    "輪をつける",
+  "Glue the loop in between the top flowers to hang the ball. Done!":
+    "輪を上の花のあいだにはって、ボールをつるせるようにします。完成です！",
   "Fold a square in half side to side, then unfold.":
     "正方形を左右に半分に折り、開きます。",
   "Fold the sides in":
@@ -2717,8 +2721,8 @@ export const ja: Record<string, string> = {
     "体の両側を少し開いて、足で立たせます。しっぽをうしろに外へむけ、頭をこちらにむけます。リスが見はりをしています！",
   "Draw an eye and a row of sharp teeth on the head.":
     "頭に目と、とがった歯をかきます。",
-  "Open the body’s two sides a little and stand it on its legs, the head turned to look out. Roar!":
-    "体の両側を少し開いて足で立たせ、頭をこちらにむけます。ガオー！",
+  "Open the body’s two sides a little and stand it on its legs. Sit the head up on the front of its back, turned to look out. Roar!":
+    "体の両側を少し開いて足で立たせます。頭を背中の前の方にのせて、こちらにむけます。ガオー！",
   "Draw on eyes, a nose and whiskers.":
     "目と鼻とひげをかきます。",
   "Bend the body’s sides back a little, so it stands up, its face looking out. Your cat is sitting pretty!":

@@ -2425,10 +2425,14 @@ export const es: Record<string, string> = {
     "Curva la cadena y mete el primer eslabón en las fundas del último, para llevarla como pulsera.",
   "Glue on the other six flowers, the last one on top, to close the ball.":
     "Pega las otras seis flores, la última arriba, para cerrar la bola.",
-  "Add a loop":
-    "Añade una anilla",
-  "Glue the ends of a strip together into a loop, and glue it in between the top flowers to hang the ball. Done!":
-    "Pega los extremos de una tira para formar una anilla y pégala entre las flores de arriba para colgar la bola. ¡Listo!",
+  "Make a loop":
+    "Haz una anilla",
+  "Glue the ends of a strip together into a loop.":
+    "Pega los extremos de una tira para formar una anilla.",
+  "Add the loop":
+    "Añade la anilla",
+  "Glue the loop in between the top flowers to hang the ball. Done!":
+    "Pega la anilla entre las flores de arriba para colgar la bola. ¡Listo!",
   "Fold a square in half side to side, then unfold.":
     "Dobla un cuadrado por la mitad de lado a lado y desdobla.",
   "Fold the sides in":
@@ -2717,8 +2721,8 @@ export const es: Record<string, string> = {
     "Abre un poco los dos lados del cuerpo y ponlo de pie sobre sus pies. Gira la cola hacia fuera por detrás, y la cabeza para que mire hacia ti. ¡Tu ardilla está vigilando!",
   "Draw an eye and a row of sharp teeth on the head.":
     "Dibuja un ojo y una fila de dientes afilados en la cabeza.",
-  "Open the body’s two sides a little and stand it on its legs, the head turned to look out. Roar!":
-    "Abre un poco los dos lados del cuerpo y ponlo de pie sobre sus patas, con la cabeza girada para mirar hacia ti. ¡Grrr!",
+  "Open the body’s two sides a little and stand it on its legs. Sit the head up on the front of its back, turned to look out. Roar!":
+    "Abre un poco los dos lados del cuerpo y ponlo de pie sobre sus patas. Sienta la cabeza sobre la parte delantera del lomo, girada para mirar hacia ti. ¡Grrr!",
   "Draw on eyes, a nose and whiskers.":
     "Dibuja los ojos, la nariz y los bigotes.",
   "Bend the body’s sides back a little, so it stands up, its face looking out. Your cat is sitting pretty!":

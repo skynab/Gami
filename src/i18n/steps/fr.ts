@@ -2425,10 +2425,14 @@ export const fr: Record<string, string> = {
     "Enroulez la chaîne et glissez le premier maillon dans les fourreaux du dernier, pour la porter en bracelet.",
   "Glue on the other six flowers, the last one on top, to close the ball.":
     "Collez les six autres fleurs, la dernière en haut, pour fermer la boule.",
-  "Add a loop":
-    "Ajoutez une boucle",
-  "Glue the ends of a strip together into a loop, and glue it in between the top flowers to hang the ball. Done!":
-    "Collez les bouts d’une bande en boucle, puis collez-la entre les fleurs du haut pour suspendre la boule. C’est fini !",
+  "Make a loop":
+    "Faites une boucle",
+  "Glue the ends of a strip together into a loop.":
+    "Collez les bouts d’une bande en boucle.",
+  "Add the loop":
+    "Ajoutez la boucle",
+  "Glue the loop in between the top flowers to hang the ball. Done!":
+    "Collez la boucle entre les fleurs du haut pour suspendre la boule. C’est fini !",
   "Fold a square in half side to side, then unfold.":
     "Pliez un carré en deux de gauche à droite, puis dépliez.",
   "Fold the sides in":
@@ -2717,8 +2721,8 @@ export const fr: Record<string, string> = {
     "Écarte un peu les deux côtés du corps et mets-le debout sur ses pieds. Tourne la queue vers l’extérieur derrière lui, et la tête pour qu’elle regarde dehors. Ton écureuil monte la garde !",
   "Draw an eye and a row of sharp teeth on the head.":
     "Dessine un œil et une rangée de dents pointues sur la tête.",
-  "Open the body’s two sides a little and stand it on its legs, the head turned to look out. Roar!":
-    "Écarte un peu les deux côtés du corps et mets-le debout sur ses pattes, la tête tournée pour regarder dehors. Grrr !",
+  "Open the body’s two sides a little and stand it on its legs. Sit the head up on the front of its back, turned to look out. Roar!":
+    "Écarte un peu les deux côtés du corps et mets-le debout sur ses pattes. Pose la tête sur l’avant de son dos, tournée pour regarder dehors. Grrr !",
   "Draw on eyes, a nose and whiskers.":
     "Dessine les yeux, le nez et les moustaches.",
   "Bend the body’s sides back a little, so it stands up, its face looking out. Your cat is sitting pretty!":

@@ -83,8 +83,8 @@ export function chrysanthemum() {
     });
 
   // The ball: a cube half a square across, each unit's square on a side, facing out, its petals rising out from it.
-  // It stands on the bottom unit's petals.
-  const C: Vec3 = [0, 0.25 + 0.25 * Math.sin((PETAL * Math.PI) / 180) + 0.01, 1.4];
+  // It stands on the bottom unit's petals, where that unit lay: clear of the units still waiting round it.
+  const C: Vec3 = [at[0][0], 0.25 + 0.25 * Math.sin((PETAL * Math.PI) / 180) + 0.01, at[0][1]];
   const faces: { n: number; out: Vec3; along: Vec3 }[] = [
     { n: 0, out: [0, -1, 0], along: [1, 0, 0] },
     { n: 1, out: [0, 1, 0], along: [1, 0, 0] },

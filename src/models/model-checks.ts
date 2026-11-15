@@ -52,13 +52,10 @@ const GRAZES: Record<string, number> = {
 const REST = 2.5 * LAYER_GAP;
 /**
  * The models known to go deeper at rest, each a little over what it was measured at (on 15 November 2026), and
- * where. Each shows as the inside of one piece of paper poking out through another: to be fixed, not added to.
+ * where. Each shows as the inside of one piece of paper poking out through another: to be fixed, not added to. The
+ * kusudama, T-rex, squirrel and chrysanthemum, 4 to 10 mm through on a 15 cm sheet, came off it the same day.
  */
 const RESTS: Record<string, number> = {
-  kusudama: 0.067, // Its units, rigid, set into the ball: each tab passes through the next unit (steps 13–15).
-  't-rex': 0.052, // Standing it up: the body through the head and neck's sheet.
-  squirrel: 0.05, // Standing it up: the body through the tail's sheet.
-  chrysanthemum: 0.0275, // Starting the ball: one unit through the next.
   'rainbow-chain': 0.017, // Pressing it flat and joining the ends: links dip into each other where they cross.
   'pirate-hat': 0.0105, // Opening it and standing it up: one side's brim through the other.
   'fox-3d': 0.0035, // Putting the tail on: the tail's sheet through the body.
