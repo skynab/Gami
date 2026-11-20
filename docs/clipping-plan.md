@@ -87,7 +87,7 @@ corner two faces meet at: their layers' offset where they're joined, as at a con
 
 | Cause | Steps | Approach |
 |---|---|---|
-| Reverse folds with rigid paper: the point turns as one through half the flap | Crane (neck, tail, head, 1.1 mm), fox (tail), frog (legs lifted, turned out and bent, up to 1.6 mm), penguin (head) | The flap opens a few degrees as the point turns and closes after it (a staged motion in `animate.ts`), as real paper does. The biggest shared win: about six models. |
+| Reverse folds with rigid paper: the point ends between layers staying put on both sides | Crane (neck, tail, head, 1.1 mm), fox (tail) | Not the flap opening as the point turns: that was tried on 8 November ("open, fold, close", `docs/next-tasks-plan.md`, Smaller) and fails on each of these. The crane's flap carries on across the body's centre line, the fox's tail can't open without tearing. Checked again 20 November: the point's layers already turn each about its own crease at its own height, so it isn't the point turning as one block. It's where it lands: between layers that stay put and carry on past the crease, so any flat face turning in cuts through one side by about the stack's thickness (0.0077 on the crane's neck). Real paper bends the body apart near the corner. The way on is the bending one: frames on the way with a finer mesh round the corner, which needs `transitionVia` and the file format to place faces that aren't pieces of the end frame's. Large. |
 | Squash and petal folds: layers grazing as they turn | Lily (four flaps, 1.3 mm), boat (the diamond again, 1.5 mm), frog (squashes), chrysanthemum, kusudama step 6 | Hold the layers apart longer (`makeWay`), or land them in order as the seal's tail now does. |
 | Opening out in 3D: the fins swing before the layers part | Whale and dolphin "Open the fins" (1.3 and 1.1 mm, deepest 0.1 of the way) | Part the layers first, then swing. |
 | A closed tube in rigid paper | Swan "Pull the neck up" (2.0 mm) | Needs bending (PLAN.md, milestone 13). Stays listed until then. |
@@ -128,7 +128,7 @@ use would be part 3's bent stacks.
 |---|---|---|
 | 1 | ✅ 3D fox and butterfly (20 November); masu box and lids diagnosed and deferred | Small to medium |
 | 2 | ✅ Kusudama step 6 and the penguin; CI's motion check to `joined: 'edge'`; samples at 0.05 and 0.95 (20 November) | Medium |
-| 3 | Reverse folds opening their flap as the point turns | Large, about six models |
+| 3 | Reverse folds: bending round the corner as the point turns in (frames on the way with a finer mesh; format and animator first). Not opening the flap, tried 8 November. | Large, two or three models |
 | 4 | Pirate hat; decide the rainbow chain | Medium to large |
 | 5 | Squash and petal folds; the fins | Medium |
 | 6 | Recipe-build warning, report links, the Studio's warning | Medium |
@@ -142,3 +142,4 @@ use would be part 3's bent stacks.
 | Squirrel, T-rex, chrysanthemum, kusudama at rest | Done 15 November (`f58d3aa`); the kusudama's ball dense again (`b6981f4`). |
 | Order of work, row 1 | 20 November: the 3D fox's tail tucked lower; lifted stacks in `shape` turned about their top, which fixed the butterfly (the kusudama's flowers set out to 0.77 to stay clear, 29.5% gaps); crossings beside a shared corner left out at rest. The masu box and lids' cause found, and deferred. Three left on `RESTS`: the rainbow chain, pirate hat and shallow masu lid. |
 | Order of work, row 2 | 20 November: CI's motion check compares faces meeting at a point (crossings beside the corner left out), at 0.05 and 0.95 too; the kusudama's squash plays as two folds in turn (`together`'s `inTurn`); the heart and seal listed, the dolphin's limit raised. |
+| Order of work, row 3 | 20 November: looked at again before starting. The approach planned (the flap opening as the point turns) was tried on 8 November and fails on these steps; the cause is the point landing between layers that carry on past the crease. Needs the bending way: waiting on a decision. |
