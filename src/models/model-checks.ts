@@ -24,6 +24,11 @@ const file = (name: string) => readFileSync(new URL(`../../public/models/${name}
 /** How deep paper may pass through paper as a model plays (a sheet's width is 1, a layer 0.0007): a few layers. */
 const GRAZE = 0.005;
 /**
+ * Where through each step to look: every tenth, and near each end too, where a fold starting or landing can cut
+ * through for a moment (the heart's and seal's below were found there, on 20 November 2026).
+ */
+const PLAYING = [0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95];
+/**
  * The models known to go deeper, each a little over what it was measured at (last on 11 November 2026), and where. Bent steps
  * are left to the bending checks: the viewer draws bent paper in its stacking order where layers meet.
  */
@@ -31,7 +36,7 @@ const GRAZES: Record<string, number> = {
   lily: 0.009, // Its squash-and-petal folds, joined up all the way (see collisions.test.ts).
   swan: 0.014, // Pulling up the neck: with rigid paper its body is a closed tube (PLAN.md, milestone 13).
   whale: 0.009, // Opening the fins out in 3D.
-  dolphin: 0.0075, // Opening the fins out in 3D.
+  dolphin: 0.0095, // Opening the fins out in 3D, deepest as they start.
   frog: 0.011, // Turning out a back leg, and lifting the front legs against the other front quarter (docs/origami-me-plan.md).
   'masu-shallow-lid': 0.0085, // Raising the walls: riding layers sit a little off the faces they ride on.
   'rainbow-chain': 0.034, // Joining the ends: rigid links set on a ring dip into each other where they cross.
@@ -42,6 +47,9 @@ const GRAZES: Record<string, number> = {
   // can't without opening it right out (docs/next-tasks-plan.md).
   crane: 0.008, // The neck, tail and head. (The seal's tail came off the list on 11 November: see LANDS in animate.ts.)
   fox: 0.0075, // Folding the tail in.
+  // Found looking near the ends of steps and at points tucked through (20 November 2026).
+  heart: 0.0095, // Folding the top down: the white side triangles lie on the point it turns up through as it starts.
+  seal: 0.007, // Raising the neck, for a moment as it lands.
 };
 
 /**
@@ -87,7 +95,8 @@ function checks(id: string, model: ReturnType<(typeof RECIPES)[number]>) {
   }, 90_000);
 
   it('passes paper through paper no deeper than a few layers, or than it’s known to', () => {
-    const deepest = Math.max(0, ...crossings(model).filter((c) => !model.steps[c.step - 1].frame.soft?.length).map((c) => c.depth));
+    // Faces meeting at a point compared too, so a flap's point tucked through what it meets there is found.
+    const deepest = Math.max(0, ...crossings(model, PLAYING, 'edge').filter((c) => !model.steps[c.step - 1].frame.soft?.length).map((c) => c.depth));
     expect(deepest).toBeLessThanOrEqual(GRAZES[id] ?? GRAZE);
     // A model that no longer goes deeper comes off the list.
     if (id in GRAZES) expect(deepest).toBeGreaterThan(GRAZE);

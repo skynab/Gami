@@ -54,7 +54,7 @@ export function kusudama() {
       .along(O, M, table(0, -h / 2), { title: '', only: local(0, (u, v) => u < 0 && v < 0 && v < u) })
       .edgeOnto([O, A], [O, N], { title: '', only: right(0) })
       .along(O, N, table(0, -h / 2), { title: '', only: local(0, (u, v) => u > 0 && v > 0 && v > u) });
-  })
+  }, { inTurn: true })
     .together({ title: 'Fold the tips down', text: 'Fold down the tip of each kite where it sticks out past the diamond, along the diamond’s upper edge.' }, (q) => {
       q.along(table(-h, 0), A, table(-0.5, -0.5), { title: '', only: left(0) }).along(table(h, 0), A, table(0.5, -0.5), { title: '', only: right(0) });
     })

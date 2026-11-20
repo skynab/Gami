@@ -1,6 +1,6 @@
 import { collapse, CREASE_KINDS, type CreaseKind } from './collapse';
 import { cut } from './cut';
-import { fold, FoldError, unplaceLike, rotate, toFlat, turnOver, unfoldStep, FOLD_KINDS, type FoldKind } from './fold';
+import { fold, FoldError, unplaceLike, rotate, toFlat, turnOver, unfoldStep, unfoldTo, FOLD_KINDS, type FoldKind } from './fold';
 import { flipLine, lineEdgeOnto, lineOnto, lineThrough, sideOf, type Line } from './geometry2d';
 import { copyUnit } from './copy';
 import { assemble } from './assemble';
@@ -126,8 +126,8 @@ export type Op =
   | { op: 'cut'; from: At; to: At; layers?: number; only?: Faces }
   /** A strip of sticky tape laid on top of the paper from one point to another, `width` wide (see tape.ts). */
   | { op: 'tape'; from: At; to: At; width?: number }
-  /** Several operations shown as one step. */
-  | { op: 'together'; ops: Op[] };
+  /** Several operations shown as one step: played at the same time, or with `inTurn` one after another. */
+  | { op: 'together'; ops: Op[]; inTurn?: boolean };
 
 export class OpError extends CodedError {}
 
@@ -286,7 +286,7 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
       };
     case 'together':
       if (depth >= LIMITS.nesting) throw new OpError(`${path}: nested too deeply`);
-      return { op: 'together', ops: list(o.ops, `${path}.ops`, (v, p) => parseOp(v, p, depth + 1)) };
+      return { op: 'together', ops: list(o.ops, `${path}.ops`, (v, p) => parseOp(v, p, depth + 1)), ...opt(o, 'inTurn', bool, path) };
     default:
       throw new OpError(`${path}.op: unknown operation ${JSON.stringify(o.op)}`);
   }
@@ -807,9 +807,20 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
         for (let k = added.length - 1; k >= 0; k--) p = added[k].frame.faces_parent?.[p] ?? p;
         return p;
       });
-      return { frame: { ...last, faces_parent }, ...(marks.length && { marks }) };
+      const via = op.inTurn ? inTurnVia(added.map((s) => s.frame)) : undefined;
+      return { frame: { ...last, faces_parent }, ...(via && { via }), ...(marks.length && { marks }) };
     }
   }
+}
+
+/**
+ * For operations played in turn as one step (`together` with `inTurn`), given the frame each leaves: the paper as
+ * each but the last leaves it, the last's faces placed as they are then, as an unfold's passes are.
+ */
+export function inTurnVia(frames: FoldFrame[]): FoldFrame[] | undefined {
+  if (frames.length < 2) return undefined;
+  const last = frames[frames.length - 1];
+  return frames.slice(0, -1).map((_, j) => keepIn(unfoldTo(frames, j), last));
 }
 
 /** A line spec as a line on the table, for the paper as it is in `frame`. */

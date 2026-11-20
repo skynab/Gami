@@ -26,6 +26,8 @@ const withStacked = flag('--stacked');
 const mdAt = args.indexOf('--md');
 const md = mdAt >= 0 ? args.splice(mdAt, 2)[1] : undefined;
 
+/** Where through each step to look while it plays, as the model checks do: every tenth, and near each end. */
+const PLAYING = [0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95];
 /** Deeper than this counts: a single layer's gap is how far apart stacked paper is drawn anyway. */
 const SHOWS = LAYER_GAP;
 
@@ -64,7 +66,7 @@ for (const w of which) {
   });
   let worst = Math.max(0, ...found.map((c) => c.depth));
   if (playing) {
-    const moving = crossings(model, undefined, 'edge').filter((c) => c.depth > SHOWS && !model.steps[c.step - 1].frame.soft?.length);
+    const moving = crossings(model, PLAYING, 'edge').filter((c) => c.depth > SHOWS && !model.steps[c.step - 1].frame.soft?.length);
     const steps = new Map<number, { depth: number; at: number }>();
     for (const c of moving) if (c.depth > (steps.get(c.step)?.depth ?? 0)) steps.set(c.step, { depth: c.depth, at: c.at });
     for (const [k, c] of steps) lines.push(`  playing, step ${String(k).padStart(2)} “${model.steps[k - 1].title}”: ${layers(c.depth)} (${mm(c.depth)}), deepest ${c.at.toFixed(1)} of the way through`);

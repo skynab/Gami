@@ -158,8 +158,14 @@ export function crossingAt(t: Transition, s: number, joined: Joined = 'point'): 
       let shared = 0;
       for (const key of keys[a]) if (keys[b].has(key)) shared++;
       if (shared >= (joined === 'point' ? 1 : 2)) continue;
-      const depth = clearanceDepth(pose[a], pose[b]);
-      if (depth > 0) out.push({ faces: [a, b], depth });
+      if (!shared) {
+        const depth = clearanceDepth(pose[a], pose[b]);
+        if (depth > 0) out.push({ faces: [a, b], depth });
+        continue;
+      }
+      // Meeting at a corner: as at rest, a crossing right beside it is only their layers' offset where they're joined.
+      const hit = clearanceAt(pose[a], pose[b]);
+      if (hit && !nearJoin(hit.at, [pose[a], pose[b]], [t.faces[a].paper, t.faces[b].paper], keys[b])) out.push({ faces: [a, b], depth: hit.depth });
     }
   }
   return out;

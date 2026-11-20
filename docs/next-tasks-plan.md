@@ -287,7 +287,7 @@ The frog now grazes a little deeper, 0.0106 at most (step 45) against 0.0094, st
 | Housekeeping | Done but for the branches (above). 12 November: settled questions taken off "Waiting", CI's actions moved to Node 24 (see Smaller). |
 | Studio, rows 6 and the open questions | Done 11 November: bend with crease goals, share links, a first-visit tour, a note on phones, Submit hidden (`docs/studio-plan.md`). |
 | Unit tests' speed | Done 11 November: 444 s to 217 s, the model checks in four shards (see Smaller). |
-| Clipping | 15 November: paper through paper checked where steps come to rest, `npm run clip-report`, and the squirrel, T-rex, chrysanthemum and kusudama fixed. What's next is in `docs/clipping-plan.md` (20 November). |
+| Clipping | 15 November: paper through paper checked where steps come to rest, `npm run clip-report`, and the squirrel, T-rex, chrysanthemum and kusudama fixed. 20 November: the 3D fox and butterfly fixed at rest; the motion check compares faces meeting at a point, near steps' ends too. What's next is in `docs/clipping-plan.md`. |
 | Grazes | 11 November: the seal off the list (landing in order over up to 0.8 of a step), the frog's entry tightened, every depth measured again (see 2). |
 | Studio, row 5 | Done 8 November: swivel and open sink in the Studio's Named fold (`src/fold/presets.ts`); see `docs/studio-plan.md`. In the common-folds lesson since 11 November (two sections, 66 steps), the sink made with `Recipe.preset`. |
 | Reverse folds' stacking | Fixed 8 November (see Smaller): points tuck into the middle of the flap; three folds keep the old stacking. |

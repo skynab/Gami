@@ -12,7 +12,7 @@ import { radial, reparent, shape, type Bend, type Ray } from './shape';
 import { sheetOf, startFrame } from './sheets';
 import { keepIn, tape } from './tape';
 import { frontUp, sideOf } from './geometry2d';
-import { applyOp, lastFold, lineOf, reopened, select, type At, type BendGoal, type Faces, type LineSpec, type Op } from './ops';
+import { applyOp, inTurnVia, lastFold, lineOf, reopened, select, type At, type BendGoal, type Faces, type LineSpec, type Op } from './ops';
 import { presetOp, type Preset } from './presets';
 import type { FoldFrame, Mark, OrigamiModel, Sheet, Step, Vec2, Vec3 } from './types';
 
@@ -216,9 +216,10 @@ export class Recipe {
 
   /**
    * Several folds shown as one step, such as the same fold on both sheets of a modular model.
-   * `make` adds the folds as usual; they're then merged, and play at the same time.
+   * `make` adds the folds as usual; they're then merged, and play at the same time, or with `inTurn` one after
+   * another, in the order made: as a squash is folding a flap in half, then opening it out.
    */
-  together(step: { title: string; text?: string; kind?: Step['kind'] }, make: (r: this) => void): this {
+  together(step: { title: string; text?: string; kind?: Step['kind'] }, make: (r: this) => void, { inTurn = false } = {}): this {
     const before = this.steps.length;
     make(this);
     const added = this.steps.splice(before);
@@ -231,10 +232,12 @@ export class Recipe {
       for (let k = added.length - 1; k >= 0; k--) p = added[k].frame.faces_parent?.[p] ?? p;
       return p;
     });
-    const op: Op = { op: 'together', ops: added.map((s) => s.op!) };
+    const op: Op = { op: 'together', ops: added.map((s) => s.op!), ...(inTurn && { inTurn }) };
     this.push({ title: step.title, text: step.text, kind: step.kind ?? added.at(-1)!.kind }, { ...last, faces_parent }, op);
     const marks = added.flatMap((s) => s.marks ?? []);
     if (marks.length) this.steps.at(-1)!.marks = marks;
+    const via = inTurn ? inTurnVia(added.map((s) => s.frame)) : undefined;
+    if (via) this.steps.at(-1)!.via = via;
     return this;
   }
 

@@ -10,13 +10,15 @@ down further.
   rest on, what's on screen most. Every pair of faces is compared, bent triangles too, except faces joined along a
   crease. Bent layers lying the same way are marked `stacked`: the viewer draws those in their stacking order where
   they meet (`LIFT` in `FoldedPaper.tsx`).
-- **`crossings(model, samples, joined)`**: the same while each step plays, at 0.1 to 0.9 of the way through. With
-  `joined` `'point'` (the default, and what CI uses) faces meeting at a single corner on the sheet are skipped; with
-  `'edge'` only faces joined along a crease are, which also finds a flap's point tucked through what it meets there.
+- **`crossings(model, samples, joined)`**: the same while each step plays, at 0.1 to 0.9 of the way through by
+  default. With `joined` `'point'` (the default) faces meeting at a single corner on the sheet are skipped; with
+  `'edge'` (what CI uses since 20 November) only faces joined along a crease are, which also finds a flap's point
+  tucked through what it meets there. Crossings within `NEAR_JOIN` of that corner are left out, as at rest.
 - **`npm run clip-report`**: both, model by model and step by step, with where on the sheet. `--playing` adds the
-  motions (a few minutes for every model), `--stacked` adds bent stacks, `--md <file>` writes Markdown too.
+  motions, at the same points as CI (a few minutes for every model), `--stacked` adds bent stacks, `--md <file>` writes Markdown too.
 - **The model checks** (`src/models/model-checks.ts`): at rest no deeper than `REST` (2.5 layers, about 0.26 mm on
-  a 15 cm sheet) and playing no deeper than `GRAZE` (0.005, about 7 layers), except the models listed in `RESTS`
+  a 15 cm sheet) and playing no deeper than `GRAZE` (0.005, about 7 layers; at every tenth of each step and at 0.05
+  and 0.95), except the models listed in `RESTS`
   and `GRAZES` at what they were measured at. Lists only shrink: a model that's fixed must come off.
 
 Done so far: the checks and report (15 November, `8f7ff14`); the squirrel, T-rex, chrysanthemum and kusudama fixed
@@ -27,7 +29,7 @@ at rest, 4 to 10 mm each (`f58d3aa`); the kusudama's ball made dense again witho
 | | Over the limit | Of which already listed |
 |---|---|---|
 | At rest, more than 2.5 layers | 5 models: rainbow chain (2.5 mm), pirate hat (1.5 mm), 3D fox, butterfly, shallow masu lid (0.3 to 0.5 mm). The 3D fox and butterfly fixed later that day. | All 5 (`RESTS`) |
-| Playing, faces joined at a point included, more than 7 layers | 22 steps in 13 models | 11 models (`GRAZES`); new: the kusudama's "Squash the flaps" (step 6, 5.9 mm) and the penguin's "Turn the head down" (step 12, 0.8 mm) |
+| Playing, faces joined at a point included, more than 7 layers | 22 steps in 13 models | 11 models (`GRAZES`); new: the kusudama's "Squash the flaps" (step 6, 5.9 mm) and the penguin's "Turn the head down" (step 12, 0.8 mm), both fixed later that day; then the heart and seal, found near steps' ends |
 | Playing, more than 2.5 layers | 64 steps | |
 | Bent stacks at rest | Cup and samurai helmet 0.7 mm, balloon rabbit 0.4 mm, boat, tulip bloom, balloon, waterbomb 0.1 to 0.3 mm | Not checked: left to `LIFT` |
 
@@ -67,12 +69,20 @@ corner two faces meet at: their layers' offset where they're joined, as at a con
 
 ## 2. Motions
 
-1. **Close the blind spot in CI.** Switch the model checks' motion test to `joined: 'edge'`. Only two models go
-   newly over `GRAZE` today. Fix the kusudama's step 6 first: 5.9 mm, 0.9 of the way through squashing the first
-   petal's flaps, probably a flap swinging through the diamond's tip it meets at a point. Then the penguin's step
-   12, or list it at 0.0055.
-2. **Look nearer the ends.** Many steps are deepest at 0.9 of the way, the last sample. Add 0.05 and 0.95 to the
-   samples (about a fifth more time) and see whether depths grow.
+1. ✅ **Close the blind spot in CI** (20 November). The motion check uses `joined: 'edge'`, with `NEAR_JOIN` as at
+   rest. The kusudama's step 6 was 6.4 mm, not a point tucked through: its squash was two folds merged (fold the
+   flap in half, open it out), each face taking its own way and the joins pulling a corner down through the diamond.
+   `together(…, { inTurn: true })` now plays such folds one after another; it's 0.2 mm. The penguin was only the
+   offset beside its shared corner, under the limit once `NEAR_JOIN` left that out.
+2. ✅ **Look nearer the ends** (20 November). With 0.05 and 0.95 added, three steps go deeper, each for a moment:
+   the heart's "Fold the top down" (1.6 mm at 0.03 of the way: its white side triangles lie on the point that turns
+   up through them, so they'd need lifting aside as it starts), the seal's "Raise the neck" (1.0 mm at 0.95, not
+   looked at yet) and the dolphin's fins (1.3 mm at 0.05). The heart and seal are listed, the dolphin's limit raised.
+   Points between samples go deeper still (the heart is deepest at 0.03): sampling finds steps, not their worst.
+
+   Also found: the viewer plays the `.fold` files, whose rounded coordinates can pick a slightly different way
+   through a step than the recipe the checks build (the penguin's step 12: 0.0054 from its file, 0.0046 from its
+   recipe). Worth checking from the files too, perhaps in the test that compares them.
 3. **Work the `GRAZES` list deepest first, by cause**, as one fix often covers several models:
 
 | Cause | Steps | Approach |
@@ -117,7 +127,7 @@ use would be part 3's bent stacks.
 | # | Work | Size |
 |---|---|---|
 | 1 | ✅ 3D fox and butterfly (20 November); masu box and lids diagnosed and deferred | Small to medium |
-| 2 | Kusudama step 6 and the penguin; CI's motion check to `joined: 'edge'`; samples at 0.05 and 0.95 | Medium |
+| 2 | ✅ Kusudama step 6 and the penguin; CI's motion check to `joined: 'edge'`; samples at 0.05 and 0.95 (20 November) | Medium |
 | 3 | Reverse folds opening their flap as the point turns | Large, about six models |
 | 4 | Pirate hat; decide the rainbow chain | Medium to large |
 | 5 | Squash and petal folds; the fins | Medium |
@@ -131,3 +141,4 @@ use would be part 3's bent stacks.
 | Checks and report | Done 15 November (`8f7ff14`). |
 | Squirrel, T-rex, chrysanthemum, kusudama at rest | Done 15 November (`f58d3aa`); the kusudama's ball dense again (`b6981f4`). |
 | Order of work, row 1 | 20 November: the 3D fox's tail tucked lower; lifted stacks in `shape` turned about their top, which fixed the butterfly (the kusudama's flowers set out to 0.77 to stay clear, 29.5% gaps); crossings beside a shared corner left out at rest. The masu box and lids' cause found, and deferred. Three left on `RESTS`: the rainbow chain, pirate hat and shallow masu lid. |
+| Order of work, row 2 | 20 November: CI's motion check compares faces meeting at a point (crossings beside the corner left out), at 0.05 and 0.95 too; the kusudama's squash plays as two folds in turn (`together`'s `inTurn`); the heart and seal listed, the dolphin's limit raised. |
