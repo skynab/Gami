@@ -26,7 +26,7 @@ at rest, 4 to 10 mm each (`f58d3aa`); the kusudama's ball made dense again witho
 
 | | Over the limit | Of which already listed |
 |---|---|---|
-| At rest, more than 2.5 layers | 5 models: rainbow chain (2.5 mm), pirate hat (1.5 mm), 3D fox, butterfly, shallow masu lid (0.3 to 0.5 mm) | All 5 (`RESTS`) |
+| At rest, more than 2.5 layers | 5 models: rainbow chain (2.5 mm), pirate hat (1.5 mm), 3D fox, butterfly, shallow masu lid (0.3 to 0.5 mm). The 3D fox and butterfly fixed later that day. | All 5 (`RESTS`) |
 | Playing, faces joined at a point included, more than 7 layers | 22 steps in 13 models | 11 models (`GRAZES`); new: the kusudama's "Squash the flaps" (step 6, 5.9 mm) and the penguin's "Turn the head down" (step 12, 0.8 mm) |
 | Playing, more than 2.5 layers | 64 steps | |
 | Bent stacks at rest | Cup and samurai helmet 0.7 mm, balloon rabbit 0.4 mm, boat, tulip bloom, balloon, waterbomb 0.1 to 0.3 mm | Not checked: left to `LIFT` |
@@ -52,14 +52,18 @@ part 3).
 
 | Model | At rest | Cause | Approach | Size |
 |---|---|---|---|---|
-| 3D fox | 0.5 mm, step 17 "Put the tail on" | The tail's sheet lies in the plane of a tilted body face, where the body's top edge meets it. | Set it clear by the body's stacked layers, as the squirrel's head is. | Small |
-| Shallow masu lid | 0.3 mm, steps 30 to 32 (raising and locking the walls) | Riding layers, the locks, sit a little inside the walls they ride on. The masu box (0.1 mm) has the same. | Lift riding layers clear of what they ride on by their layer gaps when the walls go up. One fix for the box, lid and shallow lid. | Medium |
-| Butterfly | 0.4 mm, step 28 "Lift the wings" | Lifting the wings swings layers through the body's middle: the hinge isn't where those layers wrap round. | Lift about the crease the layers wrap round, or lift the wrapped layers with the wing. | Medium |
+| 3D fox | ~~0.5 mm~~ fixed 20 November | The tail rose past the back just inside the body's rear edge, where the body's sides meet and there's no room between them. | Its wide end tucked lower, so it rises past the back only behind the body. | Done |
+| Butterfly | ~~0.4 mm~~ fixed 20 November | `shape` turned a stack lifted by one bend about its bottom layer, so its upper layers' edges swung in past the crease, through the wing's top layers lying still there. | Fixed in `shape`, for every model: a stack that's all lifted turns about its top, the fold's inside, its lower layers swinging out round it (a stack carrying on past its line the other way, as a plane's fin past its body, keeps its bottom). 24 models' files moved a little; none newly crosses. | Done |
+| Shallow masu lid | 0.3 mm, steps 30 to 32 (raising and locking the walls) | Not the riding layers, as first thought: at the box's inside corners, a flap lying on one wall (or the floor) runs right out to the corner's line, while the other wall's inner layers stand a few layers in from it, so its edge pokes 2 to 3 layers into them. Hidden inside the corner; the masu box (1 layer) has the same. | In the chained `shape` (`opened`), stop each layer short of a wall it meets at a corner by that wall's layers there, a mitre. Changes shared code for 0.2 mm out of sight: after the motions. | Medium, deferred |
 | Pirate hat | 1.5 mm, step 13 "Open it and stand it up" (bent) | Two triangles of opposite sides cross near the brim's corner as the hat opens. They don't face the same way, so the bend solver's contacts between stacked layers don't hold them apart. | Contacts between those parts of the bend, or open it a little less. | Medium to large |
 | Rainbow chain | 2.5 mm, steps 14 and 15 | Rigid links set on a ring dip into each other where they cross; real links flex. | **Decide:** a wider ring so rigid links clear (it looks less like the real chain), links that bend, or leave it listed as an accepted approximation. | Large, or none |
 
 Then bring `REST` down from 2.5 layers to 1.5, measure again and list what's newly over: the masu box, the
 lotus's "Open the petals" and the boat's opening are near.
+
+Since 20 November `restingCrossings` leaves out a crossing within `NEAR_JOIN` (0.02, 3 mm on a 15 cm sheet) of the
+corner two faces meet at: their layers' offset where they're joined, as at a cone's tip, not a point tucked through.
+`crossingAt` with `joined: 'edge'` should get the same before CI switches to it (part 2).
 
 ## 2. Motions
 
@@ -112,7 +116,7 @@ use would be part 3's bent stacks.
 
 | # | Work | Size |
 |---|---|---|
-| 1 | 3D fox, then the masu box and lids (one cause), then the butterfly | Small to medium |
+| 1 | ✅ 3D fox and butterfly (20 November); masu box and lids diagnosed and deferred | Small to medium |
 | 2 | Kusudama step 6 and the penguin; CI's motion check to `joined: 'edge'`; samples at 0.05 and 0.95 | Medium |
 | 3 | Reverse folds opening their flap as the point turns | Large, about six models |
 | 4 | Pirate hat; decide the rainbow chain | Medium to large |
@@ -126,3 +130,4 @@ use would be part 3's bent stacks.
 |---|---|
 | Checks and report | Done 15 November (`8f7ff14`). |
 | Squirrel, T-rex, chrysanthemum, kusudama at rest | Done 15 November (`f58d3aa`); the kusudama's ball dense again (`b6981f4`). |
+| Order of work, row 1 | 20 November: the 3D fox's tail tucked lower; lifted stacks in `shape` turned about their top, which fixed the butterfly (the kusudama's flowers set out to 0.77 to stay clear, 29.5% gaps); crossings beside a shared corner left out at rest. The masu box and lids' cause found, and deferred. Three left on `RESTS`: the rainbow chain, pirate hat and shallow masu lid. |

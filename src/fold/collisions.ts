@@ -55,7 +55,10 @@ export interface RestingCrossing {
   paper: [Vec2, Vec2];
   /** Which sheet each face is part of. */
   sheets: [number, number];
-  /** The faces meet at a corner on the sheet (a point tucked in), rather than not at all. */
+  /**
+   * The faces meet at a corner on the sheet (a point tucked in), rather than not at all. Crossings within `NEAR_JOIN`
+   * of that corner are left out, as their layers' offset where they're joined.
+   */
   pointJoined: boolean;
   /**
    * Bent paper lying nearly the same way (or opposite), as stacked layers do: these can pass a little into each
@@ -92,6 +95,9 @@ export function restingCrossings(model: OrigamiModel, joined: Joined = 'edge'): 
         if (shared >= (joined === 'point' ? 1 : 2)) continue;
         const hit = clearanceAt(pose[a], pose[b]);
         if (!hit) continue;
+        // Faces meeting at a corner, crossing right beside it, are only offset from each other by their layers there,
+        // where they're joined (a cone's tip, where all its paper meets): not a point tucked through.
+        if (shared === 1 && nearJoin(hit.at, [pose[a], pose[b]], [paper[a], paper[b]], keys[b])) continue;
         const [na, nb] = [normals[a], normals[b]];
         const stacked = bent && !!na && !!nb && Math.abs(na[0] * nb[0] + na[1] * nb[1] + na[2] * nb[2]) >= STACKED_FACING;
         out.push({
@@ -108,6 +114,20 @@ export function restingCrossings(model: OrigamiModel, joined: Joined = 'edge'): 
     }
   });
   return out;
+}
+
+/**
+ * How near the corner two faces share a crossing has to be to count as their layers' offset where they're joined,
+ * rather than one passing through the other: 3 mm on a 15 cm sheet, the thickness of 30 layers.
+ */
+const NEAR_JOIN = 0.02;
+
+/** Whether `at` is within `NEAR_JOIN` of where either face has the corner they share (its key in `other`). */
+function nearJoin(at: Vec3, pose: [Vec3[], Vec3[]], paper: [Vec2[], Vec2[]], other: Set<string>): boolean {
+  const i = paper[0].findIndex((q) => other.has(`${q[0].toFixed(6)},${q[1].toFixed(6)}`));
+  if (i < 0) return false;
+  const j = paper[1].findIndex((q) => q[0].toFixed(6) === paper[0][i][0].toFixed(6) && q[1].toFixed(6) === paper[0][i][1].toFixed(6));
+  return [pose[0][i], j >= 0 ? pose[1][j] : null].some((c) => !!c && Math.hypot(at[0] - c[0], at[1] - c[1], at[2] - c[2]) < NEAR_JOIN);
 }
 
 /** Points through a step to look for paper coming apart: often, as paper can part for a moment near the end. */

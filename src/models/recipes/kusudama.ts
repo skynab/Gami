@@ -146,7 +146,7 @@ export function kusudama() {
   // petals straight at its face's corners: turned, the flowers' petals slip in beside their neighbours' rather than
   // meeting them tip to tip, so the flowers sit close, the ball shut but for a few gaps, and no petal passes into
   // another. (Pointed straight at the corners, they had to sit 0.96 out to clear each other, the ball half gaps.)
-  const DEPTH = 0.76;
+  const DEPTH = 0.77;
   const TWIST = (20 * Math.PI) / 180;
   const ball = (k: number, middle: Vec3) => {
     const up = faces[k];

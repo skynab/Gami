@@ -103,12 +103,13 @@ export function fox3d() {
   r.assemble({ title: 'Put the head on', text: 'Slip the head over the front of the body, facing forwards.' }, [
     { only: head, pose: { from: table(hcx, hcz), to: [front + 0.02, high + 0.06, 0], x: [0, 0, -1], up: [1, 0, 0] } },
   ]);
-  // The tail out behind and a little up, its wide end tucked between the body's sides.
+  // The tail out behind and a little up, its wide end tucked between the body's sides: low enough that it rises past
+  // the back only behind the body, as up at the back, where the sides meet, there's no room between them for it.
   const lift = (20 * Math.PI) / 180;
   const along: Vec3 = [-Math.cos(lift), Math.sin(lift), 0];
   return r
     .assemble({ title: 'Put the tail on', text: 'Tuck the tail’s wide end between the back legs, so it sticks out behind. Your fox is ready to explore!' }, [
-      { only: tail, pose: { from: table(tx, tz - d), to: [bb.left - bx + 0.18, high - 0.06, 0], x: [-along[1], along[0], 0], up: [0, 0, 1] } },
+      { only: tail, pose: { from: table(tx, tz - d), to: [bb.left - bx + 0.18, high - 0.09, 0], x: [-along[1], along[0], 0], up: [0, 0, 1] } },
     ])
     .build();
 }
