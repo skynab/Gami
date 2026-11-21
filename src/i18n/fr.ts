@@ -231,6 +231,7 @@ export const fr: Messages = {
     'fox-3d': { title: 'Renard debout', blurb: 'Un renard debout sur ses quatre pattes, en 3D, la queue tendue derrière, à partir de trois carrés et quatre entailles.' },
     'hummingbird': { title: 'Colibri', blurb: 'Un colibri en vol stationnaire, les ailes rejetées en arrière, un long bec pointé devant, à partir de la base de l’oiseau.' },
     'skull': { title: 'Crâne', blurb: 'Une tête de mort aux orbites sombres, obtenues par pliage et non au dessin. Un carré, le nez et les dents dessinés.' },
+    'cute-whale': { title: 'Petite baleine', blurb: 'Une petite baleine trapue, la queue en l’air. Retournez-la, c’est une boîte : la boîte masu traditionnelle, posée à l’envers.' },
   },
   notFound: {
     title: 'Cette page a été repliée',

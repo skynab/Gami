@@ -109,8 +109,19 @@ export function masuShallowLid() {
 /** The box with its corners folded `gap` short of the middle (a hairline for the box itself). */
 function masu({ id, title, colour, gap, corners: cornerTexts, done }: { id: string; title: string; colour: string; gap: number; corners: [string, string, string, string]; done: string }) {
   // Folded white side up, so the box is coloured outside and white inside.
-  const r = new Recipe({ id, title, card: 'finished', sheet: { size: [1, 1], front: '#f6f3ec', back: colour } })
-    .crease(paper(-0.5, 0), paper(0.5, 0), { title: 'Fold in half', text: 'White side up, fold in half side to side, and unfold.' })
+  const r = new Recipe({ id, title, card: 'finished', sheet: { size: [1, 1], front: '#f6f3ec', back: colour } });
+  const e = masuFolds(r, gap, cornerTexts);
+  pose(r, e / 2, e, done);
+  return r;
+}
+
+/**
+ * The masu box's flat folds, up to raising the walls: creased in half both ways, the corners folded `gap` short of
+ * the middle, turned so the edges run straight, the top and bottom edges creased to the middle and their flaps
+ * opened out, the sides creased to the middle. Returns the smaller square's half side, `e`.
+ */
+export function masuFolds(r: Recipe, gap: number, cornerTexts: [string, string, string, string]): number {
+  r.crease(paper(-0.5, 0), paper(0.5, 0), { title: 'Fold in half', text: 'White side up, fold in half side to side, and unfold.' })
     .crease(paper(0, -0.5), paper(0, 0.5), { title: 'Fold in half the other way', text: 'And top to bottom, and unfold.' });
   // Each corner folded in; the paper each fold moved, to open some of them again.
   const corner: Record<string, (c: Vec2) => boolean> = {};
@@ -136,9 +147,7 @@ function masu({ id, title, colour, gap, corners: cornerTexts, done }: { id: stri
     .along(table(-1, e), table(1, e), table(0, 0.1), { title: 'Open the bottom flap', text: 'And the bottom flap.', only: ends.bottom });
   r.crease(table(-e, 0), table(0, 0), { title: 'Fold the left edge to the middle', text: 'Fold the left edge in to the middle, and unfold.' })
     .crease(table(e, 0), table(0, 0), { title: 'Fold the right edge to the middle', text: 'And the right edge, and unfold.' });
-
-  pose(r, e / 2, e, done);
-  return r;
+  return e;
 }
 
 /**
@@ -152,9 +161,32 @@ function masu({ id, title, colour, gap, corners: cornerTexts, done }: { id: stri
  * top.
  */
 function pose(r: Recipe, h: number, e: number, done: string, ride?: (centre: Vec2) => boolean) {
+  const { walls, lock, floor } = masuBends(r, h, e, ride);
+  return r
+    .shape(
+      {
+        title: 'Raise the walls',
+        text: 'Stand the side walls up, and push each corner in so it folds flat against the end wall. The end walls stand up too, with their flaps.',
+      },
+      walls,
+      { chained: floor, ...(ride && { ride }) },
+    )
+    .shape({ title: 'Lock the top end', text: 'Fold the top flap over the end wall into the box, so its point lies on the floor and holds the corners in.' }, lock(-1))
+    .shape({ title: 'Lock the bottom end', text: done }, lock(1));
+}
+
+/** A bend of the masu box's posing, as `shape` takes it, with its test on where a face's centre lies when flat. */
+export type MasuBend = { through: [At, At]; moving: At; degrees: number; only: (c: Vec2) => boolean };
+
+/**
+ * The bends that pose the masu box (see `pose`), from the flat state it's in now: the walls' (`walls`), each end's
+ * lock (`lock(t)`, t = −1 the top end, 1 the bottom), a maker for others (`bend`, its test on where a face lies when
+ * flat) and the point on the floor the walls are chained from.
+ */
+export function masuBends(r: Recipe, h: number, e: number, ride?: (centre: Vec2) => boolean) {
   const flat = r.current;
   const where = (c: Vec2) => locate(flat, c);
-  type B = { through: [At, At]; moving: At; degrees: number; only: (c: Vec2) => boolean };
+  type B = MasuBend;
   const bend = (p: Vec2, q: Vec2, left: Vec2, degrees: number, only: (x: number, z: number) => boolean): B => ({
     through: [table(...p), table(...q)],
     moving: table(...left),
@@ -190,15 +222,5 @@ function pose(r: Recipe, h: number, e: number, done: string, ride?: (centre: Vec
     ]),
   ];
   const floor = paper(0.05, 0.05);
-  return r
-    .shape(
-      {
-        title: 'Raise the walls',
-        text: 'Stand the side walls up, and push each corner in so it folds flat against the end wall. The end walls stand up too, with their flaps.',
-      },
-      walls,
-      { chained: floor, ...(ride && { ride }) },
-    )
-    .shape({ title: 'Lock the top end', text: 'Fold the top flap over the end wall into the box, so its point lies on the floor and holds the corners in.' }, lock(-1))
-    .shape({ title: 'Lock the bottom end', text: done }, lock(1));
+  return { walls, lock, bend, floor };
 }

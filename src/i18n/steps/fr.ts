@@ -2803,4 +2803,16 @@ export const fr: Record<string, string> = {
     "Dessiner le nez et les dents",
   "Draw an upside-down triangle for the nose, and a row of teeth below it. Done!":
     "Dessinez un triangle pointe en bas pour le nez, et une rangée de dents en dessous. C’est fini !",
+  "Draw an eye and a long smile on each side strip, near the top end. They’ll be on the whale’s sides.":
+    "Dessinez un œil et un long sourire sur chaque bande des côtés, près du bout du haut. Ils seront sur les flancs de la baleine.",
+  "Fold the bottom flap under":
+    "Plier le rabat du bas derrière",
+  "Fold the bottom flap, with its corners, behind, along the bottom edge.":
+    "Pliez le rabat du bas, avec ses coins, vers l’arrière le long du bord du bas.",
+  "Hold the paper up. Stand the side walls up, and push each corner in so it folds flat against the end wall. The end walls stand up too, the bottom one with its flap behind it: the flap’s point sticks out below the box, leaning back. That’s the tail.":
+    "Soulevez le papier. Redressez les parois des côtés et poussez chaque coin vers l’intérieur pour qu’il se plaque contre la paroi du bout. Les parois des bouts se redressent aussi, celle du bas avec son rabat derrière elle : la pointe du rabat dépasse sous la boîte, penchée vers l’arrière. C’est la queue.",
+  "Turn it over":
+    "Le retourner",
+  "Turn the box over onto its rim: the whale’s tail rises behind it. Turned back, it’s a box. Done!":
+    "Retournez la boîte sur son bord : la queue de la baleine se dresse derrière. Remise à l’endroit, c’est une boîte. C’est fini !",
 };

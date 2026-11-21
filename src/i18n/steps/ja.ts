@@ -2803,4 +2803,16 @@ export const ja: Record<string, string> = {
     "鼻と歯をかく",
   "Draw an upside-down triangle for the nose, and a row of teeth below it. Done!":
     "鼻にさかさまの三角をかき、その下に歯を一列かきます。できあがり！",
+  "Draw an eye and a long smile on each side strip, near the top end. They’ll be on the whale’s sides.":
+    "左右の帯の、上の端の近くに、目と長い口をかきます。クジラの横顔になります。",
+  "Fold the bottom flap under":
+    "下のフラップをうしろへ折る",
+  "Fold the bottom flap, with its corners, behind, along the bottom edge.":
+    "下のフラップを、角ごと、下の辺でうしろへ折ります。",
+  "Hold the paper up. Stand the side walls up, and push each corner in so it folds flat against the end wall. The end walls stand up too, the bottom one with its flap behind it: the flap’s point sticks out below the box, leaning back. That’s the tail.":
+    "紙を持ち上げます。左右の壁を立て、角を内側に押し込んで、端の壁にぴったり重ねます。端の壁も立ち上がり、下の壁はうしろにフラップをつけたままです。フラップの先は箱の下から少しうしろに傾いて出ます。これがしっぽです。",
+  "Turn it over":
+    "ひっくり返す",
+  "Turn the box over onto its rim: the whale’s tail rises behind it. Turned back, it’s a box. Done!":
+    "箱をふちを下にしてひっくり返すと、うしろにクジラのしっぽが立ちます。もどせば箱になります。できあがり！",
 };

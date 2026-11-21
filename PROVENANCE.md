@@ -122,6 +122,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `fox-3d` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a fox standing in 3D, in place of OrigamiOK's, which is Hoàng Tiến Quyết's; its head is the traditional cat face's folds (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
 | `hummingbird` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a hummingbird from the traditional bird base, after the look of OrigamiOK's, which names no designer (the site says it designed that version itself); Gilad's database lists no Traditional hummingbird (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 21 Nov 2026 |
 | `skull` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a skull face, the corners folded to the middle and the side flaps' tips turned back out for dark eye sockets, after the look of OrigamiOK's skull, which names no designer; Gilad's database lists no Traditional skull (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 21 Nov 2026 |
+| `cute-whale` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a box whale, the traditional masu box worn upside down with one end flap folded out over its wall for a tail, after the look of OrigamiOK's cute whale, which names no designer; Gilad's database lists no Traditional whale in what could be read (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the box's folds follow `masu-box` ([origami.me/box](https://origami.me/box/)) | Clear | 21 Nov 2026 |
 
 ### Notes
 
@@ -136,6 +137,9 @@ noted when it was written, and the model was folded from the common traditional 
   Gami's skull is the blintz (corners to the middle, dark side out) with the side flaps' tips folded back out so
   the dark side shows as eye sockets, its outline folded behind and its nose and teeth drawn; OrigamiOK's opens
   pockets, pulls out sandwiched flaps and pleats the teeth.
+  Gami's cute whale is the traditional masu box (as `masu-box`) worn open side down: one end locked as usual, the
+  other end's flap folded out over its wall rather than into the box, so it runs up the outside and its point flicks
+  back above the back as a tail; eyes drawn. OrigamiOK's raises the head into a cube from a crease grid.
 - **Intermediate models from OrigamiOK** (checked 13 November 2026; the plan is `docs/origamiok-intermediate-plan.md`).
   Its fox page credits Hoàng Tiến Quyết and its lizard page Lee Won-pyo; the rest name only their writer and
   photographer. Gilad's database lists about ten Traditional square turtles (Gross's *Zoogami*, Momotani, NOA 493 and

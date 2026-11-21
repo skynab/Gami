@@ -47,6 +47,7 @@ site's source code, or any other model in the gallery.
 | Standing fox | `src/models/recipes/fox-3d.ts` | November 2026 |
 | Hummingbird | `src/models/recipes/hummingbird.ts` | November 2026 |
 | Skull | `src/models/recipes/skull.ts` | November 2026 |
+| Cute whale | `src/models/recipes/cute-whale.ts` | November 2026 |
 
 ## Other models in the gallery
 
