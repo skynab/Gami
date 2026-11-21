@@ -2815,4 +2815,24 @@ export const fr: Record<string, string> = {
     "Le retourner",
   "Turn the box over onto its rim: the whale’s tail rises behind it. Turned back, it’s a box. Done!":
     "Retournez la boîte sur son bord : la queue de la baleine se dresse derrière. Remise à l’endroit, c’est une boîte. C’est fini !",
+  "Three green squares, each turned so a corner points towards you. Fold them all the same way, side by side: each makes a long leaf.":
+    "Trois carrés verts, chacun tourné pour qu’un coin pointe vers vous. Pliez-les tous de la même façon, côte à côte : chacun donne une longue feuille.",
+  "Crease the leaf squares":
+    "Marquer les carrés des feuilles",
+  "Fold each green square’s left corner to its right corner, then unfold.":
+    "Pliez le coin gauche de chaque carré vert sur son coin droit, puis dépliez.",
+  "Fold the soil":
+    "Plier la terre",
+  "Lighter side up, fold the small brown square’s corners to the middle.":
+    "Face plus claire vers le haut, pliez les coins du petit carré marron jusqu’au milieu.",
+  "And the bottom flap. That’s the pot.":
+    "Puis le rabat du bas. Le pot est prêt.",
+  "Put in the soil":
+    "Mettre la terre",
+  "Push the soil into the pot, folded side up, until it sits a little below the rim.":
+    "Enfoncez la terre dans le pot, face pliée vers le haut, jusqu’à ce qu’elle soit un peu sous le bord.",
+  "Plant the leaves":
+    "Planter les feuilles",
+  "Stand the three leaves on the soil on their thin points, in a fan: the middle one upright, the others leaning out. Done!":
+    "Dressez les trois feuilles sur la terre, sur leurs pointes fines, en éventail : celle du milieu droite, les autres penchées vers l’extérieur. C’est fini !",
 };

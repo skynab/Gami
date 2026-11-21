@@ -2815,4 +2815,24 @@ export const ja: Record<string, string> = {
     "ひっくり返す",
   "Turn the box over onto its rim: the whale’s tail rises behind it. Turned back, it’s a box. Done!":
     "箱をふちを下にしてひっくり返すと、うしろにクジラのしっぽが立ちます。もどせば箱になります。できあがり！",
+  "Three green squares, each turned so a corner points towards you. Fold them all the same way, side by side: each makes a long leaf.":
+    "緑の正方形を三枚、それぞれ角が手前に来るように置きます。三枚とも同じように、並べて折ります。一枚が長い葉一枚になります。",
+  "Crease the leaf squares":
+    "葉の正方形に折り目をつける",
+  "Fold each green square’s left corner to its right corner, then unfold.":
+    "それぞれの緑の正方形の左の角を右の角に合わせて折り、開きます。",
+  "Fold the soil":
+    "土を折る",
+  "Lighter side up, fold the small brown square’s corners to the middle.":
+    "明るい面を上にして、小さな茶色の正方形の角を真ん中に折ります。",
+  "And the bottom flap. That’s the pot.":
+    "下のフラップも。これで鉢のできあがりです。",
+  "Put in the soil":
+    "土を入れる",
+  "Push the soil into the pot, folded side up, until it sits a little below the rim.":
+    "土を、折った面を上にして鉢に押し込み、ふちより少し下にすえます。",
+  "Plant the leaves":
+    "葉を植える",
+  "Stand the three leaves on the soil on their thin points, in a fan: the middle one upright, the others leaning out. Done!":
+    "三枚の葉を細い先で土の上に立て、扇のように広げます。真ん中はまっすぐ、両側は外に傾けます。できあがり！",
 };

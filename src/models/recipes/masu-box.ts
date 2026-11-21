@@ -120,9 +120,12 @@ function masu({ id, title, colour, gap, corners: cornerTexts, done }: { id: stri
  * the middle, turned so the edges run straight, the top and bottom edges creased to the middle and their flaps
  * opened out, the sides creased to the middle. Returns the smaller square's half side, `e`.
  */
-export function masuFolds(r: Recipe, gap: number, cornerTexts: [string, string, string, string]): number {
-  r.crease(paper(-0.5, 0), paper(0.5, 0), { title: 'Fold in half', text: 'White side up, fold in half side to side, and unfold.' })
-    .crease(paper(0, -0.5), paper(0, 0.5), { title: 'Fold in half the other way', text: 'And top to bottom, and unfold.' });
+export function masuFolds(r: Recipe, gap: number, cornerTexts: [string, string, string, string], only?: (c: Vec2) => boolean): number {
+  // With `only`, just that sheet is folded, and turned on its own rather than the whole table: it must lie with its
+  // sheet origin at the middle of the table.
+  const on = only ? { only } : {};
+  r.crease(paper(-0.5, 0), paper(0.5, 0), { title: 'Fold in half', text: 'White side up, fold in half side to side, and unfold.', ...on })
+    .crease(paper(0, -0.5), paper(0, 0.5), { title: 'Fold in half the other way', text: 'And top to bottom, and unfold.', ...on });
   // Each corner folded in; the paper each fold moved, to open some of them again.
   const corner: Record<string, (c: Vec2) => boolean> = {};
   // Each lands on the diagonal `gap` short of the middle.
@@ -133,20 +136,22 @@ export function masuFolds(r: Recipe, gap: number, cornerTexts: [string, string, 
     [0.5, -0.5, 'Fold the next corner in', cornerTexts[2]],
     [-0.5, -0.5, 'Fold the last corner in', cornerTexts[3]],
   ] as const) {
-    corner[`${u},${v}`] = moved(r, () => r.onto(paper(u, v), paper(u * short, v * short), { title, text }));
+    corner[`${u},${v}`] = moved(r, () => r.onto(paper(u, v), paper(u * short, v * short), { title, text, ...on }));
   }
-  r.rotate(45, { title: 'Turn it', text: 'Turn it so its edges run straight up and down.' });
+  const turn = { title: 'Turn it', text: 'Turn it so its edges run straight up and down.' };
+  if (only) r.move(turn, only, { degrees: 45 });
+  else r.rotate(45, turn);
   // The smaller square's half side: its edges at x and z = ±e, the middle creases to come at ±e/2. Each edge is
   // the crease halfway between a corner, √½ out, and where it lands, `gap` out.
   const e = (Math.SQRT1_2 + gap) / 2;
-  r.crease(table(0, -e), table(0, 0), { title: 'Fold the top edge to the middle', text: 'Fold the top edge down to the middle, and unfold.' })
-    .crease(table(0, e), table(0, 0), { title: 'Fold the bottom edge to the middle', text: 'And the bottom edge up to the middle, and unfold.' });
+  r.crease(table(0, -e), table(0, 0), { title: 'Fold the top edge to the middle', text: 'Fold the top edge down to the middle, and unfold.', ...on })
+    .crease(table(0, e), table(0, 0), { title: 'Fold the bottom edge to the middle', text: 'And the bottom edge up to the middle, and unfold.', ...on });
   // The flaps along the top and bottom edges (from the sheet's corners at (½, −½) and (−½, ½)) open back out.
   const ends = { top: corner['0.5,-0.5'], bottom: corner['-0.5,0.5'] };
   r.along(table(-1, -e), table(1, -e), table(0, -0.1), { title: 'Open the top flap', text: 'Unfold the top flap, back out past the top edge.', only: ends.top })
     .along(table(-1, e), table(1, e), table(0, 0.1), { title: 'Open the bottom flap', text: 'And the bottom flap.', only: ends.bottom });
-  r.crease(table(-e, 0), table(0, 0), { title: 'Fold the left edge to the middle', text: 'Fold the left edge in to the middle, and unfold.' })
-    .crease(table(e, 0), table(0, 0), { title: 'Fold the right edge to the middle', text: 'And the right edge, and unfold.' });
+  r.crease(table(-e, 0), table(0, 0), { title: 'Fold the left edge to the middle', text: 'Fold the left edge in to the middle, and unfold.', ...on })
+    .crease(table(e, 0), table(0, 0), { title: 'Fold the right edge to the middle', text: 'And the right edge, and unfold.', ...on });
   return e;
 }
 
@@ -183,15 +188,17 @@ export type MasuBend = { through: [At, At]; moving: At; degrees: number; only: (
  * lock (`lock(t)`, t = −1 the top end, 1 the bottom), a maker for others (`bend`, its test on where a face lies when
  * flat) and the point on the floor the walls are chained from.
  */
-export function masuBends(r: Recipe, h: number, e: number, ride?: (centre: Vec2) => boolean) {
+export function masuBends(r: Recipe, h: number, e: number, ride?: (centre: Vec2) => boolean, only?: (centre: Vec2) => boolean) {
   const flat = r.current;
   const where = (c: Vec2) => locate(flat, c);
+  // With `only`, the bends turn just that sheet's faces.
+  const mine = only ?? (() => true);
   type B = MasuBend;
-  const bend = (p: Vec2, q: Vec2, left: Vec2, degrees: number, only: (x: number, z: number) => boolean): B => ({
+  const bend = (p: Vec2, q: Vec2, left: Vec2, degrees: number, test: (x: number, z: number) => boolean): B => ({
     through: [table(...p), table(...q)],
     moving: table(...left),
     degrees,
-    only: (c) => only(...where(c)),
+    only: (c) => mine(c) && test(...where(c)),
   });
   const walls: B[] = [];
   for (const s of [-1, 1]) {

@@ -2815,4 +2815,24 @@ export const es: Record<string, string> = {
     "Dale la vuelta",
   "Turn the box over onto its rim: the whale’s tail rises behind it. Turned back, it’s a box. Done!":
     "Dale la vuelta a la caja y apóyala en el borde: la cola de la ballena se levanta detrás. Del derecho, es una caja. ¡Listo!",
+  "Three green squares, each turned so a corner points towards you. Fold them all the same way, side by side: each makes a long leaf.":
+    "Tres cuadrados verdes, cada uno girado para que una esquina apunte hacia ti. Dóblalos todos igual, uno al lado del otro: cada uno será una hoja larga.",
+  "Crease the leaf squares":
+    "Marca los cuadrados de las hojas",
+  "Fold each green square’s left corner to its right corner, then unfold.":
+    "Dobla la esquina izquierda de cada cuadrado verde hasta la derecha y desdobla.",
+  "Fold the soil":
+    "Dobla la tierra",
+  "Lighter side up, fold the small brown square’s corners to the middle.":
+    "Con el lado más claro hacia arriba, dobla las esquinas del cuadrado marrón pequeño hasta el centro.",
+  "And the bottom flap. That’s the pot.":
+    "Y la solapa de abajo. Ya tienes la maceta.",
+  "Put in the soil":
+    "Pon la tierra",
+  "Push the soil into the pot, folded side up, until it sits a little below the rim.":
+    "Mete la tierra en la maceta, con el lado doblado hacia arriba, hasta que quede un poco por debajo del borde.",
+  "Plant the leaves":
+    "Planta las hojas",
+  "Stand the three leaves on the soil on their thin points, in a fan: the middle one upright, the others leaning out. Done!":
+    "Pon de pie las tres hojas sobre la tierra, apoyadas en sus puntas finas, en abanico: la del medio derecha y las otras inclinadas hacia fuera. ¡Listo!",
 };

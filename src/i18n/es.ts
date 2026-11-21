@@ -232,6 +232,7 @@ export const es: Messages = {
     'hummingbird': { title: 'Colibrí', blurb: 'Un colibrí volando quieto, con las alas hacia atrás y un pico largo hacia delante, desde la base de pájaro.' },
     'skull': { title: 'Calavera', blurb: 'Una calavera con las cuencas de los ojos oscuras, hechas al doblar, no al dibujar. Un cuadrado, con la nariz y los dientes dibujados.' },
     'cute-whale': { title: 'Ballena mona', blurb: 'Una ballenita rechoncha con la cola en alto. Dale la vuelta y es una caja: la caja masu tradicional, puesta del revés.' },
+    'pot-plant': { title: 'Planta en maceta', blurb: 'Tres hojas largas de pie en una macetita con tierra, en 3D. Cinco cuadrados, sin tijeras ni pegamento.' },
   },
   notFound: {
     title: 'Esta página se ha plegado y ha desaparecido',

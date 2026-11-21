@@ -232,6 +232,7 @@ export const fr: Messages = {
     'hummingbird': { title: 'Colibri', blurb: 'Un colibri en vol stationnaire, les ailes rejetées en arrière, un long bec pointé devant, à partir de la base de l’oiseau.' },
     'skull': { title: 'Crâne', blurb: 'Une tête de mort aux orbites sombres, obtenues par pliage et non au dessin. Un carré, le nez et les dents dessinés.' },
     'cute-whale': { title: 'Petite baleine', blurb: 'Une petite baleine trapue, la queue en l’air. Retournez-la, c’est une boîte : la boîte masu traditionnelle, posée à l’envers.' },
+    'pot-plant': { title: 'Plante en pot', blurb: 'Trois longues feuilles dressées dans un petit pot de terre, en 3D. Cinq carrés, sans ciseaux ni colle.' },
   },
   notFound: {
     title: 'Cette page a été repliée',
