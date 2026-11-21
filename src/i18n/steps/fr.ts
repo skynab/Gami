@@ -2835,4 +2835,70 @@ export const fr: Record<string, string> = {
     "Planter les feuilles",
   "Stand the three leaves on the soil on their thin points, in a fan: the middle one upright, the others leaning out. Done!":
     "Dressez les trois feuilles sur la terre, sur leurs pointes fines, en éventail : celle du milieu droite, les autres penchées vers l’extérieur. C’est fini !",
+  "White side up, the rectangle standing tall, cut two snips up from the bottom edge and two down from the top edge, a little in from each side.":
+    "Face blanche vers le haut, le rectangle dans la hauteur, faites deux entailles vers le haut depuis le bord du bas et deux vers le bas depuis le bord du haut, un peu à l’intérieur de chaque côté.",
+  "Start with four diamonds":
+    "Commencer avec quatre losanges",
+  "Take the four squares, coloured side up: a big one for the neck, a little one for the horn and two for the mane and tail. Turn each so a corner points towards you.":
+    "Prenez les quatre carrés, face colorée vers le haut : un grand pour le cou, un petit pour la corne et deux pour la crinière et la queue. Tournez-les pour qu’un coin pointe vers vous.",
+  "Fold the diamonds in half":
+    "Plier les losanges en deux",
+  "Fold each diamond’s left corner over to its right corner.":
+    "Pliez le coin gauche de chaque losange sur son coin droit.",
+  "Open them back up, leaving a crease down the middle of each.":
+    "Dépliez-les : il reste un pli au milieu de chacun.",
+  "Fold them into kites":
+    "Les plier en cerfs-volants",
+  "Fold each diamond’s lower edges to its middle crease.":
+    "Pliez les bords du bas de chaque losange sur son pli du milieu.",
+  "Fold the neck’s top behind":
+    "Plier le haut du cou derrière",
+  "Fold the neck’s top corner behind, along a line between its side corners.":
+    "Pliez le coin du haut du cou derrière, le long d’une ligne entre ses coins latéraux.",
+  "Fold the neck in half":
+    "Plier le cou en deux",
+  "Fold its left half behind, along its middle crease.":
+    "Pliez sa moitié gauche derrière, le long du pli du milieu.",
+  "Outside-reverse-fold the head":
+    "Plier la tête en pli inversé extérieur",
+  "Open the neck’s point a little and wrap it round the outside, so it points the other way, forwards and a little down. This is the head.":
+    "Ouvrez un peu la pointe du cou et rabattez-la par-dessus l’extérieur, pour qu’elle pointe dans l’autre sens, vers l’avant et un peu vers le bas. C’est la tête.",
+  "Draw an eye on the head, near the top.":
+    "Dessinez un œil sur la tête, vers le haut.",
+  "Turn the neck over":
+    "Retourner le cou",
+  "Turn the neck over, left to right.":
+    "Retournez le cou, de gauche à droite.",
+  "Draw the other eye":
+    "Dessiner l’autre œil",
+  "And an eye on this side.":
+    "Et un œil de ce côté.",
+  "Turn the neck back over.":
+    "Retournez le cou à nouveau.",
+  "Fold the horn in half":
+    "Plier la corne en deux",
+  "Fold the horn’s left half behind, so it’s a thin spike.":
+    "Pliez la moitié gauche de la corne derrière : c’est une fine pointe.",
+  "Narrow the mane and tail":
+    "Affiner la crinière et la queue",
+  "Fold the mane’s and tail’s upper edges to the middle crease too, so each is a long, narrow leaf.":
+    "Pliez aussi les bords du haut de la crinière et de la queue sur le pli du milieu : chacune devient une longue feuille étroite.",
+  "Fold the mane and tail in half":
+    "Plier la crinière et la queue en deux",
+  "Fold each leaf in half along its length, its left half behind.":
+    "Pliez chaque feuille en deux dans la longueur, la moitié gauche derrière.",
+  "Put the neck on":
+    "Poser le cou",
+  "Stand the neck on the front of the body, leaning forwards, its fold at the back and the head looking ahead.":
+    "Dressez le cou à l’avant du corps, penché vers l’avant, le pli derrière et la tête tournée vers l’avant.",
+  "Put the horn on":
+    "Poser la corne",
+  "Set the horn on the forehead, pointing up and forwards.":
+    "Posez la corne sur le front, pointée vers le haut et l’avant.",
+  "Put the mane on":
+    "Poser la crinière",
+  "Ripple the mane back and forth across its length and stand it along the back of the neck, its fold against the neck.":
+    "Ondulez la crinière d’un côté puis de l’autre sur toute sa longueur et dressez-la le long de l’arrière du cou, le pli contre le cou.",
+  "Ripple the tail the same way and hang it from the top of the back, its fold on top. Your unicorn is ready!":
+    "Ondulez la queue de la même façon et suspendez-la au haut du dos, le pli au-dessus. Votre licorne est prête !",
 };

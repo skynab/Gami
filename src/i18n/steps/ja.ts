@@ -2835,4 +2835,70 @@ export const ja: Record<string, string> = {
     "葉を植える",
   "Stand the three leaves on the soil on their thin points, in a fan: the middle one upright, the others leaning out. Done!":
     "三枚の葉を細い先で土の上に立て、扇のように広げます。真ん中はまっすぐ、両側は外に傾けます。できあがり！",
+  "White side up, the rectangle standing tall, cut two snips up from the bottom edge and two down from the top edge, a little in from each side.":
+    "白い面を上にして長方形を縦長に置き、左右の端から少し内側に、下の辺から上へ二か所、上の辺から下へ二か所、切り込みを入れます。",
+  "Start with four diamonds":
+    "ひし形を四つ用意する",
+  "Take the four squares, coloured side up: a big one for the neck, a little one for the horn and two for the mane and tail. Turn each so a corner points towards you.":
+    "四枚の正方形を、色の面を上にして用意します。大きい一枚は首、小さい一枚は角、二枚はたてがみとしっぽです。それぞれ角が手前を向くように回します。",
+  "Fold the diamonds in half":
+    "ひし形を半分に折る",
+  "Fold each diamond’s left corner over to its right corner.":
+    "それぞれのひし形の左の角を、右の角に合わせて折ります。",
+  "Open them back up, leaving a crease down the middle of each.":
+    "開いて、それぞれの真ん中に折り筋をつけます。",
+  "Fold them into kites":
+    "たこの形に折る",
+  "Fold each diamond’s lower edges to its middle crease.":
+    "それぞれのひし形の下の二辺を、真ん中の折り筋に合わせて折ります。",
+  "Fold the neck’s top behind":
+    "首の上を後ろに折る",
+  "Fold the neck’s top corner behind, along a line between its side corners.":
+    "首の上の角を、左右の角を結ぶ線で後ろに折ります。",
+  "Fold the neck in half":
+    "首を半分に折る",
+  "Fold its left half behind, along its middle crease.":
+    "左半分を、真ん中の折り筋で後ろに折ります。",
+  "Outside-reverse-fold the head":
+    "頭をかぶせ折りする",
+  "Open the neck’s point a little and wrap it round the outside, so it points the other way, forwards and a little down. This is the head.":
+    "首の先を少し開いて外側にかぶせ、向きを変えて前の少し下を向くようにします。これが頭です。",
+  "Draw an eye on the head, near the top.":
+    "頭の上のほうに目をかきます。",
+  "Turn the neck over":
+    "首を裏返す",
+  "Turn the neck over, left to right.":
+    "首を左から右へ裏返します。",
+  "Draw the other eye":
+    "もう片方の目をかく",
+  "And an eye on this side.":
+    "こちら側にも目をかきます。",
+  "Turn the neck back over.":
+    "首を元どおりに裏返します。",
+  "Fold the horn in half":
+    "角を半分に折る",
+  "Fold the horn’s left half behind, so it’s a thin spike.":
+    "角の左半分を後ろに折り、細くとがった形にします。",
+  "Narrow the mane and tail":
+    "たてがみとしっぽを細くする",
+  "Fold the mane’s and tail’s upper edges to the middle crease too, so each is a long, narrow leaf.":
+    "たてがみとしっぽの上の二辺も真ん中の折り筋に合わせて折り、それぞれ細長い葉の形にします。",
+  "Fold the mane and tail in half":
+    "たてがみとしっぽを半分に折る",
+  "Fold each leaf in half along its length, its left half behind.":
+    "それぞれの葉を縦に半分に、左半分を後ろに折ります。",
+  "Put the neck on":
+    "首をつける",
+  "Stand the neck on the front of the body, leaning forwards, its fold at the back and the head looking ahead.":
+    "首を胴の前に立て、前に傾けます。折り目が後ろ、頭は前を向くようにします。",
+  "Put the horn on":
+    "角をつける",
+  "Set the horn on the forehead, pointing up and forwards.":
+    "角をおでこにつけ、上の少し前を向くようにします。",
+  "Put the mane on":
+    "たてがみをつける",
+  "Ripple the mane back and forth across its length and stand it along the back of the neck, its fold against the neck.":
+    "たてがみを長さにそって交互に波打たせ、折り目を首に沿わせて首の後ろに立てます。",
+  "Ripple the tail the same way and hang it from the top of the back, its fold on top. Your unicorn is ready!":
+    "しっぽも同じように波打たせ、折り目を上にして背中の後ろの端から垂らします。ユニコーンのできあがり！",
 };

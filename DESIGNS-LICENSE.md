@@ -49,6 +49,7 @@ site's source code, or any other model in the gallery.
 | Skull | `src/models/recipes/skull.ts` | November 2026 |
 | Cute whale | `src/models/recipes/cute-whale.ts` | November 2026 |
 | Pot plant | `src/models/recipes/pot-plant.ts` | November 2026 |
+| Unicorn | `src/models/recipes/unicorn.ts` | November 2026 |
 
 ## Other models in the gallery
 

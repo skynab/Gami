@@ -233,6 +233,7 @@ export const es: Messages = {
     'skull': { title: 'Calavera', blurb: 'Una calavera con las cuencas de los ojos oscuras, hechas al doblar, no al dibujar. Un cuadrado, con la nariz y los dientes dibujados.' },
     'cute-whale': { title: 'Ballena mona', blurb: 'Una ballenita rechoncha con la cola en alto. Dale la vuelta y es una caja: la caja masu tradicional, puesta del revés.' },
     'pot-plant': { title: 'Planta en maceta', blurb: 'Tres hojas largas de pie en una macetita con tierra, en 3D. Cinco cuadrados, sin tijeras ni pegamento.' },
+    'unicorn': { title: 'Unicornio', blurb: 'Un unicornio de pie sobre cuatro patas largas, en 3D, con un cuerno dorado y la crin y la cola onduladas. Un rectángulo y cuatro cuadrados, con cuatro cortes.' },
   },
   notFound: {
     title: 'Esta página se ha plegado y ha desaparecido',

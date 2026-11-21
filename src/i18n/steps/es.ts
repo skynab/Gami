@@ -2835,4 +2835,70 @@ export const es: Record<string, string> = {
     "Planta las hojas",
   "Stand the three leaves on the soil on their thin points, in a fan: the middle one upright, the others leaning out. Done!":
     "Pon de pie las tres hojas sobre la tierra, apoyadas en sus puntas finas, en abanico: la del medio derecha y las otras inclinadas hacia fuera. ¡Listo!",
+  "White side up, the rectangle standing tall, cut two snips up from the bottom edge and two down from the top edge, a little in from each side.":
+    "Con el lado blanco hacia arriba y el rectángulo en vertical, haz dos cortes hacia arriba desde el borde de abajo y dos hacia abajo desde el de arriba, un poco hacia dentro de cada lado.",
+  "Start with four diamonds":
+    "Empieza con cuatro rombos",
+  "Take the four squares, coloured side up: a big one for the neck, a little one for the horn and two for the mane and tail. Turn each so a corner points towards you.":
+    "Toma los cuatro cuadrados, con el lado de color hacia arriba: uno grande para el cuello, uno pequeñito para el cuerno y dos para la crin y la cola. Gira cada uno para que una esquina apunte hacia ti.",
+  "Fold the diamonds in half":
+    "Dobla los rombos por la mitad",
+  "Fold each diamond’s left corner over to its right corner.":
+    "Dobla la esquina izquierda de cada rombo sobre su esquina derecha.",
+  "Open them back up, leaving a crease down the middle of each.":
+    "Vuelve a abrirlos; queda un pliegue en el centro de cada uno.",
+  "Fold them into kites":
+    "Dóblalos en forma de cometa",
+  "Fold each diamond’s lower edges to its middle crease.":
+    "Dobla los bordes de abajo de cada rombo hasta su pliegue central.",
+  "Fold the neck’s top behind":
+    "Dobla la parte de arriba del cuello hacia atrás",
+  "Fold the neck’s top corner behind, along a line between its side corners.":
+    "Dobla la esquina de arriba del cuello hacia atrás, por la línea que une sus esquinas de los lados.",
+  "Fold the neck in half":
+    "Dobla el cuello por la mitad",
+  "Fold its left half behind, along its middle crease.":
+    "Dobla su mitad izquierda hacia atrás, por el pliegue central.",
+  "Outside-reverse-fold the head":
+    "Haz un pliegue invertido exterior para la cabeza",
+  "Open the neck’s point a little and wrap it round the outside, so it points the other way, forwards and a little down. This is the head.":
+    "Abre un poco la punta del cuello y envuélvela por fuera, para que apunte hacia el otro lado, hacia delante y un poco hacia abajo. Es la cabeza.",
+  "Draw an eye on the head, near the top.":
+    "Dibuja un ojo en la cabeza, cerca de arriba.",
+  "Turn the neck over":
+    "Da la vuelta al cuello",
+  "Turn the neck over, left to right.":
+    "Da la vuelta al cuello, de izquierda a derecha.",
+  "Draw the other eye":
+    "Dibuja el otro ojo",
+  "And an eye on this side.":
+    "Y un ojo en este lado.",
+  "Turn the neck back over.":
+    "Vuelve a dar la vuelta al cuello.",
+  "Fold the horn in half":
+    "Dobla el cuerno por la mitad",
+  "Fold the horn’s left half behind, so it’s a thin spike.":
+    "Dobla la mitad izquierda del cuerno hacia atrás, para que quede una punta fina.",
+  "Narrow the mane and tail":
+    "Estrecha la crin y la cola",
+  "Fold the mane’s and tail’s upper edges to the middle crease too, so each is a long, narrow leaf.":
+    "Dobla también los bordes de arriba de la crin y de la cola hasta el pliegue central, para que cada una sea una hoja larga y estrecha.",
+  "Fold the mane and tail in half":
+    "Dobla la crin y la cola por la mitad",
+  "Fold each leaf in half along its length, its left half behind.":
+    "Dobla cada hoja por la mitad a lo largo, con la mitad izquierda hacia atrás.",
+  "Put the neck on":
+    "Pon el cuello",
+  "Stand the neck on the front of the body, leaning forwards, its fold at the back and the head looking ahead.":
+    "Pon el cuello de pie en la parte delantera del cuerpo, inclinado hacia delante, con el doblez detrás y la cabeza mirando al frente.",
+  "Put the horn on":
+    "Pon el cuerno",
+  "Set the horn on the forehead, pointing up and forwards.":
+    "Pon el cuerno en la frente, apuntando hacia arriba y hacia delante.",
+  "Put the mane on":
+    "Pon la crin",
+  "Ripple the mane back and forth across its length and stand it along the back of the neck, its fold against the neck.":
+    "Ondula la crin de un lado a otro a lo largo y ponla de pie a lo largo de la parte de atrás del cuello, con el doblez contra el cuello.",
+  "Ripple the tail the same way and hang it from the top of the back, its fold on top. Your unicorn is ready!":
+    "Ondula la cola del mismo modo y cuélgala de la parte de arriba del lomo, con el doblez arriba. ¡Tu unicornio está listo!",
 };

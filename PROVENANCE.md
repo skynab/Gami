@@ -124,6 +124,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `skull` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a skull face, the corners folded to the middle and the side flaps' tips turned back out for dark eye sockets, after the look of OrigamiOK's skull, which names no designer; Gilad's database lists no Traditional skull (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 21 Nov 2026 |
 | `cute-whale` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a box whale, the traditional masu box worn upside down with one end flap folded out over its wall for a tail, after the look of OrigamiOK's cute whale, which names no designer; Gilad's database lists no Traditional whale in what could be read (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the box's folds follow `masu-box` ([origami.me/box](https://origami.me/box/)) | Clear | 21 Nov 2026 |
 | `pot-plant` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a plant standing in a pot, from five squares: the traditional masu box for the pot, a blintzed square for the soil and three leaves folded as the flat tulip's traditional leafy stem starts, after the look of OrigamiOK's pot plant, which names no designer (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the pot's folds follow `masu-box` ([origami.me/box](https://origami.me/box/)), the stems' `tulip` | Clear | 21 Nov 2026 |
+| `unicorn` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a unicorn standing in 3D from five sheets, built as Gami's standing fox is, after the look of OrigamiOK's unicorn, whose page credits **Imai Yudai** (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the body's folds follow `fox-3d`, the mane's and tail's leaves `palm-leaf` | Clear | 21 Nov 2026 |
 
 ### Notes
 
@@ -144,6 +145,11 @@ noted when it was written, and the model was folded from the common traditional 
   Gami's pot plant puts traditional parts together: the masu box as the pot, a square with its corners folded to
   the middle as the soil, and three leaves standing on it, each narrowed into a long kite as the tulip's stem starts. OrigamiOK's uses eight sheets, cuts
   its leaves and stems, rolls the stems and glues them into a rolled filler.
+  Gami's unicorn takes nothing from Imai Yudai's, which collapses one square from a full crease grid and makes the
+  horn, head, legs and tail from its layers. Gami's is five sheets put together in 3D, as its standing fox is: a
+  rectangle snipped for legs and folded in half along the back; a kite with its top folded behind and folded in half
+  for the neck, the head turned out with an outside reverse fold and eyes drawn; a kite folded in half for the horn;
+  and two long leaves, folded in half and rippled, for the mane and tail. Only the subject is shared.
 - **Intermediate models from OrigamiOK** (checked 13 November 2026; the plan is `docs/origamiok-intermediate-plan.md`).
   Its fox page credits Hoàng Tiến Quyết and its lizard page Lee Won-pyo; the rest name only their writer and
   photographer. Gilad's database lists about ten Traditional square turtles (Gross's *Zoogami*, Momotani, NOA 493 and
