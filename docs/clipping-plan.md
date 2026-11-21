@@ -83,13 +83,34 @@ corner two faces meet at: their layers' offset where they're joined, as at a con
    Also found: the viewer plays the `.fold` files, whose rounded coordinates can pick a slightly different way
    through a step than the recipe the checks build (the penguin's step 12: 0.0054 from its file, 0.0046 from its
    recipe). Worth checking from the files too, perhaps in the test that compares them.
-3. **Work the `GRAZES` list deepest first, by cause**, as one fix often covers several models:
+3. **Snaps at a step's ends** (found 20 November, working on the squash folds). Looked at every 0.005 in the first
+   and last 5% of each step, nine models go deeper than the samples show, the deepest by far: the folds lesson's
+   "Fold a square base" (steps 54 and 62, 18 mm at 0.99) and "Crimp" (step 47, 6 mm), the lily's three
+   squash-and-petal folds (steps 22, 25 and 28, 7 to 7.5 mm at 0.96 to 0.985), the rainbow chain (5.7 mm), the heart
+   (1.8 mm at 0.035), the boat, the diamond ring, the pinwheel and the chrysanthemum (about 1 mm). Most of the deep
+   ones aren't grazes but snaps: most of the step's motion in its last 2.5%, as far as a corner goes. The folds
+   lesson's square base moves 0.90 of its 1.13 there, the lily's petal folds 0.49 of 0.71, the bases lesson's step 53
+   0.49 of 1.42, the rainbow chain's step 14 all of it at the start; the pinwheel, chrysanthemum, butterfly and
+   diamond ring less. On screen that's paper jumping into place as the step ends, through whatever's in the way.
+
+   The cause, in the lily and the folds lesson: `joinFixes` (animate.ts) joins the paper up at 40 points through the
+   step, each starting from the last one's join. Once that holds a face a way it doesn't end (the lily's petal flap
+   standing, when its own motion has it nearly flat), every later point keeps it so, and only the end, where the
+   fix is nothing, lets it go: in the last fortieth of the step. Tried 20 November: joining up from the end backwards
+   too, and switching over where the two are nearest, bridged by joining up from the two blended (as points that
+   can't be joined whole already are). The two never come near each other (a flap standing in one, lying in the
+   other, all through the step), and joined from a blend the flap still falls one way or the other: the lily went
+   from 7.5 mm at 0.98 to 7.5 mm at 0.89. Reverted. The way on is likely a better motion for the faces before
+   they're joined up (the flap's own motion turns 135° about a line the joins don't keep), rather than better joins.
+   And the checks should look near the ends more closely, 0.975 and 0.99 at least, once the snaps are fixed (until
+   then those would only lengthen the lists).
+4. **Work the `GRAZES` list deepest first, by cause**, as one fix often covers several models:
 
 | Cause | Steps | Approach |
 |---|---|---|
 | Reverse folds with rigid paper: the point ends between layers staying put on both sides | Crane (neck, tail, head, 1.1 mm), fox (tail) | Not the flap opening as the point turns: that was tried on 8 November ("open, fold, close", `docs/next-tasks-plan.md`, Smaller) and fails on each of these. The crane's flap carries on across the body's centre line, the fox's tail can't open without tearing. Checked again 20 November: the point's layers already turn each about its own crease at its own height, so it isn't the point turning as one block. It's where it lands: between layers that stay put and carry on past the crease, so any flat face turning in cuts through one side by about the stack's thickness (0.0077 on the crane's neck). Real paper bends the body apart near the corner. The way on is the bending one: frames on the way with a finer mesh round the corner, which needs `transitionVia` and the file format to place faces that aren't pieces of the end frame's. Large. |
-| Squash and petal folds: layers grazing as they turn | Lily (four flaps, 1.3 mm), boat (the diamond again, 1.5 mm), frog (squashes), chrysanthemum, kusudama step 6 | Hold the layers apart longer (`makeWay`), or land them in order as the seal's tail now does. |
-| Opening out in 3D: the fins swing before the layers part | Whale and dolphin "Open the fins" (1.3 and 1.1 mm, deepest 0.1 of the way) | Part the layers first, then swing. |
+| Squash and petal folds: layers grazing as they turn | Lily (four flaps, 1.3 mm sampled, but see item 3: 7.5 mm as they snap down at the end), boat (the diamond again, 1.5 mm, grazing all through the step), frog (turning out a back leg, 1.6 mm at 0.8), chrysanthemum, ~~kusudama step 6~~ | Looked at 20 November: the lily's is the snap in item 3. Not `makeWay`, which lifts separate paper (another unit) out of the way, not layers of one sheet. The boat's and frog's not looked into further. |
+| Opening out in 3D: the fins swing through the body | Whale and dolphin "Open the fins" (1.3 and 1.4 mm, deepest 0.05 to 0.1 of the way) | Looked at 20 November: not the layers parting late. Each fin lies folded back on the layer it's hinged to, inside the body: the whale's lower fin (layers 1 and 2) has 13 layers above it, the other half of the body. Opening it can only turn it up through them (turned down, it's folding further, into its own layer). At rest the fin's hinge is drawn lifted above the body, so it's clear; on the way it passes through. Real paper parts the body to let it out, or (origami.me) swings the fins out past the belly's open edge. Either needs bending: large. |
 | A closed tube in rigid paper | Swan "Pull the neck up" (2.0 mm) | Needs bending (PLAN.md, milestone 13). Stays listed until then. |
 | Rigid links | Rainbow chain (up to 5 mm) | Left listed for now, as in part 1. |
 
@@ -130,7 +151,7 @@ use would be part 3's bent stacks.
 | 2 | ✅ Kusudama step 6 and the penguin; CI's motion check to `joined: 'edge'`; samples at 0.05 and 0.95 (20 November) | Medium |
 | 3 | Reverse folds: bending round the corner as the point turns in (frames on the way with a finer mesh; format and animator first). Not opening the flap, tried 8 November. | Large, two or three models |
 | 4 | ✅ Pirate hat (20 November); the rainbow chain left listed | Medium |
-| 5 | Squash and petal folds; the fins | Medium |
+| 5 | Squash and petal folds; the fins (looked at 20 November: the fins need bending; the lily's is a snap at the step's end, item 3 of part 2, with the folds lesson's and others) | Medium, then a decision |
 | 6 | Recipe-build warning, report links, the Studio's warning | Medium |
 | 7 | `REST` to 1.5 layers, `GRAZE` to 5; bent stacks looked at; part 5 only if needed | Small, then as needed |
 
@@ -144,3 +165,4 @@ use would be part 3's bent stacks.
 | Order of work, row 2 | 20 November: CI's motion check compares faces meeting at a point (crossings beside the corner left out), at 0.05 and 0.95 too; the kusudama's squash plays as two folds in turn (`together`'s `inTurn`); the heart and seal listed, the dolphin's limit raised. |
 | Order of work, row 3 | 20 November: looked at again before starting. The approach planned (the flap opening as the point turns) was tried on 8 November and fails on these steps; the cause is the point landing between layers that carry on past the crease. Needs the bending way: waiting on a decision. |
 | Order of work, row 4 | 20 November: the pirate hat's cause found (its band ends carried on into the other wall at the brim's corners). Lying them flat between the walls along cut lines fixes the clipping but stretches slivers of the mesh 7.2% as it plays and builds in 68 s; not committed, decision needed. The rainbow chain's decision put to the user. Then: the mesher lays long narrow faces out on a grid (`meshFrame`), and the hat's fix went in, off `RESTS` (2.9% stretch, 33 s). The rainbow chain stays listed for now. |
+| Order of work, row 5 | 20 November: the whale's and dolphin's fins open from inside the body (needs bending). Looking closely at the ends of steps found snaps, the joins letting paper go only in the last fortieth of a step: the folds lesson 18 mm, the lily 7.5 mm, and others. Joining from the end too didn't help; reverted. Waiting on a decision. |
