@@ -6,6 +6,11 @@ import type { Vec2 } from '../../fold/types';
  * you. The start of the bird base and the frog base.
  */
 export function squareBase(r: Recipe): Recipe {
+  return squareBaseFold(r).rotate(135, { title: 'Open end towards you', text: 'Turn the square so the loose corners point towards you.' });
+}
+
+/** The square base's creases and its collapse, before it's turned with its open end towards you (`squareBase`). */
+export function squareBaseFold(r: Recipe): Recipe {
   return r.crease(paper(-0.5, -0.5), paper(0.5, 0.5), { title: 'Fold in half diagonally', text: 'Bring one corner to the opposite corner, then unfold.' })
     .crease(paper(0.5, -0.5), paper(-0.5, 0.5), { title: 'Fold the other diagonal', text: 'The two creases cross at the centre.' })
     .crease(paper(-0.5, 0), paper(0.5, 0), { title: 'Fold in half', text: 'Edge to edge this time, then unfold.' })
@@ -21,8 +26,7 @@ export function squareBase(r: Recipe): Recipe {
         { through: [table(-1, -1), table(1, 1)], kind: 'valley' },
       ],
       paper(-0.4, -0.1),
-    )
-    .rotate(135, { title: 'Open end towards you', text: 'Turn the square so the loose corners point towards you.' });
+    );
 }
 
 /**

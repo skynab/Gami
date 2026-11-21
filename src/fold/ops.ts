@@ -820,7 +820,17 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
 export function inTurnVia(frames: FoldFrame[]): FoldFrame[] | undefined {
   if (frames.length < 2) return undefined;
   const last = frames[frames.length - 1];
-  return frames.slice(0, -1).map((_, j) => keepIn(unfoldTo(frames, j), last));
+  const via = frames.slice(0, -1).map((_, j) => keepIn(unfoldTo(frames, j), last));
+  // The first follows the frame before the step, which can have fewer faces (a square base collapsed from a sheet
+  // only creased): each face points back at the face it's part of there, through every operation. The rest share
+  // the last's faces.
+  const back = last.faces_vertices.map((_, f) => {
+    let p = f;
+    for (let k = frames.length - 1; k >= 0; k--) p = frames[k].faces_parent?.[p] ?? p;
+    return p;
+  });
+  via[0] = { ...via[0], faces_parent: back };
+  return via;
 }
 
 /** A line spec as a line on the table, for the paper as it is in `frame`. */

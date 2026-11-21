@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { crossings, partings, restingCrossings } from '../fold/collisions';
+import { crossings, partings, PLAYING, restingCrossings } from '../fold/collisions';
 import { fromFoldFile, toFoldFile } from '../fold/fold-format';
 import { framesOf, LAYER_GAP } from '../fold/frames';
 import { guidesFor } from '../fold/guides';
@@ -24,19 +24,14 @@ const file = (name: string) => readFileSync(new URL(`../../public/models/${name}
 /** How deep paper may pass through paper as a model plays (a sheet's width is 1, a layer 0.0007): a few layers. */
 const GRAZE = 0.005;
 /**
- * Where through each step to look: every tenth, and near each end too, where a fold starting or landing can cut
- * through for a moment (the heart's and seal's below were found there, on 20 November 2026).
- */
-const PLAYING = [0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95];
-/**
  * The models known to go deeper, each a little over what it was measured at (last on 11 November 2026), and where. Bent steps
  * are left to the bending checks: the viewer draws bent paper in its stacking order where layers meet.
  */
 const GRAZES: Record<string, number> = {
   lily: 0.009, // Its squash-and-petal folds, joined up all the way (see collisions.test.ts).
   swan: 0.014, // Pulling up the neck: with rigid paper its body is a closed tube (PLAN.md, milestone 13).
-  whale: 0.009, // Opening the fins out in 3D.
-  dolphin: 0.0095, // Opening the fins out in 3D, deepest as they start.
+  whale: 0.009, // Opening the fins out in 3D: the lower fin turns up from inside the body (docs/clipping-plan.md).
+  dolphin: 0.01, // Opening the fins out in 3D, deepest as they start: the lower fin turns up from inside the body.
   frog: 0.011, // Turning out a back leg, and lifting the front legs against the other front quarter (docs/origami-me-plan.md).
   'masu-shallow-lid': 0.0085, // Raising the walls: riding layers sit a little off the faces they ride on.
   'rainbow-chain': 0.034, // Joining the ends: rigid links set on a ring dip into each other where they cross.
@@ -46,10 +41,15 @@ const GRAZES: Record<string, number> = {
   // settles in between, through about half the stack. Real paper bends a little to open the flap; rigid paper
   // can't without opening it right out (docs/next-tasks-plan.md).
   crane: 0.008, // The neck, tail and head. (The seal's tail came off the list on 11 November: see LANDS in animate.ts.)
-  fox: 0.0075, // Folding the tail in.
+  fox: 0.008, // Folding the tail in, deepest as it lands.
   // Found looking near the ends of steps and at points tucked through (20 November 2026).
   heart: 0.0095, // Folding the top down: the white side triangles lie on the point it turns up through as it starts.
   seal: 0.007, // Raising the neck, for a moment as it lands.
+  // Found looking closer at the ends of steps (20 November 2026), once the snaps there were fixed.
+  'folds-lesson': 0.026, // The crimp: two reverse folds at once, the point settling in between the layers.
+  'diamond-ring': 0.0095, // Curling the band round, as it closes.
+  pinwheel: 0.007, // Squashing an end: the paper the joins held lets go in the last fortieth of the step.
+  chrysanthemum: 0.007, // Its pinwheel unit's squash, as the pinwheel's.
 };
 
 /**
@@ -76,10 +76,20 @@ const RESTS: Record<string, number> = {
  */
 const TEAR = 0.01;
 /**
- * The models known to come further apart, each a little over what it was measured at, and where. None since
- * 11 November 2026: the lily, seal, frog and fox, the last four, are joined up all the way (docs/next-tasks-plan.md).
+ * The models known to come further apart, each a little over what it was measured at, and where. None from
+ * 11 November 2026, when the lily, seal, frog and fox were joined up all the way (docs/next-tasks-plan.md), until
+ * the checks looked at the last fortieth of each step.
  */
-const TEARS: Record<string, number> = {};
+const TEARS: Record<string, number> = {
+  // Found looking at the last fortieth of each step (20 November 2026), where the joins can let go of paper held
+  // the way it started, so it jumps into place (docs/clipping-plan.md).
+  kusudama: 0.33, // Assembling the ball: units held where they started, let go as the step ends.
+  chrysanthemum: 0.14, // Starting the ball, as the kusudama's.
+  'rainbow-chain': 0.043, // Joining the ends.
+  lily: 0.018, // The petal folds, stood up first so they no longer snap down at the end: apart a little on the way.
+  pinwheel: 0.013, // Squashing the bottom, as it lands.
+  butterfly: 0.0105, // Squashing the bottom, as it lands.
+};
 
 /** The checks on shard `shard` (1 to `SHARDS`) of the built-in models: every `SHARDS`th recipe from its place. */
 export function checkModels(shard: number) {

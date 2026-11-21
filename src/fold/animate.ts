@@ -145,7 +145,7 @@ function workOut(from: FoldFrame, to: FoldFrame, makeWay: boolean, stages: numbe
   // With paper that can get out of the way, the way round that goes through it may be the better one.
   let best = made;
   let fewest = passesThrough(made, WAY_SAMPLES);
-  if (!fewest) return made;
+  if (!fewest) return stoodFirst(from, to, t, stages, made);
   const yielding = withWayMade(moving(from, to, { yielding: true }));
   const y = passesThrough(yielding, WAY_SAMPLES);
   if (y < fewest) [best, fewest] = [yielding, y];
@@ -167,7 +167,66 @@ function workOut(from: FoldFrame, to: FoldFrame, makeWay: boolean, stages: numbe
       if (!deepest) break;
     }
   }
+  return stoodFirst(from, to, t, stages, best);
+}
+
+/**
+ * Paper torn apart by the faces' own moves is joined up as it's drawn (see `joinFixes`), and the joins can hold it
+ * the way it started all through the step, letting go only as it ends, where it jumps into place through whatever's
+ * in the way: the lily's petal folds, 6 mm through in the last fortieth of the step. (Joined up from the end back
+ * instead, they hold it the way it ends all through: the two never meet.) Where the paper jumps like that, judged
+ * by the paper as it's drawn, closely, standing the moving paper up first can be better, where the faces all meet
+ * at a point and so never count as passing through each other in `workOut`. `best` is the way found so far, `t`
+ * the faces' own moves.
+ */
+function stoodFirst(from: FoldFrame, to: FoldFrame, t: Transition, stages: number, best: Transition): Transition {
+  if (!stages || best.path || !jumps(best)) return best;
+  let drawn = asDrawn(best);
+  for (const staged of stagedWays(from, to, t, stages - 1)) {
+    const way = staged();
+    if (!way) continue;
+    const d = asDrawn(way);
+    // Clearly less deep and torn no further, or no deeper and either clearly less torn or not jumping at all.
+    const shallower = d.depth < drawn.depth - DEEPER && d.apart <= Math.max(drawn.apart, TEAR);
+    const noDeeper = d.depth <= drawn.depth + LAYER_GAP;
+    const joined = noDeeper && d.apart < drawn.apart - TEAR;
+    const smooth = noDeeper && d.apart <= Math.max(drawn.apart, TEAR) && !jumps(way);
+    if (shallower || joined || smooth) [best, drawn] = [way, d];
+  }
   return best;
+}
+
+/**
+ * Whether paper jumps as it's drawn, in the last or first half of a fortieth of the step, where the joins (see
+ * `joinFixes`) let go of it or take hold: further than `JUMP`.
+ */
+function jumps(t: Transition): boolean {
+  const h = 1 / (2 * JOIN_SAMPLES);
+  const moved = (a: Vec3[][], b: Vec3[][]) => Math.max(...a.flatMap((face, f) => face.map((p, c) => Math.hypot(p[0] - b[f][c][0], p[1] - b[f][c][1], p[2] - b[f][c][2]))));
+  return moved(poseAt(t, 1 - h), poseAt(t, 1)) > JUMP || moved(poseAt(t, 0), poseAt(t, h)) > JUMP;
+}
+
+/**
+ * How far a corner may move in an eightieth of a step, as it's drawn, before it counts as jumping: a flap's tip half
+ * a sheet out, turning right over, moves two hundredths.
+ */
+const JUMP = 0.08;
+
+/**
+ * How a transition looks as it's drawn, joins and all: how deep paper passes through paper (faces sharing no
+ * corner), and how much further apart the same point of paper comes than at either end, at the most.
+ */
+function asDrawn(t: Transition): { depth: number; apart: number } {
+  const groups = cornerGroups(t.faces);
+  // Between and at the points the joins are worked out at (see `joinFixes`): where paper jumps, it's between them.
+  const poses = Array.from({ length: 2 * JOIN_SAMPLES - 1 }, (_, i) => poseAt(t, (i + 1) / (2 * JOIN_SAMPLES)));
+  const ends = groups.length ? [spreads(poseAt(t, 0), groups), spreads(poseAt(t, 1), groups)] : [[], []];
+  let [depth, apart] = [0, 0];
+  for (const pose of poses) {
+    depth = Math.max(depth, deepest(t, pose));
+    if (groups.length) apart = Math.max(apart, ...spreads(pose, groups).map((d, g) => d - Math.max(ends[0][g], ends[1][g])));
+  }
+  return { depth, apart };
 }
 
 /** Into a bent frame (see Transition.blend), all as one motion. */
@@ -883,9 +942,27 @@ function sameFaces(a: FoldFrame, b: FoldFrame): number[] | undefined {
   return out.every((i) => i !== undefined) ? (out as number[]) : undefined;
 }
 
+/** `to`, its faces pointing back at `from`'s face for face if they're the same faces (see `transitionVia`), kept for the transitions' cache. */
+const parted = new WeakMap<FoldFrame, WeakMap<FoldFrame, FoldFrame>>();
+function partOf(from: FoldFrame, to: FoldFrame): FoldFrame {
+  let byTo = parted.get(from);
+  if (!byTo) parted.set(from, (byTo = new WeakMap()));
+  let out = byTo.get(to);
+  if (!out) {
+    const same = sameFaces(from, to);
+    out = same && !same.every((p, f) => (to.faces_parent?.[f] ?? f) === p) ? { ...to, faces_parent: same } : to;
+    byTo.set(to, out);
+  }
+  return out;
+}
+
 /** How the paper gets through a list of frames, one after another, as a single step. */
-export function transitionVia(frames: FoldFrame[]): Transition {
-  if (frames.length <= 2) return transition(frames[0], frames.at(-1)!);
+export function transitionVia(given: FoldFrame[]): Transition {
+  if (given.length <= 2) return transition(given[0], given.at(-1)!);
+  // A frame with the same faces as the one before it is part of it face for face, whatever it says it comes from:
+  // a step played as several operations in turn ends on a frame whose faces point back at the frame before the
+  // step, as the step's own last frame, not at the frame it passed just before it.
+  const frames = given.map((f, j) => (j ? partOf(given[j - 1], f) : f));
   const parts = frames.slice(1).map((f, j) => transition(frames[j], f));
   const last = frames.at(-1)!;
   // Each final face's ancestor in each frame, following faces_parent back from the end.

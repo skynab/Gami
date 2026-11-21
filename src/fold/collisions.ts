@@ -25,6 +25,14 @@ export interface Crossing {
 const SAMPLES = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];
 
 /**
+ * Where through each step the checks look, as a model plays: every tenth, and near each end too, where a fold
+ * starting or landing can cut through for a moment (the heart's and seal's, found 20 November 2026), and closer
+ * still at the end, where paper the joins held the way it started jumped into place in the last fortieth of the
+ * step, between the samples (the lily's petal folds and the folds lesson's square base, 6 and 18 mm through).
+ */
+export const PLAYING = [0.025, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.975, 0.99];
+
+/**
  * Which faces count as joined, and so are never compared: those sharing any corner on the sheet ('point', as the
  * checks have always had it), or only those sharing two, joined along a crease ('edge'), which also finds a flap's
  * point tucked through the layers it meets at that point.
@@ -130,8 +138,11 @@ function nearJoin(at: Vec3, pose: [Vec3[], Vec3[]], paper: [Vec2[], Vec2[]], oth
   return [pose[0][i], j >= 0 ? pose[1][j] : null].some((c) => !!c && Math.hypot(at[0] - c[0], at[1] - c[1], at[2] - c[2]) < NEAR_JOIN);
 }
 
-/** Points through a step to look for paper coming apart: often, as paper can part for a moment near the end. */
-const PART_SAMPLES = Array.from({ length: 19 }, (_, i) => (i + 1) / 20);
+/**
+ * Points through a step to look for paper coming apart: often, as paper can part for a moment near the end, and in
+ * the last fortieth, where the joins can let go of paper they held (see `PLAYING`).
+ */
+const PART_SAMPLES = [...Array.from({ length: 19 }, (_, i) => (i + 1) / 20), 0.975, 0.99];
 
 /**
  * Paper coming apart while each step animates, as the viewer draws it: for each step (1-based), how much further

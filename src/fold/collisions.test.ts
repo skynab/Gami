@@ -154,7 +154,8 @@ describe('paper passing through paper', () => {
     }
   });
 
-  it('stands a flap up before squashing it', () => {
+  // Judging which way the lily's petal folds look best as drawn, joins and all, takes a few seconds.
+  it('stands a flap up before squashing it', { timeout: 30_000 }, () => {
     // The fox's squash and the lily's squash-and-petal folds play in stages: the flap lifts about its hinge
     // first, then each part goes to its place.
     const fox = byId('fox');

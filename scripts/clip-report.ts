@@ -11,7 +11,7 @@
  * report to a Markdown file as well.
  */
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { crossings, restingCrossings, type RestingCrossing } from '../src/fold/collisions';
+import { crossings, PLAYING, restingCrossings, type RestingCrossing } from '../src/fold/collisions';
 import { fromFoldFile } from '../src/fold/fold-format';
 import { LAYER_GAP } from '../src/fold/frames';
 import type { OrigamiModel, Vec2 } from '../src/fold/types';
@@ -26,8 +26,6 @@ const withStacked = flag('--stacked');
 const mdAt = args.indexOf('--md');
 const md = mdAt >= 0 ? args.splice(mdAt, 2)[1] : undefined;
 
-/** Where through each step to look while it plays, as the model checks do: every tenth, and near each end. */
-const PLAYING = [0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95];
 /** Deeper than this counts: a single layer's gap is how far apart stacked paper is drawn anyway. */
 const SHOWS = LAYER_GAP;
 

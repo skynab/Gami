@@ -1,6 +1,6 @@
 import { paper, Recipe, table } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
-import { squareBase, squareBaseFlaps } from './bird-base';
+import { squareBaseFlaps, squareBaseFold } from './bird-base';
 
 /**
  * A lesson rather than a model: the common folds, one to a section, each on a fresh square. The choice of
@@ -247,7 +247,8 @@ export function foldsLesson() {
       text: 'Start from a square base: crease both diagonals and both halves, then collapse it so the four corners meet, loose corners towards you. Origami bases shows it step by step.',
       kind: 'fold',
     },
-    () => squareBase(r),
+    () => squareBaseInTurn(r),
+    { inTurn: true },
   );
   squareBaseFlaps(r).petal(false);
   openUp(petal, 'Open it out to see the creases the petal fold left behind.');
@@ -264,7 +265,8 @@ export function foldsLesson() {
       text: 'Start from a square base: crease both diagonals and both halves, then collapse it so the four corners meet, loose corners towards you. Origami bases shows it step by step.',
       kind: 'fold',
     },
-    () => squareBase(r),
+    () => squareBaseInTurn(r),
+    { inTurn: true },
   );
   const tip = r.where(paper(0, 0));
   // A quarter of the way down the point: sunk less deep, the layers graze past each other a little more as they go in.
@@ -287,3 +289,13 @@ export function foldsLesson() {
   return r.build();
 }
 
+
+/**
+ * A square base folded as one step, played in two parts in turn: creased and collapsed, then turned with its open end
+ * towards you. All at once, its faces turning their own ways while the paper was joined up held them as they started
+ * until the step's end, then they jumped into place, 18 mm through each other.
+ */
+function squareBaseInTurn(r: Recipe) {
+  r.together({ title: 'Collapse into a square base' }, () => squareBaseFold(r));
+  r.rotate(135, { title: 'Open end towards you', text: 'Turn the square so the loose corners point towards you.' });
+}
