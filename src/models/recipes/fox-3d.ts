@@ -61,7 +61,7 @@ export function fox3d() {
   const ears: ((c: Vec2) => boolean)[] = [];
   r.together({ title: 'Fold up the ears', text: 'Fold each side corner up, so its point sticks up past the top point and out to the side.' }, (q) => {
     for (const s of [-1, 1]) ears.push(moved(r, () => q.onto(table(hx + s * h, hz), table(hx + s * ear[0], hz + ear[1]), { title: '', only: head })));
-  });
+  }, { inTurn: true });
   r.along(table(hx - 1, hz - 0.62 * h), table(hx + 1, hz - 0.62 * h), table(hx, hz - h), {
     title: 'Fold the top behind',
     text: 'Fold the top point down behind, between the ears.',

@@ -117,6 +117,15 @@ corner two faces meet at: their layers' offset where they're joined, as at a con
    - The checks look at 0.025, 0.975 and 0.99 too (`PLAYING` in collisions.ts, shared with `clip-report`), and the
      tearing check at 0.975 and 0.99.
 
+   ✅ **Then, 20 November:** the kusudama's and chrysanthemum's assembly: `comingIn` moved each face of a unit its own
+   way to its place, so a unit bent into shape as it came in came apart in the air (half a sheet), and the joins
+   held it as it started until the end. Now each unit moves as its biggest piece that keeps its shape does, and each
+   face bends into place relative to that piece, so a face turning about a crease with it stays joined: the
+   kusudama 32% apart to under 1%, the chrysanthemum's ball clean. And where a step jumps, the other ways `moving`
+   weighed (each face its own way, hinged at each pace, creases in step, a squash as rigid paper folds it:
+   `Transition.others`) are judged as drawn too: the butterfly's squash, 1% apart to 0.3%. The pinwheel's squash
+   jumps whichever way it moves (all of its ways do, as drawn), so it stays listed.
+
    **Left, listed** (what the closer look found, beyond the above): the kusudama's and chrysanthemum's assembly
    (units held where they started, let go as the step ends: 32% and 14% apart for a moment, `TEARS`), the rainbow
    chain (4%), the pinwheel's and chrysanthemum's squash (0.0064 through, 1.2% apart: all the paper moves, so
@@ -133,9 +142,12 @@ corner two faces meet at: their layers' offset where they're joined, as at a con
 | A closed tube in rigid paper | Swan "Pull the neck up" (2.0 mm) | Needs bending (PLAN.md, milestone 13). Stays listed until then. |
 | Rigid links | Rainbow chain (up to 5 mm) | Left listed for now, as in part 1. |
 
-Once the list is down to the swan and the chain, bring `GRAZE` down from 7 layers to 5. (Measured 20 November:
-at 5 layers six more would be listed, the penguin, crow, flapping bird, cute cat, turtle and 3D fox, 0.004 to 0.005
-each; so it stays at 7 until the list is shorter.)
+✅ `GRAZE` came down from 7 layers to 5 on 20 November. Of the six between, the cute cat's and 3D fox's ears (two
+folds at once, passing through each other) now fold in turn and cross nothing; the penguin's head, crow's feet and
+flapping bird's neck are reverse folds, as the crane's (the flapping bird's 0.013 at its deepest, between samples);
+the turtle's back flippers, a four-layer flap whose lower layers dip into the shell as it lands. Those four are
+listed. The boat's second squash was looked at too: every other way of moving it crosses 3.5 to 6.6 times deeper
+than the rigid squash it uses, so its 1.5 mm stays; the frog's back leg is a reverse fold.
 
 ## 3. Bent paper
 
@@ -182,7 +194,7 @@ use would be part 3's bent stacks.
 | 4 | ✅ Pirate hat (20 November); the rainbow chain left listed | Medium |
 | 5 | ✅ Squash and petal folds, and the snaps at steps' ends (20 November: part 2, item 3); the fins need bending, the boat's and frog's grazes not looked into | Medium |
 | 6 | ✅ Recipe-build warning, report links, the Studio's warning and the review queue's (20 November) | Medium |
-| 7 | ✅ `REST` to 1.5 layers; bent stacks looked at and `LIFT` doubled (20 November); `GRAZE` stays at 7 until the list is shorter; part 5 only if needed | Small, then as needed |
+| 7 | ✅ `REST` to 1.5 layers; bent stacks looked at and `LIFT` doubled; `GRAZE` to 5 layers (20 November); part 5 only if needed | Small, then as needed |
 
 ## Progress
 
@@ -197,3 +209,4 @@ use would be part 3's bent stacks.
 | Order of work, row 5 | 20 November: the whale's and dolphin's fins open from inside the body (needs bending). Looking closely at the ends of steps found snaps, the joins letting paper go only in the last fortieth of a step: the folds lesson 18 mm, the lily 7.5 mm, and others. Then fixed where better moves exist (standing a flap up first, judged as drawn; the square base in turn), and the checks look near the ends; what's left is listed (part 2, item 3). |
 | Order of work, row 6 | 20 November: `npm run models` fails on a step clipping at rest beyond its limit, the report links each line to the viewer, and the Studio warns under such a step (the review queue lists them). |
 | Order of work, row 7 | 20 November: `REST` down to 1.5 layers (nothing new listed). Bent stacks showed specks (the helmet, the cup); the viewer now draws covered bent layers 8 layers back a place rather than 4, and they're gone. `GRAZE` left at 7: six more would be listed at 5. |
+| After the plan | 20 November: assembly snaps fixed (units move as their biggest unbent piece, bending into place relative to it); a jumping step's other ways of moving judged as drawn (the butterfly); the cute cat's and 3D fox's ears in turn; `GRAZE` to 5 layers with the penguin, crow, flapping bird and turtle listed; the boat's and frog's grazes looked at, left (rigid paper's best, and a reverse fold). |

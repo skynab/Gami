@@ -63,7 +63,7 @@ export function cuteCat() {
       title: '',
       only: head,
     });
-  });
+  }, { inTurn: true });
   const brow = hz - h + 0.14;
   const ears = r.lying(([x, z]) => z < hz - 0.05 && Math.abs(x - hx) > 0.06);
   r.along(table(hx - 1, brow), table(hx + 1, brow), table(hx, hz - h), {

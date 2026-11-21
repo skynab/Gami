@@ -8,8 +8,11 @@ import { REST } from '../fold/collisions';
  */
 export { REST };
 
-/** How deep paper may pass through paper as a model plays (a sheet's width is 1, a layer 0.0007): a few layers. */
-export const GRAZE = 0.005;
+/**
+ * How deep paper may pass through paper as a model plays (a sheet's width is 1, a layer 0.0007): five layers, half a
+ * millimetre on a 15 cm sheet (from seven on 20 November 2026, the models between listed below).
+ */
+export const GRAZE = 0.0035;
 /**
  * The models known to go deeper, each a little over what it was measured at (last on 11 November 2026), and where. Bent steps
  * are left to the bending checks: the viewer draws bent paper in its stacking order where layers meet.
@@ -28,6 +31,11 @@ export const GRAZES: Record<string, number> = {
   // settles in between, through about half the stack. Real paper bends a little to open the flap; rigid paper
   // can't without opening it right out (docs/next-tasks-plan.md).
   crane: 0.008, // The neck, tail and head. (The seal's tail came off the list on 11 November: see LANDS in animate.ts.)
+  // The same, found bringing GRAZE down to five layers (20 November 2026).
+  penguin: 0.0055, // Turning the head down, as it lands.
+  crow: 0.0048, // Making the feet.
+  'flapping-bird': 0.0045, // Pulling out the neck: 0.013 at its deepest, between the samples.
+  turtle: 0.005, // Folding out the back flippers: the four-layer flap's lower layers dip into the shell as it lands.
   fox: 0.008, // Folding the tail in, deepest as it lands.
   // Found looking near the ends of steps and at points tucked through (20 November 2026).
   heart: 0.0095, // Folding the top down: the white side triangles lie on the point it turns up through as it starts.
@@ -64,10 +72,8 @@ export const TEAR = 0.01;
 export const TEARS: Record<string, number> = {
   // Found looking at the last fortieth of each step (20 November 2026), where the joins can let go of paper held
   // the way it started, so it jumps into place (docs/clipping-plan.md).
-  kusudama: 0.33, // Assembling the ball: units held where they started, let go as the step ends.
-  chrysanthemum: 0.14, // Starting the ball, as the kusudama's.
+  chrysanthemum: 0.013, // Its pinwheel unit's squash, as the pinwheel's.
   'rainbow-chain': 0.043, // Joining the ends.
   lily: 0.018, // The petal folds, stood up first so they no longer snap down at the end: apart a little on the way.
   pinwheel: 0.013, // Squashing the bottom, as it lands.
-  butterfly: 0.0105, // Squashing the bottom, as it lands.
 };
