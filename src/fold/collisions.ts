@@ -92,10 +92,11 @@ export function restingCrossings(model: OrigamiModel, joined: Joined = 'edge'): 
 
 /**
  * How deep paper may pass through paper where a step comes to rest, which is what's on screen most of the time:
- * two and a half layers, as deep as the motions themselves allow (see animate.ts). Bent stacked layers are left
- * out, as the viewer draws those in their stacking order where they meet.
+ * a layer and a half (from two and a half on 20 November 2026, when nothing but the models listed went deeper; the
+ * boat's opening is next, at 1.3). Bent stacked layers are left out, as the viewer draws those in their stacking
+ * order where they meet.
  */
-export const REST = 2.5 * LAYER_GAP;
+export const REST = 1.5 * LAYER_GAP;
 
 /**
  * The steps where paper passes through paper deeper than `limit` as they come to rest (bent stacked layers left

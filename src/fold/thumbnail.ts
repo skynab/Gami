@@ -206,7 +206,7 @@ function slanted(model: OrigamiModel, frame: FoldFrame, size: number, marks: Mar
 }
 
 /** How far back each place among stacked bent paper is drawn: the viewer's `LIFT` (FoldedPaper.tsx). */
-const LIFT = 4 * LAYER_GAP;
+const LIFT = 8 * LAYER_GAP;
 
 /**
  * For a model finishing in bent paper (a balloon blown up), how far back to draw each of its last frame's triangles,

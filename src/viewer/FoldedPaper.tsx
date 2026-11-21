@@ -649,8 +649,11 @@ function stackRanks(model: OrigamiModel, k: number, faces: number): { lifts: Sta
  * as specks of one through the other. So each is drawn nearer the eye, or further, by its place among the paper it's
  * stacked with (`rank` seen from its front, `rankBack` from its back) times this, along the line of sight, which
  * changes only which shows where they meet. Bent paper only: a flat stack's layers are drawn apart as it is.
+ * Eight layers a place: more than the deepest stacked layers pass into each other at rest (the samurai helmet's
+ * seven), so a layer one place back stays hidden. At four (until 20 November 2026), specks of the helmet's blue
+ * showed through its horns, and of the cup's white through its green.
  */
-const LIFT = 4 * LAYER_GAP;
+const LIFT = 8 * LAYER_GAP;
 const lift = (rank: string) => (shader: { vertexShader: string }) => {
   shader.vertexShader = shader.vertexShader
     .replace('#include <common>', `#include <common>\nattribute float ${rank};`)

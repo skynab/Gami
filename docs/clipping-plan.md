@@ -60,8 +60,8 @@ part 3).
 | Pirate hat | ~~1.5 mm~~ fixed 20 November, step 13 "Open it and stand it up" (bent), and about as deep all through the opening | The band's ends, out past the line from the point to the brim's corners, carried on from the walls' slope (`along` in `pirate-hat.ts`), and at the corners the walls head in towards each other, so each wall's band ends passed through the other's, at the 54° the walls meet at. Real paper presses them flat together between the walls, the hat's two points. | They carry on flat between the walls instead, with `lines` along the point-to-corner lines so the paper can fold there: 0.0005 at rest. The cut band pieces first came out in slivers (7.2% stretch as it played, 68 s to build), so `meshFrame` now lays a face out on a square grid when halving its triangles would leave any corner sharper than 20° (a long narrow face), once the faces around it are halved. The hat's whole band was slivers before, cut or not. Now 2.9% stretch, 33 s to build. Of the other models only the boat's mesh changed, no worse. | Done |
 | Rainbow chain | 2.5 mm, steps 14 and 15 | Rigid links set on a ring dip into each other where they cross; real links flex. | Left listed for now (decided 20 November), as an accepted approximation. A wider ring (looks less like the real chain) or links that bend are the ways on, if it's taken up again. | None for now |
 
-Then bring `REST` down from 2.5 layers to 1.5, measure again and list what's newly over: the masu box, the
-lotus's "Open the petals" and the boat's opening are near.
+✅ `REST` came down from 2.5 layers to 1.5 on 20 November: nothing but the two listed (the rainbow chain and the
+shallow masu lid) goes deeper at rest; the boat's opening is next, at 1.3.
 
 Since 20 November `restingCrossings` leaves out a crossing within `NEAR_JOIN` (0.02, 3 mm on a 15 cm sheet) of the
 corner two faces meet at: their layers' offset where they're joined, as at a cone's tip, not a point tucked through.
@@ -133,14 +133,19 @@ corner two faces meet at: their layers' offset where they're joined, as at a con
 | A closed tube in rigid paper | Swan "Pull the neck up" (2.0 mm) | Needs bending (PLAN.md, milestone 13). Stays listed until then. |
 | Rigid links | Rainbow chain (up to 5 mm) | Left listed for now, as in part 1. |
 
-Once the list is down to the swan and the chain, bring `GRAZE` down from 7 layers to 5.
+Once the list is down to the swan and the chain, bring `GRAZE` down from 7 layers to 5. (Measured 20 November:
+at 5 layers six more would be listed, the penguin, crow, flapping bird, cute cat, turtle and 3D fox, 0.004 to 0.005
+each; so it stays at 7 until the list is shorter.)
 
 ## 3. Bent paper
 
-- **Bent stacks** (the cup, helmet, balloon rabbit and others above) are left to `LIFT` drawing them in their stacking
-  order. Look at them rather than assume it works, with part 5's check or by eye. If specks show, have the bend
-  solver hold its gap between stacked layers at more points (`contacts` in `src/fold/bend/solver.ts`): today
-  they're kept apart at the triangles' corners but can pass into each other between them.
+- ✅ **Bent stacks**, looked at 20 November: specks did show, the samurai helmet's blue through its white horns,
+  the cup's white through its green. Stacked layers pass up to 7 layers into each other at rest (the helmet; the cup
+  6.4, pirate hat 4.0, balloon rabbit 3.4, boat 2.5), and `LIFT` drew a covered layer only 4 layers back a place, so
+  one place back wasn't enough. At 8 (viewer and thumbnails both) the specks are gone; a few hair-thin lines along
+  the helmet's creases remain, likely where a fold wraps round other layers rather than stacked layers. The bend
+  solver holding its gap at more points (`contacts` in src/fold/bend/solver.ts) is still the way to stop them
+  passing through at all, if those show.
 - **Bent steps as they play** are left out of both the CI check and the report. Add them to `clip-report`, stacked
   pairs marked, so they're seen at least.
 
@@ -177,7 +182,7 @@ use would be part 3's bent stacks.
 | 4 | ✅ Pirate hat (20 November); the rainbow chain left listed | Medium |
 | 5 | ✅ Squash and petal folds, and the snaps at steps' ends (20 November: part 2, item 3); the fins need bending, the boat's and frog's grazes not looked into | Medium |
 | 6 | ✅ Recipe-build warning, report links, the Studio's warning and the review queue's (20 November) | Medium |
-| 7 | `REST` to 1.5 layers, `GRAZE` to 5; bent stacks looked at; part 5 only if needed | Small, then as needed |
+| 7 | ✅ `REST` to 1.5 layers; bent stacks looked at and `LIFT` doubled (20 November); `GRAZE` stays at 7 until the list is shorter; part 5 only if needed | Small, then as needed |
 
 ## Progress
 
@@ -191,3 +196,4 @@ use would be part 3's bent stacks.
 | Order of work, row 4 | 20 November: the pirate hat's cause found (its band ends carried on into the other wall at the brim's corners). Lying them flat between the walls along cut lines fixes the clipping but stretches slivers of the mesh 7.2% as it plays and builds in 68 s; not committed, decision needed. The rainbow chain's decision put to the user. Then: the mesher lays long narrow faces out on a grid (`meshFrame`), and the hat's fix went in, off `RESTS` (2.9% stretch, 33 s). The rainbow chain stays listed for now. |
 | Order of work, row 5 | 20 November: the whale's and dolphin's fins open from inside the body (needs bending). Looking closely at the ends of steps found snaps, the joins letting paper go only in the last fortieth of a step: the folds lesson 18 mm, the lily 7.5 mm, and others. Then fixed where better moves exist (standing a flap up first, judged as drawn; the square base in turn), and the checks look near the ends; what's left is listed (part 2, item 3). |
 | Order of work, row 6 | 20 November: `npm run models` fails on a step clipping at rest beyond its limit, the report links each line to the viewer, and the Studio warns under such a step (the review queue lists them). |
+| Order of work, row 7 | 20 November: `REST` down to 1.5 layers (nothing new listed). Bent stacks showed specks (the helmet, the cup); the viewer now draws covered bent layers 8 layers back a place rather than 4, and they're gone. `GRAZE` left at 7: six more would be listed at 5. |
