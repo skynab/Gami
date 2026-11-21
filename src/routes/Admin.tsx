@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { TopBar } from '../app/TopBar';
 import { AccountButton } from '../auth/AccountButton';
 import { supabase, useAuth } from '../auth/store';
 import { decideReport, LICENCE, modelsToReview, openReports, review, type Report, type SavedModel } from '../cloud/models';
+import { clippedSteps } from '../fold/collisions';
 
 interface Request {
   user_id: string;
@@ -148,6 +149,7 @@ function ReviewQueue() {
                   {t('admin.preview')}
                 </Link>
                 <Certified model={m} />
+                <Clipping model={m} />
                 <label className="field">
                   <span>{t('admin.note')}</span>
                   <textarea rows={2} value={notes[m.id] ?? ''} onChange={(e) => setNotes({ ...notes, [m.id]: e.target.value })} />
@@ -178,6 +180,26 @@ function Certified({ model }: { model: SavedModel }) {
     <p className="small">
       {s.ownership === 'own' ? t('credit.designedBy', { name: s.credit }) : t('credit.traditional', { name: s.credit })}
       {s.firstPublished && ` · ${t('credit.firstPublished', { where: s.firstPublished })}`} · {s.licence === LICENCE.id ? LICENCE.name : s.licence}
+    </p>
+  );
+}
+
+/** Steps where paper passes through paper as they come to rest, each a link to it in the viewer. */
+function Clipping({ model }: { model: SavedModel }) {
+  const { t } = useTranslation();
+  const steps = useMemo(() => clippedSteps(model.model), [model.model]);
+  if (!steps.length) return null;
+  return (
+    <p className="error-text small">
+      {t('admin.clips', { count: steps.length })}{' '}
+      {steps.map(({ step }, i) => (
+        <span key={step}>
+          {i > 0 && ', '}
+          <Link to={`/m/${model.id}?step=${step}`} target="_blank">
+            {t('studio.step', { n: step })}
+          </Link>
+        </span>
+      ))}
     </p>
   );
 }

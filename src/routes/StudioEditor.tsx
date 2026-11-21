@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { sayFold } from '../i18n';
 import { Link } from 'react-router';
 import { TopBar } from '../app/TopBar';
+import { clippedSteps } from '../fold/collisions';
 import { FoldError } from '../fold/fold';
 import { toFoldFile } from '../fold/fold-format';
 import { applyOp, OpError, type Op } from '../fold/ops';
@@ -307,6 +308,8 @@ export default function StudioEditor({ end, cloud = false }: {
 
   const status = message ?? tools.error;
   const onPaper = useMemo(() => marksUpTo(before, before.steps.length).map((m) => m.mark), [before]);
+  // Where paper passes through paper as a step comes to rest: the inside of the paper shows through its outside.
+  const clipped = useMemo(() => new Map(clippedSteps(model).map((c) => [c.step, c.depth])), [model]);
   const { result } = tools;
 
   return (
@@ -464,6 +467,11 @@ export default function StudioEditor({ end, cloud = false }: {
                     value={step.text ?? ''}
                     onChange={(e) => editStep(i, { text: e.target.value || undefined })}
                   />
+                  {clipped.has(i + 1) && (
+                    <p className="error-text small" role="note">
+                      {t('studio.clips', { mm: (clipped.get(i + 1)! * 150).toFixed(1) })}
+                    </p>
+                  )}
                 </li>
               ))}
             </ol>

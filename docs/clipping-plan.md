@@ -146,13 +146,18 @@ Once the list is down to the swan and the chain, bring `GRAZE` down from 7 layer
 
 ## 4. Catch it before it's built
 
-- **When a recipe is built**: check each step's resting pose with `restingCrossings` and warn in `npm run models`,
-  naming the model and step, so an author finds out at once rather than from the model checks. Then make it an error
-  for anything not in `RESTS`.
-- **The report**: give each line a link to the step in the viewer (`/learn/<id>?step=<k>`).
-- **The Studio**: community designs have no checks at all. Run `restingCrossings` when a design is saved (the bend
-  worker already runs then) and warn in the editor ("Paper passes through paper in step 7"); show the same in the
-  admin review queue, before a submission is approved.
+✅ Done 20 November:
+
+- **When a recipe is built**: `npm run models` checks where each step comes to rest (`clippedSteps` in
+  collisions.ts, each frame looked at once) against the limits the model checks use, now in
+  src/models/known-clipping.ts (`REST`, `RESTS`, and the playing and tearing lists). Anything deeper is named, model,
+  step and title, with its link in the viewer, and it ends in an error once the files are written (so they can
+  still be looked at). It says when a listed model no longer clips, to take it off.
+- **The report**: each line ends with a link to its step in the viewer, on the dev server or the site `--url` names.
+- **The Studio**: under any step where paper passes through paper as it comes to rest, a warning saying how deep
+  ("0.3 mm on a 15 cm sheet"). Worked out in the editor as the design changes (each frame once), not when it's
+  saved: the bend worker only runs for bends. The admin review queue lists the steps that clip in each submission,
+  each a link to it in the viewer (not checked in the browser: it needs an admin sign-in).
 
 ## 5. A check of what's drawn (only if clipping is still seen)
 
@@ -171,7 +176,7 @@ use would be part 3's bent stacks.
 | 3 | Reverse folds: bending round the corner as the point turns in (frames on the way with a finer mesh; format and animator first). Not opening the flap, tried 8 November. | Large, two or three models |
 | 4 | ✅ Pirate hat (20 November); the rainbow chain left listed | Medium |
 | 5 | ✅ Squash and petal folds, and the snaps at steps' ends (20 November: part 2, item 3); the fins need bending, the boat's and frog's grazes not looked into | Medium |
-| 6 | Recipe-build warning, report links, the Studio's warning | Medium |
+| 6 | ✅ Recipe-build warning, report links, the Studio's warning and the review queue's (20 November) | Medium |
 | 7 | `REST` to 1.5 layers, `GRAZE` to 5; bent stacks looked at; part 5 only if needed | Small, then as needed |
 
 ## Progress
@@ -185,3 +190,4 @@ use would be part 3's bent stacks.
 | Order of work, row 3 | 20 November: looked at again before starting. The approach planned (the flap opening as the point turns) was tried on 8 November and fails on these steps; the cause is the point landing between layers that carry on past the crease. Needs the bending way: waiting on a decision. |
 | Order of work, row 4 | 20 November: the pirate hat's cause found (its band ends carried on into the other wall at the brim's corners). Lying them flat between the walls along cut lines fixes the clipping but stretches slivers of the mesh 7.2% as it plays and builds in 68 s; not committed, decision needed. The rainbow chain's decision put to the user. Then: the mesher lays long narrow faces out on a grid (`meshFrame`), and the hat's fix went in, off `RESTS` (2.9% stretch, 33 s). The rainbow chain stays listed for now. |
 | Order of work, row 5 | 20 November: the whale's and dolphin's fins open from inside the body (needs bending). Looking closely at the ends of steps found snaps, the joins letting paper go only in the last fortieth of a step: the folds lesson 18 mm, the lily 7.5 mm, and others. Then fixed where better moves exist (standing a flap up first, judged as drawn; the square base in turn), and the checks look near the ends; what's left is listed (part 2, item 3). |
+| Order of work, row 6 | 20 November: `npm run models` fails on a step clipping at rest beyond its limit, the report links each line to the viewer, and the Studio warns under such a step (the review queue lists them). |

@@ -1,8 +1,8 @@
 import { partedBy, poseAt, stepTransition, together, type Transition } from './animate';
-import { facePositions, framesOf } from './frames';
+import { facePositions, framesOf, LAYER_GAP } from './frames';
 import { box, clearanceAt, clearanceDepth, cornerKeys, normalOf, overlapping } from './cross3d';
 import { sheetOf } from './sheets';
-import type { OrigamiModel, Vec2, Vec3 } from './types';
+import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from './types';
 
 /**
  * Finding paper passing through paper while a step animates, and where it comes to rest. Faces that move together
@@ -85,42 +85,58 @@ const STACKED_FACING = 0.8;
  * except those joined along a crease (`joined`, 'edge' by default).
  */
 export function restingCrossings(model: OrigamiModel, joined: Joined = 'edge'): RestingCrossing[] {
-  const out: RestingCrossing[] = [];
-  const middle = (p: Vec2[]): Vec2 => [p.reduce((s, q) => s + q[0], 0) / p.length, p.reduce((s, q) => s + q[1], 0) / p.length];
-  framesOf(model).forEach((frame, k) => {
-    if (!k) return;
-    const bent = !!frame.soft?.length;
-    const pose = facePositions(frame);
-    const paper = frame.faces_vertices.map((face) => face.map((v) => frame.vertices_paper[v]));
-    const keys = paper.map(cornerKeys);
-    const boxes = pose.map(box);
-    const normals = bent ? pose.map(normalOf) : [];
-    for (let a = 0; a < pose.length; a++) {
-      for (let b = a + 1; b < pose.length; b++) {
-        if (!overlapping(boxes[a], boxes[b])) continue;
-        let shared = 0;
-        for (const key of keys[a]) if (keys[b].has(key)) shared++;
-        if (shared >= (joined === 'point' ? 1 : 2)) continue;
-        const hit = clearanceAt(pose[a], pose[b]);
-        if (!hit) continue;
-        // Faces meeting at a corner, crossing right beside it, are only offset from each other by their layers there,
-        // where they're joined (a cone's tip, where all its paper meets): not a point tucked through.
-        if (shared === 1 && nearJoin(hit.at, [pose[a], pose[b]], [paper[a], paper[b]], keys[b])) continue;
-        const [na, nb] = [normals[a], normals[b]];
-        const stacked = bent && !!na && !!nb && Math.abs(na[0] * nb[0] + na[1] * nb[1] + na[2] * nb[2]) >= STACKED_FACING;
-        out.push({
-          step: k,
-          faces: [a, b],
-          depth: hit.depth,
-          at: hit.at,
-          paper: [middle(paper[a]), middle(paper[b])],
-          sheets: [sheetOf(model.sheets, paper[a]), sheetOf(model.sheets, paper[b])],
-          pointJoined: shared === 1,
-          stacked,
-        });
-      }
-    }
+  return framesOf(model).flatMap((frame, k) =>
+    k ? atRest(frame, joined).map((c) => ({ ...c, step: k, sheets: c.paper.map((q) => sheetOf(model.sheets, [q])) as [number, number] })) : [],
+  );
+}
+
+/**
+ * How deep paper may pass through paper where a step comes to rest, which is what's on screen most of the time:
+ * two and a half layers, as deep as the motions themselves allow (see animate.ts). Bent stacked layers are left
+ * out, as the viewer draws those in their stacking order where they meet.
+ */
+export const REST = 2.5 * LAYER_GAP;
+
+/**
+ * The steps where paper passes through paper deeper than `limit` as they come to rest (bent stacked layers left
+ * out), each with how deep, at the most: for warning whoever is making the model. Each frame is looked at once.
+ */
+export function clippedSteps(model: OrigamiModel, limit = REST): { step: number; depth: number }[] {
+  return framesOf(model).flatMap((frame, k) => {
+    if (!k) return [];
+    let depth = deepestAtRest.get(frame);
+    if (depth === undefined) deepestAtRest.set(frame, (depth = Math.max(0, ...atRest(frame, 'edge').filter((c) => !c.stacked).map((c) => c.depth))));
+    return depth > limit ? [{ step: k, depth }] : [];
   });
+}
+const deepestAtRest = new WeakMap<FoldFrame, number>();
+
+/** Paper through paper in one frame (see `restingCrossings`), but for which step and sheets it's in. */
+function atRest(frame: FoldFrame, joined: Joined): Omit<RestingCrossing, 'step' | 'sheets'>[] {
+  const out: Omit<RestingCrossing, 'step' | 'sheets'>[] = [];
+  const middle = (p: Vec2[]): Vec2 => [p.reduce((s, q) => s + q[0], 0) / p.length, p.reduce((s, q) => s + q[1], 0) / p.length];
+  const bent = !!frame.soft?.length;
+  const pose = facePositions(frame);
+  const paper = frame.faces_vertices.map((face) => face.map((v) => frame.vertices_paper[v]));
+  const keys = paper.map(cornerKeys);
+  const boxes = pose.map(box);
+  const normals = bent ? pose.map(normalOf) : [];
+  for (let a = 0; a < pose.length; a++) {
+    for (let b = a + 1; b < pose.length; b++) {
+      if (!overlapping(boxes[a], boxes[b])) continue;
+      let shared = 0;
+      for (const key of keys[a]) if (keys[b].has(key)) shared++;
+      if (shared >= (joined === 'point' ? 1 : 2)) continue;
+      const hit = clearanceAt(pose[a], pose[b]);
+      if (!hit) continue;
+      // Faces meeting at a corner, crossing right beside it, are only offset from each other by their layers there,
+      // where they're joined (a cone's tip, where all its paper meets): not a point tucked through.
+      if (shared === 1 && nearJoin(hit.at, [pose[a], pose[b]], [paper[a], paper[b]], keys[b])) continue;
+      const [na, nb] = [normals[a], normals[b]];
+      const stacked = bent && !!na && !!nb && Math.abs(na[0] * nb[0] + na[1] * nb[1] + na[2] * nb[2]) >= STACKED_FACING;
+      out.push({ faces: [a, b], depth: hit.depth, at: hit.at, paper: [middle(paper[a]), middle(paper[b])], pointJoined: shared === 1, stacked });
+    }
+  }
   return out;
 }
 

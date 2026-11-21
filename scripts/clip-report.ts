@@ -3,12 +3,13 @@
  * paper poking out through its outside. Looks at the frame each step comes to rest on (see `restingCrossings` in
  * src/fold/collisions.ts), and with --playing at points through each step as it plays too.
  *
- *   npm run clip-report -- [model ids, or .fold files] [--playing] [--stacked] [--md <file>]
+ *   npm run clip-report -- [model ids, or .fold files] [--playing] [--stacked] [--md <file>] [--url <site>]
  *
  * With no models, every one in public/models (as built by `npm run models`; nothing is solved again, except the
  * steps' motions with --playing, which takes a few minutes for them all). --stacked lists bent paper's stacked layers
  * passing into each other too, which the viewer draws in order where they meet (so they rarely show). --md writes the
- * report to a Markdown file as well.
+ * report to a Markdown file as well. Each line links to its step in the viewer, on the dev server (`npm run dev`) or
+ * the site --url names.
  */
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { crossings, PLAYING, restingCrossings, type RestingCrossing } from '../src/fold/collisions';
@@ -25,6 +26,10 @@ const playing = flag('--playing');
 const withStacked = flag('--stacked');
 const mdAt = args.indexOf('--md');
 const md = mdAt >= 0 ? args.splice(mdAt, 2)[1] : undefined;
+const urlAt = args.indexOf('--url');
+const site = (urlAt >= 0 ? args.splice(urlAt, 2)[1] : 'http://localhost:5173').replace(/\/$/, '');
+/** The step in the viewer. */
+const link = (id: string, step: number) => `${site}/learn/${id}?step=${step}`;
 
 /** Deeper than this counts: a single layer's gap is how far apart stacked paper is drawn anyway. */
 const SHOWS = LAYER_GAP;
@@ -60,14 +65,16 @@ for (const w of which) {
   }
   const lines = [...bySteps.values()].map(({ worst: c, pairs }) => {
     const what = kind(c);
-    return `  at rest, step ${String(c.step).padStart(2)} “${model.steps[c.step - 1].title}”: ${layers(c.depth)} (${mm(c.depth)} on a 15 cm sheet), ${pairs} pair${pairs === 1 ? '' : 's'}${what ? `; ${what}` : ''}; on the sheet at ${pt(c.paper[0])} and ${pt(c.paper[1])}`;
+    return `  at rest, step ${String(c.step).padStart(2)} “${model.steps[c.step - 1].title}”: ${layers(c.depth)} (${mm(c.depth)} on a 15 cm sheet), ${pairs} pair${pairs === 1 ? '' : 's'}${what ? `; ${what}` : ''}; on the sheet at ${pt(c.paper[0])} and ${pt(c.paper[1])}
+    ${link(model.id, c.step)}`;
   });
   let worst = Math.max(0, ...found.map((c) => c.depth));
   if (playing) {
     const moving = crossings(model, PLAYING, 'edge').filter((c) => c.depth > SHOWS && !model.steps[c.step - 1].frame.soft?.length);
     const steps = new Map<number, { depth: number; at: number }>();
     for (const c of moving) if (c.depth > (steps.get(c.step)?.depth ?? 0)) steps.set(c.step, { depth: c.depth, at: c.at });
-    for (const [k, c] of steps) lines.push(`  playing, step ${String(k).padStart(2)} “${model.steps[k - 1].title}”: ${layers(c.depth)} (${mm(c.depth)}), deepest ${c.at.toFixed(1)} of the way through`);
+    for (const [k, c] of steps) lines.push(`  playing, step ${String(k).padStart(2)} “${model.steps[k - 1].title}”: ${layers(c.depth)} (${mm(c.depth)}), deepest ${c.at} of the way through
+    ${link(model.id, k)}`);
     worst = Math.max(worst, ...[...steps.values()].map((c) => c.depth));
   }
   if (lines.length) rows.push({ id: model.id, worst, lines });
