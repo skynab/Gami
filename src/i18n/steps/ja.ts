@@ -2765,4 +2765,42 @@ export const ja: Record<string, string> = {
     "右の先も同じように、もっと低いところで外側にかぶせて折り、うしろへ少し下向きに出します。これがしっぽです。",
   "Open the wings a little apart, and tilt the bird nose up, as if it hovers at a flower. Done!":
     "翼を少し開いて、花の前で飛んでいるように、くちばしを上げて鳥をかたむけます。できあがり！",
+  "Start dark side up, and turn the square so a corner points towards you.":
+    "濃い色の面を上にして、角が手前に来るように紙を回します。",
+  "Crease down":
+    "縦に折り目をつける",
+  "Fold the bottom corner to the top corner, then unfold. The creases cross in the middle.":
+    "下の角を上の角に合わせて折り、開きます。折り目が真ん中で交わります。",
+  "Fold the top corner down":
+    "上の角を折り下げる",
+  "Fold the top corner down, a little past the middle.":
+    "上の角を、真ん中より少し下まで折り下げます。",
+  "Fold the bottom corner up":
+    "下の角を折り上げる",
+  "Fold the bottom corner up to the middle.":
+    "下の角を真ん中まで折り上げます。",
+  "Fold the left corner to the middle.":
+    "左の角を真ん中まで折ります。",
+  "And the right corner. It’s a square, pale side up.":
+    "右の角も折ります。白っぽい面が上の正方形になります。",
+  "Fold back the left point":
+    "左の先を折り返す",
+  "Fold the point of the left flap back out to the left. The dark side shows: an eye socket.":
+    "左のフラップの先を、左へ折り返します。濃い色が見えて、目のくぼみになります。",
+  "Fold back the right point":
+    "右の先を折り返す",
+  "The same on the right, for the other eye.":
+    "右も同じように折って、もう片方の目にします。",
+  "Fold the two top corners behind a little, to round the top of the skull.":
+    "上の二つの角を少しうしろへ折って、頭のてっぺんを丸くします。",
+  "Round the other corner":
+    "もう一つの角を丸くする",
+  "Narrow the jaw":
+    "あごを細くする",
+  "Fold the lower left side behind at a slant, from the level of the eyes down, so the jaw is narrower.":
+    "左下の辺を、目の高さから下へ斜めにうしろへ折って、あごを細くします。",
+  "Draw the nose and teeth":
+    "鼻と歯をかく",
+  "Draw an upside-down triangle for the nose, and a row of teeth below it. Done!":
+    "鼻にさかさまの三角をかき、その下に歯を一列かきます。できあがり！",
 };

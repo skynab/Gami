@@ -2758,11 +2758,49 @@ export const fr: Record<string, string> = {
   "Outside-reverse-fold the beak":
     "Plier le bec en pli inversé extérieur",
   "Open the left point a little and wrap it round the outside of the body, so it points forwards and a little down, from high up. This is the beak.":
-    "Ouvre un peu la pointe de gauche et rabats-la par-dessus l’extérieur du corps, pour qu’elle parte de haut, vers l’avant et un peu vers le bas. C’est le bec.",
+    "Ouvrez un peu la pointe de gauche et rabattez-la par-dessus l’extérieur du corps, pour qu’elle parte de haut, vers l’avant et un peu vers le bas. C’est le bec.",
   "Outside-reverse-fold the tail":
     "Plier la queue en pli inversé extérieur",
   "Wrap the right point round the outside the same way, lower down, so it points back and a little down. This is the tail.":
-    "Rabats de même la pointe de droite par-dessus l’extérieur, plus bas, pour qu’elle pointe vers l’arrière et un peu vers le bas. C’est la queue.",
+    "Rabattez de même la pointe de droite par-dessus l’extérieur, plus bas, pour qu’elle pointe vers l’arrière et un peu vers le bas. C’est la queue.",
   "Open the wings a little apart, and tilt the bird nose up, as if it hovers at a flower. Done!":
-    "Écarte un peu les ailes et incline l’oiseau bec en l’air, comme s’il faisait du surplace devant une fleur. C’est fini !",
+    "Écartez un peu les ailes et inclinez l’oiseau bec en l’air, comme s’il faisait du surplace devant une fleur. C’est fini !",
+  "Start dark side up, and turn the square so a corner points towards you.":
+    "Commencez face foncée vers le haut, et tournez le carré pour qu’un coin pointe vers vous.",
+  "Crease down":
+    "Marquer un pli de haut en bas",
+  "Fold the bottom corner to the top corner, then unfold. The creases cross in the middle.":
+    "Pliez le coin du bas sur le coin du haut, puis dépliez. Les plis se croisent au milieu.",
+  "Fold the top corner down":
+    "Rabattre le coin du haut",
+  "Fold the top corner down, a little past the middle.":
+    "Rabattez le coin du haut vers le bas, un peu au-delà du milieu.",
+  "Fold the bottom corner up":
+    "Relever le coin du bas",
+  "Fold the bottom corner up to the middle.":
+    "Relevez le coin du bas jusqu’au milieu.",
+  "Fold the left corner to the middle.":
+    "Pliez le coin gauche jusqu’au milieu.",
+  "And the right corner. It’s a square, pale side up.":
+    "Puis le coin droit. C’est un carré, face claire vers le haut.",
+  "Fold back the left point":
+    "Replier la pointe gauche",
+  "Fold the point of the left flap back out to the left. The dark side shows: an eye socket.":
+    "Repliez la pointe du rabat gauche vers la gauche. La face foncée apparaît : une orbite.",
+  "Fold back the right point":
+    "Replier la pointe droite",
+  "The same on the right, for the other eye.":
+    "Pareil à droite, pour l’autre œil.",
+  "Fold the two top corners behind a little, to round the top of the skull.":
+    "Pliez un peu les deux coins du haut vers l’arrière, pour arrondir le haut du crâne.",
+  "Round the other corner":
+    "Arrondir l’autre coin",
+  "Narrow the jaw":
+    "Affiner la mâchoire",
+  "Fold the lower left side behind at a slant, from the level of the eyes down, so the jaw is narrower.":
+    "Pliez vers l’arrière le côté gauche du bas, en biais depuis la hauteur des yeux, pour affiner la mâchoire.",
+  "Draw the nose and teeth":
+    "Dessiner le nez et les dents",
+  "Draw an upside-down triangle for the nose, and a row of teeth below it. Done!":
+    "Dessinez un triangle pointe en bas pour le nez, et une rangée de dents en dessous. C’est fini !",
 };

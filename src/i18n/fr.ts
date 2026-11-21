@@ -230,6 +230,7 @@ export const fr: Messages = {
     strawberry: { title: 'Fraise', blurb: 'Une fraise en 3D, ouverte pointe en bas, ses graines dessinées, coiffée d’une étoile de feuilles vertes. À partir de deux carrés.' },
     'fox-3d': { title: 'Renard debout', blurb: 'Un renard debout sur ses quatre pattes, en 3D, la queue tendue derrière, à partir de trois carrés et quatre entailles.' },
     'hummingbird': { title: 'Colibri', blurb: 'Un colibri en vol stationnaire, les ailes rejetées en arrière, un long bec pointé devant, à partir de la base de l’oiseau.' },
+    'skull': { title: 'Crâne', blurb: 'Une tête de mort aux orbites sombres, obtenues par pliage et non au dessin. Un carré, le nez et les dents dessinés.' },
   },
   notFound: {
     title: 'Cette page a été repliée',

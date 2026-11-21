@@ -230,6 +230,7 @@ export const es: Messages = {
     strawberry: { title: 'Fresa', blurb: 'Una fresa en 3D, abierta con la punta hacia abajo y las semillas dibujadas, con una estrella de hojas verdes encima. Con dos cuadrados.' },
     'fox-3d': { title: 'Zorro de pie', blurb: 'Un zorro de pie sobre cuatro patas, en 3D, con la cola hacia atrás, con tres cuadrados y cuatro cortes.' },
     'hummingbird': { title: 'Colibrí', blurb: 'Un colibrí volando quieto, con las alas hacia atrás y un pico largo hacia delante, desde la base de pájaro.' },
+    'skull': { title: 'Calavera', blurb: 'Una calavera con las cuencas de los ojos oscuras, hechas al doblar, no al dibujar. Un cuadrado, con la nariz y los dientes dibujados.' },
   },
   notFound: {
     title: 'Esta página se ha plegado y ha desaparecido',

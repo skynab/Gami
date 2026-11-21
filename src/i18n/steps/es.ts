@@ -2765,4 +2765,42 @@ export const es: Record<string, string> = {
     "Envuelve la punta derecha por fuera del mismo modo, más abajo, para que apunte hacia atrás y un poco hacia abajo. Es la cola.",
   "Open the wings a little apart, and tilt the bird nose up, as if it hovers at a flower. Done!":
     "Separa un poco las alas e inclina el pájaro con el pico hacia arriba, como si volara quieto ante una flor. ¡Listo!",
+  "Start dark side up, and turn the square so a corner points towards you.":
+    "Empieza con el lado oscuro hacia arriba y gira el cuadrado para que una esquina apunte hacia ti.",
+  "Crease down":
+    "Marca un pliegue de arriba abajo",
+  "Fold the bottom corner to the top corner, then unfold. The creases cross in the middle.":
+    "Dobla la esquina de abajo hasta la de arriba y desdobla. Los pliegues se cruzan en el centro.",
+  "Fold the top corner down":
+    "Dobla la esquina de arriba hacia abajo",
+  "Fold the top corner down, a little past the middle.":
+    "Dobla la esquina de arriba hacia abajo, un poco más allá del centro.",
+  "Fold the bottom corner up":
+    "Dobla la esquina de abajo hacia arriba",
+  "Fold the bottom corner up to the middle.":
+    "Dobla la esquina de abajo hasta el centro.",
+  "Fold the left corner to the middle.":
+    "Dobla la esquina izquierda hasta el centro.",
+  "And the right corner. It’s a square, pale side up.":
+    "Y la esquina derecha. Queda un cuadrado con el lado claro hacia arriba.",
+  "Fold back the left point":
+    "Dobla hacia atrás la punta izquierda",
+  "Fold the point of the left flap back out to the left. The dark side shows: an eye socket.":
+    "Dobla la punta de la solapa izquierda otra vez hacia la izquierda. Se ve el lado oscuro: una cuenca del ojo.",
+  "Fold back the right point":
+    "Dobla hacia atrás la punta derecha",
+  "The same on the right, for the other eye.":
+    "Lo mismo a la derecha, para el otro ojo.",
+  "Fold the two top corners behind a little, to round the top of the skull.":
+    "Dobla un poco hacia atrás las dos esquinas de arriba, para redondear la parte de arriba de la calavera.",
+  "Round the other corner":
+    "Redondea la otra esquina",
+  "Narrow the jaw":
+    "Estrecha la mandíbula",
+  "Fold the lower left side behind at a slant, from the level of the eyes down, so the jaw is narrower.":
+    "Dobla hacia atrás el lado izquierdo de abajo, en diagonal desde la altura de los ojos, para estrechar la mandíbula.",
+  "Draw the nose and teeth":
+    "Dibuja la nariz y los dientes",
+  "Draw an upside-down triangle for the nose, and a row of teeth below it. Done!":
+    "Dibuja un triángulo boca abajo para la nariz y una fila de dientes debajo. ¡Listo!",
 };

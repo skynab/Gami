@@ -172,6 +172,7 @@ export const en = {
     strawberry: { title: 'Strawberry', blurb: 'A strawberry in 3D, popped up point down with its seeds drawn on, a star of green leaves on top. From two squares.' },
     'fox-3d': { title: 'Standing fox', blurb: 'A fox standing on four legs in 3D, its tail out behind, from three squares and four snips.' },
     'hummingbird': { title: 'Hummingbird', blurb: 'A hummingbird hovering with its wings swept back, a long beak forwards, from the bird base.' },
+    'skull': { title: 'Skull', blurb: 'A skull face with dark eye sockets that come from folding, not drawing. One square, a nose and teeth drawn on.' },
   },
   notFound: {
     title: 'This page got folded away',

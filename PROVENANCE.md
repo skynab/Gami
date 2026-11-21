@@ -121,6 +121,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `strawberry` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a strawberry in 3D, after the look of OrigamiOK's, which names no designer: the berry popped point down as Gami's diamond is, the leaves folded as the sunflower's petals are (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
 | `fox-3d` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a fox standing in 3D, in place of OrigamiOK's, which is Hoàng Tiến Quyết's; its head is the traditional cat face's folds (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
 | `hummingbird` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a hummingbird from the traditional bird base, after the look of OrigamiOK's, which names no designer (the site says it designed that version itself); Gilad's database lists no Traditional hummingbird (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 21 Nov 2026 |
+| `skull` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a skull face, the corners folded to the middle and the side flaps' tips turned back out for dark eye sockets, after the look of OrigamiOK's skull, which names no designer; Gilad's database lists no Traditional skull (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 21 Nov 2026 |
 
 ### Notes
 
@@ -132,6 +133,9 @@ noted when it was written, and the model was folded from the common traditional 
   Gami's hummingbird starts from the traditional bird base and narrows its lower points as the crane does; from
   there it's its own: the points turned out with outside reverse folds for the beak and tail, the wings left standing
   and spread, the bird tilted nose up. OrigamiOK's folds its wings down and back up, makes feet and pinches the neck.
+  Gami's skull is the blintz (corners to the middle, dark side out) with the side flaps' tips folded back out so
+  the dark side shows as eye sockets, its outline folded behind and its nose and teeth drawn; OrigamiOK's opens
+  pockets, pulls out sandwiched flaps and pleats the teeth.
 - **Intermediate models from OrigamiOK** (checked 13 November 2026; the plan is `docs/origamiok-intermediate-plan.md`).
   Its fox page credits Hoàng Tiến Quyết and its lizard page Lee Won-pyo; the rest name only their writer and
   photographer. Gilad's database lists about ten Traditional square turtles (Gross's *Zoogami*, Momotani, NOA 493 and
