@@ -229,6 +229,7 @@ export const es: Messages = {
     squirrel: { title: 'Ardilla', blurb: 'Una ardilla sentada, con la cola peluda rizada sobre la espalda, con tres cuadrados.' },
     strawberry: { title: 'Fresa', blurb: 'Una fresa en 3D, abierta con la punta hacia abajo y las semillas dibujadas, con una estrella de hojas verdes encima. Con dos cuadrados.' },
     'fox-3d': { title: 'Zorro de pie', blurb: 'Un zorro de pie sobre cuatro patas, en 3D, con la cola hacia atrás, con tres cuadrados y cuatro cortes.' },
+    'hummingbird': { title: 'Colibrí', blurb: 'Un colibrí volando quieto, con las alas hacia atrás y un pico largo hacia delante, desde la base de pájaro.' },
   },
   notFound: {
     title: 'Esta página se ha plegado y ha desaparecido',

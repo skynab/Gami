@@ -2755,4 +2755,14 @@ export const ja: Record<string, string> = {
     "もう一度裏返します。",
   "Open the bottom, pushing the front and back apart, and stand the helmet on its brim. Done!":
     "下を開いて前とうしろをはなし、かぶとをつばで立たせます。できあがり！",
+  "Outside-reverse-fold the beak":
+    "くちばしをかぶせ折りする",
+  "Open the left point a little and wrap it round the outside of the body, so it points forwards and a little down, from high up. This is the beak.":
+    "左の先を少し開いて、体の外側にかぶせるように折り、高いところから前へ、少し下向きに出します。これがくちばしです。",
+  "Outside-reverse-fold the tail":
+    "しっぽをかぶせ折りする",
+  "Wrap the right point round the outside the same way, lower down, so it points back and a little down. This is the tail.":
+    "右の先も同じように、もっと低いところで外側にかぶせて折り、うしろへ少し下向きに出します。これがしっぽです。",
+  "Open the wings a little apart, and tilt the bird nose up, as if it hovers at a flower. Done!":
+    "翼を少し開いて、花の前で飛んでいるように、くちばしを上げて鳥をかたむけます。できあがり！",
 };

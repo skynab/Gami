@@ -90,7 +90,7 @@ Phases 1 to 3 are each one sitting. Phases 4 to 6 may need engine work and shoul
 
 | Phase | Status |
 |---|---|
-| 1. Hummingbird | Not started |
+| 1. Hummingbird | Done (21 November), Gami's own, one square, 29 steps. The traditional bird base, its lower points narrowed once as the crane's are, then each turned out with an **outside** reverse fold: the beak from high up, forwards and 20° below level; the tail from lower, back and 10° below. The wings stay up as the bird base leaves them, spread 30° each way into a V, and the bird is tilted 35° nose up, so the beak points forwards, a little up, the wings sweep back over the body and it rests on its tail. Inside reverse folds, as the crane's, passed paper through paper as they played (the tail 7 to 12 layers at every angle tried, a beak turned from the neck's tip 12 to 25), over `GRAZE`; wrapped round the outside they pass through under a layer. Narrowing the points a second time, for a thinner beak, made its outside fold graze 10 to 14 layers, so the beak is as wide as the crane's neck. Checked in the 3D viewer. |
 | 2. Skull | Not started |
 | 3. Cute whale | Not started |
 | 4. Pot plant | Not started |

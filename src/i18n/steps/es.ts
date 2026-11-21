@@ -2755,4 +2755,14 @@ export const es: Record<string, string> = {
     "Vuelve a darle la vuelta.",
   "Open the bottom, pushing the front and back apart, and stand the helmet on its brim. Done!":
     "Abre la parte de abajo, separando la parte delantera de la trasera, y pon el casco de pie sobre su ala. ¡Listo!",
+  "Outside-reverse-fold the beak":
+    "Haz un pliegue invertido exterior para el pico",
+  "Open the left point a little and wrap it round the outside of the body, so it points forwards and a little down, from high up. This is the beak.":
+    "Abre un poco la punta izquierda y envuélvela por fuera del cuerpo, para que salga desde arriba hacia delante y un poco hacia abajo. Es el pico.",
+  "Outside-reverse-fold the tail":
+    "Haz un pliegue invertido exterior para la cola",
+  "Wrap the right point round the outside the same way, lower down, so it points back and a little down. This is the tail.":
+    "Envuelve la punta derecha por fuera del mismo modo, más abajo, para que apunte hacia atrás y un poco hacia abajo. Es la cola.",
+  "Open the wings a little apart, and tilt the bird nose up, as if it hovers at a flower. Done!":
+    "Separa un poco las alas e inclina el pájaro con el pico hacia arriba, como si volara quieto ante una flor. ¡Listo!",
 };
