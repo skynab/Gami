@@ -76,9 +76,18 @@ export function pirateHat() {
   return r
     .bend(
       { title: 'Open it and stand it up', text: 'Open the bottom, pushing the front and back apart, and stand the hat on its brim. Put it on. Arr!' },
-      { flex: () => true, anchor: [0, 0.3], goals: opening(r.current), mesh: 0.07, stages: STAGES, free: true },
+      { flex: () => true, anchor: [0, 0.3], goals: opening(r.current), lines: pressLines(r.current), mesh: 0.07, stages: STAGES, free: true },
     )
     .build();
+}
+
+/** Lines from the hat's point to the brim's corners, which the band's ends press flat between the walls along. */
+function pressLines(frame: FoldFrame): [Vec2, Vec2][] {
+  const corners = toFlat(frame).flatMap((f) => f.world);
+  const brim = Math.max(...corners.map(([, z]) => z));
+  const top = Math.min(...corners.map(([, z]) => z));
+  const rim = Math.max(...corners.filter((q) => Math.abs(q[1] - brim) < 1e-9).map(([x]) => Math.abs(x)));
+  return [-1, 1].map((s): [Vec2, Vec2] => [[0, top], [s * rim, brim]]);
 }
 
 /** How far the hat's sides turn in at the brim as it opens, and the frames it opens through. */
@@ -109,7 +118,7 @@ function opening(frame: FoldFrame): BendGoal[] {
     const s = Math.sign(x);
     const edge = shape(s * w, v);
     const before = shape(s * (w - 1e-4), v);
-    const t = edge.map((c, i) => c - before[i]);
+    const t = edge.map((c, i) => (i === 1 ? 0 : c - before[i]));
     const len = Math.hypot(...t) || 1;
     return edge.map((c, i) => c + (t[i] / len) * (Math.abs(x) - w)) as Vec3;
   };

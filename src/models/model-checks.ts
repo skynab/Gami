@@ -62,11 +62,10 @@ const REST = 2.5 * LAYER_GAP;
  * The models known to go deeper at rest, each a little over what it was measured at (on 15 November 2026), and
  * where. Each shows as the inside of one piece of paper poking out through another: to be fixed, not added to. The
  * kusudama, T-rex, squirrel and chrysanthemum, 4 to 10 mm through on a 15 cm sheet, came off it the same day; the
- * 3D fox and butterfly on 20 November.
+ * 3D fox and butterfly on 20 November, and the pirate hat the same day.
  */
 const RESTS: Record<string, number> = {
   'rainbow-chain': 0.017, // Pressing it flat and joining the ends: links dip into each other where they cross.
-  'pirate-hat': 0.0105, // Opening it and standing it up: one side's brim through the other.
   'masu-shallow-lid': 0.0022, // Raising and locking the walls: at the inside corners, flaps run out to the corner's line, into the other wall's inner layers.
 };
 

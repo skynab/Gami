@@ -32,31 +32,9 @@ export function meshFrame(frame: FoldFrame, flex: number[], size: number, rigidS
   const corners = facePositions(frame);
   const polys = frame.faces_vertices.map((face) => face.map((v) => frame.vertices_paper[v]));
 
-  // A face narrower than a triangle's edge (a fan's strip) would be cut into slivers, which tip right over at the
-  // slightest nudge to a narrow corner, so the frames a bend passes through, played one into the next, stretch
-  // them. Its outline is cut evenly instead, and so are the stretches its neighbours share with it, so outlines
-  // still match; the triangles then run across it in a row, well shaped.
-  const thin = polys.map((poly) => {
-    const around = poly.reduce((sum, a, i) => sum + Math.sqrt(dist2(a, poly[(i + 1) % poly.length])), 0);
-    return (2 * Math.abs(signedArea(poly))) / around < size;
-  });
-  const sharedThin: [Vec2, Vec2][][] = polys.map(() => []);
-  for (let f = 0; f < polys.length; f++) {
-    for (let g = f + 1; g < polys.length; g++) {
-      if (!thin[f] && !thin[g]) continue;
-      const shared = sharedSegment(polys[f], polys[g]);
-      if (!shared) continue;
-      sharedThin[f].push(shared as [Vec2, Vec2]);
-      sharedThin[g].push(shared as [Vec2, Vec2]);
-    }
-  }
-  const cutEvenly = (f: number, a: Vec2, b: Vec2) =>
-    thin[f] || sharedThin[f].some(([s, e]) => onSegment(a, s, e, true) !== null && onSegment(b, s, e, true) !== null);
-
   // Each face's outline, with every vertex of the frame that lies along its edges (where a neighbour was split
   // and it wasn't), so neighbouring faces' outlines match point for point.
-  const local: { paper: Vec2[]; points: Vec3[] }[] = polys.map((poly, f) => {
-    const at = affine(poly, corners[f]);
+  const outlines = polys.map((poly) => {
     const paper: Vec2[] = [];
     poly.forEach((a, i) => {
       const b = poly[(i + 1) % poly.length];
@@ -67,12 +45,53 @@ export function meshFrame(frame: FoldFrame, flex: number[], size: number, rigidS
         .sort((x, y) => x.t - y.t);
       for (const { q } of along) if (!paper.some((p) => same(p, q))) paper.push(q);
     });
+    return paper;
+  });
+
+  // Most faces are cut into triangles and then halved across their longest edges until they're small enough, which
+  // keeps right-angled triangles right-angled, and lines their halves up with their neighbours' (paper folded onto
+  // paper meets it the same way). But a long narrow face (a band, or a piece cut off it along a line it will fold
+  // along) comes out in slivers, which tip right over at the slightest nudge to a narrow corner, so the frames a bend
+  // passes through, played one into the next, stretch them. Such a face is laid out on a grid instead (`grid`): filled
+  // with points on a square grid on the sheet, once the faces around it are halved, and those joined to the points
+  // along its outline in the best-shaped triangles they make (`delaunay`).
+  const flexible = new Set(flex);
+  // A face narrower than a triangle's edge (a fan's strip) has no room for a grid: its outline is cut evenly, and so
+  // are the stretches its neighbours share with it, so outlines still match, and its triangles run across it in a row.
+  const thin = polys.map((poly) => {
+    const around = poly.reduce((sum, a, i) => sum + Math.sqrt(dist2(a, poly[(i + 1) % poly.length])), 0);
+    return (2 * Math.abs(signedArea(poly))) / around < size;
+  });
+  const limit = (f: number) => (flexible.has(f) || thin[f] ? size : rigidSize);
+  const grid = outlines.map((outline, f) => !thin[f] && halvedBadly(outline, limit(f)));
+  // A grid's squares' diagonals are as long as its triangles' edges may be.
+  const spacing = (f: number) => limit(f) / Math.SQRT2;
+  // How finely a stretch of a face's outline is cut, if at all: as finely as any thin face along it needs; else, along
+  // grids only, as finely as theirs. Beside a face that's halved, a grid takes the points it's halved at.
+  const pieceSpacing = (f: number, a: Vec2, b: Vec2) => {
+    const along = polys.flatMap((poly, g) =>
+      g === f || poly.some((s, i) => onSegment(a, s, poly[(i + 1) % poly.length], true) !== null && onSegment(b, s, poly[(i + 1) % poly.length], true) !== null)
+        ? [g]
+        : [],
+    );
+    if (along.some((g) => thin[g])) return size;
+    if (along.some((g) => !grid[g])) return Infinity;
+    return Math.min(...along.map(spacing));
+  };
+  const touched = polys.map(() => false);
+
+  const local: { paper: Vec2[]; points: Vec3[]; outline: number; tris: Tri[] }[] = outlines.map((paper, f) => {
+    const at = affine(polys[f], corners[f]);
     const even = paper.flatMap((a, i): Vec2[] => {
       const b = paper[(i + 1) % paper.length];
-      const n = cutEvenly(f, a, b) ? Math.max(1, Math.ceil(Math.sqrt(dist2(a, b)) / size - 1e-9)) : 1;
+      const piece = pieceSpacing(f, a, b);
+      if (piece === size) touched[f] = true;
+      const n = piece < Infinity ? Math.max(1, Math.ceil(Math.sqrt(dist2(a, b)) / piece - 1e-9)) : 1;
       return Array.from({ length: n }, (_, k): Vec2 => (k ? [a[0] + ((b[0] - a[0]) * k) / n, a[1] + ((b[1] - a[1]) * k) / n] : a));
     });
-    return { paper: even, points: even.map(at) };
+    // A grid's points, to be joined up once the faces around it are halved.
+    const all = grid[f] ? [...even, ...gridWithin(polys[f], spacing(f))] : even;
+    return { paper: all, points: all.map(at), outline: even.length, tris: grid[f] ? [] : earClip(even) };
   });
 
   // Points shared by joined faces become one, where the faces meet.
@@ -129,20 +148,21 @@ export function meshFrame(frame: FoldFrame, flex: number[], size: number, rigidS
   };
   const triangles: Tri[] = [];
   const parent: number[] = [];
+  const ids: number[][] = [];
   // Where each point's faces put it, which way is out of each face there, and along the crease it's on, if any.
   const from: { at: Vec3; out: Vec3 }[][] = [];
   const crease: (Vec3 | undefined)[] = [];
   local.forEach((l, f) => {
-    const ids = l.paper.map((_, i) => id(f, i));
-    const middle = l.points.reduce((m, q) => [m[0] + q[0] / l.points.length, 0, m[2] + q[2] / l.points.length] as Vec3, [0, 0, 0] as Vec3);
-    ids.forEach((k, i) => {
+    const own = (ids[f] = l.paper.map((_, i) => id(f, i)));
+    const middle = l.points.slice(0, l.outline).reduce((m, q) => [m[0] + q[0] / l.outline, 0, m[2] + q[2] / l.outline] as Vec3, [0, 0, 0] as Vec3);
+    own.forEach((k, i) => {
       for (let c = 0; c < 3; c++) sums[k].p[c] += l.points[i][c];
       sums[k].n++;
       (from[k] ??= []).push({ at: l.points[i], out: [l.points[i][0] - middle[0], 0, l.points[i][2] - middle[2]] });
       crease[k] ??= along[offsets[f] + i];
     });
-    for (const [a, b, c] of earClip(l.paper)) {
-      triangles.push([ids[a], ids[b], ids[c]]);
+    for (const [a, b, c] of l.tris) {
+      triangles.push([own[a], own[b], own[c]]);
       parent.push(f);
     }
   });
@@ -166,24 +186,139 @@ export function meshFrame(frame: FoldFrame, flex: number[], size: number, rigidS
     return [q[0] + across[0] * out, q[1], q[2] + across[2] * out];
   });
 
-  const flexible = new Set(flex);
-  refine(paper, points, triangles, parent, (f) => (flexible.has(f) ? size : rigidSize));
-  // A wider face beside a thin one has many points along that edge, which ear-clipping fans out to.
-  delaunay(paper, triangles, parent, (f) => thin[f] || sharedThin[f].length > 0);
+  // The faces that aren't grids, halved.
+  const halved = paper.length;
+  refine(paper, points, triangles, parent, limit);
+  // Each grid's points joined up, with the points along its outline, its neighbours' halves too.
+  local.forEach((l, f) => {
+    if (!grid[f]) return;
+    const outline = ids[f].slice(0, l.outline).flatMap((k, i, all) => {
+      const next = all[(i + 1) % all.length];
+      const between = paper
+        .slice(halved)
+        .map((q, j) => ({ j: halved + j, t: onSegment(q, paper[k], paper[next]) }))
+        .filter((x): x is { j: number; t: number } => x.t !== null)
+        .sort((x, y) => x.t - y.t);
+      return [k, ...between.map((x) => x.j)];
+    });
+    const all = [...outline, ...ids[f].slice(l.outline)];
+    const at = all.map((k) => paper[k]);
+    const tris = earClip(at.slice(0, outline.length));
+    for (let i = outline.length; i < all.length; i++) insertPoint(at, tris, i);
+    for (const t of tris) {
+      triangles.push(t.map((i) => all[i]) as Tri);
+      parent.push(f);
+    }
+  });
+  // A square of the grid could be cut along either diagonal: each is cut the way its neighbours aren't, a pattern
+  // that looks the same in a mirror along the grid's lines and diagonals, as halving does, so paper folded onto
+  // paper meets it the same way, rather than crossing where the two take different diagonals.
+  const prefer = (f: number, a: Vec2, b: Vec2) => {
+    if (!grid[f]) return undefined;
+    const h = spacing(f);
+    const [i, j] = [Math.floor((a[0] + b[0]) / 2 / h), Math.floor((a[1] + b[1]) / 2 / h)];
+    return (b[0] - a[0]) * (b[1] - a[1]) > 0 === ((i + j) % 2 === 0);
+  };
+  delaunay(paper, triangles, parent, (f) => grid[f], prefer);
+  // Any triangle still too long (beside a corner sharper than the grid's) halved too.
+  refine(paper, points, triangles, parent, limit);
+  // Ear-clipping fans out to the many points along an outline cut evenly beside a thin face: evened out.
+  delaunay(paper, triangles, parent, (f) => grid[f] || touched[f], prefer);
   return { paper, points, triangles, parent };
 }
 
 /**
- * Swaps the diagonal of any two triangles of one face (of those `among` picks) whose angles opposite it add up to
- * more than a straight angle (the Delaunay rule), until none do, so no triangle is needlessly thin.
+ * Whether halving a face's triangles across their longest edges until none is longer than `limit` leaves any of
+ * them sharper than `SHARPEST`: the right-angled triangles of a square or a right-angled corner, halved, never are;
+ * a band four times as long as it's wide comes out at under 15°.
  */
-function delaunay(paper: Vec2[], triangles: Tri[], parent: number[], among: (face: number) => boolean) {
+function halvedBadly(outline: Vec2[], limit: number): boolean {
+  const paper = outline.map((q): Vec2 => [q[0], q[1]]);
+  const tris = earClip(paper);
+  const points = paper.map((q): Vec3 => [q[0], 0, q[1]]);
+  refine(paper, points, tris, tris.map(() => 0), () => limit);
+  return tris.some(([a, b, c]) => minAngle(paper[a], paper[b], paper[c]) < SHARPEST);
+}
+
+/**
+ * How sharp a triangle's corner may be, halving a face's triangles, before the face is laid out on a grid instead.
+ * The cup's walls, halved, come to 22.5°, and their halves line up with each other where they meet.
+ */
+const SHARPEST = (20 * Math.PI) / 180;
+
+/**
+ * The points of a square grid on the sheet, `spacing` apart, inside a face (a convex polygon) and at least
+ * `MARGIN` of a square from its edges, which have points of their own about as far apart.
+ */
+function gridWithin(poly: Vec2[], spacing: number): Vec2[] {
+  const xs = poly.map((q) => q[0]);
+  const ys = poly.map((q) => q[1]);
+  const turn = Math.sign(signedArea(poly)) || 1;
+  const out: Vec2[] = [];
+  for (let i = Math.ceil(Math.min(...xs) / spacing); i * spacing <= Math.max(...xs); i++) {
+    for (let j = Math.ceil(Math.min(...ys) / spacing); j * spacing <= Math.max(...ys); j++) {
+      const q: Vec2 = [i * spacing, j * spacing];
+      const clear = poly.every((a, k) => {
+        const b = poly[(k + 1) % poly.length];
+        const len = Math.sqrt(dist2(a, b));
+        return (turn * ((b[0] - a[0]) * (q[1] - a[1]) - (b[1] - a[1]) * (q[0] - a[0]))) / len > MARGIN * spacing;
+      });
+      if (clear) out.push(q);
+    }
+  }
+  return out;
+}
+
+/**
+ * How near a face's edge, as a share of the grid's squares, its grid's points may be: well clear of it, so the
+ * triangles between the outline and the grid aren't flattened against it (wider gaps are halved). Paper folded round
+ * other layers starts its points along the fold a little out past it (see `meshFrame`), and small triangles there
+ * take longest to take the sheet's shape back.
+ */
+const MARGIN = 0.75;
+
+/** Adds point `p` to triangles of `paper` that fill a polygon, splitting the one it's in (or the two whose edge it's on). */
+function insertPoint(paper: Vec2[], tris: Tri[], p: number) {
+  const q = paper[p];
+  const k = tris.findIndex((t) => inside(q, t.map((v) => paper[v]) as [Vec2, Vec2, Vec2]));
+  if (k < 0) return;
+  const t = tris[k];
+  const w = barycentric(q, t.map((v) => paper[v]) as [Vec2, Vec2, Vec2]);
+  const e = w.findIndex((x) => Math.abs(x) < 1e-9);
+  if (e < 0) {
+    const [a, b, c] = t;
+    tris.splice(k, 1, [a, b, p], [b, c, p], [c, a, p]);
+    return;
+  }
+  // On the edge across from corner e: split this triangle and the one beyond it in two each.
+  const [a, b, c] = [t[(e + 1) % 3], t[(e + 2) % 3], t[e]];
+  tris.splice(k, 1, [c, a, p], [p, b, c]);
+  const n = tris.findIndex((u) => u.includes(a) && u.includes(b));
+  if (n < 0) return;
+  const u = tris[n];
+  const d = u.find((v) => v !== a && v !== b)!;
+  const [x, y] = [u[(u.indexOf(d) + 1) % 3], u[(u.indexOf(d) + 2) % 3]];
+  tris.splice(n, 1, [d, x, p], [p, y, d]);
+}
+
+/**
+ * Swaps the diagonal of any two triangles of one face (of those `among` picks) whose angles opposite it add up to
+ * more than a straight angle (the Delaunay rule), until none do, so no triangle is needlessly thin. Where they add up
+ * to a straight angle, either diagonal will do: `prefer` picks, for the faces it picks for.
+ */
+function delaunay(
+  paper: Vec2[],
+  triangles: Tri[],
+  parent: number[],
+  among: (face: number) => boolean,
+  prefer?: (face: number, a: Vec2, b: Vec2) => boolean | undefined,
+) {
   const angle = (p: Vec2, a: Vec2, b: Vec2) => {
     const [u, v]: Vec2[] = [a, b].map((q) => [q[0] - p[0], q[1] - p[1]]);
     return Math.atan2(Math.abs(u[0] * v[1] - u[1] * v[0]), u[0] * v[0] + u[1] * v[1]);
   };
   const area = (t: Tri) => signedArea(t.map((v) => paper[v]));
-  for (let round = 0; round < 100; round++) {
+  for (let round = 0; round < 1000; round++) {
     const byEdge = new Map<string, number[]>();
     triangles.forEach((t, k) => {
       if (!among(parent[k])) return;
@@ -200,7 +335,10 @@ function delaunay(paper: Vec2[], triangles: Tri[], parent: number[], among: (fac
       const [a, b] = triangles[k].filter((v) => triangles[j].includes(v));
       const c = triangles[k].find((v) => v !== a && v !== b)!;
       const d = triangles[j].find((v) => v !== a && v !== b)!;
-      if (angle(paper[c], paper[a], paper[b]) + angle(paper[d], paper[a], paper[b]) <= Math.PI + 1e-9) continue;
+      const opposite = angle(paper[c], paper[a], paper[b]) + angle(paper[d], paper[a], paper[b]);
+      // Four points round a circle (a grid's square) could be cut either way: as `prefer` has it, if it says.
+      const rather = Math.abs(opposite - Math.PI) <= 1e-6 ? prefer?.(parent[k], paper[c], paper[d]) : undefined;
+      if (rather === undefined ? opposite <= Math.PI + 1e-9 : !rather || prefer!(parent[k], paper[a], paper[b])) continue;
       // Only across a convex pair: a and b on either side of the new diagonal.
       const side = (q: Vec2) => Math.sign(signedArea([paper[c], paper[d], q]));
       if (side(paper[a]) * side(paper[b]) >= 0) continue;
