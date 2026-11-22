@@ -126,6 +126,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `pot-plant` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a plant standing in a pot, from five squares: the traditional masu box for the pot, a blintzed square for the soil and three leaves folded as the flat tulip's traditional leafy stem starts, after the look of OrigamiOK's pot plant, which names no designer (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the pot's folds follow `masu-box` ([origami.me/box](https://origami.me/box/)), the stems' `tulip` | Clear | 21 Nov 2026 |
 | `unicorn` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a unicorn standing in 3D from five sheets, built as Gami's standing fox is, after the look of OrigamiOK's unicorn, whose page credits **Imai Yudai** (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the body's folds follow `fox-3d`, the mane's and tail's leaves `palm-leaf` | Clear | 21 Nov 2026 |
 | `kaiju` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a generic monster standing upright in 3D from six squares, in place of OrigamiOK's Godzilla, which is Toho's character (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the body's folds follow the `unicorn`'s neck, the arms' its horn | Clear | 21 Nov 2026 |
+| `dragon` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a winged dragon standing in 3D from the traditional bird base and two little squares, after the look of OrigamiOK's "Easy Origami Dragon", which names no designer; Gilad's database lists no Traditional dragon in what could be read (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the bird base's folds follow `crane`, the horns' and legs' the `kaiju`'s arms | Clear | 22 Nov 2026 |
 
 ### Notes
 
@@ -156,6 +157,11 @@ noted when it was written, and the model was folded from the common traditional 
   grid collapsed into a body, with fins glued into a slot). Gami's is six squares put together in 3D: a kite with its
   top folded behind and folded in half for the body, its point turned out with an outside reverse fold for the head;
   a kite folded in half for the tail and a small one for the arms; three squares folded into triangles for the plates.
+  Gami's dragon starts from the traditional bird base and narrows its lower points as the crane does; from there
+  it's its own: the points turned out with outside reverse folds for the neck and tail, the neck's tip turned out
+  again for the head, the tail crimped, the wings spread out sideways and rippled, eyes drawn, and two little squares
+  folded into kites and folded in half for horns and legs. OrigamiOK's collapses a square into a small square,
+  zigzags the tail, makes the head and horn from the top flaps and spreads zigzag wings.
 - **Intermediate models from OrigamiOK** (checked 13 November 2026; the plan is `docs/origamiok-intermediate-plan.md`).
   Its fox page credits Hoàng Tiến Quyết and its lizard page Lee Won-pyo; the rest name only their writer and
   photographer. Gilad's database lists about ten Traditional square turtles (Gross's *Zoogami*, Momotani, NOA 493 and

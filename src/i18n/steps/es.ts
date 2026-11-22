@@ -2939,4 +2939,40 @@ export const es: Record<string, string> = {
     "Pon las placas",
   "Stand the plates up the back, their folds against it and their points out behind, the biggest in the middle. Roar!":
     "Pon las placas de pie a lo largo de la espalda, con el doblez contra ella y las puntas hacia atrás, la más grande en el centro. ¡Grrr!",
+  "Outside-reverse-fold the neck":
+    "Haz un pliegue invertido exterior para el cuello",
+  "Open the left point a little and wrap it round the outside of the body, so it points up and forwards. This is the neck.":
+    "Abre un poco la punta izquierda y envuélvela por fuera del cuerpo, para que apunte hacia arriba y hacia delante. Es el cuello.",
+  "Wrap the right point round the outside the same way, so it points back, nearly level. This is the tail.":
+    "Envuelve la punta derecha por fuera de la misma manera, para que apunte hacia atrás, casi horizontal. Es la cola.",
+  "Wrap the tip of the neck round the outside, so it points forwards and a little down. This is the head.":
+    "Envuelve la punta del cuello por fuera, para que apunte hacia delante y un poco hacia abajo. Es la cabeza.",
+  "Crimp the tail":
+    "Haz un pliegue en zigzag en la cola",
+  "Pinch a little zigzag into the end of the tail, through all its layers, so the tip kicks up.":
+    "Pellizca un pequeño zigzag en el extremo de la cola, por todas sus capas, para que la punta se levante.",
+  "Turn the dragon over":
+    "Da la vuelta al dragón",
+  "Turn the dragon over, left to right.":
+    "Da la vuelta al dragón, de izquierda a derecha.",
+  "Turn the dragon back over.":
+    "Vuelve a dar la vuelta al dragón.",
+  "Fold the little diamonds in half":
+    "Dobla los rombos pequeños por la mitad",
+  "Take the little pale square and the little green one, turned so a corner points towards you, and fold each one’s left corner over to its right corner.":
+    "Toma el cuadrado pequeño pálido y el pequeño verde, girados para que una esquina apunte hacia ti, y dobla la esquina izquierda de cada uno sobre la derecha.",
+  "Fold each one’s lower edges to its middle crease.":
+    "Dobla los bordes de abajo de cada uno hasta su pliegue central.",
+  "Fold each kite’s left half behind, along its middle crease. The pale one is the horns, the green one the legs.":
+    "Dobla hacia atrás la mitad izquierda de cada cometa, por su pliegue central. La pálida son los cuernos; la verde, las patas.",
+  "Open the wings out to the sides, and stand the dragon up.":
+    "Abre las alas hacia los lados y pon el dragón de pie.",
+  "Put the legs on":
+    "Pon las patas",
+  "Stand the dragon on its legs: the green kite under its belly, where the neck and tail part, leaning forwards a little.":
+    "Pon el dragón de pie sobre sus patas: la cometa verde bajo la barriga, donde se separan el cuello y la cola, un poco inclinada hacia delante.",
+  "Put the horns on":
+    "Pon los cuernos",
+  "Set the horns on the back of the head, sweeping back. Done!":
+    "Pon los cuernos en la parte de atrás de la cabeza, hacia atrás. ¡Listo!",
 };

@@ -2939,4 +2939,40 @@ export const fr: Record<string, string> = {
     "Poser les plaques",
   "Stand the plates up the back, their folds against it and their points out behind, the biggest in the middle. Roar!":
     "Dressez les plaques le long du dos, le pli contre lui et les pointes vers l’arrière, la plus grande au milieu. Grrr !",
+  "Outside-reverse-fold the neck":
+    "Faire un pli inversé extérieur pour le cou",
+  "Open the left point a little and wrap it round the outside of the body, so it points up and forwards. This is the neck.":
+    "Ouvrez un peu la pointe gauche et rabattez-la par-dessus l’extérieur du corps, pour qu’elle pointe vers le haut et vers l’avant. C’est le cou.",
+  "Wrap the right point round the outside the same way, so it points back, nearly level. This is the tail.":
+    "Rabattez la pointe droite par-dessus l’extérieur de la même façon, pour qu’elle pointe vers l’arrière, presque à plat. C’est la queue.",
+  "Wrap the tip of the neck round the outside, so it points forwards and a little down. This is the head.":
+    "Rabattez le bout du cou par-dessus l’extérieur, pour qu’il pointe vers l’avant et un peu vers le bas. C’est la tête.",
+  "Crimp the tail":
+    "Faire un pli en zigzag dans la queue",
+  "Pinch a little zigzag into the end of the tail, through all its layers, so the tip kicks up.":
+    "Pincez un petit zigzag au bout de la queue, à travers toutes ses couches, pour que la pointe se relève.",
+  "Turn the dragon over":
+    "Retourner le dragon",
+  "Turn the dragon over, left to right.":
+    "Retournez le dragon, de gauche à droite.",
+  "Turn the dragon back over.":
+    "Retournez le dragon à nouveau.",
+  "Fold the little diamonds in half":
+    "Plier les petits losanges en deux",
+  "Take the little pale square and the little green one, turned so a corner points towards you, and fold each one’s left corner over to its right corner.":
+    "Prenez le petit carré pâle et le petit vert, tournés pour qu’un coin pointe vers vous, et pliez le coin gauche de chacun sur son coin droit.",
+  "Fold each one’s lower edges to its middle crease.":
+    "Pliez les bords du bas de chacun sur son pli du milieu.",
+  "Fold each kite’s left half behind, along its middle crease. The pale one is the horns, the green one the legs.":
+    "Pliez derrière la moitié gauche de chaque cerf-volant, le long de son pli du milieu. Le pâle, ce sont les cornes ; le vert, les pattes.",
+  "Open the wings out to the sides, and stand the dragon up.":
+    "Ouvrez les ailes sur les côtés et mettez le dragon debout.",
+  "Put the legs on":
+    "Mettre les pattes",
+  "Stand the dragon on its legs: the green kite under its belly, where the neck and tail part, leaning forwards a little.":
+    "Mettez le dragon debout sur ses pattes : le cerf-volant vert sous le ventre, là où le cou et la queue se séparent, un peu penché vers l’avant.",
+  "Put the horns on":
+    "Mettre les cornes",
+  "Set the horns on the back of the head, sweeping back. Done!":
+    "Posez les cornes à l’arrière de la tête, tournées vers l’arrière. C’est fini !",
 };

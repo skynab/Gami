@@ -2939,4 +2939,40 @@ export const ja: Record<string, string> = {
     "背中の板をつける",
   "Stand the plates up the back, their folds against it and their points out behind, the biggest in the middle. Roar!":
     "板を背中に沿って立て、折り目を背中につけて、とがったほうを後ろに向けます。いちばん大きい板が真ん中です。ガオー！",
+  "Outside-reverse-fold the neck":
+    "首を外側に中割り折りする",
+  "Open the left point a little and wrap it round the outside of the body, so it points up and forwards. This is the neck.":
+    "左の先を少し開いて胴の外側にかぶせ、上の前を向くようにします。これが首です。",
+  "Wrap the right point round the outside the same way, so it points back, nearly level. This is the tail.":
+    "右の先も同じように外側にかぶせ、ほぼ水平に後ろを向くようにします。これがしっぽです。",
+  "Wrap the tip of the neck round the outside, so it points forwards and a little down. This is the head.":
+    "首の先を外側にかぶせ、前の少し下を向くようにします。これが頭です。",
+  "Crimp the tail":
+    "しっぽに段折りをする",
+  "Pinch a little zigzag into the end of the tail, through all its layers, so the tip kicks up.":
+    "しっぽの先に、全部の層をまとめて小さなジグザグをつまみ、先がぴんと上がるようにします。",
+  "Turn the dragon over":
+    "ドラゴンを裏返す",
+  "Turn the dragon over, left to right.":
+    "ドラゴンを左から右へ裏返します。",
+  "Turn the dragon back over.":
+    "ドラゴンを元どおりに裏返します。",
+  "Fold the little diamonds in half":
+    "小さいひし形を半分に折る",
+  "Take the little pale square and the little green one, turned so a corner points towards you, and fold each one’s left corner over to its right corner.":
+    "小さいうすい色の正方形と小さい緑の正方形を、角が手前を向くように置き、それぞれ左の角を右の角に合わせて折ります。",
+  "Fold each one’s lower edges to its middle crease.":
+    "それぞれ下の二辺を真ん中の折り筋に合わせて折ります。",
+  "Fold each kite’s left half behind, along its middle crease. The pale one is the horns, the green one the legs.":
+    "たこの形の左半分を、それぞれ真ん中の折り筋で後ろに折ります。うすい色のものが角、緑のものが脚です。",
+  "Open the wings out to the sides, and stand the dragon up.":
+    "つばさを左右に広げ、ドラゴンを立てます。",
+  "Put the legs on":
+    "脚をつける",
+  "Stand the dragon on its legs: the green kite under its belly, where the neck and tail part, leaning forwards a little.":
+    "ドラゴンを脚で立たせます。緑のたこの形を、首としっぽが分かれるおなかの下に、少し前に傾けて置きます。",
+  "Put the horns on":
+    "角をつける",
+  "Set the horns on the back of the head, sweeping back. Done!":
+    "角を頭の後ろに、後ろへなびくようにつけます。できあがり！",
 };
