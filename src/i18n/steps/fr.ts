@@ -2957,10 +2957,12 @@ export const fr: Record<string, string> = {
     "Retournez le dragon, de gauche à droite.",
   "Turn the dragon back over.":
     "Retournez le dragon à nouveau.",
+  "Turn the little squares":
+    "Tourner les petits carrés",
   "Fold the little diamonds in half":
     "Plier les petits losanges en deux",
-  "Take the little pale square and the little green one, turned so a corner points towards you, and fold each one’s left corner over to its right corner.":
-    "Prenez le petit carré pâle et le petit vert, tournés pour qu’un coin pointe vers vous, et pliez le coin gauche de chacun sur son coin droit.",
+  "Take the little pale square and the little green one and turn each so a corner points towards you.":
+    "Prenez le petit carré pâle et le petit vert, et tournez chacun pour qu’un coin pointe vers vous.",
   "Fold each one’s lower edges to its middle crease.":
     "Pliez les bords du bas de chacun sur son pli du milieu.",
   "Fold each kite’s left half behind, along its middle crease. The pale one is the horns, the green one the legs.":

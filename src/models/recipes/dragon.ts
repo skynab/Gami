@@ -49,8 +49,8 @@ export function dragon() {
       { size: [1, 1], front: '#2f8f5b', back: '#d8ecb8', origin: [0, 0], at: [0, 0] },
       // Set diagonally off the big square: there, the bird base's folds of just its top layers aren't confused by
       // them (beside it, the second petal fold's edges wouldn't fold).
-      { size: [HORN * Math.SQRT2, HORN * Math.SQRT2], front: '#ece4ca', back: '#d4c8a2', origin: [10, 0], at: [0.9, 0.9] },
-      { size: [LEG * Math.SQRT2, LEG * Math.SQRT2], front: '#287a4e', back: '#2f8f5b', origin: [20, 0], at: [-0.9, -0.9] },
+      { size: [HORN * Math.SQRT2, HORN * Math.SQRT2], front: '#ece4ca', back: '#d4c8a2', origin: [10, 0], at: [1.0, -0.3] },
+      { size: [LEG * Math.SQRT2, LEG * Math.SQRT2], front: '#287a4e', back: '#2f8f5b', origin: [20, 0], at: [1.0, 0.3] },
     ],
   });
   const body = ([u]: Vec2) => u < 5;
@@ -68,7 +68,7 @@ export function dragon() {
       })
       .onto(table(...K2), table(...up(reach)), { title: 'Fold the right edge to the centre', text: 'Match it on the right.', only: half });
   narrow((c) => back(c) || innerBack(c));
-  r.turnOver('Turn the paper over.');
+  r.turnOver('Turn the paper over.', { only: body });
   narrow((c) => front(c) || innerFront(c));
 
   // The lower points: the left one (the sheet's quarter u > 0, v > 0) the neck, the right one the tail. Each turns
@@ -143,16 +143,16 @@ export function dragon() {
   r.draw({ title: 'Draw the other eye', text: 'And an eye on this side.' }, [{ fill: ring(r.where(eyePaper)) }]);
   r.move({ title: 'Turn it back', text: 'Turn the dragon back over.' }, body, { flip: true });
 
-  // The horns and the legs: the two little squares, already diamonds, creased, folded into kites and folded in
-  // half.
+  // The horns and the legs: the two little squares turned to diamonds on their own, as the body was for its square
+  // base, then creased, folded into kites and folded in half.
   const kites = [horns, legs];
   const halves = [HORN, LEG];
   const centres = [10, 20].map((u) => r.where(paper(u, 0)));
+  r.together({ title: 'Turn the little squares', text: 'Take the little pale square and the little green one and turn each so a corner points towards you.' }, (q) => {
+    for (const only of kites) q.move({ title: '' }, only, { degrees: 135 });
+  });
   r.together(
-    {
-      title: 'Fold the little diamonds in half',
-      text: 'Take the little pale square and the little green one, turned so a corner points towards you, and fold each one’s left corner over to its right corner.',
-    },
+    { title: 'Fold the little diamonds in half', text: 'Fold each diamond’s left corner over to its right corner.' },
     (q) => {
       kites.forEach((only, i) => {
         const [x, z] = centres[i];

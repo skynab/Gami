@@ -609,13 +609,32 @@ export class Recipe {
     }
   }
 
-  turnOver(text = 'Flip the paper over from left to right.'): this {
-    return this.push({ title: 'Turn over', text, kind: 'turn-over' }, turnOver(this.current), { op: 'turnOver' });
+  /**
+   * Turns the paper over from left to right. With `only`, turns over just that paper, about its own middle, and
+   * leaves other sheets where they lie: turning the whole table over moves a sheet that shares it with others, so
+   * points worked out on it before would be wrong after.
+   */
+  turnOver(text = 'Flip the paper over from left to right.', { only }: { only?: (centre: Vec2) => boolean } = {}): this {
+    if (!only) return this.push({ title: 'Turn over', text, kind: 'turn-over' }, turnOver(this.current), { op: 'turnOver' });
+    const test = recorder(only);
+    try {
+      return this.push({ title: 'Turn over', text, kind: 'turn-over' }, place(this.current, { only: test, flip: true }), { op: 'turnOver', only: test.faces() });
+    } catch (e) {
+      if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (Turn over): ${e.message}`;
+      throw e;
+    }
   }
 
-  /** Turns the paper on the table, anticlockwise seen from above. */
-  rotate(degrees: number, step: { title: string; text?: string }): this {
-    return this.push({ ...step, kind: 'rotate' }, rotate(this.current, (degrees * Math.PI) / 180), { op: 'rotate', degrees });
+  /** Turns the paper on the table, anticlockwise seen from above. With `only`, just that paper, about its own middle. */
+  rotate(degrees: number, step: { title: string; text?: string }, { only }: { only?: (centre: Vec2) => boolean } = {}): this {
+    if (!only) return this.push({ ...step, kind: 'rotate' }, rotate(this.current, (degrees * Math.PI) / 180), { op: 'rotate', degrees });
+    const test = recorder(only);
+    try {
+      return this.push({ ...step, kind: 'rotate' }, place(this.current, { only: test, angle: (degrees * Math.PI) / 180 }), { op: 'rotate', degrees, only: test.faces() });
+    } catch (e) {
+      if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
+      throw e;
+    }
   }
 
   build(): OrigamiModel {

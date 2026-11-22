@@ -95,7 +95,9 @@ export function fromFlat(faces: FlatFace[]): FoldFrame {
 /** Folds the paper along a line. The side to the left of the line's direction moves. */
 export function fold(frame: FoldFrame, { line, kind, layers, only }: FoldOptions): FoldFrame {
   const faces = toFlat(frame);
-  const movingSideLayers = faces.filter((f) => f.world.some((x) => sideOf(line, x) > 1e-7)).map((f) => f.layer);
+  // The top layers are counted on the paper being folded: another sheet lying across the line, stacked higher or
+  // not, mustn't decide which of this paper's layers are on top.
+  const movingSideLayers = faces.filter((f) => (!only || only(f.paper)) && f.world.some((x) => sideOf(line, x) > 1e-7)).map((f) => f.layer);
   if (!movingSideLayers.length) throw new FoldError('nothingOnFoldingSide');
   const from = layers === undefined ? -Infinity : Math.max(...movingSideLayers) - layers + 1;
 

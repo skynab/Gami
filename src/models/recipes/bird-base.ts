@@ -4,10 +4,10 @@ import type { Vec2 } from '../../fold/types';
 /**
  * The square base: creased in diagonals and halves, collapsed, and turned so the loose corners point towards
  * you. The start of the bird base and the frog base. `only` keeps the folds to one sheet, when others share the
- * table (turning the table still turns them all).
+ * table: it's turned and turned over on its own, about its own middle, so the others stay where they lie.
  */
 export function squareBase(r: Recipe, only?: (centre: Vec2) => boolean): Recipe {
-  return squareBaseFold(r, only).rotate(135, { title: 'Open end towards you', text: 'Turn the square so the loose corners point towards you.' });
+  return squareBaseFold(r, only).rotate(135, { title: 'Open end towards you', text: 'Turn the square so the loose corners point towards you.' }, { only });
 }
 
 /** The square base's creases and its collapse, before it's turned with its open end towards you (`squareBase`). */
@@ -38,7 +38,7 @@ export function birdBase(r: Recipe, only?: (centre: Vec2) => boolean) {
   squareBase(r, only);
   const base = squareBaseFlaps(r, only);
   base.petal(false);
-  r.turnOver('Turn the paper over.');
+  r.turnOver('Turn the paper over.', { only });
   base.petal(true);
   return base;
 }
@@ -91,6 +91,7 @@ export function squareBaseFlaps(r: Recipe, only?: (centre: Vec2) => boolean) {
       .along(table(-2, P[1]), table(2, P[1]), table(...T), {
         title: 'Fold the top down',
         text: 'Fold the top triangle down over the kite flaps, crease hard, then…',
+        only,
       })
       .unfold({ title: 'Unfold the last three folds', text: 'Open the kite flaps and the top back out to the square base.', to: before });
     r.preset(

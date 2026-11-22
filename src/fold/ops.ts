@@ -86,8 +86,10 @@ export type Op =
     }
   /** Opens back up to the paper after step `to` (0: the start). Left out: undoes the last fold since the last unfold. */
   | { op: 'unfold'; to?: number }
-  | { op: 'turnOver' }
-  | { op: 'rotate'; degrees: number }
+  /** `only`: turns over just that paper, about its own middle, leaving other sheets where they lie. */
+  | { op: 'turnOver'; only?: Faces }
+  /** `only`: turns just that paper, about its own middle. */
+  | { op: 'rotate'; degrees: number; only?: Faces }
   /** `into`: parts of the piece slid in just under the paper `under` picks where they land (a link into another's sleeves). */
   | { op: 'move'; only: Faces; to?: At; degrees?: number; flip?: boolean; under?: boolean; into?: { part: Faces; under: Faces }[] }
   | { op: 'newSheet' }
@@ -169,11 +171,12 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
     case 'unfold':
       return { op: 'unfold', ...opt(o, 'to', count, path) };
     case 'turnOver':
+      return { op: 'turnOver', ...opt(o, 'only', (v, p) => faces(v, p, 0), path) };
     case 'newSheet':
     case 'settle':
       return { op: o.op };
     case 'rotate':
-      return { op: 'rotate', degrees: num(o.degrees, `${path}.degrees`) };
+      return { op: 'rotate', degrees: num(o.degrees, `${path}.degrees`), ...opt(o, 'only', (v, p) => faces(v, p, 0), path) };
     case 'move':
       return {
         op: 'move',
@@ -696,9 +699,9 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
       return unfoldStep(frames, to, reopened(ctx.steps));
     }
     case 'turnOver':
-      return { frame: turnOver(frame) };
+      return { frame: op.only ? place(frame, { only: test(op.only)!, flip: true }) : turnOver(frame) };
     case 'rotate':
-      return { frame: rotate(frame, radians(op.degrees)) };
+      return { frame: op.only ? place(frame, { only: test(op.only)!, angle: radians(op.degrees) }) : rotate(frame, radians(op.degrees)) };
     case 'move':
       return {
         frame: place(frame, {

@@ -2957,10 +2957,12 @@ export const ja: Record<string, string> = {
     "ドラゴンを左から右へ裏返します。",
   "Turn the dragon back over.":
     "ドラゴンを元どおりに裏返します。",
+  "Turn the little squares":
+    "小さい正方形の向きを変える",
   "Fold the little diamonds in half":
     "小さいひし形を半分に折る",
-  "Take the little pale square and the little green one, turned so a corner points towards you, and fold each one’s left corner over to its right corner.":
-    "小さいうすい色の正方形と小さい緑の正方形を、角が手前を向くように置き、それぞれ左の角を右の角に合わせて折ります。",
+  "Take the little pale square and the little green one and turn each so a corner points towards you.":
+    "小さいうすい色の正方形と小さい緑の正方形を、それぞれ角が手前を向くように回します。",
   "Fold each one’s lower edges to its middle crease.":
     "それぞれ下の二辺を真ん中の折り筋に合わせて折ります。",
   "Fold each kite’s left half behind, along its middle crease. The pale one is the horns, the green one the legs.":
