@@ -2901,4 +2901,42 @@ export const fr: Record<string, string> = {
     "Ondulez la crinière d’un côté puis de l’autre sur toute sa longueur et dressez-la le long de l’arrière du cou, le pli contre le cou.",
   "Ripple the tail the same way and hang it from the top of the back, its fold on top. Your unicorn is ready!":
     "Ondulez la queue de la même façon et suspendez-la au haut du dos, le pli au-dessus. Votre licorne est prête !",
+  "Take the big square, light side up, the middle-sized one and the little dark one, and turn each so a corner points towards you.":
+    "Prenez le grand carré, face claire vers le haut, le moyen et le petit foncé, et tournez-les pour qu’un coin pointe vers vous.",
+  "Fold the body’s top behind":
+    "Plier le haut du corps derrière",
+  "Fold the big kite’s top corner behind, along a line between its side corners. This edge is what it stands on.":
+    "Pliez le coin du haut du grand cerf-volant derrière, le long d’une ligne entre ses coins latéraux. C’est sur ce bord qu’il tient debout.",
+  "Fold them in half":
+    "Les plier en deux",
+  "Fold the left half of the body, the tail and the arms behind, along their middle creases.":
+    "Pliez derrière la moitié gauche du corps, de la queue et des bras, le long de leur pli du milieu.",
+  "Open the body’s point a little and wrap it round the outside, so it points the other way: forwards, and a little down once it stands. This is the head.":
+    "Ouvrez un peu la pointe du corps et rabattez-la par-dessus l’extérieur, pour qu’elle pointe dans l’autre sens : vers l’avant, et un peu vers le bas une fois debout. C’est la tête.",
+  "Draw a fierce eye on the head.":
+    "Dessinez un œil féroce sur la tête.",
+  "Turn the body over":
+    "Retourner le corps",
+  "Turn the body back over.":
+    "Retournez le corps à nouveau.",
+  "Start the plates":
+    "Préparer les plaques",
+  "Take the three little squares, pale side up, and turn each so a corner points towards you.":
+    "Prenez les trois petits carrés, face pâle vers le haut, et tournez-les pour qu’un coin pointe vers vous.",
+  "Fold the plates in half":
+    "Plier les plaques en deux",
+  "Fold each little diamond in half, top corner down to the bottom one, into a triangle.":
+    "Pliez chaque petit losange en deux, le coin du haut sur celui du bas : c’est un triangle.",
+  "Stand the body up on its straight edge, its back upright and the head looking ahead.":
+    "Dressez le corps sur son bord droit, le dos bien droit et la tête tournée vers l’avant.",
+  "Lay the tail behind, its fold on top, rising from the table to the back of the body.":
+    "Posez la queue derrière, le pli au-dessus, qui monte de la table jusqu’au dos du corps.",
+  "Put the arms on":
+    "Poser les bras",
+  "Set the arms on the chest, halfway up, pointing forwards and down.":
+    "Posez les bras sur la poitrine, à mi-hauteur, pointés vers l’avant et vers le bas.",
+  "Put the plates on":
+    "Poser les plaques",
+  "Stand the plates up the back, their folds against it and their points out behind, the biggest in the middle. Roar!":
+    "Dressez les plaques le long du dos, le pli contre lui et les pointes vers l’arrière, la plus grande au milieu. Grrr !",
 };

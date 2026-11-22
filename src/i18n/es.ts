@@ -234,6 +234,7 @@ export const es: Messages = {
     'cute-whale': { title: 'Ballena mona', blurb: 'Una ballenita rechoncha con la cola en alto. Dale la vuelta y es una caja: la caja masu tradicional, puesta del revés.' },
     'pot-plant': { title: 'Planta en maceta', blurb: 'Tres hojas largas de pie en una macetita con tierra, en 3D. Cinco cuadrados, sin tijeras ni pegamento.' },
     'unicorn': { title: 'Unicornio', blurb: 'Un unicornio de pie sobre cuatro patas largas, en 3D, con un cuerno dorado y la crin y la cola onduladas. Un rectángulo y cuatro cuadrados, con cuatro cortes.' },
+    'kaiju': { title: 'Kaiju', blurb: 'Un monstruo gigante de pie, erguido, en 3D, con brazos cortos, una cola larga y una fila de placas en el lomo. Seis cuadrados, sin tijeras ni pegamento.' },
   },
   notFound: {
     title: 'Esta página se ha plegado y ha desaparecido',

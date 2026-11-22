@@ -2901,4 +2901,42 @@ export const ja: Record<string, string> = {
     "たてがみを長さにそって交互に波打たせ、折り目を首に沿わせて首の後ろに立てます。",
   "Ripple the tail the same way and hang it from the top of the back, its fold on top. Your unicorn is ready!":
     "しっぽも同じように波打たせ、折り目を上にして背中の後ろの端から垂らします。ユニコーンのできあがり！",
+  "Take the big square, light side up, the middle-sized one and the little dark one, and turn each so a corner points towards you.":
+    "大きい正方形を明るい面を上にして、中くらいの一枚と小さい濃い色の一枚も用意し、それぞれ角が手前を向くように回します。",
+  "Fold the body’s top behind":
+    "胴の上を後ろに折る",
+  "Fold the big kite’s top corner behind, along a line between its side corners. This edge is what it stands on.":
+    "大きいたこの形の上の角を、左右の角を結ぶ線で後ろに折ります。この辺で立ちます。",
+  "Fold them in half":
+    "半分に折る",
+  "Fold the left half of the body, the tail and the arms behind, along their middle creases.":
+    "胴、しっぽ、腕の左半分を、真ん中の折り筋で後ろに折ります。",
+  "Open the body’s point a little and wrap it round the outside, so it points the other way: forwards, and a little down once it stands. This is the head.":
+    "胴の先を少し開いて外側にかぶせ、向きを変えます。立てたときに前の少し下を向くようにします。これが頭です。",
+  "Draw a fierce eye on the head.":
+    "頭にこわい目をかきます。",
+  "Turn the body over":
+    "胴を裏返す",
+  "Turn the body back over.":
+    "胴を元どおりに裏返します。",
+  "Start the plates":
+    "背中の板を用意する",
+  "Take the three little squares, pale side up, and turn each so a corner points towards you.":
+    "小さい正方形三枚を、うすい色の面を上にして、それぞれ角が手前を向くように回します。",
+  "Fold the plates in half":
+    "板を半分に折る",
+  "Fold each little diamond in half, top corner down to the bottom one, into a triangle.":
+    "小さいひし形をそれぞれ、上の角を下の角に合わせて半分に折り、三角にします。",
+  "Stand the body up on its straight edge, its back upright and the head looking ahead.":
+    "胴をまっすぐな辺で立て、背中をまっすぐにして、頭が前を向くようにします。",
+  "Lay the tail behind, its fold on top, rising from the table to the back of the body.":
+    "しっぽを折り目を上にして後ろに置き、机から胴の背中へ上っていくようにします。",
+  "Put the arms on":
+    "腕をつける",
+  "Set the arms on the chest, halfway up, pointing forwards and down.":
+    "腕を胸の真ん中の高さにつけ、前の下を向くようにします。",
+  "Put the plates on":
+    "背中の板をつける",
+  "Stand the plates up the back, their folds against it and their points out behind, the biggest in the middle. Roar!":
+    "板を背中に沿って立て、折り目を背中につけて、とがったほうを後ろに向けます。いちばん大きい板が真ん中です。ガオー！",
 };

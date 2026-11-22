@@ -234,6 +234,7 @@ export const fr: Messages = {
     'cute-whale': { title: 'Petite baleine', blurb: 'Une petite baleine trapue, la queue en l’air. Retournez-la, c’est une boîte : la boîte masu traditionnelle, posée à l’envers.' },
     'pot-plant': { title: 'Plante en pot', blurb: 'Trois longues feuilles dressées dans un petit pot de terre, en 3D. Cinq carrés, sans ciseaux ni colle.' },
     'unicorn': { title: 'Licorne', blurb: 'Une licorne debout sur quatre longues pattes, en 3D, avec une corne dorée, une crinière et une queue ondulées. Un rectangle et quatre carrés, avec quatre entailles.' },
+    'kaiju': { title: 'Kaiju', blurb: 'Un monstre géant debout, bien droit, en 3D, avec de petits bras, une longue queue et une rangée de plaques sur le dos. Six carrés, sans ciseaux ni colle.' },
   },
   notFound: {
     title: 'Cette page a été repliée',

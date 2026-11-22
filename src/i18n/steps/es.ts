@@ -2901,4 +2901,42 @@ export const es: Record<string, string> = {
     "Ondula la crin de un lado a otro a lo largo y ponla de pie a lo largo de la parte de atrás del cuello, con el doblez contra el cuello.",
   "Ripple the tail the same way and hang it from the top of the back, its fold on top. Your unicorn is ready!":
     "Ondula la cola del mismo modo y cuélgala de la parte de arriba del lomo, con el doblez arriba. ¡Tu unicornio está listo!",
+  "Take the big square, light side up, the middle-sized one and the little dark one, and turn each so a corner points towards you.":
+    "Toma el cuadrado grande, con el lado claro hacia arriba, el mediano y el pequeño oscuro, y gira cada uno para que una esquina apunte hacia ti.",
+  "Fold the body’s top behind":
+    "Dobla la parte de arriba del cuerpo hacia atrás",
+  "Fold the big kite’s top corner behind, along a line between its side corners. This edge is what it stands on.":
+    "Dobla la esquina de arriba de la cometa grande hacia atrás, por la línea que une sus esquinas de los lados. Se sostiene de pie sobre este borde.",
+  "Fold them in half":
+    "Dóblalos por la mitad",
+  "Fold the left half of the body, the tail and the arms behind, along their middle creases.":
+    "Dobla hacia atrás la mitad izquierda del cuerpo, de la cola y de los brazos, por sus pliegues centrales.",
+  "Open the body’s point a little and wrap it round the outside, so it points the other way: forwards, and a little down once it stands. This is the head.":
+    "Abre un poco la punta del cuerpo y envuélvela por fuera, para que apunte hacia el otro lado: hacia delante, y un poco hacia abajo cuando esté de pie. Es la cabeza.",
+  "Draw a fierce eye on the head.":
+    "Dibuja un ojo feroz en la cabeza.",
+  "Turn the body over":
+    "Da la vuelta al cuerpo",
+  "Turn the body back over.":
+    "Vuelve a dar la vuelta al cuerpo.",
+  "Start the plates":
+    "Prepara las placas",
+  "Take the three little squares, pale side up, and turn each so a corner points towards you.":
+    "Toma los tres cuadrados pequeños, con el lado pálido hacia arriba, y gira cada uno para que una esquina apunte hacia ti.",
+  "Fold the plates in half":
+    "Dobla las placas por la mitad",
+  "Fold each little diamond in half, top corner down to the bottom one, into a triangle.":
+    "Dobla cada rombo pequeño por la mitad, la esquina de arriba sobre la de abajo, en un triángulo.",
+  "Stand the body up on its straight edge, its back upright and the head looking ahead.":
+    "Pon el cuerpo de pie sobre su borde recto, con la espalda erguida y la cabeza mirando al frente.",
+  "Lay the tail behind, its fold on top, rising from the table to the back of the body.":
+    "Pon la cola detrás, con el doblez arriba, subiendo desde la mesa hasta la espalda del cuerpo.",
+  "Put the arms on":
+    "Pon los brazos",
+  "Set the arms on the chest, halfway up, pointing forwards and down.":
+    "Pon los brazos en el pecho, a media altura, apuntando hacia delante y hacia abajo.",
+  "Put the plates on":
+    "Pon las placas",
+  "Stand the plates up the back, their folds against it and their points out behind, the biggest in the middle. Roar!":
+    "Pon las placas de pie a lo largo de la espalda, con el doblez contra ella y las puntas hacia atrás, la más grande en el centro. ¡Grrr!",
 };
