@@ -1,4 +1,6 @@
 import { toFlat } from '../../fold/fold';
+import { lineThrough, sideOf } from '../../fold/geometry2d';
+import { inside } from '../../fold/select';
 import { paper, Recipe, table, type ShapeBend } from '../../fold/recipe';
 import type { Vec2, Vec3 } from '../../fold/types';
 import { birdBase } from './bird-base';
@@ -6,20 +8,29 @@ import { birdBase } from './bird-base';
 /**
  * A dragon, Gami's own: the traditional bird base, its lower points narrowed as the crane's are, then turned with
  * outside reverse folds (wrapped round the body, as the hummingbird's are) into a neck rising forwards and a long
- * tail behind; the neck's tip turned out again for the head, and the tail's end crimped up. The wings are the bird
- * base's upper flaps, spread out sideways in 3D and rippled into ribs.
+ * tail behind, sloping down so its end rests on the table once the dragon stands. The neck's top is turned out
+ * again to stand straight up, and its tip pushed in between its layers for the head, pointing forwards and down: an
+ * S. The tail's end is crimped up. The wings are the bird base's upper flaps, spread out sideways in 3D and rippled
+ * into ribs.
  *
  * As the kaiju is built, the parts one sheet can't give come from little squares set on in the body's middle
  * plane: horns, a pale kite folded in half on the back of the head; legs, a green one under the belly. And an eye
  * drawn on each side of the head.
  *
- * Outside reverse folds rather than inside ones: tucked between the layers, rigid paper passes through the stack
- * as the point turns (the tail 8.7 layers, the head 6 at these angles), over `GRAZE` (src/models/known-clipping.ts).
+ * The neck and tail turn with outside reverse folds rather than inside ones: tucked between the layers, rigid paper
+ * passes through the stack as the point turns (the tail 8.7 layers), over `GRAZE` (src/models/known-clipping.ts).
+ * The head is the other way round: wrapped round the upright top of the neck, it swings through the neck's inner
+ * layers (14 layers), tucked in it passes nothing. Steeper than 60° the neck's root runs into the wings once they
+ * spread (9 layers), so the S rises at 50° and stands up from there; turned past upright, its top won't fold flat.
  */
-export const NECK_UP = 60;
-export const TAIL_UP = 5;
+export const NECK_UP = 50;
+/** The upper neck: how far down from the tip it turns, and how far above level it then points. */
+export const UPPER = 0.22;
+export const UPPER_UP = 90;
+/** How far from where the head's crease starts the paper it creases may cross it: the neck's width there, and more. */
+export const REACH = 0.1;
+export const TAIL_UP = -9;
 export const HEAD_DOWN = 20;
-export const HEAD_NEAR = 0.45;
 export const NECK_ROOT = 0.5;
 export const TAIL_ROOT = 0.5;
 export const SPREAD = 70;
@@ -40,6 +51,21 @@ const dirOf = (angle: number, dir: 1 | -1): Vec2 => [dir * Math.cos(deg(angle)),
 const plus = (a: Vec2, b: Vec2): Vec2 => [a[0] + b[0], a[1] + b[1]];
 const minus = (a: Vec2, b: Vec2, k = 1): Vec2 => [a[0] - k * b[0], a[1] - k * b[1]];
 const turn = (d: Vec2, a: number): Vec2 => [d[0] * Math.cos(deg(a)) - d[1] * Math.sin(deg(a)), d[0] * Math.sin(deg(a)) + d[1] * Math.cos(deg(a))];
+/** Inside a convex face: a triangle's incentre, or any other face's centre of area. */
+function middleOf(face: Vec2[]): Vec2 {
+  if (face.length === 3) {
+    const sides = face.map((_, i) => Math.hypot(face[(i + 1) % 3][0] - face[(i + 2) % 3][0], face[(i + 1) % 3][1] - face[(i + 2) % 3][1]));
+    const round = sides[0] + sides[1] + sides[2];
+    return [0, 1].map((k) => face.reduce((a, p, i) => a + sides[i] * p[k], 0) / round) as Vec2;
+  }
+  let [area, cx, cz] = [0, 0, 0];
+  face.forEach((p, i) => {
+    const q = face[(i + 1) % face.length];
+    const w = p[0] * q[1] - q[0] * p[1];
+    [area, cx, cz] = [area + w, cx + (p[0] + q[0]) * w, cz + (p[1] + q[1]) * w];
+  });
+  return [cx / (3 * area), cz / (3 * area)];
+}
 
 export function dragon() {
   const r = new Recipe({
@@ -47,8 +73,6 @@ export function dragon() {
     title: 'Dragon',
     sheets: [
       { size: [1, 1], front: '#2f8f5b', back: '#d8ecb8', origin: [0, 0], at: [0, 0] },
-      // Set diagonally off the big square: there, the bird base's folds of just its top layers aren't confused by
-      // them (beside it, the second petal fold's edges wouldn't fold).
       { size: [HORN * Math.SQRT2, HORN * Math.SQRT2], front: '#ece4ca', back: '#d4c8a2', origin: [10, 0], at: [1.0, -0.3] },
       { size: [LEG * Math.SQRT2, LEG * Math.SQRT2], front: '#287a4e', back: '#2f8f5b', origin: [20, 0], at: [1.0, 0.3] },
     ],
@@ -91,25 +115,64 @@ export function dragon() {
   r.collapse(
     {
       title: 'Outside-reverse-fold the tail',
-      text: 'Wrap the right point round the outside the same way, so it points back, nearly level. This is the tail.',
+      text: 'Wrap the right point round the outside the same way, so it points back and a little down. This is the tail.',
       kind: 'reverse',
     },
     [{ through: [table(...tailRoot), table(...plus(tailRoot, plus([0, 1], tailDir)))], kind: 'outside', only: tailPaper }],
     paper(-0.3, 0.3),
   );
 
-  // The head: the neck's tip turned out forwards and down. Only the paper near the tip creases (the line carries on
-  // back across the body).
-  const tip = r.where(paper(0.5, 0.5));
-  const headRoot = minus(tip, neckDir, 0.12);
-  const headDir = dirOf(-HEAD_DOWN, -1);
+  // The faces of `part` past a crease from `a` to `b`, on the side `towards` is, as patches of the sheet: a compound
+  // fold creases where the pieces it cuts on both sides of the line pass the test. Only faces crossing the line
+  // within `reach` of `a`, or lying wholly past it no further from `towards`, so the line, carried on, creases
+  // nothing else. (A circle round the tip on the sheet misses the neck's long faces, which run from the tip nearly
+  // to the body.)
+  const beyond = (part: (c: Vec2) => boolean, a: Vec2, b: Vec2, towards: Vec2, reach: number) => {
+    const line = lineThrough(a, b);
+    const sense = Math.sign(sideOf(line, towards));
+    const far = Math.hypot(towards[0] - a[0], towards[1] - a[1]) + reach;
+    const patches = toFlat(r.current)
+      .filter((f) => part([f.paper.reduce((t, p) => t + p[0], 0) / f.paper.length, f.paper.reduce((t, p) => t + p[1], 0) / f.paper.length]))
+      .filter((f) => {
+        const s = f.world.map((p) => sense * sideOf(line, p));
+        if (s.every((v) => v > 1e-7)) return f.world.every((p) => Math.hypot(p[0] - towards[0], p[1] - towards[1]) < far);
+        // Where its edges cross the line.
+        return f.world.some((p, k) => {
+          const q = f.world[(k + 1) % f.world.length];
+          const [sp, sq] = [s[k], s[(k + 1) % s.length]];
+          if ((sp > 1e-7) === (sq > 1e-7)) return false;
+          const t = sp / (sp - sq);
+          return Math.hypot(p[0] + t * (q[0] - p[0]) - a[0], p[1] + t * (q[1] - p[1]) - a[1]) < reach;
+        });
+      })
+      .map((f) => f.paper);
+    return (c: Vec2) => patches.some((poly) => inside(poly, c));
+  };
+
+  // The upper neck turned out to stand straight up, for an S: the neck's paper reaching past its crease folds (all of
+  // it: kept to near the neck, some of its layers wouldn't crease and it can't fold flat).
+  const neckTop = r.where(paper(0.5, 0.5));
+  const upperRoot = minus(neckTop, neckDir, UPPER);
+  const upperDir = dirOf(UPPER_UP, -1);
+  const upperLine = plus(upperRoot, plus(neckDir, upperDir));
   r.collapse(
     {
-      title: 'Outside-reverse-fold the head',
-      text: 'Wrap the tip of the neck round the outside, so it points forwards and a little down. This is the head.',
+      title: 'Outside-reverse-fold the upper neck',
+      text: 'Wrap the top of the neck round the outside the same way, so it stands straight up.',
       kind: 'reverse',
     },
-    [{ through: [table(...headRoot), table(...plus(headRoot, plus(neckDir, headDir)))], kind: 'outside', only: (c) => neckPaper(c) && Math.hypot(0.5 - c[0], 0.5 - c[1]) < HEAD_NEAR }],
+    [{ through: [table(...upperRoot), table(...upperLine)], kind: 'outside', only: beyond(neckPaper, upperRoot, upperLine, neckTop, Infinity) }],
+    // Held by the neck just below the crease: the body can lie on either side of the line, carried on.
+    r.sheetAt(minus(upperRoot, neckDir, 0.03), neckPaper),
+  );
+
+  // The head: the neck's tip pushed in between its layers, forwards and down. Only the paper near the tip creases.
+  const tip = r.where(paper(0.5, 0.5));
+  const headRoot = minus(tip, upperDir, 0.12);
+  const headLine = plus(headRoot, plus(upperDir, dirOf(-HEAD_DOWN, -1)));
+  r.collapse(
+    { title: 'Make the head', text: 'Push the tip of the neck forward between its layers, for the head.', kind: 'reverse' },
+    [{ through: [table(...headRoot), table(...headLine)], kind: 'inside', only: beyond(neckPaper, headRoot, headLine, tip, REACH) }],
     paper(-0.3, 0.3),
   );
 
@@ -127,15 +190,13 @@ export function dragon() {
     paper(-0.3, 0.3),
   );
 
-  // An eye on each side of the head: in the middle of its triangle (where a circle in it would touch all three
-  // sides), towards the back of the head.
+  // An eye on each side of the head, on its top face at the tip: in the middle of it (for a triangle, where a
+  // circle in it would touch all three sides, towards the back of the head).
   const headTip = r.where(paper(0.5, 0.5));
   const head = toFlat(r.current)
-    .filter((f) => f.world.length === 3 && f.world.some((p) => Math.hypot(p[0] - headTip[0], p[1] - headTip[1]) < 1e-6))
+    .filter((f) => f.world.some((p) => Math.hypot(p[0] - headTip[0], p[1] - headTip[1]) < 1e-6))
     .sort((a, b) => b.layer - a.layer)[0].world as Vec2[];
-  const sides = head.map((_, i) => Math.hypot(head[(i + 1) % 3][0] - head[(i + 2) % 3][0], head[(i + 1) % 3][1] - head[(i + 2) % 3][1]));
-  const round = sides[0] + sides[1] + sides[2];
-  const eye: Vec2 = [0, 1].map((k) => head.reduce((a, p, i) => a + sides[i] * p[k], 0) / round) as Vec2;
+  const eye = middleOf(head);
   const ring = ([x, z]: Vec2): Vec2[] => Array.from({ length: 12 }, (_, i) => [x + EYE_SIZE * Math.cos((i * Math.PI) / 6), z + EYE_SIZE * Math.sin((i * Math.PI) / 6)]);
   const eyePaper = r.sheetAt(eye, body);
   r.draw({ title: 'Draw an eye', text: 'Draw a fierce eye on the head.' }, [{ fill: ring(eye) }]);

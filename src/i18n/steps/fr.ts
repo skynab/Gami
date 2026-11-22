@@ -2943,10 +2943,12 @@ export const fr: Record<string, string> = {
     "Faire un pli inversé extérieur pour le cou",
   "Open the left point a little and wrap it round the outside of the body, so it points up and forwards. This is the neck.":
     "Ouvrez un peu la pointe gauche et rabattez-la par-dessus l’extérieur du corps, pour qu’elle pointe vers le haut et vers l’avant. C’est le cou.",
-  "Wrap the right point round the outside the same way, so it points back, nearly level. This is the tail.":
-    "Rabattez la pointe droite par-dessus l’extérieur de la même façon, pour qu’elle pointe vers l’arrière, presque à plat. C’est la queue.",
-  "Wrap the tip of the neck round the outside, so it points forwards and a little down. This is the head.":
-    "Rabattez le bout du cou par-dessus l’extérieur, pour qu’il pointe vers l’avant et un peu vers le bas. C’est la tête.",
+  "Wrap the right point round the outside the same way, so it points back and a little down. This is the tail.":
+    "Rabattez la pointe droite par-dessus l’extérieur de la même façon, pour qu’elle pointe vers l’arrière et un peu vers le bas. C’est la queue.",
+  "Outside-reverse-fold the upper neck":
+    "Faire un pli inversé extérieur en haut du cou",
+  "Wrap the top of the neck round the outside the same way, so it stands straight up.":
+    "Rabattez le haut du cou par-dessus l’extérieur de la même façon, pour qu’il se dresse tout droit.",
   "Crimp the tail":
     "Faire un pli en zigzag dans la queue",
   "Pinch a little zigzag into the end of the tail, through all its layers, so the tip kicks up.":

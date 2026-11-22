@@ -2943,10 +2943,12 @@ export const es: Record<string, string> = {
     "Haz un pliegue invertido exterior para el cuello",
   "Open the left point a little and wrap it round the outside of the body, so it points up and forwards. This is the neck.":
     "Abre un poco la punta izquierda y envuélvela por fuera del cuerpo, para que apunte hacia arriba y hacia delante. Es el cuello.",
-  "Wrap the right point round the outside the same way, so it points back, nearly level. This is the tail.":
-    "Envuelve la punta derecha por fuera de la misma manera, para que apunte hacia atrás, casi horizontal. Es la cola.",
-  "Wrap the tip of the neck round the outside, so it points forwards and a little down. This is the head.":
-    "Envuelve la punta del cuello por fuera, para que apunte hacia delante y un poco hacia abajo. Es la cabeza.",
+  "Wrap the right point round the outside the same way, so it points back and a little down. This is the tail.":
+    "Envuelve la punta derecha por fuera de la misma manera, para que apunte hacia atrás y un poco hacia abajo. Es la cola.",
+  "Outside-reverse-fold the upper neck":
+    "Haz un pliegue invertido exterior en lo alto del cuello",
+  "Wrap the top of the neck round the outside the same way, so it stands straight up.":
+    "Envuelve lo alto del cuello por fuera de la misma manera, para que quede recto hacia arriba.",
   "Crimp the tail":
     "Haz un pliegue en zigzag en la cola",
   "Pinch a little zigzag into the end of the tail, through all its layers, so the tip kicks up.":

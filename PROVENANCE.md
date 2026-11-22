@@ -158,8 +158,8 @@ noted when it was written, and the model was folded from the common traditional 
   top folded behind and folded in half for the body, its point turned out with an outside reverse fold for the head;
   a kite folded in half for the tail and a small one for the arms; three squares folded into triangles for the plates.
   Gami's dragon starts from the traditional bird base and narrows its lower points as the crane does; from there
-  it's its own: the points turned out with outside reverse folds for the neck and tail, the neck's tip turned out
-  again for the head, the tail crimped, the wings spread out sideways and rippled, eyes drawn, and two little squares
+  it's its own: the points turned out with outside reverse folds for the neck and tail, the neck's top turned out
+  again to stand up and its tip pushed in for the head (an S), the tail crimped, the wings spread out sideways and rippled, eyes drawn, and two little squares
   folded into kites and folded in half for horns and legs. OrigamiOK's collapses a square into a small square,
   zigzags the tail, makes the head and horn from the top flaps and spreads zigzag wings.
 - **Intermediate models from OrigamiOK** (checked 13 November 2026; the plan is `docs/origamiok-intermediate-plan.md`).

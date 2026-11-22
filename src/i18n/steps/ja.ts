@@ -2943,10 +2943,12 @@ export const ja: Record<string, string> = {
     "首を外側に中割り折りする",
   "Open the left point a little and wrap it round the outside of the body, so it points up and forwards. This is the neck.":
     "左の先を少し開いて胴の外側にかぶせ、上の前を向くようにします。これが首です。",
-  "Wrap the right point round the outside the same way, so it points back, nearly level. This is the tail.":
-    "右の先も同じように外側にかぶせ、ほぼ水平に後ろを向くようにします。これがしっぽです。",
-  "Wrap the tip of the neck round the outside, so it points forwards and a little down. This is the head.":
-    "首の先を外側にかぶせ、前の少し下を向くようにします。これが頭です。",
+  "Wrap the right point round the outside the same way, so it points back and a little down. This is the tail.":
+    "右の先も同じように外側にかぶせ、後ろの少し下を向くようにします。これがしっぽです。",
+  "Outside-reverse-fold the upper neck":
+    "首の上を外側に中割り折りする",
+  "Wrap the top of the neck round the outside the same way, so it stands straight up.":
+    "首の上も同じように外側にかぶせ、まっすぐ上を向くようにします。",
   "Crimp the tail":
     "しっぽに段折りをする",
   "Pinch a little zigzag into the end of the tail, through all its layers, so the tip kicks up.":

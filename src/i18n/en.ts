@@ -177,7 +177,7 @@ export const en = {
     'pot-plant': { title: 'Pot plant', blurb: 'Three long leaves standing in a little pot of soil, in 3D. Five squares, no scissors or glue.' },
     'unicorn': { title: 'Unicorn', blurb: 'A unicorn standing on four long legs in 3D, with a golden horn and a wavy mane and tail. A rectangle and four squares, with four snips.' },
     'kaiju': { title: 'Kaiju', blurb: 'A giant monster standing upright in 3D, with short arms, a long tail and a row of plates up its back. Six squares, no scissors or glue.' },
-    'dragon': { title: 'Dragon', blurb: 'A winged dragon standing in 3D, with a long neck, horns, ribbed wings spread wide and a tail. Three squares, no scissors or glue.' },
+    'dragon': { title: 'Dragon', blurb: 'A winged dragon standing in 3D, with a long neck curved in an S, horns, ribbed wings spread wide and a tail. Three squares, no scissors or glue.' },
   },
   notFound: {
     title: 'This page got folded away',
