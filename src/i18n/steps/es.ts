@@ -2979,4 +2979,24 @@ export const es: Record<string, string> = {
     "Pon los cuernos",
   "Set the horns on the back of the head, sweeping back. Done!":
     "Pon los cuernos en la parte de atrás de la cabeza, hacia atrás. ¡Listo!",
+  "Start with the plain side up and a corner pointing towards you.":
+    "Empieza con la cara lisa hacia arriba y una esquina apuntando hacia ti.",
+  "Fold the long upper edges to the middle again, so the top is narrow: the part that goes round the neck.":
+    "Dobla otra vez los bordes superiores largos hasta el centro, para que la parte de arriba quede estrecha: la que va alrededor del cuello.",
+  "Turn the paper over, left to right.":
+    "Da la vuelta al papel, de izquierda a derecha.",
+  "Draw stripes":
+    "Dibuja rayas",
+  "Draw stripes slanting across the tie, but not on the top third, where the knot will be.":
+    "Dibuja rayas inclinadas a lo largo de la corbata, pero no en el tercio de arriba, donde irá el nudo.",
+  "Fold the long point down over the tie, about a third of the way down.":
+    "Dobla la punta larga hacia abajo sobre la corbata, a un tercio más o menos.",
+  "Fold it back up":
+    "Vuelve a doblarla hacia arriba",
+  "Fold it back up a little below that fold, leaving a band across: the knot.":
+    "Vuelve a doblarla hacia arriba un poco por debajo de ese doblez, dejando una banda a lo ancho: el nudo.",
+  "Fold the tip behind":
+    "Dobla la punta hacia atrás",
+  "Fold the tip that sticks up above the knot behind, along the knot’s top edge. Your tie is done.":
+    "Dobla hacia atrás la punta que sobresale por encima del nudo, por el borde de arriba del nudo. ¡Tu corbata está lista!",
 };

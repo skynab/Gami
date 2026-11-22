@@ -2979,4 +2979,24 @@ export const fr: Record<string, string> = {
     "Mettre les cornes",
   "Set the horns on the back of the head, sweeping back. Done!":
     "Posez les cornes à l’arrière de la tête, tournées vers l’arrière. C’est fini !",
+  "Start with the plain side up and a corner pointing towards you.":
+    "Commencez face unie vers le haut, un coin pointant vers vous.",
+  "Fold the long upper edges to the middle again, so the top is narrow: the part that goes round the neck.":
+    "Pliez encore les longs bords du haut jusqu’au milieu, pour que le haut soit étroit : la partie qui passe autour du cou.",
+  "Turn the paper over, left to right.":
+    "Retournez le papier, de gauche à droite.",
+  "Draw stripes":
+    "Dessiner des rayures",
+  "Draw stripes slanting across the tie, but not on the top third, where the knot will be.":
+    "Dessinez des rayures en biais sur la cravate, mais pas sur le tiers du haut, où sera le nœud.",
+  "Fold the long point down over the tie, about a third of the way down.":
+    "Pliez la longue pointe vers le bas sur la cravate, à environ un tiers.",
+  "Fold it back up":
+    "La replier vers le haut",
+  "Fold it back up a little below that fold, leaving a band across: the knot.":
+    "Repliez-la vers le haut un peu sous ce pli, en laissant une bande en travers : le nœud.",
+  "Fold the tip behind":
+    "Plier la pointe derrière",
+  "Fold the tip that sticks up above the knot behind, along the knot’s top edge. Your tie is done.":
+    "Pliez derrière la pointe qui dépasse au-dessus du nœud, le long du bord haut du nœud. Votre cravate est prête !",
 };

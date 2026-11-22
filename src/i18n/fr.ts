@@ -236,6 +236,7 @@ export const fr: Messages = {
     'unicorn': { title: 'Licorne', blurb: 'Une licorne debout sur quatre longues pattes, en 3D, avec une corne dorée, une crinière et une queue ondulées. Un rectangle et quatre carrés, avec quatre entailles.' },
     'kaiju': { title: 'Kaiju', blurb: 'Un monstre géant debout, bien droit, en 3D, avec de petits bras, une longue queue et une rangée de plaques sur le dos. Six carrés, sans ciseaux ni colle.' },
     'dragon': { title: 'Dragon', blurb: 'Un dragon ailé debout en 3D, avec un long cou en S, des cornes, de grandes ailes nervurées déployées et une queue. Trois carrés, sans ciseaux ni colle.' },
+    'necktie': { title: 'Cravate', blurb: 'Une cravate rayée au nœud uni, dans un seul carré. Les rayures se dessinent au feutre avant de plier le nœud.' },
   },
   notFound: {
     title: 'Cette page a été repliée',

@@ -2979,4 +2979,24 @@ export const ja: Record<string, string> = {
     "角をつける",
   "Set the horns on the back of the head, sweeping back. Done!":
     "角を頭の後ろに、後ろへなびくようにつけます。できあがり！",
+  "Start with the plain side up and a corner pointing towards you.":
+    "無地の面を上にして、角が手前を向くように置きます。",
+  "Fold the long upper edges to the middle again, so the top is narrow: the part that goes round the neck.":
+    "長い上の二辺を、もう一度真ん中に合わせて折り、上を細くします。ここが首に回る部分です。",
+  "Turn the paper over, left to right.":
+    "紙を左から右へ裏返します。",
+  "Draw stripes":
+    "しまもようをかく",
+  "Draw stripes slanting across the tie, but not on the top third, where the knot will be.":
+    "ネクタイにななめのしまもようをかきます。結び目になる上の三分の一にはかきません。",
+  "Fold the long point down over the tie, about a third of the way down.":
+    "長い先を、ネクタイの上に三分の一くらいのところで下へ折ります。",
+  "Fold it back up":
+    "上へ折りもどす",
+  "Fold it back up a little below that fold, leaving a band across: the knot.":
+    "その折り目の少し下で上へ折りもどし、横に帯を残します。これが結び目です。",
+  "Fold the tip behind":
+    "先を後ろへ折る",
+  "Fold the tip that sticks up above the knot behind, along the knot’s top edge. Your tie is done.":
+    "結び目の上につき出た先を、結び目の上の辺にそって後ろへ折ります。ネクタイのできあがり！",
 };
