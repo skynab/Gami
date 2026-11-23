@@ -2999,4 +2999,18 @@ export const ja: Record<string, string> = {
     "先を後ろへ折る",
   "Fold the tip that sticks up above the knot behind, along the knot’s top edge. Your tie is done.":
     "結び目の上につき出た先を、結び目の上の辺にそって後ろへ折ります。ネクタイのできあがり！",
+  "Start with the plain side up. Fold the left edge to the right edge, and unfold.":
+    "無地の面を上にして置きます。左の辺を右の辺に合わせて折り、開きます。",
+  "Fold the collar":
+    "えりを折る",
+  "Fold each edge at the middle back out on a slant, a little way at the top and narrowing to nothing lower down: the white collar.":
+    "真ん中で合わさったふちを、それぞれななめに外へ折り返します。上は少しだけ、下へいくほど細く、最後はなくなるように折ります。これが白いえりです。",
+  "Fold the sleeves out":
+    "そでを外へ折る",
+  "Fold each bottom corner at the middle out to the side, on a line from halfway up the middle to the bottom outer corner.":
+    "真ん中の下の角を、それぞれ横へ折り出します。折り線は、真ん中の高さの半分のところから、下の外側の角までです。",
+  "Fold the bottom up behind":
+    "下を後ろへ折り上げる",
+  "Fold the bottom half up behind, so the sleeves come up at the shoulders. Your kimono is done.":
+    "下半分を後ろへ折り上げて、そでが肩のところに出るようにします。着物のできあがり！",
 };

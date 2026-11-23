@@ -2999,4 +2999,18 @@ export const es: Record<string, string> = {
     "Dobla la punta hacia atrás",
   "Fold the tip that sticks up above the knot behind, along the knot’s top edge. Your tie is done.":
     "Dobla hacia atrás la punta que sobresale por encima del nudo, por el borde de arriba del nudo. ¡Tu corbata está lista!",
+  "Start with the plain side up. Fold the left edge to the right edge, and unfold.":
+    "Empieza con la cara lisa hacia arriba. Dobla el borde izquierdo sobre el derecho y desdobla.",
+  "Fold the collar":
+    "Dobla el cuello",
+  "Fold each edge at the middle back out on a slant, a little way at the top and narrowing to nothing lower down: the white collar.":
+    "Dobla hacia fuera, en diagonal, cada borde del centro: un poco arriba y cada vez menos hacia abajo, hasta nada. Es el cuello blanco.",
+  "Fold the sleeves out":
+    "Saca las mangas",
+  "Fold each bottom corner at the middle out to the side, on a line from halfway up the middle to the bottom outer corner.":
+    "Dobla hacia el lado cada esquina inferior del centro, por una línea que va de la mitad de la altura del centro a la esquina exterior de abajo.",
+  "Fold the bottom up behind":
+    "Dobla la parte de abajo hacia atrás",
+  "Fold the bottom half up behind, so the sleeves come up at the shoulders. Your kimono is done.":
+    "Dobla la mitad de abajo hacia arriba por detrás, para que las mangas queden en los hombros. ¡Tu kimono está listo!",
 };

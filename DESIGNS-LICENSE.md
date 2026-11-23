@@ -53,6 +53,7 @@ site's source code, or any other model in the gallery.
 | Kaiju | `src/models/recipes/kaiju.ts` | November 2026 |
 | Dragon | `src/models/recipes/dragon.ts` | November 2026 |
 | Necktie | `src/models/recipes/necktie.ts` | November 2026 |
+| Kimono | `src/models/recipes/kimono.ts` | November 2026 |
 
 ## Other models in the gallery
 

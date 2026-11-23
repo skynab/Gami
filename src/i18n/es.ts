@@ -237,6 +237,7 @@ export const es: Messages = {
     'kaiju': { title: 'Kaiju', blurb: 'Un monstruo gigante de pie, erguido, en 3D, con brazos cortos, una cola larga y una fila de placas en el lomo. Seis cuadrados, sin tijeras ni pegamento.' },
     'dragon': { title: 'Dragón', blurb: 'Un dragón alado de pie en 3D, con un cuello largo curvado en S, cuernos, alas con nervios bien abiertas y cola. Tres cuadrados, sin tijeras ni pegamento.' },
     'necktie': { title: 'Corbata', blurb: 'Una corbata de rayas con el nudo liso, de un solo cuadrado. Las rayas se dibujan con un rotulador antes de doblar el nudo.' },
+    'kimono': { title: 'Kimono', blurb: 'Un kimono con el cuello blanco y las mangas saliendo de los hombros, de un solo cuadrado.' },
   },
   notFound: {
     title: 'Esta página se ha plegado y ha desaparecido',

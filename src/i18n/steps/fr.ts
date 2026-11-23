@@ -2999,4 +2999,18 @@ export const fr: Record<string, string> = {
     "Plier la pointe derrière",
   "Fold the tip that sticks up above the knot behind, along the knot’s top edge. Your tie is done.":
     "Pliez derrière la pointe qui dépasse au-dessus du nœud, le long du bord haut du nœud. Votre cravate est prête !",
+  "Start with the plain side up. Fold the left edge to the right edge, and unfold.":
+    "Commencez face unie vers le haut. Pliez le bord gauche sur le bord droit, puis dépliez.",
+  "Fold the collar":
+    "Plier le col",
+  "Fold each edge at the middle back out on a slant, a little way at the top and narrowing to nothing lower down: the white collar.":
+    "Repliez vers l’extérieur, en biais, chaque bord du milieu : un peu en haut, puis de moins en moins vers le bas, jusqu’à rien. C’est le col blanc.",
+  "Fold the sleeves out":
+    "Sortir les manches",
+  "Fold each bottom corner at the middle out to the side, on a line from halfway up the middle to the bottom outer corner.":
+    "Pliez vers le côté chaque coin du bas au milieu, selon une ligne qui va de la mi-hauteur du milieu au coin extérieur du bas.",
+  "Fold the bottom up behind":
+    "Plier le bas derrière",
+  "Fold the bottom half up behind, so the sleeves come up at the shoulders. Your kimono is done.":
+    "Pliez la moitié du bas vers le haut, derrière, pour que les manches arrivent aux épaules. Votre kimono est prêt !",
 };

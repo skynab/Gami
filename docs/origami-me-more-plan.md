@@ -56,7 +56,7 @@ Flat first, then the ones that stand, then the cut ones, roughly in step count:
 | Phase | Status |
 |---|---|
 | 1. Necktie | Done (22 November), **Gami's own** (Gilad's database has no Traditional necktie), 10 steps, a pen. A kite narrowed at the top and turned over, the point folded down and back up for the knot and its tip folded behind, as the easy sword makes its crossguard. Folded from the narrow point, the knot came out narrower than the tie and the same colour, so it barely showed; stripes drawn across the tie below it before it's folded leave the knot plain. Light blue, as the pen is dark. origami.me's knot is squashed out from a pleat; not followed. |
-| 2. Kimono | Not started |
+| 2. Kimono | Done (22 November), **Gami's own**: Gilad's database does list Traditional kimonos, but Gami's doesn't follow them or origami.me's (a square folded in half, narrow strips, a squash). 6 steps: the sides to the middle for a coloured body, their edges turned back on a slant at the top for a white collar, and their bottom corners folded out and the bottom half folded up behind, as a dollar-bill shirt's sleeves are, so the sleeves show the coloured side. Folding the corners out square, for wider sleeves, would tear the flaps from the body, so the sleeves are pointed; the body is as tall as it's wide, as the sleeves need the whole bottom half. |
 | 3. Wallet | Not started |
 | 4. Parrot | Not started |
 | 5. Chicken | Not started |

@@ -128,6 +128,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `kaiju` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a generic monster standing upright in 3D from six squares, in place of OrigamiOK's Godzilla, which is Toho's character (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the body's folds follow the `unicorn`'s neck, the arms' its horn | Clear | 21 Nov 2026 |
 | `dragon` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a winged dragon standing in 3D from the traditional bird base and two little squares, after the look of OrigamiOK's "Easy Origami Dragon", which names no designer; Gilad's database lists no Traditional dragon in what could be read (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the bird base's folds follow `crane`, the horns' and legs' the `kaiju`'s arms | Clear | 22 Nov 2026 |
 | `necktie` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a striped necktie from a kite narrowed at the top, its point folded down and back up for the knot, as Gami's easy sword makes its crossguard; origami.me credits its necktie as Traditional, but Gilad's database lists only neckties by named designers (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 22 Nov 2026 |
+| `kimono` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a kimono from the sides folded to the middle, their edges turned back for a white collar and their bottom corners folded out and carried up behind for the sleeves, as a dollar-bill shirt's are; Gilad's database lists traditional kimonos, but Gami's follows neither them nor origami.me's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 22 Nov 2026 |
 
 ### Notes
 
@@ -168,7 +169,11 @@ noted when it was written, and the model was folded from the common traditional 
   Uchiyama, Huisken, Nir and others), none Traditional, so Gami's is its own rather than a traditional one. It doesn't
   follow origami.me's either, whose knot is squashed out from a pleat: Gami's is a kite narrowed at the top and
   turned over, the point folded down and back up for a plain knot and its tip folded behind, with stripes drawn
-  across below it. The rest of the batch gets the same check before its recipe.
+  across below it. The rest of the batch gets the same check before its recipe. The kimono passes it: Gilad's
+  database has eight Traditional kimonos (Takagi's *Joy of Origami*, Gardiner's *Essential Origami*, NOA 14, 143, 163
+  and 227 and others) among dozens by named designers. But origami.me's is a square folded in half with narrow strips
+  and a squash, and Gami's is folded its own way, the sides to the middle with the collar turned back from their edges
+  and the sleeves carried up behind, so it's Gami's too.
 - **Intermediate models from OrigamiOK** (checked 13 November 2026; the plan is `docs/origamiok-intermediate-plan.md`).
   Its fox page credits Hoàng Tiến Quyết and its lizard page Lee Won-pyo; the rest name only their writer and
   photographer. Gilad's database lists about ten Traditional square turtles (Gross's *Zoogami*, Momotani, NOA 493 and
