@@ -60,6 +60,59 @@ Flat first, then the ones that stand, then the cut ones, roughly in step count:
 | 3. Wallet | Done (22 November), **traditional**: Gilad's database lists six Traditional wallets. 12 steps, following origami.me's order of folds: creased in half and near the top and bottom, the corners folded to those creases and the strips over them, turned over and stood up, the bottom folded up past the middle and the top folded down and tucked under its side flaps (a `collapse` with `under`), then folded in half like a book. From a square, as origami.me's steps are, though its candidates row said rectangle. Left closed, not opened with a `bend`. |
 | 4. Parrot | Done (22 November), **Gami's own**: Gilad's database lists a Traditional parrot (Saydak's book), but origami.me's squashes out the head in steps that can't be followed from its text. 8 steps: a kite, its long point pleated for the tail, folded in half coloured side out, and its short point, at the front of the head on the fold, inside-reverse-folded forward and down for a hooked beak. Narrowing the top for a separate head left it a thin spike; folded the other way, the beak hung at the back of the head; an outside reverse fold showed the plain side but wrapped the head like a cap, so the beak is green. |
 | 5. Chicken | Done (22 November), **traditional**: Gilad's database lists three Traditional chickens, one in Saydak's book (he wrote origami.me's page). 16 steps, following origami.me's order as far as the beak: landmark pinches made as full creases, the corners folded up, folded in half, the feet reverse-folded (round the outside: inside, its many layers pass through each other) and the beak. Its wings, comb and head are left out: the wings' squash can't be placed from the text, and the comb is one layer of the beak unfolded, joined to the next along the fold, which the engine can't do; turning the head over outside or folding a front layer down couldn't reach the red inside without tearing. So it's a one-colour (russet) hen, and it lies flat rather than standing. Tried first: a triangle and a kite folded in half with reverse-folded neck, head and tail, which read as a duck. |
-| 6. Swallow | Not started |
-| 7. Horse | Not started |
-| 8. Crab | Not started |
+| 6. Swallow | **Paused** (22 November). Traditional: Gilad's database lists five Swallows credited Traditional (Saydak's *Everyone Can Learn Origami*, Cunliffe, LaFosse, Takahama, Sakade) and two Unknown. Four readings of origami.me's captions tried, none shipped; see below. |
+| 7. Horse | **Paused** before starting: like the swallow, its key steps need origami.me's diagrams. |
+| 8. Crab | **Paused** before starting: as the horse. |
+
+The batch is paused at five of eight (22 November). What's below is what's left, and what would help.
+
+## What could still be done
+
+### The swallow, horse and crab
+
+origami.me's step text for these three leans on its diagrams ("fold along the dashed line", "where it meets the layer
+underneath"), which can't be read from the text alone, so the order of folds can't be followed with confidence. The
+swallow got furthest. Its bird base and the crane's leg narrowing (origami.me's steps 1 to 12) are certain; what isn't
+is which parts become the wings, head and tail. Four readings, each built and checked:
+
+1. **Legs swung out as wings** (inside reverse folds from a little above the bottom point), **one long flap folded down
+   for the tail, the other's tip down and up for the head.** Folds cleanly, but the long flaps can only fold at the top
+   of the body (the sheet's centre; lower, the fold tears through the narrowed legs' edges), so the tail reaches only
+   the wing roots and doesn't show.
+2. **Long flaps swung out as wings** (folded on slanted lines through the top of the body), **one leg folded up for the
+   neck, the other cut for the tail.** The wings come out stubby (only the 0.3 of each flap above the top of the body swings out, on a sheet 1 across), and folding one
+   leg up tears whatever number of layers is picked: each leg is folded in half round the other.
+3. **As 2, but the neck reverse-folded up between the layers, as the crane's is.** The neck stays hidden inside the long
+   flaps, and with it inside the wing folds tear.
+4. **The long flap folded down along the crease across the middle** (for a longer tail). Tears for the reason in 1.
+
+The next try: look at a diagram of the traditional swallow (Robinson's *World's Best Origami* or Saydak's book) for
+which flap is which, then build it from the crane's moves. Failing that, a swallow of Gami's own: the crane's bird
+base, the legs as swept wings, a long flap cut into a forked tail. The horse (square base, a cut to part the legs,
+reverse-folded head and tail) and the crab (frog base, several cuts) need the same diagram check first.
+
+### Left out of the five that shipped
+
+- **Chicken: wings, red comb, head.** origami.me squashes the front flap into a wing after the feet are folded, makes
+  the comb by unfolding one layer of the beak's reverse fold, and shapes the head with an outside reverse fold. The
+  squash couldn't be placed from the text. The comb needs one layer of a reverse fold opened while the layer it's
+  joined to along the fold stays, which the engine can't make; turning the head over outside or folding a front layer
+  down couldn't reach the red inside without tearing. Also its feet are reverse-folded round the outside, not inside:
+  inside, its many layers pass through each other as the step plays (8.9 layers against a limit of 5). And it lies
+  flat; origami.me's stands on its feet (stand it up with `assemble`, as the T-rex is).
+- **Kimono: a longer robe and an obi.** The body can only be as tall as it's wide, as the sleeves use the whole bottom
+  half, and the sleeves are pointed, as folding them out square would tear the flaps from the body. An obi (a band of
+  the plain side across the waist) needs a flap that turns over once; a pleat shows the same side.
+- **Parrot: a pale beak.** Its beak shows the coloured side; turned round the outside it shows the plain side but wraps
+  the head like a cap.
+- **Wallet: open.** It's left closed; it could open part way with a `bend`, as the fan does.
+
+### Engine features that would help
+
+- **Pinches**: a short crease at an edge, to mark a point, as origami.me's chicken does. They're full creases (folded
+  and unfolded) for now, which draws lines right across.
+- **Opening one layer of a fold**: unfolding the top layer of a reverse fold while the rest stays (the chicken's comb),
+  and similar "open the pocket" moves.
+- **Coloured pen marks**: marks are always dark (`MARK_COLOUR`); a red pen would draw a comb, an obi or a pale beak
+  where the paper can't show one.
+
