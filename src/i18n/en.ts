@@ -182,6 +182,7 @@ export const en = {
     'kimono': { title: 'Kimono', blurb: 'A kimono with a white collar and its sleeves out at the shoulders, from one square.' },
     'wallet': { title: 'Wallet', blurb: 'A little wallet that closes like a book, with a pocket each side, from one square. Its cover is half plain, half coloured.' },
     'parrot': { title: 'Parrot', blurb: 'A green parrot perched upright, with a hooked beak and a long pleated tail, from one square.' },
+    'chicken': { title: 'Chicken', blurb: 'A russet hen with a beak and her feet tucked under her, from one square.' },
   },
   notFound: {
     title: 'This page got folded away',

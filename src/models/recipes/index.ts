@@ -94,13 +94,14 @@ import { necktie } from './necktie';
 import { kimono } from './kimono';
 import { wallet } from './wallet';
 import { parrot } from './parrot';
+import { chicken } from './chicken';
 
 /**
  * Every built-in model, as code. `npm run models` turns these into public/models/<id>.fold and <id>.svg,
  * which the site loads. Not bundled into the site itself. Each carries its gallery details from the catalog,
  * so a copy opened in the Studio or shared keeps them.
  */
-export const RECIPES: (() => OrigamiModel)[] = ([basics, foldsLesson, basesLesson, paperPlane, glider, bulldogDart, navyPlane, kingBee, sprinter, funFlyer, corkscrew, flyingSaucer, dogFace, catFace, boat, cup, samuraiHelmet, fortuneTeller, heart, cicada, jumpingFrog, ninjaStar, tulip, fox, crane, lily, swan, penguin, whale, crow, christmasTree, waterbomb, balloon, balloonRabbit, flappingBird, pinwheel, pajarita, butterfly, frog, dolphin, seal, masuBox, masuLid, masuShallowLid, envelope, sword, boomerang, fish, crown, sailboat, lotus, tulipBloom, peacock, cactus, pirateHat, frogBookmark, heartBookmark, cuteCat, bat, bull, tRex, knife, kunai, handFan, fan, rose, palmLeaf, greenLeaf, pyramid, diamond, bracelet, diamondRing, fingerTrap, easySword, rainbowChain, businessCardCube, dice, kusudama, chrysanthemum, turtle, sunflower, lizard, squirrel, strawberry, fox3d, hummingbird, skull, cuteWhale, potPlant, unicorn, kaiju, dragon, necktie, kimono, wallet, parrot, foldingGeometry] as (() => OrigamiModel)[]).map((make) => () => withAbout(make()));
+export const RECIPES: (() => OrigamiModel)[] = ([basics, foldsLesson, basesLesson, paperPlane, glider, bulldogDart, navyPlane, kingBee, sprinter, funFlyer, corkscrew, flyingSaucer, dogFace, catFace, boat, cup, samuraiHelmet, fortuneTeller, heart, cicada, jumpingFrog, ninjaStar, tulip, fox, crane, lily, swan, penguin, whale, crow, christmasTree, waterbomb, balloon, balloonRabbit, flappingBird, pinwheel, pajarita, butterfly, frog, dolphin, seal, masuBox, masuLid, masuShallowLid, envelope, sword, boomerang, fish, crown, sailboat, lotus, tulipBloom, peacock, cactus, pirateHat, frogBookmark, heartBookmark, cuteCat, bat, bull, tRex, knife, kunai, handFan, fan, rose, palmLeaf, greenLeaf, pyramid, diamond, bracelet, diamondRing, fingerTrap, easySword, rainbowChain, businessCardCube, dice, kusudama, chrysanthemum, turtle, sunflower, lizard, squirrel, strawberry, fox3d, hummingbird, skull, cuteWhale, potPlant, unicorn, kaiju, dragon, necktie, kimono, wallet, parrot, chicken, foldingGeometry] as (() => OrigamiModel)[]).map((make) => () => withAbout(make()));
 
 function withAbout(model: OrigamiModel): OrigamiModel {
   const info = findModel(model.id);

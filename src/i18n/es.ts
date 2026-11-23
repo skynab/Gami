@@ -240,6 +240,7 @@ export const es: Messages = {
     'kimono': { title: 'Kimono', blurb: 'Un kimono con el cuello blanco y las mangas saliendo de los hombros, de un solo cuadrado.' },
     'wallet': { title: 'Cartera', blurb: 'Una carterita que se cierra como un libro, con un bolsillo a cada lado, de un solo cuadrado. La tapa es mitad lisa, mitad de color.' },
     'parrot': { title: 'Loro', blurb: 'Un loro verde posado erguido, con el pico curvo y una cola larga plegada, de un solo cuadrado.' },
+    'chicken': { title: 'Gallina', blurb: 'Una gallina rojiza con pico y las patas recogidas bajo el cuerpo, de un solo cuadrado.' },
   },
   notFound: {
     title: 'Esta página se ha plegado y ha desaparecido',

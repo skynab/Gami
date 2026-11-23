@@ -3049,4 +3049,26 @@ export const ja: Record<string, string> = {
     "くちばしを作る",
   "Push the top point forward and down between its layers, so it hooks out over the chest: the beak. Your parrot is done.":
     "上の先を、紙のあいだに前へ下へと押しこんで、胸の上に曲がって出るようにします。これがくちばしです。オウムのできあがり！",
+  "Fold the left edge down onto the bottom edge, and unfold.":
+    "左の辺を下の辺に合わせて折り、開きます。",
+  "Crease the right corner":
+    "右の角に折りすじをつける",
+  "Fold the right corner up to where that crease meets the right edge, and unfold.":
+    "右の角を、その折りすじが右の辺と交わるところまで折り上げて、開きます。",
+  "Fold the left and right corners up to the top corner.":
+    "左右の角を、上の角まで折り上げます。",
+  "Crease the bottom corner":
+    "下の角に折りすじをつける",
+  "Fold the bottom corner up to the second crease on the right flap’s edge, and unfold.":
+    "下の角を、右のふたの辺にある二本目の折りすじまで折り上げて、開きます。",
+  "Fold the left half behind, along the middle crease.":
+    "真ん中の折りすじで、左半分を後ろへ折ります。",
+  "Crease the feet":
+    "足の折りすじをつける",
+  "Fold the bottom of the left edge up onto that crease, and unfold.":
+    "左の辺の下の部分を、その折りすじに合わせて折り上げ、開きます。",
+  "Turn the bottom corner up round the outside, on that crease, for the feet.":
+    "その折りすじで、下の角を外側にかぶせるように折り上げます。これが足です。",
+  "Push the top corner down between the layers, for the beak. Your hen is ready.":
+    "上の角を紙のあいだに下へ押しこんで、くちばしにします。にわとりのできあがり！",
 };

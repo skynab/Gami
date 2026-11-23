@@ -3049,4 +3049,26 @@ export const fr: Record<string, string> = {
     "Faire le bec",
   "Push the top point forward and down between its layers, so it hooks out over the chest: the beak. Your parrot is done.":
     "Poussez la pointe du haut vers l’avant et vers le bas entre ses épaisseurs, pour qu’elle ressorte en crochet au-dessus de la poitrine : c’est le bec. Votre perroquet est prêt !",
+  "Fold the left edge down onto the bottom edge, and unfold.":
+    "Pliez le bord gauche sur le bord du bas, puis dépliez.",
+  "Crease the right corner":
+    "Marquer le coin droit",
+  "Fold the right corner up to where that crease meets the right edge, and unfold.":
+    "Pliez le coin droit jusqu’à l’endroit où ce pli touche le bord droit, puis dépliez.",
+  "Fold the left and right corners up to the top corner.":
+    "Pliez les coins gauche et droit jusqu’au coin du haut.",
+  "Crease the bottom corner":
+    "Marquer le coin du bas",
+  "Fold the bottom corner up to the second crease on the right flap’s edge, and unfold.":
+    "Pliez le coin du bas jusqu’au deuxième pli sur le bord du rabat droit, puis dépliez.",
+  "Fold the left half behind, along the middle crease.":
+    "Pliez la moitié gauche derrière, le long du pli du milieu.",
+  "Crease the feet":
+    "Marquer les pattes",
+  "Fold the bottom of the left edge up onto that crease, and unfold.":
+    "Pliez le bas du bord gauche sur ce pli, puis dépliez.",
+  "Turn the bottom corner up round the outside, on that crease, for the feet.":
+    "Rabattez le coin du bas vers le haut par l’extérieur, le long de ce pli, pour les pattes.",
+  "Push the top corner down between the layers, for the beak. Your hen is ready.":
+    "Poussez le coin du haut vers le bas entre les épaisseurs, pour le bec. Votre poule est prête !",
 };

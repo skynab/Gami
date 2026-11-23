@@ -3049,4 +3049,26 @@ export const es: Record<string, string> = {
     "Haz el pico",
   "Push the top point forward and down between its layers, so it hooks out over the chest: the beak. Your parrot is done.":
     "Empuja la punta de arriba hacia delante y hacia abajo entre sus capas, para que salga curvada sobre el pecho: es el pico. ¡Tu loro está listo!",
+  "Fold the left edge down onto the bottom edge, and unfold.":
+    "Dobla el borde izquierdo sobre el borde inferior y desdobla.",
+  "Crease the right corner":
+    "Marca la esquina derecha",
+  "Fold the right corner up to where that crease meets the right edge, and unfold.":
+    "Dobla la esquina derecha hasta donde esa marca toca el borde derecho y desdobla.",
+  "Fold the left and right corners up to the top corner.":
+    "Dobla las esquinas izquierda y derecha hasta la esquina de arriba.",
+  "Crease the bottom corner":
+    "Marca la esquina de abajo",
+  "Fold the bottom corner up to the second crease on the right flap’s edge, and unfold.":
+    "Dobla la esquina de abajo hasta la segunda marca del borde de la solapa derecha y desdobla.",
+  "Fold the left half behind, along the middle crease.":
+    "Dobla la mitad izquierda hacia atrás, por la marca del centro.",
+  "Crease the feet":
+    "Marca las patas",
+  "Fold the bottom of the left edge up onto that crease, and unfold.":
+    "Dobla la parte de abajo del borde izquierdo sobre esa marca y desdobla.",
+  "Turn the bottom corner up round the outside, on that crease, for the feet.":
+    "Dobla la esquina de abajo hacia arriba por fuera, por esa marca, para las patas.",
+  "Push the top corner down between the layers, for the beak. Your hen is ready.":
+    "Empuja la esquina de arriba hacia abajo entre las capas, para el pico. ¡Tu gallina está lista!",
 };

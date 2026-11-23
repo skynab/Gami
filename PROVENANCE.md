@@ -131,6 +131,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `kimono` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a kimono from the sides folded to the middle, their edges turned back for a white collar and their bottom corners folded out and carried up behind for the sleeves, as a dollar-bill shirt's are; Gilad's database lists traditional kimonos, but Gami's follows neither them nor origami.me's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 22 Nov 2026 |
 | `wallet` | Traditional (origami.me credits it as a traditional design; Gilad's database lists six Traditional wallets, among them Robinson's *World's Best Origami* and Palacios's *Beginning Origami*) | None needed: nobody owns it | [origami.me/wallet](https://origami.me/wallet/) (order of folds only) | Clear | 22 Nov 2026 |
 | `parrot` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a parrot from a kite, its long point pleated for the tail, folded in half and its short point reverse-folded for a hooked beak; Gilad's database lists a traditional parrot (in Saydak's *Everyone Can Learn Origami*), but Gami's follows neither it nor origami.me's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 22 Nov 2026 |
+| `chicken` | Traditional (origami.me credits it as a traditional design; Gilad's database lists three Traditional chickens, among them Saydak's *Everyone Can Learn Origami* and NOA 156) | None needed: nobody owns it | [origami.me/chicken](https://origami.me/chicken/) (order of folds as far as the beak) | Clear | 22 Nov 2026 |
 
 ### Notes
 
@@ -182,7 +183,13 @@ noted when it was written, and the model was folded from the common traditional 
   is listed in Gilad's database as Traditional (Saydak's *Everyone Can Learn Origami*; Saydak also wrote origami.me's
   page) and Unknown (Origami Deutschland 1990), among dozens by named designers. But origami.me's squashes the head
   out of the kite's flaps in steps its own readers say can't be followed from the text, and Gami's is folded its own
-  way: the kite folded in half coloured side out, the top point reverse-folded for the beak, so it's Gami's.
+  way: the kite folded in half coloured side out, the top point reverse-folded for the beak, so it's Gami's. The
+  chicken is traditional: Gilad's database lists three Chickens credited Traditional (Saydak's *Everyone Can Learn
+  Origami*, NOA 156 folded by Saydak, Der Falter 61) among dozens by named designers, and Saydak wrote origami.me's
+  page. Gami follows its order of folds as far as the beak, with its landmark pinches made as full creases and the
+  feet reverse-folded round the outside rather than inside (inside, the layers pass through each other in the
+  engine), and leaves out its wings, comb and head: the wings' squash can't be placed from the text, and the comb's
+  layer is joined to the next along the fold.
 - **Intermediate models from OrigamiOK** (checked 13 November 2026; the plan is `docs/origamiok-intermediate-plan.md`).
   Its fox page credits Hoàng Tiến Quyết and its lizard page Lee Won-pyo; the rest name only their writer and
   photographer. Gilad's database lists about ten Traditional square turtles (Gross's *Zoogami*, Momotani, NOA 493 and

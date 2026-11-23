@@ -17,7 +17,6 @@ These are the rest, kept here for later; each was checked on its own page as cre
 | Flapping pigeon | [pigeon](https://origami.me/pigeon/) | Close to the flapping bird |
 | Swallow | [swallow](https://origami.me/swallow/) | Good candidate |
 | Duck | [duck](https://origami.me/duck/) | Close to the swan |
-| Chicken | [chicken](https://origami.me/chicken/) | Good candidate |
 | Goldfish | [goldfish](https://origami.me/goldfish/) | Ends puffed up in 3D |
 | Seal | [seal](https://origami.me/seal/) | Good candidate |
 | Horse | [horse](https://origami.me/horse/) | Good candidate |
