@@ -16,7 +16,6 @@ These are the rest, kept here for later; each was checked on its own page as cre
 | Phoenix | [phoenix](https://origami.me/phoenix/) | Crane variant |
 | Flapping pigeon | [pigeon](https://origami.me/pigeon/) | Close to the flapping bird |
 | Swallow | [swallow](https://origami.me/swallow/) | Good candidate |
-| Parrot | [parrot](https://origami.me/parrot/) | Good candidate |
 | Duck | [duck](https://origami.me/duck/) | Close to the swan |
 | Chicken | [chicken](https://origami.me/chicken/) | Good candidate |
 | Goldfish | [goldfish](https://origami.me/goldfish/) | Ends puffed up in 3D |

@@ -239,6 +239,7 @@ export const fr: Messages = {
     'necktie': { title: 'Cravate', blurb: 'Une cravate rayée au nœud uni, dans un seul carré. Les rayures se dessinent au feutre avant de plier le nœud.' },
     'kimono': { title: 'Kimono', blurb: 'Un kimono au col blanc, avec les manches qui sortent aux épaules, dans un seul carré.' },
     'wallet': { title: 'Portefeuille', blurb: 'Un petit portefeuille qui se ferme comme un livre, avec une poche de chaque côté, dans un seul carré. Sa couverture est moitié unie, moitié en couleur.' },
+    'parrot': { title: 'Perroquet', blurb: 'Un perroquet vert perché bien droit, au bec crochu et à la longue queue plissée, dans un seul carré.' },
   },
   notFound: {
     title: 'Cette page a été repliée',

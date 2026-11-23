@@ -181,6 +181,7 @@ export const en = {
     'necktie': { title: 'Necktie', blurb: 'A striped necktie with a plain knot, from one square. The stripes are drawn with a pen before the knot is folded.' },
     'kimono': { title: 'Kimono', blurb: 'A kimono with a white collar and its sleeves out at the shoulders, from one square.' },
     'wallet': { title: 'Wallet', blurb: 'A little wallet that closes like a book, with a pocket each side, from one square. Its cover is half plain, half coloured.' },
+    'parrot': { title: 'Parrot', blurb: 'A green parrot perched upright, with a hooked beak and a long pleated tail, from one square.' },
   },
   notFound: {
     title: 'This page got folded away',

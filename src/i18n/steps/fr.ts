@@ -3035,4 +3035,18 @@ export const fr: Record<string, string> = {
     "Pliez aussi le bord du haut vers le bas, un peu au-delà du milieu, et glissez-le sous les rabats latéraux de la partie du bas.",
   "Fold it in half from left to right, like a book. Your wallet has a pocket each side when you open it.":
     "Pliez-le en deux de gauche à droite, comme un livre. Votre portefeuille a une poche de chaque côté quand on l’ouvre !",
+  "Fold the lower edges to the middle crease, making a kite with a long point at the bottom.":
+    "Pliez les bords du bas jusqu’au pli du milieu, pour faire un cerf-volant avec une longue pointe en bas.",
+  "Fold the tail up":
+    "Plier la queue vers le haut",
+  "Fold the long point up.":
+    "Pliez la longue pointe vers le haut.",
+  "Fold it back down a little above that fold, leaving a pleat across the tail.":
+    "Repliez-la vers le bas un peu au-dessus de ce pli, pour laisser un pli en escalier sur la queue.",
+  "Fold the right half over onto the left, along the middle crease.":
+    "Pliez la moitié droite sur la gauche, le long du pli du milieu.",
+  "Make the beak":
+    "Faire le bec",
+  "Push the top point forward and down between its layers, so it hooks out over the chest: the beak. Your parrot is done.":
+    "Poussez la pointe du haut vers l’avant et vers le bas entre ses épaisseurs, pour qu’elle ressorte en crochet au-dessus de la poitrine : c’est le bec. Votre perroquet est prêt !",
 };

@@ -3035,4 +3035,18 @@ export const es: Record<string, string> = {
     "Dobla también el borde superior hacia abajo, un poco más allá del centro, y mételo bajo las solapas laterales de la parte de abajo.",
   "Fold it in half from left to right, like a book. Your wallet has a pocket each side when you open it.":
     "Dóblalo por la mitad de izquierda a derecha, como un libro. ¡Tu cartera tiene un bolsillo a cada lado cuando la abres!",
+  "Fold the lower edges to the middle crease, making a kite with a long point at the bottom.":
+    "Dobla los bordes inferiores hasta la marca del centro, para hacer una cometa con una punta larga abajo.",
+  "Fold the tail up":
+    "Dobla la cola hacia arriba",
+  "Fold the long point up.":
+    "Dobla la punta larga hacia arriba.",
+  "Fold it back down a little above that fold, leaving a pleat across the tail.":
+    "Vuelve a doblarla hacia abajo un poco por encima de ese pliegue, dejando un pliegue en escalón en la cola.",
+  "Fold the right half over onto the left, along the middle crease.":
+    "Dobla la mitad derecha sobre la izquierda, por la marca del centro.",
+  "Make the beak":
+    "Haz el pico",
+  "Push the top point forward and down between its layers, so it hooks out over the chest: the beak. Your parrot is done.":
+    "Empuja la punta de arriba hacia delante y hacia abajo entre sus capas, para que salga curvada sobre el pecho: es el pico. ¡Tu loro está listo!",
 };

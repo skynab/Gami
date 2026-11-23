@@ -130,6 +130,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `necktie` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a striped necktie from a kite narrowed at the top, its point folded down and back up for the knot, as Gami's easy sword makes its crossguard; origami.me credits its necktie as Traditional, but Gilad's database lists only neckties by named designers (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 22 Nov 2026 |
 | `kimono` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a kimono from the sides folded to the middle, their edges turned back for a white collar and their bottom corners folded out and carried up behind for the sleeves, as a dollar-bill shirt's are; Gilad's database lists traditional kimonos, but Gami's follows neither them nor origami.me's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 22 Nov 2026 |
 | `wallet` | Traditional (origami.me credits it as a traditional design; Gilad's database lists six Traditional wallets, among them Robinson's *World's Best Origami* and Palacios's *Beginning Origami*) | None needed: nobody owns it | [origami.me/wallet](https://origami.me/wallet/) (order of folds only) | Clear | 22 Nov 2026 |
+| `parrot` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a parrot from a kite, its long point pleated for the tail, folded in half and its short point reverse-folded for a hooked beak; Gilad's database lists a traditional parrot (in Saydak's *Everyone Can Learn Origami*), but Gami's follows neither it nor origami.me's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 22 Nov 2026 |
 
 ### Notes
 
@@ -177,7 +178,11 @@ noted when it was written, and the model was folded from the common traditional 
   and the sleeves carried up behind, so it's Gami's too. The wallet passes it and is traditional: Gilad's database
   lists six wallets credited Traditional (Robinson's *World's Best Origami*, Palacios's *Beginning Origami*,
   Kawasaki's *Doctor's Origami Dream Book*, Pajarita 5 and others) and two Unknown, among about ninety by named
-  designers. Gami follows origami.me's order of folds, leaving out its turns of the paper between folds.
+  designers. Gami follows origami.me's order of folds, leaving out its turns of the paper between folds. The parrot
+  is listed in Gilad's database as Traditional (Saydak's *Everyone Can Learn Origami*; Saydak also wrote origami.me's
+  page) and Unknown (Origami Deutschland 1990), among dozens by named designers. But origami.me's squashes the head
+  out of the kite's flaps in steps its own readers say can't be followed from the text, and Gami's is folded its own
+  way: the kite folded in half coloured side out, the top point reverse-folded for the beak, so it's Gami's.
 - **Intermediate models from OrigamiOK** (checked 13 November 2026; the plan is `docs/origamiok-intermediate-plan.md`).
   Its fox page credits Hoàng Tiến Quyết and its lizard page Lee Won-pyo; the rest name only their writer and
   photographer. Gilad's database lists about ten Traditional square turtles (Gross's *Zoogami*, Momotani, NOA 493 and

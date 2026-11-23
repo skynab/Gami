@@ -3035,4 +3035,18 @@ export const ja: Record<string, string> = {
     "上の辺も真ん中より少し下まで折り下げて、下の部分の左右のふたの下に差しこみます。",
   "Fold it in half from left to right, like a book. Your wallet has a pocket each side when you open it.":
     "本のように、左から右へ半分に折ります。開くと左右にポケットのあるさいふのできあがり！",
+  "Fold the lower edges to the middle crease, making a kite with a long point at the bottom.":
+    "下の二辺を真ん中の折りすじに合わせて折り、下に長い先のあるたこの形にします。",
+  "Fold the tail up":
+    "しっぽを折り上げる",
+  "Fold the long point up.":
+    "長い先を上へ折ります。",
+  "Fold it back down a little above that fold, leaving a pleat across the tail.":
+    "その折り目の少し上で下へ折り返し、しっぽに段を作ります。",
+  "Fold the right half over onto the left, along the middle crease.":
+    "真ん中の折りすじで、右半分を左半分の上に折ります。",
+  "Make the beak":
+    "くちばしを作る",
+  "Push the top point forward and down between its layers, so it hooks out over the chest: the beak. Your parrot is done.":
+    "上の先を、紙のあいだに前へ下へと押しこんで、胸の上に曲がって出るようにします。これがくちばしです。オウムのできあがり！",
 };

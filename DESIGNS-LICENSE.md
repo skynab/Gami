@@ -54,6 +54,7 @@ site's source code, or any other model in the gallery.
 | Dragon | `src/models/recipes/dragon.ts` | November 2026 |
 | Necktie | `src/models/recipes/necktie.ts` | November 2026 |
 | Kimono | `src/models/recipes/kimono.ts` | November 2026 |
+| Parrot | `src/models/recipes/parrot.ts` | November 2026 |
 
 ## Other models in the gallery
 
