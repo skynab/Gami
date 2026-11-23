@@ -3013,4 +3013,26 @@ export const fr: Record<string, string> = {
     "Plier le bas derrière",
   "Fold the bottom half up behind, so the sleeves come up at the shoulders. Your kimono is done.":
     "Pliez la moitié du bas vers le haut, derrière, pour que les manches arrivent aux épaules. Votre kimono est prêt !",
+  "Fold the bottom edge up to the top edge.":
+    "Pliez le bord du bas sur le bord du haut.",
+  "Crease a third":
+    "Marquer un tiers",
+  "Fold the open edges down a third of the way to the fold, through both layers.":
+    "Pliez les bords ouverts vers le bas, sur un tiers de la distance jusqu’au pli, les deux épaisseurs ensemble.",
+  "Unfold the paper completely: there are creases across near the top and the bottom.":
+    "Dépliez complètement le papier : il y a des plis en travers près du haut et du bas.",
+  "Fold each corner in to the crease across nearest it.":
+    "Pliez chaque coin jusqu’au pli en travers le plus proche.",
+  "Fold the edges in":
+    "Replier les bords",
+  "Fold the top and bottom edges in along their creases, over the corners.":
+    "Repliez les bords du haut et du bas le long de leurs plis, par-dessus les coins.",
+  "Turn it a quarter turn, so the strips run up the sides.":
+    "Faites-lui faire un quart de tour, pour que les bandes soient sur les côtés.",
+  "Fold the bottom edge up a little past the middle crease.":
+    "Pliez le bord du bas vers le haut, un peu au-delà du pli du milieu.",
+  "Fold the top edge down a little past the middle too, and tuck it under the side flaps of the bottom part.":
+    "Pliez aussi le bord du haut vers le bas, un peu au-delà du milieu, et glissez-le sous les rabats latéraux de la partie du bas.",
+  "Fold it in half from left to right, like a book. Your wallet has a pocket each side when you open it.":
+    "Pliez-le en deux de gauche à droite, comme un livre. Votre portefeuille a une poche de chaque côté quand on l’ouvre !",
 };

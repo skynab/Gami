@@ -180,6 +180,7 @@ export const en = {
     'dragon': { title: 'Dragon', blurb: 'A winged dragon standing in 3D, with a long neck curved in an S, horns, ribbed wings spread wide and a tail. Three squares, no scissors or glue.' },
     'necktie': { title: 'Necktie', blurb: 'A striped necktie with a plain knot, from one square. The stripes are drawn with a pen before the knot is folded.' },
     'kimono': { title: 'Kimono', blurb: 'A kimono with a white collar and its sleeves out at the shoulders, from one square.' },
+    'wallet': { title: 'Wallet', blurb: 'A little wallet that closes like a book, with a pocket each side, from one square. Its cover is half plain, half coloured.' },
   },
   notFound: {
     title: 'This page got folded away',

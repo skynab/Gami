@@ -3013,4 +3013,26 @@ export const es: Record<string, string> = {
     "Dobla la parte de abajo hacia atrás",
   "Fold the bottom half up behind, so the sleeves come up at the shoulders. Your kimono is done.":
     "Dobla la mitad de abajo hacia arriba por detrás, para que las mangas queden en los hombros. ¡Tu kimono está listo!",
+  "Fold the bottom edge up to the top edge.":
+    "Dobla el borde inferior hasta el borde superior.",
+  "Crease a third":
+    "Marca un tercio",
+  "Fold the open edges down a third of the way to the fold, through both layers.":
+    "Dobla los bordes abiertos hacia abajo un tercio de la distancia hasta el pliegue, las dos capas a la vez.",
+  "Unfold the paper completely: there are creases across near the top and the bottom.":
+    "Desdobla el papel del todo: quedan marcas de lado a lado cerca de arriba y de abajo.",
+  "Fold each corner in to the crease across nearest it.":
+    "Dobla cada esquina hasta la marca transversal más cercana.",
+  "Fold the edges in":
+    "Dobla los bordes hacia dentro",
+  "Fold the top and bottom edges in along their creases, over the corners.":
+    "Dobla los bordes de arriba y de abajo hacia dentro por sus marcas, sobre las esquinas.",
+  "Turn it a quarter turn, so the strips run up the sides.":
+    "Gíralo un cuarto de vuelta, para que las tiras queden a los lados.",
+  "Fold the bottom edge up a little past the middle crease.":
+    "Dobla el borde inferior hacia arriba, un poco más allá de la marca del centro.",
+  "Fold the top edge down a little past the middle too, and tuck it under the side flaps of the bottom part.":
+    "Dobla también el borde superior hacia abajo, un poco más allá del centro, y mételo bajo las solapas laterales de la parte de abajo.",
+  "Fold it in half from left to right, like a book. Your wallet has a pocket each side when you open it.":
+    "Dóblalo por la mitad de izquierda a derecha, como un libro. ¡Tu cartera tiene un bolsillo a cada lado cuando la abres!",
 };

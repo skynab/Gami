@@ -3013,4 +3013,26 @@ export const ja: Record<string, string> = {
     "下を後ろへ折り上げる",
   "Fold the bottom half up behind, so the sleeves come up at the shoulders. Your kimono is done.":
     "下半分を後ろへ折り上げて、そでが肩のところに出るようにします。着物のできあがり！",
+  "Fold the bottom edge up to the top edge.":
+    "下の辺を上の辺に合わせて折ります。",
+  "Crease a third":
+    "三分の一に折りすじをつける",
+  "Fold the open edges down a third of the way to the fold, through both layers.":
+    "開いている辺を、折り目までの三分の一だけ下へ折ります。二枚いっしょに折ります。",
+  "Unfold the paper completely: there are creases across near the top and the bottom.":
+    "紙をすっかり開きます。上と下の近くに、横の折りすじができています。",
+  "Fold each corner in to the crease across nearest it.":
+    "四つの角を、それぞれいちばん近い横の折りすじまで折ります。",
+  "Fold the edges in":
+    "辺を折りこむ",
+  "Fold the top and bottom edges in along their creases, over the corners.":
+    "上と下の辺を、折りすじにそって角の上から内側へ折ります。",
+  "Turn it a quarter turn, so the strips run up the sides.":
+    "四分の一回して、折った帯が左右にたてに来るようにします。",
+  "Fold the bottom edge up a little past the middle crease.":
+    "下の辺を、真ん中の折りすじより少し上まで折り上げます。",
+  "Fold the top edge down a little past the middle too, and tuck it under the side flaps of the bottom part.":
+    "上の辺も真ん中より少し下まで折り下げて、下の部分の左右のふたの下に差しこみます。",
+  "Fold it in half from left to right, like a book. Your wallet has a pocket each side when you open it.":
+    "本のように、左から右へ半分に折ります。開くと左右にポケットのあるさいふのできあがり！",
 };

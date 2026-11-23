@@ -238,6 +238,7 @@ export const fr: Messages = {
     'dragon': { title: 'Dragon', blurb: 'Un dragon ailé debout en 3D, avec un long cou en S, des cornes, de grandes ailes nervurées déployées et une queue. Trois carrés, sans ciseaux ni colle.' },
     'necktie': { title: 'Cravate', blurb: 'Une cravate rayée au nœud uni, dans un seul carré. Les rayures se dessinent au feutre avant de plier le nœud.' },
     'kimono': { title: 'Kimono', blurb: 'Un kimono au col blanc, avec les manches qui sortent aux épaules, dans un seul carré.' },
+    'wallet': { title: 'Portefeuille', blurb: 'Un petit portefeuille qui se ferme comme un livre, avec une poche de chaque côté, dans un seul carré. Sa couverture est moitié unie, moitié en couleur.' },
   },
   notFound: {
     title: 'Cette page a été repliée',
