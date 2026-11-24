@@ -3011,8 +3011,6 @@ export const ja: Record<string, string> = {
     "真ん中の下の角を、それぞれ横へ折り出します。折り線は、真ん中の高さの半分のところから、下の外側の角までです。",
   "Fold the bottom up behind":
     "下を後ろへ折り上げる",
-  "Fold the bottom half up behind, so the sleeves come up at the shoulders. Your kimono is done.":
-    "下半分を後ろへ折り上げて、そでが肩のところに出るようにします。着物のできあがり！",
   "Fold the bottom edge up to the top edge.":
     "下の辺を上の辺に合わせて折ります。",
   "Crease a third":
@@ -3047,8 +3045,6 @@ export const ja: Record<string, string> = {
     "真ん中の折りすじで、右半分を左半分の上に折ります。",
   "Make the beak":
     "くちばしを作る",
-  "Push the top point forward and down between its layers, so it hooks out over the chest: the beak. Your parrot is done.":
-    "上の先を、紙のあいだに前へ下へと押しこんで、胸の上に曲がって出るようにします。これがくちばしです。オウムのできあがり！",
   "Fold the left edge down onto the bottom edge, and unfold.":
     "左の辺を下の辺に合わせて折り、開きます。",
   "Crease the right corner":
@@ -3069,6 +3065,38 @@ export const ja: Record<string, string> = {
     "左の辺の下の部分を、その折りすじに合わせて折り上げ、開きます。",
   "Turn the bottom corner up round the outside, on that crease, for the feet.":
     "その折りすじで、下の角を外側にかぶせるように折り上げます。これが足です。",
-  "Push the top corner down between the layers, for the beak. Your hen is ready.":
-    "上の角を紙のあいだに下へ押しこんで、くちばしにします。にわとりのできあがり！",
+  "Push the top corner down between the layers, for the beak.":
+    "上の角を紙のあいだに下へ押しこんで、くちばしにします。",
+  "Draw the comb":
+    "とさかを描く",
+  "With a red pen, draw a comb along the top of the head and a wattle under the beak. Give her an eye too.":
+    "赤いペンで、頭のてっぺんにそってとさかを、くちばしの下に肉垂れを描きます。目も描きましょう。",
+  "Turn the hen over, left to right.":
+    "にわとりを左から右へ裏返します。",
+  "Draw the other side":
+    "反対側を描く",
+  "Draw the comb, wattle and eye on this side too.":
+    "こちら側にも、とさか、肉垂れ、目を描きます。",
+  "Turn her back over. Your hen is ready.":
+    "もう一度裏返して、元にもどします。にわとりのできあがり！",
+  "Push the top point forward and down between its layers, so it hooks out over the chest: the beak.":
+    "上の先を紙のあいだに前へ下へと押しこんで、胸の上に曲がって出るようにします。これがくちばしです。",
+  "Colour the beak":
+    "くちばしをぬる",
+  "Colour the beak in with a pale yellow pen.":
+    "淡い黄色のペンで、くちばしをぬります。",
+  "Turn the parrot over, left to right.":
+    "オウムを左から右へ裏返します。",
+  "Colour the other side":
+    "反対側をぬる",
+  "Colour the beak on this side too.":
+    "こちら側のくちばしもぬります。",
+  "Turn it back over. Your parrot is done.":
+    "もう一度裏返して、元にもどします。オウムのできあがり！",
+  "Fold the bottom half up behind, so the sleeves come up at the shoulders.":
+    "下半分を後ろへ折り上げて、そでが肩のところに出るようにします。",
+  "Draw the obi":
+    "帯を描く",
+  "With a gold pen, draw a wide band across the waist: the obi. Your kimono is done.":
+    "金色のペンで、腰のところに太い帯を描きます。着物のできあがり！",
 };

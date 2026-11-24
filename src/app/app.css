@@ -1833,7 +1833,8 @@ kbd {
   gap: 8px;
 }
 
-.sheet-row input[type='color'] {
+.sheet-row input[type='color'],
+.field.pen input[type='color'] {
   width: 28px;
   height: 24px;
   padding: 0;

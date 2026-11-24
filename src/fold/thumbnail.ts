@@ -2,7 +2,7 @@ import { stackLifts, type StackLifts } from './bend/stack';
 import { FoldError, placeLike, toFlat } from './fold';
 import { facePositions, framesOf, LAYER_GAP, normal } from './frames';
 import { frontUp } from './geometry2d';
-import { MARK_COLOUR, MARK_WIDTH, marksUpTo, onFace, type Mark } from './marks';
+import { MARK_WIDTH, markColour, marksUpTo, onFace, type Mark } from './marks';
 import { faceColour } from './sheets';
 import { TAPE_COLOUR, TAPE_OPACITY } from './tape';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from './types';
@@ -58,8 +58,8 @@ export function fromAbove(model: OrigamiModel, frame: FoldFrame, marks: Mark[] =
           onFace(m, f.paper).map((part) => {
             const pts = part.map((p) => place(p).map((n) => +n.toFixed(4)).join(',')).join(' ');
             return m.fill
-              ? `<polygon points="${pts}" fill="${MARK_COLOUR}" stroke="none"/>`
-              : `<polyline points="${pts}" fill="none" stroke="${MARK_COLOUR}" stroke-opacity="1" stroke-width="${width}" stroke-linecap="round"/>`;
+              ? `<polygon points="${pts}" fill="${markColour(m)}" stroke="none"/>`
+              : `<polyline points="${pts}" fill="none" stroke="${markColour(m)}" stroke-opacity="1" stroke-width="${width}" stroke-linecap="round"/>`;
           }),
         )
         .join('');
@@ -187,8 +187,8 @@ function slanted(model: OrigamiModel, frame: FoldFrame, size: number, marks: Mar
           onFace(m, f.paper).map((part) => {
             const pts = part.map((p) => at(onScreen(p))).join(' ');
             return m.fill
-              ? `<polygon points="${pts}" fill="${MARK_COLOUR}" stroke="none"/>`
-              : `<polyline points="${pts}" fill="none" stroke="${MARK_COLOUR}" stroke-opacity="1" stroke-width="${width}" stroke-linecap="round"/>`;
+              ? `<polygon points="${pts}" fill="${markColour(m)}" stroke="none"/>`
+              : `<polyline points="${pts}" fill="none" stroke="${markColour(m)}" stroke-opacity="1" stroke-width="${width}" stroke-linecap="round"/>`;
           }),
         )
         .join('');

@@ -189,7 +189,9 @@ noted when it was written, and the model was folded from the common traditional 
   page. Gami follows its order of folds as far as the beak, with its landmark pinches made as full creases and the
   feet reverse-folded round the outside rather than inside (inside, the layers pass through each other in the
   engine), and leaves out its wings, comb and head: the wings' squash can't be placed from the text, and the comb's
-  layer is joined to the next along the fold.
+  layer is joined to the next along the fold. Since 23 November the comb and a wattle are drawn on in red instead,
+  with an eye, on both sides; the kimono's obi is drawn on in gold and the parrot's beak coloured pale yellow, where
+  the paper can't show those colours.
 - **Intermediate models from OrigamiOK** (checked 13 November 2026; the plan is `docs/origamiok-intermediate-plan.md`).
   Its fox page credits Hoàng Tiến Quyết and its lizard page Lee Won-pyo; the rest name only their writer and
   photographer. Gilad's database lists about ten Traditional square turtles (Gross's *Zoogami*, Momotani, NOA 493 and

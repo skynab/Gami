@@ -3,12 +3,16 @@ import { Recipe, table } from '../../fold/recipe';
 /** The white collar: its width at the top of each side, and how far down it comes to a point. */
 export const COLLAR = 0.06;
 export const COLLAR_DOWN = 0.22;
+/** The obi, drawn on: its top and bottom on the finished kimono (its body runs from −0.5 at the collar to 0), and its pen. */
+export const OBI: [number, number] = [-0.22, -0.13];
+export const OBI_COLOUR = '#d9a441';
 
 /**
  * A kimono, Gami's own way of folding one (Gilad's database lists traditional kimonos, but this follows neither them
  * nor origami.me's), from one square: the sides folded to the middle for the coloured body, their edges at the top
  * turned back on a slant for a white collar, and their bottom corners folded out and carried up behind, as a
- * dollar-bill shirt's sleeves are, so the sleeves show the coloured side at the shoulders.
+ * dollar-bill shirt's sleeves are, so the sleeves show the coloured side at the shoulders. The obi, a band across
+ * the waist, would need a flap turned over once (a pleat shows the same side), so it's drawn on with a gold pen.
  */
 export function kimono() {
   const r = new Recipe({ id: 'kimono', title: 'Kimono', sheet: { size: [1, 1], front: '#f4efe4', back: '#b8344a' } }).crease(table(-0.5, 0), table(0.5, 0), {
@@ -39,8 +43,16 @@ export function kimono() {
   );
   r.along(table(-1, 0), table(1, 0), table(0, 0.49), {
     title: 'Fold the bottom up behind',
-    text: 'Fold the bottom half up behind, so the sleeves come up at the shoulders. Your kimono is done.',
+    text: 'Fold the bottom half up behind, so the sleeves come up at the shoulders.',
     kind: 'mountain',
   });
+  // A band on each side of the middle, as each is its own flap; each starts inside its flap, as a mark goes on the
+  // paper under its first point.
+  const [a, b] = OBI;
+  const band = (s: number) => [[s * 0.125, a], [s * 0.25, a], [s * 0.25, b], [0, b], [0, a]].map(([x, z]): [number, number] => [x, z]);
+  r.draw({ title: 'Draw the obi', text: 'With a gold pen, draw a wide band across the waist: the obi. Your kimono is done.' }, [
+    { fill: band(-1), colour: OBI_COLOUR },
+    { fill: band(1), colour: OBI_COLOUR },
+  ]);
   return r.build();
 }

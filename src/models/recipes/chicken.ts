@@ -1,9 +1,12 @@
+import { toFlat } from '../../fold/fold';
 import { Recipe, table, type At } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 
 /** The beak: how far down the front from the top corner it turns, and how far (degrees from straight up, forward). */
 export const BEAK = 0.12;
 export const BEAK_TURN = 120;
+/** The red pen, for the comb and wattle. */
+export const RED = '#c8202a';
 
 /** Where the line through a along d meets the line through b along e. */
 function meet(a: Vec2, d: Vec2, b: Vec2, e: Vec2): Vec2 {
@@ -25,8 +28,8 @@ function turning(a: Vec2, from: number, to: number): [At, At] {
  * triangle creased for its landmarks, its corners folded up to the top, the bottom corner creased, folded in half; the
  * bottom of the fold reverse-folded for the feet (round the outside, not inside) and the top corner for the beak. origami.me's wings (a squash
  * of the front flap), comb (one layer of the beak unfolded) and head (an outside reverse fold) are left out: the
- * squash can't be placed from its text, and the comb's layer is joined to the next along the fold. So the hen shows
- * one colour, the sheet's back.
+ * squash can't be placed from its text, and the comb's layer is joined to the next along the fold. So the comb and
+ * wattle are drawn on with a red pen instead, on both sides, with an eye.
  */
 export function chicken() {
   const h = Math.SQRT1_2;
@@ -69,9 +72,43 @@ export function chicken() {
   );
   // The beak: the top corner pushed in, forward (left) and down.
   r.collapse(
-    { title: 'Make the beak', text: 'Push the top corner down between the layers, for the beak. Your hen is ready.', kind: 'reverse' },
+    { title: 'Make the beak', text: 'Push the top corner down between the layers, for the beak.', kind: 'reverse' },
     [{ through: turning([0, T[1] + BEAK], -90, -90 - BEAK_TURN), kind: 'inside' }],
     anchor(),
   );
+  // The comb, wattle and eye, drawn on the head (the top corner's side of the back, the fold at the chest on x = 0),
+  // then the same turned over: the paper turns over about the middle of its width.
+  const head = headMarks();
+  const xs = toFlat(r.current).flatMap((f) => f.world.map((w) => w[0]));
+  const mirror = (p: Vec2): Vec2 => [Math.min(...xs) + Math.max(...xs) - p[0], p[1]];
+  const drawHead = (place: (p: Vec2) => Vec2) => head.map((m) => ({ fill: m.fill.map(place), ...(m.colour && { colour: m.colour }) }));
+  r.draw({ title: 'Draw the comb', text: 'With a red pen, draw a comb along the top of the head and a wattle under the beak. Give her an eye too.' }, drawHead((p) => p));
+  r.turnOver('Turn the hen over, left to right.');
+  r.draw({ title: 'Draw the other side', text: 'Draw the comb, wattle and eye on this side too.' }, drawHead(mirror));
+  r.turnOver('Turn her back over. Your hen is ready.');
   return r.build();
+}
+
+/**
+ * A round blob, as a polygon: centre and radii across and down, its first point at angle `start` (radians on the
+ * table). A mark goes on the paper under its first point, so that has to be on the paper.
+ */
+const blob = ([x, z]: Vec2, rx: number, rz = rx, start = 0): Vec2[] =>
+  Array.from({ length: 14 }, (_, i) => [x + rx * Math.cos(start + (i * Math.PI) / 7), z + rz * Math.sin(start + (i * Math.PI) / 7)]);
+
+/**
+ * What's drawn on the head as the hen lies (facing left, the chest's fold on x = 0, the top corner at its top left):
+ * three round red lobes for the comb just inside the head's top edge, a red wattle under the beak, a dark eye. Each
+ * fill is convex, as fills are drawn.
+ */
+function headMarks(): { fill: Vec2[]; colour?: string }[] {
+  // The head's top edge runs from the top corner (0, −0.59) down to the right, 0.595 down for each 1 across.
+  const top = (x: number): Vec2 => [x, -0.59 + 0.595 * x];
+  const inward: Vec2 = [-0.511, 0.86];
+  // Each lobe's middle a little inside the edge, so the paper's edge cuts it into a scallop; they overlap.
+  const lobe = (x: number, r: number) => {
+    const p = top(x);
+    return { fill: blob([p[0] + inward[0] * r * 0.35, p[1] + inward[1] * r * 0.35], r, r, Math.atan2(inward[1], inward[0])), colour: RED };
+  };
+  return [lobe(0.022, 0.014), lobe(0.047, 0.017), lobe(0.074, 0.015), { fill: blob([0.014, -0.481], 0.009, 0.017), colour: RED }, { fill: blob([0.032, -0.527], 0.0065) }];
 }

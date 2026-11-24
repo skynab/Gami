@@ -12,7 +12,14 @@ export type { Mark } from './types';
 
 /** How wide a drawn line is, as a share of the sheet's longer side. */
 export const MARK_WIDTH = 0.007;
+/** The usual pen: nearly black. A mark can take a pen of another colour (`Mark.colour`). */
 export const MARK_COLOUR = '#2b2a33';
+
+/** The colour a mark is drawn in. */
+export const markColour = (mark: Pick<Mark, 'colour'>): string => mark.colour ?? MARK_COLOUR;
+
+/** Whether `x` is a colour a mark can take: `#` and six hex digits. */
+export const isPenColour = (x: unknown): x is string => typeof x === 'string' && /^#[0-9a-f]{6}$/i.test(x);
 
 /**
  * The marks drawn by each of the first `k` steps, in order, with the step that drew them (1 for the first step).

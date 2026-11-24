@@ -5,6 +5,7 @@ import { lineThrough, type Line } from '../fold/geometry2d';
 import { applyOp, lineOf, opKind, shapingBase, type At, type Faces, type LineSpec, type Op, type ShapeBend } from '../fold/ops';
 import type { PresetKind } from '../fold/presets';
 import { locate } from '../fold/select';
+import { MARK_COLOUR } from '../fold/marks';
 import { TAPE_WIDTH } from '../fold/tape';
 import type { FoldFrame, Mark, OrigamiModel, StepKind, Vec2 } from '../fold/types';
 import { markOnTable, popSettings } from './editor';
@@ -74,6 +75,8 @@ export interface ToolState {
   /** Drawing: marks kept for this step, with where they are on the table, and whether the next is filled in. */
   marks: { mark: Mark; table: Vec2[] }[];
   fill: boolean;
+  /** The pen's colour for the next mark, as `#rrggbb`. */
+  pen: string;
   tapeWidth: number;
   layers: Layers;
   /** Models of several sheets: which one the next step works on (or all), and for a move, how it's put down. */
@@ -120,6 +123,7 @@ export const INITIAL: ToolState = {
   rays: 8,
   steep: 60,
   fill: false,
+  pen: MARK_COLOUR,
   tapeWidth: TAPE_WIDTH,
   layers: 'all',
   sheet: 'all',
@@ -291,6 +295,7 @@ export function toolsFor(made: Op | undefined, m: OrigamiModel): Partial<ToolSta
       action: 'draw',
       marks: made.marks.map((mk) => ({ mark: mk, table: markOnTable(paperBefore, mk) ?? [] })),
       fill: !!made.marks.at(-1)?.fill,
+      pen: made.marks.at(-1)?.colour ?? MARK_COLOUR,
     });
   } else if (made.op === 'cut') {
     Object.assign(out, { action: 'cut', layers: layersOf(made.layers) });

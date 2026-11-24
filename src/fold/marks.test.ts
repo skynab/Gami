@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { fromFoldFile, toFoldFile } from './fold-format';
-import { marksUpTo, onFace } from './marks';
+import { MARK_COLOUR, markColour, marksUpTo, onFace } from './marks';
 import { replay } from './ops';
 import { paper, Recipe } from './recipe';
+import { fromAbove } from './thumbnail';
 import type { OrigamiModel, Vec2 } from './types';
 
 /** A square folded in half, with a line drawn across the fold's edge and a dot on the top layer. */
@@ -67,13 +68,31 @@ describe('marks drawn on the paper', () => {
   });
 
   it('that aren’t well formed are left out, with a warning, and the rest of the file still opens', () => {
-    for (const bad of [[{ side: 'top', points: [[0, 0], [1, 1]] }], [{ side: 'front', points: [[0, 0]] }], [{ side: 'front', points: [[0, 0], [1, 0]], fill: true }], 'lines']) {
+    for (const bad of [[{ side: 'top', points: [[0, 0], [1, 1]] }], [{ side: 'front', points: [[0, 0]] }], [{ side: 'front', points: [[0, 0], [1, 0]], fill: true }], [{ side: 'front', points: [[0, 0], [1, 1]], colour: 'red' }], 'lines']) {
       const warnings: string[] = [];
       const read = throughFile(drawn(), (f) => ((f.file_frames as Record<string, unknown>[])[1]['gami:marks'] = bad), warnings);
       expect(warnings.length, JSON.stringify(bad)).toBeGreaterThan(0);
       expect(read.steps[1].marks).toBeUndefined();
       expect(read.steps).toHaveLength(2);
     }
+  });
+
+  it('can take a pen of another colour, kept through a file and drawn in it', () => {
+    const model = new Recipe({ id: 'red', title: 'Red', sheet: { size: [1, 1], front: '#ffffff', back: '#ffffff' } })
+      .draw({ title: 'Draw' }, [{ line: [[-0.3, 0], [0.3, 0]] }, { fill: [[0, 0.1], [0.1, 0.1], [0.05, 0.2]], colour: '#C03028' }])
+      .build();
+    const [plain, red] = model.steps[0].marks!;
+    expect(plain.colour).toBeUndefined();
+    expect(markColour(plain)).toBe(MARK_COLOUR);
+    // Kept in lower case, as files write it.
+    expect(red.colour).toBe('#c03028');
+    expect(throughFile(model).steps[0].marks).toEqual(model.steps[0].marks);
+    const { body } = fromAbove(model, model.steps[0].frame, model.steps[0].marks);
+    expect(body).toContain('fill="#c03028"');
+    expect(body).toContain(`stroke="${MARK_COLOUR}"`);
+    expect(() =>
+      new Recipe({ id: 'bad', title: 'Bad', sheet: { size: [1, 1], front: '#ffffff', back: '#ffffff' } }).draw({ title: 'Draw' }, [{ line: [[0, 0], [0.1, 0]], colour: 'red' }]),
+    ).toThrow(/colour/);
   });
 
   it('are drawn again when the model is folded again from its operations', () => {

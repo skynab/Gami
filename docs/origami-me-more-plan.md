@@ -93,6 +93,10 @@ reverse-folded head and tail) and the crab (frog base, several cuts) need the sa
 
 ### Left out of the five that shipped
 
+Since 23 November marks can take a pen of any colour (`Mark.colour`; the Studio's Draw tool has a Pen swatch), and
+three of these are drawn on: the chicken's red comb and wattle (with an eye, both sides), the kimono's gold obi and
+the parrot's pale yellow beak (both sides). What's below is what folding them would still need.
+
 - **Chicken: wings, red comb, head.** origami.me squashes the front flap into a wing after the feet are folded, makes
   the comb by unfolding one layer of the beak's reverse fold, and shapes the head with an outside reverse fold. The
   squash couldn't be placed from the text. The comb needs one layer of a reverse fold opened while the layer it's
@@ -113,6 +117,6 @@ reverse-folded head and tail) and the crab (frog base, several cuts) need the sa
   and unfolded) for now, which draws lines right across.
 - **Opening one layer of a fold**: unfolding the top layer of a reverse fold while the rest stays (the chicken's comb),
   and similar "open the pocket" moves.
-- **Coloured pen marks**: marks are always dark (`MARK_COLOUR`); a red pen would draw a comb, an obi or a pale beak
-  where the paper can't show one.
+- ✅ **Coloured pen marks** (23 November): a mark's `colour` (`#rrggbb`, kept in .fold files), drawn in it by the
+  viewer, the cards and the Studio. Used for the chicken's comb, the kimono's obi and the parrot's beak.
 

@@ -10,6 +10,7 @@ import { place } from './place';
 import { settle } from './settle';
 import { radial, reparent, shape, type Bend, type Ray } from './shape';
 import { sheetOf, startFrame } from './sheets';
+import { isPenColour } from './marks';
 import { keepIn, tape } from './tape';
 import { frontUp, sideOf } from './geometry2d';
 import { applyOp, inTurnVia, lastFold, lineOf, reopened, select, type At, type BendGoal, type Faces, type LineSpec, type Op } from './ops';
@@ -539,9 +540,9 @@ export class Recipe {
   /**
    * Draws on the paper where it lies now, as a face drawn on at the end: lines through points on the table, or
    * shapes filled in. Each mark goes on whatever paper is on top under its first point, on the side facing up,
-   * and moves with it from then on.
+   * and moves with it from then on. A mark's `colour` (`#rrggbb`) picks a pen other than the usual dark one.
    */
-  draw(step: { title: string; text?: string }, marks: ({ line: Vec2[] } | { fill: Vec2[] })[]): this {
+  draw(step: { title: string; text?: string }, marks: (({ line: Vec2[] } | { fill: Vec2[] }) & { colour?: string })[]): this {
     const faces = toFlat(this.current).sort((a, b) => b.layer - a.layer);
     const drawn = marks.map((m): Mark => {
       const points = 'line' in m ? m.line : m.fill;
@@ -549,7 +550,9 @@ export class Recipe {
       if (!f) throw new FoldError(`${this.info.id}: no paper to draw on at (${points[0].join(', ')}).`);
       // Rounded as .fold files round coordinates, so the model and its file agree exactly.
       const onSheet = points.map((p) => unplaceLike(f)(p).map(roundCoord) as Vec2);
-      return { side: frontUp(f.world, f.paper) ? 'front' : 'back', points: onSheet, ...('fill' in m && { fill: true }) };
+      if (m.colour !== undefined && !isPenColour(m.colour)) throw new FoldError(`${this.info.id}: a pen's colour is #rrggbb, not ${m.colour}.`);
+      const colour = m.colour?.toLowerCase();
+      return { side: frontUp(f.world, f.paper) ? 'front' : 'back', points: onSheet, ...('fill' in m && { fill: true }), ...(colour && { colour }) };
     });
     this.push({ ...step, kind: 'draw' }, { ...this.current, faces_parent: undefined }, { op: 'draw', marks: drawn });
     this.steps.at(-1)!.marks = drawn;

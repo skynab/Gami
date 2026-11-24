@@ -3011,8 +3011,6 @@ export const fr: Record<string, string> = {
     "Pliez vers le côté chaque coin du bas au milieu, selon une ligne qui va de la mi-hauteur du milieu au coin extérieur du bas.",
   "Fold the bottom up behind":
     "Plier le bas derrière",
-  "Fold the bottom half up behind, so the sleeves come up at the shoulders. Your kimono is done.":
-    "Pliez la moitié du bas vers le haut, derrière, pour que les manches arrivent aux épaules. Votre kimono est prêt !",
   "Fold the bottom edge up to the top edge.":
     "Pliez le bord du bas sur le bord du haut.",
   "Crease a third":
@@ -3047,8 +3045,6 @@ export const fr: Record<string, string> = {
     "Pliez la moitié droite sur la gauche, le long du pli du milieu.",
   "Make the beak":
     "Faire le bec",
-  "Push the top point forward and down between its layers, so it hooks out over the chest: the beak. Your parrot is done.":
-    "Poussez la pointe du haut vers l’avant et vers le bas entre ses épaisseurs, pour qu’elle ressorte en crochet au-dessus de la poitrine : c’est le bec. Votre perroquet est prêt !",
   "Fold the left edge down onto the bottom edge, and unfold.":
     "Pliez le bord gauche sur le bord du bas, puis dépliez.",
   "Crease the right corner":
@@ -3069,6 +3065,38 @@ export const fr: Record<string, string> = {
     "Pliez le bas du bord gauche sur ce pli, puis dépliez.",
   "Turn the bottom corner up round the outside, on that crease, for the feet.":
     "Rabattez le coin du bas vers le haut par l’extérieur, le long de ce pli, pour les pattes.",
-  "Push the top corner down between the layers, for the beak. Your hen is ready.":
-    "Poussez le coin du haut vers le bas entre les épaisseurs, pour le bec. Votre poule est prête !",
+  "Push the top corner down between the layers, for the beak.":
+    "Poussez le coin du haut vers le bas entre les épaisseurs, pour le bec.",
+  "Draw the comb":
+    "Dessiner la crête",
+  "With a red pen, draw a comb along the top of the head and a wattle under the beak. Give her an eye too.":
+    "Avec un stylo rouge, dessinez une crête le long du haut de la tête et un barbillon sous le bec. Dessinez-lui aussi un œil.",
+  "Turn the hen over, left to right.":
+    "Retournez la poule, de gauche à droite.",
+  "Draw the other side":
+    "Dessiner l’autre côté",
+  "Draw the comb, wattle and eye on this side too.":
+    "Dessinez aussi la crête, le barbillon et l’œil de ce côté.",
+  "Turn her back over. Your hen is ready.":
+    "Retournez-la de nouveau. Votre poule est prête !",
+  "Push the top point forward and down between its layers, so it hooks out over the chest: the beak.":
+    "Poussez la pointe du haut vers l’avant et vers le bas entre ses épaisseurs, pour qu’elle ressorte en crochet sur la poitrine : le bec.",
+  "Colour the beak":
+    "Colorier le bec",
+  "Colour the beak in with a pale yellow pen.":
+    "Coloriez le bec avec un stylo jaune pâle.",
+  "Turn the parrot over, left to right.":
+    "Retournez le perroquet, de gauche à droite.",
+  "Colour the other side":
+    "Colorier l’autre côté",
+  "Colour the beak on this side too.":
+    "Coloriez aussi le bec de ce côté.",
+  "Turn it back over. Your parrot is done.":
+    "Retournez-le de nouveau. Votre perroquet est terminé !",
+  "Fold the bottom half up behind, so the sleeves come up at the shoulders.":
+    "Pliez la moitié du bas vers le haut, derrière, pour que les manches ressortent aux épaules.",
+  "Draw the obi":
+    "Dessiner l’obi",
+  "With a gold pen, draw a wide band across the waist: the obi. Your kimono is done.":
+    "Avec un stylo doré, dessinez une large bande à la taille : l’obi. Votre kimono est terminé !",
 };

@@ -274,7 +274,7 @@ What the five left out, and the engine features that would bring it back (detail
 
 | Feature | Brings back | Size |
 |---|---|---|
-| Coloured pen marks (marks are always `MARK_COLOUR`) | The chicken's red comb, the kimono's obi, the parrot's pale beak | Small |
+| ✅ Coloured pen marks (23 November: `Mark.colour`, a Pen swatch in the Studio's Draw tool) | The chicken's red comb, the kimono's gold obi, the parrot's pale beak, all drawn on | Small |
 | Pinches (a short crease at an edge, not one right across) | The chicken's landmarks, drawn as origami.me draws them | Small to medium |
 | Opening one layer of a fold | The chicken's comb as folded, "open the pocket" moves | Medium |
 
@@ -285,7 +285,7 @@ Also: the chicken stood up with `assemble`, and the wallet opened part way with 
 | Item | Status |
 |---|---|
 | Housekeeping | Done but for the `fold-grazes` worktree (above). 12 November: settled questions taken off "Waiting", CI's actions moved to Node 24 (see Smaller). 23 November: branches checked, the New cutoff moved, the content batches added (5), `docs/origami-me-candidates.md` brought up to date. |
-| Models | 21–22 November: OrigamiOK's advanced batch done, origami.me's eight paused at five (see 5). |
+| Models | 21–22 November: OrigamiOK's advanced batch done, origami.me's eight paused at five (see 5). 23 November: coloured pen marks, and the chicken's comb, kimono's obi and parrot's beak drawn with them. |
 | Studio, rows 6 and the open questions | Done 11 November: bend with crease goals, share links, a first-visit tour, a note on phones, Submit hidden (`docs/studio-plan.md`). |
 | Unit tests' speed | Done 11 November: 444 s to 217 s, the model checks in four shards (see Smaller). |
 | Clipping | 15 November: paper through paper checked where steps come to rest, `npm run clip-report`, and the squirrel, T-rex, chrysanthemum and kusudama fixed. 20 November: the 3D fox and butterfly fixed at rest; the motion check compares faces meeting at a point, near steps' ends too. What's next is in `docs/clipping-plan.md`. |

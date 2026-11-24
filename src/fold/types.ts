@@ -52,6 +52,8 @@ export interface Mark {
   side: 'front' | 'back';
   points: Vec2[];
   fill?: boolean;
+  /** The pen's colour, as `#rrggbb`. Left out: the usual dark pen (`MARK_COLOUR`). */
+  colour?: string;
 }
 
 /**

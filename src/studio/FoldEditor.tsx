@@ -46,7 +46,7 @@ export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kin
   const cuts = useMemo(() => cutsOnTable(frame), [frame]);
   const drawn = useMemo(() => marks.flatMap((m) => {
     const points = markOnTable(frame, m);
-    return points ? [{ points, fill: !!m.fill }] : [];
+    return points ? [{ points, fill: !!m.fill, colour: m.colour }] : [];
   }), [frame, marks]);
   const box = useMemo(() => viewBox([...faces.flatMap((f) => f.world), ...(preview ? project(preview).flatMap((f) => f.world) : [])]), [faces, preview]);
   const unit = box[2] / 100;
@@ -94,7 +94,11 @@ export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kin
           ))}
         </g>
       ))}
-      {drawn.map((m, i) => (m.fill ? <polygon key={i} points={pts(m.points)} className="mark fill" /> : <polyline key={i} points={pts(m.points)} className="mark" />))}
+      {drawn.map((m, i) => {
+        // A pen of another colour than the usual dark one.
+        const style = m.colour ? { stroke: m.colour, ...(m.fill && { fill: m.colour }) } : undefined;
+        return m.fill ? <polygon key={i} points={pts(m.points)} className="mark fill" style={style} /> : <polyline key={i} points={pts(m.points)} className="mark" style={style} />;
+      })}
       {picked &&
         faces.map((f, i) => isPicked(picked, f.paper) && <polygon key={i} points={pts(f.world)} className="face-picked" />)}
       {movingSide && <polygon points={pts(movingSide)} className="moving-side" />}

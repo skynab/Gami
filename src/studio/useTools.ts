@@ -58,8 +58,8 @@ export function useTools(before: OrigamiModel) {
 
   // The mark the picks make so far, on the paper under its first point.
   const mark = useMemo(
-    () => (action === 'draw' && picks.length >= (s.fill ? 3 : 2) ? markAt(editFrame, picks, s.fill) : null),
-    [action, picks, s.fill, editFrame],
+    () => (action === 'draw' && picks.length >= (s.fill ? 3 : 2) ? markAt(editFrame, picks, s.fill, s.pen) : null),
+    [action, picks, s.fill, s.pen, editFrame],
   );
   // Posing crease by crease, or bending: the paper that stays put, picked or else the middle of the paper.
   const anchor = useMemo((): { spot: Vec2; at: At } | null => {

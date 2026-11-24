@@ -5,6 +5,7 @@ import {
   BufferAttribute,
   BufferGeometry,
   CanvasTexture,
+  Color,
   DoubleSide,
   FrontSide,
   RepeatWrapping,
@@ -17,7 +18,7 @@ import { stackLifts, type StackLifts } from '../fold/bend/stack';
 import { FoldError } from '../fold/fold';
 import { framesOf, LAYER_GAP, normal } from '../fold/frames';
 import { joinedSegment } from '../fold/geometry2d';
-import { MARK_COLOUR, MARK_WIDTH, marksUpTo, onFace } from '../fold/marks';
+import { MARK_WIDTH, markColour, marksUpTo, onFace } from '../fold/marks';
 import { sheetOf } from '../fold/sheets';
 import { laidAlong, TAPE_COLOUR, TAPE_OPACITY } from '../fold/tape';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from '../fold/types';
@@ -131,9 +132,9 @@ export function FoldedPaper({ model, edgeColor }: { model: OrigamiModel; edgeCol
           </lineSegments>
         </group>
       ))}
-      {/* Drawn on the paper: just off its face, and pulled forward in depth so it never sinks into it. */}
+      {/* Drawn on the paper: just off its face, and pulled forward in depth so it never sinks into it. Each mark in its pen's colour. */}
       <mesh ref={marks} frustumCulled={false}>
-        <meshStandardMaterial color={MARK_COLOUR} side={DoubleSide} roughness={0.9} polygonOffset polygonOffsetFactor={-1} polygonOffsetUnits={-1} />
+        <meshStandardMaterial color="#ffffff" vertexColors side={DoubleSide} roughness={0.9} polygonOffset polygonOffsetFactor={-1} polygonOffsetUnits={-1} />
       </mesh>
       {/* Tape: see-through and a little glossy, over the marks. */}
       <mesh ref={tape} frustumCulled={false}>
@@ -218,6 +219,8 @@ interface Drawn {
   front: boolean;
   face: number;
   turn: number;
+  /** A mark's pen (tape has none). */
+  colour?: Color;
 }
 
 /**
@@ -231,10 +234,11 @@ function buildMarks(t: Transition, model: OrigamiModel, k: number): { geometry: 
   // Which of this step's marks each mark is (its turn to appear), or -1 for marks drawn earlier.
   let turn = 0;
   const turns = drawn.map(({ step }) => (step === k ? turn++ : -1));
-  const parts = drawn.flatMap(({ mark }, i) =>
-    t.faces.flatMap((face, f) => onFace(mark, face.paper).map((points) => ({ points, fill: !!mark.fill, front: mark.side === 'front', face: f, turn: turns[i] }))),
-  );
-  return onFaces(t, parts, turn, width, MARK_LIFT);
+  const parts = drawn.flatMap(({ mark }, i) => {
+    const colour = new Color(markColour(mark));
+    return t.faces.flatMap((face, f) => onFace(mark, face.paper).map((points) => ({ points, fill: !!mark.fill, front: mark.side === 'front', face: f, turn: turns[i], colour })));
+  });
+  return onFaces(t, parts, turn, width, MARK_LIFT, undefined, true);
 }
 
 /**
@@ -263,9 +267,10 @@ function buildTape(t: Transition, model: OrigamiModel, k: number): { geometry: B
  * Geometry for marks or tape on the paper's faces, `lift` off them: lines as strips `width` wide through their
  * points, fills as their outline filled in. The step's own (`turns` of them) appear one after another as it plays,
  * each in an equal share of it: all at once at the end of its share, or, given the line on the table it runs
- * along (`along`, one per turn), spreading over the paper along it from one end to the other.
+ * along (`along`, one per turn), spreading over the paper along it from one end to the other. With `coloured`, each
+ * part's vertices carry its colour (for marks, whose material takes vertex colours).
  */
-function onFaces(t: Transition, parts: Drawn[], turn: number, width: number, lift: number, along?: [Vec2, Vec2][]): { geometry: BufferGeometry; update(pose: Vec3[][], s: number): void } {
+function onFaces(t: Transition, parts: Drawn[], turn: number, width: number, lift: number, along?: [Vec2, Vec2][], coloured = false): { geometry: BufferGeometry; update(pose: Vec3[][], s: number): void } {
   // Vertices: a strip's two edges at each point, or a fill's corners; one more for a fill cut short across the
   // line it's laid along (a convex outline cut by a line gains at most one corner).
   const laying = parts.map(({ fill, turn: at }) => (fill && at >= 0 && along?.[at]) || null);
@@ -284,6 +289,14 @@ function onFaces(t: Transition, parts: Drawn[], turn: number, width: number, lif
   const geometry = new BufferGeometry();
   geometry.setAttribute('position', new BufferAttribute(positions, 3));
   geometry.setAttribute('normal', new BufferAttribute(normals, 3));
+  if (coloured) {
+    // Colours don't change as the paper moves: set once.
+    const colours = new Float32Array(total * 3);
+    parts.forEach(({ colour }, i) => {
+      for (let j = 0; j < sizes[i]; j++) colour?.toArray(colours, (starts[i] + j) * 3);
+    });
+    geometry.setAttribute('color', new BufferAttribute(colours, 3));
+  }
   geometry.setIndex(index);
 
   return {

@@ -10,6 +10,7 @@ import { anchorFor, centre, inside, locate, smallerSideMoves, topLayers } from '
 import { curl, radial, reparent, shape, type Bend, type Ray } from './shape';
 import { sheetOf } from './sheets';
 import { bendFrame } from './bend/frame';
+import { isPenColour } from './marks';
 import { keepIn, tape } from './tape';
 import type { FoldFrame, Mark, OrigamiModel, Step, StepKind, Tool, Vec2, Vec3 } from './types';
 import { CodedError, said, type Said } from './messages';
@@ -308,7 +309,9 @@ export function parseMarks(x: unknown, path = 'marks'): Mark[] {
       const points = list(r.points, `${p}.points`, vec2, LIMITS.outline);
       const fill = r.fill === undefined ? false : bool(r.fill, `${p}.fill`);
       if (points.length < (fill ? 3 : 2)) throw new OpError(`${p}.points: a ${fill ? 'fill needs three' : 'line needs two'} points`);
-      return { side: oneOf(r.side, `${p}.side`, ['front', 'back'] as const), points, ...(fill && { fill }) };
+      if (r.colour !== undefined && !isPenColour(r.colour)) throw new OpError(`${p}.colour: expected a colour like #c03028`);
+      const colour = r.colour === undefined ? undefined : (r.colour as string).toLowerCase();
+      return { side: oneOf(r.side, `${p}.side`, ['front', 'back'] as const), points, ...(fill && { fill }), ...(colour && { colour }) };
     },
     LIMITS.marks,
   );

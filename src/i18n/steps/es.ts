@@ -3011,8 +3011,6 @@ export const es: Record<string, string> = {
     "Dobla hacia el lado cada esquina inferior del centro, por una línea que va de la mitad de la altura del centro a la esquina exterior de abajo.",
   "Fold the bottom up behind":
     "Dobla la parte de abajo hacia atrás",
-  "Fold the bottom half up behind, so the sleeves come up at the shoulders. Your kimono is done.":
-    "Dobla la mitad de abajo hacia arriba por detrás, para que las mangas queden en los hombros. ¡Tu kimono está listo!",
   "Fold the bottom edge up to the top edge.":
     "Dobla el borde inferior hasta el borde superior.",
   "Crease a third":
@@ -3047,8 +3045,6 @@ export const es: Record<string, string> = {
     "Dobla la mitad derecha sobre la izquierda, por la marca del centro.",
   "Make the beak":
     "Haz el pico",
-  "Push the top point forward and down between its layers, so it hooks out over the chest: the beak. Your parrot is done.":
-    "Empuja la punta de arriba hacia delante y hacia abajo entre sus capas, para que salga curvada sobre el pecho: es el pico. ¡Tu loro está listo!",
   "Fold the left edge down onto the bottom edge, and unfold.":
     "Dobla el borde izquierdo sobre el borde inferior y desdobla.",
   "Crease the right corner":
@@ -3069,6 +3065,38 @@ export const es: Record<string, string> = {
     "Dobla la parte de abajo del borde izquierdo sobre esa marca y desdobla.",
   "Turn the bottom corner up round the outside, on that crease, for the feet.":
     "Dobla la esquina de abajo hacia arriba por fuera, por esa marca, para las patas.",
-  "Push the top corner down between the layers, for the beak. Your hen is ready.":
-    "Empuja la esquina de arriba hacia abajo entre las capas, para el pico. ¡Tu gallina está lista!",
+  "Push the top corner down between the layers, for the beak.":
+    "Empuja la esquina de arriba hacia abajo entre las capas, para el pico.",
+  "Draw the comb":
+    "Dibuja la cresta",
+  "With a red pen, draw a comb along the top of the head and a wattle under the beak. Give her an eye too.":
+    "Con un bolígrafo rojo, dibuja una cresta en lo alto de la cabeza y una barbilla bajo el pico. Dibújale también un ojo.",
+  "Turn the hen over, left to right.":
+    "Da la vuelta a la gallina, de izquierda a derecha.",
+  "Draw the other side":
+    "Dibuja el otro lado",
+  "Draw the comb, wattle and eye on this side too.":
+    "Dibuja también la cresta, la barbilla y el ojo de este lado.",
+  "Turn her back over. Your hen is ready.":
+    "Vuelve a darle la vuelta. ¡Tu gallina está lista!",
+  "Push the top point forward and down between its layers, so it hooks out over the chest: the beak.":
+    "Empuja la punta de arriba hacia delante y hacia abajo entre sus capas, para que salga curvada sobre el pecho: el pico.",
+  "Colour the beak":
+    "Colorea el pico",
+  "Colour the beak in with a pale yellow pen.":
+    "Colorea el pico con un bolígrafo amarillo claro.",
+  "Turn the parrot over, left to right.":
+    "Da la vuelta al loro, de izquierda a derecha.",
+  "Colour the other side":
+    "Colorea el otro lado",
+  "Colour the beak on this side too.":
+    "Colorea también el pico de este lado.",
+  "Turn it back over. Your parrot is done.":
+    "Vuelve a darle la vuelta. ¡Tu loro está listo!",
+  "Fold the bottom half up behind, so the sleeves come up at the shoulders.":
+    "Dobla la mitad de abajo hacia arriba por detrás, para que las mangas salgan a la altura de los hombros.",
+  "Draw the obi":
+    "Dibuja el obi",
+  "With a gold pen, draw a wide band across the waist: the obi. Your kimono is done.":
+    "Con un bolígrafo dorado, dibuja una banda ancha en la cintura: el obi. ¡Tu kimono está listo!",
 };

@@ -271,7 +271,7 @@ function same(a: unknown, b: unknown): boolean {
 }
 
 function writeMark(m: Mark): Mark {
-  return { side: m.side, points: m.points.map(([u, v]) => [roundCoord(u), roundCoord(v)]), ...(m.fill && { fill: true }) };
+  return { side: m.side, points: m.points.map(([u, v]) => [roundCoord(u), roundCoord(v)]), ...(m.fill && { fill: true }), ...(m.colour && { colour: m.colour.toLowerCase() }) };
 }
 
 function readFrame(f: FoldFileFrame): FoldFrame {
