@@ -31,6 +31,7 @@ export const GRAZES: Record<string, number> = {
   // settles in between, through about half the stack. Real paper bends a little to open the flap; rigid paper
   // can't without opening it right out (docs/next-tasks-plan.md).
   crane: 0.008, // The neck, tail and head. (The seal's tail came off the list on 11 November: see LANDS in animate.ts.)
+  swallow: 0.0095, // The second wing, as the crane's neck and tail (0.0093, 24 November 2026; 0.0066 to 0.01 for other wing angles and heights).
   // The same, found bringing GRAZE down to five layers (20 November 2026).
   penguin: 0.0055, // Turning the head down, as it lands.
   crow: 0.0048, // Making the feet.

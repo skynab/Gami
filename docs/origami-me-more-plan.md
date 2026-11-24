@@ -60,11 +60,11 @@ Flat first, then the ones that stand, then the cut ones, roughly in step count:
 | 3. Wallet | Done (22 November), **traditional**: Gilad's database lists six Traditional wallets. 12 steps, following origami.me's order of folds: creased in half and near the top and bottom, the corners folded to those creases and the strips over them, turned over and stood up, the bottom folded up past the middle and the top folded down and tucked under its side flaps (a `collapse` with `under`), then folded in half like a book. From a square, as origami.me's steps are, though its candidates row said rectangle. Left closed, not opened with a `bend`. |
 | 4. Parrot | Done (22 November), **Gami's own**: Gilad's database lists a Traditional parrot (Saydak's book), but origami.me's squashes out the head in steps that can't be followed from its text. 8 steps: a kite, its long point pleated for the tail, folded in half coloured side out, and its short point, at the front of the head on the fold, inside-reverse-folded forward and down for a hooked beak. Narrowing the top for a separate head left it a thin spike; folded the other way, the beak hung at the back of the head; an outside reverse fold showed the plain side but wrapped the head like a cap, so the beak is green. |
 | 5. Chicken | Done (22 November), **traditional**: Gilad's database lists three Traditional chickens, one in Saydak's book (he wrote origami.me's page). 16 steps, following origami.me's order as far as the beak: landmark pinches made as full creases, the corners folded up, folded in half, the feet reverse-folded (round the outside: inside, its many layers pass through each other) and the beak. Its wings, comb and head are left out: the wings' squash can't be placed from the text, and the comb is one layer of the beak unfolded, joined to the next along the fold, which the engine can't do; turning the head over outside or folding a front layer down couldn't reach the red inside without tearing. So it's a one-colour (russet) hen, and it lies flat rather than standing. Tried first: a triangle and a kite folded in half with reverse-folded neck, head and tail, which read as a duck. |
-| 6. Swallow | **Paused** (22 November). Traditional: Gilad's database lists five Swallows credited Traditional (Saydak's *Everyone Can Learn Origami*, Cunliffe, LaFosse, Takahama, Sakade) and two Unknown. Four readings of origami.me's captions tried, none shipped; see below. |
+| 6. Swallow | Done (24 November), **Gami's own** (paused 22 November): Gilad's database lists five Swallows credited Traditional (Saydak's *Everyone Can Learn Origami*, Cunliffe, LaFosse, Takahama, Sakade) and two Unknown, but four readings of origami.me's captions didn't fold; see below. 33 steps, seen from above: the bird base and the crane's leg narrowing, the legs reverse-folded up and out to 25° above level as swept-back wings (from half a side above the bottom point; higher, the creases can't fold flat), the front long flap folded down at the top of the body so its tip shows below the wings for the head, the back one cut up the middle and each half's inside edge folded out 12° for a forked tail, then turned round head up. |
 | 7. Horse | **Paused** before starting: like the swallow, its key steps need origami.me's diagrams. |
 | 8. Crab | **Paused** before starting: as the horse. |
 
-The batch is paused at five of eight (22 November). What's below is what's left, and what would help.
+The batch is paused at six of eight (22 November; the swallow, as Gami's own, 24 November). What's below is what's left, and what would help.
 
 ## What could still be done
 
@@ -86,9 +86,9 @@ is which parts become the wings, head and tail. Four readings, each built and ch
    flaps, and with it inside the wing folds tear.
 4. **The long flap folded down along the crease across the middle** (for a longer tail). Tears for the reason in 1.
 
-The next try: look at a diagram of the traditional swallow (Robinson's *World's Best Origami* or Saydak's book) for
-which flap is which, then build it from the crane's moves. Failing that, a swallow of Gami's own: the crane's bird
-base, the legs as swept wings, a long flap cut into a forked tail. The horse (square base, a cut to part the legs,
+Done instead (24 November): a swallow of Gami's own, as row 6 says, which takes the legs as wings swinging up toward
+the long flaps, so the flap folded down becomes the head and the one left up the tail. A traditional swallow could
+still follow, once a diagram (Robinson's *World's Best Origami* or Saydak's book) shows which flap is which. The horse (square base, a cut to part the legs,
 reverse-folded head and tail) and the crab (frog base, several cuts) need the same diagram check first.
 
 ### Left out of the five that shipped

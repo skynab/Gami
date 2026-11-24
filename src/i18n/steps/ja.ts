@@ -3099,4 +3099,24 @@ export const ja: Record<string, string> = {
     "帯を描く",
   "With a gold pen, draw a wide band across the waist: the obi. Your kimono is done.":
     "金色のペンで、腰のところに太い帯を描きます。着物のできあがり！",
+  "Reverse-fold a wing":
+    "翼を中わり折りする",
+  "Push the left point up between the layers so it sticks out to the side, sloping up a little. This is a wing.":
+    "左の先を紙のあいだに上へ押しこんで、少し上向きに横へつき出るようにします。これが翼です。",
+  "Reverse-fold the other wing":
+    "もう一方の翼を中わり折りする",
+  "Do the same with the right point, for the other wing.":
+    "右の先も同じようにして、もう一方の翼にします。",
+  "Fold the front flap down as far as it goes, so its tip peeks out below the wings. This is the head.":
+    "手前のひだを、折れるところまで下へ折ります。先が翼の下から少しのぞきます。これが頭です。",
+  "With scissors, cut along the middle of the point that’s left at the top, from its tip almost down to its widest part.":
+    "はさみで、上に残った先のまん中を、先から一番広いところの近くまで切ります。",
+  "Fork the tail":
+    "しっぽをふたまたにする",
+  "Fold the inside edge of the left half out on a slant, from the bottom of the cut, so the tail opens into a fork.":
+    "左半分の内側のふちを、切りこみの下からななめに外へ折って、しっぽをふたまたに開きます。",
+  "Fork the other side":
+    "反対側もふたまたにする",
+  "Turn the swallow round so its head points up. Your swallow is done!":
+    "頭が上を向くようにツバメの向きを変えます。ツバメのできあがり！",
 };

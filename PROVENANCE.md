@@ -132,6 +132,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `wallet` | Traditional (origami.me credits it as a traditional design; Gilad's database lists six Traditional wallets, among them Robinson's *World's Best Origami* and Palacios's *Beginning Origami*) | None needed: nobody owns it | [origami.me/wallet](https://origami.me/wallet/) (order of folds only) | Clear | 22 Nov 2026 |
 | `parrot` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a parrot from a kite, its long point pleated for the tail, folded in half and its short point reverse-folded for a hooked beak; Gilad's database lists a traditional parrot (in Saydak's *Everyone Can Learn Origami*), but Gami's follows neither it nor origami.me's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 22 Nov 2026 |
 | `chicken` | Traditional (origami.me credits it as a traditional design; Gilad's database lists three Traditional chickens, among them Saydak's *Everyone Can Learn Origami* and NOA 156) | None needed: nobody owns it | [origami.me/chicken](https://origami.me/chicken/) (order of folds as far as the beak) | Clear | 22 Nov 2026 |
+| `swallow` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a swallow seen from above, from the traditional bird base with its legs narrowed and reverse-folded out as swept-back wings, the front flap folded down for the head and the back flap cut up the middle and folded apart for a forked tail; Gilad's database lists traditional swallows (Saydak's *Everyone Can Learn Origami* and others), but Gami's follows neither them nor origami.me's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the bird base's folds follow `crane` | Clear | 24 Nov 2026 |
 
 ### Notes
 
@@ -192,6 +193,11 @@ noted when it was written, and the model was folded from the common traditional 
   layer is joined to the next along the fold. Since 23 November the comb and a wattle are drawn on in red instead,
   with an eye, on both sides; the kimono's obi is drawn on in gold and the parrot's beak coloured pale yellow, where
   the paper can't show those colours.
+  The swallow is Gami's: Gilad's database lists five Swallows credited Traditional (Saydak's *Everyone Can Learn
+  Origami*, Cunliffe, LaFosse, Takahama, Sakade) and two Unknown, but origami.me's step text leans on its diagrams
+  for which flap becomes which part, and four readings of it didn't fold (`docs/origami-me-more-plan.md`). Gami's
+  takes the crane's bird base and leg narrowing, swings the legs out as wings, folds one long flap down for the head
+  and cuts the other into a forked tail, in its own order and words (24 November 2026).
 - **Intermediate models from OrigamiOK** (checked 13 November 2026; the plan is `docs/origamiok-intermediate-plan.md`).
   Its fox page credits Hoàng Tiến Quyết and its lizard page Lee Won-pyo; the rest name only their writer and
   photographer. Gilad's database lists about ten Traditional square turtles (Gross's *Zoogami*, Momotani, NOA 493 and

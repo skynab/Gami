@@ -15,7 +15,7 @@ These are the rest, kept here for later; each was checked on its own page as cre
 | Imoseyama cranes | [imoseyama-cranes](https://origami.me/imoseyama-cranes/) | Two cranes from one cut sheet; the engine has no cuts |
 | Phoenix | [phoenix](https://origami.me/phoenix/) | Crane variant |
 | Flapping pigeon | [pigeon](https://origami.me/pigeon/) | Close to the flapping bird |
-| Swallow | [swallow](https://origami.me/swallow/) | Tried 22 November 2026, paused: needs a diagram check (`docs/origami-me-more-plan.md`) |
+| Swallow | [swallow](https://origami.me/swallow/) | Tried 22 November 2026, paused: needs a diagram check (`docs/origami-me-more-plan.md`). Gami's own swallow added instead, 24 November 2026 |
 | Duck | [duck](https://origami.me/duck/) | Close to the swan |
 | Goldfish | [goldfish](https://origami.me/goldfish/) | Ends puffed up in 3D |
 | Horse | [horse](https://origami.me/horse/) | Paused before starting: needs a diagram check, as the swallow |

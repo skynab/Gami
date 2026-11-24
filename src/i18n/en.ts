@@ -183,6 +183,7 @@ export const en = {
     'wallet': { title: 'Wallet', blurb: 'A little wallet that closes like a book, with a pocket each side, from one square. Its cover is half plain, half coloured.' },
     'parrot': { title: 'Parrot', blurb: 'A green parrot perched upright, with a pale hooked beak and a long pleated tail, from one square.' },
     'chicken': { title: 'Chicken', blurb: 'A russet hen with a red comb and her feet tucked under her, from one square.' },
+    'swallow': { title: 'Swallow', blurb: 'A swallow in flight, seen from above, with swept-back wings and a forked tail, from one square.' },
   },
   notFound: {
     title: 'This page got folded away',

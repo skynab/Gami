@@ -241,6 +241,7 @@ export const es: Messages = {
     'wallet': { title: 'Cartera', blurb: 'Una carterita que se cierra como un libro, con un bolsillo a cada lado, de un solo cuadrado. La tapa es mitad lisa, mitad de color.' },
     'parrot': { title: 'Loro', blurb: 'Un loro verde posado erguido, con el pico curvo de color claro y una cola larga plegada, de un solo cuadrado.' },
     'chicken': { title: 'Gallina', blurb: 'Una gallina rojiza con la cresta roja y las patas recogidas bajo el cuerpo, de un solo cuadrado.' },
+    'swallow': { title: 'Golondrina', blurb: 'Una golondrina en vuelo vista desde arriba, con las alas hacia atrás y la cola en horquilla, de un solo cuadrado.' },
   },
   notFound: {
     title: 'Esta página se ha plegado y ha desaparecido',

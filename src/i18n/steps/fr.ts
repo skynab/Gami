@@ -3099,4 +3099,24 @@ export const fr: Record<string, string> = {
     "Dessiner l’obi",
   "With a gold pen, draw a wide band across the waist: the obi. Your kimono is done.":
     "Avec un stylo doré, dessinez une large bande à la taille : l’obi. Votre kimono est terminé !",
+  "Reverse-fold a wing":
+    "Pli inversé pour une aile",
+  "Push the left point up between the layers so it sticks out to the side, sloping up a little. This is a wing.":
+    "Poussez la pointe gauche vers le haut entre les épaisseurs pour qu’elle ressorte sur le côté, un peu relevée. C’est une aile.",
+  "Reverse-fold the other wing":
+    "Pli inversé pour l’autre aile",
+  "Do the same with the right point, for the other wing.":
+    "Faites de même avec la pointe droite, pour l’autre aile.",
+  "Fold the front flap down as far as it goes, so its tip peeks out below the wings. This is the head.":
+    "Pliez le rabat de devant vers le bas aussi loin qu’il va, pour que sa pointe dépasse sous les ailes. C’est la tête.",
+  "With scissors, cut along the middle of the point that’s left at the top, from its tip almost down to its widest part.":
+    "Avec des ciseaux, coupez le milieu de la pointe restée en haut, de son bout presque jusqu’à sa partie la plus large.",
+  "Fork the tail":
+    "Fourcher la queue",
+  "Fold the inside edge of the left half out on a slant, from the bottom of the cut, so the tail opens into a fork.":
+    "Pliez vers l’extérieur, en biais, le bord intérieur de la moitié gauche, depuis le bas de la coupe, pour que la queue s’ouvre en fourche.",
+  "Fork the other side":
+    "Fourcher l’autre côté",
+  "Turn the swallow round so its head points up. Your swallow is done!":
+    "Tournez l’hirondelle pour que sa tête pointe vers le haut. Votre hirondelle est terminée !",
 };

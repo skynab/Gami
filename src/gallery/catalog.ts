@@ -164,6 +164,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'wallet', title: 'Wallet', blurb: 'A little wallet that closes like a book, with a pocket each side, from one square. Its cover is half plain, half coloured.', difficulty: 1, category: 'object', steps: 12, minutes: 5, sheets: 1, added: '2026-11-22' },
   { id: 'parrot', title: 'Parrot', blurb: 'A green parrot perched upright, with a pale hooked beak and a long pleated tail, from one square.', difficulty: 1, category: 'animal', steps: 12, minutes: 6, sheets: 1, needs: ['pen'], added: '2026-11-22' },
   { id: 'chicken', title: 'Chicken', blurb: 'A russet hen with a red comb and her feet tucked under her, from one square.', difficulty: 2, category: 'animal', steps: 20, minutes: 10, sheets: 1, needs: ['pen'], added: '2026-11-22' },
+  { id: 'swallow', title: 'Swallow', blurb: 'A swallow in flight, seen from above, with swept-back wings and a forked tail, from one square.', difficulty: 3, category: 'animal', steps: 33, minutes: 15, sheets: 1, needs: ['scissors'], added: '2026-11-24' },
   { id: 'fan', title: 'Fan', blurb: 'Pleat a sheet back and forth, fold it in half and lock the middle, then spread it into a half circle.', difficulty: 1, category: 'object', form: '3d', steps: 14, minutes: 10, sheets: 1, paper: 1.4, added: '2026-11-07' },
   { id: 'boat', title: 'Boat', blurb: 'The classic paper boat. It really floats, for a while.', difficulty: 2, category: 'object', form: '3d', steps: 15, minutes: 6, sheets: 1, paper: 1.41, added: '2026-11-09' },
   // Coming soon: listed, with no steps yet.

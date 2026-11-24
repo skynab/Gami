@@ -3099,4 +3099,24 @@ export const es: Record<string, string> = {
     "Dibuja el obi",
   "With a gold pen, draw a wide band across the waist: the obi. Your kimono is done.":
     "Con un bolígrafo dorado, dibuja una banda ancha en la cintura: el obi. ¡Tu kimono está listo!",
+  "Reverse-fold a wing":
+    "Haz un pliegue invertido para un ala",
+  "Push the left point up between the layers so it sticks out to the side, sloping up a little. This is a wing.":
+    "Empuja la punta izquierda hacia arriba entre las capas para que salga hacia el lado, un poco inclinada hacia arriba. Es un ala.",
+  "Reverse-fold the other wing":
+    "Haz un pliegue invertido para la otra ala",
+  "Do the same with the right point, for the other wing.":
+    "Haz lo mismo con la punta derecha, para la otra ala.",
+  "Fold the front flap down as far as it goes, so its tip peeks out below the wings. This is the head.":
+    "Dobla la solapa de delante hacia abajo hasta donde llegue, para que su punta asome bajo las alas. Es la cabeza.",
+  "With scissors, cut along the middle of the point that’s left at the top, from its tip almost down to its widest part.":
+    "Con unas tijeras, corta por el centro de la punta que queda arriba, desde su extremo casi hasta su parte más ancha.",
+  "Fork the tail":
+    "Abre la cola en horquilla",
+  "Fold the inside edge of the left half out on a slant, from the bottom of the cut, so the tail opens into a fork.":
+    "Dobla hacia fuera, en diagonal, el borde interior de la mitad izquierda, desde el final del corte, para que la cola se abra en horquilla.",
+  "Fork the other side":
+    "Abre el otro lado",
+  "Turn the swallow round so its head points up. Your swallow is done!":
+    "Gira la golondrina para que la cabeza apunte hacia arriba. ¡Tu golondrina está lista!",
 };

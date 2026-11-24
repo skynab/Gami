@@ -241,6 +241,7 @@ export const fr: Messages = {
     'wallet': { title: 'Portefeuille', blurb: 'Un petit portefeuille qui se ferme comme un livre, avec une poche de chaque côté, dans un seul carré. Sa couverture est moitié unie, moitié en couleur.' },
     'parrot': { title: 'Perroquet', blurb: 'Un perroquet vert perché bien droit, au bec crochu pâle et à la longue queue plissée, dans un seul carré.' },
     'chicken': { title: 'Poule', blurb: 'Une poule rousse à la crête rouge, les pattes repliées sous elle, dans un seul carré.' },
+    'swallow': { title: 'Hirondelle', blurb: 'Une hirondelle en vol vue d’en haut, aux ailes rejetées en arrière et à la queue fourchue, dans un seul carré.' },
   },
   notFound: {
     title: 'Cette page a été repliée',
