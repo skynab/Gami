@@ -15,17 +15,16 @@ These are the rest, kept here for later; each was checked on its own page as cre
 | Imoseyama cranes | [imoseyama-cranes](https://origami.me/imoseyama-cranes/) | Two cranes from one cut sheet; the engine has no cuts |
 | Phoenix | [phoenix](https://origami.me/phoenix/) | Crane variant |
 | Flapping pigeon | [pigeon](https://origami.me/pigeon/) | Close to the flapping bird |
-| Swallow | [swallow](https://origami.me/swallow/) | Good candidate |
+| Swallow | [swallow](https://origami.me/swallow/) | Tried 22 November 2026, paused: needs a diagram check (`docs/origami-me-more-plan.md`) |
 | Duck | [duck](https://origami.me/duck/) | Close to the swan |
 | Goldfish | [goldfish](https://origami.me/goldfish/) | Ends puffed up in 3D |
-| Seal | [seal](https://origami.me/seal/) | Good candidate |
-| Horse | [horse](https://origami.me/horse/) | Good candidate |
-| Crab | [crab](https://origami.me/crab/) | Good candidate |
-| Turtle | [turtle](https://origami.me/turtle/) | Good candidate |
+| Horse | [horse](https://origami.me/horse/) | Paused before starting: needs a diagram check, as the swallow |
+| Crab | [crab](https://origami.me/crab/) | Paused before starting: needs a diagram check, as the swallow |
+| Turtle | [turtle](https://origami.me/turtle/) | The gallery's turtle (13 November) is Gami's own, after OrigamiOK's; this would be a second |
 | Sea turtle | [sea-turtle](https://origami.me/sea-turtle/) | Harder than the turtle |
 | Dragonfly | [dragonfly](https://origami.me/dragonfly/) | Very narrow points; tests the engine |
 | Rose | [rose](https://origami.me/rose/) | Twisted, curled 3D |
-| Lotus | [lotus](https://origami.me/lotus/) | Petals pulled out in 3D |
+| Lotus | [lotus](https://origami.me/lotus/) | Petals pulled out in 3D; the gallery's lotus (28 October) is OrigamiOK's traditional one, its petals lifted instead |
 | Camellia | [camellia](https://origami.me/camellia/) | Check the engine fit |
 | Bellflower | [bellflower](https://origami.me/bellflower/) | Check the engine fit |
 | 5-petal lily | [5-petal-lily](https://origami.me/5-petal-lily/) | Needs a pentagon sheet |

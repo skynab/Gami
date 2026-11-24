@@ -80,8 +80,7 @@ Phases 1 to 3 are each one sitting. Phases 4 to 6 may need engine work and shoul
 - **One sheet or several.** OrigamiOK's unicorn, dragon and whale are one sheet each. Gami's own can use more,
   as the standing fox and squirrel did, and it's the safer route while reverse folds clip. If one-sheet versions
   matter, phases 5 and 6 wait for the clipping plan's part 3.
-- **The New cutoff.** `NEW_SINCE` is `2026-10-28`. When phase 1 ships, move it forward so only the intermediate
-  and advanced batches show as New, or leave it.
+- ✅ **The New cutoff.** Moved to `2026-11-21` on 23 November: this batch and the five from origami.me show as New.
 - **An Advanced shelf.** The gallery's difficulty filter has Easy, Medium and Hard (`LEVELS` in
   `src/gallery/catalog.ts`); these will land under Hard. A separate Advanced level is only worth adding if the
   user wants them apart from the 3s.

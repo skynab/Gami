@@ -46,7 +46,7 @@ export interface ModelInfo {
  * day rather than "the last month", which would mark the whole first month's gallery New; move it on to retire a
  * batch's stars.
  */
-export const NEW_SINCE = '2026-10-28';
+export const NEW_SINCE = '2026-11-21';
 
 export function isNew(model: Pick<ModelInfo, 'steps' | 'added'>): boolean {
   return !!model.steps && !!model.added && model.added >= NEW_SINCE;
