@@ -3045,18 +3045,10 @@ export const fr: Record<string, string> = {
     "Pliez la moitié droite sur la gauche, le long du pli du milieu.",
   "Make the beak":
     "Faire le bec",
-  "Fold the left edge down onto the bottom edge, and unfold.":
-    "Pliez le bord gauche sur le bord du bas, puis dépliez.",
-  "Crease the right corner":
-    "Marquer le coin droit",
-  "Fold the right corner up to where that crease meets the right edge, and unfold.":
-    "Pliez le coin droit jusqu’à l’endroit où ce pli touche le bord droit, puis dépliez.",
   "Fold the left and right corners up to the top corner.":
     "Pliez les coins gauche et droit jusqu’au coin du haut.",
   "Crease the bottom corner":
     "Marquer le coin du bas",
-  "Fold the bottom corner up to the second crease on the right flap’s edge, and unfold.":
-    "Pliez le coin du bas jusqu’au deuxième pli sur le bord du rabat droit, puis dépliez.",
   "Fold the left half behind, along the middle crease.":
     "Pliez la moitié gauche derrière, le long du pli du milieu.",
   "Crease the feet":
@@ -3119,4 +3111,14 @@ export const fr: Record<string, string> = {
     "Fourcher l’autre côté",
   "Turn the swallow round so its head points up. Your swallow is done!":
     "Tournez l’hirondelle pour que sa tête pointe vers le haut. Votre hirondelle est terminée !",
+  "Pinch the right edge":
+    "Marquer le bord droit",
+  "Fold the left edge down onto the bottom edge, but press the fold flat only where it meets the right edge, and unfold. The pinch marks a point.":
+    "Pliez le bord gauche vers le bas sur le bord du bas, mais n’écrasez le pli qu’à l’endroit où il touche le bord droit, puis dépliez. Ce petit pli marque un point.",
+  "Pinch it again":
+    "Marquer encore",
+  "Fold the right corner up to the pinch, pressing only at the right edge again, and unfold.":
+    "Pliez le coin droit vers le haut jusqu’à la marque, en n’écrasant de nouveau qu’au bord droit, puis dépliez.",
+  "Fold the bottom corner up to the second pinch on the right flap’s edge, and unfold.":
+    "Pliez le coin du bas vers le haut jusqu’à la deuxième marque sur le bord du rabat droit, puis dépliez.",
 };

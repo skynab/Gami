@@ -187,7 +187,7 @@ noted when it was written, and the model was folded from the common traditional 
   way: the kite folded in half coloured side out, the top point reverse-folded for the beak, so it's Gami's. The
   chicken is traditional: Gilad's database lists three Chickens credited Traditional (Saydak's *Everyone Can Learn
   Origami*, NOA 156 folded by Saydak, Der Falter 61) among dozens by named designers, and Saydak wrote origami.me's
-  page. Gami follows its order of folds as far as the beak, with its landmark pinches made as full creases and the
+  page. Gami follows its order of folds as far as the beak, with its landmarks pinched (since 24 November) and the
   feet reverse-folded round the outside rather than inside (inside, the layers pass through each other in the
   engine), and leaves out its wings, comb and head: the wings' squash can't be placed from the text, and the comb's
   layer is joined to the next along the fold. Since 23 November the comb and a wattle are drawn on in red instead,

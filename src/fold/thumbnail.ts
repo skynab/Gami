@@ -3,6 +3,7 @@ import { FoldError, placeLike, toFlat } from './fold';
 import { facePositions, framesOf, LAYER_GAP, normal } from './frames';
 import { frontUp } from './geometry2d';
 import { MARK_WIDTH, markColour, marksUpTo, onFace, type Mark } from './marks';
+import { drawnParts } from './pinch';
 import { faceColour } from './sheets';
 import { TAPE_COLOUR, TAPE_OPACITY } from './tape';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from './types';
@@ -45,6 +46,7 @@ export function fromAbove(model: OrigamiModel, frame: FoldFrame, marks: Mark[] =
   ].map((n) => +n.toFixed(4));
   const stroke = +(span / 220).toFixed(5);
   const width = +(MARK_WIDTH * Math.max(...model.sheets.map((s) => Math.max(...s.size)))).toFixed(5);
+  const parts = drawnParts(frame);
   const polys = faces
     .map((f) => {
       const up = frontUp(f.world, f.paper);
@@ -73,10 +75,26 @@ export function fromAbove(model: OrigamiModel, frame: FoldFrame, marks: Mark[] =
           }),
         )
         .join('');
-      return `<polygon points="${points}" fill="${fill}"/>${drawn}${taped}`;
+      const lined = f.paper.map((p, c) => parts(p, f.paper[(c + 1) % f.paper.length]));
+      return `${outlined(points, fill, f.world, lined, (p) => p.map((n) => +n.toFixed(4)).join(','))}${drawn}${taped}`;
     })
     .join('');
   return { box, body: `<g stroke="#2b2a33" stroke-opacity=".45" stroke-width="${stroke}" stroke-linejoin="round">${polys}</g>` };
+}
+
+/**
+ * A face as an SVG polygon, its edges lined as the group's stroke says. Where only parts of its edges are lines
+ * (`lined`: for each edge, the stretches of it that are, as fractions along it; none between triangles of bent
+ * paper, or along a pinch's unpressed stretch), it's outlined in its own colour, closing the hairline seams there,
+ * then lined on those parts.
+ */
+function outlined(points: string, fill: string, corners: Vec2[], lined: [number, number][][], at: (p: Vec2) => string): string {
+  if (lined.every((l) => l.length === 1 && l[0][0] === 0 && l[0][1] === 1)) return `<polygon points="${points}" fill="${fill}"/>`;
+  const lerp = (a: Vec2, b: Vec2, t: number): Vec2 => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+  const d = corners
+    .flatMap((p, c) => lined[c].map(([s, e]) => `M${at(lerp(p, corners[(c + 1) % corners.length], s))}L${at(lerp(p, corners[(c + 1) % corners.length], e))}`))
+    .join('');
+  return `<polygon points="${points}" fill="${fill}" stroke="${fill}" stroke-opacity="1"/>${d && `<path d="${d}" fill="none"/>`}`;
 }
 
 /** How many moments a preview shows, and how long each. */
@@ -131,6 +149,7 @@ function slanted(model: OrigamiModel, frame: FoldFrame, size: number, marks: Mar
   // Edges between triangles of paper that bends get no line.
   const key = (u: number, v: number) => (u < v ? `${u} ${v}` : `${v} ${u}`);
   const soft = new Set((frame.soft ?? []).map(([u, v]) => key(u, v)));
+  const parts = drawnParts(frame);
   const faces = frame.faces_vertices.map((face, f) => {
     const n = normal(placed[f]);
     const front = dot(n, toViewer) > 0;
@@ -143,7 +162,7 @@ function slanted(model: OrigamiModel, frame: FoldFrame, size: number, marks: Mar
     return {
       paper: face.map((v) => frame.vertices_paper[v]),
       world,
-      softly: face.map((u, c) => soft.has(key(u, face[(c + 1) % face.length]))),
+      lined: face.map((u, c) => (soft.has(key(u, face[(c + 1) % face.length])) ? [] : parts(frame.vertices_paper[u], frame.vertices_paper[face[(c + 1) % face.length]]))),
       screen: world.map((p): Vec2 => [p[0], -dot(p, up)]),
       depth: world.reduce((s, p) => s + dot(p, toViewer), 0) / world.length,
       facing,
@@ -192,10 +211,7 @@ function slanted(model: OrigamiModel, frame: FoldFrame, size: number, marks: Mar
           }),
         )
         .join('');
-      if (!f.softly.some(Boolean)) return `<polygon points="${points}" fill="${fill}"/>${drawn}`;
-      // Outlined in its own colour, closing the hairline seams between triangles, then lined on its other edges.
-      const d = f.screen.flatMap((p, c) => (f.softly[c] ? [] : [`M${at(p)}L${at(f.screen[(c + 1) % f.screen.length])}`])).join('');
-      return `<polygon points="${points}" fill="${fill}" stroke="${fill}" stroke-opacity="1"/>${d && `<path d="${d}" fill="none"/>`}${drawn}`;
+      return `${outlined(points, fill, f.screen, f.lined, at)}${drawn}`;
     })
     .join('');
   return (

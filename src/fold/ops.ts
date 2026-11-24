@@ -11,6 +11,7 @@ import { curl, radial, reparent, shape, type Bend, type Ray } from './shape';
 import { sheetOf } from './sheets';
 import { bendFrame } from './bend/frame';
 import { isPenColour } from './marks';
+import { pinchedUnfold } from './pinch';
 import { keepIn, tape } from './tape';
 import type { FoldFrame, Mark, OrigamiModel, Step, StepKind, Tool, Vec2, Vec3 } from './types';
 import { CodedError, said, type Said } from './messages';
@@ -85,8 +86,12 @@ export type Op =
       /** Tucking: the moving paper slides under these faces. */
       under?: Faces;
     }
-  /** Opens back up to the paper after step `to` (0: the start). Left out: undoes the last fold since the last unfold. */
-  | { op: 'unfold'; to?: number }
+  /**
+   * Opens back up to the paper after step `to` (0: the start). Left out: undoes the last fold since the last unfold.
+   * `pinch`: the fold was only pressed between these two points on the table (as the paper lies before opening),
+   * so only that much of its line creases (see pinch.ts).
+   */
+  | { op: 'unfold'; to?: number; pinch?: [Vec2, Vec2] }
   /** `only`: turns over just that paper, about its own middle, leaving other sheets where they lie. */
   | { op: 'turnOver'; only?: Faces }
   /** `only`: turns just that paper, about its own middle. */
@@ -170,7 +175,7 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
         ...opt(o, 'under', (v, p) => faces(v, p, 0), path),
       };
     case 'unfold':
-      return { op: 'unfold', ...opt(o, 'to', count, path) };
+      return { op: 'unfold', ...opt(o, 'to', count, path), ...opt(o, 'pinch', (v, p) => pair(v, p, vec2), path) };
     case 'turnOver':
       return { op: 'turnOver', ...opt(o, 'only', (v, p) => faces(v, p, 0), path) };
     case 'newSheet':
@@ -699,7 +704,8 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
         to = last;
       }
       if (to >= frames.length - 1) throw new OpError('unfoldAhead', { step: to });
-      return unfoldStep(frames, to, reopened(ctx.steps));
+      const out = unfoldStep(frames, to, reopened(ctx.steps));
+      return op.pinch ? { ...out, frame: pinchedUnfold(frames, to, out.frame, op.pinch) } : out;
     }
     case 'turnOver':
       return { frame: op.only ? place(frame, { only: test(op.only)!, flip: true }) : turnOver(frame) };

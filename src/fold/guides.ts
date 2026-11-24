@@ -1,5 +1,6 @@
 import { move, poseAt, transitionBetween, transitionVia, type Motion } from './animate';
 import { sharedSegment } from './geometry2d';
+import { drawnParts } from './pinch';
 import type { FoldFrame, Vec2, Vec3 } from './types';
 
 /**
@@ -54,6 +55,7 @@ export function guidesFor(from: FoldFrame, to: FoldFrame, via: FoldFrame[] = [])
   const touch = (i: number, j: number) =>
     boxes[i][0] <= boxes[j][1] + 1e-7 && boxes[j][0] <= boxes[i][1] + 1e-7 && boxes[i][2] <= boxes[j][3] + 1e-7 && boxes[j][2] <= boxes[i][3] + 1e-7;
   const creases: CreaseGuide[] = [];
+  const lined = drawnParts(to);
   for (let i = 0; i < t.faces.length; i++) {
     for (let j = i + 1; j < t.faces.length; j++) {
       const fi = t.faces[i];
@@ -65,7 +67,11 @@ export function guidesFor(from: FoldFrame, to: FoldFrame, via: FoldFrame[] = [])
       const [moving, other] = still(t.motions[fi.motion]) ? [j, i] : [i, j];
       const layer = (f: number) => to.faces_layer?.[f] ?? 0;
       const place = placer(fi.paper, fi.before);
-      creases.push({ a: place(shared[0]), b: place(shared[1]), valley: layer(moving) >= layer(other) });
+      // Only as much of it as the step leaves creased: opening a pinched fold, just the pinch.
+      for (const [s, e] of lined(shared[0], shared[1])) {
+        const at = (k: number): Vec2 => [shared[0][0] + (shared[1][0] - shared[0][0]) * k, shared[0][1] + (shared[1][1] - shared[0][1]) * k];
+        creases.push({ a: place(at(s)), b: place(at(e)), valley: layer(moving) >= layer(other) });
+      }
     }
   }
 

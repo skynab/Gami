@@ -33,6 +33,8 @@ interface FoldFileFrame {
   'gami:cuts'?: number[][][];
   /** Tape laid so far, each strip as its pieces on the sheet (see FoldFrame.tapes). */
   'gami:tapes'?: { pieces: Mark[] }[];
+  /** Stretches of fold lines a pinch didn't press, as segments on the sheet (see FoldFrame.uncreased). */
+  'gami:uncreased'?: number[][][];
   /** Seams between triangles of bent paper cut from one face (see FoldFrame.soft). */
   'gami:soft'?: number[][];
   'gami:text'?: string;
@@ -188,6 +190,7 @@ function writeFrame(f: FoldFrame, exact = false): FoldFileFrame {
     ...(f.faces_layer && { 'gami:faces_layer': f.faces_layer }),
     ...(f.cuts?.length && { 'gami:cuts': f.cuts.map((c) => c.map((p) => p.map(round))) }),
     ...(f.tapes?.length && { 'gami:tapes': f.tapes.map((t) => ({ pieces: t.pieces.map(writeMark) })) }),
+    ...(f.uncreased?.length && { 'gami:uncreased': f.uncreased.map((c) => c.map((p) => p.map(round))) }),
     ...(f.soft?.length && { 'gami:soft': f.soft }),
   };
 }
@@ -283,6 +286,7 @@ function readFrame(f: FoldFileFrame): FoldFrame {
     ...(f['gami:faces_layer'] && { faces_layer: f['gami:faces_layer'] }),
     ...(cutsOf(f['gami:cuts']) && { cuts: cutsOf(f['gami:cuts']) }),
     ...(tapesOf(f['gami:tapes']) && { tapes: tapesOf(f['gami:tapes']) }),
+    ...(cutsOf(f['gami:uncreased']) && { uncreased: cutsOf(f['gami:uncreased']) }),
     ...(softOf(f['gami:soft'], f.vertices_coords.length) && { soft: softOf(f['gami:soft'], f.vertices_coords.length) }),
   };
 }
@@ -310,7 +314,7 @@ function tapesOf(x: unknown): FoldFrame['tapes'] | undefined {
   return tapes.length ? tapes : undefined;
 }
 
-/** Cuts read from a file: segments of two points each. Anything else is left out. */
+/** Cuts (or a pinch's unpressed stretches) read from a file: segments of two points each. Anything else is left out. */
 function cutsOf(x: unknown): FoldFrame['cuts'] | undefined {
   if (!Array.isArray(x)) return undefined;
   const point = (p: unknown): p is [number, number] => Array.isArray(p) && p.length === 2 && p.every((n) => typeof n === 'number' && Number.isFinite(n));

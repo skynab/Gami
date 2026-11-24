@@ -3045,18 +3045,10 @@ export const ja: Record<string, string> = {
     "真ん中の折りすじで、右半分を左半分の上に折ります。",
   "Make the beak":
     "くちばしを作る",
-  "Fold the left edge down onto the bottom edge, and unfold.":
-    "左の辺を下の辺に合わせて折り、開きます。",
-  "Crease the right corner":
-    "右の角に折りすじをつける",
-  "Fold the right corner up to where that crease meets the right edge, and unfold.":
-    "右の角を、その折りすじが右の辺と交わるところまで折り上げて、開きます。",
   "Fold the left and right corners up to the top corner.":
     "左右の角を、上の角まで折り上げます。",
   "Crease the bottom corner":
     "下の角に折りすじをつける",
-  "Fold the bottom corner up to the second crease on the right flap’s edge, and unfold.":
-    "下の角を、右のふたの辺にある二本目の折りすじまで折り上げて、開きます。",
   "Fold the left half behind, along the middle crease.":
     "真ん中の折りすじで、左半分を後ろへ折ります。",
   "Crease the feet":
@@ -3119,4 +3111,14 @@ export const ja: Record<string, string> = {
     "反対側もふたまたにする",
   "Turn the swallow round so its head points up. Your swallow is done!":
     "頭が上を向くようにツバメの向きを変えます。ツバメのできあがり！",
+  "Pinch the right edge":
+    "右の辺に印をつける",
+  "Fold the left edge down onto the bottom edge, but press the fold flat only where it meets the right edge, and unfold. The pinch marks a point.":
+    "左の辺を下の辺に合わせて折りますが、右の辺と重なるところだけを指でつまんで折り目をつけ、開きます。この小さな折り目が印になります。",
+  "Pinch it again":
+    "もう一度印をつける",
+  "Fold the right corner up to the pinch, pressing only at the right edge again, and unfold.":
+    "右の角をその印まで折り上げ、また右の辺のところだけをつまんで、開きます。",
+  "Fold the bottom corner up to the second pinch on the right flap’s edge, and unfold.":
+    "下の角を、右のふたの辺にある二つ目の印まで折り上げて、開きます。",
 };

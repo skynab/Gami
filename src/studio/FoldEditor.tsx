@@ -1,6 +1,7 @@
 import { useMemo, useRef, type PointerEvent } from 'react';
 import { placeLike } from '../fold/fold';
 import { dist, signedArea, split, type Line } from '../fold/geometry2d';
+import { drawnParts } from '../fold/pinch';
 import { faceColour } from '../fold/sheets';
 import type { FoldFrame, Mark, OrigamiModel, Vec2 } from '../fold/types';
 import { cutsOnTable, frontUp, isPicked, markOnTable, project, snapPoints, tapeOnFace, viewBox } from './editor';
@@ -83,12 +84,27 @@ export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kin
   };
 
   const pts = (poly: Vec2[]) => poly.map((p) => p.join(',')).join(' ');
+  // Along a pinch's unpressed stretch, the paper is split but not creased: its face edges there get no line.
+  const parts = drawnParts(frame);
+  const lerp = (a: Vec2, b: Vec2, t: number): Vec2 => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+  const outline = (f: { world: Vec2[]; paper: Vec2[] }, fill: string) => {
+    const n = f.paper.length;
+    const lined = f.paper.map((p, c) => parts(p, f.paper[(c + 1) % n]));
+    if (lined.every((l) => l.length === 1 && l[0][0] === 0 && l[0][1] === 1)) return <polygon points={pts(f.world)} fill={fill} className="face" />;
+    const d = f.world.flatMap((p, c) => lined[c].map(([s, e]) => `M${lerp(p, f.world[(c + 1) % n], s).join(',')}L${lerp(p, f.world[(c + 1) % n], e).join(',')}`)).join('');
+    return (
+      <>
+        <polygon points={pts(f.world)} fill={fill} className="face" style={{ stroke: fill }} />
+        {d && <path d={d} className="face-lines" />}
+      </>
+    );
+  };
 
   return (
     <svg ref={svg} className="fold-editor" viewBox={box.join(' ')} onPointerDown={pick} role="img" aria-label="The paper from above">
       {faces.map((f, i) => (
         <g key={i}>
-          <polygon points={pts(f.world)} fill={faceColour(model, f.paper, frontUp(f.world, f.paper))} className="face" />
+          {outline(f, faceColour(model, f.paper, frontUp(f.world, f.paper)))}
           {tapeOnFace(frame, f).map((piece, k) => (
             <polygon key={k} points={pts(piece)} className="tape" />
           ))}

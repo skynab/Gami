@@ -3045,18 +3045,10 @@ export const es: Record<string, string> = {
     "Dobla la mitad derecha sobre la izquierda, por la marca del centro.",
   "Make the beak":
     "Haz el pico",
-  "Fold the left edge down onto the bottom edge, and unfold.":
-    "Dobla el borde izquierdo sobre el borde inferior y desdobla.",
-  "Crease the right corner":
-    "Marca la esquina derecha",
-  "Fold the right corner up to where that crease meets the right edge, and unfold.":
-    "Dobla la esquina derecha hasta donde esa marca toca el borde derecho y desdobla.",
   "Fold the left and right corners up to the top corner.":
     "Dobla las esquinas izquierda y derecha hasta la esquina de arriba.",
   "Crease the bottom corner":
     "Marca la esquina de abajo",
-  "Fold the bottom corner up to the second crease on the right flap’s edge, and unfold.":
-    "Dobla la esquina de abajo hasta la segunda marca del borde de la solapa derecha y desdobla.",
   "Fold the left half behind, along the middle crease.":
     "Dobla la mitad izquierda hacia atrás, por la marca del centro.",
   "Crease the feet":
@@ -3119,4 +3111,14 @@ export const es: Record<string, string> = {
     "Abre el otro lado",
   "Turn the swallow round so its head points up. Your swallow is done!":
     "Gira la golondrina para que la cabeza apunte hacia arriba. ¡Tu golondrina está lista!",
+  "Pinch the right edge":
+    "Marca el borde derecho",
+  "Fold the left edge down onto the bottom edge, but press the fold flat only where it meets the right edge, and unfold. The pinch marks a point.":
+    "Dobla el borde izquierdo hacia abajo sobre el borde inferior, pero aplasta el doblez solo donde llega al borde derecho, y desdobla. Esa pequeña marca señala un punto.",
+  "Pinch it again":
+    "Vuelve a marcar",
+  "Fold the right corner up to the pinch, pressing only at the right edge again, and unfold.":
+    "Dobla la esquina derecha hacia arriba hasta la marca, aplastando otra vez solo en el borde derecho, y desdobla.",
+  "Fold the bottom corner up to the second pinch on the right flap’s edge, and unfold.":
+    "Dobla la esquina de abajo hacia arriba hasta la segunda marca del borde de la solapa derecha, y desdobla.",
 };

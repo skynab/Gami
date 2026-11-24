@@ -19,6 +19,7 @@ import { FoldError } from '../fold/fold';
 import { framesOf, LAYER_GAP, normal } from '../fold/frames';
 import { joinedSegment } from '../fold/geometry2d';
 import { MARK_WIDTH, markColour, marksUpTo, onFace } from '../fold/marks';
+import { drawnParts } from '../fold/pinch';
 import { sheetOf } from '../fold/sheets';
 import { laidAlong, TAPE_COLOUR, TAPE_OPACITY } from '../fold/tape';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from '../fold/types';
@@ -183,8 +184,11 @@ function build(t: Transition, model: OrigamiModel, k: number): Built {
   t.faces.forEach((f, i) => bySheet[sheetOf(sheets, f.paper)].push(i));
   // Faces either side of a scissor cut aren't joined: no bend is drawn between them. The step's faces are its frame's.
   const frame = k ? model.steps[k - 1].frame : model.start;
+  // The paper before the step: where it had a pinch's unpressed stretch the step presses, or the step pinches (and
+  // opens up) a fold, the line along it shows as it moves.
+  const prior = k > 1 ? model.steps[k - 2].frame : model.start;
   const ranks = stackRanks(model, k, t.faces.length);
-  const parts = bySheet.map((faces) => buildPart(t, faces, frame, ranks?.lifts));
+  const parts = bySheet.map((faces) => buildPart(t, faces, frame, prior, ranks?.lifts));
   const marks = buildMarks(t, model, k);
   const tape = buildTape(t, model, k);
   return {
@@ -195,7 +199,7 @@ function build(t: Transition, model: OrigamiModel, k: number): Built {
       const pose = poseAt(t, s);
       // Bending, the paper goes from the flat stack's order to that of what's still stacked (see `stackLifts`).
       const bent = ranks?.bending ? Math.min(1, Math.max(0, s)) : 1;
-      for (const p of parts) p.update(pose, bent);
+      for (const p of parts) p.update(pose, bent, s >= 1);
       marks.update(pose, s);
       tape.update(pose, s);
     },
@@ -368,7 +372,13 @@ function laidSoFar(pts: Vec3[], reach: number[], upTo: number, size: number): Ve
   return out.length ? [...out, ...Array<Vec3>(size - out.length).fill(out[out.length - 1])] : Array<Vec3>(size).fill(pts[0]);
 }
 
-function buildPart(t: Transition, faceIndices: number[], frame: FoldFrame, lifts?: StackLifts): { part: Part; update(pose: ReturnType<typeof poseAt>, bent: number): void; dispose(): void } {
+function buildPart(
+  t: Transition,
+  faceIndices: number[],
+  frame: FoldFrame,
+  prior: FoldFrame,
+  lifts?: StackLifts,
+): { part: Part; update(pose: ReturnType<typeof poseAt>, bent: number, resting: boolean): void; dispose(): void } {
   const { cuts } = frame;
   const tracks = faceIndices.map((i) => t.faces[i]);
   const corners = tracks.reduce((n, f) => n + f.paper.length, 0);
@@ -379,7 +389,7 @@ function buildPart(t: Transition, faceIndices: number[], frame: FoldFrame, lifts
   const rank = new Float32Array(corners);
   const rankBack = new Float32Array(corners);
   const index: number[] = [];
-  const { lines, smooth, softly } = softness(frame, faceIndices);
+  const { lines, smooth, softly } = softness(frame, faceIndices, prior);
   const edgePositions = new Float32Array(lines.length * 6);
   // Each line drawn as near the eye as its face's side facing it.
   const edgeRanks = new Float32Array(lines.length * 2);
@@ -514,7 +524,7 @@ function buildPart(t: Transition, faceIndices: number[], frame: FoldFrame, lifts
 
   return {
     part: { surface, edges, bends },
-    update(pose, bent) {
+    update(pose, bent, resting) {
       rankFaces(bent);
       let c = 0;
       const faceNormals = faceIndices.map((i) => normal(pose[i]));
@@ -526,10 +536,13 @@ function buildPart(t: Transition, faceIndices: number[], frame: FoldFrame, lifts
           c++;
         });
       });
-      lines.forEach(([a, i], e) => {
+      lines.forEach(([a, i, from, to, when], e) => {
         const points = pose[faceIndices[a]];
-        edgePositions.set(points[i], e * 6);
-        edgePositions.set(points[(i + 1) % points.length], e * 6 + 3);
+        const [p, q] = [points[i], points[(i + 1) % points.length]];
+        // A stretch drawn only at rest, or only moving, is folded down to nothing the rest of the time.
+        const shown = when === 'always' || (when === 'resting') === resting;
+        edgePositions.set(lerp(p, q, from), e * 6);
+        edgePositions.set(shown ? lerp(p, q, to) : lerp(p, q, from), e * 6 + 3);
         edgeNormals.set(faceNormals[a], e * 6);
         edgeNormals.set(faceNormals[a], e * 6 + 3);
       });
@@ -548,22 +561,38 @@ function buildPart(t: Transition, faceIndices: number[], frame: FoldFrame, lifts
 }
 
 /**
- * For one sheet's faces (indices into `frame`'s): the face edges to draw as lines, as [face, corner] (soft edges
- * have none); for each corner, in order, the faces whose normals it's shaded with when bending paper meets it
- * smoothly there (undefined for a plain corner); and whether two faces meet along a soft edge.
+ * For one sheet's faces (indices into `frame`'s): the face edges to draw as lines, as [face, corner, from, to, when]
+ * (soft edges have none; from and to are how far along the edge the line runs, less than all of it along a pinch's
+ * unpressed stretch; `when`, whether it shows always, only at rest, or only as the step plays, where `prior`, the
+ * paper before the step, lines more of it); for each corner, in order, the faces whose normals it's shaded with when
+ * bending paper meets it smoothly there (undefined for a plain corner); and whether two faces meet along a soft edge.
  */
-function softness(frame: FoldFrame, faceIndices: number[]) {
+function softness(frame: FoldFrame, faceIndices: number[], prior: FoldFrame) {
   const key = (u: number, v: number) => (u < v ? `${u} ${v}` : `${v} ${u}`);
   const soft = new Set((frame.soft ?? []).map(([u, v]) => key(u, v)));
   const corners = (a: number) => frame.faces_vertices[faceIndices[a]];
-  const lines: [number, number][] = [];
+  const lines: [number, number, number, number, 'always' | 'resting' | 'moving'][] = [];
+  const parts = drawnParts(frame);
+  const before = drawnParts(prior);
+  const all = (l: [number, number][]) => l.length === 1 && l[0][0] === 0 && l[0][1] === 1;
   // The faces on each soft edge.
   const across = new Map<string, number[]>();
   faceIndices.forEach((_, a) =>
     corners(a).forEach((u, c, vs) => {
-      const k = key(u, vs[(c + 1) % vs.length]);
-      if (!soft.has(k)) lines.push([a, c]);
-      else across.set(k, [...(across.get(k) ?? []), a]);
+      const w = vs[(c + 1) % vs.length];
+      const k = key(u, w);
+      if (soft.has(k)) {
+        across.set(k, [...(across.get(k) ?? []), a]);
+        return;
+      }
+      const [p, q] = [frame.vertices_paper[u], frame.vertices_paper[w]];
+      const resting = parts(p, q);
+      const moving = union(resting, before(p, q));
+      if (all(resting)) lines.push([a, c, 0, 1, 'always']);
+      else {
+        for (const [s, e] of resting) lines.push([a, c, s, e, 'resting']);
+        for (const [s, e] of moving) lines.push([a, c, s, e, 'moving']);
+      }
     }),
   );
   // Faces meeting smoothly at each vertex: joined round it, soft edge by soft edge.
@@ -592,6 +621,17 @@ function softness(frame: FoldFrame, faceIndices: number[]) {
   );
   const pairs = new Set([...across.values()].flatMap((faces) => faces.flatMap((a) => faces.map((b) => `${a} ${b}`))));
   return { lines, smooth, softly: (a: number, b: number) => pairs.has(`${a} ${b}`) };
+}
+
+/** Two lists of stretches along an edge (fractions along it), joined: where either has a line. */
+function union(a: [number, number][], b: [number, number][]): [number, number][] {
+  const out: [number, number][] = [];
+  for (const [s, e] of [...a, ...b].sort((x, y) => x[0] - y[0])) {
+    const last = out[out.length - 1];
+    if (last && s <= last[1] + 1e-9) last[1] = Math.max(last[1], e);
+    else out.push([s, e]);
+  }
+  return out;
 }
 
 const add = (a: Vec3, b: Vec3): Vec3 => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];

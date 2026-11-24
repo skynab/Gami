@@ -11,6 +11,7 @@ import { settle } from './settle';
 import { radial, reparent, shape, type Bend, type Ray } from './shape';
 import { sheetOf, startFrame } from './sheets';
 import { isPenColour } from './marks';
+import { pinchedUnfold } from './pinch';
 import { keepIn, tape } from './tape';
 import { frontUp, sideOf } from './geometry2d';
 import { applyOp, inTurnVia, lastFold, lineOf, reopened, select, type At, type BendGoal, type Faces, type LineSpec, type Op } from './ops';
@@ -154,17 +155,26 @@ export class Recipe {
 
   /**
    * Opens the paper back up, keeping the creases. By default undoes the last fold; pass `to` (from `mark()`)
-   * to open everything folded since then.
+   * to open everything folded since then. `pinch`: the fold was only pressed between these two points (on the
+   * table as the paper lies now, or on the sheet), so only that much of its line creases.
    */
-  unfold(step: { title?: string; text?: string; to?: number } = {}): this {
+  unfold(step: { title?: string; text?: string; to?: number; pinch?: [At, At] } = {}): this {
     let to = step.to;
     if (to === undefined) {
       const last = lastFold(this.steps);
       if (last === null) throw new FoldError(`${this.info.id}: nothing to unfold at step ${this.steps.length + 1}`);
       to = last;
     }
-    const { frame, via } = unfoldStep(this.frames(), to, reopened(this.steps));
-    this.push({ title: step.title ?? 'Unfold', text: step.text, kind: 'unfold' }, frame, { op: 'unfold', ...(step.to !== undefined && { to }) });
+    const frames = this.frames();
+    const opened = unfoldStep(frames, to, reopened(this.steps));
+    const pinch = step.pinch && (step.pinch.map((a) => this.where(a)) as [Vec2, Vec2]);
+    const frame = pinch ? pinchedUnfold(frames, to, opened.frame, pinch) : opened.frame;
+    const via = opened.via;
+    this.push({ title: step.title ?? 'Unfold', text: step.text, kind: 'unfold' }, frame, {
+      op: 'unfold',
+      ...(step.to !== undefined && { to }),
+      ...(pinch && { pinch }),
+    });
     const now = this.steps.at(-1)!.frame;
     if (via) this.steps.at(-1)!.via = via.map((f) => keepIn(f, now));
     return this;

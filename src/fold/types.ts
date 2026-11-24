@@ -34,6 +34,12 @@ export interface FoldFrame {
   /** Strips of sticky tape on the paper so far (see tape.ts). Kept from frame to frame once laid. */
   tapes?: Tape[];
   /**
+   * Stretches of fold lines a pinch didn't press, as segments on the sheet (see pinch.ts): the paper is split along
+   * them, but they aren't creases, so face edges along them get no lines. Kept from frame to frame once made, less
+   * any stretch a later fold presses.
+   */
+  uncreased?: [Vec2, Vec2][];
+  /**
    * Edges between triangles of bent paper cut from one face (see docs/bending-plan.md), as pairs of vertices:
    * seams of the mesh rather than creases, so drawn without lines, and shaded smoothly across.
    */

@@ -1634,11 +1634,16 @@ kbd {
   touch-action: none;
 }
 
-.fold-editor .face {
+.fold-editor .face,
+.fold-editor .face-lines {
   stroke: var(--muted);
   stroke-width: 1px;
   vector-effect: non-scaling-stroke;
   stroke-linejoin: round;
+}
+
+.fold-editor .face-lines {
+  fill: none;
 }
 
 .fold-editor .moving-side {
