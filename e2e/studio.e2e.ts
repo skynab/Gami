@@ -101,6 +101,43 @@ test.describe('studio library', () => {
     await expect(editor.locator('.tape:not(.planned)')).toHaveCount(1);
   });
 
+  test('pinches a fold at an edge with the pinch tool', async ({ page }) => {
+    await page.goto('/studio');
+    await page.getByRole('button', { name: 'New design' }).click();
+    const editor = page.getByRole('img', { name: 'The paper from above' });
+    const click = async (x: number, z: number) => {
+      const p = await editor.evaluate((svg, [x, z]) => {
+        const p = new DOMPoint(x, z).matrixTransform((svg as SVGSVGElement).getScreenCTM()!);
+        return { x: p.x, y: p.y };
+      }, [x, z] as const);
+      await page.mouse.click(p.x, p.y);
+    };
+    const bar = page.locator('.bottombar');
+
+    // Nothing folded yet: nothing to pinch.
+    await bar.getByRole('button', { name: 'Pinch', exact: true }).first().click();
+    await expect(page.getByText('There’s no fold to pinch.')).toBeVisible();
+
+    // Folded in half, left corner onto right.
+    await bar.getByRole('button', { name: 'Fold', exact: true }).first().click();
+    await click(-0.5, -0.5);
+    await click(0.5, -0.5);
+    await bar.getByRole('button', { name: 'Fold', exact: true }).last().click();
+    await expect(page.getByRole('textbox', { name: 'Step 1 title' })).toHaveValue('Valley fold');
+
+    // The fold shows dotted; two picks near it go onto it, and the pinch opens it.
+    await bar.getByRole('button', { name: 'Pinch', exact: true }).first().click();
+    await expect(page.getByText('Pick two points along a dotted fold')).toBeVisible();
+    await expect(editor.locator('.fold-line')).toHaveCount(1);
+    await click(0.06, -0.3);
+    await click(0.08, -0.15);
+    await expect(editor.locator('.pinch')).toHaveCount(1);
+    await bar.getByRole('button', { name: 'Pinch', exact: true }).last().click();
+    await expect(page.getByRole('textbox', { name: 'Step 2 title' })).toHaveValue('Pinch and unfold');
+    // Opened, the fold's line is drawn only where it was pressed.
+    await expect(editor.locator('.face-lines')).toHaveCount(2);
+  });
+
   test('makes named folds: a pleat, a rabbit ear on a triangle, and a swivel', async ({ page }) => {
     await page.goto('/studio');
     await page.getByRole('button', { name: 'New design' }).click();

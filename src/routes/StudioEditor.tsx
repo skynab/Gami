@@ -360,7 +360,8 @@ export default function StudioEditor({ end, cloud = false }: {
             // A cut about to be made, or the way a pop-up's first crease points.
             cut={(s.action === 'cut' || s.action === 'popUp') && s.picks.length === 2 ? [s.picks[0], s.picks[1]] : null}
             tape={s.action === 'tape' && s.picks.length === 2 ? planned(() => tapeStrip(s.picks[0], s.picks[1], s.tapeWidth)) : null}
-            free={s.action === 'cut' || s.action === 'tape' || s.action === 'preset' || s.action === 'draw' || s.action === 'popUp' || s.pickMode === 'anchor'}
+            pinch={s.action === 'pinch' && tools.pinchLines ? { lines: tools.pinchLines, at: s.picks.length === 2 ? [s.picks[0], s.picks[1]] : null } : null}
+            free={s.action === 'cut' || s.action === 'tape' || s.action === 'pinch' || s.action === 'preset' || s.action === 'draw' || s.action === 'popUp' || s.pickMode === 'anchor'}
             marks={onPaper}
             drawing={s.action === 'draw' ? [...s.marks.map((m) => ({ points: m.table, fill: !!m.mark.fill })), { points: s.picks, fill: s.fill }] : []}
             faces={FACE_ACTIONS.includes(s.action) && (s.pickMode === 'faces' || s.picked.length) ? s.picked : null}

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { fromFoldFile, toFoldFile } from './fold-format';
 import { applyOp, replay } from './ops';
-import { drawnParts, merged, unpressed } from './pinch';
+import { drawnParts, foldLines, merged, onFoldLine, unpressed } from './pinch';
 import { paper, Recipe, table } from './recipe';
 import { fromAbove } from './thumbnail';
 import type { OrigamiModel, Vec2 } from './types';
@@ -67,6 +67,17 @@ describe('pinches', () => {
     // Each half's outline is drawn edge by edge, its edge on the fold only as far as the pinch.
     const onFold = [...body.matchAll(/M0,(-?[\d.]+)L0,(-?[\d.]+)/g)].map((m) => [Number(m[1]), Number(m[2])].sort((a, b) => a - b));
     expect(onFold).toEqual([[-0.5, -0.4], [-0.5, -0.4]]);
+  });
+
+  it('can be pressed along the folds an unfold opens, picked near them', () => {
+    const r = new Recipe({ id: 'x', title: 'X', sheet }).onto(paper(-0.5, 0), paper(0.5, 0), { title: 'Fold' });
+    const model = r.build();
+    const open = applyOp(model, { op: 'unfold' }).frame;
+    const lines = foldLines([model.start, ...model.steps.map((s) => s.frame)], 0, open);
+    expect(near(lines)).toEqual([[[0, -0.5], [0, 0.5]]]);
+    // Each point goes onto the line nearest the first, kept within it.
+    expect(onFoldLine(lines, [[0.04, -0.45], [0.1, -0.7]])?.map((p) => p.map((n) => +n.toFixed(9) || 0))).toEqual([[0, -0.45], [0, -0.5]]);
+    expect(onFoldLine([], [[0, 0]])).toBeNull();
   });
 
   it('can be replayed from a hand-written operation', () => {

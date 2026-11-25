@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { sayFold } from '../i18n';
 import { FoldError } from '../fold/fold';
 import { lineThrough, type Line } from '../fold/geometry2d';
-import { applyOp, atOf, lineOf, NoStillError, OpError, shapingBase, type At, type Faces, type LineSpec, type Op, type ShapeBend } from '../fold/ops';
+import { applyOp, atOf, lastFold, lineOf, NoStillError, OpError, shapingBase, type At, type Faces, type LineSpec, type Op, type ShapeBend } from '../fold/ops';
 import type { FoldFrame, Mark, OrigamiModel, Vec2 } from '../fold/types';
+import { foldLines, onFoldLine } from '../fold/pinch';
 import { PRESET_PICKS, presetOp } from '../fold/presets';
 import { TAPE_WIDTH } from '../fold/tape';
 import { markAt, popRays, project, toggleFace, viewBox } from './editor';
@@ -81,6 +82,21 @@ export function useTools(before: OrigamiModel) {
     ...(only && { only }),
   });
 
+  // Pinching: where the folds the next unfold opens lie on the table, to press along one. Null with none to open.
+  const pinchLines = useMemo((): [Vec2, Vec2][] | null => {
+    if (action !== 'pinch') return null;
+    const to = lastFold(before.steps);
+    if (to === null) return null;
+    try {
+      const { frame: open } = applyOp(before, { op: 'unfold' });
+      const lines = foldLines([before.start, ...before.steps.map((st) => st.frame)], to, open);
+      return lines.length ? lines : null;
+    } catch (e) {
+      if (e instanceof FoldError || e instanceof OpError) return null;
+      throw e;
+    }
+  }, [action, before]);
+
   // A named fold, worked out from its picks, or why it can't be made there.
   const named = useMemo((): { op: Op } | { error: string } | null => {
     if (action !== 'preset' || picks.length < needs) return null;
@@ -110,6 +126,10 @@ export function useTools(before: OrigamiModel) {
       const [from, to] = picks.map((p) => atOf(editFrame, p));
       return { op: 'tape', from, to, ...(s.tapeWidth !== TAPE_WIDTH && { width: s.tapeWidth }) };
     }
+    if (action === 'pinch') {
+      if (!pinchLines || picks.length < 2 || Math.hypot(picks[1][0] - picks[0][0], picks[1][1] - picks[0][1]) < 1e-6) return null;
+      return { op: 'unfold', pinch: [picks[0], picks[1]] };
+    }
     if (action === 'draw') {
       const all = [...s.marks.map((m) => m.mark), ...(mark ? [mark] : [])];
       return all.length ? { op: 'draw', marks: all } : null;
@@ -136,7 +156,7 @@ export function useTools(before: OrigamiModel) {
     const faces = creaseFaces(n, chosen, facesPicked);
     return { op: 'collapse', creases: [{ line: spec, ...flip, kind: s.reverseKind, ...(faces && { only: faces }) }], anchor: auto };
     // The operation is rebuilt from the whole tool state; `result` below only refolds when it changes.
-  }, [s, chosen, editFrame, spec, line, mark, anchorAt, named]);
+  }, [s, chosen, editFrame, spec, line, mark, anchorAt, named, pinchLines]);
   const opKey = JSON.stringify(op);
 
   // For a lift, `onFlat` is the preview with its faces matched to the flat state the lines are picked on.
@@ -181,6 +201,8 @@ export function useTools(before: OrigamiModel) {
     if (action === 'move') return preview ? (picks.length ? t('studio.hints.move') : t('studio.hints.moveWhere')) : null;
     if (action === 'cut' && picks.length < needs) return t('studio.hints.cutEnds');
     if (action === 'tape' && picks.length < needs) return t('studio.hints.tapeEnds');
+    // Nothing to pinch is no mistake: just after a pinch, there's none until the next fold.
+    if (action === 'pinch') return !pinchLines ? t('studio.hints.pinchNone') : picks.length < needs ? t('studio.hints.pinchEnds') : preview ? t('studio.hints.pinch') : null;
     if (action === 'preset') return picks.length < needs ? t(`studio.hints.presets.${s.preset}`) : preview ? t('studio.hints.preset') : null;
     if (action === 'draw') return mark ? t('studio.hints.draw') : s.marks.length ? t('studio.hints.marks', { count: s.marks.length }) : t('studio.hints.drawPoints');
     if (action === 'popUp') return preview ? t('studio.hints.popUp') : t('studio.hints.popUpPoints');
@@ -218,6 +240,7 @@ export function useTools(before: OrigamiModel) {
     result,
     preview,
     presetCreases,
+    pinchLines,
     error,
     hint,
     startOver,
@@ -246,7 +269,11 @@ export function useTools(before: OrigamiModel) {
     pick: (p: Vec2) =>
       s.pickMode === 'anchor'
         ? set({ anchorPick: { spot: p, at: atOf(editFrame, p) }, pickMode: 'points' })
-        : update((prev) => ({ picks: prev.action === 'move' || prev.picks.length >= needs ? [p] : [...prev.picks, p] })),
+        : update((prev) => {
+            const picked = prev.action === 'move' || prev.picks.length >= needs ? [p] : [...prev.picks, p];
+            // A pinch's points go on the fold line nearest the first.
+            return { picks: (prev.action === 'pinch' && pinchLines && onFoldLine(pinchLines, picked)) || picked };
+          }),
     /** A face clicked while picking faces: picked, or left out again. */
     pickFace: (spot: Vec2) => update((prev) => ({ picked: toggleFace(editFrame, prev.picked, spot) })),
   };

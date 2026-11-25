@@ -65,15 +65,13 @@ function faceNormal(frame: FoldFrame, f: number): Vec3 {
 }
 
 /**
- * The creases left by opening `folded` back up to `unfolded` (its faces, placed as an earlier frame has them), when
- * the fold was pinched only between `keep`'s two points on the table, as `folded` lies: the parts of the new creases
- * along that line but outside the pinch, as segments on the sheet. `before` is the paper before the folds, so creases
- * it already had stay creased.
+ * The new creases opening `folded` back up to `unfolded` makes (its faces, placed as an earlier frame has them), each
+ * edge once: where it is on the sheet (p, q) and where it lay on the table as `folded` lies (wp, wq). `before` is the
+ * paper before the folds: creases it already had aren't new.
  */
-export function unpinched(folded: FoldFrame, unfolded: FoldFrame, before: FoldFrame, keep: [Vec2, Vec2]): [Vec2, Vec2][] {
-  const [a, b] = keep;
+function newCreases(folded: FoldFrame, unfolded: FoldFrame, before: FoldFrame) {
   const old = edges(before);
-  const out: [Vec2, Vec2][] = [];
+  const out: { p: Vec2; q: Vec2; wp: Vec2; wq: Vec2 }[] = [];
   const seen = new Set<string>();
   for (const { f, c, p, q } of edges(unfolded)) {
     // Where the edge lay when the paper was folded: the unfolded frame keeps the folded one's faces.
@@ -81,18 +79,31 @@ export function unpinched(folded: FoldFrame, unfolded: FoldFrame, before: FoldFr
     if (!face) continue;
     const wp = flat(folded.vertices_coords[face[c]]);
     const wq = flat(folded.vertices_coords[face[(c + 1) % face.length]]);
-    const on = along(a, b, wp, wq, 1e-6);
-    if (!on) continue;
     const k = [p, q].map((x) => x.map((n) => n.toFixed(6)).join(',')).sort().join('|');
     if (seen.has(k)) continue;
     seen.add(k);
-    // Creased before the folds: it stays so.
+    // Creased before the folds (the paper's outline among them): not new.
     const mid = lerp(p, q, 0.5);
     const creased = old.some((o) => {
       const at = along(o.p, o.q, mid, mid);
       return !!at && at[0] > -1e-9 && at[0] < 1 + 1e-9;
     });
-    if (creased) continue;
+    if (!creased) out.push({ p, q, wp, wq });
+  }
+  return out;
+}
+
+/**
+ * The creases left by opening `folded` back up to `unfolded`, when the fold was pinched only between `keep`'s two
+ * points on the table, as `folded` lies: the parts of the new creases along that line but outside the pinch, as
+ * segments on the sheet. `before` is the paper before the folds, so creases it already had stay creased.
+ */
+export function unpinched(folded: FoldFrame, unfolded: FoldFrame, before: FoldFrame, keep: [Vec2, Vec2]): [Vec2, Vec2][] {
+  const [a, b] = keep;
+  const out: [Vec2, Vec2][] = [];
+  for (const { p, q, wp, wq } of newCreases(folded, unfolded, before)) {
+    const on = along(a, b, wp, wq, 1e-6);
+    if (!on) continue;
     // The pinch, as a stretch of this edge: where along it the edge's folded place falls inside a–b.
     const [s, e] = on;
     const span = e - s;
@@ -103,6 +114,31 @@ export function unpinched(folded: FoldFrame, unfolded: FoldFrame, before: FoldFr
     for (const [t0, t1] of less([kept])) out.push([lerp(p, q, t0), lerp(p, q, t1)]);
   }
   return merged(out);
+}
+
+/**
+ * Where on the table, as the last of `frames` lies, the folds an unfold to frame `to` opens run: the lines a pinch
+ * can press along, each as one segment. `unfolded` is that unfold's paper.
+ */
+export function foldLines(frames: FoldFrame[], to: number, unfolded: FoldFrame): [Vec2, Vec2][] {
+  const folded = frames[frames.length - 1];
+  return merged(newCreases(folded, unfolded, frames[to]).map(({ wp, wq }): [Vec2, Vec2] => [wp, wq]));
+}
+
+/**
+ * The two points picked for a pinch, put on the fold line nearest the first of them (among `lines`, from foldLines),
+ * and kept within it. Null with no fold lines.
+ */
+export function onFoldLine(lines: [Vec2, Vec2][], picks: Vec2[]): Vec2[] | null {
+  if (!lines.length || !picks.length) return null;
+  const at = (seg: [Vec2, Vec2], p: Vec2) => {
+    const d = sub(seg[1], seg[0]);
+    const t = Math.min(1, Math.max(0, dot(sub(p, seg[0]), d) / (dot(d, d) || 1)));
+    return lerp(seg[0], seg[1], t);
+  };
+  const gap = (seg: [Vec2, Vec2], p: Vec2) => Math.hypot(...sub(at(seg, p), p));
+  const seg = lines.reduce((best, l) => (gap(l, picks[0]) < gap(best, picks[0]) ? l : best));
+  return picks.map((p) => at(seg, p));
 }
 
 /**

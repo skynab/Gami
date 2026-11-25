@@ -275,7 +275,7 @@ What the five left out, and the engine features that would bring it back (detail
 | Feature | Brings back | Size |
 |---|---|---|
 | ✅ Coloured pen marks (23 November: `Mark.colour`, a Pen swatch in the Studio's Draw tool) | The chicken's red comb, the kimono's gold obi, the parrot's pale beak, all drawn on | Small |
-| ✅ Pinches (24 November: `unfold({ pinch })`, only the pinched part of the line creases) | The chicken's landmarks, drawn as origami.me draws them. Next: a Pinch tool in the Studio | Small to medium |
+| ✅ Pinches (24 November: `unfold({ pinch })`, only the pinched part of the line creases) | The chicken's landmarks, drawn as origami.me draws them. The Studio's Pinch tool (24 November) makes them too | Small to medium |
 | Opening one layer of a fold | The chicken's comb as folded, "open the pocket" moves | Medium |
 
 Also: the chicken stood up with `assemble`, and the wallet opened part way with a `bend`.

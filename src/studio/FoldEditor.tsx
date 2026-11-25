@@ -10,9 +10,9 @@ import { cutsOnTable, frontUp, isPicked, markOnTable, project, snapPoints, tapeO
  * The paper seen from above, as you'd see it on the table. Click the dots to place a fold: the crease
  * shows as a line, the side that moves is shaded, and a dashed outline shows where it will land.
  * Scissor cuts made so far show as solid lines, what's been drawn on the paper as thin ones, and tape as
- * see-through strips.
+ * see-through strips. Pinching, the folds that will open show dotted, and the stretch to press along one thick.
  */
-export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kind, preview, extra = [], cut = null, tape = null, free = false, marks = [], drawing = [], faces: picked, anchor = null, onPick, onFace }: {
+export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kind, preview, extra = [], cut = null, tape = null, pinch = null, free = false, marks = [], drawing = [], faces: picked, anchor = null, onPick, onFace }: {
   frame: FoldFrame;
   model: Pick<OrigamiModel, 'sheets'>;
   picks: Vec2[];
@@ -28,6 +28,8 @@ export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kin
   cut?: [Vec2, Vec2] | null;
   /** A strip of tape about to be laid, its outline on the table. */
   tape?: Vec2[] | null;
+  /** Pinching: the folds that will open, on the table, and the stretch picked to press along one. */
+  pinch?: { lines: [Vec2, Vec2][]; at: [Vec2, Vec2] | null } | null;
   /** Picks can go anywhere, snapping to a dot only when one is close. */
   free?: boolean;
   /** What's drawn on the paper so far. */
@@ -148,6 +150,10 @@ export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kin
       )}
       {anchor && <rect x={anchor[0] - 1.6 * unit} y={anchor[1] - 1.6 * unit} width={3.2 * unit} height={3.2 * unit} className="anchor" />}
       {tape && <polygon points={pts(tape)} className="tape planned" />}
+      {pinch?.lines.map(([a, b], i) => (
+        <line key={i} x1={a[0]} y1={a[1]} x2={b[0]} y2={b[1]} className="fold-line" />
+      ))}
+      {pinch?.at && <line x1={pinch.at[0][0]} y1={pinch.at[0][1]} x2={pinch.at[1][0]} y2={pinch.at[1][1]} className="pinch" />}
       {cut && <line x1={cut[0][0]} y1={cut[0][1]} x2={cut[1][0]} y2={cut[1][1]} className="cut planned" />}
       {snaps.map((s, i) => (
         <circle key={i} cx={s[0]} cy={s[1]} r={1.1 * unit} className="snap" />

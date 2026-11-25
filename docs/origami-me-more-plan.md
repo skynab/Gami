@@ -115,7 +115,7 @@ the parrot's pale yellow beak (both sides). What's below is what folding them wo
 
 - ✅ **Pinches** (24 November): `unfold({ pinch })`, a fold pressed only for a short way and opened, so only that much
   of its line creases (the rest is kept as `uncreased` and drawn without lines). The chicken's two landmarks are pinched
-  at the right edge. The Studio has no pinch tool yet.
+  at the right edge. The Studio's Pinch tool makes them: two picks along the fold about to open.
 - **Opening one layer of a fold**: unfolding the top layer of a reverse fold while the rest stays (the chicken's comb),
   and similar "open the pocket" moves.
 - ✅ **Coloured pen marks** (23 November): a mark's `colour` (`#rrggbb`, kept in .fold files), drawn in it by the

@@ -50,6 +50,16 @@ describe('loading a step into the tools', () => {
     expect(stepFor(strip, ((key: string) => key) as unknown as TFunction)).toEqual({ title: 'studio.steps.tape', kind: 'tape' });
   });
 
+  it('sets a pinch from its two points, but not an unfold further back', () => {
+    const m = new Recipe({ id: 'p', title: 'P', sheet: { size: [1, 1], front: '#fff', back: '#000' } }).onto(paper(-0.5, 0), paper(0.5, 0), { title: 'Fold' }).build();
+    const pinch: Op = { op: 'unfold', pinch: [[0, -0.5], [0, -0.4]] };
+    expect(toolsFor(pinch, m)).toMatchObject({ action: 'pinch', picks: [[0, -0.5], [0, -0.4]] });
+    expect(toolsFor({ ...pinch, to: 0 }, m).action).toBeUndefined();
+    const t = ((key: string) => key) as unknown as TFunction;
+    expect(stepFor(pinch, t)).toEqual({ title: 'studio.steps.pinch', kind: 'unfold' });
+    expect(stepFor({ op: 'unfold' }, t)).toEqual({ title: 'studio.steps.unfold', kind: 'unfold' });
+  });
+
   it('sets a bend from its paper, what stays put and its creases, keeping goals it can’t show', () => {
     const m = new Recipe({ id: 'b', title: 'B', sheet: { size: [1, 1], front: '#fff', back: '#000' } })
       .crease(paper(0, -0.5), paper(0, 0.5), { title: 'Crease down the middle' })
