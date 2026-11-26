@@ -81,8 +81,9 @@ function checks(id: string, model: ReturnType<(typeof RECIPES)[number]>) {
     expect(file(`${id}-preview.svg`)).toBe(previewSvg(model));
   });
 
-  // Replaying a bend solves it again, which takes seconds.
-  it('folds again from its .fold file exactly as its recipe did', { timeout: 60_000 }, () => {
+  // Replaying a bend solves it again: up to 38 s on its own (the balloon and balloon rabbit, 24 November), and
+  // past 60 s with the other shards' workers sharing the cores.
+  it('folds again from its .fold file exactly as its recipe did', { timeout: 180_000 }, () => {
     const warnings: string[] = [];
     const read = fromFoldFile(JSON.parse(JSON.stringify(toFoldFile(model))), warnings);
     expect(warnings).toEqual([]);
