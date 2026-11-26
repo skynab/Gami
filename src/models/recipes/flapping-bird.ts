@@ -14,10 +14,11 @@ export function flappingBird() {
   const { up, front, back } = birdBase(r);
 
   // Neck and tail: each lower point swings up and out between the wings, to 45° above level. The fold line
-  // bisects straight down and that direction.
+  // bisects straight down and that direction. The neck's starts a little below the tail's: from the same point,
+  // the neck swung through the tail's layers where the two lines meet (0.0041 deep, 26 November 2026).
   const A = Math.PI / 4;
-  const root = up(0.4);
-  const out = (dir: 1 | -1): Vec2 => [root[0] + dir * Math.cos(A), root[1] + 1 - Math.sin(A)];
+  const roots = { [-1]: up(0.4), [1]: up(0.38) } as Record<1 | -1, Vec2>;
+  const out = (dir: 1 | -1): Vec2 => [roots[dir][0] + dir * Math.cos(A), roots[dir][1] + 1 - Math.sin(A)];
   const leg = (su: number) => ([u, v]: Vec2) => Math.sign(u) === su && Math.sign(v) === su;
   r.collapse(
     {
@@ -25,11 +26,11 @@ export function flappingBird() {
       text: 'Hold the body, and pull the left lower point out and up between the wings. Flatten it at an angle. This is the tail.',
       kind: 'reverse',
     },
-    [{ through: [table(...root), table(...out(-1))], kind: 'inside', only: leg(1) }],
+    [{ through: [table(...roots[-1]), table(...out(-1))], kind: 'inside', only: leg(1) }],
     paper(-0.3, 0.3),
   ).collapse(
     { title: 'Pull out the neck', text: 'The same with the right point, for the neck.', kind: 'reverse' },
-    [{ through: [table(...root), table(...out(1))], kind: 'inside', only: leg(-1) }],
+    [{ through: [table(...roots[1]), table(...out(1))], kind: 'inside', only: leg(-1) }],
     paper(-0.3, 0.3),
   );
 

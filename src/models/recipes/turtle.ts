@@ -10,7 +10,7 @@ import { cornersUp, T, waterbombBase } from './waterbomb-base';
  */
 export function turtle() {
   const r = waterbombBase(new Recipe({ id: 'turtle', title: 'Turtle', sheet: { size: [1, 1], front: '#5f9e4a', back: '#c9e3a4' } }));
-  narrowedSide(r, 30, 'back flipper', ', low down');
+  narrowedSide(r, 38, 'back flipper', ', low down');
   r.turnOver('Turn the paper over.');
   narrowedSide(r, 55, 'front flipper');
   // Eyes near the head's point, and the shell's plates: a hexagon in the middle with a spoke from each corner.

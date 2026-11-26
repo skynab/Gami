@@ -35,9 +35,6 @@ export const GRAZES: Record<string, number> = {
   horse: 0.0085, // The tail and head, through the neck's stack (0.0075 and 0.0080, 25 November 2026; 0.008 whatever the head's angle).
   // The same, found bringing GRAZE down to five layers (20 November 2026).
   penguin: 0.0055, // Turning the head down, as it lands.
-  crow: 0.0048, // Making the feet.
-  'flapping-bird': 0.0045, // Pulling out the neck: 0.013 at its deepest, between the samples.
-  turtle: 0.005, // Folding out the back flippers: the four-layer flap's lower layers dip into the shell as it lands.
   fox: 0.008, // Folding the tail in, deepest as it lands.
   // Found looking near the ends of steps and at points tucked through (20 November 2026).
   heart: 0.0095, // Folding the top down: the white side triangles lie on the point it turns up through as it starts.

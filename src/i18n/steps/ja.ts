@@ -3269,4 +3269,54 @@ export const ja: Record<string, string> = {
     "V字に開く",
   "Bend the two halves up a little along the middle crease, so the wing makes a shallow V. It’s ready to fly: launch it gently, level, and let it float.":
     "まん中の折りすじで左右を少し上に曲げ、浅いV字にします。できあがり。水平にそっと投げて、ふわりと飛ばしましょう。",
+  "With scissors, cut the long lower point up the middle, through all the layers, as far as the widest part. Each corner of the paper parts into two thin flaps.":
+    "はさみで、下の長い角を、すべての紙をいっしょに、いちばん広いところまでまん中で切ります。紙のそれぞれの角が、細い二つのフラップに分かれます。",
+  "Narrow the flaps":
+    "フラップを細くする",
+  "Fold the lower edges of the top layer in to the middle line.":
+    "上の一枚の下のふちを、まん中の線に合わせて折ります。",
+  "Turn two pages":
+    "二ページめくる",
+  "Turn the top two flaps on the right over to the left.":
+    "右の上の二枚を左へめくります。",
+  "Fold these lower edges in to the middle line too.":
+    "この下のふちも、まん中の線に合わせて折ります。",
+  "Turn the top two flaps on the right over to the left here too.":
+    "こちらでも、右の上の二枚を左へめくります。",
+  "Narrow the last flaps":
+    "最後のフラップを細くする",
+  "Cut the shoulders":
+    "肩に切りこみを入れる",
+  "With scissors, make a short cut in from each side of the top part, slanting a little down, through all the layers.":
+    "はさみで、上の部分の両側から、少し下向きにななめに、すべての紙をいっしょに短く切ります。",
+  "Fold the top point down between the cuts, on a level line through their ends, over the front. The bits beside the cuts stay up as eyes.":
+    "切りこみのあいだで、切りこみのはしを通るよこの線で、上の角を前に折り下げます。切りこみの横の部分は立ったまま、目になります。",
+  "Turn out the first legs":
+    "最初の足を出す",
+  "Fold the top flap on each side out to the side, on a line slanting down from the middle. They stick out nearly level.":
+    "それぞれの側の上のフラップを、まん中からななめ下に下がる線で外へ折ります。ほぼよこに出ます。",
+  "Turn out the next legs":
+    "つぎの足を出す",
+  "Fold the next flap on each side out over the first pair, from a little lower down and a little steeper, so they fan out above it.":
+    "つぎのフラップを、最初の足の上に、少し下から少し上向きに外へ折ります。扇のように広がります。",
+  "Turn out a third leg":
+    "三番目の足を出す",
+  "The same with the third flap on the left, a little lower and steeper again.":
+    "左の三番目のフラップも同じように、少し下から、さらに上向きに折ります。",
+  "And the third flap on the right.":
+    "右の三番目のフラップも。",
+  "Turn out the claws":
+    "はさみを出す",
+  "And the last pair, lower again and steepest of all: these are the claws.":
+    "最後の二本は、さらに下から、いちばん上向きに折ります。これがはさみです。",
+  "Bend the claws":
+    "はさみを曲げる",
+  "Fold the tip of each claw in towards the middle, about halfway along.":
+    "それぞれのはさみの先を、半分くらいのところで、まん中に向けて折ります。",
+  "Bend the legs":
+    "足を曲げる",
+  "Fold the tip of each leg down and out, about halfway along.":
+    "それぞれの足の先を、半分くらいのところで、下の外側に折ります。",
+  "Turn the crab over. It’s finished!":
+    "かにを裏返します。できあがり！",
 };

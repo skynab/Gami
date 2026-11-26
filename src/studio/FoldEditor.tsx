@@ -1,4 +1,5 @@
 import { useMemo, useRef, type PointerEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { placeLike } from '../fold/fold';
 import { dist, signedArea, split, type Line } from '../fold/geometry2d';
 import { drawnParts } from '../fold/pinch';
@@ -43,6 +44,7 @@ export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kin
   onPick(point: Vec2): void;
   onFace?(spot: Vec2): void;
 }) {
+  const { t } = useTranslation();
   const svg = useRef<SVGSVGElement>(null);
   const faces = useMemo(() => project(frame).sort((a, b) => a.layer - b.layer), [frame]);
   const snaps = useMemo(() => snapPoints(frame), [frame]);
@@ -103,7 +105,7 @@ export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kin
   };
 
   return (
-    <svg ref={svg} className="fold-editor" viewBox={box.join(' ')} onPointerDown={pick} role="img" aria-label="The paper from above">
+    <svg ref={svg} className="fold-editor" viewBox={box.join(' ')} onPointerDown={pick} role="img" aria-label={t('studio.paperFromAbove')}>
       {faces.map((f, i) => (
         <g key={i}>
           {outline(f, faceColour(model, f.paper, frontUp(f.world, f.paper)))}

@@ -3269,4 +3269,54 @@ export const fr: Record<string, string> = {
     "Ouvrir en V",
   "Bend the two halves up a little along the middle crease, so the wing makes a shallow V. It’s ready to fly: launch it gently, level, and let it float.":
     "Relevez un peu les deux moitiés le long du pli du milieu, pour que l’aile forme un V ouvert. Il est prêt : lancez-le en douceur, à plat, et laissez-le flotter.",
+  "With scissors, cut the long lower point up the middle, through all the layers, as far as the widest part. Each corner of the paper parts into two thin flaps.":
+    "Avec des ciseaux, coupez la longue pointe du bas au milieu, à travers toutes les épaisseurs, jusqu’à la partie la plus large. Chaque coin du papier se sépare en deux rabats fins.",
+  "Narrow the flaps":
+    "Affiner les rabats",
+  "Fold the lower edges of the top layer in to the middle line.":
+    "Rabattez les bords inférieurs de l’épaisseur du dessus sur la ligne du milieu.",
+  "Turn two pages":
+    "Tourner deux pages",
+  "Turn the top two flaps on the right over to the left.":
+    "Tournez les deux rabats du dessus de droite à gauche.",
+  "Fold these lower edges in to the middle line too.":
+    "Rabattez aussi ces bords inférieurs sur la ligne du milieu.",
+  "Turn the top two flaps on the right over to the left here too.":
+    "Ici aussi, tournez les deux rabats du dessus de droite à gauche.",
+  "Narrow the last flaps":
+    "Affiner les derniers rabats",
+  "Cut the shoulders":
+    "Couper les épaules",
+  "With scissors, make a short cut in from each side of the top part, slanting a little down, through all the layers.":
+    "Avec des ciseaux, faites une petite coupe depuis chaque côté de la partie du haut, un peu en biais vers le bas, à travers toutes les épaisseurs.",
+  "Fold the top point down between the cuts, on a level line through their ends, over the front. The bits beside the cuts stay up as eyes.":
+    "Rabattez la pointe du haut entre les coupes, le long d’une ligne horizontale passant par leurs extrémités, par-devant. Les petits bouts à côté des coupes restent dressés : ce sont les yeux.",
+  "Turn out the first legs":
+    "Sortir les premières pattes",
+  "Fold the top flap on each side out to the side, on a line slanting down from the middle. They stick out nearly level.":
+    "Rabattez le rabat du dessus de chaque côté vers l’extérieur, le long d’une ligne qui descend en biais depuis le milieu. Elles sortent presque à l’horizontale.",
+  "Turn out the next legs":
+    "Sortir les pattes suivantes",
+  "Fold the next flap on each side out over the first pair, from a little lower down and a little steeper, so they fan out above it.":
+    "Rabattez le rabat suivant de chaque côté vers l’extérieur, par-dessus la première paire, d’un peu plus bas et un peu plus relevé, pour qu’elles s’étalent en éventail au-dessus.",
+  "Turn out a third leg":
+    "Sortir une troisième patte",
+  "The same with the third flap on the left, a little lower and steeper again.":
+    "Pareil avec le troisième rabat à gauche, un peu plus bas et encore plus relevé.",
+  "And the third flap on the right.":
+    "Et le troisième rabat à droite.",
+  "Turn out the claws":
+    "Sortir les pinces",
+  "And the last pair, lower again and steepest of all: these are the claws.":
+    "Et la dernière paire, plus bas encore et la plus relevée de toutes : ce sont les pinces.",
+  "Bend the claws":
+    "Plier les pinces",
+  "Fold the tip of each claw in towards the middle, about halfway along.":
+    "Rabattez la pointe de chaque pince vers le milieu, à peu près à mi-longueur.",
+  "Bend the legs":
+    "Plier les pattes",
+  "Fold the tip of each leg down and out, about halfway along.":
+    "Rabattez la pointe de chaque patte vers le bas et l’extérieur, à peu près à mi-longueur.",
+  "Turn the crab over. It’s finished!":
+    "Retournez le crabe. Il est terminé !",
 };

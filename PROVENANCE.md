@@ -138,6 +138,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `parrot` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a parrot from a kite, its long point pleated for the tail, folded in half and its short point reverse-folded for a hooked beak; Gilad's database lists a traditional parrot (in Saydak's *Everyone Can Learn Origami*), but Gami's follows neither it nor origami.me's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 22 Nov 2026 |
 | `chicken` | Traditional (origami.me credits it as a traditional design; Gilad's database lists three Traditional chickens, among them Saydak's *Everyone Can Learn Origami* and NOA 156) | None needed: nobody owns it | [origami.me/chicken](https://origami.me/chicken/) (order of folds, but its wings) | Clear | 22 Nov 2026 |
 | `horse` | Traditional (origami.me credits it as a traditional design; Gilad's database lists twelve Horses credited Traditional, most from a square with cuts, among them Saydak's *Everyone Can Learn Origami*, Fuse's *Action Origami* and NOA 168) | None needed: nobody owns it | [origami.me/horse](https://origami.me/horse/) (order of folds) | Clear | 25 Nov 2026 |
+| `crab` | Traditional (origami.me credits it as a traditional design; Gilad's database lists six Crabs credited Traditional, five from a square with cuts, among them Saydak's *Everyone Can Learn Origami*, Honda's *The World of Origami* and ORU 1) | None needed: nobody owns it | [origami.me/crab](https://origami.me/crab/) (order of folds) | Clear | 26 Nov 2026 |
 | `swallow` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a swallow seen from above, from the traditional bird base with its legs narrowed and reverse-folded out as swept-back wings, the front flap folded down for the head and the back flap cut up the middle and folded apart for a forked tail; Gilad's database lists traditional swallows (Saydak's *Everyone Can Learn Origami* and others), but Gami's follows neither them nor origami.me's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the bird base's folds follow `crane` | Clear | 24 Nov 2026 |
 
 ### Notes
@@ -210,6 +211,13 @@ noted when it was written, and the model was folded from the common traditional 
   from its diagrams (25 November 2026): a square base creased for a petal fold and cut up the middle front and back,
   the cut halves lifted for legs, the hooves' tips folded in, the sides folded in, the tail reverse-folded out level
   and the neck's tip reverse-folded for the head. Its step text is Gami's own.
+  The crab is traditional: Gilad's database lists six Crabs credited Traditional (Saydak's *Everyone Can Learn
+  Origami*, Honda's *The World of Origami*, the Biddles' *Essential Origami*, Momotani, ORU 1, Le Pli 92) and one
+  Unknown, and Saydak wrote origami.me's page. Gami follows its order of folds, worked out from its diagrams (26
+  November 2026): the frog base, its lower point cut up the middle, every flap narrowed, short cuts at the shoulders
+  and the top folded down, the flaps turned out in pairs for legs and claws and bent at the knee. It cuts the middle
+  through every layer at once, lays the top over the front rather than tucking it, and turns each pair out over the
+  last rather than behind it (see the recipe). Its step text is Gami's own.
 - **Intermediate models from OrigamiOK** (checked 13 November 2026; the plan is `docs/origamiok-intermediate-plan.md`).
   Its fox page credits Hoàng Tiến Quyết and its lizard page Lee Won-pyo; the rest name only their writer and
   photographer. Gilad's database lists about ten Traditional square turtles (Gross's *Zoogami*, Momotani, NOA 493 and

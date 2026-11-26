@@ -3269,4 +3269,54 @@ export const es: Record<string, string> = {
     "Ábrelo en V",
   "Bend the two halves up a little along the middle crease, so the wing makes a shallow V. It’s ready to fly: launch it gently, level, and let it float.":
     "Dobla un poco hacia arriba las dos mitades por la marca del centro, para que el ala forme una V abierta. Ya está listo: lánzalo con suavidad, recto, y deja que flote.",
+  "With scissors, cut the long lower point up the middle, through all the layers, as far as the widest part. Each corner of the paper parts into two thin flaps.":
+    "Con unas tijeras, corta la punta larga de abajo por el centro, a través de todas las capas, hasta la parte más ancha. Cada esquina del papel se separa en dos solapas finas.",
+  "Narrow the flaps":
+    "Estrecha las solapas",
+  "Fold the lower edges of the top layer in to the middle line.":
+    "Dobla los bordes inferiores de la capa de arriba hasta la línea del centro.",
+  "Turn two pages":
+    "Pasa dos páginas",
+  "Turn the top two flaps on the right over to the left.":
+    "Pasa las dos solapas de arriba de la derecha a la izquierda.",
+  "Fold these lower edges in to the middle line too.":
+    "Dobla también estos bordes inferiores hasta la línea del centro.",
+  "Turn the top two flaps on the right over to the left here too.":
+    "Pasa también aquí las dos solapas de arriba de la derecha a la izquierda.",
+  "Narrow the last flaps":
+    "Estrecha las últimas solapas",
+  "Cut the shoulders":
+    "Corta los hombros",
+  "With scissors, make a short cut in from each side of the top part, slanting a little down, through all the layers.":
+    "Con unas tijeras, haz un corte corto desde cada lado de la parte de arriba, un poco inclinado hacia abajo, a través de todas las capas.",
+  "Fold the top point down between the cuts, on a level line through their ends, over the front. The bits beside the cuts stay up as eyes.":
+    "Dobla la punta de arriba hacia abajo entre los cortes, por una línea horizontal que pasa por sus extremos, por delante. Los trocitos junto a los cortes quedan levantados como ojos.",
+  "Turn out the first legs":
+    "Saca las primeras patas",
+  "Fold the top flap on each side out to the side, on a line slanting down from the middle. They stick out nearly level.":
+    "Dobla la solapa de arriba de cada lado hacia fuera, por una línea que baja inclinada desde el centro. Quedan casi horizontales.",
+  "Turn out the next legs":
+    "Saca las siguientes patas",
+  "Fold the next flap on each side out over the first pair, from a little lower down and a little steeper, so they fan out above it.":
+    "Dobla la siguiente solapa de cada lado hacia fuera, sobre el primer par, desde un poco más abajo y un poco más inclinada, para que se abran en abanico por encima.",
+  "Turn out a third leg":
+    "Saca una tercera pata",
+  "The same with the third flap on the left, a little lower and steeper again.":
+    "Igual con la tercera solapa de la izquierda, un poco más abajo y todavía más inclinada.",
+  "And the third flap on the right.":
+    "Y la tercera solapa de la derecha.",
+  "Turn out the claws":
+    "Saca las pinzas",
+  "And the last pair, lower again and steepest of all: these are the claws.":
+    "Y el último par, más abajo todavía y el más inclinado de todos: son las pinzas.",
+  "Bend the claws":
+    "Dobla las pinzas",
+  "Fold the tip of each claw in towards the middle, about halfway along.":
+    "Dobla la punta de cada pinza hacia el centro, más o menos a la mitad.",
+  "Bend the legs":
+    "Dobla las patas",
+  "Fold the tip of each leg down and out, about halfway along.":
+    "Dobla la punta de cada pata hacia abajo y hacia fuera, más o menos a la mitad.",
+  "Turn the crab over. It’s finished!":
+    "Da la vuelta al cangrejo. ¡Ya está terminado!",
 };

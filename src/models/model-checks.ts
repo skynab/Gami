@@ -69,7 +69,8 @@ function checks(id: string, model: ReturnType<(typeof RECIPES)[number]>) {
       const g = guidesFor(fs[k - 1], fs[k], model.steps[k - 1].via);
       expect(g.arrows.length + g.creases.length + g.cuts.length, `step ${k}`).toBeGreaterThan(0);
     }
-  }, 60_000);
+    // The kusudama's 61 sheets took over 60 s with every shard running (26 November 2026).
+  }, 180_000);
 
   it('has a title on every step', () => {
     for (const s of model.steps) expect(s.title.trim()).not.toBe('');
@@ -81,8 +82,9 @@ function checks(id: string, model: ReturnType<(typeof RECIPES)[number]>) {
     expect(file(`${id}-preview.svg`)).toBe(previewSvg(model));
   });
 
-  // Replaying a bend solves it again, which takes seconds.
-  it('folds again from its .fold file exactly as its recipe did', { timeout: 60_000 }, () => {
+  // Replaying a bend solves it again: up to 40 s on its own (the balloon and balloon rabbit), over 60 s with the
+  // other shards' workers sharing the cores (26 November 2026).
+  it('folds again from its .fold file exactly as its recipe did', { timeout: 180_000 }, () => {
     const warnings: string[] = [];
     const read = fromFoldFile(JSON.parse(JSON.stringify(toFoldFile(model))), warnings);
     expect(warnings).toEqual([]);

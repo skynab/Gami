@@ -15,12 +15,15 @@ export function crow() {
   // The legs: the two thin points at the bottom, each the sheet's other two quarters.
   const legs: [(c: Vec2) => boolean][] = [[([u, v]) => u > 0 && v > 0], [([u, v]) => u < 0 && v < 0]];
   // The legs lie one on the other. Both feet turn out at once, one to each side, from a little way up the legs,
-  // by reverse folds on the lines bisecting straight down and straight out.
-  const root = up(0.16);
+  // by reverse folds on the lines bisecting straight down and straight out. The second a little lower than the
+  // first: from the same point, each foot's point swung through the other's layers where the lines meet (0.0043
+  // deep, 26 November 2026; 0.00349 for the second anywhere from 0.10 to 0.14 up).
+  const roots = [up(0.16), up(0.12)];
   r.collapse(
     { title: 'Make the feet', text: 'Push the point of each leg up between its layers so one sticks out to the left and one to the right, for the feet.', kind: 'reverse' },
     legs.map(([leg], i) => {
       const side = i === 0 ? 1 : -1;
+      const root = roots[i];
       return { through: [table(...root), table(root[0] + side, root[1] + 1)], kind: 'inside' as const, only: leg };
     }),
     paper(0.3, -0.3),

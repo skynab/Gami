@@ -249,6 +249,7 @@ export const fr: Messages = {
     'chicken': { title: 'Poule', blurb: 'Une poule rousse à la crête rouge, les pattes repliées sous elle, dans un seul carré.' },
     'swallow': { title: 'Hirondelle', blurb: 'Une hirondelle en vol vue d’en haut, aux ailes rejetées en arrière et à la queue fourchue, dans un seul carré.' },
     'horse': { title: 'Cheval', blurb: 'Un cheval debout sur ses quatre pattes, l’encolure dressée et la queue tendue en arrière, dans un seul carré avec deux coups de ciseaux.' },
+    'crab': { title: 'Crabe', blurb: 'Un crabe rouge à six pattes et deux pinces, la carapace coupée et pliée aux épaules, dans un seul carré.' },
   },
   notFound: {
     title: 'Cette page a été repliée',
@@ -514,6 +515,7 @@ export const fr: Messages = {
     stepText: 'Instructions de l’étape {{n}}',
     instructions: 'Instructions (facultatif)',
     noSteps: 'Pas encore d’étapes. Faites le premier pli à gauche.',
+    paperFromAbove: 'Le papier vu de dessus',
     phoneNote: 'Le Studio est plus simple à utiliser avec une souris et un plus grand écran.',
     copyLink: 'Copier le lien',
     copyLinkTitle: 'Copie un lien qui contient cette création. Qui l’ouvre peut la plier et en garder une copie. Rien n’est envoyé.',

@@ -18,7 +18,7 @@ request.
 | A link here from `PLAN.md` | Done, under the milestones. |
 | CI's first run (`Tests`, 7 November, on `dev` at `933b887`) | **Failed in the end-to-end job**: found and fixed 8 November (see "Waiting" below), to confirm on CI. The type check and unit tests passed. The e2e job's report was never uploaded, as Playwright wasn't writing one; on CI it now writes an HTML report, with a trace of each test that fails once and is run again, which the workflow uploads as `playwright-report`. |
 | Finished sessions' worktrees | Done: "Lesson: common origami folds", "Lesson: origami bases" and "Standardise fold vocabulary and unfold logic" are archived and their worktrees removed. Their work is all in `dev` (the third's commit, `5dbf414`, landed in another form: `CREASE_KINDS`, `FOLD_KINDS`, `lastFold`). |
-| Old branches, and the `fold-grazes` worktree | The branches are gone (checked 23 November: only `dev` and `main` here and on GitHub). **Left:** the `fold-grazes` worktree and its branch; the commands are under "Branches to delete by hand". |
+| Old branches, and the `fold-grazes` worktree | The branches are gone (checked 23 November: only `dev` and `main` here and on GitHub). The `fold-grazes` worktree and its branch were removed 26 November. |
 | Release `dev` to `main` | See Progress at the end. |
 
 ## Waiting
@@ -36,14 +36,15 @@ Things that can't be settled from the code alone.
   tools take taps (it fails on the old layout). Passes here; confirm on CI's next run, after a push.
 - ✅ **The New cutoff.** Moved from `2026-10-28` (54 models New) to `2026-11-21` on 23 November: the 12 models
   of OrigamiOK's advanced batch and origami.me's latest five keep their stars.
-- **Sword or easy sword.** `easy-sword` (one square, 9 steps, difficulty 1) went in on 29 October "to compare
-  with `sword` and keep the better one" (`sword`: a 1 × 4 strip, 14 steps, difficulty 2). Keep both, or drop one
-  (its recipe, catalog entry, files, step translations and `PROVENANCE.md` row, and its line in
-  `DESIGNS-LICENSE.md`).
+- ✅ **Sword or easy sword.** `easy-sword` (one square, 9 steps, difficulty 1) went in on 29 October "to compare
+  with `sword` and keep the better one" (`sword`: a 1 × 4 strip, 14 steps, difficulty 2). Decided 26 November: keep
+  both, a strip and a square at two levels.
 - ✅ **The `paper-breaking-bug` branch**: gone, here and on GitHub (checked 23 November). "Creases round a point
   fold in step" and "Paper joined up sooner, and to the end" took on its problem.
-- **Releasing `dev` to `main`.** The last release was `dev-to-main-10` (14 November); since then, the clipping
-  work and 12 models. Before deploying, confirm the submissions migration (below) has been run on Supabase.
+- **Releasing `dev` to `main`.** Branches `dev-to-main-11` and `dev-to-main-12` exist here (seen 26 November), so
+  releases have gone out since `dev-to-main-10` (14 November). The next carries the origami.me batch's last models
+  (horse, crab), the chicken's comb, five planes and cuts that throw a piece away; left to the owner (decided 26
+  November), after confirming the submissions migration (below) has been run on Supabase.
 - ✅ **The Studio's submissions** (`docs/studio-plan.md`, part 4: ownership and licence): decided and made 13
   November. **Before deploying**, run the new migration (`20261113000000_submissions.sql`) on the Supabase project
   (`docs/accounts.md`). Its other open questions are settled and done: the cloud panel stays for creators with Submit
@@ -51,18 +52,15 @@ Things that can't be settled from the code alone.
   that the Studio is easiest on a bigger screen.
 - **The Spin Plane's designer** (`docs/foldnfly-planes-plan.md`): Laux's, or Unattributed? Needs his book's
   contents.
-- **The bending plan's last open question** (`docs/bending-plan.md`): whether the mesh pattern needs to be finer
-  near the fan's pinched end. Re-solving bends on replay and a bend tool in the Studio were both settled by
+- ✅ **The bending plan's last open question** (`docs/bending-plan.md`): whether the mesh pattern needs to be finer
+  near the fan's pinched end. Settled 26 November: no, the regular grid is enough (a finer mesh plays worse and
+  solves up to seven times slower). Re-solving bends on replay and a bend tool in the Studio were both settled by
   Studio row 6.
 
 ## Branches to delete by hand
 
-Only the `fold-grazes` worktree is left (23 November). It's at `933b887`, merged into `dev`, with nothing of its own
-but an untracked `.tmp/` of scratch scripts and a copy of `animate.ts` as `dev` had it:
-
-```bash
-git worktree remove --force .claude/worktrees/fold-grazes && git branch -d worktree-fold-grazes
-```
+None (26 November): the `fold-grazes` worktree, merged into `dev` at `933b887` with only scratch files of its own,
+and its branch are removed.
 
 ## Order of work
 
@@ -79,7 +77,7 @@ the boat are in the gallery; the iris is still to come.
 | 3 | ✅ **Boat's opening.** In the gallery (9 November), as two steps: a collapse into a boat lying flat, then a bend opening it out and standing it on its keel, only the corner flaps' lower triangles bending (bending plan, step 7, "In the gallery"). Since 12 November the collapse plays as rigid paper folds it (0.003 through itself, 0.019 before), and the opening bends nothing. `scripts/boat-opening-lab.ts` was for the old stacking and is no longer needed. | No, as it turned out |
 | 4 | ✅ **Balloon blown up** (8 November): the gallery's balloon now blows up into a cube, guided face by face, its ends crumpling on the way (bending plan, "Improving the solver", row 11). The 3D tulip was still blown up by air into a pillow until 12 November: it's the same base wrapped narrower, so the balloon's map leads it too, into a box twice as tall as wide, stood on end (bending plan, "The tulip bloom, led as the balloon is"). | Yes |
 | 5 | ✅ **Shallow masu lid's locks** (10 November). They came apart by up to 0.08 as the flap went over the wall, and `shape` refused the locks part-way. It wasn't the paper: the flap's sides, folded over onto it, turned over the wall the same way round as the flap rather than the other way (as they already did going down onto the floor). A half turn either way ends in the same place, so only the way there was wrong. Turned the other way round, every pose on the way holds together; the locks part by 0.005 at most and graze 0.003 (0.0077 before). The box and the plain lid play as before. No bending needed. | No |
-| 6 | **Iris.** Needs paper that bends and then lies flat again. Last. Surveyed 11 November: five of its eight swivels can be made with rigid paper, and no order makes the rest (`docs/bending-plan.md`, step 8). | Yes |
+| 6 | **Iris.** Stays coming soon (decided 26 November): the solver work it needs, creases that form and paper relaxing flat (bending plan, row 10), is a project of its own, and `wip/iris` is gone. Needs paper that bends and then lies flat again. Last. Surveyed 11 November: five of its eight swivels can be made with rigid paper, and no order makes the rest (`docs/bending-plan.md`, step 8). | Yes |
 
 ### 2. Grazes
 
@@ -102,6 +100,23 @@ more (the frog's tightened from 0.013 to 0.011):
 | Dolphin | 0.0071 | Opening the fins out in 3D: as the whale. |
 | ✅ Seal | 0.0048 | Off the list (11 November). Its tail's reverse fold (step 18) grazed 0.0050: layers may now land one after another over up to 0.8 of a step, not 0.4 (`LANDS` in `animate.ts`), and over 0.6 the tail grazes 0.0048. No other model goes deeper, or comes further apart than 0.01; working out every model's steps takes about 3% longer. |
 | ✅ King bee | 0 | Off the list (10 November). The first wing is turned right over (by the body's bend and its own), and `shape` lifts paper turned right over so its layers stack upside down. The aileron, turned a little further, wasn't turned right over, so it was lifted along its own slanting way up instead: 49 layers down and to the side, 3 cm off its hinge, and through the wingtip. Paper turned further on paper turned right over is now lifted as that paper is. The first wingtips of the king bee and the corkscrew were off their wings the same way (3.5 and 1.4 mm). |
+
+26 November: the **turtle off the list**. Its back flippers fold out on a line at 38° rather than 30° (`narrowedSide`), and
+its deepest graze drops from 0.0046 to 0.0029, under `GRAZE` (0.0035); it comes apart by 0.0093 at most (0.0078 before,
+`TEAR` 0.01). Tried the same day without a win: the penguin's head (the beak's landing point moved about: 0.0048 to
+0.0062, an outside reverse fold) and the heart (its fold is fixed by the model's geometry). The crab (0.0075) and horse
+(0.0080) came on in this batch, as reverse folds and legs turned out through thick stacks.
+
+26 November, later: the **crab off the list**. Each pair of legs turns out 0.015 lower down the middle than the last, so it
+swings up clear of the bases of those already out (0.0075 to 0.0035), and the third pair one side at a time, as a pair's two
+flaps overlap a little at the middle and swapped layers there (0.0035 to 0.0032, under `GRAZE`). The **horse stays**: its tail
+and head are reverse folds whose point swings over the flap and lands in the middle of its stack, through the layers above
+(0.0066 to 0.008 for every tail angle and head height tried); it waits on reverse folds that bend (`docs/clipping-plan.md`,
+row 3), as the crane's and fox's do.
+
+The crab's cause, two folds starting from one point, also took the **flapping bird** (its neck from 0.38 up rather than the
+tail's 0.4: 0.0041 to clean) and the **crow** (its second foot from 0.12 up: 0.0043 to 0.00349) off the list. The swallow,
+penguin and horse were tried too, without a win (`docs/clipping-plan.md`, Progress).
 
 Tried 12 November on the frog, lily and shallow lid: landing layers over up to 0.9 of a step as well (`LANDS`) changes
 none of their depths, and the frog then comes apart by 0.011, over `TEAR`. Each still on the list needs its own look at
@@ -145,7 +160,7 @@ The frog now grazes a little deeper, 0.0106 at most (step 45) against 0.0094, st
 |---|---|---|
 | 5 | ✅ Swivel and open sink as named folds (8 November) | Medium |
 | 6 | ✅ Bend with crease goals, solved in a worker, baked on save (11 November; `docs/studio-plan.md`) | Large |
-| 7 | Bend with point goals (3D handles) | Large, and only if 6 shows the need |
+| 7 | Bend with point goals (3D handles). Looked at 26 November: not yet. Row 6 shows the gallery's bends (fan, boat, cup, balloon) follow guides worked out beforehand, which point goals can't make any more than crease goals can, and no design or report has asked for points. Revisit if someone does, or for a Studio guide tool instead | Large, and only if 6 shows the need |
 | 8 | ✅ Submissions with ownership and licence (13 November): decided that day as CC BY 4.0 only, anyone signed in, and a Report button feeding the admin queue; see `docs/studio-plan.md`, part 4, and `docs/accounts.md` | Large |
 
 ### 4. Smaller
@@ -247,7 +262,8 @@ The frog now grazes a little deeper, 0.0106 at most (step 45) against 0.0094, st
   message follows a change of language. Left in English: messages for recipe authors (naming the model and step),
   for malformed `.fold` files (naming the path in the file), and the bend solver's checks on its own goals. A test
   checks every code used in the source is one the engine knows, so a misspelt one can't quietly show as English.
-  Noticed on the way: the 2D editor's label, "The paper from above", is English in every language.
+  Noticed on the way: the 2D editor's label, "The paper from above", is English in every language. ✅ Translated 26
+  November (`studio.paperFromAbove`).
 - ✅ **Recipes making named folds with the presets** (12 November), where a preset makes the same fold. The bird
   base's petal folds (`squareBaseFlaps` in `bird-base.ts`) are now `Recipe.preset` picked at the flap's free corner,
   in the crane, crow, flapping bird and both lessons. Their paper is identical; only each step's recorded collapse
@@ -268,7 +284,7 @@ The frog now grazes a little deeper, 0.0106 at most (step 45) against 0.0094, st
 | Batch | Status |
 |---|---|
 | OrigamiOK's advanced folds (`docs/origamiok-advanced-plan.md`) | ✅ All seven, 21–22 November, Gami's own: hummingbird, skull, cute whale, pot plant, unicorn, dragon, kaiju. The unicorn and dragon are several sheets; one-sheet versions wait on reverse folds that bend (`docs/clipping-plan.md`, row 3). |
-| Eight more from origami.me (`docs/origami-me-more-plan.md`) | **Seven of eight**: necktie, kimono, wallet, parrot, chicken (22 November), a swallow of Gami's own (24 November) in place of origami.me's, and the horse (25 November). The crab is left: its diagrams can be looked at the same way. |
+| Eight more from origami.me (`docs/origami-me-more-plan.md`) | ✅ **All eight**: necktie, kimono, wallet, parrot, chicken (22 November), a swallow of Gami's own (24 November) in place of origami.me's, the horse (25 November) and the crab (26 November). |
 
 What the five left out, and the engine features that would bring it back (detail in `docs/origami-me-more-plan.md`):
 

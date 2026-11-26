@@ -249,6 +249,7 @@ export const es: Messages = {
     'chicken': { title: 'Gallina', blurb: 'Una gallina rojiza con la cresta roja y las patas recogidas bajo el cuerpo, de un solo cuadrado.' },
     'swallow': { title: 'Golondrina', blurb: 'Una golondrina en vuelo vista desde arriba, con las alas hacia atrás y la cola en horquilla, de un solo cuadrado.' },
     'horse': { title: 'Caballo', blurb: 'Un caballo de pie sobre sus cuatro patas, con el cuello erguido y la cola hacia atrás, de un solo cuadrado con dos cortes.' },
+    'crab': { title: 'Cangrejo', blurb: 'Un cangrejo rojo con seis patas y dos pinzas, y el caparazón cortado y doblado en los hombros, de un solo cuadrado.' },
   },
   notFound: {
     title: 'Esta página se ha plegado y ha desaparecido',
@@ -514,6 +515,7 @@ export const es: Messages = {
     stepText: 'Instrucciones del paso {{n}}',
     instructions: 'Instrucciones (opcional)',
     noSteps: 'Aún no hay pasos. Haz el primer pliegue a la izquierda.',
+    paperFromAbove: 'El papel visto desde arriba',
     phoneNote: 'El Estudio es más cómodo con ratón y una pantalla más grande.',
     copyLink: 'Copiar enlace',
     copyLinkTitle: 'Copia un enlace que lleva este diseño. Quien lo abra podrá plegarlo y guardar una copia. No se sube nada.',

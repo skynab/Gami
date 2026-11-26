@@ -190,6 +190,7 @@ export const en = {
     'chicken': { title: 'Chicken', blurb: 'A russet hen with a red comb and her feet tucked under her, from one square.' },
     'swallow': { title: 'Swallow', blurb: 'A swallow in flight, seen from above, with swept-back wings and a forked tail, from one square.' },
     'horse': { title: 'Horse', blurb: 'A horse standing on four legs, its neck up and its tail out behind, from one square with two snips.' },
+    'crab': { title: 'Crab', blurb: 'A red crab with six legs and two claws, its shell cut and folded at the shoulders, from one square.' },
   },
   notFound: {
     title: 'This page got folded away',
@@ -455,6 +456,7 @@ export const en = {
     stepText: 'Step {{n}} instructions',
     instructions: 'Instructions (optional)',
     noSteps: 'No steps yet. Make the first fold on the left.',
+    paperFromAbove: 'The paper from above',
     phoneNote: 'The Studio is easiest with a mouse and a bigger screen.',
     copyLink: 'Copy link',
     copyLinkTitle: 'Copy a link that carries this design. Anyone who opens it can fold it and save a copy. Nothing is uploaded.',

@@ -851,8 +851,12 @@ that paper stretches; the report says how far it drew in, separately.
 - ✅ **Replay in other browsers.** Settled with the Studio's bend tool (11 November 2026): a saved design keeps its
   baked frames and re-solves only when an earlier step changes, so opening it never waits on the solver. A share
   link carries no frames, so opening one solves its bends again (`docs/studio-plan.md`).
-- **Mesh pattern.** A regular grid of right triangles is simplest; aligned to the paper's creases it meshes cleanly.
+- ✅ **Mesh pattern.** A regular grid of right triangles is simplest; aligned to the paper's creases it meshes cleanly.
   Is that enough, or does the fan's twist need a finer mesh near the pinched end? (November 2026: thin faces now
-  have their outlines cut evenly, which the fan's strips needed; see step 6.)
+  have their outlines cut evenly, which the fan's strips needed; see step 6.) Settled 26 November 2026: the grid is
+  enough. The fan solved again finer all over (`MESH` 0.15, 0.10, 0.075) gains nothing worth having: stretch in its
+  frames 0.8%, 0.8%, 0.1%; as it plays 1.2%, 1.8%, 3.5%; behind its guides 1.23, 1.30, 0.86 cm; paper through paper
+  0.14, 0.28, 0.29 cm; 15, 26 and 105 s to solve. The worst places move about the sheet rather than gathering at the
+  pinched end, so a finer mesh there has nothing to fix.
 - ✅ **A bend tool in the Studio.** Done 11 November 2026 with crease goals (Studio row 6). Point goals (row 7) wait
   until creators ask for them.
