@@ -78,4 +78,28 @@ describe('scissor cuts', () => {
     expect(heights(0.5, 0.5)).toEqual([0]);
     expect(problems(model)).toEqual([]);
   });
+
+  it('throws away a piece cut right off, and only one cut right off', () => {
+    // Two cuts take the top left quarter off; the second throws it away. Through both layers of a sheet folded in half.
+    const folded = () => square().onto(paper(0, 0.5), paper(0, -0.5), { title: 'Fold in half' });
+    const model = folded()
+      .cut(table(-0.51, -0.25), table(0, -0.25), { title: 'Cut across' })
+      .cut(table(0, -0.25), table(0, -0.51), { title: 'Cut up', away: table(-0.25, -0.4) })
+      .build();
+    const area = (k: number) => {
+      const f = model.steps[k].frame;
+      return f.faces_vertices.reduce((a, face) => {
+        const p = face.map((v) => f.vertices_paper[v]);
+        return a + Math.abs(p.reduce((s, q, i) => s + q[0] * p[(i + 1) % p.length][1] - p[(i + 1) % p.length][0] * q[1], 0)) / 2;
+      }, 0);
+    };
+    // A quarter of the folded half, through both layers: an eighth of the sheet, twice.
+    expect(area(2)).toBeCloseTo(0.75);
+    expect(model.steps[2].op).toMatchObject({ away: { table: [-0.25, -0.4] } });
+    expect(problems(model)).toEqual([]);
+    const again = replay(fromFoldFile(JSON.parse(JSON.stringify(toFoldFile(model)))));
+    expect(again.status.every((s) => s === 'replayed')).toBe(true);
+    // One cut alone leaves that corner joined on: nothing to throw away.
+    expect(() => folded().cut(table(-0.51, -0.25), table(0, -0.25), { title: 'Cut across', away: table(-0.25, -0.4) })).toThrow(/still joined/);
+  });
 });

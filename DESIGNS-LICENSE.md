@@ -56,6 +56,9 @@ site's source code, or any other model in the gallery.
 | Kimono | `src/models/recipes/kimono.ts` | November 2026 |
 | Parrot | `src/models/recipes/parrot.ts` | November 2026 |
 | Swallow | `src/models/recipes/swallow.ts` | November 2026 |
+| Kestrel | `src/models/recipes/kestrel.ts` | November 2026 |
+| Albatross | `src/models/recipes/albatross.ts` | November 2026 |
+| Manta | `src/models/recipes/manta.ts` | November 2026 |
 
 ## Other models in the gallery
 

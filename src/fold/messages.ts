@@ -17,6 +17,7 @@ export const FOLD_MESSAGES = {
   creasesNotFlat: 'Those creases can’t all fold flat at once.',
   creasesStretch: 'Those creases would stretch the paper between them.',
   cutMissesPaper: 'That cut doesn’t cross any paper.',
+  nothingCutAway: 'That piece is still joined to the rest of the paper, so it can’t be taken away.',
   edgeOnLine: 'That edge is already on that line.',
   flatCantBend: 'Paper pressed flat can’t be bent as it’s put together.',
   foldsStretch: 'Those folds can’t all open together without stretching the paper.',

@@ -22,7 +22,7 @@ describe('catalog', () => {
     expect(filterModels(MODELS, { category: 'modular' }).map((m) => m.id)).toEqual(['ninja-star', 'rainbow-chain', 'business-card-cube', 'dice', 'kusudama', 'chrysanthemum']);
     expect(filterModels(MODELS, { level: 'easy', category: 'animal' }).map((m) => m.id)).toEqual([
       'dog-face', 'cat-face', 'cicada', 'jumping-frog', 'fox', 'swan', 'penguin', 'whale', 'pajarita', 'fish', 'peacock', 'cute-cat', 'bat',
-      'bull', 't-rex', 'turtle', 'squirrel', 'parrot', 'chicken',
+      'bull', 't-rex', 'turtle', 'squirrel', 'parrot', 'chicken', 'horse',
     ]);
     expect(filterModels(MODELS, {})).toHaveLength(MODELS.length);
     // Everything but the planes, and but the planes and lessons.
@@ -45,7 +45,7 @@ describe('catalog', () => {
     expect(easiest[0].id).toBe('basics');
     expect(sortModels(MODELS, 'hardest')[0].id).toBe('lily');
     const az = sortModels(MODELS, 'az').map((m) => m.title);
-    expect(az[0]).toBe('Balloon');
+    expect(az[0]).toBe('Albatross');
     expect(sortModels(MODELS, 'za').map((m) => m.title)).toEqual([...az].reverse());
     expect(sortModels(MODELS, 'quickest').slice(0, 2).map((m) => m.id)).toEqual(['dog-face', 'cat-face']);
     // Sorting copies: the catalog keeps its order.

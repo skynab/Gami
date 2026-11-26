@@ -1,5 +1,6 @@
 import { FoldError, fromFlat, toFlat, unplaceLike, type FlatFace } from './fold';
-import { cross, dot, split, sub, type Cut, type Line } from './geometry2d';
+import { cross, dot, joinedSegment, split, sub, type Cut, type Line } from './geometry2d';
+import { inside } from './select';
 import type { FoldFrame, Vec2 } from './types';
 
 /**
@@ -16,12 +17,17 @@ export interface CutOptions {
   layers?: number;
   /** Cut only faces whose corners on the sheet pass this test. */
   only?: (paper: Vec2[]) => boolean;
+  /**
+   * A point on the table on a piece this cut (with earlier ones) has cut right off: that piece is thrown away, every
+   * layer there and all the paper joined to them. It's an error if that leaves nothing, or nothing behind.
+   */
+  away?: Vec2;
 }
 
 const EPS = 1e-9;
 
 /** The paper after a cut from `from` to `to` on the table. */
-export function cut(frame: FoldFrame, { from, to, layers, only }: CutOptions): FoldFrame {
+export function cut(frame: FoldFrame, { from, to, layers, only, away }: CutOptions): FoldFrame {
   const faces = toFlat(frame);
   const reach = faces.map((f) => clip(f.world, from, to));
   const crossed = faces.map((_, i) => reach[i] !== null && (!only || only(faces[i].paper)));
@@ -46,7 +52,30 @@ export function cut(frame: FoldFrame, { from, to, layers, only }: CutOptions): F
     if (pos) pieces.push({ ...pos, layer: f.layer, parent: i });
     if (neg) pieces.push({ ...neg, layer: f.layer, parent: i });
   });
-  return { ...fromFlat(pieces), cuts };
+  return { ...fromFlat(away ? throwAway(pieces, cuts, away) : pieces), cuts };
+}
+
+/** The pieces left once the paper at `away`, and all joined to it, is taken away (see `CutOptions.away`). */
+function throwAway(pieces: FlatFace[], cuts: Cut[], away: Vec2): FlatFace[] {
+  const under = pieces.map((_, i) => i).filter((i) => inside(pieces[i].world, away));
+  if (!under.length) throw new FoldError('nothingCutAway');
+  // Everything joined to them, face to face along edges no cut runs along.
+  const piece = new Set(under);
+  for (let grew = true; grew; ) {
+    grew = false;
+    pieces.forEach((f, i) => {
+      if (piece.has(i)) return;
+      for (const j of piece) {
+        if (joinedSegment(f.paper, pieces[j].paper, cuts)) {
+          piece.add(i);
+          grew = true;
+          return;
+        }
+      }
+    });
+  }
+  if (piece.size === pieces.length) throw new FoldError('nothingCutAway');
+  return pieces.filter((_, i) => !piece.has(i));
 }
 
 /** The part of the segment a–b inside a convex polygon (or on its edge), if more than a point. */

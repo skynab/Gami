@@ -131,7 +131,7 @@ export type Op =
   /** Draws on the paper, leaving it where it is: a face, say. */
   | { op: 'draw'; marks: Mark[] }
   /** A scissor cut along a segment, through every layer it crosses, the top N, or the faces `only` picks. */
-  | { op: 'cut'; from: At; to: At; layers?: number; only?: Faces }
+  | { op: 'cut'; from: At; to: At; layers?: number; only?: Faces; away?: At }
   /** A strip of sticky tape laid on top of the paper from one point to another, `width` wide (see tape.ts). */
   | { op: 'tape'; from: At; to: At; width?: number }
   /** Several operations shown as one step: played at the same time, or with `inTurn` one after another. */
@@ -285,6 +285,7 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
         to: at(o.to, `${path}.to`),
         ...opt(o, 'layers', count, path),
         ...opt(o, 'only', (v, p) => faces(v, p, 0), path),
+        ...opt(o, 'away', at, path),
       };
     case 'tape':
       return {
@@ -801,7 +802,7 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
     case 'draw':
       return { frame: { ...frame, faces_parent: undefined }, marks: op.marks };
     case 'cut':
-      return { frame: cut(frame, { from: where(op.from), to: where(op.to), layers: op.layers, only: test(op.only) }) };
+      return { frame: cut(frame, { from: where(op.from), to: where(op.to), layers: op.layers, only: test(op.only), away: op.away && where(op.away) }) };
     case 'tape':
       return { frame: tape(frame, where(op.from), where(op.to), op.width) };
     case 'together': {

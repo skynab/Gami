@@ -1,10 +1,13 @@
 import { toFlat } from '../../fold/fold';
+import { inside } from '../../fold/select';
 import { Recipe, table, type At } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 
 /** The beak: how far down the front from the top corner it turns, and how far (degrees from straight up, forward). */
 export const BEAK = 0.12;
 export const BEAK_TURN = 120;
+/** How far down the comb's tip is turned over. */
+export const CAP = 0.07;
 /** How far in from the right edge the landmarks are pinched. */
 export const PINCH = 0.08;
 /** The red pen, for the comb and wattle. */
@@ -16,6 +19,8 @@ function meet(a: Vec2, d: Vec2, b: Vec2, e: Vec2): Vec2 {
   return [a[0] + k * d[0], a[1] + k * d[1]];
 }
 const mid = (a: Vec2, b: Vec2): Vec2 => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+/** The average of the points' `k`th coordinates. */
+const avg = (ps: Vec2[], k: 0 | 1) => ps.reduce((a, p) => a + p[k], 0) / ps.length;
 /** The direction square to the one from a to b (the line folding a onto b runs this way, through their middle). */
 const across = (a: Vec2, b: Vec2): Vec2 => [a[1] - b[1], b[0] - a[0]];
 const deg = Math.PI / 180;
@@ -26,12 +31,12 @@ function turning(a: Vec2, from: number, to: number): [At, At] {
 }
 
 /**
- * The traditional chicken, following the order of folds at origami.me/chicken as far as its beak, from one square: a
- * triangle pinched at its right edge for its landmarks, its corners folded up to the top, the bottom corner creased, folded in half; the
- * bottom of the fold reverse-folded for the feet (round the outside, not inside) and the top corner for the beak. origami.me's wings (a squash
- * of the front flap), comb (one layer of the beak unfolded) and head (an outside reverse fold) are left out: the
- * squash can't be placed from its text, and the comb's layer is joined to the next along the fold. So the comb and
- * wattle are drawn on with a red pen instead, on both sides, with an eye.
+ * The traditional chicken, following the order of folds at origami.me/chicken (but its wings), from one square: a
+ * triangle pinched at its right edge for its landmarks, its corners folded up to the top, the bottom corner creased,
+ * folded in half; the bottom of the fold reverse-folded for the feet (round the outside, not inside) and the top
+ * corner for the beak; the beak's outer point opened back up for the comb, and the comb's tip turned down round the
+ * outside. origami.me's wings (a squash of the front flap either side) are left out. The comb's cap is coloured with a
+ * red pen and a wattle and an eye drawn on, on both sides.
  */
 export function chicken() {
   const h = Math.SQRT1_2;
@@ -89,18 +94,50 @@ export function chicken() {
     anchor(),
   );
   // The beak: the top corner pushed in, forward (left) and down.
+  const beakLine = turning([0, T[1] + BEAK], -90, -90 - BEAK_TURN);
+  const [b0, b1] = beakLine.map((a) => (a as { table: Vec2 }).table);
+  const sideOfBeak = (p: Vec2) => (b1[0] - b0[0]) * (p[1] - b0[1]) - (b1[1] - b0[1]) * (p[0] - b0[0]);
+  const topSide = Math.sign(sideOfBeak(T));
+  const inBeak = r.lying((p) => sideOfBeak(p) * topSide > 0);
   r.collapse(
     { title: 'Make the beak', text: 'Push the top corner down between the layers, for the beak.', kind: 'reverse' },
-    [{ through: turning([0, T[1] + BEAK], -90, -90 - BEAK_TURN), kind: 'inside' }],
+    [{ through: beakLine, kind: 'inside' }],
     anchor(),
   );
-  // The comb, wattle and eye, drawn on the head (the top corner's side of the back, the fold at the chest on x = 0),
-  // then the same turned over: the paper turns over about the middle of its width.
-  const head = headMarks();
+  // The comb: the beak's outer point (the corner at (½, ½), whose walls are the outermost layers) swung back up
+  // about the beak's crease, its two halves together, so nothing joined to it parts. Then its tip turned down round
+  // the outside on a level line, square to the chest edge, so the inside shows as a cap.
+  const outer = (c: Vec2) => c[0] > 0 && c[1] > 0 && inBeak(c);
+  const tip = toFlat(r.current).find((f) => outer([avg(f.paper, 0), avg(f.paper, 1)]))!;
+  r.along(beakLine[0], beakLine[1], table(avg(tip.world, 0), avg(tip.world, 1)), {
+    title: 'Open the comb',
+    text: 'Pull the beak’s outer point back up, undoing the reverse fold for it alone, so it stands up behind the beak. This is the comb.',
+    only: outer,
+  });
+  r.crease(table(0, -h), table(0, -h + 2 * CAP), {
+    title: 'Crease the comb',
+    text: 'Fold the top of the comb straight down a little, keeping its left edge on the chest edge, and unfold.',
+  });
+  r.collapse(
+    { title: 'Shape the comb', text: 'Turn the top of the comb down round the outside, on that crease, so a little of its inside shows.', kind: 'reverse' },
+    [{ through: [table(0, -h + CAP), table(1, -h + CAP)], kind: 'outside' }],
+    anchor(),
+  );
+  // The comb's cap coloured red, a wattle and an eye drawn on the head (facing left, the chest's fold on x = 0),
+  // then the same on the other side: the paper turns over about the middle of its width.
   const xs = toFlat(r.current).flatMap((f) => f.world.map((w) => w[0]));
   const mirror = (p: Vec2): Vec2 => [Math.min(...xs) + Math.max(...xs) - p[0], p[1]];
-  const drawHead = (place: (p: Vec2) => Vec2) => head.map((m) => ({ fill: m.fill.map(place), ...(m.colour && { colour: m.colour }) }));
-  r.draw({ title: 'Draw the comb', text: 'With a red pen, draw a comb along the top of the head and a wattle under the beak. Give her an eye too.' }, drawHead((p) => p));
+  const drawHead = (place: (p: Vec2) => Vec2) => {
+    // The cap is one face: filled to its outline, drawn a hair inside it.
+    const at = place([0.012, -h + CAP + 0.012]);
+    const cap = toFlat(r.current)
+      .filter((f) => inside(f.world, at))
+      .sort((a, b) => b.layer - a.layer)[0].world;
+    const mid: Vec2 = [avg(cap, 0), avg(cap, 1)];
+    const fill = cap.map((p): Vec2 => [mid[0] + (p[0] - mid[0]) * 0.97, mid[1] + (p[1] - mid[1]) * 0.97]);
+    return [{ fill, colour: RED }, ...headMarks().map((m) => ({ fill: m.fill.map(place), ...(m.colour && { colour: m.colour }) }))];
+  };
+  r.draw({ title: 'Draw the comb', text: 'With a red pen, colour in the comb’s turned-down tip, and draw a wattle under the beak. Give her an eye too.' }, drawHead((p) => p));
   r.turnOver('Turn the hen over, left to right.');
   r.draw({ title: 'Draw the other side', text: 'Draw the comb, wattle and eye on this side too.' }, drawHead(mirror));
   r.turnOver('Turn her back over. Your hen is ready.');
@@ -114,19 +151,7 @@ export function chicken() {
 const blob = ([x, z]: Vec2, rx: number, rz = rx, start = 0): Vec2[] =>
   Array.from({ length: 14 }, (_, i) => [x + rx * Math.cos(start + (i * Math.PI) / 7), z + rz * Math.sin(start + (i * Math.PI) / 7)]);
 
-/**
- * What's drawn on the head as the hen lies (facing left, the chest's fold on x = 0, the top corner at its top left):
- * three round red lobes for the comb just inside the head's top edge, a red wattle under the beak, a dark eye. Each
- * fill is convex, as fills are drawn.
- */
+/** What's drawn on the head as the hen lies (facing left, the chest's fold on x = 0): a red wattle under the beak, a dark eye. */
 function headMarks(): { fill: Vec2[]; colour?: string }[] {
-  // The head's top edge runs from the top corner (0, −0.59) down to the right, 0.595 down for each 1 across.
-  const top = (x: number): Vec2 => [x, -0.59 + 0.595 * x];
-  const inward: Vec2 = [-0.511, 0.86];
-  // Each lobe's middle a little inside the edge, so the paper's edge cuts it into a scallop; they overlap.
-  const lobe = (x: number, r: number) => {
-    const p = top(x);
-    return { fill: blob([p[0] + inward[0] * r * 0.35, p[1] + inward[1] * r * 0.35], r, r, Math.atan2(inward[1], inward[0])), colour: RED };
-  };
-  return [lobe(0.022, 0.014), lobe(0.047, 0.017), lobe(0.074, 0.015), { fill: blob([0.014, -0.481], 0.009, 0.017), colour: RED }, { fill: blob([0.032, -0.527], 0.0065) }];
+  return [{ fill: blob([0.014, -0.481], 0.009, 0.017), colour: RED }, { fill: blob([0.032, -0.527], 0.0065) }];
 }

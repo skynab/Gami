@@ -572,17 +572,19 @@ export class Recipe {
   /**
    * Cuts with scissors from one point to another, through every layer the cut crosses (or the top `layers`, or
    * the faces `only` picks, by their centre on the sheet). Paper either side of a cut is no longer joined there.
+   * `away`: a point on a piece the cut leaves cut right off, which is thrown away.
    */
-  cut(from: At, to: At, step: { title: string; text?: string; layers?: number; only?: (centre: Vec2) => boolean }): this {
+  cut(from: At, to: At, step: { title: string; text?: string; layers?: number; only?: (centre: Vec2) => boolean; away?: At }): this {
     const test = step.only && recorder(step.only);
     try {
-      const frame = cut(this.current, { from: this.where(from), to: this.where(to), layers: step.layers, only: test });
+      const frame = cut(this.current, { from: this.where(from), to: this.where(to), layers: step.layers, only: test, away: step.away && this.where(step.away) });
       return this.push({ title: step.title, text: step.text, kind: 'cut' }, frame, {
         op: 'cut',
         from,
         to,
         ...(step.layers !== undefined && { layers: step.layers }),
         ...(test && { only: test.faces() }),
+        ...(step.away && { away: step.away }),
       });
     } catch (e) {
       if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;

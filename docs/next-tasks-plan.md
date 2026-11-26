@@ -268,7 +268,7 @@ The frog now grazes a little deeper, 0.0106 at most (step 45) against 0.0094, st
 | Batch | Status |
 |---|---|
 | OrigamiOK's advanced folds (`docs/origamiok-advanced-plan.md`) | ✅ All seven, 21–22 November, Gami's own: hummingbird, skull, cute whale, pot plant, unicorn, dragon, kaiju. The unicorn and dragon are several sheets; one-sheet versions wait on reverse folds that bend (`docs/clipping-plan.md`, row 3). |
-| Eight more from origami.me (`docs/origami-me-more-plan.md`) | **Paused at six**: necktie, kimono, wallet, parrot, chicken (22 November), and a swallow of Gami's own (24 November) in place of origami.me's. The horse and crab need a look at a diagram (Robinson's or Saydak's book) to know which flap is which. |
+| Eight more from origami.me (`docs/origami-me-more-plan.md`) | **Seven of eight**: necktie, kimono, wallet, parrot, chicken (22 November), a swallow of Gami's own (24 November) in place of origami.me's, and the horse (25 November). The crab is left: its diagrams can be looked at the same way. |
 
 What the five left out, and the engine features that would bring it back (detail in `docs/origami-me-more-plan.md`):
 
@@ -276,7 +276,7 @@ What the five left out, and the engine features that would bring it back (detail
 |---|---|---|
 | ✅ Coloured pen marks (23 November: `Mark.colour`, a Pen swatch in the Studio's Draw tool) | The chicken's red comb, the kimono's gold obi, the parrot's pale beak, all drawn on | Small |
 | ✅ Pinches (24 November: `unfold({ pinch })`, only the pinched part of the line creases) | The chicken's landmarks, drawn as origami.me draws them. The Studio's Pinch tool (24 November) makes them too | Small to medium |
-| Opening one layer of a fold | The chicken's comb as folded, "open the pocket" moves | Medium |
+| ✅ Opening one layer of a fold (25 November: no engine change; a `fold` with `only` opens the beak's whole outer point, both halves) | The chicken's comb as folded, from origami.me's diagram 15 | Small |
 
 Also: the chicken stood up with `assemble`, and the wallet opened part way with a `bend`.
 
@@ -285,7 +285,7 @@ Also: the chicken stood up with `assemble`, and the wallet opened part way with 
 | Item | Status |
 |---|---|
 | Housekeeping | Done but for the `fold-grazes` worktree (above). 12 November: settled questions taken off "Waiting", CI's actions moved to Node 24 (see Smaller). 23 November: branches checked, the New cutoff moved, the content batches added (5), `docs/origami-me-candidates.md` brought up to date. |
-| Models | 21–22 November: OrigamiOK's advanced batch done, origami.me's eight paused at five (see 5). 23 November: coloured pen marks, and the chicken's comb, kimono's obi and parrot's beak drawn with them. 24 November: Gami's own swallow, and pinches (the chicken's landmarks). |
+| Models | 21–22 November: OrigamiOK's advanced batch done, origami.me's eight paused at five (see 5). 23 November: coloured pen marks, and the chicken's comb, kimono's obi and parrot's beak drawn with them. 24 November: Gami's own swallow, and pinches (the chicken's landmarks). 25 November: the chicken's comb folded as origami.me folds it, and the horse, both worked out from origami.me's diagrams looked at as pictures. |
 | Studio, rows 6 and the open questions | Done 11 November: bend with crease goals, share links, a first-visit tour, a note on phones, Submit hidden (`docs/studio-plan.md`). |
 | Unit tests' speed | Done 11 November: 444 s to 217 s, the model checks in four shards (see Smaller). |
 | Clipping | 15 November: paper through paper checked where steps come to rest, `npm run clip-report`, and the squirrel, T-rex, chrysanthemum and kusudama fixed. 20 November: the 3D fox and butterfly fixed at rest; the motion check compares faces meeting at a point, near steps' ends too. What's next is in `docs/clipping-plan.md`. |

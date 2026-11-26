@@ -3,22 +3,26 @@ import { crumpleOf } from './bend/frame';
 import { toFlat } from './fold';
 import { framesOf } from './frames';
 import { overlapArea, signedArea } from './geometry2d';
+import type { Op } from './ops';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from './types';
 
 /**
  * Checks a model is physically sensible, step by step. Returns what's wrong, or an empty list.
- * The paper must never stretch or lose area, stacked faces must be in a definite order,
+ * The paper must never stretch or lose area (but where a cut throws a piece away), stacked faces must be in a definite order,
  * and animating each step must keep faces their shape and above the table. Bent paper keeps its shape to
  * within what the solver reaches (`BENT_STRAIN`, `BENT_PLAY_STRAIN`), checked step by step by `bendStrain`.
  */
 export function problems(model: OrigamiModel): string[] {
   const out: string[] = [];
   const frames = framesOf(model);
-  const area = Math.abs(sheetArea(model.start));
+  let area = Math.abs(sheetArea(model.start));
 
   frames.forEach((frame, k) => {
     const where = k ? `step ${k}` : 'start';
-    if (Math.abs(sheetArea(frame) - area) > 1e-6) out.push(`${where}: paper area changed`);
+    const now = sheetArea(frame);
+    // A cut that throws a piece away leaves less paper, never more; it's the new area from then on.
+    if (k && throwsAway(model.steps[k - 1].op) && now < area - 1e-6) area = now;
+    else if (Math.abs(now - area) > 1e-6) out.push(`${where}: paper area changed`);
     if (k && frame.faces_parent?.some((p) => p >= frames[k - 1].faces_vertices.length)) out.push(`${where}: face parent out of range`);
     const bent = !!frame.soft?.length;
     if (k && bent && model.steps[k - 1].op?.op === 'bend') {
@@ -53,6 +57,11 @@ export function problems(model: OrigamiModel): string[] {
     }
   });
   return [...new Set(out)];
+}
+
+/** Whether an operation cuts a piece right off and throws it away (`away`), alone or among others. */
+function throwsAway(op: Op | undefined): boolean {
+  return op?.op === 'cut' ? !!op.away : op?.op === 'together' ? op.ops.some(throwsAway) : false;
 }
 
 /** How far bent paper may stretch, at most: in its frames, and while a bent step plays between them. */

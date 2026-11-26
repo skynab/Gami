@@ -42,6 +42,11 @@ noted when it was written, and the model was folded from the common traditional 
 | `sprinter` | Unattributed: Fold'N Fly's Sprinter (design #4) names no designer; its references are four books by different authors, none named as the source | Unknown: no designer found | [Fold'N Fly: The Sprinter](https://www.foldnfly.com/4.html) | Unattributed | 29 Oct 2026 |
 | `fun-flyer` | Unattributed: Fold'N Fly's Fun Flyer (design #45) names no designer and lists no references | Unknown: no designer found | [Fold'N Fly: Fun Flyer](https://www.foldnfly.com/45.html), for the order of folds; Gami leaves out its rabbit ears (see the notes) | Unattributed | 29 Oct 2026 |
 | `corkscrew` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a needle-nosed stunt dart after the look of Fold'N Fly's Spin Plane, which is likely Keith Laux's, folded differently (see the notes); its nose folds are the traditional dart's | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 29 Oct 2026 |
+| `wilson` | Unattributed: Fold'N Fly's Wilson (design #53) names no designer and lists no references | Unknown: no designer found | [Fold'N Fly: Wilson](https://www.foldnfly.com/53.html) | Unattributed | 25 Nov 2026 |
+| `fast-glider` | Unattributed: Fold'N Fly's Fast Glider (design #48) names no designer and lists no references | Unknown: no designer found | [Fold'N Fly: Fast Glider](https://www.foldnfly.com/48.html) | Unattributed | 25 Nov 2026 |
+| `kestrel` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a broad swept glider with upturned tips after the look of Fold'N Fly's Fast Hawk, which is likely Keith Laux's, folded differently (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 25 Nov 2026 |
+| `albatross` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a long-winged slow glider after the look of Fold'N Fly's Underside Plane, which is likely Norman Schmidt's, folded differently (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 25 Nov 2026 |
+| `manta` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a flying wing after the look of Fold'N Fly's Sky OmniWing, by OrigamiAirEnforcer after Mike Kelsey's Proto OmniWing, folded differently and with no cutting or tape (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 25 Nov 2026 |
 | `flying-saucer` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a round floater after the look of Fold'N Fly's UFO, which is Ken Blackburn and Jeff Lammers's, folded differently and without scissors (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 29 Oct 2026 |
 | `boomerang` | Unattributed: Fold'N Fly's Boomerang (design #56) names no designer | Unknown: no designer found | [Fold'N Fly: Boomerang](https://www.foldnfly.com/56.html) | Unattributed | 22 Oct 2026 |
 | `dog-face` | Traditional | None needed: nobody owns it | none recorded | Clear | 18 Oct 2026 |
@@ -131,7 +136,8 @@ noted when it was written, and the model was folded from the common traditional 
 | `kimono` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a kimono from the sides folded to the middle, their edges turned back for a white collar and their bottom corners folded out and carried up behind for the sleeves, as a dollar-bill shirt's are; Gilad's database lists traditional kimonos, but Gami's follows neither them nor origami.me's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 22 Nov 2026 |
 | `wallet` | Traditional (origami.me credits it as a traditional design; Gilad's database lists six Traditional wallets, among them Robinson's *World's Best Origami* and Palacios's *Beginning Origami*) | None needed: nobody owns it | [origami.me/wallet](https://origami.me/wallet/) (order of folds only) | Clear | 22 Nov 2026 |
 | `parrot` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a parrot from a kite, its long point pleated for the tail, folded in half and its short point reverse-folded for a hooked beak; Gilad's database lists a traditional parrot (in Saydak's *Everyone Can Learn Origami*), but Gami's follows neither it nor origami.me's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 22 Nov 2026 |
-| `chicken` | Traditional (origami.me credits it as a traditional design; Gilad's database lists three Traditional chickens, among them Saydak's *Everyone Can Learn Origami* and NOA 156) | None needed: nobody owns it | [origami.me/chicken](https://origami.me/chicken/) (order of folds as far as the beak) | Clear | 22 Nov 2026 |
+| `chicken` | Traditional (origami.me credits it as a traditional design; Gilad's database lists three Traditional chickens, among them Saydak's *Everyone Can Learn Origami* and NOA 156) | None needed: nobody owns it | [origami.me/chicken](https://origami.me/chicken/) (order of folds, but its wings) | Clear | 22 Nov 2026 |
+| `horse` | Traditional (origami.me credits it as a traditional design; Gilad's database lists twelve Horses credited Traditional, most from a square with cuts, among them Saydak's *Everyone Can Learn Origami*, Fuse's *Action Origami* and NOA 168) | None needed: nobody owns it | [origami.me/horse](https://origami.me/horse/) (order of folds) | Clear | 25 Nov 2026 |
 | `swallow` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a swallow seen from above, from the traditional bird base with its legs narrowed and reverse-folded out as swept-back wings, the front flap folded down for the head and the back flap cut up the middle and folded apart for a forked tail; Gilad's database lists traditional swallows (Saydak's *Everyone Can Learn Origami* and others), but Gami's follows neither them nor origami.me's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the bird base's folds follow `crane` | Clear | 24 Nov 2026 |
 
 ### Notes
@@ -187,17 +193,23 @@ noted when it was written, and the model was folded from the common traditional 
   way: the kite folded in half coloured side out, the top point reverse-folded for the beak, so it's Gami's. The
   chicken is traditional: Gilad's database lists three Chickens credited Traditional (Saydak's *Everyone Can Learn
   Origami*, NOA 156 folded by Saydak, Der Falter 61) among dozens by named designers, and Saydak wrote origami.me's
-  page. Gami follows its order of folds as far as the beak, with its landmarks pinched (since 24 November) and the
-  feet reverse-folded round the outside rather than inside (inside, the layers pass through each other in the
-  engine), and leaves out its wings, comb and head: the wings' squash can't be placed from the text, and the comb's
-  layer is joined to the next along the fold. Since 23 November the comb and a wattle are drawn on in red instead,
-  with an eye, on both sides; the kimono's obi is drawn on in gold and the parrot's beak coloured pale yellow, where
+  page. Gami follows its order of folds, with its landmarks pinched (since 24 November) and the feet reverse-folded
+  round the outside rather than inside (inside, the layers pass through each other in the engine), and leaves out its
+  wings, a squash of the front flap either side. Since 25 November its comb is folded as origami.me folds it (the
+  beak's outer point opened back up and its tip turned down round the outside), worked out from its diagrams; before
+  that it was drawn on. The comb's turned-over tip is coloured red, with a wattle and an eye drawn on, on both sides; the kimono's obi is drawn on in gold and the parrot's beak coloured pale yellow, where
   the paper can't show those colours.
   The swallow is Gami's: Gilad's database lists five Swallows credited Traditional (Saydak's *Everyone Can Learn
   Origami*, Cunliffe, LaFosse, Takahama, Sakade) and two Unknown, but origami.me's step text leans on its diagrams
   for which flap becomes which part, and four readings of it didn't fold (`docs/origami-me-more-plan.md`). Gami's
   takes the crane's bird base and leg narrowing, swings the legs out as wings, folds one long flap down for the head
   and cuts the other into a forked tail, in its own order and words (24 November 2026).
+  The horse is traditional: Gilad's database lists twelve Horses credited Traditional (Saydak's *Everyone Can Learn
+  Origami*, Fuse's *Action Origami*, Kawasaki's *Doctor's Origami Dream Book*, NOA 10, 168 and 605, and others), most
+  from a square with cuts, and Saydak wrote origami.me's page. Gami follows origami.me's order of folds, worked out
+  from its diagrams (25 November 2026): a square base creased for a petal fold and cut up the middle front and back,
+  the cut halves lifted for legs, the hooves' tips folded in, the sides folded in, the tail reverse-folded out level
+  and the neck's tip reverse-folded for the head. Its step text is Gami's own.
 - **Intermediate models from OrigamiOK** (checked 13 November 2026; the plan is `docs/origamiok-intermediate-plan.md`).
   Its fox page credits Hoàng Tiến Quyết and its lizard page Lee Won-pyo; the rest name only their writer and
   photographer. Gilad's database lists about ten Traditional square turtles (Gross's *Zoogami*, Momotani, NOA 493 and
@@ -323,6 +335,22 @@ noted when it was written, and the model was folded from the common traditional 
   UFO, Gami has its own flying saucer: the top folded down to the middle for a thick front edge, the front
   corners turned in, and the back corners folded behind and rounded off with smaller folds, so it's nearly round
   from above. The UFO cuts a corner round with scissors and folds a dart's nose first; the saucer cuts nothing.
+  The Wilson (Fold'N Fly #53) and the fast glider (#48), checked 25 November 2026, name no designer, give no licence
+  and list no references, so they're Unattributed and follow Fold'N Fly's order of folds, in Gami's own words. The
+  Wilson's flaps fold back out along lines about 9° off the middle, read from Fold'N Fly's photos; it suggests a
+  staple rather than needing one. The fast glider's notch is cut out through every layer and thrown away (a cut's
+  `away`, added for it). Checked the same day and not followed: the Fast Hawk (#21), whose only reference is
+  Laux's book, as the Spin Plane's; the Underside Plane (#27), whose only reference is *Great Paper Airplanes*,
+  Norman Schmidt's book of his own gliders; and the Sky OmniWing (#60), credited to OrigamiAirEnforcer after Mike
+  Kelsey's Proto OmniWing, with no open licence. In their place, Gami has three of its own, decided the same day,
+  each keeping only the general look. The kestrel, after the Fast Hawk: a sheet held sideways, the corners to the
+  middle, the point folded down blunt and its corners folded in again, folded in half with swept wings, the tips
+  turned up (the Fast Hawk folds a strip down first, then accordion-folds and tucks its sides). The albatross, after
+  the Underside Plane: folded in half crosswise and its folded edge rolled over twice, then a short body under long,
+  narrow wings (the Underside Plane folds its top edge to the middle and back, then folds corners and its point, and
+  has flaps under its wings). The manta, after the Sky OmniWing: a flying wing with its top corners folded in and its
+  front edge folded over three times for weight, opened into a shallow V with its tips up; no cut, no nose weight
+  slid in, no tape.
 - **Coming soon.** The models listed on 21 October 2026 are gallery placeholders with no recipe
   yet. Each is credited "Traditional" on origami.me. When one gets a recipe, set its reference to what was
   actually followed and its date to when it shipped. Other traditional models on origami.me that aren't

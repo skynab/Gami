@@ -3059,10 +3059,22 @@ export const ja: Record<string, string> = {
     "その折りすじで、下の角を外側にかぶせるように折り上げます。これが足です。",
   "Push the top corner down between the layers, for the beak.":
     "上の角を紙のあいだに下へ押しこんで、くちばしにします。",
+  "Open the comb":
+    "とさかを開く",
+  "Pull the beak’s outer point back up, undoing the reverse fold for it alone, so it stands up behind the beak. This is the comb.":
+    "くちばしのいちばん外側の先だけ中わり折りをもどして上に引き上げ、くちばしのうしろに立てます。これがとさかです。",
+  "Crease the comb":
+    "とさかに折りすじをつける",
+  "Fold the top of the comb straight down a little, keeping its left edge on the chest edge, and unfold.":
+    "とさかの上を少しまっすぐ下に折り、左のふちを胸のふちにそろえて、もどします。",
+  "Shape the comb":
+    "とさかの形を作る",
+  "Turn the top of the comb down round the outside, on that crease, so a little of its inside shows.":
+    "その折りすじで、とさかの上を外側にかぶせるように下に折り（かぶせ折り）、内側が少し見えるようにします。",
   "Draw the comb":
     "とさかを描く",
-  "With a red pen, draw a comb along the top of the head and a wattle under the beak. Give her an eye too.":
-    "赤いペンで、頭のてっぺんにそってとさかを、くちばしの下に肉垂れを描きます。目も描きましょう。",
+  "With a red pen, colour in the comb’s turned-down tip, and draw a wattle under the beak. Give her an eye too.":
+    "赤いペンで、とさかの折り下げた先をぬり、くちばしの下に肉垂れを描きます。目も描きましょう。",
   "Turn the hen over, left to right.":
     "にわとりを左から右へ裏返します。",
   "Draw the other side":
@@ -3121,4 +3133,140 @@ export const ja: Record<string, string> = {
     "右の角をその印まで折り上げ、また右の辺のところだけをつまんで、開きます。",
   "Fold the bottom corner up to the second pinch on the right flap’s edge, and unfold.":
     "下の角を、右のふたの辺にある二つ目の印まで折り上げて、開きます。",
+  "Fold the lower left edge of the top layer in to the middle crease.":
+    "上の一枚の左下のふちを、まん中の折りすじに合わせて折ります。",
+  "Then the lower right edge, making a kite.":
+    "右下のふちも同じように折ると、たこの形になります。",
+  "Fold the top triangle down over the kite, along the top edges of its flaps, and crease it hard.":
+    "上の三角を、たこの折り返したふちにそって下に折り、しっかり折りすじをつけます。",
+  "Open the top and the kite flaps back out.":
+    "上の三角とたこの折り返しを開いてもどします。",
+  "Cut up the middle":
+    "まん中を切る",
+  "With scissors, cut just the top layer along the middle crease, from the bottom corner up to where the crease across meets it.":
+    "はさみで、上の一枚だけを、下の角からよこの折りすじのところまで、まん中の折りすじにそって切ります。",
+  "As before: the lower left edge of the top layer to the middle crease.":
+    "さっきと同じように、上の一枚の左下のふちをまん中の折りすじに合わせます。",
+  "Lift the front legs":
+    "前足を上げる",
+  "Fold each cut half up, on a line from its side corner to the top of the cut. They stand up as two tall points.":
+    "切った半分ずつを、よこの角から切りこみの上はしまでの線で上に折ります。二本の高い角が立ちます。",
+  "Fold in the hooves":
+    "ひづめを折る",
+  "Fold the tip of each leg in a little, straight across, for the hooves.":
+    "それぞれの足の先を、まっすぐ少しだけ内側に折って、ひづめにします。",
+  "Fold the left and right sides in to the middle, on the creases from the bottom corner to each leg’s tip.":
+    "下の角からそれぞれの足の先までの折りすじで、左右をまん中に折ります。",
+  "Lift the back legs":
+    "うしろ足を上げる",
+  "Lift this side’s cut halves the same way.":
+    "こちら側の切った半分も、同じように上げます。",
+  "Fold in the tips of these legs too.":
+    "こちらの足の先も折ります。",
+  "And fold the sides in to the middle on this side as well.":
+    "こちら側も、左右をまん中に折ります。",
+  "Make the tail":
+    "しっぽを作る",
+  "Push the bottom right point out to the right between its layers, so it sticks out level: the tail.":
+    "右下の角を、あいだに入れるようにして右へ出し、まっすぐよこにのばします。これがしっぽです。",
+  "Push the tip of the bottom left point out to the left between its layers, for the head. The rest of that point is the neck.":
+    "左下の角の先を、あいだに入れるようにして左へ出し、頭にします。残りの部分が首です。",
+  "Turn the horse round so it stands on its legs. Done!":
+    "うまの向きを変えて、足で立たせます。できあがり！",
+  "Fold the left edge in again":
+    "もう一度左のふちを折る",
+  "Once more, fold the left edge in to the centre crease. The point gets long and narrow.":
+    "もう一度、左のふちをまん中の折りすじに合わせて折ります。先が細長くなります。",
+  "Fold the right edge in again":
+    "もう一度右のふちを折る",
+  "And the right edge, to match.":
+    "右のふちも同じように折ります。",
+  "Fold the right flap out":
+    "右のフラップを外に折る",
+  "Fold the right flap back out along a line from the nose to the back, a little way out from the middle. Its edge fans out at the back.":
+    "右のフラップを、先からうしろまで、まん中から少しはなれた線で外側に折りかえします。うしろでふちが広がります。",
+  "Fold the left flap out":
+    "左のフラップを外に折る",
+  "Fold the left flap out the same way.":
+    "左のフラップも同じように外に折ります。",
+  "Fold the wing down along a line about 1 cm (3/8 inch) above the bottom, from the nose to the back.":
+    "下から1cm（3/8インチ）くらいの線で、先からうしろまで翼を下に折ります。",
+  "Turn the plane over so it stands on its keel. A staple in the body, near the middle, keeps it shut. It flies fast, and may twist as it goes: bend the backs of the wings a little to steady it.":
+    "ひこうきを裏返して、胴体の下で立たせます。胴体のまん中あたりをホチキスでとめると開きません。速く飛び、ねじれながら飛ぶこともあります。翼のうしろを少し曲げると安定します。",
+  "Fold the point down to the bottom of the corner flaps, leaving a flat top.":
+    "先を、角のフラップの下のはしまで下に折り、上を平らにします。",
+  "Fold the top left in":
+    "上の左を折る",
+  "Fold the left half of the flat top down onto the centre crease, on a line from the middle of the top.":
+    "平らな上の左半分を、上のまん中から出る線で、まん中の折りすじに合わせて下に折ります。",
+  "Fold the top right in":
+    "上の右を折る",
+  "Match it on the right. The top comes to a point again.":
+    "右も同じように折ります。上がまたとがります。",
+  "Fold the point down to the bottom":
+    "先を下まで折る",
+  "Fold the whole point down so its tip meets the bottom edge.":
+    "先が下のふちにとどくように、とがった部分をまるごと下に折ります。",
+  "Fold the point back up":
+    "先を上に折りかえす",
+  "Fold the point back up along a line about 2.5 cm (1 inch) below the top edge, so it sticks up above it.":
+    "上のふちから2.5cm（1インチ）くらい下の線で先を上に折りかえし、上のふちからとび出させます。",
+  "Cut out the notch":
+    "切りこみを入れる",
+  "With scissors, cut through all the layers straight in from the open edges, a little under halfway back, to under halfway to the fold.":
+    "はさみで、すべての紙を、開いている側のふちから、長さの半分より少し手前でまっすぐ、折り目までの半分より少し手前まで切ります。",
+  "Then cut on a slant towards the back and out a little.":
+    "つぎに、うしろへ向かって少し外側へななめに切ります。",
+  "Then cut straight back to the back edge, and throw the corner away. The back is now narrower than the front.":
+    "つぎに、うしろのふちまでまっすぐ切り、角を取りのぞきます。うしろが前よりせまくなります。",
+  "Fold the wing down along a line about 3.2 cm (1 1/4 inch) above the bottom. The tailplane folds down with it.":
+    "下から3.2cm（1 1/4インチ）くらいの線で翼を下に折ります。尾翼もいっしょに折れます。",
+  "Turn the plane over, so it stands on its keel with the main wing in front and the tailplane behind. Give it a smooth throw and it glides a long way.":
+    "ひこうきを裏返して胴体の下で立たせると、前に主翼、うしろに尾翼があります。そっと投げると遠くまですべるように飛びます。",
+  "With the paper sideways, bring the left edge over to the right edge, crease down the middle and open it again.":
+    "紙をよこ長に置き、左のふちを右のふちに合わせてまん中に折りすじをつけ、開きます。",
+  "Fold the top layers down along a line from the nose to the back, a little deeper at the back, so the wings sweep back.":
+    "上の紙を、先からうしろまで、うしろが少し低くなる線で下に折ります。翼がうしろへそります。",
+  "Turn the wingtips up":
+    "翼のはしを立てる",
+  "Fold a strip at the tip of each wing straight up, parallel to the body.":
+    "それぞれの翼のはしを、胴体と平行な細い帯にして、まっすぐ上に折ります。",
+  "Turn the plane over, so it stands on its keel with its wingtips up. Give the wings a slight upward V and throw it gently: it glides a long way.":
+    "ひこうきを裏返して胴体の下で立たせると、翼のはしが上を向いています。翼を少しV字に開き、そっと投げると遠くまで飛びます。",
+  "Bring the top edge down to the bottom edge. The fold along the top is the front of the wing.":
+    "上のふちを下のふちに合わせて折ります。上の折り目が翼の前になります。",
+  "Roll the front edge":
+    "前のふちを巻く",
+  "Fold the folded top edge down about 2.5 cm (1 inch).":
+    "上の折り目を2.5cm（1インチ）くらい下に折ります。",
+  "Fold it down once more, the same amount, so the front edge is thick and heavy.":
+    "同じはばでもう一度折り、前のふちを厚く重くします。",
+  "Fold the wing down along a line about 1 cm (3/8 inch) above the bottom. It’s long and narrow.":
+    "下から1cm（3/8インチ）くらいの線で翼を下に折ります。細長い翼です。",
+  "Turn the plane over, so it stands on its keel with its long wings out flat. Give them a slight upward V and launch it gently: it glides slowly round in wide circles.":
+    "ひこうきを裏返して胴体の下で立たせ、長い翼を平らに広げます。少しV字に開いてそっと投げると、大きな円をえがいてゆっくり飛びます。",
+  "Fold in the top-left corner":
+    "左上の角を折る",
+  "Fold the top-left corner down, so its edges meet the top and side about 8 cm (3 inch) from the corner.":
+    "左上の角を、ふちが角から8cm（3インチ）くらいのところで上と横に合うように下に折ります。",
+  "Fold in the top-right corner":
+    "右上の角を折る",
+  "And the top-right corner, to match.":
+    "右上の角も同じように折ります。",
+  "Fold over the front edge":
+    "前のふちを折る",
+  "Fold the top edge down about 2 cm (3/4 inch), over the corners.":
+    "上のふちを、角の上から2cm（3/4インチ）くらい下に折ります。",
+  "Fold it over again":
+    "もう一度折る",
+  "Fold the thick edge down again, the same amount.":
+    "厚くなったふちを、同じはばでもう一度下に折ります。",
+  "Fold it down a third time. The weight at the front makes it glide.":
+    "三回目も折ります。前が重いので、すべるように飛びます。",
+  "Fold a strip at each side, about 3 cm (1 1/4 inch) wide, straight up, front to back.":
+    "両はしを3cm（1 1/4インチ）くらいのはばで、前からうしろまでまっすぐ上に折ります。",
+  "Open it into a V":
+    "V字に開く",
+  "Bend the two halves up a little along the middle crease, so the wing makes a shallow V. It’s ready to fly: launch it gently, level, and let it float.":
+    "まん中の折りすじで左右を少し上に曲げ、浅いV字にします。できあがり。水平にそっと投げて、ふわりと飛ばしましょう。",
 };

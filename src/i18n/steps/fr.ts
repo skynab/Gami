@@ -3059,10 +3059,22 @@ export const fr: Record<string, string> = {
     "Rabattez le coin du bas vers le haut par l’extérieur, le long de ce pli, pour les pattes.",
   "Push the top corner down between the layers, for the beak.":
     "Poussez le coin du haut vers le bas entre les épaisseurs, pour le bec.",
+  "Open the comb":
+    "Ouvrir la crête",
+  "Pull the beak’s outer point back up, undoing the reverse fold for it alone, so it stands up behind the beak. This is the comb.":
+    "Remontez la pointe extérieure du bec en défaisant le pli inversé pour elle seule, afin qu’elle se dresse derrière le bec. C’est la crête.",
+  "Crease the comb":
+    "Marquer la crête",
+  "Fold the top of the comb straight down a little, keeping its left edge on the chest edge, and unfold.":
+    "Rabattez un peu le haut de la crête bien droit vers le bas, son bord gauche sur le bord de la poitrine, puis dépliez.",
+  "Shape the comb":
+    "Former la crête",
+  "Turn the top of the comb down round the outside, on that crease, so a little of its inside shows.":
+    "Rabattez le haut de la crête vers le bas par l’extérieur, sur ce pli, pour qu’un peu de son intérieur apparaisse.",
   "Draw the comb":
     "Dessiner la crête",
-  "With a red pen, draw a comb along the top of the head and a wattle under the beak. Give her an eye too.":
-    "Avec un stylo rouge, dessinez une crête le long du haut de la tête et un barbillon sous le bec. Dessinez-lui aussi un œil.",
+  "With a red pen, colour in the comb’s turned-down tip, and draw a wattle under the beak. Give her an eye too.":
+    "Avec un stylo rouge, coloriez la pointe rabattue de la crête et dessinez un barbillon sous le bec. Dessinez-lui aussi un œil.",
   "Turn the hen over, left to right.":
     "Retournez la poule, de gauche à droite.",
   "Draw the other side":
@@ -3121,4 +3133,140 @@ export const fr: Record<string, string> = {
     "Pliez le coin droit vers le haut jusqu’à la marque, en n’écrasant de nouveau qu’au bord droit, puis dépliez.",
   "Fold the bottom corner up to the second pinch on the right flap’s edge, and unfold.":
     "Pliez le coin du bas vers le haut jusqu’à la deuxième marque sur le bord du rabat droit, puis dépliez.",
+  "Fold the lower left edge of the top layer in to the middle crease.":
+    "Rabattez le bord inférieur gauche de l’épaisseur du dessus sur le pli du milieu.",
+  "Then the lower right edge, making a kite.":
+    "Puis le bord inférieur droit, pour former un cerf-volant.",
+  "Fold the top triangle down over the kite, along the top edges of its flaps, and crease it hard.":
+    "Rabattez le triangle du haut sur le cerf-volant, le long du bord supérieur de ses rabats, et marquez bien le pli.",
+  "Open the top and the kite flaps back out.":
+    "Dépliez le haut et les rabats du cerf-volant.",
+  "Cut up the middle":
+    "Couper au milieu",
+  "With scissors, cut just the top layer along the middle crease, from the bottom corner up to where the crease across meets it.":
+    "Avec des ciseaux, coupez seulement l’épaisseur du dessus le long du pli du milieu, du coin du bas jusqu’au pli horizontal.",
+  "As before: the lower left edge of the top layer to the middle crease.":
+    "Comme avant : le bord inférieur gauche de l’épaisseur du dessus sur le pli du milieu.",
+  "Lift the front legs":
+    "Lever les pattes avant",
+  "Fold each cut half up, on a line from its side corner to the top of the cut. They stand up as two tall points.":
+    "Relevez chaque moitié coupée, sur une ligne allant de son coin latéral au haut de la coupe. Elles se dressent en deux pointes hautes.",
+  "Fold in the hooves":
+    "Plier les sabots",
+  "Fold the tip of each leg in a little, straight across, for the hooves.":
+    "Rabattez un peu la pointe de chaque patte vers l’intérieur, bien droit, pour les sabots.",
+  "Fold the left and right sides in to the middle, on the creases from the bottom corner to each leg’s tip.":
+    "Rabattez les côtés gauche et droit au milieu, sur les plis qui vont du coin du bas à la pointe de chaque patte.",
+  "Lift the back legs":
+    "Lever les pattes arrière",
+  "Lift this side’s cut halves the same way.":
+    "Relevez de la même façon les moitiés coupées de ce côté.",
+  "Fold in the tips of these legs too.":
+    "Rabattez aussi les pointes de ces pattes.",
+  "And fold the sides in to the middle on this side as well.":
+    "Et rabattez aussi les côtés au milieu de ce côté.",
+  "Make the tail":
+    "Former la queue",
+  "Push the bottom right point out to the right between its layers, so it sticks out level: the tail.":
+    "Poussez la pointe en bas à droite vers l’extérieur, entre ses épaisseurs, pour qu’elle sorte bien à l’horizontale : la queue.",
+  "Push the tip of the bottom left point out to the left between its layers, for the head. The rest of that point is the neck.":
+    "Poussez le bout de la pointe en bas à gauche vers l’extérieur, entre ses épaisseurs, pour la tête. Le reste de cette pointe est l’encolure.",
+  "Turn the horse round so it stands on its legs. Done!":
+    "Retournez le cheval pour qu’il tienne sur ses pattes. C’est fini !",
+  "Fold the left edge in again":
+    "Rabattre encore le bord gauche",
+  "Once more, fold the left edge in to the centre crease. The point gets long and narrow.":
+    "Encore une fois, rabattez le bord gauche sur le pli du milieu. La pointe devient longue et fine.",
+  "Fold the right edge in again":
+    "Rabattre encore le bord droit",
+  "And the right edge, to match.":
+    "Puis le bord droit, de la même façon.",
+  "Fold the right flap out":
+    "Ressortir le rabat droit",
+  "Fold the right flap back out along a line from the nose to the back, a little way out from the middle. Its edge fans out at the back.":
+    "Repliez le rabat droit vers l’extérieur, le long d’une ligne allant du nez à l’arrière, un peu à l’écart du milieu. Son bord s’évase à l’arrière.",
+  "Fold the left flap out":
+    "Ressortir le rabat gauche",
+  "Fold the left flap out the same way.":
+    "Ressortez le rabat gauche de la même façon.",
+  "Fold the wing down along a line about 1 cm (3/8 inch) above the bottom, from the nose to the back.":
+    "Rabattez l’aile le long d’une ligne à environ 1 cm (3/8 de pouce) du bas, du nez jusqu’à l’arrière.",
+  "Turn the plane over so it stands on its keel. A staple in the body, near the middle, keeps it shut. It flies fast, and may twist as it goes: bend the backs of the wings a little to steady it.":
+    "Retournez l’avion pour qu’il repose sur sa quille. Une agrafe dans le corps, près du milieu, le garde fermé. Il vole vite et peut vriller : courbez un peu l’arrière des ailes pour le stabiliser.",
+  "Fold the point down to the bottom of the corner flaps, leaving a flat top.":
+    "Rabattez la pointe jusqu’au bas des rabats des coins, pour laisser un haut plat.",
+  "Fold the top left in":
+    "Rabattre le haut à gauche",
+  "Fold the left half of the flat top down onto the centre crease, on a line from the middle of the top.":
+    "Rabattez la moitié gauche du haut plat sur le pli du milieu, le long d’une ligne partant du milieu du haut.",
+  "Fold the top right in":
+    "Rabattre le haut à droite",
+  "Match it on the right. The top comes to a point again.":
+    "Faites de même à droite. Le haut redevient pointu.",
+  "Fold the point down to the bottom":
+    "Rabattre la pointe jusqu’en bas",
+  "Fold the whole point down so its tip meets the bottom edge.":
+    "Rabattez toute la pointe vers le bas, jusqu’à ce qu’elle touche le bord inférieur.",
+  "Fold the point back up":
+    "Remonter la pointe",
+  "Fold the point back up along a line about 2.5 cm (1 inch) below the top edge, so it sticks up above it.":
+    "Remontez la pointe le long d’une ligne à environ 2,5 cm (1 pouce) sous le bord du haut, pour qu’elle dépasse au-dessus.",
+  "Cut out the notch":
+    "Découper l’encoche",
+  "With scissors, cut through all the layers straight in from the open edges, a little under halfway back, to under halfway to the fold.":
+    "Avec des ciseaux, coupez toutes les épaisseurs bien droit depuis les bords ouverts, un peu avant la moitié de la longueur, jusqu’à un peu moins de la moitié de la distance au pli.",
+  "Then cut on a slant towards the back and out a little.":
+    "Puis coupez en biais vers l’arrière, en ressortant un peu.",
+  "Then cut straight back to the back edge, and throw the corner away. The back is now narrower than the front.":
+    "Puis coupez tout droit jusqu’au bord arrière et jetez le coin. L’arrière est maintenant plus étroit que l’avant.",
+  "Fold the wing down along a line about 3.2 cm (1 1/4 inch) above the bottom. The tailplane folds down with it.":
+    "Rabattez l’aile le long d’une ligne à environ 3,2 cm (1 pouce 1/4) du bas. L’empennage se replie avec elle.",
+  "Turn the plane over, so it stands on its keel with the main wing in front and the tailplane behind. Give it a smooth throw and it glides a long way.":
+    "Retournez l’avion pour qu’il repose sur sa quille, l’aile principale devant et l’empennage derrière. Lancez-le en douceur : il plane très loin.",
+  "With the paper sideways, bring the left edge over to the right edge, crease down the middle and open it again.":
+    "La feuille à l’horizontale, amenez le bord gauche sur le bord droit, marquez le milieu et rouvrez.",
+  "Fold the top layers down along a line from the nose to the back, a little deeper at the back, so the wings sweep back.":
+    "Rabattez les épaisseurs du dessus le long d’une ligne allant du nez à l’arrière, un peu plus basse à l’arrière, pour que les ailes soient en flèche.",
+  "Turn the wingtips up":
+    "Relever les bouts d’ailes",
+  "Fold a strip at the tip of each wing straight up, parallel to the body.":
+    "Relevez bien droit une bande au bout de chaque aile, parallèle au corps.",
+  "Turn the plane over, so it stands on its keel with its wingtips up. Give the wings a slight upward V and throw it gently: it glides a long way.":
+    "Retournez l’avion pour qu’il repose sur sa quille, les bouts d’ailes relevés. Donnez aux ailes un léger V et lancez-le en douceur : il plane très loin.",
+  "Bring the top edge down to the bottom edge. The fold along the top is the front of the wing.":
+    "Amenez le bord du haut sur le bord du bas. Le pli du haut sera l’avant de l’aile.",
+  "Roll the front edge":
+    "Rouler le bord d’attaque",
+  "Fold the folded top edge down about 2.5 cm (1 inch).":
+    "Rabattez le bord plié du haut d’environ 2,5 cm (1 pouce).",
+  "Fold it down once more, the same amount, so the front edge is thick and heavy.":
+    "Rabattez-le encore une fois, de la même largeur, pour que le bord d’attaque soit épais et lourd.",
+  "Fold the wing down along a line about 1 cm (3/8 inch) above the bottom. It’s long and narrow.":
+    "Rabattez l’aile le long d’une ligne à environ 1 cm (3/8 de pouce) du bas. Elle est longue et étroite.",
+  "Turn the plane over, so it stands on its keel with its long wings out flat. Give them a slight upward V and launch it gently: it glides slowly round in wide circles.":
+    "Retournez l’avion pour qu’il repose sur sa quille, ses longues ailes bien à plat. Donnez-leur un léger V et lancez-le en douceur : il plane lentement en larges cercles.",
+  "Fold in the top-left corner":
+    "Rabattre le coin en haut à gauche",
+  "Fold the top-left corner down, so its edges meet the top and side about 8 cm (3 inch) from the corner.":
+    "Rabattez le coin en haut à gauche, pour que ses bords arrivent à environ 8 cm (3 pouces) du coin, en haut et sur le côté.",
+  "Fold in the top-right corner":
+    "Rabattre le coin en haut à droite",
+  "And the top-right corner, to match.":
+    "Puis le coin en haut à droite, de la même façon.",
+  "Fold over the front edge":
+    "Rabattre le bord d’attaque",
+  "Fold the top edge down about 2 cm (3/4 inch), over the corners.":
+    "Rabattez le bord du haut d’environ 2 cm (3/4 de pouce), par-dessus les coins.",
+  "Fold it over again":
+    "Le rabattre encore",
+  "Fold the thick edge down again, the same amount.":
+    "Rabattez encore le bord épais, de la même largeur.",
+  "Fold it down a third time. The weight at the front makes it glide.":
+    "Rabattez-le une troisième fois. Le poids à l’avant le fait planer.",
+  "Fold a strip at each side, about 3 cm (1 1/4 inch) wide, straight up, front to back.":
+    "Relevez bien droit une bande de chaque côté, d’environ 3 cm (1 pouce 1/4), de l’avant à l’arrière.",
+  "Open it into a V":
+    "Ouvrir en V",
+  "Bend the two halves up a little along the middle crease, so the wing makes a shallow V. It’s ready to fly: launch it gently, level, and let it float.":
+    "Relevez un peu les deux moitiés le long du pli du milieu, pour que l’aile forme un V ouvert. Il est prêt : lancez-le en douceur, à plat, et laissez-le flotter.",
 };
