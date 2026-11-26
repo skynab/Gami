@@ -1,6 +1,6 @@
 import { collapse, CREASE_KINDS, type CreaseKind } from './collapse';
 import { cut } from './cut';
-import { fold, FoldError, unplaceLike, rotate, toFlat, turnOver, unfoldStep, FOLD_KINDS, type FoldKind } from './fold';
+import { fold, FoldError, unplaceLike, rotate, toFlat, turnOver, unfoldStep, unfoldTo, FOLD_KINDS, type FoldKind } from './fold';
 import { flipLine, lineEdgeOnto, lineOnto, lineThrough, sideOf, type Line } from './geometry2d';
 import { copyUnit } from './copy';
 import { assemble } from './assemble';
@@ -10,6 +10,8 @@ import { anchorFor, centre, inside, locate, smallerSideMoves, topLayers } from '
 import { curl, radial, reparent, shape, type Bend, type Ray } from './shape';
 import { sheetOf } from './sheets';
 import { bendFrame } from './bend/frame';
+import { isPenColour } from './marks';
+import { pinchedUnfold } from './pinch';
 import { keepIn, tape } from './tape';
 import type { FoldFrame, Mark, OrigamiModel, Step, StepKind, Tool, Vec2, Vec3 } from './types';
 import { CodedError, said, type Said } from './messages';
@@ -84,10 +86,16 @@ export type Op =
       /** Tucking: the moving paper slides under these faces. */
       under?: Faces;
     }
-  /** Opens back up to the paper after step `to` (0: the start). Left out: undoes the last fold since the last unfold. */
-  | { op: 'unfold'; to?: number }
-  | { op: 'turnOver' }
-  | { op: 'rotate'; degrees: number }
+  /**
+   * Opens back up to the paper after step `to` (0: the start). Left out: undoes the last fold since the last unfold.
+   * `pinch`: the fold was only pressed between these two points on the table (as the paper lies before opening),
+   * so only that much of its line creases (see pinch.ts).
+   */
+  | { op: 'unfold'; to?: number; pinch?: [Vec2, Vec2] }
+  /** `only`: turns over just that paper, about its own middle, leaving other sheets where they lie. */
+  | { op: 'turnOver'; only?: Faces }
+  /** `only`: turns just that paper, about its own middle. */
+  | { op: 'rotate'; degrees: number; only?: Faces }
   /** `into`: parts of the piece slid in just under the paper `under` picks where they land (a link into another's sleeves). */
   | { op: 'move'; only: Faces; to?: At; degrees?: number; flip?: boolean; under?: boolean; into?: { part: Faces; under: Faces }[] }
   | { op: 'newSheet' }
@@ -126,8 +134,8 @@ export type Op =
   | { op: 'cut'; from: At; to: At; layers?: number; only?: Faces }
   /** A strip of sticky tape laid on top of the paper from one point to another, `width` wide (see tape.ts). */
   | { op: 'tape'; from: At; to: At; width?: number }
-  /** Several operations shown as one step. */
-  | { op: 'together'; ops: Op[] };
+  /** Several operations shown as one step: played at the same time, or with `inTurn` one after another. */
+  | { op: 'together'; ops: Op[]; inTurn?: boolean };
 
 export class OpError extends CodedError {}
 
@@ -167,13 +175,14 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
         ...opt(o, 'under', (v, p) => faces(v, p, 0), path),
       };
     case 'unfold':
-      return { op: 'unfold', ...opt(o, 'to', count, path) };
+      return { op: 'unfold', ...opt(o, 'to', count, path), ...opt(o, 'pinch', (v, p) => pair(v, p, vec2), path) };
     case 'turnOver':
+      return { op: 'turnOver', ...opt(o, 'only', (v, p) => faces(v, p, 0), path) };
     case 'newSheet':
     case 'settle':
       return { op: o.op };
     case 'rotate':
-      return { op: 'rotate', degrees: num(o.degrees, `${path}.degrees`) };
+      return { op: 'rotate', degrees: num(o.degrees, `${path}.degrees`), ...opt(o, 'only', (v, p) => faces(v, p, 0), path) };
     case 'move':
       return {
         op: 'move',
@@ -286,7 +295,7 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
       };
     case 'together':
       if (depth >= LIMITS.nesting) throw new OpError(`${path}: nested too deeply`);
-      return { op: 'together', ops: list(o.ops, `${path}.ops`, (v, p) => parseOp(v, p, depth + 1)) };
+      return { op: 'together', ops: list(o.ops, `${path}.ops`, (v, p) => parseOp(v, p, depth + 1)), ...opt(o, 'inTurn', bool, path) };
     default:
       throw new OpError(`${path}.op: unknown operation ${JSON.stringify(o.op)}`);
   }
@@ -305,7 +314,9 @@ export function parseMarks(x: unknown, path = 'marks'): Mark[] {
       const points = list(r.points, `${p}.points`, vec2, LIMITS.outline);
       const fill = r.fill === undefined ? false : bool(r.fill, `${p}.fill`);
       if (points.length < (fill ? 3 : 2)) throw new OpError(`${p}.points: a ${fill ? 'fill needs three' : 'line needs two'} points`);
-      return { side: oneOf(r.side, `${p}.side`, ['front', 'back'] as const), points, ...(fill && { fill }) };
+      if (r.colour !== undefined && !isPenColour(r.colour)) throw new OpError(`${p}.colour: expected a colour like #c03028`);
+      const colour = r.colour === undefined ? undefined : (r.colour as string).toLowerCase();
+      return { side: oneOf(r.side, `${p}.side`, ['front', 'back'] as const), points, ...(fill && { fill }), ...(colour && { colour }) };
     },
     LIMITS.marks,
   );
@@ -693,12 +704,13 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
         to = last;
       }
       if (to >= frames.length - 1) throw new OpError('unfoldAhead', { step: to });
-      return unfoldStep(frames, to, reopened(ctx.steps));
+      const out = unfoldStep(frames, to, reopened(ctx.steps));
+      return op.pinch ? { ...out, frame: pinchedUnfold(frames, to, out.frame, op.pinch) } : out;
     }
     case 'turnOver':
-      return { frame: turnOver(frame) };
+      return { frame: op.only ? place(frame, { only: test(op.only)!, flip: true }) : turnOver(frame) };
     case 'rotate':
-      return { frame: rotate(frame, radians(op.degrees)) };
+      return { frame: op.only ? place(frame, { only: test(op.only)!, angle: radians(op.degrees) }) : rotate(frame, radians(op.degrees)) };
     case 'move':
       return {
         frame: place(frame, {
@@ -807,9 +819,30 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
         for (let k = added.length - 1; k >= 0; k--) p = added[k].frame.faces_parent?.[p] ?? p;
         return p;
       });
-      return { frame: { ...last, faces_parent }, ...(marks.length && { marks }) };
+      const via = op.inTurn ? inTurnVia(added.map((s) => s.frame)) : undefined;
+      return { frame: { ...last, faces_parent }, ...(via && { via }), ...(marks.length && { marks }) };
     }
   }
+}
+
+/**
+ * For operations played in turn as one step (`together` with `inTurn`), given the frame each leaves: the paper as
+ * each but the last leaves it, the last's faces placed as they are then, as an unfold's passes are.
+ */
+export function inTurnVia(frames: FoldFrame[]): FoldFrame[] | undefined {
+  if (frames.length < 2) return undefined;
+  const last = frames[frames.length - 1];
+  const via = frames.slice(0, -1).map((_, j) => keepIn(unfoldTo(frames, j), last));
+  // The first follows the frame before the step, which can have fewer faces (a square base collapsed from a sheet
+  // only creased): each face points back at the face it's part of there, through every operation. The rest share
+  // the last's faces.
+  const back = last.faces_vertices.map((_, f) => {
+    let p = f;
+    for (let k = frames.length - 1; k >= 0; k--) p = frames[k].faces_parent?.[p] ?? p;
+    return p;
+  });
+  via[0] = { ...via[0], faces_parent: back };
+  return via;
 }
 
 /** A line spec as a line on the table, for the paper as it is in `frame`. */

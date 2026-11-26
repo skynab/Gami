@@ -248,6 +248,12 @@ export function ToolBar({ tools, sheets, canUndo, unfoldable, rest, bending = fa
                 </button>
               </div>
             )}
+            {s.action === 'draw' && (
+              <label className="field inline pen" title={t('studio.markPenTitle')}>
+                <span>{t('studio.markPen')}</span>
+                <input type="color" value={s.pen} onChange={(e) => set({ pen: e.target.value })} />
+              </label>
+            )}
             {FACE_ACTIONS.includes(s.action) && s.action !== 'bend' && (
             <label className="field inline">
               <span>{t('studio.layers')}</span>

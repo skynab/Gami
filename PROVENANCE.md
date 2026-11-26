@@ -120,9 +120,84 @@ noted when it was written, and the model was folded from the common traditional 
 | `squirrel` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a squirrel sitting up, after the look of OrigamiOK's, which names no designer, from three squares rather than one (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
 | `strawberry` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a strawberry in 3D, after the look of OrigamiOK's, which names no designer: the berry popped point down as Gami's diamond is, the leaves folded as the sunflower's petals are (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
 | `fox-3d` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a fox standing in 3D, in place of OrigamiOK's, which is Hoàng Tiến Quyết's; its head is the traditional cat face's folds (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
+| `hummingbird` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a hummingbird from the traditional bird base, after the look of OrigamiOK's, which names no designer (the site says it designed that version itself); Gilad's database lists no Traditional hummingbird (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 21 Nov 2026 |
+| `skull` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a skull face, the corners folded to the middle and the side flaps' tips turned back out for dark eye sockets, after the look of OrigamiOK's skull, which names no designer; Gilad's database lists no Traditional skull (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 21 Nov 2026 |
+| `cute-whale` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a box whale, the traditional masu box worn upside down with one end flap folded out over its wall for a tail, after the look of OrigamiOK's cute whale, which names no designer; Gilad's database lists no Traditional whale in what could be read (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the box's folds follow `masu-box` ([origami.me/box](https://origami.me/box/)) | Clear | 21 Nov 2026 |
+| `pot-plant` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a plant standing in a pot, from five squares: the traditional masu box for the pot, a blintzed square for the soil and three leaves folded as the flat tulip's traditional leafy stem starts, after the look of OrigamiOK's pot plant, which names no designer (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the pot's folds follow `masu-box` ([origami.me/box](https://origami.me/box/)), the stems' `tulip` | Clear | 21 Nov 2026 |
+| `unicorn` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a unicorn standing in 3D from five sheets, built as Gami's standing fox is, after the look of OrigamiOK's unicorn, whose page credits **Imai Yudai** (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the body's folds follow `fox-3d`, the mane's and tail's leaves `palm-leaf` | Clear | 21 Nov 2026 |
+| `kaiju` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a generic monster standing upright in 3D from six squares, in place of OrigamiOK's Godzilla, which is Toho's character (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the body's folds follow the `unicorn`'s neck, the arms' its horn | Clear | 21 Nov 2026 |
+| `dragon` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a winged dragon standing in 3D from the traditional bird base and two little squares, after the look of OrigamiOK's "Easy Origami Dragon", which names no designer; Gilad's database lists no Traditional dragon in what could be read (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the bird base's folds follow `crane`, the horns' and legs' the `kaiju`'s arms | Clear | 22 Nov 2026 |
+| `necktie` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a striped necktie from a kite narrowed at the top, its point folded down and back up for the knot, as Gami's easy sword makes its crossguard; origami.me credits its necktie as Traditional, but Gilad's database lists only neckties by named designers (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 22 Nov 2026 |
+| `kimono` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a kimono from the sides folded to the middle, their edges turned back for a white collar and their bottom corners folded out and carried up behind for the sleeves, as a dollar-bill shirt's are; Gilad's database lists traditional kimonos, but Gami's follows neither them nor origami.me's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 22 Nov 2026 |
+| `wallet` | Traditional (origami.me credits it as a traditional design; Gilad's database lists six Traditional wallets, among them Robinson's *World's Best Origami* and Palacios's *Beginning Origami*) | None needed: nobody owns it | [origami.me/wallet](https://origami.me/wallet/) (order of folds only) | Clear | 22 Nov 2026 |
+| `parrot` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a parrot from a kite, its long point pleated for the tail, folded in half and its short point reverse-folded for a hooked beak; Gilad's database lists a traditional parrot (in Saydak's *Everyone Can Learn Origami*), but Gami's follows neither it nor origami.me's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 22 Nov 2026 |
+| `chicken` | Traditional (origami.me credits it as a traditional design; Gilad's database lists three Traditional chickens, among them Saydak's *Everyone Can Learn Origami* and NOA 156) | None needed: nobody owns it | [origami.me/chicken](https://origami.me/chicken/) (order of folds as far as the beak) | Clear | 22 Nov 2026 |
+| `swallow` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a swallow seen from above, from the traditional bird base with its legs narrowed and reverse-folded out as swept-back wings, the front flap folded down for the head and the back flap cut up the middle and folded apart for a forked tail; Gilad's database lists traditional swallows (Saydak's *Everyone Can Learn Origami* and others), but Gami's follows neither them nor origami.me's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the bird base's folds follow `crane` | Clear | 24 Nov 2026 |
 
 ### Notes
 
+- **Advanced models from OrigamiOK** (checked 21 November 2026; the plan is `docs/origamiok-advanced-plan.md`).
+  Of the seven asked for, only the unicorn page names a designer (Imai Yudai). The hummingbird page says it's built on
+  the bird base, and a reply from the site says OrigamiOK designed that version itself; the others name only their
+  writer. Gilad's database lists no Traditional skull, dragon, unicorn, Godzilla, whale or hummingbird in what could
+  be read, so each is Gami's own. Godzilla is Toho's character, so Gami folds a generic kaiju in its place.
+  Gami's hummingbird starts from the traditional bird base and narrows its lower points as the crane does; from
+  there it's its own: the points turned out with outside reverse folds for the beak and tail, the wings left standing
+  and spread, the bird tilted nose up. OrigamiOK's folds its wings down and back up, makes feet and pinches the neck.
+  Gami's skull is the blintz (corners to the middle, dark side out) with the side flaps' tips folded back out so
+  the dark side shows as eye sockets, its outline folded behind and its nose and teeth drawn; OrigamiOK's opens
+  pockets, pulls out sandwiched flaps and pleats the teeth.
+  Gami's cute whale is the traditional masu box (as `masu-box`) worn open side down: one end locked as usual, the
+  other end's flap folded out over its wall rather than into the box, so it runs up the outside and its point flicks
+  back above the back as a tail; eyes drawn. OrigamiOK's raises the head into a cube from a crease grid.
+  Gami's pot plant puts traditional parts together: the masu box as the pot, a square with its corners folded to
+  the middle as the soil, and three leaves standing on it, each narrowed into a long kite as the tulip's stem starts. OrigamiOK's uses eight sheets, cuts
+  its leaves and stems, rolls the stems and glues them into a rolled filler.
+  Gami's unicorn takes nothing from Imai Yudai's, which collapses one square from a full crease grid and makes the
+  horn, head, legs and tail from its layers. Gami's is five sheets put together in 3D, as its standing fox is: a
+  rectangle snipped for legs and folded in half along the back; a kite with its top folded behind and folded in half
+  for the neck, the head turned out with an outside reverse fold and eyes drawn; a kite folded in half for the horn;
+  and two long leaves, folded in half and rippled, for the mane and tail. Only the subject is shared.
+  Gami's kaiju is a generic upright monster with plates down its back, named only "Kaiju": nothing in its title,
+  blurb or steps names Godzilla, and it takes no detail from Toho's character or from OrigamiOK's model (a crease
+  grid collapsed into a body, with fins glued into a slot). Gami's is six squares put together in 3D: a kite with its
+  top folded behind and folded in half for the body, its point turned out with an outside reverse fold for the head;
+  a kite folded in half for the tail and a small one for the arms; three squares folded into triangles for the plates.
+  Gami's dragon starts from the traditional bird base and narrows its lower points as the crane does; from there
+  it's its own: the points turned out with outside reverse folds for the neck and tail, the neck's top turned out
+  again to stand up and its tip pushed in for the head (an S), the tail crimped, the wings spread out sideways and rippled, eyes drawn, and two little squares
+  folded into kites and folded in half for horns and legs. OrigamiOK's collapses a square into a small square,
+  zigzags the tail, makes the head and horn from the top flaps and spreads zigzag wings.
+- **More from origami.me** (checked 22 November 2026; the plan is `docs/origami-me-more-plan.md`). origami.me credits
+  its necktie as Traditional, but all ten neckties in Gilad's database have named designers (Yamaguchi, Takagi,
+  Uchiyama, Huisken, Nir and others), none Traditional, so Gami's is its own rather than a traditional one. It doesn't
+  follow origami.me's either, whose knot is squashed out from a pleat: Gami's is a kite narrowed at the top and
+  turned over, the point folded down and back up for a plain knot and its tip folded behind, with stripes drawn
+  across below it. The rest of the batch gets the same check before its recipe. The kimono passes it: Gilad's
+  database has eight Traditional kimonos (Takagi's *Joy of Origami*, Gardiner's *Essential Origami*, NOA 14, 143, 163
+  and 227 and others) among dozens by named designers. But origami.me's is a square folded in half with narrow strips
+  and a squash, and Gami's is folded its own way, the sides to the middle with the collar turned back from their edges
+  and the sleeves carried up behind, so it's Gami's too. The wallet passes it and is traditional: Gilad's database
+  lists six wallets credited Traditional (Robinson's *World's Best Origami*, Palacios's *Beginning Origami*,
+  Kawasaki's *Doctor's Origami Dream Book*, Pajarita 5 and others) and two Unknown, among about ninety by named
+  designers. Gami follows origami.me's order of folds, leaving out its turns of the paper between folds. The parrot
+  is listed in Gilad's database as Traditional (Saydak's *Everyone Can Learn Origami*; Saydak also wrote origami.me's
+  page) and Unknown (Origami Deutschland 1990), among dozens by named designers. But origami.me's squashes the head
+  out of the kite's flaps in steps its own readers say can't be followed from the text, and Gami's is folded its own
+  way: the kite folded in half coloured side out, the top point reverse-folded for the beak, so it's Gami's. The
+  chicken is traditional: Gilad's database lists three Chickens credited Traditional (Saydak's *Everyone Can Learn
+  Origami*, NOA 156 folded by Saydak, Der Falter 61) among dozens by named designers, and Saydak wrote origami.me's
+  page. Gami follows its order of folds as far as the beak, with its landmarks pinched (since 24 November) and the
+  feet reverse-folded round the outside rather than inside (inside, the layers pass through each other in the
+  engine), and leaves out its wings, comb and head: the wings' squash can't be placed from the text, and the comb's
+  layer is joined to the next along the fold. Since 23 November the comb and a wattle are drawn on in red instead,
+  with an eye, on both sides; the kimono's obi is drawn on in gold and the parrot's beak coloured pale yellow, where
+  the paper can't show those colours.
+  The swallow is Gami's: Gilad's database lists five Swallows credited Traditional (Saydak's *Everyone Can Learn
+  Origami*, Cunliffe, LaFosse, Takahama, Sakade) and two Unknown, but origami.me's step text leans on its diagrams
+  for which flap becomes which part, and four readings of it didn't fold (`docs/origami-me-more-plan.md`). Gami's
+  takes the crane's bird base and leg narrowing, swings the legs out as wings, folds one long flap down for the head
+  and cuts the other into a forked tail, in its own order and words (24 November 2026).
 - **Intermediate models from OrigamiOK** (checked 13 November 2026; the plan is `docs/origamiok-intermediate-plan.md`).
   Its fox page credits Hoàng Tiến Quyết and its lizard page Lee Won-pyo; the rest name only their writer and
   photographer. Gilad's database lists about ten Traditional square turtles (Gross's *Zoogami*, Momotani, NOA 493 and

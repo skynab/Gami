@@ -162,8 +162,8 @@ export function shape(
     for (const k of mine.slice(1)) [up, at] = [turn(up, bends[k]), turn(at, bends[k])];
     return up[1] - at[1] < -0.999;
   };
-  // Any other stack turned by one bend turns about its own bottom layer, standing on the paper that stays put
-  // beneath it: turned about the table instead, a thick stack's bottom edge would cut down through that
+  // Any other stack turned by one bend turns about its own bottom layer (its top, if lifted: see below), standing on
+  // the paper that stays put beneath it: turned about the table instead, a thick stack's bottom edge would cut down through that
   // paper. Paper turned further, beyond a stack that stands up, is hinged to the stack's far side, so it lies
   // beyond the stack's layers rather than in under them. Bends turning along one line by one angle (flaps lying
   // one on another, each turned by a bend of its own) turn one stack, so its layers stand apart.
@@ -178,7 +178,7 @@ export function shape(
   };
   const nearest = (i: number) => lineOf(order.findLast((k) => moves[k][i]) ?? -1);
   const turnedBy = (i: number) => moves.filter((m) => m[i]).length;
-  const base = new Map<string, { bottom: number; rest: number; beyond: Vec3 | null }>();
+  const base = new Map<string, { bottom: number; top: number; lifted: boolean; rest: number; beyond: Vec3 | null }>();
   pieces.forEach((_, i) => {
     const k = nearest(i);
     if (!ups[i] || over(i) || cornerOf[i] || turnedBy(i) !== 1 || base.has(k)) return;
@@ -189,7 +189,10 @@ export function shape(
     const [ux, uy, uz] = ups[i]!;
     const width = (Math.max(...layers) - bottom + 1) * LAYER_GAP;
     const rest = Math.max(bottom, 1 + Math.max(-1, ...under.map((p) => p.layer)));
-    base.set(k, { bottom, rest, beyond: Math.abs(uy) < 0.5 ? [ux * width, 0, uz * width] : null });
+    // Lifted only if all of it is: a stack can carry on past its line the other way, turned down by the same turn
+    // (a plane's fin, past its body), and that part's fold has its inside at the bottom.
+    const lifted = stack.every((j) => bends[order.findLast((b) => moves[b][j])!].angle > 0);
+    base.set(k, { bottom, top: Math.max(...layers), lifted, rest, beyond: Math.abs(uy) < 0.5 ? [ux * width, 0, uz * width] : null });
   });
   pieces.forEach((p, i) => {
     const up = ups[i];
@@ -203,6 +206,11 @@ export function shape(
         : onOver(i)
           ? // As the paper it's on ends up, which is also lifted by its layer when drawn, flat; this isn't.
             [0, (overTop - p.layer) * LAYER_GAP, 0]
+        : stack && b.lifted
+          ? // Lifted, the fold's inside is the stack's top: it turns about that, its lower layers swinging out round
+            // it. Turned about its bottom layer, its upper layers' edges swung in past the crease, through any
+            // paper lying still on top there (the butterfly's wings, lifted beside its body).
+            up.map((c, n) => c * (p.layer - b.top) * LAYER_GAP + (n === 1 ? (b.rest + b.top - b.bottom) * LAYER_GAP : 0))
         : stack
           ? up.map((c, n) => c * (p.layer - b.bottom) * LAYER_GAP + (n === 1 ? b.rest * LAYER_GAP : 0))
           : up.map((c) => c * p.layer * LAYER_GAP)

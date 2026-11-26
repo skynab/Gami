@@ -1,7 +1,9 @@
-import { placeLike, toFlat } from './fold';
-import { facePositions, normal } from './frames';
+import { stackLifts, type StackLifts } from './bend/stack';
+import { FoldError, placeLike, toFlat } from './fold';
+import { facePositions, framesOf, LAYER_GAP, normal } from './frames';
 import { frontUp } from './geometry2d';
-import { MARK_COLOUR, MARK_WIDTH, marksUpTo, onFace, type Mark } from './marks';
+import { MARK_WIDTH, markColour, marksUpTo, onFace, type Mark } from './marks';
+import { drawnParts } from './pinch';
 import { faceColour } from './sheets';
 import { TAPE_COLOUR, TAPE_OPACITY } from './tape';
 import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from './types';
@@ -44,6 +46,7 @@ export function fromAbove(model: OrigamiModel, frame: FoldFrame, marks: Mark[] =
   ].map((n) => +n.toFixed(4));
   const stroke = +(span / 220).toFixed(5);
   const width = +(MARK_WIDTH * Math.max(...model.sheets.map((s) => Math.max(...s.size)))).toFixed(5);
+  const parts = drawnParts(frame);
   const polys = faces
     .map((f) => {
       const up = frontUp(f.world, f.paper);
@@ -57,8 +60,8 @@ export function fromAbove(model: OrigamiModel, frame: FoldFrame, marks: Mark[] =
           onFace(m, f.paper).map((part) => {
             const pts = part.map((p) => place(p).map((n) => +n.toFixed(4)).join(',')).join(' ');
             return m.fill
-              ? `<polygon points="${pts}" fill="${MARK_COLOUR}" stroke="none"/>`
-              : `<polyline points="${pts}" fill="none" stroke="${MARK_COLOUR}" stroke-opacity="1" stroke-width="${width}" stroke-linecap="round"/>`;
+              ? `<polygon points="${pts}" fill="${markColour(m)}" stroke="none"/>`
+              : `<polyline points="${pts}" fill="none" stroke="${markColour(m)}" stroke-opacity="1" stroke-width="${width}" stroke-linecap="round"/>`;
           }),
         )
         .join('');
@@ -72,10 +75,26 @@ export function fromAbove(model: OrigamiModel, frame: FoldFrame, marks: Mark[] =
           }),
         )
         .join('');
-      return `<polygon points="${points}" fill="${fill}"/>${drawn}${taped}`;
+      const lined = f.paper.map((p, c) => parts(p, f.paper[(c + 1) % f.paper.length]));
+      return `${outlined(points, fill, f.world, lined, (p) => p.map((n) => +n.toFixed(4)).join(','))}${drawn}${taped}`;
     })
     .join('');
   return { box, body: `<g stroke="#2b2a33" stroke-opacity=".45" stroke-width="${stroke}" stroke-linejoin="round">${polys}</g>` };
+}
+
+/**
+ * A face as an SVG polygon, its edges lined as the group's stroke says. Where only parts of its edges are lines
+ * (`lined`: for each edge, the stretches of it that are, as fractions along it; none between triangles of bent
+ * paper, or along a pinch's unpressed stretch), it's outlined in its own colour, closing the hairline seams there,
+ * then lined on those parts.
+ */
+function outlined(points: string, fill: string, corners: Vec2[], lined: [number, number][][], at: (p: Vec2) => string): string {
+  if (lined.every((l) => l.length === 1 && l[0][0] === 0 && l[0][1] === 1)) return `<polygon points="${points}" fill="${fill}"/>`;
+  const lerp = (a: Vec2, b: Vec2, t: number): Vec2 => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+  const d = corners
+    .flatMap((p, c) => lined[c].map(([s, e]) => `M${at(lerp(p, corners[(c + 1) % corners.length], s))}L${at(lerp(p, corners[(c + 1) % corners.length], e))}`))
+    .join('');
+  return `<polygon points="${points}" fill="${fill}" stroke="${fill}" stroke-opacity="1"/>${d && `<path d="${d}" fill="none"/>`}`;
 }
 
 /** How many moments a preview shows, and how long each. */
@@ -90,18 +109,25 @@ const PREVIEW_SECONDS = 0.9;
 export function previewSvg(model: OrigamiModel, size = 240): string {
   // Each flat state, with how many steps it's after (for the marks drawn by then).
   const frames = [model.start, ...model.steps.map((s) => s.frame)].map((frame, k) => ({ frame, k })).filter(({ frame }) => flat(frame));
-  const n = Math.min(PREVIEW_FRAMES, frames.length);
-  const picked = Array.from({ length: n }, (_, i) => frames[Math.round((i * (frames.length - 1)) / Math.max(1, n - 1))]);
-  const cycle = n * PREVIEW_SECONDS;
-  const share = +(100 / n).toFixed(3);
+  // A model whose card shows it finished in 3D (a balloon blown up) ends on that, as its card does, rather than on
+  // its last flat state: the flat moments lead up to it.
+  const last = model.steps.at(-1)?.frame ?? model.start;
+  const finished = model.card === 'finished' && !flat(last);
+  const n = Math.min(PREVIEW_FRAMES - (finished ? 1 : 0), frames.length);
+  const flats = Array.from({ length: n }, (_, i) => frames[Math.round((i * (frames.length - 1)) / Math.max(1, n - 1))]);
+  const picked: ({ frame: FoldFrame; k: number } | null)[] = finished ? [...flats, null] : flats;
+  const shown = picked.length;
+  const cycle = shown * PREVIEW_SECONDS;
+  const share = +(100 / shown).toFixed(3);
   const style =
     `.f{opacity:0;animation:show ${cycle}s step-end infinite}` +
     `@keyframes show{0%{opacity:1}${share}%{opacity:0}100%{opacity:0}}` +
     picked.map((_, i) => `.f${i}{animation-delay:${(i * PREVIEW_SECONDS).toFixed(2)}s}`).join('') +
-    `@media (prefers-reduced-motion:reduce){.f{animation:none}.f${n - 1}{opacity:1}}`;
+    `@media (prefers-reduced-motion:reduce){.f{animation:none}.f${shown - 1}{opacity:1}}`;
   const views = picked
-    .map(({ frame, k }, i) => {
-      const { box, body } = fromAbove(model, frame, marksAt(model, k));
+    .map((p, i) => {
+      if (!p) return slanted(model, last, size, marksAt(model, model.steps.length)).trim().replace('<svg xmlns="http://www.w3.org/2000/svg"', `<svg class="f f${i}"`);
+      const { box, body } = fromAbove(model, p.frame, marksAt(model, p.k));
       return `<svg class="f f${i}" viewBox="${box.join(' ')}" width="${size}" height="${size}">${body}</svg>`;
     })
     .join('');
@@ -113,6 +139,7 @@ export function previewSvg(model: OrigamiModel, size = 240): string {
 const SLANT = (55 * Math.PI) / 180;
 
 function slanted(model: OrigamiModel, frame: FoldFrame, size: number, marks: Mark[] = []): string {
+  const lifts = frame === model.steps.at(-1)?.frame ? finishedLifts(model) : undefined;
   // Looking down from above and in front: screen right is +x, screen up tilts back with the view.
   const toViewer: Vec3 = [0, Math.sin(SLANT), Math.cos(SLANT)];
   const up: Vec3 = [0, Math.cos(SLANT), -Math.sin(SLANT)];
@@ -122,16 +149,20 @@ function slanted(model: OrigamiModel, frame: FoldFrame, size: number, marks: Mar
   // Edges between triangles of paper that bends get no line.
   const key = (u: number, v: number) => (u < v ? `${u} ${v}` : `${v} ${u}`);
   const soft = new Set((frame.soft ?? []).map(([u, v]) => key(u, v)));
+  const parts = drawnParts(frame);
   const faces = frame.faces_vertices.map((face, f) => {
-    const world = placed[f];
-    const n = normal(world);
+    const n = normal(placed[f]);
     const front = dot(n, toViewer) > 0;
+    // Bent paper's layers can pass a little into each other: each is drawn as far back as the viewer draws it, by
+    // its place among the paper it's stacked with (see `stackLifts`), so the inside doesn't show through.
+    const back = (lifts ? (front ? lifts.front[f] : lifts.back[f]) : 0) * LIFT;
+    const world = placed[f].map((p): Vec3 => [p[0] + toViewer[0] * back, p[1] + toViewer[1] * back, p[2] + toViewer[2] * back]);
     // The face's plane, its normal turned towards the viewer, and how far along that normal the plane lies.
     const facing: Vec3 = front ? n : [-n[0], -n[1], -n[2]];
     return {
       paper: face.map((v) => frame.vertices_paper[v]),
       world,
-      softly: face.map((u, c) => soft.has(key(u, face[(c + 1) % face.length]))),
+      lined: face.map((u, c) => (soft.has(key(u, face[(c + 1) % face.length])) ? [] : parts(frame.vertices_paper[u], frame.vertices_paper[face[(c + 1) % face.length]]))),
       screen: world.map((p): Vec2 => [p[0], -dot(p, up)]),
       depth: world.reduce((s, p) => s + dot(p, toViewer), 0) / world.length,
       facing,
@@ -175,15 +206,12 @@ function slanted(model: OrigamiModel, frame: FoldFrame, size: number, marks: Mar
           onFace(m, f.paper).map((part) => {
             const pts = part.map((p) => at(onScreen(p))).join(' ');
             return m.fill
-              ? `<polygon points="${pts}" fill="${MARK_COLOUR}" stroke="none"/>`
-              : `<polyline points="${pts}" fill="none" stroke="${MARK_COLOUR}" stroke-opacity="1" stroke-width="${width}" stroke-linecap="round"/>`;
+              ? `<polygon points="${pts}" fill="${markColour(m)}" stroke="none"/>`
+              : `<polyline points="${pts}" fill="none" stroke="${markColour(m)}" stroke-opacity="1" stroke-width="${width}" stroke-linecap="round"/>`;
           }),
         )
         .join('');
-      if (!f.softly.some(Boolean)) return `<polygon points="${points}" fill="${fill}"/>${drawn}`;
-      // Outlined in its own colour, closing the hairline seams between triangles, then lined on its other edges.
-      const d = f.screen.flatMap((p, c) => (f.softly[c] ? [] : [`M${at(p)}L${at(f.screen[(c + 1) % f.screen.length])}`])).join('');
-      return `<polygon points="${points}" fill="${fill}" stroke="${fill}" stroke-opacity="1"/>${d && `<path d="${d}" fill="none"/>`}${drawn}`;
+      return `${outlined(points, fill, f.screen, f.lined, at)}${drawn}`;
     })
     .join('');
   return (
@@ -191,6 +219,30 @@ function slanted(model: OrigamiModel, frame: FoldFrame, size: number, marks: Mar
     `<g stroke="#2b2a33" stroke-opacity=".45" stroke-width="${stroke}" stroke-linejoin="round">${polys}</g></svg>
 `
   );
+}
+
+/** How far back each place among stacked bent paper is drawn: the viewer's `LIFT` (FoldedPaper.tsx). */
+const LIFT = 8 * LAYER_GAP;
+
+/**
+ * For a model finishing in bent paper (a balloon blown up), how far back to draw each of its last frame's triangles,
+ * as the viewer does (`stackRanks` in FoldedPaper.tsx). Undefined if it doesn't end bent, or not from a flat stack.
+ */
+function finishedLifts(model: OrigamiModel): StackLifts | undefined {
+  const frames = framesOf(model);
+  const k = frames.length - 1;
+  if (!k || !frames[k].soft?.length) return undefined;
+  let b = k;
+  while (b > 1 && frames[b - 1].soft?.length) b--;
+  const parent = model.steps[b - 1].via?.[0]?.faces_parent;
+  const before = frames[b - 1];
+  if (!parent || parent.length !== frames[k].faces_vertices.length || !before.faces_layer) return undefined;
+  try {
+    return stackLifts(before, parent, frames[k]);
+  } catch (e) {
+    if (e instanceof FoldError) return undefined;
+    throw e;
+  }
 }
 
 /**

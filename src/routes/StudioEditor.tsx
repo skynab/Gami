@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { sayFold } from '../i18n';
 import { Link } from 'react-router';
 import { TopBar } from '../app/TopBar';
+import { clippedSteps } from '../fold/collisions';
 import { FoldError } from '../fold/fold';
 import { toFoldFile } from '../fold/fold-format';
 import { applyOp, OpError, type Op } from '../fold/ops';
@@ -307,6 +308,8 @@ export default function StudioEditor({ end, cloud = false }: {
 
   const status = message ?? tools.error;
   const onPaper = useMemo(() => marksUpTo(before, before.steps.length).map((m) => m.mark), [before]);
+  // Where paper passes through paper as a step comes to rest: the inside of the paper shows through its outside.
+  const clipped = useMemo(() => new Map(clippedSteps(model).map((c) => [c.step, c.depth])), [model]);
   const { result } = tools;
 
   return (
@@ -357,7 +360,8 @@ export default function StudioEditor({ end, cloud = false }: {
             // A cut about to be made, or the way a pop-up's first crease points.
             cut={(s.action === 'cut' || s.action === 'popUp') && s.picks.length === 2 ? [s.picks[0], s.picks[1]] : null}
             tape={s.action === 'tape' && s.picks.length === 2 ? planned(() => tapeStrip(s.picks[0], s.picks[1], s.tapeWidth)) : null}
-            free={s.action === 'cut' || s.action === 'tape' || s.action === 'preset' || s.action === 'draw' || s.action === 'popUp' || s.pickMode === 'anchor'}
+            pinch={s.action === 'pinch' && tools.pinchLines ? { lines: tools.pinchLines, at: s.picks.length === 2 ? [s.picks[0], s.picks[1]] : null } : null}
+            free={s.action === 'cut' || s.action === 'tape' || s.action === 'pinch' || s.action === 'preset' || s.action === 'draw' || s.action === 'popUp' || s.pickMode === 'anchor'}
             marks={onPaper}
             drawing={s.action === 'draw' ? [...s.marks.map((m) => ({ points: m.table, fill: !!m.mark.fill })), { points: s.picks, fill: s.fill }] : []}
             faces={FACE_ACTIONS.includes(s.action) && (s.pickMode === 'faces' || s.picked.length) ? s.picked : null}
@@ -464,6 +468,11 @@ export default function StudioEditor({ end, cloud = false }: {
                     value={step.text ?? ''}
                     onChange={(e) => editStep(i, { text: e.target.value || undefined })}
                   />
+                  {clipped.has(i + 1) && (
+                    <p className="error-text small" role="note">
+                      {t('studio.clips', { mm: (clipped.get(i + 1)! * 150).toFixed(1) })}
+                    </p>
+                  )}
                 </li>
               ))}
             </ol>

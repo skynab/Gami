@@ -46,7 +46,7 @@ export interface ModelInfo {
  * day rather than "the last month", which would mark the whole first month's gallery New; move it on to retire a
  * batch's stars.
  */
-export const NEW_SINCE = '2026-10-28';
+export const NEW_SINCE = '2026-11-21';
 
 export function isNew(model: Pick<ModelInfo, 'steps' | 'added'>): boolean {
   return !!model.steps && !!model.added && model.added >= NEW_SINCE;
@@ -84,7 +84,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'dog-face', title: 'Dog face', blurb: 'A first fold: a triangle with floppy ears.', difficulty: 1, category: 'animal', steps: 11, minutes: 2, sheets: 1, needs: ['pen'], added: '2026-10-18' },
   { id: 'cat-face', title: 'Cat face', blurb: 'A first fold: a triangle with pointed ears.', difficulty: 1, category: 'animal', steps: 7, minutes: 2, sheets: 1, needs: ['pen'], added: '2026-10-18' },
   { id: 'cup', title: 'Cup', blurb: 'A cup that holds water, for a while.', difficulty: 1, category: 'object', form: '3d', steps: 8, minutes: 4, sheets: 1, added: '2026-10-16' },
-  { id: 'samurai-helmet', title: 'Samurai helmet', blurb: 'A kabuto with horns. Fold a big one to wear.', difficulty: 2, category: 'object', steps: 17, minutes: 8, sheets: 1, added: '2026-10-16' },
+  { id: 'samurai-helmet', title: 'Samurai helmet', blurb: 'A kabuto with horns. Fold a big one to wear.', difficulty: 2, category: 'object', form: '3d', steps: 18, minutes: 8, sheets: 1, added: '2026-10-16' },
   { id: 'fortune-teller', title: 'Fortune teller', blurb: 'Pick a colour, pick a number.', difficulty: 2, category: 'toy', form: '3d', steps: 19, minutes: 8, sheets: 1, added: '2026-10-16' },
   { id: 'heart', title: 'Heart', blurb: 'A simple heart, nice for cards.', difficulty: 2, category: 'object', steps: 20, minutes: 5, sheets: 1, added: '2026-10-16' },
   { id: 'cicada', title: 'Cicada', blurb: 'A traditional Japanese cicada, its wings folded out from a diamond.', difficulty: 2, category: 'animal', steps: 10, minutes: 5, sheets: 1, added: '2026-10-18' },
@@ -99,10 +99,10 @@ export const MODELS: ModelInfo[] = [
   { id: 'whale', title: 'Whale', blurb: 'A fish base folded into a whale, with fins and a flicked-up tail.', difficulty: 2, category: 'animal', form: '3d', steps: 22, minutes: 8, sheets: 1, added: '2026-10-21' },
   { id: 'crow', title: 'Crow', blurb: 'A traditional crow with a sharp beak.', difficulty: 3, category: 'animal', steps: 26, minutes: 12, sheets: 1, added: '2026-10-21' },
   { id: 'christmas-tree', title: 'Christmas tree', blurb: 'A fir tree in a white pot, nice on a card.', difficulty: 1, category: 'object', steps: 11, minutes: 5, sheets: 1, added: '2026-10-21' },
-  { id: 'waterbomb', title: 'Water bomb', blurb: 'A paper balloon. Blow into the hole and it puffs up.', difficulty: 2, category: 'toy', steps: 27, minutes: 8, sheets: 1, added: '2026-10-21' },
+  { id: 'waterbomb', title: 'Water bomb', blurb: 'A paper balloon. Blow into the hole and it puffs up.', difficulty: 2, category: 'toy', form: '3d', steps: 28, minutes: 8, sheets: 1, added: '2026-10-21' },
   { id: 'balloon', title: 'Balloon', blurb: 'The water bomb, blown up into a cube.', difficulty: 2, category: 'toy', form: '3d', steps: 28, minutes: 8, sheets: 1, added: '2026-10-23' },
   { id: 'flapping-bird', title: 'Flapping bird', blurb: 'Pull its tail and the wings flap.', difficulty: 3, category: 'toy', form: '3d', steps: 25, minutes: 12, sheets: 1, added: '2026-10-21' },
-  { id: 'balloon-rabbit', title: 'Balloon rabbit', blurb: 'A water bomb with long ears, puffed up round.', difficulty: 3, category: 'animal', steps: 25, minutes: 10, sheets: 1, added: '2026-10-21' },
+  { id: 'balloon-rabbit', title: 'Balloon rabbit', blurb: 'A water bomb with long ears, puffed up round.', difficulty: 3, category: 'animal', form: '3d', steps: 26, minutes: 10, sheets: 1, added: '2026-10-21' },
   { id: 'pinwheel', title: 'Pinwheel', blurb: 'A windmill with four sails. Pin it to a stick and blow.', difficulty: 2, category: 'toy', steps: 12, minutes: 6, sheets: 1, added: '2026-10-21' },
   { id: 'butterfly', title: 'Butterfly', blurb: 'Wings folded out from a squashed square, lifted for flight.', difficulty: 3, category: 'animal', form: '3d', steps: 28, minutes: 10, sheets: 1, added: '2026-10-21' },
   { id: 'dolphin', title: 'Dolphin', blurb: 'A traditional dolphin, leaping.', difficulty: 3, category: 'animal', form: '3d', steps: 24, minutes: 12, sheets: 1, needs: ['scissors'], added: '2026-10-21' },
@@ -122,7 +122,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'tulip-bloom', title: 'Tulip in 3D', blurb: 'The traditional 3D blossom: a water bomb base wrapped narrow, then blown up into a bud.', difficulty: 3, category: 'flower', form: '3d', steps: 20, minutes: 12, sheets: 1, added: '2026-10-28' },
   { id: 'peacock', title: 'Peacock', blurb: 'A blue bird in front of its green fan of a tail, from two squares.', difficulty: 2, category: 'animal', steps: 11, minutes: 8, sheets: 2, added: '2026-10-28' },
   { id: 'cactus', title: 'Cactus', blurb: 'A ribbed cactus in a pot, with a flower on top. Three squares, no glue.', difficulty: 2, category: 'flower', steps: 9, minutes: 10, sheets: 3, added: '2026-10-28' },
-  { id: 'pirate-hat', title: 'Pirate hat', blurb: 'The newspaper hat, from a sheet of printer paper, with a skull and crossbones drawn on.', difficulty: 1, category: 'object', steps: 12, minutes: 5, sheets: 1, paper: 1.41, needs: ['pen'], added: '2026-10-28' },
+  { id: 'pirate-hat', title: 'Pirate hat', blurb: 'The newspaper hat, from a sheet of printer paper, with a skull and crossbones drawn on.', difficulty: 1, category: 'object', form: '3d', steps: 13, minutes: 5, sheets: 1, paper: 1.41, needs: ['pen'], added: '2026-10-28' },
   { id: 'frog-bookmark', title: 'Frog bookmark', blurb: 'A frog’s head with eyes that stick out, slipped over the corner of a page.', difficulty: 1, category: 'object', steps: 8, minutes: 5, sheets: 1, needs: ['pen'], added: '2026-10-28' },
   { id: 'heart-bookmark', title: 'Heart bookmark', blurb: 'A heart that slips over the corner of a page.', difficulty: 1, category: 'object', steps: 11, minutes: 5, sheets: 1, added: '2026-10-28' },
   { id: 'cute-cat', title: 'Cute cat', blurb: 'A cat sitting tall, its tail curled out to one side, from two squares.', difficulty: 2, category: 'animal', form: '3d', steps: 10, minutes: 8, sheets: 2, needs: ['pen'], added: '2026-10-28' },
@@ -144,7 +144,7 @@ export const MODELS: ModelInfo[] = [
   { id: 'rainbow-chain', title: 'Rainbow chain', blurb: 'Twenty-eight links in seven colours, each slid into the last, in a zigzag closed into a bracelet. No glue.', difficulty: 2, category: 'modular', form: '3d', steps: 15, minutes: 40, sheets: 28, paper: 2.5, added: '2026-10-29' },
   { id: 'business-card-cube', title: 'Business card cube', blurb: 'Six cards folded into units that lock together into a cube, every edge held by a flap. No glue.', difficulty: 2, category: 'modular', form: '3d', steps: 9, minutes: 15, sheets: 6, paper: 1.75, added: '2026-10-29' },
   { id: 'dice', title: 'Dice', blurb: 'Six white cards locked into a cube, flaps hidden inside, with the dots drawn on. No glue.', difficulty: 2, category: 'modular', form: '3d', steps: 12, minutes: 20, sheets: 6, paper: 1.75, needs: ['pen'], added: '2026-10-29' },
-  { id: 'kusudama', title: 'Kusudama flower ball', blurb: 'Sixty petals glued into twelve flowers, the flowers into a ball, and a loop to hang it from.', difficulty: 3, category: 'modular', form: '3d', steps: 15, minutes: 120, sheets: 61, paper: 13.33, needs: ['glue'], added: '2026-10-29' },
+  { id: 'kusudama', title: 'Kusudama flower ball', blurb: 'Sixty petals glued into twelve flowers, the flowers into a ball, and a loop to hang it from.', difficulty: 3, category: 'modular', form: '3d', steps: 16, minutes: 120, sheets: 61, paper: 13.33, needs: ['glue'], added: '2026-10-29' },
   { id: 'chrysanthemum', title: 'Chrysanthemum kusudama', blurb: 'Six windmill units glued corner to corner into a ball, their arms opened out as petals.', difficulty: 2, category: 'modular', form: '3d', steps: 16, minutes: 30, sheets: 6, needs: ['glue'], added: '2026-10-29' },
   { id: 'turtle', title: 'Turtle', blurb: 'A turtle seen from above, flippers out, its shell drawn on, from the water bomb base.', difficulty: 2, category: 'animal', steps: 24, minutes: 10, sheets: 1, needs: ['pen'], added: '2026-11-13' },
   { id: 'sunflower', title: 'Sunflower', blurb: 'Eight yellow petals round a brown middle, on a stem with a leaf, from three squares.', difficulty: 2, category: 'flower', steps: 17, minutes: 12, sheets: 3, needs: ['pen'], added: '2026-11-13' },
@@ -152,6 +152,19 @@ export const MODELS: ModelInfo[] = [
   { id: 'squirrel', title: 'Squirrel', blurb: 'A squirrel sitting up, its bushy tail curled over its back, from three squares.', difficulty: 2, category: 'animal', form: '3d', steps: 14, minutes: 10, sheets: 3, needs: ['pen'], added: '2026-11-13' },
   { id: 'strawberry', title: 'Strawberry', blurb: 'A strawberry in 3D, popped up point down with its seeds drawn on, a star of green leaves on top. From two squares.', difficulty: 2, category: 'flower', form: '3d', steps: 13, minutes: 12, sheets: 2, needs: ['pen'], added: '2026-11-13' },
   { id: 'fox-3d', title: 'Standing fox', blurb: 'A fox standing on four legs in 3D, its tail out behind, from three squares and four snips.', difficulty: 3, category: 'animal', form: '3d', steps: 17, minutes: 15, sheets: 3, needs: ['scissors', 'pen'], added: '2026-11-13' },
+  { id: 'hummingbird', title: 'Hummingbird', blurb: 'A hummingbird hovering with its wings swept back, a long beak forwards, from the bird base.', difficulty: 3, category: 'animal', form: '3d', steps: 29, minutes: 15, sheets: 1, added: '2026-11-21' },
+  { id: 'skull', title: 'Skull', blurb: 'A skull face with dark eye sockets that come from folding, not drawing. One square, a nose and teeth drawn on.', difficulty: 3, category: 'object', steps: 16, minutes: 12, sheets: 1, needs: ['pen'], added: '2026-11-21' },
+  { id: 'cute-whale', title: 'Cute whale', blurb: 'A chunky little whale with its tail in the air. Turn it over and it’s a box: the traditional masu box, worn upside down.', difficulty: 3, category: 'animal', form: '3d', steps: 26, minutes: 15, sheets: 1, needs: ['pen'], added: '2026-11-21' },
+  { id: 'pot-plant', title: 'Pot plant', blurb: 'Three long leaves standing in a little pot of soil, in 3D. Five squares, no scissors or glue.', difficulty: 3, category: 'flower', form: '3d', steps: 32, minutes: 30, sheets: 5, added: '2026-11-21' },
+  { id: 'unicorn', title: 'Unicorn', blurb: 'A unicorn standing on four long legs in 3D, with a golden horn and a wavy mane and tail. A rectangle and four squares, with four snips.', difficulty: 3, category: 'animal', form: '3d', steps: 22, minutes: 25, sheets: 5, paper: 1.5, needs: ['scissors', 'pen'], added: '2026-11-21' },
+  { id: 'kaiju', title: 'Kaiju', blurb: 'A giant monster standing upright in 3D, with short arms, a long tail and a row of plates up its back. Six squares, no scissors or glue.', difficulty: 3, category: 'animal', form: '3d', steps: 17, minutes: 25, sheets: 6, needs: ['pen'], added: '2026-11-21' },
+  { id: 'dragon', title: 'Dragon', blurb: 'A winged dragon standing in 3D, with a long neck curved in an S, horns, ribbed wings spread wide and a tail. Three squares, no scissors or glue.', difficulty: 3, category: 'animal', form: '3d', steps: 43, minutes: 35, sheets: 3, needs: ['pen'], added: '2026-11-22' },
+  { id: 'necktie', title: 'Necktie', blurb: 'A striped necktie with a plain knot, from one square. The stripes are drawn with a pen before the knot is folded.', difficulty: 1, category: 'object', steps: 10, minutes: 5, sheets: 1, needs: ['pen'], added: '2026-11-22' },
+  { id: 'kimono', title: 'Kimono', blurb: 'A kimono with a white collar, a gold obi and its sleeves out at the shoulders, from one square.', difficulty: 1, category: 'object', steps: 7, minutes: 5, sheets: 1, needs: ['pen'], added: '2026-11-22' },
+  { id: 'wallet', title: 'Wallet', blurb: 'A little wallet that closes like a book, with a pocket each side, from one square. Its cover is half plain, half coloured.', difficulty: 1, category: 'object', steps: 12, minutes: 5, sheets: 1, added: '2026-11-22' },
+  { id: 'parrot', title: 'Parrot', blurb: 'A green parrot perched upright, with a pale hooked beak and a long pleated tail, from one square.', difficulty: 1, category: 'animal', steps: 12, minutes: 6, sheets: 1, needs: ['pen'], added: '2026-11-22' },
+  { id: 'chicken', title: 'Chicken', blurb: 'A russet hen with a red comb and her feet tucked under her, from one square.', difficulty: 2, category: 'animal', steps: 20, minutes: 10, sheets: 1, needs: ['pen'], added: '2026-11-22' },
+  { id: 'swallow', title: 'Swallow', blurb: 'A swallow in flight, seen from above, with swept-back wings and a forked tail, from one square.', difficulty: 3, category: 'animal', steps: 33, minutes: 15, sheets: 1, needs: ['scissors'], added: '2026-11-24' },
   { id: 'fan', title: 'Fan', blurb: 'Pleat a sheet back and forth, fold it in half and lock the middle, then spread it into a half circle.', difficulty: 1, category: 'object', form: '3d', steps: 14, minutes: 10, sheets: 1, paper: 1.4, added: '2026-11-07' },
   { id: 'boat', title: 'Boat', blurb: 'The classic paper boat. It really floats, for a while.', difficulty: 2, category: 'object', form: '3d', steps: 15, minutes: 6, sheets: 1, paper: 1.41, added: '2026-11-09' },
   // Coming soon: listed, with no steps yet.
@@ -204,6 +217,8 @@ export interface Filter {
   query?: string;
   level?: Level | null;
   category?: Category | null;
+  /** Everything but the models in these categories. */
+  without?: Category[];
   /** Only the models marked New. */
   onlyNew?: boolean;
   /** Only the flat models, or only the 3D ones. */
@@ -235,12 +250,13 @@ export function sortModels<M extends ModelInfo>(models: M[], sort: Sort, locale?
   return by ? [...models].sort(by) : models;
 }
 
-export function filterModels(models: ModelInfo[], { query = '', level, category, onlyNew, form }: Filter): ModelInfo[] {
+export function filterModels(models: ModelInfo[], { query = '', level, category, without, onlyNew, form }: Filter): ModelInfo[] {
   const q = query.trim().toLowerCase();
   return models.filter(
     (m) =>
       (!level || levelOf(m.difficulty) === level) &&
       (!category || m.category === category) &&
+      !without?.includes(m.category) &&
       (!onlyNew || isNew(m)) &&
       (!form || formOf(m) === form) &&
       (!q || m.title.toLowerCase().includes(q) || m.blurb.toLowerCase().includes(q)),

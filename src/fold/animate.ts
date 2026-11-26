@@ -101,6 +101,12 @@ export interface Transition {
   /** Faces of separate paper that stay on the table while the rest lifts off it (see Motion.lift). */
   grounded?: boolean[];
   /**
+   * The other ways the paper could move that `moving` weighed (each face its own way, hinged at each pace, creases
+   * in step, a squash as rigid paper folds it), worked out when asked: judged as drawn if the way chosen jumps
+   * (see `stoodFirst`).
+   */
+  others?: () => Transition[];
+  /**
    * When each face finishes its move (0–1): faces ending lower in the stack land first, so paper settles
    * bottom layer first, as it does by hand, instead of a lower layer coming down through upper ones.
    */
@@ -145,7 +151,7 @@ function workOut(from: FoldFrame, to: FoldFrame, makeWay: boolean, stages: numbe
   // With paper that can get out of the way, the way round that goes through it may be the better one.
   let best = made;
   let fewest = passesThrough(made, WAY_SAMPLES);
-  if (!fewest) return made;
+  if (!fewest) return stoodFirst(from, to, t, stages, made);
   const yielding = withWayMade(moving(from, to, { yielding: true }));
   const y = passesThrough(yielding, WAY_SAMPLES);
   if (y < fewest) [best, fewest] = [yielding, y];
@@ -167,7 +173,69 @@ function workOut(from: FoldFrame, to: FoldFrame, makeWay: boolean, stages: numbe
       if (!deepest) break;
     }
   }
+  return stoodFirst(from, to, t, stages, best);
+}
+
+/**
+ * Paper torn apart by the faces' own moves is joined up as it's drawn (see `joinFixes`), and the joins can hold it
+ * the way it started all through the step, letting go only as it ends, where it jumps into place through whatever's
+ * in the way: the lily's petal folds, 6 mm through in the last fortieth of the step. (Joined up from the end back
+ * instead, they hold it the way it ends all through: the two never meet.) Where the paper jumps like that, judged
+ * by the paper as it's drawn, closely, standing the moving paper up first can be better, where the faces all meet
+ * at a point and so never count as passing through each other in `workOut`. `best` is the way found so far, `t`
+ * the faces' own moves.
+ */
+function stoodFirst(from: FoldFrame, to: FoldFrame, t: Transition, stages: number, best: Transition): Transition {
+  if (!stages || best.path || !jumps(best)) return best;
+  let drawn = asDrawn(best);
+  // Its other ways of moving too (see `Transition.others`), where there's no flap to stand up first, or none helps:
+  // a pinwheel's corners pulled out as its end squashes are joined to the paper staying put along several creases.
+  const ways = [...stagedWays(from, to, t, stages - 1), ...(best.others?.() ?? []).map((w) => () => w)];
+  for (const staged of ways) {
+    const way = staged();
+    if (!way) continue;
+    const d = asDrawn(way);
+    // Clearly less deep and torn no further, or no deeper and either clearly less torn or not jumping at all.
+    const shallower = d.depth < drawn.depth - DEEPER && d.apart <= Math.max(drawn.apart, TEAR);
+    const noDeeper = d.depth <= drawn.depth + LAYER_GAP;
+    const joined = noDeeper && d.apart < drawn.apart - TEAR;
+    const smooth = noDeeper && d.apart <= Math.max(drawn.apart, TEAR) && !jumps(way);
+    if (shallower || joined || smooth) [best, drawn] = [way, d];
+  }
   return best;
+}
+
+/**
+ * Whether paper jumps as it's drawn, in the last or first half of a fortieth of the step, where the joins (see
+ * `joinFixes`) let go of it or take hold: further than `JUMP`.
+ */
+function jumps(t: Transition): boolean {
+  const h = 1 / (2 * JOIN_SAMPLES);
+  const moved = (a: Vec3[][], b: Vec3[][]) => Math.max(...a.flatMap((face, f) => face.map((p, c) => Math.hypot(p[0] - b[f][c][0], p[1] - b[f][c][1], p[2] - b[f][c][2]))));
+  return moved(poseAt(t, 1 - h), poseAt(t, 1)) > JUMP || moved(poseAt(t, 0), poseAt(t, h)) > JUMP;
+}
+
+/**
+ * How far a corner may move in an eightieth of a step, as it's drawn, before it counts as jumping: a flap's tip half
+ * a sheet out, turning right over, moves two hundredths.
+ */
+const JUMP = 0.08;
+
+/**
+ * How a transition looks as it's drawn, joins and all: how deep paper passes through paper (faces sharing no
+ * corner), and how much further apart the same point of paper comes than at either end, at the most.
+ */
+function asDrawn(t: Transition): { depth: number; apart: number } {
+  const groups = cornerGroups(t.faces);
+  // Between and at the points the joins are worked out at (see `joinFixes`): where paper jumps, it's between them.
+  const poses = Array.from({ length: 2 * JOIN_SAMPLES - 1 }, (_, i) => poseAt(t, (i + 1) / (2 * JOIN_SAMPLES)));
+  const ends = groups.length ? [spreads(poseAt(t, 0), groups), spreads(poseAt(t, 1), groups)] : [[], []];
+  let [depth, apart] = [0, 0];
+  for (const pose of poses) {
+    depth = Math.max(depth, deepest(t, pose));
+    if (groups.length) apart = Math.max(apart, ...spreads(pose, groups).map((d, g) => d - Math.max(ends[0][g], ends[1][g])));
+  }
+  return { depth, apart };
 }
 
 /** Into a bent frame (see Transition.blend), all as one motion. */
@@ -357,19 +425,42 @@ function comingIn(model: OrigamiModel, k: number, op: Extract<Op, { op: 'assembl
     const across = Math.max(...pts.map((p) => Math.hypot(p[0] - c[0], p[1] - c[1], p[2] - c[2])));
     return out.normalize().multiplyScalar(COME_IN * across);
   });
-  // Each face's move to just outside its place, as a screw motion of its own (the same for a whole unit that keeps its shape).
+  // Each face's move to just outside its place. A unit bent into shape as it's placed moves as one, as its biggest
+  // piece that keeps its shape does (the most faces moving alike), and each face bends into place as it goes, by
+  // its own move relative to that piece: a face turning about a crease with that piece stays joined to it. Each face
+  // moving its own way, a unit bent as it came in came apart in the air, and joined up again, it was held flat as it
+  // started until the very end, then jumped into shape (the kusudama's flowers, a third of a sheet apart).
+  const outsideOf = (i: number, way: Vector3) => faces[i].after.map((p): Vec3 => [p[0] + way.x, p[1] + way.y, p[2] + way.z]);
+  const own = faces.map((f, i) => {
+    const way = ways[unitOf[i]];
+    return unitOf[i] < 0 || !way ? null : rigid(f.paper, f.before, outsideOf(i, way));
+  });
+  const alike = (a: { q: Quaternion; t: Vector3 }, b: { q: Quaternion; t: Vector3 }) => Math.abs(a.q.dot(b.q)) > 1 - 1e-9 && a.t.distanceTo(b.t) < SAME;
+  const whole = placing.map((_, u) => {
+    const mine = own.flatMap((x, i) => (x && unitOf[i] === u ? [x] : []));
+    let best = mine[0];
+    let most = 0;
+    for (const x of mine) {
+      const n = mine.filter((y) => alike(x, y)).length;
+      if (n > most) [best, most] = [x, n];
+    }
+    return best ? { ...best, motion: screwsFor(best.q, best.t)[0] } : null;
+  });
   const moves = faces.map((f, i) => {
     const way = ways[unitOf[i]];
-    if (unitOf[i] < 0 || !way) return null;
-    const outside = f.after.map((p): Vec3 => [p[0] + way.x, p[1] + way.y, p[2] + way.z]);
-    const { q, t } = rigid(f.paper, f.before, outside);
-    return { motion: screwsFor(q, t)[0], way };
+    const unit = whole[unitOf[i]];
+    if (unitOf[i] < 0 || !way || !unit) return null;
+    // Where it ends, as the unit's piece that keeps its shape sees it.
+    const back = unit.q.clone().invert();
+    const there = outsideOf(i, way).map((p) => new Vector3(...p).sub(unit.t).applyQuaternion(back).toArray() as Vec3);
+    const { q, t } = rigid(f.paper, f.before, there);
+    return { unit: unit.motion, bend: screwsFor(q, t)[0], way };
   });
   const replay = (s: number): Vec3[][] =>
     faces.map((f, i) => {
       const m = moves[i];
       if (!m) return f.before.map((p, c) => [0, 1, 2].map((d) => p[d] + (f.after[c][d] - p[d]) * s) as Vec3);
-      if (s < ARRIVE) return f.before.map((p) => move(m.motion, p, s / ARRIVE));
+      if (s < ARRIVE) return f.before.map((p) => move(m.unit, move(m.bend, p, s / ARRIVE), s / ARRIVE));
       const left = (1 - s) / (1 - ARRIVE);
       return f.after.map((p): Vec3 => [p[0] + m.way.x * left, p[1] + m.way.y * left, p[2] + m.way.z * left]);
     });
@@ -576,6 +667,19 @@ function moving(from: FoldFrame, to: FoldFrame, { yielding = false } = {}): Tran
     if (!without || without <= passesThrough(out, WAY_SAMPLES, { limit: without })) out = plain;
   }
   const found = hingesFor(faces, reps);
+  const withOthers = (chosen: Transition): Transition => ({
+    ...chosen,
+    others: () => {
+      const all = [landInOrder(out)];
+      if (!found) return all;
+      const deep = found.order.some((f) => found.parent[f] >= 0 && found.parent[found.parent[f]] >= 0);
+      const loose = found.parent.some((p) => p === -2);
+      for (const stagger of deep && !loose ? [0, 0.3, 0.5, -0.3] : [0]) all.push(landInOrder(hingedWith(out, { ...found, stagger })));
+      const even = hingedWith(out, { ...found, stagger: 0 });
+      for (const way of [inStep(even), vertexFold(even)]) if (way) all.push(landInOrder(way));
+      return all;
+    },
+  });
   if (found) {
     // Folds of several creases rarely move in step: try the creases folding together, and nearest-first or
     // outermost-first when faces hang from turning paper, and keep whichever passes through least paper.
@@ -604,7 +708,7 @@ function moving(from: FoldFrame, to: FoldFrame, { yielding = false } = {}): Tran
       else {
         // It keeps the paper joined: kept over each piece making its own way if that pulls the paper apart,
         // whatever the paper passing through says (paper torn apart passes through less of itself).
-        if (vertex && tornBy(out) > TEAR) return landInOrder(vertex);
+        if (vertex && tornBy(out) > TEAR) return withOthers(landInOrder(vertex));
         if (vertex) [hinged, fewest] = [vertex, passesThrough(vertex, WAY_SAMPLES)];
       }
     }
@@ -621,9 +725,9 @@ function moving(from: FoldFrame, to: FoldFrame, { yielding = false } = {}): Tran
     const [tornHinged, tornOwn] = [torn(hinged!), torn(out)];
     const tears = (a: number, b: number) => a > TEAR && b < a - TEAR;
     const tie = fewest === through && (tears(tornOwn, tornHinged) || (!plain && deepestCut(hinged!) <= deepestCut(out)));
-    if (!tears(tornHinged, tornOwn) && (fewest < through || tie)) return landInOrder(hinged!);
+    if (!tears(tornHinged, tornOwn) && (fewest < through || tie)) return withOthers(landInOrder(hinged!));
   }
-  return landInOrder(out);
+  return withOthers(landInOrder(out));
 }
 
 /**
@@ -883,9 +987,27 @@ function sameFaces(a: FoldFrame, b: FoldFrame): number[] | undefined {
   return out.every((i) => i !== undefined) ? (out as number[]) : undefined;
 }
 
+/** `to`, its faces pointing back at `from`'s face for face if they're the same faces (see `transitionVia`), kept for the transitions' cache. */
+const parted = new WeakMap<FoldFrame, WeakMap<FoldFrame, FoldFrame>>();
+function partOf(from: FoldFrame, to: FoldFrame): FoldFrame {
+  let byTo = parted.get(from);
+  if (!byTo) parted.set(from, (byTo = new WeakMap()));
+  let out = byTo.get(to);
+  if (!out) {
+    const same = sameFaces(from, to);
+    out = same && !same.every((p, f) => (to.faces_parent?.[f] ?? f) === p) ? { ...to, faces_parent: same } : to;
+    byTo.set(to, out);
+  }
+  return out;
+}
+
 /** How the paper gets through a list of frames, one after another, as a single step. */
-export function transitionVia(frames: FoldFrame[]): Transition {
-  if (frames.length <= 2) return transition(frames[0], frames.at(-1)!);
+export function transitionVia(given: FoldFrame[]): Transition {
+  if (given.length <= 2) return transition(given[0], given.at(-1)!);
+  // A frame with the same faces as the one before it is part of it face for face, whatever it says it comes from:
+  // a step played as several operations in turn ends on a frame whose faces point back at the frame before the
+  // step, as the step's own last frame, not at the frame it passed just before it.
+  const frames = given.map((f, j) => (j ? partOf(given[j - 1], f) : f));
   const parts = frames.slice(1).map((f, j) => transition(frames[j], f));
   const last = frames.at(-1)!;
   // Each final face's ancestor in each frame, following faces_parent back from the end.
@@ -1899,7 +2021,10 @@ const JOIN_SAMPLES = 40;
 const JOIN_ROUNDS = 30;
 /** How many times over the points that couldn't be joined are tried again. */
 const FILL_ROUNDS = 4;
-/** How far joined-up paper may graze through other paper (a sheet's width is 1), as the crossing tests allow: far less than a tear shows. */
+/**
+ * How far joined-up paper may graze through other paper (a sheet's width is 1): seven layers, as the crossing tests
+ * allowed until 20 November 2026 (they allow five now), far less than a tear shows.
+ */
 const GRAZE = 0.005;
 /**
  * How much more graze is let by, joining paper up, for each sheet width it has come apart beyond a tear; or,

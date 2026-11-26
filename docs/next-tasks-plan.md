@@ -1,6 +1,6 @@
 # Plan: what's next (November 2026)
 
-Where Gami stands on 7 November 2026 (brought up to date 12 November): the housekeeping done, what's waiting on a decision or on something
+Where Gami stands on 7 November 2026 (brought up to date 23 November): the housekeeping done, what's waiting on a decision or on something
 only the owner can see, and the order of work after that. Each area keeps its detail in its own plan; this
 one points to them and is kept up to date as items close.
 
@@ -18,7 +18,7 @@ request.
 | A link here from `PLAN.md` | Done, under the milestones. |
 | CI's first run (`Tests`, 7 November, on `dev` at `933b887`) | **Failed in the end-to-end job**: found and fixed 8 November (see "Waiting" below), to confirm on CI. The type check and unit tests passed. The e2e job's report was never uploaded, as Playwright wasn't writing one; on CI it now writes an HTML report, with a trace of each test that fails once and is run again, which the workflow uploads as `playwright-report`. |
 | Finished sessions' worktrees | Done: "Lesson: common origami folds", "Lesson: origami bases" and "Standardise fold vocabulary and unfold logic" are archived and their worktrees removed. Their work is all in `dev` (the third's commit, `5dbf414`, landed in another form: `CREASE_KINDS`, `FOLD_KINDS`, `lastFold`). |
-| Old branches, and the `fold-grazes` worktree | **Not done.** Auto mode stopped the deletions as irreversible. The commands are under "Branches to delete by hand". |
+| Old branches, and the `fold-grazes` worktree | The branches are gone (checked 23 November: only `dev` and `main` here and on GitHub). **Left:** the `fold-grazes` worktree and its branch; the commands are under "Branches to delete by hand". |
 | Release `dev` to `main` | See Progress at the end. |
 
 ## Waiting
@@ -34,19 +34,16 @@ Things that can't be settled from the code alone.
   editor's crowded top bar scrolls sideways in one line (its "Studio" title hidden; a screen-reader label inside it
   had been left past the screen's edge); a long hint wraps. A new test checks the editor fits the screen and its
   tools take taps (it fails on the old layout). Passes here; confirm on CI's next run, after a push.
-- **The New cutoff.** `NEW_SINCE` is `2026-10-28`, so 40 models show as New: 24 added on 28 October, 10 on
-  29 October and 6 on 13 November (OrigamiOK's intermediate batch, `docs/origamiok-intermediate-plan.md`). Move it
-  to `2026-11-13` to keep only the new batch's stars, or leave it.
+- ✅ **The New cutoff.** Moved from `2026-10-28` (54 models New) to `2026-11-21` on 23 November: the 12 models
+  of OrigamiOK's advanced batch and origami.me's latest five keep their stars.
 - **Sword or easy sword.** `easy-sword` (one square, 9 steps, difficulty 1) went in on 29 October "to compare
   with `sword` and keep the better one" (`sword`: a 1 × 4 strip, 14 steps, difficulty 2). Keep both, or drop one
   (its recipe, catalog entry, files, step translations and `PROVENANCE.md` row, and its line in
   `DESIGNS-LICENSE.md`).
-- **The `paper-breaking-bug` branch** (on GitHub too). One commit from 25 October, "only part way through
-  figuring out the problem": scripts in `.tmp-scripts/` measuring how far paper comes apart mid-step (petal
-  folds, the pajarita's swivels, the king bee's ailerons), and changes to `animate.ts`, the bend solver and the
-  ninja star. It's 79 commits behind `dev`. "Creases round a point fold in step" and "Paper joined up sooner, and
-  to the end" (November) took on the same problem, so it's probably done with. Check its list against `dev`,
-  then delete it here and on GitHub, or pick it up.
+- ✅ **The `paper-breaking-bug` branch**: gone, here and on GitHub (checked 23 November). "Creases round a point
+  fold in step" and "Paper joined up sooner, and to the end" took on its problem.
+- **Releasing `dev` to `main`.** The last release was `dev-to-main-10` (14 November); since then, the clipping
+  work and 12 models. Before deploying, confirm the submissions migration (below) has been run on Supabase.
 - ✅ **The Studio's submissions** (`docs/studio-plan.md`, part 4: ownership and licence): decided and made 13
   November. **Before deploying**, run the new migration (`20261113000000_submissions.sql`) on the Supabase project
   (`docs/accounts.md`). Its other open questions are settled and done: the cloud panel stays for creators with Submit
@@ -60,26 +57,12 @@ Things that can't be settled from the code alone.
 
 ## Branches to delete by hand
 
-All merged into both `dev` and `main` (`git branch -d` refuses anything that isn't):
-
-```bash
-git branch -d deb-to-main-minor-polish dev-to-main dev-to-main-4 dev-to-main-6 dev-to-main-mobile-upgrade main-build-source main-to-dev-2
-```
-
-The `fold-grazes` worktree, at `dev`'s tip with nothing of its own (its `.tmp/` holds scratch scripts and a
-copy of `animate.ts` as `dev` has it):
+Only the `fold-grazes` worktree is left (23 November). It's at `933b887`, merged into `dev`, with nothing of its own
+but an untracked `.tmp/` of scratch scripts and a copy of `animate.ts` as `dev` had it:
 
 ```bash
 git worktree remove --force .claude/worktrees/fold-grazes && git branch -d worktree-fold-grazes
 ```
-
-The archived sessions' branches:
-
-```bash
-git branch -d claude/lesson-bases-cf4d91 claude/lesson-folds-cc4e1d && git branch -D claude/sharp-mccarthy-24d693
-```
-
-(`-D` for the last: its commit isn't in `dev` as such, only its changes.)
 
 ## Order of work
 
@@ -280,13 +263,32 @@ The frog now grazes a little deeper, 0.0106 at most (step 45) against 0.0094, st
   `pull_request_target`, a registry token or dotfiles in `dist`. To confirm on CI's next run, after a push.
   `ubuntu-latest` is also moving to Ubuntu 26.
 
+### 5. Models, and the engine features they wait on
+
+| Batch | Status |
+|---|---|
+| OrigamiOK's advanced folds (`docs/origamiok-advanced-plan.md`) | ✅ All seven, 21–22 November, Gami's own: hummingbird, skull, cute whale, pot plant, unicorn, dragon, kaiju. The unicorn and dragon are several sheets; one-sheet versions wait on reverse folds that bend (`docs/clipping-plan.md`, row 3). |
+| Eight more from origami.me (`docs/origami-me-more-plan.md`) | **Paused at six**: necktie, kimono, wallet, parrot, chicken (22 November), and a swallow of Gami's own (24 November) in place of origami.me's. The horse and crab need a look at a diagram (Robinson's or Saydak's book) to know which flap is which. |
+
+What the five left out, and the engine features that would bring it back (detail in `docs/origami-me-more-plan.md`):
+
+| Feature | Brings back | Size |
+|---|---|---|
+| ✅ Coloured pen marks (23 November: `Mark.colour`, a Pen swatch in the Studio's Draw tool) | The chicken's red comb, the kimono's gold obi, the parrot's pale beak, all drawn on | Small |
+| ✅ Pinches (24 November: `unfold({ pinch })`, only the pinched part of the line creases) | The chicken's landmarks, drawn as origami.me draws them. The Studio's Pinch tool (24 November) makes them too | Small to medium |
+| Opening one layer of a fold | The chicken's comb as folded, "open the pocket" moves | Medium |
+
+Also: the chicken stood up with `assemble`, and the wallet opened part way with a `bend`.
+
 ## Progress
 
 | Item | Status |
 |---|---|
-| Housekeeping | Done but for the branches (above). 12 November: settled questions taken off "Waiting", CI's actions moved to Node 24 (see Smaller). |
+| Housekeeping | Done but for the `fold-grazes` worktree (above). 12 November: settled questions taken off "Waiting", CI's actions moved to Node 24 (see Smaller). 23 November: branches checked, the New cutoff moved, the content batches added (5), `docs/origami-me-candidates.md` brought up to date. |
+| Models | 21–22 November: OrigamiOK's advanced batch done, origami.me's eight paused at five (see 5). 23 November: coloured pen marks, and the chicken's comb, kimono's obi and parrot's beak drawn with them. 24 November: Gami's own swallow, and pinches (the chicken's landmarks). |
 | Studio, rows 6 and the open questions | Done 11 November: bend with crease goals, share links, a first-visit tour, a note on phones, Submit hidden (`docs/studio-plan.md`). |
 | Unit tests' speed | Done 11 November: 444 s to 217 s, the model checks in four shards (see Smaller). |
+| Clipping | 15 November: paper through paper checked where steps come to rest, `npm run clip-report`, and the squirrel, T-rex, chrysanthemum and kusudama fixed. 20 November: the 3D fox and butterfly fixed at rest; the motion check compares faces meeting at a point, near steps' ends too. What's next is in `docs/clipping-plan.md`. |
 | Grazes | 11 November: the seal off the list (landing in order over up to 0.8 of a step), the frog's entry tightened, every depth measured again (see 2). |
 | Studio, row 5 | Done 8 November: swivel and open sink in the Studio's Named fold (`src/fold/presets.ts`); see `docs/studio-plan.md`. In the common-folds lesson since 11 November (two sections, 66 steps), the sink made with `Recipe.preset`. |
 | Reverse folds' stacking | Fixed 8 November (see Smaller): points tuck into the middle of the flap; three folds keep the old stacking. |

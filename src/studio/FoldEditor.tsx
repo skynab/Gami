@@ -1,6 +1,7 @@
 import { useMemo, useRef, type PointerEvent } from 'react';
 import { placeLike } from '../fold/fold';
 import { dist, signedArea, split, type Line } from '../fold/geometry2d';
+import { drawnParts } from '../fold/pinch';
 import { faceColour } from '../fold/sheets';
 import type { FoldFrame, Mark, OrigamiModel, Vec2 } from '../fold/types';
 import { cutsOnTable, frontUp, isPicked, markOnTable, project, snapPoints, tapeOnFace, viewBox } from './editor';
@@ -9,9 +10,9 @@ import { cutsOnTable, frontUp, isPicked, markOnTable, project, snapPoints, tapeO
  * The paper seen from above, as you'd see it on the table. Click the dots to place a fold: the crease
  * shows as a line, the side that moves is shaded, and a dashed outline shows where it will land.
  * Scissor cuts made so far show as solid lines, what's been drawn on the paper as thin ones, and tape as
- * see-through strips.
+ * see-through strips. Pinching, the folds that will open show dotted, and the stretch to press along one thick.
  */
-export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kind, preview, extra = [], cut = null, tape = null, free = false, marks = [], drawing = [], faces: picked, anchor = null, onPick, onFace }: {
+export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kind, preview, extra = [], cut = null, tape = null, pinch = null, free = false, marks = [], drawing = [], faces: picked, anchor = null, onPick, onFace }: {
   frame: FoldFrame;
   model: Pick<OrigamiModel, 'sheets'>;
   picks: Vec2[];
@@ -27,6 +28,8 @@ export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kin
   cut?: [Vec2, Vec2] | null;
   /** A strip of tape about to be laid, its outline on the table. */
   tape?: Vec2[] | null;
+  /** Pinching: the folds that will open, on the table, and the stretch picked to press along one. */
+  pinch?: { lines: [Vec2, Vec2][]; at: [Vec2, Vec2] | null } | null;
   /** Picks can go anywhere, snapping to a dot only when one is close. */
   free?: boolean;
   /** What's drawn on the paper so far. */
@@ -46,7 +49,7 @@ export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kin
   const cuts = useMemo(() => cutsOnTable(frame), [frame]);
   const drawn = useMemo(() => marks.flatMap((m) => {
     const points = markOnTable(frame, m);
-    return points ? [{ points, fill: !!m.fill }] : [];
+    return points ? [{ points, fill: !!m.fill, colour: m.colour }] : [];
   }), [frame, marks]);
   const box = useMemo(() => viewBox([...faces.flatMap((f) => f.world), ...(preview ? project(preview).flatMap((f) => f.world) : [])]), [faces, preview]);
   const unit = box[2] / 100;
@@ -83,18 +86,37 @@ export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kin
   };
 
   const pts = (poly: Vec2[]) => poly.map((p) => p.join(',')).join(' ');
+  // Along a pinch's unpressed stretch, the paper is split but not creased: its face edges there get no line.
+  const parts = drawnParts(frame);
+  const lerp = (a: Vec2, b: Vec2, t: number): Vec2 => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+  const outline = (f: { world: Vec2[]; paper: Vec2[] }, fill: string) => {
+    const n = f.paper.length;
+    const lined = f.paper.map((p, c) => parts(p, f.paper[(c + 1) % n]));
+    if (lined.every((l) => l.length === 1 && l[0][0] === 0 && l[0][1] === 1)) return <polygon points={pts(f.world)} fill={fill} className="face" />;
+    const d = f.world.flatMap((p, c) => lined[c].map(([s, e]) => `M${lerp(p, f.world[(c + 1) % n], s).join(',')}L${lerp(p, f.world[(c + 1) % n], e).join(',')}`)).join('');
+    return (
+      <>
+        <polygon points={pts(f.world)} fill={fill} className="face" style={{ stroke: fill }} />
+        {d && <path d={d} className="face-lines" />}
+      </>
+    );
+  };
 
   return (
     <svg ref={svg} className="fold-editor" viewBox={box.join(' ')} onPointerDown={pick} role="img" aria-label="The paper from above">
       {faces.map((f, i) => (
         <g key={i}>
-          <polygon points={pts(f.world)} fill={faceColour(model, f.paper, frontUp(f.world, f.paper))} className="face" />
+          {outline(f, faceColour(model, f.paper, frontUp(f.world, f.paper)))}
           {tapeOnFace(frame, f).map((piece, k) => (
             <polygon key={k} points={pts(piece)} className="tape" />
           ))}
         </g>
       ))}
-      {drawn.map((m, i) => (m.fill ? <polygon key={i} points={pts(m.points)} className="mark fill" /> : <polyline key={i} points={pts(m.points)} className="mark" />))}
+      {drawn.map((m, i) => {
+        // A pen of another colour than the usual dark one.
+        const style = m.colour ? { stroke: m.colour, ...(m.fill && { fill: m.colour }) } : undefined;
+        return m.fill ? <polygon key={i} points={pts(m.points)} className="mark fill" style={style} /> : <polyline key={i} points={pts(m.points)} className="mark" style={style} />;
+      })}
       {picked &&
         faces.map((f, i) => isPicked(picked, f.paper) && <polygon key={i} points={pts(f.world)} className="face-picked" />)}
       {movingSide && <polygon points={pts(movingSide)} className="moving-side" />}
@@ -128,6 +150,10 @@ export function FoldEditor({ frame, model, picks, labels = ['A', 'B'], line, kin
       )}
       {anchor && <rect x={anchor[0] - 1.6 * unit} y={anchor[1] - 1.6 * unit} width={3.2 * unit} height={3.2 * unit} className="anchor" />}
       {tape && <polygon points={pts(tape)} className="tape planned" />}
+      {pinch?.lines.map(([a, b], i) => (
+        <line key={i} x1={a[0]} y1={a[1]} x2={b[0]} y2={b[1]} className="fold-line" />
+      ))}
+      {pinch?.at && <line x1={pinch.at[0][0]} y1={pinch.at[0][1]} x2={pinch.at[1][0]} y2={pinch.at[1][1]} className="pinch" />}
       {cut && <line x1={cut[0][0]} y1={cut[0][1]} x2={cut[1][0]} y2={cut[1][1]} className="cut planned" />}
       {snaps.map((s, i) => (
         <circle key={i} cx={s[0]} cy={s[1]} r={1.1 * unit} className="snap" />

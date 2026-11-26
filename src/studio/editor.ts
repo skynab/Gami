@@ -5,7 +5,7 @@ import { sheetOf } from '../fold/sheets';
 import { roundCoord } from '../fold/fold-format';
 import { frontUp, lerp } from '../fold/geometry2d';
 export { frontUp } from '../fold/geometry2d';
-import { onFace } from '../fold/marks';
+import { MARK_COLOUR, onFace } from '../fold/marks';
 import { centre, inside, locate, project } from '../fold/select';
 import type { Ray } from '../fold/shape';
 export { anchorFor, project, smallerSideMoves, topLayers } from '../fold/select';
@@ -86,14 +86,16 @@ export function faceAt(frame: FoldFrame, spot: Vec2) {
 
 /**
  * A mark drawn through points picked on the table, as a recipe's `draw` makes one: on the paper on top under
- * its first point, on the side facing up, with every point carried onto the sheet by that face. Null off the paper.
+ * its first point, on the side facing up, with every point carried onto the sheet by that face, in the pen's
+ * `colour` (the usual dark pen if left out). Null off the paper.
  */
-export function markAt(frame: FoldFrame, points: Vec2[], fill: boolean): Mark | null {
+export function markAt(frame: FoldFrame, points: Vec2[], fill: boolean, colour?: string): Mark | null {
   const face = points.length ? faceAt(frame, points[0]) : null;
   if (!face) return null;
   // Rounded as .fold files round coordinates, as recipes round what they record.
   const toSheet = unplaceLike(face);
-  return { side: frontUp(face.world, face.paper) ? 'front' : 'back', points: points.map((p) => toSheet(p).map(roundCoord) as Vec2), ...(fill && { fill: true }) };
+  const pen = colour && colour.toLowerCase() !== MARK_COLOUR ? colour.toLowerCase() : undefined;
+  return { side: frontUp(face.world, face.paper) ? 'front' : 'back', points: points.map((p) => toSheet(p).map(roundCoord) as Vec2), ...(fill && { fill: true }), ...(pen && { colour: pen }) };
 }
 
 /** Where a mark's points are on the table now, or null if any of them isn't on the paper. */

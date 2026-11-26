@@ -94,8 +94,9 @@ export function squirrel() {
   r.draw({ title: 'Draw an eye', text: 'Draw an eye on the head.' }, [{ fill: ring(...eye, 0.016) }]);
 
   // Standing it up: the body's sides open `open` either side of its back (the fold, along x = bx), and it stands on
-  // its feet, the table's +z going down and its up towards the viewer. The tail and head go where they lay on the
-  // body, turned about the upright: the tail out behind, the head to look out.
+  // its feet, the table's +z going down and its up towards the viewer. The tail goes where it lay on the body, turned
+  // about the upright out behind. The head sits down between the body's sides, so it turns about the back, inside
+  // the V they open, to look out: set a little forward first, clear of the fold, where the V is too narrow for it.
   const open = 12;
   const right = ([u, v]: Vec2) => u + v > 0;
   const sides: ShapeBend[] = [1, -1].map((s) => ({
@@ -109,6 +110,17 @@ export function squirrel() {
     const a = (deg * Math.PI) / 180;
     return { x: [Math.cos(a), 0, -Math.sin(a)] as Vec3, up: [Math.sin(a), 0, Math.cos(a)] as Vec3 };
   };
+  // The back, once stood up: the body's layers stack it this far forward of where it's set. The head, about ten
+  // layers thick, is set half that behind it, to sit in the middle of the V; and this far forward, and turned this
+  // far about the back (the most it fits in the V; its nose swings out as far as turning it about its middle 25°).
+  const back = 0.008;
+  const headForward = 0.08;
+  const headTurn = 7;
+  /** A point turned `deg` about the back, as `turned` turns a piece. */
+  const aroundBack = ([x, y, z]: Vec3, deg: number): Vec3 => {
+    const a = (deg * Math.PI) / 180;
+    return [x * Math.cos(a) + (z - back) * Math.sin(a), y, back - x * Math.sin(a) + (z - back) * Math.cos(a)];
+  };
   const root = r.where(paper(10 - t, t));
   const hc = box(head);
   const headMiddle: Vec2 = [(hc.left + hc.right) / 2, (hc.top + hc.bottom) / 2];
@@ -116,7 +128,7 @@ export function squirrel() {
     .assemble({ title: 'Stand it up', text: 'Open the body’s two sides a little and stand it on its feet. Turn the tail out behind it, and the head to look out. Your squirrel is keeping watch!' }, [
       { only: body, bends: sides, pose: { from: table(bx, feet), to: at([bx, feet]), x: [1, 0, 0], up: [0, 0, 1] } },
       { only: tail, pose: { from: table(...root), to: at(root, -0.04), ...turned(-35) } },
-      { only: head, pose: { from: table(...headMiddle), to: at(headMiddle), ...turned(25) } },
+      { only: head, pose: { from: table(...headMiddle), to: aroundBack(at([headMiddle[0] - headForward, headMiddle[1]], back - 0.004), headTurn), ...turned(headTurn) } },
     ])
     .build();
 }

@@ -2,6 +2,7 @@ import { FoldError, toFlat, unplaceLike, type FlatFace } from './fold';
 import { roundCoord } from './fold-format';
 import { frontUp } from './geometry2d';
 import { onFace } from './marks';
+import { unpressed } from './pinch';
 import type { At, Op } from './ops';
 import { inside, locate } from './select';
 import type { FoldFrame, Mark, Vec2 } from './types';
@@ -84,9 +85,16 @@ function showing(part: Vec2[], above: FlatFace[]): boolean {
   return false;
 }
 
-/** What stays in the paper from step to step until a fresh sheet: its scissor cuts and its tape. */
+/** What stays in the paper from step to step until a fresh sheet: its scissor cuts, its tape and its pinches. */
 export function keepIn(after: FoldFrame, before: FoldFrame): FoldFrame {
   const cuts = !after.cuts && before.cuts?.length ? before.cuts : undefined;
   const tapes = !after.tapes && before.tapes?.length ? before.tapes : undefined;
-  return cuts || tapes ? { ...after, ...(cuts && { cuts }), ...(tapes && { tapes }) } : after;
+  const kept = cuts || tapes ? { ...after, ...(cuts && { cuts }), ...(tapes && { tapes }) } : after;
+  // A pinch's unpressed stretches, less any the new frame folds.
+  const loose = after.uncreased ?? before.uncreased;
+  if (!loose?.length) return kept;
+  const uncreased = unpressed(loose, kept);
+  if (uncreased.length) return { ...kept, uncreased };
+  const { uncreased: _, ...rest } = kept;
+  return rest;
 }

@@ -45,6 +45,17 @@ site's source code, or any other model in the gallery.
 | Squirrel | `src/models/recipes/squirrel.ts` | November 2026 |
 | Strawberry | `src/models/recipes/strawberry.ts` | November 2026 |
 | Standing fox | `src/models/recipes/fox-3d.ts` | November 2026 |
+| Hummingbird | `src/models/recipes/hummingbird.ts` | November 2026 |
+| Skull | `src/models/recipes/skull.ts` | November 2026 |
+| Cute whale | `src/models/recipes/cute-whale.ts` | November 2026 |
+| Pot plant | `src/models/recipes/pot-plant.ts` | November 2026 |
+| Unicorn | `src/models/recipes/unicorn.ts` | November 2026 |
+| Kaiju | `src/models/recipes/kaiju.ts` | November 2026 |
+| Dragon | `src/models/recipes/dragon.ts` | November 2026 |
+| Necktie | `src/models/recipes/necktie.ts` | November 2026 |
+| Kimono | `src/models/recipes/kimono.ts` | November 2026 |
+| Parrot | `src/models/recipes/parrot.ts` | November 2026 |
+| Swallow | `src/models/recipes/swallow.ts` | November 2026 |
 
 ## Other models in the gallery
 

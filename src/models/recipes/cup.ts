@@ -101,7 +101,7 @@ function opening(frame: FoldFrame): BendGoal[] {
 }
 
 /** Points of a triangular lattice on the sheet inside a convex face, all at least `MARGIN` in from its edges. */
-function lattice(poly: Vec2[]): Vec2[] {
+export function lattice(poly: Vec2[]): Vec2[] {
   const turn = Math.sign(signedArea(poly));
   const within = (q: Vec2) =>
     poly.every((a, i) => {
@@ -129,7 +129,7 @@ function lattice(poly: Vec2[]): Vec2[] {
  * the line up the middle stays as long, its depth and how far the middle of the rim dips below the corners shared to
  * do so. Elsewhere it's near enough for the paper to settle.
  */
-function openCup({ bottom, rim, height }: { bottom: number; rim: number; height: number }, squeeze: number): (x: number, v: number) => Vec3 {
+export function openCup({ bottom, rim, height }: { bottom: number; rim: number; height: number }, squeeze: number): (x: number, v: number) => Vec3 {
   const n = 400;
   const dv = height / n;
   const flare = rim - bottom;

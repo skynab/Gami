@@ -5,6 +5,7 @@ import { lineThrough, type Line } from '../fold/geometry2d';
 import { applyOp, lineOf, opKind, shapingBase, type At, type Faces, type LineSpec, type Op, type ShapeBend } from '../fold/ops';
 import type { PresetKind } from '../fold/presets';
 import { locate } from '../fold/select';
+import { MARK_COLOUR } from '../fold/marks';
 import { TAPE_WIDTH } from '../fold/tape';
 import type { FoldFrame, Mark, OrigamiModel, StepKind, Vec2 } from '../fold/types';
 import { markOnTable, popSettings } from './editor';
@@ -21,10 +22,11 @@ export type Layers = 'all' | 1 | 2 | 3;
  * Or popping the model up about a point (picking the point, then which way the first crease points), a
  * scissor cut (picking where it starts and ends), a strip of tape (picking its two ends), drawing on the paper
  * (picking points along the mark), or, for models of several sheets, moving one sheet (picking where its middle goes).
+ * Or opening the last fold having pressed it only between two points along its line (a pinch, to mark a point).
  */
-export type Action = 'fold' | 'reverse' | 'preset' | 'collapse' | 'lift' | 'bend' | 'popUp' | 'cut' | 'tape' | 'draw' | 'move';
+export type Action = 'fold' | 'reverse' | 'preset' | 'collapse' | 'lift' | 'bend' | 'popUp' | 'cut' | 'tape' | 'draw' | 'pinch' | 'move';
 
-export const ACTIONS: Action[] = ['fold', 'reverse', 'preset', 'collapse', 'lift', 'bend', 'popUp', 'cut', 'tape', 'draw', 'move'];
+export const ACTIONS: Action[] = ['fold', 'reverse', 'preset', 'collapse', 'lift', 'bend', 'popUp', 'cut', 'tape', 'draw', 'pinch', 'move'];
 /** How wide a strip of tape can be, on a 1 × 1 sheet: narrow, as it comes, and wide. */
 export const TAPE_WIDTHS = [0.06, TAPE_WIDTH, 0.2];
 /** Actions that can be limited to faces picked by clicking them. */
@@ -74,6 +76,8 @@ export interface ToolState {
   /** Drawing: marks kept for this step, with where they are on the table, and whether the next is filled in. */
   marks: { mark: Mark; table: Vec2[] }[];
   fill: boolean;
+  /** The pen's colour for the next mark, as `#rrggbb`. */
+  pen: string;
   tapeWidth: number;
   layers: Layers;
   /** Models of several sheets: which one the next step works on (or all), and for a move, how it's put down. */
@@ -120,6 +124,7 @@ export const INITIAL: ToolState = {
   rays: 8,
   steep: 60,
   fill: false,
+  pen: MARK_COLOUR,
   tapeWidth: TAPE_WIDTH,
   layers: 'all',
   sheet: 'all',
@@ -181,7 +186,7 @@ export function stepFor(o: Op, t: TFunction): { title: string; kind: StepKind } 
     case 'draw':
       return { title: t('studio.steps.draw'), kind: 'draw' };
     case 'unfold':
-      return { title: t('studio.steps.unfold'), kind: 'unfold' };
+      return { title: t(o.pinch ? 'studio.steps.pinch' : 'studio.steps.unfold'), kind: 'unfold' };
     case 'turnOver':
       return { title: t('studio.steps.turnOver'), kind: 'turn-over' };
     case 'rotate':
@@ -291,6 +296,7 @@ export function toolsFor(made: Op | undefined, m: OrigamiModel): Partial<ToolSta
       action: 'draw',
       marks: made.marks.map((mk) => ({ mark: mk, table: markOnTable(paperBefore, mk) ?? [] })),
       fill: !!made.marks.at(-1)?.fill,
+      pen: made.marks.at(-1)?.colour ?? MARK_COLOUR,
     });
   } else if (made.op === 'cut') {
     Object.assign(out, { action: 'cut', layers: layersOf(made.layers) });
@@ -304,6 +310,9 @@ export function toolsFor(made: Op | undefined, m: OrigamiModel): Partial<ToolSta
     limits(made.only);
     Object.assign(out, { turn: made.degrees ?? 0, overturn: !!made.flip, underneath: !!made.under });
     if (made.to && 'table' in made.to) out.picks = [made.to.table];
+  } else if (made.op === 'unfold' && made.pinch && made.to === undefined) {
+    // A pinch opens the last fold; one opening further back is made some other way than these tools.
+    Object.assign(out, { action: 'pinch', picks: [...made.pinch] });
   }
   return out;
 }

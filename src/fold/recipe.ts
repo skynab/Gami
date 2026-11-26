@@ -10,9 +10,11 @@ import { place } from './place';
 import { settle } from './settle';
 import { radial, reparent, shape, type Bend, type Ray } from './shape';
 import { sheetOf, startFrame } from './sheets';
+import { isPenColour } from './marks';
+import { pinchedUnfold } from './pinch';
 import { keepIn, tape } from './tape';
 import { frontUp, sideOf } from './geometry2d';
-import { applyOp, lastFold, lineOf, reopened, select, type At, type BendGoal, type Faces, type LineSpec, type Op } from './ops';
+import { applyOp, inTurnVia, lastFold, lineOf, reopened, select, type At, type BendGoal, type Faces, type LineSpec, type Op } from './ops';
 import { presetOp, type Preset } from './presets';
 import type { FoldFrame, Mark, OrigamiModel, Sheet, Step, Vec2, Vec3 } from './types';
 
@@ -153,17 +155,26 @@ export class Recipe {
 
   /**
    * Opens the paper back up, keeping the creases. By default undoes the last fold; pass `to` (from `mark()`)
-   * to open everything folded since then.
+   * to open everything folded since then. `pinch`: the fold was only pressed between these two points (on the
+   * table as the paper lies now, or on the sheet), so only that much of its line creases.
    */
-  unfold(step: { title?: string; text?: string; to?: number } = {}): this {
+  unfold(step: { title?: string; text?: string; to?: number; pinch?: [At, At] } = {}): this {
     let to = step.to;
     if (to === undefined) {
       const last = lastFold(this.steps);
       if (last === null) throw new FoldError(`${this.info.id}: nothing to unfold at step ${this.steps.length + 1}`);
       to = last;
     }
-    const { frame, via } = unfoldStep(this.frames(), to, reopened(this.steps));
-    this.push({ title: step.title ?? 'Unfold', text: step.text, kind: 'unfold' }, frame, { op: 'unfold', ...(step.to !== undefined && { to }) });
+    const frames = this.frames();
+    const opened = unfoldStep(frames, to, reopened(this.steps));
+    const pinch = step.pinch && (step.pinch.map((a) => this.where(a)) as [Vec2, Vec2]);
+    const frame = pinch ? pinchedUnfold(frames, to, opened.frame, pinch) : opened.frame;
+    const via = opened.via;
+    this.push({ title: step.title ?? 'Unfold', text: step.text, kind: 'unfold' }, frame, {
+      op: 'unfold',
+      ...(step.to !== undefined && { to }),
+      ...(pinch && { pinch }),
+    });
     const now = this.steps.at(-1)!.frame;
     if (via) this.steps.at(-1)!.via = via.map((f) => keepIn(f, now));
     return this;
@@ -216,9 +227,10 @@ export class Recipe {
 
   /**
    * Several folds shown as one step, such as the same fold on both sheets of a modular model.
-   * `make` adds the folds as usual; they're then merged, and play at the same time.
+   * `make` adds the folds as usual; they're then merged, and play at the same time, or with `inTurn` one after
+   * another, in the order made: as a squash is folding a flap in half, then opening it out.
    */
-  together(step: { title: string; text?: string; kind?: Step['kind'] }, make: (r: this) => void): this {
+  together(step: { title: string; text?: string; kind?: Step['kind'] }, make: (r: this) => void, { inTurn = false } = {}): this {
     const before = this.steps.length;
     make(this);
     const added = this.steps.splice(before);
@@ -231,10 +243,12 @@ export class Recipe {
       for (let k = added.length - 1; k >= 0; k--) p = added[k].frame.faces_parent?.[p] ?? p;
       return p;
     });
-    const op: Op = { op: 'together', ops: added.map((s) => s.op!) };
+    const op: Op = { op: 'together', ops: added.map((s) => s.op!), ...(inTurn && { inTurn }) };
     this.push({ title: step.title, text: step.text, kind: step.kind ?? added.at(-1)!.kind }, { ...last, faces_parent }, op);
     const marks = added.flatMap((s) => s.marks ?? []);
     if (marks.length) this.steps.at(-1)!.marks = marks;
+    const via = inTurn ? inTurnVia(added.map((s) => s.frame)) : undefined;
+    if (via) this.steps.at(-1)!.via = via;
     return this;
   }
 
@@ -536,9 +550,9 @@ export class Recipe {
   /**
    * Draws on the paper where it lies now, as a face drawn on at the end: lines through points on the table, or
    * shapes filled in. Each mark goes on whatever paper is on top under its first point, on the side facing up,
-   * and moves with it from then on.
+   * and moves with it from then on. A mark's `colour` (`#rrggbb`) picks a pen other than the usual dark one.
    */
-  draw(step: { title: string; text?: string }, marks: ({ line: Vec2[] } | { fill: Vec2[] })[]): this {
+  draw(step: { title: string; text?: string }, marks: (({ line: Vec2[] } | { fill: Vec2[] }) & { colour?: string })[]): this {
     const faces = toFlat(this.current).sort((a, b) => b.layer - a.layer);
     const drawn = marks.map((m): Mark => {
       const points = 'line' in m ? m.line : m.fill;
@@ -546,7 +560,9 @@ export class Recipe {
       if (!f) throw new FoldError(`${this.info.id}: no paper to draw on at (${points[0].join(', ')}).`);
       // Rounded as .fold files round coordinates, so the model and its file agree exactly.
       const onSheet = points.map((p) => unplaceLike(f)(p).map(roundCoord) as Vec2);
-      return { side: frontUp(f.world, f.paper) ? 'front' : 'back', points: onSheet, ...('fill' in m && { fill: true }) };
+      if (m.colour !== undefined && !isPenColour(m.colour)) throw new FoldError(`${this.info.id}: a pen's colour is #rrggbb, not ${m.colour}.`);
+      const colour = m.colour?.toLowerCase();
+      return { side: frontUp(f.world, f.paper) ? 'front' : 'back', points: onSheet, ...('fill' in m && { fill: true }), ...(colour && { colour }) };
     });
     this.push({ ...step, kind: 'draw' }, { ...this.current, faces_parent: undefined }, { op: 'draw', marks: drawn });
     this.steps.at(-1)!.marks = drawn;
@@ -606,13 +622,32 @@ export class Recipe {
     }
   }
 
-  turnOver(text = 'Flip the paper over from left to right.'): this {
-    return this.push({ title: 'Turn over', text, kind: 'turn-over' }, turnOver(this.current), { op: 'turnOver' });
+  /**
+   * Turns the paper over from left to right. With `only`, turns over just that paper, about its own middle, and
+   * leaves other sheets where they lie: turning the whole table over moves a sheet that shares it with others, so
+   * points worked out on it before would be wrong after.
+   */
+  turnOver(text = 'Flip the paper over from left to right.', { only }: { only?: (centre: Vec2) => boolean } = {}): this {
+    if (!only) return this.push({ title: 'Turn over', text, kind: 'turn-over' }, turnOver(this.current), { op: 'turnOver' });
+    const test = recorder(only);
+    try {
+      return this.push({ title: 'Turn over', text, kind: 'turn-over' }, place(this.current, { only: test, flip: true }), { op: 'turnOver', only: test.faces() });
+    } catch (e) {
+      if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (Turn over): ${e.message}`;
+      throw e;
+    }
   }
 
-  /** Turns the paper on the table, anticlockwise seen from above. */
-  rotate(degrees: number, step: { title: string; text?: string }): this {
-    return this.push({ ...step, kind: 'rotate' }, rotate(this.current, (degrees * Math.PI) / 180), { op: 'rotate', degrees });
+  /** Turns the paper on the table, anticlockwise seen from above. With `only`, just that paper, about its own middle. */
+  rotate(degrees: number, step: { title: string; text?: string }, { only }: { only?: (centre: Vec2) => boolean } = {}): this {
+    if (!only) return this.push({ ...step, kind: 'rotate' }, rotate(this.current, (degrees * Math.PI) / 180), { op: 'rotate', degrees });
+    const test = recorder(only);
+    try {
+      return this.push({ ...step, kind: 'rotate' }, place(this.current, { only: test, angle: (degrees * Math.PI) / 180 }), { op: 'rotate', degrees, only: test.faces() });
+    } catch (e) {
+      if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
+      throw e;
+    }
   }
 
   build(): OrigamiModel {

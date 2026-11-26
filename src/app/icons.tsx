@@ -113,6 +113,13 @@ export const GlueIcon = icon(
   </>,
 );
 /** Lines getting shorter beside a downward arrow: the order of a list. */
+/** A circle struck through: leave this out. */
+export const NotIcon = icon(
+  <>
+    <circle cx="12" cy="12" r="7.5" />
+    <path d="M6.7 17.3 17.3 6.7" />
+  </>,
+);
 export const SortIcon = icon(<path d="M7 4v16M3.5 16.5 7 20l3.5-3.5M13 6h8M13 12h6M13 18h3" />);
 /**
  * The origami heart, as the gallery's Heart model folds it: two squared-off lobes, the middle crease, and a corner

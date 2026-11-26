@@ -66,37 +66,61 @@ export function tulip() {
  * sunflower.
  */
 export function leafyStem(r: Recipe, stem: (c: Vec2) => boolean, o: number) {
+  for (const fold of leafyStemFolds(r, stem, o)) fold.make();
+}
+
+/**
+ * `leafyStem`'s folds one by one, each with its title and text, for a square `2h` across (1.5 by default), to fold
+ * several stems side by side: `make` folds it as a step of its own, or within a `together` with another stem's (but
+ * one `unfold` opens every stem's last fold at once). Each works out where to fold when it's made, so they must be
+ * made in order.
+ */
+export function leafyStemFolds(r: Recipe, stem: (c: Vec2) => boolean, o: number, h = 0.75): { title: string; text: string; make: () => void; unfold?: boolean }[] {
   const d = Math.SQRT1_2;
-  const h = 0.75;
-  const [sx, sz] = r.where(paper(o, 0));
-  const B: Vec2 = [sx, sz + 2 * h * d];
-  r.crease(paper(o - h, -h), paper(o + h, h), { title: 'Crease the stem square', text: 'Fold the green square’s left corner to its right corner, then unfold.', only: stem });
-  r.onto(paper(o - h, -h), table(sx, B[1] - 2 * h), { title: 'Fold the lower edges in', text: 'Fold the lower left edge to the centre crease…', only: stem })
-    .onto(paper(o + h, h), table(sx, B[1] - 2 * h), { title: 'Fold the lower edges in', text: '…and the lower right edge. A kite.', only: stem });
+  let sx = 0;
+  let sz = 0;
+  let B: Vec2 = [0, 0];
+  let V: Vec2 = [0, 0];
+  let reach = 0;
   // The kite's side corners, a tan 22.5° of the way along the upper edges from the old side corners.
   const t = Math.tan(Math.PI / 8);
-  const V = r.where(paper(o - h + 2 * h * t, -h));
-  const reach = Math.hypot(V[0] - B[0], V[1] - B[1]);
-  r.onto(table(...V), table(sx, B[1] - reach), { title: 'Narrow it again', text: 'Fold the lower edges to the centre again…', only: stem }).onto(
-    table(2 * sx - V[0], V[1]),
-    table(sx, B[1] - reach),
-    { title: 'Narrow it again', text: '…on both sides. The bottom is a long thin point.', only: stem },
-  );
-  r.along(table(sx - 1, sz), table(sx + 1, sz), table(...B), {
-    title: 'Fold the bottom up',
-    text: 'Fold the bottom point up to the top point.',
-    only: stem,
-  }).along(table(sx, sz - 2), table(sx, sz + 2), table(sx - 0.1, sz - 0.4), {
-    title: 'Fold in half',
-    text: 'Fold the left half over onto the right.',
-    only: stem,
-  });
-  // The stem is inside now; pull it out about the bottom so it leans 45° to the right of the leaf.
-  const lean = (22.5 * Math.PI) / 180;
-  r.collapse(
-    { title: 'Pull out the stem', text: 'Pull the thin inner point out and up, away from the leaf, and press it flat at the bottom.', kind: 'reverse' },
-    [{ through: [table(sx, sz), table(sx + Math.sin(lean), sz - Math.cos(lean))], kind: 'inside', only: stem }],
-    paper(o + 0.3, -0.7),
-  );
-
+  const step = (title: string, text: string, make: (title: string, text: string) => void) => ({ title, text, make: () => make(title, text) });
+  return [
+    // The crease, as `crease` makes it: folded, then opened (`unfold`: several stems' creases open in one step).
+    step('Crease the stem square', 'Fold the green square’s left corner to its right corner, then unfold.', (title, text) => {
+      [sx, sz] = r.where(paper(o, 0));
+      B = [sx, sz + 2 * h * d];
+      r.onto(paper(o - h, -h), paper(o + h, h), { title, text, only: stem });
+    }),
+    { ...step('Unfold', 'Open it back up, leaving a crease.', (title, text) => r.unfold({ title, text })), unfold: true },
+    step('Fold the lower edges in', 'Fold the lower left edge to the centre crease…', (title, text) => {
+      r.onto(paper(o - h, -h), table(sx, B[1] - 2 * h), { title, text, only: stem });
+    }),
+    step('Fold the lower edges in', '…and the lower right edge. A kite.', (title, text) => {
+      r.onto(paper(o + h, h), table(sx, B[1] - 2 * h), { title, text, only: stem });
+      V = r.where(paper(o - h + 2 * h * t, -h));
+      reach = Math.hypot(V[0] - B[0], V[1] - B[1]);
+    }),
+    step('Narrow it again', 'Fold the lower edges to the centre again…', (title, text) => {
+      r.onto(table(...V), table(sx, B[1] - reach), { title, text, only: stem });
+    }),
+    step('Narrow it again', '…on both sides. The bottom is a long thin point.', (title, text) => {
+      r.onto(table(2 * sx - V[0], V[1]), table(sx, B[1] - reach), { title, text, only: stem });
+    }),
+    step('Fold the bottom up', 'Fold the bottom point up to the top point.', (title, text) => {
+      r.along(table(sx - 1, sz), table(sx + 1, sz), table(...B), { title, text, only: stem });
+    }),
+    step('Fold in half', 'Fold the left half over onto the right.', (title, text) => {
+      r.along(table(sx, sz - 2), table(sx, sz + 2), table(sx - 0.1, sz - 0.4), { title, text, only: stem });
+    }),
+    // The stem is inside now; pull it out about the bottom so it leans 45° to the right of the leaf.
+    step('Pull out the stem', 'Pull the thin inner point out and up, away from the leaf, and press it flat at the bottom.', (title, text) => {
+      const lean = (22.5 * Math.PI) / 180;
+      r.collapse(
+        { title, text, kind: 'reverse' },
+        [{ through: [table(sx, sz), table(sx + Math.sin(lean), sz - Math.cos(lean))], kind: 'inside', only: stem }],
+        paper(o + (0.3 / 0.75) * h, (-0.7 / 0.75) * h),
+      );
+    }),
+  ];
 }

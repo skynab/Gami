@@ -5,7 +5,8 @@ import type { Vec2, Vec3 } from '../../fold/types';
 /**
  * A T-rex, Gami's own, from two squares: a big one for the body, a kite folded in half and laid on its side, its long
  * point the tail and its corner the legs, and a small one for the head, folded in half with its snout's top corner
- * folded behind, set high on the body's front end. Then stood up in 3D, the body's halves opened a little.
+ * folded behind, set high on the body's front end. Then stood up in 3D, the body's halves opened a little and the
+ * head sitting up on the front of its back.
  */
 export function tRex() {
   const r = new Recipe({
@@ -65,8 +66,8 @@ export function tRex() {
   r.draw({ title: 'Draw a face', text: 'Draw an eye and a row of sharp teeth on the head.' }, [{ fill: ring(k.left + 0.1, k.top + 0.06, 0.02) }, { line: teeth }]);
 
   // Standing it up: the body's halves open `open` either side of its back (the kite's middle, folded), and it
-  // stands on its legs, the table's +z going down and its up towards the viewer. The head goes where it lay, turned
-  // a little about the upright to look out.
+  // stands on its legs, the table's +z going down and its up towards the viewer. The head goes up onto the back
+  // above where it lay, turned a little about the upright to look out.
   const [A, B] = [r.where(paper(0.5, -0.5)), r.where(paper(-0.5, 0.5))];
   // A point on the body off its back, on the legs' side, and the legs' tip, its lowest point.
   const side = r.where(paper(0.3, 0));
@@ -83,12 +84,17 @@ export function tRex() {
   const back = A[1];
   const high = (legs - back) * Math.cos((open * Math.PI) / 180) + 0.003;
   const at = ([x, z]: Vec2): Vec3 => [x - bx, high - (z - back), 0];
+  const add = (p: Vec3, q: Vec3): Vec3 => [p[0] + q[0], p[1] + q[1], p[2] + q[2]];
   const a = (20 * Math.PI) / 180;
+  // The head sits up on the front of the back, its lower edge on it: turned to look out, it couldn't go down between
+  // the body's halves without passing through them, and its snout's fold holds its layers shut, so they can't open
+  // to sit astride them.
+  const perch = k.bottom - back + 0.002;
   const middle: Vec2 = [(k.left + k.right) / 2, (k.top + k.bottom) / 2];
   return r
-    .assemble({ title: 'Stand it up', text: 'Open the body’s two sides a little and stand it on its legs, the head turned to look out. Roar!' }, [
+    .assemble({ title: 'Stand it up', text: 'Open the body’s two sides a little and stand it on its legs. Sit the head up on the front of its back, turned to look out. Roar!' }, [
       { only: body, bends: halves, pose: { from: table(bx, back), to: at([bx, back]), x: [1, 0, 0], up: [0, 0, 1] } },
-      { only: head, pose: { from: table(...middle), to: at(middle), x: [Math.cos(a), 0, -Math.sin(a)], up: [Math.sin(a), 0, Math.cos(a)] } },
+      { only: head, pose: { from: table(...middle), to: add(at(middle), [0, perch, 0]), x: [Math.cos(a), 0, -Math.sin(a)], up: [Math.sin(a), 0, Math.cos(a)] } },
     ])
     .build();
 }

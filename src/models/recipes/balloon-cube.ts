@@ -28,7 +28,7 @@ import type { FoldFrame, Vec2, Vec3 } from '../../fold/types';
  */
 
 /** Half the width of the water bomb's arms, and half its cube's side. */
-const E = 0.125;
+export const E = 0.125;
 /** How far in from a face's edges the lattice of guides keeps. */
 const MARGIN = 0.006;
 
@@ -189,7 +189,7 @@ function tips(poly: Vec2[]): Vec2[] {
 }
 
 /** Points of a triangular lattice on the sheet inside a convex face, `spacing` apart, all at least `MARGIN` in from its edges. */
-function lattice(poly: Vec2[], spacing: number): Vec2[] {
+export function lattice(poly: Vec2[], spacing: number): Vec2[] {
   const turn = Math.sign(signedArea(poly));
   const within = (q: Vec2) =>
     poly.every((a, i) => {
