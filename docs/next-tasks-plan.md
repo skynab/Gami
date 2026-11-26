@@ -117,6 +117,10 @@ row 3), as the crane's and fox's do.
 The crab's cause, two folds starting from one point, also took the **flapping bird** (its neck from 0.38 up rather than the
 tail's 0.4: 0.0041 to clean) and the **crow** (its second foot from 0.12 up: 0.0043 to 0.00349) off the list. The swallow,
 penguin and horse were tried too, without a win (`docs/clipping-plan.md`, Progress).
+The folds lesson's crimp now plays its two reverse folds in turn, in one step: 0.025 to 0.0025, so the lesson's entry
+drops to 0.0045, for its open sink. The crane's tail was tried without a win. The **diamond ring** is off the list: its band curled down under the table, so
+the whole band rose into the air and the gem jumped onto it at the end; now it's turned over, the band curled up and over,
+and turned back (0.0095 to 0.0002, two more steps). The lily's squash and petal fold in turn didn't fold flat.
 
 Tried 12 November on the frog, lily and shallow lid: landing layers over up to 0.9 of a step as well (`LANDS`) changes
 none of their depths, and the frog then comes apart by 0.011, over `TEAR`. Each still on the list needs its own look at

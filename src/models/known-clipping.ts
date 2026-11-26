@@ -40,8 +40,7 @@ export const GRAZES: Record<string, number> = {
   heart: 0.0095, // Folding the top down: the white side triangles lie on the point it turns up through as it starts.
   seal: 0.007, // Raising the neck, for a moment as it lands.
   // Found looking closer at the ends of steps (20 November 2026), once the snaps there were fixed.
-  'folds-lesson': 0.026, // The crimp: two reverse folds at once, the point settling in between the layers.
-  'diamond-ring': 0.0095, // Curling the band round, as it closes.
+  'folds-lesson': 0.0045, // The open sink, as it closes up, and opening it out (0.0041; the crimp, 0.025 until 26 November 2026, now plays its two reverse folds in turn).
   pinwheel: 0.007, // Squashing an end: the paper the joins held lets go in the last fortieth of the step.
   chrysanthemum: 0.007, // Its pinwheel unit's squash, as the pinwheel's.
 };

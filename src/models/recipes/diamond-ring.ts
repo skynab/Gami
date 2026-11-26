@@ -34,13 +34,19 @@ export function diamondRing() {
     for (const [x, z] of [[-g, -g], [g, -g], [g, g], [-g, g]]) q.onto(table(gx + x, gz + z), table(gx, gz), { title: '', only: gem });
   });
 
-  // Set the gem on the band's left end, then curl the rest of the band round underneath it.
+  // Set the gem on the band's left end, then curl the rest of the band round underneath it: turned over, gem side
+  // down, the band curls up and over onto the end the gem is under, then the ring is turned back over. Curled down
+  // and round under the table instead, the whole band (the gem's end too) rose up to half a sheet into the air to
+  // keep above it, and the gem jumped up onto it as the step ended, 0.0095 through its end (26 November 2026).
   const left = bx - 0.25;
   const seat = left + 0.14;
   r.move({ title: 'Set the gem', text: 'Lay the gem on the left end of the band.' }, gem, { to: table(left + 0.07, bz) });
+  r.turnOver('Turn it over, gem side down.');
+  const [sx, sz] = r.where(paper(seat - bx, 0));
   return r
-    .shape({ title: 'Curl the band round', text: 'Curl the rest of the band down and round underneath, so it meets the end under the gem. Your ring is ready to wear.' }, [
-      { through: [table(seat, -1), table(seat, 1)], moving: table(bx + 0.25, bz), degrees: -330, segments: 18, only: band },
+    .shape({ title: 'Curl the band round', text: 'Curl the rest of the band up and round over the top, so it meets the end above the gem.' }, [
+      { through: [table(sx, sz - 1), table(sx, sz + 1)], moving: table(...r.where(paper(0.25, 0))), degrees: 330, segments: 18, only: band },
     ])
+    .turnOver('Turn it back over, gem on top. Your ring is ready to wear.')
     .build();
 }

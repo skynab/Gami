@@ -57,7 +57,8 @@ describe('fold presets make the common folds as the lesson does', () => {
   });
 
   it('crimp: an inside and an outside reverse fold together', () => {
-    const { before, after } = at('Crimp');
+    // The lesson plays its crimp as the two reverse folds in turn, in one step (a `together`), ending the same.
+    const { before, after } = at('Crimp', false);
     const ray = (x: number, deg: number): Vec2 => [x + Math.cos((deg * Math.PI) / 180), -Math.sin((deg * Math.PI) / 180)];
     expectSame(make(before, { kind: 'crimp', picks: [[0.05, 0], ray(0.05, 85), [0.1, 0], ray(0.1, 70)] }), after);
   });

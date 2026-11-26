@@ -2247,8 +2247,12 @@ export const fr: Record<string, string> = {
     "Posez la pierre sur le bout gauche de la bande.",
   "Curl the band round":
     "Enrouler la bande",
-  "Curl the rest of the band down and round underneath, so it meets the end under the gem. Your ring is ready to wear.":
-    "Enroulez le reste de la bande vers le bas et par-dessous, jusqu’à rejoindre le bout sous la pierre. Votre bague est prête à porter.",
+  "Turn it over, gem side down.":
+    "Retournez-la, la pierre en dessous.",
+  "Curl the rest of the band up and round over the top, so it meets the end above the gem.":
+    "Enroulez le reste de la bande vers le haut et par-dessus, jusqu’à rejoindre le bout au-dessus de la pierre.",
+  "Turn it back over, gem on top. Your ring is ready to wear.":
+    "Retournez-la encore, la pierre au-dessus. Votre bague est prête à porter.",
   "Turn it over: a plain strip.":
     "Retournez-la : une bande unie.",
   "Draw the weave":

@@ -2247,8 +2247,12 @@ export const ja: Record<string, string> = {
     "宝石を帯の左はしにのせます。",
   "Curl the band round":
     "帯を丸める",
-  "Curl the rest of the band down and round underneath, so it meets the end under the gem. Your ring is ready to wear.":
-    "帯ののこりを下へ丸め、宝石の下のはしまで回します。指輪の完成です。",
+  "Turn it over, gem side down.":
+    "宝石を下にして裏返します。",
+  "Curl the rest of the band up and round over the top, so it meets the end above the gem.":
+    "帯ののこりを上へ丸めて上から回し、宝石の上のはしまで回します。",
+  "Turn it back over, gem on top. Your ring is ready to wear.":
+    "宝石が上になるように、もう一度裏返します。指輪の完成です。",
   "Turn it over: a plain strip.":
     "うら返します。何もない帯になります。",
   "Draw the weave":

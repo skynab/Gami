@@ -2247,8 +2247,12 @@ export const es: Record<string, string> = {
     "Pon la gema sobre el extremo izquierdo de la banda.",
   "Curl the band round":
     "Enrolla la banda",
-  "Curl the rest of the band down and round underneath, so it meets the end under the gem. Your ring is ready to wear.":
-    "Enrolla el resto de la banda hacia abajo y por debajo, hasta que se junte con el extremo bajo la gema. Tu anillo está listo para ponértelo.",
+  "Turn it over, gem side down.":
+    "Dale la vuelta, con la gema abajo.",
+  "Curl the rest of the band up and round over the top, so it meets the end above the gem.":
+    "Enrolla el resto de la banda hacia arriba y por encima, hasta que se junte con el extremo sobre la gema.",
+  "Turn it back over, gem on top. Your ring is ready to wear.":
+    "Vuelve a darle la vuelta, con la gema arriba. Tu anillo está listo para ponértelo.",
   "Turn it over: a plain strip.":
     "Dale la vuelta: una tira lisa.",
   "Draw the weave":

@@ -200,19 +200,31 @@ export function foldsLesson() {
       title: 'Crease beside it',
       text: 'Fold it over again along a second line just to the right, leaning a little further right.',
     })
-    .unfold({ title: 'Unfold', text: 'Open it again.' })
-    .collapse(
-      {
-        title: 'Crimp',
-        text: 'Pinch a pleat into both layers along the two creases at once, so the point tilts up. Each layer gets the same pleat, mirrored, with the pleat tucked between them.',
-        kind: 'reverse',
-      },
-      [
-        { through: [k1[0], k1[1]], kind: 'inside' },
-        { through: [k2[0], k2[1]], kind: 'outside' },
-      ],
-      paper(-0.3, 0.3),
-    );
+    .unfold({ title: 'Unfold', text: 'Open it again.' });
+  // Played as its two reverse folds in turn: the point pushed in on the first crease, then its tip pushed in again on
+  // the second, where the first has taken it (mirrored there, the outside crease turns inside), which leaves each
+  // layer the same pleat, its tip under its middle. Both at once, the point settled in between the layers through
+  // them, 0.025 deep (and as deep opening it up again); in turn, 0.0025 (26 November 2026). It ends the same, layers
+  // and all (presets.test.ts).
+  const [p1, p2] = [[0.05, 0] as Vec2, at(0.05, 85)];
+  const across = ([x, z]: Vec2): Vec2 => {
+    const d: Vec2 = [p2[0] - p1[0], p2[1] - p1[1]];
+    const k = ((x - p1[0]) * d[0] + (z - p1[1]) * d[1]) / (d[0] * d[0] + d[1] * d[1]);
+    return [2 * (p1[0] + k * d[0]) - x, 2 * (p1[1] + k * d[1]) - z];
+  };
+  const point = r.lying(([x, z]) => (p2[0] - p1[0]) * z - p2[1] * (x - p1[0]) > 0);
+  r.together(
+    {
+      title: 'Crimp',
+      text: 'Pinch a pleat into both layers along the two creases at once, so the point tilts up. Each layer gets the same pleat, mirrored, with the pleat tucked between them.',
+      kind: 'reverse',
+    },
+    () =>
+      r
+        .collapse({ title: '' }, [{ through: [k1[0], k1[1]], kind: 'inside' }], paper(-0.3, 0.3))
+        .collapse({ title: '' }, [{ through: [table(...across([0.1, 0])), table(...across(at(0.1, 70)))], kind: 'inside', only: point }], paper(-0.3, 0.3)),
+    { inTurn: true },
+  );
   openUp(crimp, 'Open it out: on each layer, the two creases are a pleat.');
 
   // 8. Swivel fold: a corner folded over, then swung round on the end of its folded edge, as the Studio's named
