@@ -10,38 +10,60 @@ export { REST };
 
 /**
  * How deep paper may pass through paper as a model plays (a sheet's width is 1, a layer 0.0007): five layers, half a
- * millimetre on a 15 cm sheet (from seven on 20 November 2026, the models between listed below).
+ * millimetre on a 15 cm sheet (from seven on 20 November 2026, the steps between listed below).
  */
 export const GRAZE = 0.0035;
 /**
- * The models known to go deeper, each a little over what it was measured at (last on 11 November 2026), and where. Bent steps
- * are left to the bending checks: the viewer draws bent paper in its stacking order where layers meet.
+ * The steps known to go deeper, by model and step (1-based), each a little over what it was measured at, looking
+ * every hundredth of the way through (last on 27 November 2026, when the checks first looked step by step and that
+ * closely: until then a model's entry covered all its steps, hiding the boat's first squash, the whale's tail and
+ * the frog's legs behind other steps, and samples every tenth stepped over grazes peaking between them). Bent
+ * steps are left to the bending checks: the viewer draws bent paper in its stacking order where layers meet.
  */
-export const GRAZES: Record<string, number> = {
-  lily: 0.009, // Its squash-and-petal folds, joined up all the way (see collisions.test.ts).
-  swan: 0.014, // Pulling up the neck: with rigid paper its body is a closed tube (PLAN.md, milestone 13).
-  whale: 0.009, // Opening the fins out in 3D: the lower fin turns up from inside the body (docs/clipping-plan.md).
-  dolphin: 0.01, // Opening the fins out in 3D, deepest as they start: the lower fin turns up from inside the body.
-  frog: 0.011, // Turning out a back leg, and lifting the front legs against the other front quarter (docs/origami-me-plan.md).
-  'masu-shallow-lid': 0.0085, // Raising the walls: riding layers sit a little off the faces they ride on.
-  'rainbow-chain': 0.034, // Joining the ends: rigid links set on a ring dip into each other where they cross.
-  // The second squash, its twelve layers grazing as they turn (docs/bending-plan.md, step 7).
-  boat: 0.0105,
+export const GRAZES: Record<string, Record<number, number>> = {
+  // Its squash-and-petal folds, joined up all the way (see collisions.test.ts).
+  lily: { 22: 0.007, 25: 0.006, 28: 0.011, 31: 0.008 },
+  // Pulling up the neck: with rigid paper its body is a closed tube (PLAN.md, milestone 13).
+  swan: { 13: 0.014 },
+  // Turning the tail up, an outside reverse fold: its lower layers go over the top with the rest, and come down
+  // through the body to their place beneath it. Opening the fins out in 3D: the lower fin turns up from inside the
+  // body (docs/clipping-plan.md).
+  whale: { 21: 0.0075, 22: 0.009 },
+  // Opening the fins out in 3D, deepest as they start: the lower fin turns up from inside the body.
+  dolphin: { 24: 0.01 },
+  // Lifting the front legs against the other front quarter, turning out the back legs, and bending the legs
+  // (docs/origami-me-plan.md).
+  frog: { 44: 0.01, 45: 0.011, 46: 0.0095, 47: 0.01, 48: 0.01, 49: 0.0075, 50: 0.0055 },
+  // Raising the walls: riding layers sit a little off the faces they ride on.
+  'masu-shallow-lid': { 30: 0.008 },
+  // Pressing it flat and joining the ends: rigid links set on a ring dip into each other where they cross.
+  'rainbow-chain': { 13: 0.0285, 14: 0.024, 15: 0.0505 },
+  // The first squash, tucking one end of the strip under the other: the back end reaches past the diagonal the
+  // back triangle turns about, which runs through where the ends overlap (docs/clipping-plan.md, Progress). The
+  // second squash, its twelve layers grazing as they turn (docs/bending-plan.md, step 7), and pulling it out into
+  // a boat, for a moment as it starts.
+  boat: { 8: 0.012, 13: 0.0105, 14: 0.004 },
   // Reverse folds, their points tucked in between the flap's halves (November 2026): the point turns as one and
   // settles in between, through about half the stack. Real paper bends a little to open the flap; rigid paper
   // can't without opening it right out (docs/next-tasks-plan.md). Played bent on the way (`bent`, see
-  // fold/bend/reverse.ts), they don't: the crane's came off on 26 November 2026. (The seal's tail came off on
-  // 11 November: see LANDS in animate.ts.)
-  horse: 0.0085, // The tail and head, through the neck's stack (0.0075 and 0.0080, 25 November 2026; 0.008 whatever the head's angle).
-  // The same, found bringing GRAZE down to five layers (20 November 2026).
-  // Found looking near the ends of steps and at points tucked through (20 November 2026).
-  heart: 0.0095, // Folding the top down: the white side triangles lie on the point it turns up through as it starts.
-  seal: 0.007, // Raising the neck, for a moment as it lands.
-  // Found looking closer at the ends of steps (20 November 2026), once the snaps there were fixed.
-  'folds-lesson': 0.0045, // The open sink, as it closes up, and opening it out (0.0041; the crimp, 0.025 until 26 November 2026, now plays its two reverse folds in turn).
+  // fold/bend/reverse.ts), most don't; the crane's neck, the fox's tail and the swallow's second wing, bent, still
+  // just over between the old samples (0.0037), and the pinwheel's second squash at one of its bent frames.
+  horse: { 30: 0.008, 31: 0.0085 }, // The tail and head, through the neck's stack (whatever the head's angle).
+  crane: { 27: 0.004 },
+  fox: { 14: 0.004 },
+  swallow: { 28: 0.004 },
+  pinwheel: { 12: 0.005 },
+  crow: { 26: 0.0045 }, // Making the head, an inside reverse fold; no better bent on the way.
+  // Folding the top down: the white side triangles lie on the point it turns up through as it starts.
+  heart: { 12: 0.013 },
+  // Raising the neck, for a moment as it lands; turning the tail and head, and opening the flippers.
+  seal: { 17: 0.007, 18: 0.005, 19: 0.004, 20: 0.005 },
+  // The open sink, as it closes up, and opening it out (the crimp, 0.025 until 26 November 2026, now plays its
+  // two reverse folds in turn).
+  'folds-lesson': { 65: 0.0045, 66: 0.0045 },
   // Its pinwheel unit's squash, as the pinwheel's was. Bent on the way, as the pinwheel's now is, its five copies
   // (made by replaying the first unit's folding) came apart by half a sheet (26 November 2026).
-  chrysanthemum: 0.007,
+  chrysanthemum: { 10: 0.007, 11: 0.007 },
 };
 
 /**

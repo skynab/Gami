@@ -12,7 +12,7 @@
  * the site --url names.
  */
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { crossings, PLAYING, restingCrossings, type RestingCrossing } from '../src/fold/collisions';
+import { crossings, playing as samplesFor, restingCrossings, type RestingCrossing } from '../src/fold/collisions';
 import { fromFoldFile } from '../src/fold/fold-format';
 import { LAYER_GAP } from '../src/fold/frames';
 import type { OrigamiModel, Vec2 } from '../src/fold/types';
@@ -70,7 +70,7 @@ for (const w of which) {
   });
   let worst = Math.max(0, ...found.map((c) => c.depth));
   if (playing) {
-    const moving = crossings(model, PLAYING, 'edge').filter((c) => c.depth > SHOWS && !model.steps[c.step - 1].frame.soft?.length);
+    const moving = crossings(model, samplesFor, 'edge').filter((c) => c.depth > SHOWS && !model.steps[c.step - 1].frame.soft?.length);
     const steps = new Map<number, { depth: number; at: number }>();
     for (const c of moving) if (c.depth > (steps.get(c.step)?.depth ?? 0)) steps.set(c.step, { depth: c.depth, at: c.at });
     for (const [k, c] of steps) lines.push(`  playing, step ${String(k).padStart(2)} “${model.steps[k - 1].title}”: ${layers(c.depth)} (${mm(c.depth)}), deepest ${c.at} of the way through

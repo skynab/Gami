@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { crossings, partings, PLAYING, restingCrossings } from '../fold/collisions';
+import { crossings, partings, playing, restingCrossings } from '../fold/collisions';
 import { fromFoldFile, toFoldFile } from '../fold/fold-format';
 import { framesOf } from '../fold/frames';
 import { guidesFor } from '../fold/guides';
@@ -35,12 +35,19 @@ function checks(id: string, model: ReturnType<(typeof RECIPES)[number]>) {
   }, 90_000);
 
   it('passes paper through paper no deeper than a few layers, or than it’s known to', () => {
-    // Faces meeting at a point compared too, so a flap's point tucked through what it meets there is found.
-    const deepest = Math.max(0, ...crossings(model, PLAYING, 'edge').filter((c) => !model.steps[c.step - 1].frame.soft?.length).map((c) => c.depth));
-    expect(deepest).toBeLessThanOrEqual(GRAZES[id] ?? GRAZE);
-    // A model that no longer goes deeper comes off the list.
-    if (id in GRAZES) expect(deepest).toBeGreaterThan(GRAZE);
-  }, 60_000);
+    // Faces meeting at a point compared too, so a flap's point tucked through what it meets there is found. Step
+    // by step: a model's entry once covered all its steps, which hid others going deeper than the limit.
+    const deepest = new Map<number, number>();
+    for (const c of crossings(model, playing, 'edge')) {
+      if (model.steps[c.step - 1].frame.soft?.length) continue;
+      deepest.set(c.step, Math.max(deepest.get(c.step) ?? 0, c.depth));
+    }
+    const known = GRAZES[id] ?? {};
+    const name = (k: number) => `step ${k} “${model.steps[k - 1]?.title}”`;
+    expect([...deepest].filter(([k, d]) => d > (known[k] ?? GRAZE)).map(([k, d]) => `${name(k)}: ${d.toFixed(4)}`)).toEqual([]);
+    // A step that no longer goes deeper comes off the list.
+    expect(Object.keys(known).map(Number).filter((k) => (deepest.get(k) ?? 0) <= GRAZE).map(name)).toEqual([]);
+  }, 90_000);
 
   it('rests without paper through paper deeper than a few layers, or than it’s known to', () => {
     const deepest = Math.max(0, ...restingCrossings(model).filter((c) => !c.stacked).map((c) => c.depth));

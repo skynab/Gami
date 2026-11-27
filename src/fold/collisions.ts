@@ -25,12 +25,33 @@ export interface Crossing {
 const SAMPLES = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];
 
 /**
- * Where through each step the checks look, as a model plays: every tenth, and near each end too, where a fold
- * starting or landing can cut through for a moment (the heart's and seal's, found 20 November 2026), and closer
- * still at the end, where paper the joins held the way it started jumped into place in the last fortieth of the
- * step, between the samples (the lily's petal folds and the folds lesson's square base, 6 and 18 mm through).
+ * Where through each step the checks look, as a model plays: every hundredth, and every four-hundredth in its
+ * first and last twentieth, where a fold starting or landing can cut through for a moment and paper the joins held
+ * the way it started can jump into place (the lily's petal folds and the folds lesson's square base, 6 and 18 mm
+ * through, found 20 November 2026). Until 27 November 2026 it was every tenth and a few near the ends, which
+ * stepped over the masu box's lock jumping into place at 0.94 and grazes peaking between the samples in nine
+ * models (docs/clipping-plan.md, Progress). Looking costs little beside working out the motions it looks at.
  */
-export const PLAYING = [0.025, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.975, 0.99];
+export const PLAYING = [
+  ...new Set([
+    ...Array.from({ length: 99 }, (_, i) => (i + 1) / 100),
+    ...Array.from({ length: 19 }, (_, i) => +((i + 1) * 0.0025).toFixed(4)),
+    ...Array.from({ length: 19 }, (_, i) => +(1 - (i + 1) * 0.0025).toFixed(4)),
+    0.001,
+    0.999,
+  ]),
+].sort((a, b) => a - b);
+
+/**
+ * Where through step k (1-based) to look as it plays: `PLAYING`, and for a fold bent on the way (bend/reverse.ts)
+ * each of its bent frames too, which the paper passes through exactly and which the solver may have left crossing
+ * (the pinwheel's second squash, 0.0044 at its fourth of sixteen, between the old samples).
+ */
+export function playing(model: OrigamiModel, k: number): number[] {
+  const step = model.steps[k - 1];
+  const via = step.op?.op === 'collapse' && step.op.bent ? (step.via?.length ?? 0) : 0;
+  return via ? [...new Set([...PLAYING, ...Array.from({ length: via - 1 }, (_, i) => (i + 1) / via)])].sort((a, b) => a - b) : PLAYING;
+}
 
 /**
  * Which faces count as joined, and so are never compared: those sharing any corner on the sheet ('point', as the
@@ -39,12 +60,14 @@ export const PLAYING = [0.025, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9
  */
 export type Joined = 'point' | 'edge';
 
-export function crossings(model: OrigamiModel, samples = SAMPLES, joined: Joined = 'point'): Crossing[] {
+/** Paper through paper as each step plays, at `samples` through it (the same for every step, or for step k). */
+export function crossings(model: OrigamiModel, samples: number[] | ((model: OrigamiModel, k: number) => number[]) = SAMPLES, joined: Joined = 'point'): Crossing[] {
   const frames = framesOf(model);
   const out: Crossing[] = [];
   for (let k = 1; k < frames.length; k++) {
     const t = stepTransition(model, k);
-    for (const at of samples) for (const { faces, depth } of crossingAt(t, at, joined)) out.push({ step: k, at, faces, depth });
+    const at = typeof samples === 'function' ? samples(model, k) : samples;
+    for (const s of at) for (const { faces, depth } of crossingAt(t, s, joined)) out.push({ step: k, at: s, faces, depth });
   }
   return out;
 }
