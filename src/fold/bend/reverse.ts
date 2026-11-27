@@ -2,6 +2,7 @@ import { fixedPose, type Transition } from '../animate';
 import { LAYER_GAP } from '../frames';
 import type { FoldFrame, Vec2, Vec3 } from '../types';
 import { meshFrame } from './frame';
+import { frameKey, remembered } from './memo';
 import { topology } from './mesh';
 import { solve } from './solver';
 
@@ -16,16 +17,13 @@ export interface BentWay {
   near?: number;
   /** The longest edge of a triangle of bending paper, on the sheet. */
   mesh?: number;
-  /** The frames it passes through. */
+  /** The frames it passes through, each the paper brought to rest along the way (guided, the solver's iterations aren't used). */
   stages?: number;
-  /** The solver's iterations at each stage. */
-  iterations?: number;
 }
 
 const NEAR = 0.08;
 const MESH = 0.06;
 const STAGES = 16;
-const ITERATIONS = 30;
 /** How readily creases give, as bendFrame has it. */
 const CREASE_COMPLIANCE = 0.1;
 /** How readily the paper strays from the way rigid paper goes (see BendProblem.compliance.guide). */
@@ -37,9 +35,16 @@ const GUIDE_COMPLIANCE = 1e-2;
  * sides `end` stacks them, so where the rigid motion takes paper through paper, the layers near the corner give
  * way, bending apart, instead. The paper that moves bends too, and any that stays put within `near` of the corner.
  * The first frame points each triangle back at the face before the step it comes from; the last is the paper as it
- * lands, close to `end` (within a few layers, where they were held apart), which the step then rests on.
+ * lands, close to `end` (within a few layers, where they were held apart), which the step plays to before it rests
+ * on `end`.
  */
 export function bentWay(end: FoldFrame, rigid: Transition, way: BentWay = {}): FoldFrame[] {
+  // The rigid motion's every pose follows from where each face starts and ends.
+  const key = `bentWay ${frameKey(end)} ${JSON.stringify(rigid.faces.map((f) => f.before))} ${JSON.stringify(way)}`;
+  return remembered(key, () => solveBentWay(end, rigid, way));
+}
+
+function solveBentWay(end: FoldFrame, rigid: Transition, way: BentWay): FoldFrame[] {
   const stages = way.stages ?? STAGES;
   const [startPose, endPose] = [fixedPose(rigid, 0), fixedPose(rigid, 1)];
   const moves = rigid.faces.map((_, f) => startPose[f].some((q, j) => dist(q, endPose[f][j]) > 1e-6));
@@ -122,7 +127,6 @@ export function bentWay(end: FoldFrame, rigid: Transition, way: BentWay = {}): F
     thickness: LAYER_GAP,
     side,
     stages,
-    iterations: way.iterations ?? ITERATIONS,
     compliance: { guide: GUIDE_COMPLIANCE },
   });
   const from = end.faces_parent;

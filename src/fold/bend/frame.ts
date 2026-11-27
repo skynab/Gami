@@ -3,6 +3,7 @@ import { FoldError, fromFlat, placeLike, toFlat, type FlatFace } from '../fold';
 import { facePositions, LAYER_GAP } from '../frames';
 import { joinedAlong, sharedSegment, signedArea, split } from '../geometry2d';
 import type { FoldFrame, Vec2, Vec3 } from '../types';
+import { frameKey, remembered } from './memo';
 import { topology, type Tri } from './mesh';
 import { solve } from './solver';
 
@@ -411,6 +412,10 @@ const CREASE_COMPLIANCE = 0.1;
  * triangle back at the face of `frame` it came from) and the bent paper, and how far any triangle strains.
  */
 export function bendFrame(given: FoldFrame, options: BendOptions): { via: FoldFrame[]; frame: FoldFrame; strain: number } {
+  return remembered(`bendFrame ${frameKey(given)} ${JSON.stringify(options)}`, () => bendAfresh(given, options));
+}
+
+function bendAfresh(given: FoldFrame, options: BendOptions): { via: FoldFrame[]; frame: FoldFrame; strain: number } {
   // Cut along the lines it will fold along, if any; its faces then point back at the frame's (`origin`).
   const { frame, origin } = options.lines?.length ? cutAlong(given, options.lines) : { frame: given, origin: given.faces_vertices.map((_, f) => f) };
   const flex = frame.faces_vertices.flatMap((_, f) => (options.flex.includes(origin[f]) ? [f] : []));

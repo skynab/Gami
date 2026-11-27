@@ -355,7 +355,7 @@ const bentWayOf: Check<BentWay> = (x, path) => {
   const r = record(x, path);
   const positive: Check<number> = (v, p) => between(num(v, p), p, 1e-3, 1);
   const some: Check<number> = (v, p) => between(count(v, p), p, 1, 64);
-  return { ...opt(r, 'near', positive, path), ...opt(r, 'mesh', positive, path), ...opt(r, 'stages', some, path), ...opt(r, 'iterations', (v, p) => between(count(v, p), p, 1, 1000), path) };
+  return { ...opt(r, 'near', positive, path), ...opt(r, 'mesh', positive, path), ...opt(r, 'stages', some, path) };
 };
 
 function between(n: number, path: string, lo: number, hi: number): number {
