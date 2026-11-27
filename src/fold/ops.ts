@@ -709,7 +709,7 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
       }
       const folded = collapse(frame, { creases, anchor, under: test(op.under) });
       // Bent on the way: the frames it passes through, guided along the way rigid paper goes (see bend/reverse.ts).
-      return op.bent ? { frame: folded, via: bentWay(folded, transitionBetween(frame, folded), op.bent) } : { frame: folded };
+      return op.bent ? { frame: folded, via: bentWay(folded, transitionBetween(frame, folded, { check: false }), op.bent) } : { frame: folded };
     }
     case 'unfold': {
       let to = op.to;

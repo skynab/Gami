@@ -48,10 +48,9 @@ export const GRAZES: Record<string, Record<number, number>> = {
   // can't without opening it right out (docs/next-tasks-plan.md). Played bent on the way (`bent`, see
   // fold/bend/reverse.ts), most don't; the crane's neck and the swallow's second wing, bent, still just over
   // between the old samples (0.0037; no mesh or number of frames tried took them under, 27 November 2026).
-  horse: { 30: 0.008, 31: 0.0085 }, // The tail and head, through the neck's stack (whatever the head's angle).
+  horse: { 30: 0.008, 31: 0.008 }, // The tail and head, through the neck's stack (whatever the head's angle).
   crane: { 27: 0.004 },
   swallow: { 28: 0.004 },
-  crow: { 26: 0.0045 }, // Making the head, an inside reverse fold; no better bent on the way.
   // Folding the top down: the white side triangles lie on the point it turns up through as it starts.
   heart: { 12: 0.013 },
   // Raising the neck, for a moment as it lands; turning the tail and head, and opening the flippers.

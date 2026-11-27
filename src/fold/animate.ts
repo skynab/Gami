@@ -1,5 +1,5 @@
 import { Matrix4, Quaternion, Vector3 } from 'three';
-import { box, clearanceDepth, cornerKeys, crossDepth, overlapping } from './cross3d';
+import { box, clearanceAt, clearanceDepth, cornerKeys, crossDepth, overlapping } from './cross3d';
 import { facePositions, framesOf, LAYER_GAP, normal, sphereAround } from './frames';
 import { joinedSegment, overlapArea, signedArea, type Cut } from './geometry2d';
 import { applyOp, lastFold, reopened, select, type Op } from './ops';
@@ -118,15 +118,17 @@ const SAME = 1e-4;
 const SLACK = 20 * LAYER_GAP;
 
 /** Transitions already worked out, by the frames they go between: the viewer, guides and camera all ask. */
-const known = [0, 1, 2, 3].map(() => new WeakMap<FoldFrame, WeakMap<FoldFrame, Transition>>());
+const known = [0, 1, 2, 3, 4, 5, 6, 7].map(() => new WeakMap<FoldFrame, WeakMap<FoldFrame, Transition>>());
 // (Frames made for a stage are new each time, so the stage depth needn't be part of the key.)
 
 /**
- * How the paper gets from `from` to `to`. `makeWay` lets separate paper lift out of the way, and `stage` lets
- * a compound fold lift its moving paper first (both on unless asked otherwise).
+ * How the paper gets from `from` to `to`. `makeWay` lets separate paper lift out of the way, `stage` lets a
+ * compound fold lift its moving paper first, and `check` judges a way that goes deep again as the checks would (see
+ * `checked`): all on unless asked otherwise. A fold bent on the way is guided by its rigid motion, which is never
+ * played: judged again, the crane's neck took a rigid way that bent worse (0.0037 to 0.0070), so it asks for none.
  */
-export function transition(from: FoldFrame, to: FoldFrame, { makeWay = true, stage = true } = {}): Transition {
-  return transitionStaged(from, to, makeWay, stage ? STAGES : 0);
+export function transition(from: FoldFrame, to: FoldFrame, { makeWay = true, stage = true, check = true } = {}): Transition {
+  return transitionStaged(from, to, makeWay, stage ? STAGES : 0, check);
 }
 
 /** How many times over a step can be split into stages (a stage can itself be staged). */
@@ -134,16 +136,16 @@ const STAGES = 2;
 /** How much deeper staged paper may cut than paper going straight there, whatever that cuts: a few layers. */
 const DEEPER = 0.005;
 
-function transitionStaged(from: FoldFrame, to: FoldFrame, makeWay: boolean, stages: number): Transition {
-  const cache = known[(makeWay ? 1 : 0) + (makeWay && stages ? 2 : 0)];
+function transitionStaged(from: FoldFrame, to: FoldFrame, makeWay: boolean, stages: number, check = true): Transition {
+  const cache = known[(makeWay ? 1 : 0) + (makeWay && stages ? 2 : 0) + (makeWay && stages && !check ? 4 : 0)];
   let byTo = cache.get(from);
   if (!byTo) cache.set(from, (byTo = new WeakMap()));
   let t = byTo.get(to);
-  if (!t) byTo.set(to, (t = workOut(from, to, makeWay, stages)));
+  if (!t) byTo.set(to, (t = workOut(from, to, makeWay, stages, check)));
   return t;
 }
 
-function workOut(from: FoldFrame, to: FoldFrame, makeWay: boolean, stages: number): Transition {
+function workOut(from: FoldFrame, to: FoldFrame, makeWay: boolean, stages: number, check = true): Transition {
   if (to.soft?.length) return blended(from, to);
   const t = moving(from, to);
   if (!makeWay) return t;
@@ -173,7 +175,81 @@ function workOut(from: FoldFrame, to: FoldFrame, makeWay: boolean, stages: numbe
       if (!deepest) break;
     }
   }
-  return stoodFirst(from, to, t, stages, best);
+  const found = stoodFirst(from, to, t, stages, best);
+  return check ? checked(t, stages, found) : found;
+}
+
+/**
+ * The way found, unless it passes paper through paper deeper than the checks let by, judged as they judge it (see
+ * `asChecked`), and another of its ways goes clearly less deep, torn no further. The animator's own judges look at
+ * the paper as it moves, not joined up, at a few points, and leave out faces meeting at a corner, where a point can
+ * be tucked through what it meets: to them the crow's head went as deep hinged as staged, where the checks found
+ * the hinged way under the limit and the staged one over it (27 November 2026).
+ */
+function checked(t: Transition, stages: number, best: Transition): Transition {
+  // Only for the step as a whole, not each stage of a staged way; first a quick look, at every fourth point.
+  if (stages !== STAGES || asChecked(best, 4, false).depth <= CHECKED / 2) return best;
+  let drawn = asChecked(best);
+  if (drawn.depth <= CHECKED) return best;
+  // The ways already worked out (joining each up is what costs: staged ways too made the frog five times slower).
+  // (Often the same list, worked out afresh each time it's asked for.)
+  const ways = [...new Set([t, ...(t.others?.() ?? []), ...(best.others && best.others !== t.others ? best.others() : [])])];
+  for (const way of ways) {
+    // Joined up only if it looks clearly shallower as it moves, which costs far less to look at.
+    if (way === best || asChecked(way, 2, false, false).depth >= drawn.depth - LAYER_GAP) continue;
+    const d = asChecked(way);
+    if (d.depth < drawn.depth - LAYER_GAP && d.apart <= Math.max(drawn.apart, TEAR)) [best, drawn] = [way, d];
+  }
+  return best;
+}
+
+/** How deep paper may pass through paper as a step plays, judged as the checks judge it: `GRAZE` in models/known-clipping.ts. */
+const CHECKED = 0.0035;
+
+/**
+ * How a transition looks to the checks (`crossings` in collisions.ts, with faces joined only along a crease): how
+ * deep paper passes through paper as it's drawn, faces meeting at a corner too but for right beside it, and how much
+ * further apart the same point of paper comes than at either end, at the most; at the points the joins are worked
+ * out at and between them.
+ */
+function asChecked(t: Transition, every = 1, parting = true, joined = true): { depth: number; apart: number } {
+  const posed = joined ? poseAt : rawPose;
+  const groups = parting ? cornerGroups(t.faces) : [];
+  const keys = t.faces.map((f) => cornerKeys(f.paper));
+  const ends = groups.length ? [spreads(poseAt(t, 0), groups), spreads(poseAt(t, 1), groups)] : [[], []];
+  let [depth, apart] = [0, 0];
+  for (let i = every; i < 2 * JOIN_SAMPLES; i += every) {
+    const pose = posed(t, i / (2 * JOIN_SAMPLES));
+    const boxes = pose.map(box);
+    for (let a = 0; a < pose.length; a++) {
+      for (let b = a + 1; b < pose.length; b++) {
+        if (together(t, a, b) || !overlapping(boxes[a], boxes[b])) continue;
+        let shared = 0;
+        for (const key of keys[a]) if (keys[b].has(key)) shared++;
+        if (shared >= 2) continue;
+        if (!shared) {
+          depth = Math.max(depth, clearanceDepth(pose[a], pose[b]));
+          continue;
+        }
+        const hit = clearanceAt(pose[a], pose[b]);
+        if (hit && hit.depth > depth && !besideCorner(hit.at, pose[a], pose[b], t.faces[a].paper, t.faces[b].paper)) depth = hit.depth;
+      }
+    }
+    if (groups.length) apart = Math.max(apart, ...spreads(pose, groups).map((d, g) => d - Math.max(ends[0][g], ends[1][g])));
+  }
+  return { depth, apart };
+}
+
+/**
+ * Whether a crossing at `at` is within 3 mm (on a 15 cm sheet) of the corner two faces share, where either has it:
+ * their layers' offset where they're joined, not one passing through the other (as `NEAR_JOIN` in collisions.ts).
+ */
+function besideCorner(at: Vec3, a: Vec3[], b: Vec3[], pa: Vec2[], pb: Vec2[]): boolean {
+  const key = (q: Vec2) => `${q[0].toFixed(6)},${q[1].toFixed(6)}`;
+  const i = pa.findIndex((q) => pb.some((r) => key(r) === key(q)));
+  if (i < 0) return false;
+  const j = pb.findIndex((r) => key(r) === key(pa[i]));
+  return [a[i], j >= 0 ? b[j] : null].some((c) => !!c && Math.hypot(at[0] - c[0], at[1] - c[1], at[2] - c[2]) < 0.02);
 }
 
 /**
@@ -266,13 +342,13 @@ function blended(from: FoldFrame, to: FoldFrame): Transition {
 const SEPARATELY = 400;
 
 /** How the paper gets from one frame to the next: as `transition`, or face by face when very many faces move. */
-export function transitionBetween(from: FoldFrame, to: FoldFrame): Transition {
-  if (to.faces_vertices.length <= SEPARATELY || to.soft?.length) return transition(from, to);
+export function transitionBetween(from: FoldFrame, to: FoldFrame, { check = true } = {}): Transition {
+  if (to.faces_vertices.length <= SEPARATELY || to.soft?.length) return transition(from, to, { check });
   // Counting only the faces that move: one petal of the kusudama closing into a cone, the rest lying still, is a
   // few faces' joined-up motion, not sixty petals'.
   const own = separately(from, to);
   const still = (m: Motion) => Math.abs(m.angle) < 1e-9 && m.shift.length() < SLACK;
-  return own.faces.filter((f) => !still(own.motions[f.motion])).length > SEPARATELY ? own : transition(from, to);
+  return own.faces.filter((f) => !still(own.motions[f.motion])).length > SEPARATELY ? own : transition(from, to, { check });
 }
 
 function separately(from: FoldFrame, to: FoldFrame): Transition {
