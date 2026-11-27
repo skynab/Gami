@@ -32,12 +32,18 @@ export function swallow() {
   const root = up(0.5);
   const lift = (25 * Math.PI) / 180;
   const line = (dir: 1 | -1): Vec2 => normalize([dir * Math.cos(lift), 1 - Math.sin(lift)]);
-  const wing = (dir: 1 | -1, leg: (c: Vec2) => boolean, title: string, text: string) =>
-    r.collapse(
+  // The second wing a little lower, and bent on the way (fold/bend/reverse.ts): from the same point, rigid, it swung
+  // through the first wing's layers there, 0.0093 deep (0.0063 bent from the same point; 0.0032 now, 26 November 2026).
+  const wing = (dir: 1 | -1, leg: (c: Vec2) => boolean, title: string, text: string) => {
+    const at = dir > 0 ? up(0.46) : root;
+    return r.collapse(
       { title, text, kind: 'reverse' },
-      [{ through: [table(...root), table(root[0] + line(dir)[0], root[1] + line(dir)[1])], kind: 'inside', only: leg }],
+      [{ through: [table(...at), table(at[0] + line(dir)[0], at[1] + line(dir)[1])], kind: 'inside', only: leg }],
       paper(-0.3, 0.3),
+      undefined,
+      dir > 0 ? {} : undefined,
     );
+  };
   wing(-1, ([u, v]) => u > 0 && v > 0, 'Reverse-fold a wing', 'Push the left point up between the layers so it sticks out to the side, sloping up a little. This is a wing.');
   wing(1, ([u, v]) => u < 0 && v < 0, 'Reverse-fold the other wing', 'Do the same with the right point, for the other wing.');
 

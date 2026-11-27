@@ -32,7 +32,6 @@ export const GRAZES: Record<string, number> = {
   // can't without opening it right out (docs/next-tasks-plan.md). Played bent on the way (`bent`, see
   // fold/bend/reverse.ts), they don't: the crane's came off on 26 November 2026. (The seal's tail came off on
   // 11 November: see LANDS in animate.ts.)
-  swallow: 0.0095, // The second wing, as the crane's neck and tail (0.0093, 24 November 2026; 0.0066 to 0.01 for other wing angles and heights).
   horse: 0.0085, // The tail and head, through the neck's stack (0.0075 and 0.0080, 25 November 2026; 0.008 whatever the head's angle).
   // The same, found bringing GRAZE down to five layers (20 November 2026).
   // Found looking near the ends of steps and at points tucked through (20 November 2026).

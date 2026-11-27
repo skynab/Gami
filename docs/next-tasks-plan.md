@@ -128,7 +128,8 @@ and the layers kept on the sides the end frame stacks them, so the layers near t
 going through them. Off the list with it: the **crane** (neck, tail and head), the **fox**, the **penguin** and the
 **pinwheel** (its squashes, off `TEARS` too). Each bent fold takes 15 to 30 s to make, solved again on replay; the crane
 takes about 85 s and its file grew from 128 KB to 529 KB. Not enough, or worse, for the rest (`docs/clipping-plan.md`,
-Progress).
+Progress). Later the same day, the **swallow** too: its second wing bent and started 0.04 lower than the first
+(0.0093 to 0.0032; from the same point, bent, 0.0063), which leaves it a little banked seen from above.
 
 Tried 12 November on the frog, lily and shallow lid: landing layers over up to 0.9 of a step as well (`LANDS`) changes
 none of their depths, and the frog then comes apart by 0.011, over `TEAR`. Each still on the list needs its own look at
@@ -193,7 +194,8 @@ The frog now grazes a little deeper, 0.0106 at most (step 45) against 0.0094, st
   crease, opposite ways, and tucked into the middle the halves' tips pass through each other by about the
   stack's thickness, where real paper opens the flap a little first. Allowed for now (`GRAZES`: the crane, fox
   and seal added, the swan's raised; two collision tests leave those steps out).
-- **Reverse folds' animation, with the point in the middle.** Tried 8 November: the flap's upper half (found from
+- ✅ **Reverse folds' animation, with the point in the middle.** Built 26 November, the bending way below (`collapse`'s
+  `bent`, clipping plan row 3): the crane, fox, penguin and swallow now bend on the way. Tried 8 November: the flap's upper half (found from
   the frames: moving paper ending sandwiched between paper staying put) tilted up about the fold joining it to
   the lower half, as paper making way does, with the two halves of the point turning opposite ways into the gap.
   On the crane's neck it passed more paper through paper (117–167 crossings against 97) and pulled the point
