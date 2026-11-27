@@ -1199,6 +1199,8 @@ function hingesFor(faces: FaceTrack[], reps: { q: Quaternion; t: Vector3; faces:
   const at: Vec3[] = faces.map(() => [0, 0, 0]);
   const dir: Vec3[] = faces.map(() => [0, 0, 0]);
   const angle = new Array<number>(n).fill(0);
+  // For a half turn, how clearly the side of its parent it lands on (or lifts off) says which way round.
+  const clear = new Array<number>(n).fill(Infinity);
   const order: number[] = [];
   const queue: number[] = [];
   faces.forEach((f, i) => {
@@ -1230,7 +1232,9 @@ function hingesFor(faces: FaceTrack[], reps: { q: Quaternion; t: Vector3; faces:
         // nothing then (the boat's ends, opening out as its sides fold up, went half of them the wrong way).
         if (Math.abs(Math.abs(turn) - Math.PI) < 1e-3) {
           const opening = foldedOnto(faces, u, w, 'before') && !foldedOnto(faces, u, w, 'after');
-          const wanted = Math.sign(opening ? sideBefore(faces, u, w) : sideAfter(faces, u, w)) || 1;
+          const side = opening ? sideBefore(faces, u, w) : sideAfter(faces, u, w);
+          clear[w] = Math.abs(side);
+          const wanted = Math.sign(side) || 1;
           if (Math.sign(sideHalfway(faces, u, w, a, edge, Math.sign(turn))) !== wanted) turn = -turn;
         }
       }
@@ -1242,9 +1246,35 @@ function hingesFor(faces: FaceTrack[], reps: { q: Quaternion; t: Vector3; faces:
       queue.push(w);
     }
   }
+  sameWayRound(faces, parent, at, dir, angle, clear);
   // Paper staying put still slides by the few gaps between layers its stack is renumbered by, as it goes.
   const shift = faces.map((f): Vec3 => (still[f.motion] ? reps[f.motion].t.toArray() as Vec3 : [0, 0, 0]));
   return order.length > roots ? { parent, at, dir, angle, order, lift: 0, shift } : null;
+}
+
+/**
+ * Faces joined along a crease, each turning a half turn from still paper about the same line, go the same way
+ * round, or the crease between them comes apart by their whole width on the way, and the joins hold the paper as
+ * it started until the very end, where it jumps into place. The masu box's lock: the end flap's sides, folded in
+ * onto it, end level with the wall layer they hang from (or a layer outside it), so where they land says little,
+ * and they went round outside the wall while the flap went over its top. The face whose side is the less clear
+ * (`clear`, see `hingesFor`) turns the way the other does. Faces joined along the line itself are left alone.
+ */
+function sameWayRound(faces: FaceTrack[], parent: number[], at: Vec3[], dir: Vec3[], angle: number[], clear: number[]) {
+  const half = (i: number) => parent[i] >= 0 && parent[parent[i]] === -1 && Math.abs(Math.abs(angle[i]) - Math.PI) < 1e-3;
+  const v = (p: Vec3) => new Vector3(...p);
+  // How far a point is from face i's hinge line.
+  const off = (i: number, p: Vec3) => v(p).sub(v(at[i])).cross(v(dir[i])).length();
+  for (const { i, j, shared } of sharedEdges(faces)) {
+    if (!half(i) || !half(j) || parent[i] === j || parent[j] === i) continue;
+    const [di, dj] = [v(dir[i]), v(dir[j])];
+    if (Math.abs(di.dot(dj)) < 1 - 1e-6 || off(i, at[j]) > SLACK) continue;
+    const place = affine(faces[i].paper, faces[i].before);
+    if (shared.every((q) => off(i, place(q)) < SLACK)) continue;
+    if (Math.sign(angle[i]) * Math.sign(angle[j]) * di.dot(dj) > 0) continue;
+    const k = clear[i] < clear[j] ? i : j;
+    angle[k] = -angle[k];
+  }
 }
 
 /** The cuts in the paper a step's faces were made from (see `moving`): faces meeting along one aren't joined. */

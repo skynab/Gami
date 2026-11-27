@@ -5,8 +5,9 @@ import { envelope } from '../models/recipes/envelope';
 import { fox } from '../models/recipes/fox';
 import { frog } from '../models/recipes/frog';
 import { lily } from '../models/recipes/lily';
+import { masuBox } from '../models/recipes/masu-box';
 import { poseAt, stepTransition, transition } from './animate';
-import { crossings } from './collisions';
+import { crossingAt, crossings } from './collisions';
 import { facePositions, framesOf, LAYER_GAP } from './frames';
 import { sharedSegment } from './geometry2d';
 import type { OrigamiModel, Vec2, Vec3 } from './types';
@@ -157,4 +158,30 @@ describe('compound folds', () => {
     expect(torn(fox(), 13)).toBeLessThan(0.01);
     // Making the fox solves its tail's bent frames: most of a minute with the other tests running.
   }, 300_000);
+});
+
+describe('half turns about one line', () => {
+  it('turns faces joined along a crease the same way round: the masu box’s lock goes over the wall without a snap', () => {
+    // The lock's flap goes over the end wall into the box. Its sides, folded in onto it, end level with the wall
+    // layer they hang from, so where they land doesn't say which way round; they went round outside the wall, and
+    // the joins held the paper back until it jumped into place at 0.93 to 0.96, 6 layers through, between the
+    // samples the model checks look at (27 November 2026).
+    const model = masuBox();
+    const k = model.steps.findIndex((s) => s.title === 'Lock the top end') + 1;
+    const t = stepTransition(model, k);
+    const n = 100;
+    const moves: number[] = [];
+    let prev = poseAt(t, 0);
+    let deepest = 0;
+    for (let i = 1; i <= n; i++) {
+      const pose = poseAt(t, i / n);
+      moves.push(Math.max(...pose.flatMap((face, f) => face.map((p, c) => dist(p, prev[f][c])))));
+      deepest = Math.max(deepest, ...crossingAt(t, i / n, 'edge').map((c) => c.depth));
+      prev = pose;
+    }
+    // Steadily: no hundredth of the step moves paper more than twice as far as the middle one.
+    const middle = [...moves].sort((a, b) => a - b)[n / 2];
+    expect(Math.max(...moves)).toBeLessThan(2 * middle);
+    expect(deepest).toBeLessThan(2.5 * LAYER_GAP);
+  });
 });
