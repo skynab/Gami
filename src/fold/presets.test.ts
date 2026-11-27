@@ -87,7 +87,8 @@ describe('fold presets elsewhere', () => {
     const before = { ...m, steps: m.steps.slice(0, i) };
     const corner = locate(before.steps.at(-1)!.frame, [0.5, 0.5]);
     expectSame(make(before, { kind: 'petal', picks: [corner] }), m.steps[i].frame);
-  });
+    // Making the crane solves its three reverse folds' bent frames: well over a minute with the other tests running.
+  }, 300_000);
 
   it('swivels a flap as Recipe.swivel does, the paper it swings across pleated', () => {
     // A square's corner folded over on a hinge from the middle of the bottom edge, swung 30° about that end.

@@ -1,3 +1,4 @@
+import type { BentWay } from '../../fold/bend/reverse';
 import { paper, type At, type Recipe } from '../../fold/recipe';
 import type { CreaseKind } from '../../fold/collapse';
 import type { Vec2 } from '../../fold/types';
@@ -48,12 +49,15 @@ export function cornerCreases(side: -1 | 1, end: -1 | 1, pull: Pull): Crease[] {
   }));
 }
 
-/** Squashes the top (`end` −1) or bottom (`end` 1) end, its left and right corners pulled as given. */
-export function squashEnd(r: Recipe, end: -1 | 1, left: Pull, right: Pull, step: { title: string; text: string }): Recipe {
+/**
+ * Squashes the top (`end` −1) or bottom (`end` 1) end, its left and right corners pulled as given; `bent`, bending on
+ * the way (fold/bend/reverse.ts).
+ */
+export function squashEnd(r: Recipe, end: -1 | 1, left: Pull, right: Pull, step: { title: string; text: string }, bent?: BentWay): Recipe {
   const creases = [...cornerCreases(-1, end, left), ...cornerCreases(1, end, right)].map((c) => ({
     through: c.through.map(([u, v]) => paper(u, v)) as [At, At],
     kind: c.kind,
     only: c.only,
   }));
-  return r.collapse({ ...step, kind: 'fold' }, creases, paper(0, -end * 0.1));
+  return r.collapse({ ...step, kind: 'fold' }, creases, paper(0, -end * 0.1), undefined, bent);
 }

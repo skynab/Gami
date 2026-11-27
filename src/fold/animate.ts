@@ -920,6 +920,23 @@ export function stepTransition(model: OrigamiModel, k: number): Transition {
   const over = tuckedOver(model, k);
   if (over) return transitionVia([frames[k - 1], over, { ...frames[k], faces_parent: sameFaces(over, frames[k]) }]);
   if (!model.steps[k - 1].via?.length) return transitionBetween(frames[k - 1], frames[k]);
+  // A fold bent on the way (bend/reverse.ts) plays through its bent frames to the last, the paper as it lands: played
+  // on into its flat frame, each face would move as one of the triangles it came from, unbent. It rests on the flat
+  // frame, the next step starting from there.
+  if (op?.op === 'collapse' && op.bent) {
+    const t = transitionVia([frames[k - 1], ...model.steps[k - 1].via!]);
+    // Each triangle moves on its own from frame to frame, its corners not drawn together with its neighbours'. Into
+    // the first, they start where their faces lay, a layer's gap apart for each layer between them, and drawn
+    // together, small triangles across a fold several layers thick would stretch by a third on the way; between the
+    // others, the point's small ones turning fast stretch by a tenth. On their own, they part by less than a few
+    // layers for a moment, which doesn't show.
+    t.path?.parts.forEach((part, j) => {
+      if (!part.blend) return;
+      let n = 0;
+      t.path!.parts[j] = { ...part, blend: { ...part.blend, vertices: part.blend.vertices.map((face) => face.map(() => n++)) } };
+    });
+    return t;
+  }
   const t = transitionVia([frames[k - 1], ...(model.steps[k - 1].via ?? []), frames[k]]);
   return t.path ? unfoldingBackwards(model, k, t) : t;
 }
@@ -1001,6 +1018,15 @@ function partOf(from: FoldFrame, to: FoldFrame): FoldFrame {
   return out;
 }
 
+/**
+ * The paper step k's animation ends on (`stepTransition`): its frame, but for a fold bent on the way (bend/reverse.ts),
+ * the last of its bent frames, the paper as it lands, which the step's faces are.
+ */
+export function playedTo(model: OrigamiModel, k: number): FoldFrame {
+  const step = model.steps[k - 1];
+  return step.op?.op === 'collapse' && step.op.bent && step.via?.length ? step.via[step.via.length - 1] : step.frame;
+}
+
 /** How the paper gets through a list of frames, one after another, as a single step. */
 export function transitionVia(given: FoldFrame[]): Transition {
   if (given.length <= 2) return transition(given[0], given.at(-1)!);
@@ -1040,7 +1066,7 @@ export function poseAt(t: Transition, s: number): Vec3[][] {
 }
 
 /** Each face's corners `s` of the way through the step, put right (see `poseAt`) but not yet set down on the table. */
-function fixedPose(t: Transition, s: number): Vec3[][] {
+export function fixedPose(t: Transition, s: number): Vec3[][] {
   const pose = rawPose(t, s);
   // Not at the very start, where the paper is as the step before left it; at the end, with layers held apart.
   const fixes = s > 0 ? fixesFor(t) : null;

@@ -25,7 +25,10 @@ export function problems(model: OrigamiModel): string[] {
     else if (Math.abs(now - area) > 1e-6) out.push(`${where}: paper area changed`);
     if (k && frame.faces_parent?.some((p) => p >= frames[k - 1].faces_vertices.length)) out.push(`${where}: face parent out of range`);
     const bent = !!frame.soft?.length;
-    if (k && bent && model.steps[k - 1].op?.op === 'bend') {
+    // A fold bent on the way (bend/reverse.ts) ends flat, but plays bent: held to bent paper's strain as it plays.
+    const op = k ? model.steps[k - 1].op : undefined;
+    const playsBent = op?.op === 'collapse' && !!op.bent;
+    if (k && ((bent && op?.op === 'bend') || playsBent)) {
       const { still, playing } = bendStrain(model, k);
       if (still > BENT_STRAIN) out.push(`${where}: bent paper stretches by ${percent(still)}`);
       if (playing > BENT_PLAY_STRAIN) out.push(`${where}: bent paper stretches by ${percent(playing)} while animating`);
@@ -50,7 +53,7 @@ export function problems(model: OrigamiModel): string[] {
       const t = stepTransition(model, k);
       for (const s of [0.25, 0.5, 0.75]) {
         poseAt(t, s).forEach((pts, f) => {
-          if (!bent && !sameShape(pts, t.faces[f].paper)) out.push(`${where}: face ${f} stretches while animating`);
+          if (!bent && !playsBent && !sameShape(pts, t.faces[f].paper)) out.push(`${where}: face ${f} stretches while animating`);
           if (pts.some((p) => p[1] < -1e-6)) out.push(`${where}: face ${f} goes through the table while animating`);
         });
       }

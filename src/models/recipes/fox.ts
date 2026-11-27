@@ -76,6 +76,9 @@ export function fox() {
     { title: 'Fold the tail in', text: 'Push the left corner in between the layers, so the bottom edges line up and the fox can stand.', kind: 'reverse' },
     [{ through: [table(x, -2), table(x, 2)], kind: 'inside' }],
     paper(0.5, 0),
+    undefined,
+    // Bent on the way (fold/bend/reverse.ts): rigid, the tail went 0.0075 through the body as it landed.
+    {},
   );
 
   // The face: the squashed diamond, from where the ears meet down to its point, where the sheet's corners are.

@@ -13,7 +13,7 @@ import {
   type LineSegments,
   type Mesh,
 } from 'three';
-import { affine, poseAt, stepTransition, transition, type Transition } from '../fold/animate';
+import { affine, playedTo, poseAt, stepTransition, transition, type Transition } from '../fold/animate';
 import { stackLifts, type StackLifts } from '../fold/bend/stack';
 import { FoldError } from '../fold/fold';
 import { framesOf, LAYER_GAP, normal } from '../fold/frames';
@@ -67,10 +67,14 @@ export function FoldedPaper({ model, edgeColor }: { model: OrigamiModel; edgeCol
     const draw = (pos: number) => {
       // Step k plays frame k − 1 → k. Before any step, show the start frame as a still.
       const k = Math.min(total, Math.max(0, Math.ceil(pos)));
-      let b = built.get(k);
+      // At rest after a fold bent on the way, its flat frame as a still: the paper as it lands, bent, is a few layers
+      // off it, its stacked layers showing through each other in specks along the folds.
+      const still = k > 0 && pos >= k && playedTo(model, k) !== frames[k];
+      const key = still ? -k : k;
+      let b = built.get(key);
       if (!b) {
-        b = build(k === 0 ? transition(frames[0], frames[0]) : stepTransition(model, k), model, k);
-        built.set(k, b);
+        b = still ? build(transition(frames[k], frames[k]), model, k, true) : build(k === 0 ? transition(frames[0], frames[0]) : stepTransition(model, k), model, k);
+        built.set(key, b);
       }
       if (b !== shown) {
         b.parts.forEach((part, i) => {
@@ -83,7 +87,7 @@ export function FoldedPaper({ model, edgeColor }: { model: OrigamiModel; edgeCol
         tape.current!.geometry = b.tape;
         shown = b;
       }
-      b.update(k === 0 ? 1 : pos - (k - 1));
+      b.update(k === 0 || still ? 1 : pos - (k - 1));
       invalidate();
       warm(k + 1);
     };
@@ -177,17 +181,18 @@ interface Built {
   dispose(): void;
 }
 
-/** Step k's paper (k from 1; 0 for the paper before any step). */
-function build(t: Transition, model: OrigamiModel, k: number): Built {
+/** Step k's paper (k from 1; 0 for the paper before any step); `still`, its frame at rest, `t` holding it still. */
+function build(t: Transition, model: OrigamiModel, k: number, still = false): Built {
   const { sheets } = model;
   const bySheet = sheets.map(() => [] as number[]);
   t.faces.forEach((f, i) => bySheet[sheetOf(sheets, f.paper)].push(i));
-  // Faces either side of a scissor cut aren't joined: no bend is drawn between them. The step's faces are its frame's.
-  const frame = k ? model.steps[k - 1].frame : model.start;
+  // Faces either side of a scissor cut aren't joined: no bend is drawn between them. The step's faces are those of
+  // the frame it plays to (a fold bent on the way plays to its last bent frame).
+  const frame = k ? (still ? model.steps[k - 1].frame : playedTo(model, k)) : model.start;
   // The paper before the step: where it had a pinch's unpressed stretch the step presses, or the step pinches (and
   // opens up) a fold, the line along it shows as it moves.
   const prior = k > 1 ? model.steps[k - 2].frame : model.start;
-  const ranks = stackRanks(model, k, t.faces.length);
+  const ranks = still ? undefined : stackRanks(model, k, t.faces.length);
   const parts = bySheet.map((faces) => buildPart(t, faces, frame, prior, ranks?.lifts));
   const marks = buildMarks(t, model, k);
   const tape = buildTape(t, model, k);
@@ -681,14 +686,16 @@ function paperGrain(): CanvasTexture {
  */
 function stackRanks(model: OrigamiModel, k: number, faces: number): { lifts: StackLifts; bending: boolean } | undefined {
   const frames = framesOf(model);
-  if (!k || !frames[k].soft?.length) return undefined;
+  // The paper the step plays to: a fold bent on the way plays to its last bent frame, though it ends flat.
+  const end = k ? playedTo(model, k) : undefined;
+  if (!k || !end?.soft?.length) return undefined;
   let b = k;
   while (b > 1 && frames[b - 1].soft?.length) b--;
   const parent = model.steps[b - 1].via?.[0]?.faces_parent;
   const before = frames[b - 1];
-  if (!parent || parent.length !== faces || frames[k].faces_vertices.length !== faces || !before.faces_layer) return undefined;
+  if (!parent || parent.length !== faces || end.faces_vertices.length !== faces || !before.faces_layer) return undefined;
   try {
-    return { lifts: stackLifts(before, parent, frames[k]), bending: b === k };
+    return { lifts: stackLifts(before, parent, end), bending: b === k };
   } catch (e) {
     // Bent from paper that wasn't lying flat: no stack to draw it in the order of.
     if (e instanceof FoldError) return undefined;

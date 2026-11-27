@@ -14,6 +14,7 @@ import { isPenColour } from './marks';
 import { pinchedUnfold } from './pinch';
 import { keepIn, tape } from './tape';
 import { frontUp, sideOf } from './geometry2d';
+import type { BentWay } from './bend/reverse';
 import { applyOp, inTurnVia, lastFold, lineOf, reopened, select, type At, type BendGoal, type Faces, type LineSpec, type Op } from './ops';
 import { presetOp, type Preset } from './presets';
 import type { FoldFrame, Mark, OrigamiModel, Sheet, Step, Vec2, Vec3 } from './types';
@@ -291,6 +292,11 @@ export class Recipe {
     anchor: At,
     /** Tucking: the moving paper slides under the faces this picks out (by their centre on the sheet). */
     under?: (centre: Vec2) => boolean,
+    /**
+     * Bending on the way, though it ends flat (see bend/reverse.ts): for a point turned in between layers that stay
+     * put on both sides, which rigid paper can only take through them.
+     */
+    bent?: BentWay,
   ): this {
     const lines = creases.map((c) => ({
       spec: { through: c.through } as LineSpec,
@@ -303,12 +309,19 @@ export class Recipe {
     try {
       const tuck = under && recorder(under);
       const frame = collapse(this.current, { creases: lines, anchor: at, under: tuck });
-      return this.push({ title: step.title, text: step.text, kind: step.kind ?? 'fold' }, frame, {
+      const op: Op = {
         op: 'collapse',
         creases: lines.map((c) => ({ line: c.spec, kind: c.kind, ...(c.only && { only: c.only.faces() }) })),
         anchor: { paper: at },
         ...(tuck && { under: tuck.faces() }),
-      });
+        ...(bent && { bent }),
+      };
+      if (!bent) return this.push({ title: step.title, text: step.text, kind: step.kind ?? 'fold' }, frame, op);
+      // Made as replaying makes it, so the model and its file agree exactly.
+      const made = applyOp(this.build(), op);
+      this.push({ title: step.title, text: step.text, kind: step.kind ?? 'fold' }, made.frame, op);
+      if (made.via) this.steps.at(-1)!.via = made.via;
+      return this;
     } catch (e) {
       if (e instanceof FoldError) e.message = `${this.info.id}, step ${this.steps.length + 1} (${step.title}): ${e.message}`;
       throw e;

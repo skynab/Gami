@@ -83,8 +83,9 @@ function checks(id: string, model: ReturnType<(typeof RECIPES)[number]>) {
   });
 
   // Replaying a bend solves it again: up to 40 s on its own (the balloon and balloon rabbit), over 60 s with the
-  // other shards' workers sharing the cores (26 November 2026).
-  it('folds again from its .fold file exactly as its recipe did', { timeout: 180_000 }, () => {
+  // other shards' workers sharing the cores (26 November 2026); the crane's three reverse folds, bent on the way,
+  // about 85 s on their own.
+  it('folds again from its .fold file exactly as its recipe did', { timeout: 420_000 }, () => {
     const warnings: string[] = [];
     const read = fromFoldFile(JSON.parse(JSON.stringify(toFoldFile(model))), warnings);
     expect(warnings).toEqual([]);

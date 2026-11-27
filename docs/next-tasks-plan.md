@@ -122,6 +122,14 @@ drops to 0.0045, for its open sink. The crane's tail was tried without a win. Th
 the whole band rose into the air and the gem jumped onto it at the end; now it's turned over, the band curled up and over,
 and turned back (0.0095 to 0.0002, two more steps). The lily's squash and petal fold in turn didn't fold flat.
 
+26 November, later: **reverse folds bent on the way** (clipping plan, row 3), built. A `collapse` can ask to bend on the way
+(`bent`, `src/fold/bend/reverse.ts`): it ends flat, but plays through bent frames, the rigid motion guiding the bend solver
+and the layers kept on the sides the end frame stacks them, so the layers near the corner bend apart instead of the point
+going through them. Off the list with it: the **crane** (neck, tail and head), the **fox**, the **penguin** and the
+**pinwheel** (its squashes, off `TEARS` too). Each bent fold takes 15 to 30 s to make, solved again on replay; the crane
+takes about 85 s and its file grew from 128 KB to 529 KB. Not enough, or worse, for the rest (`docs/clipping-plan.md`,
+Progress).
+
 Tried 12 November on the frog, lily and shallow lid: landing layers over up to 0.9 of a step as well (`LANDS`) changes
 none of their depths, and the frog then comes apart by 0.011, over `TEAR`. Each still on the list needs its own look at
 the step, as the seal's and the king bee's had; a wider landing spread doesn't take them off.

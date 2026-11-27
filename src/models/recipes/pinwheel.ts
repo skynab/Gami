@@ -16,14 +16,15 @@ export function pinwheel() {
     .crease(paper(0, 0.5), paper(0, 0), { title: 'Fold the bottom to the middle', text: 'And the bottom edge, then unfold.' });
 
   // Each end squashed with its corners pulled out (see ./windmill): at the top, the left corner sideways and the
-  // right one up; at the bottom, the other way round, so the four arms turn the same way.
+  // right one up; at the bottom, the other way round, so the four arms turn the same way. Bent on the way
+  // (fold/bend/reverse.ts): rigid, the paper the joins held let go in the last fortieth, 0.0064 through.
   squashEnd(r, -1, 'side', 'end', {
     title: 'Squash the top',
     text: 'Fold the top edge down to the middle, pulling the top left corner out to the side and the top right corner up. Flatten them into triangles.',
-  });
+  }, {});
   squashEnd(r, 1, 'end', 'side', {
     title: 'Squash the bottom',
     text: 'The same at the bottom, the other way round: the bottom right corner out to the side and the bottom left one down. Pin the middle to a stick and blow: it spins!',
-  });
+  }, {});
   return r.build();
 }

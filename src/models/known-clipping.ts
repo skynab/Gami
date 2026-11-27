@@ -29,20 +29,20 @@ export const GRAZES: Record<string, number> = {
   boat: 0.0105,
   // Reverse folds, their points tucked in between the flap's halves (November 2026): the point turns as one and
   // settles in between, through about half the stack. Real paper bends a little to open the flap; rigid paper
-  // can't without opening it right out (docs/next-tasks-plan.md).
-  crane: 0.008, // The neck, tail and head. (The seal's tail came off the list on 11 November: see LANDS in animate.ts.)
+  // can't without opening it right out (docs/next-tasks-plan.md). Played bent on the way (`bent`, see
+  // fold/bend/reverse.ts), they don't: the crane's came off on 26 November 2026. (The seal's tail came off on
+  // 11 November: see LANDS in animate.ts.)
   swallow: 0.0095, // The second wing, as the crane's neck and tail (0.0093, 24 November 2026; 0.0066 to 0.01 for other wing angles and heights).
   horse: 0.0085, // The tail and head, through the neck's stack (0.0075 and 0.0080, 25 November 2026; 0.008 whatever the head's angle).
   // The same, found bringing GRAZE down to five layers (20 November 2026).
-  penguin: 0.0055, // Turning the head down, as it lands.
-  fox: 0.008, // Folding the tail in, deepest as it lands.
   // Found looking near the ends of steps and at points tucked through (20 November 2026).
   heart: 0.0095, // Folding the top down: the white side triangles lie on the point it turns up through as it starts.
   seal: 0.007, // Raising the neck, for a moment as it lands.
   // Found looking closer at the ends of steps (20 November 2026), once the snaps there were fixed.
   'folds-lesson': 0.0045, // The open sink, as it closes up, and opening it out (0.0041; the crimp, 0.025 until 26 November 2026, now plays its two reverse folds in turn).
-  pinwheel: 0.007, // Squashing an end: the paper the joins held lets go in the last fortieth of the step.
-  chrysanthemum: 0.007, // Its pinwheel unit's squash, as the pinwheel's.
+  // Its pinwheel unit's squash, as the pinwheel's was. Bent on the way, as the pinwheel's now is, its five copies
+  // (made by replaying the first unit's folding) came apart by half a sheet (26 November 2026).
+  chrysanthemum: 0.007,
 };
 
 /**
@@ -73,5 +73,4 @@ export const TEARS: Record<string, number> = {
   chrysanthemum: 0.013, // Its pinwheel unit's squash, as the pinwheel's.
   'rainbow-chain': 0.043, // Joining the ends.
   lily: 0.018, // The petal folds, stood up first so they no longer snap down at the end: apart a little on the way.
-  pinwheel: 0.013, // Squashing the bottom, as it lands.
 };

@@ -199,9 +199,24 @@ function writeFrame(f: FoldFrame, exact = false): FoldFileFrame {
  * A step's in-between frames: as moves (see MovedFrame) when they're a bend's, with the step's triangles, points on
  * the sheet and seams, else as frames of their own.
  */
-function writeVia(via: FoldFrame[], frame: FoldFrame): FoldFileFrame[] | MovedFrame[] {
-  const shared = (v: FoldFrame) =>
-    v.vertices_coords.length === frame.vertices_coords.length && same(v.faces_vertices, frame.faces_vertices) && same(v.vertices_paper, frame.vertices_paper) && same(v.soft, frame.soft);
+function writeVia(via: FoldFrame[], frame: FoldFrame): (FoldFileFrame | MovedFrame)[] {
+  const sharedWith = (to: FoldFrame) => (v: FoldFrame) =>
+    v.vertices_coords.length === to.vertices_coords.length && same(v.faces_vertices, to.faces_vertices) && same(v.vertices_paper, to.vertices_paper) && same(v.soft, to.soft);
+  const shared = sharedWith(frame);
+  // A fold bent on the way (bend/reverse.ts) ends flat: its bent frames share the first's triangles, which is written
+  // whole, the rest as moves from it.
+  if (!frame.soft?.length && via.length > 1 && via[0].soft?.length && via.slice(1).every(sharedWith(via[0]))) {
+    let at = via[0].vertices_coords.flatMap((p) => p.map((x) => Math.round(x * BENT)));
+    return [
+      writeFrame(via[0]),
+      ...via.slice(1).map((v): MovedFrame => {
+        const now = v.vertices_coords.flatMap((p) => p.map((x) => Math.round(x * BENT)));
+        const moves = now.map((x, i) => x - at[i] || 0);
+        at = now;
+        return { 'gami:moves': moves };
+      }),
+    ];
+  }
   if (!frame.soft?.length || !via.every(shared)) return via.map((v) => writeFrame(v));
   let before = frame.vertices_coords.flatMap(() => [0, 0, 0]);
   return via.map((v): MovedFrame => {
@@ -216,6 +231,25 @@ function writeVia(via: FoldFrame[], frame: FoldFrame): FoldFileFrame[] | MovedFr
 function viaOf(entries: (FoldFileFrame | MovedFrame)[], frame: FoldFrame, k: number, warnings: string[]): FoldFrame[] | undefined {
   if (!Array.isArray(entries)) return undefined;
   if (!entries.some((e) => 'gami:moves' in e)) return entries.map((e) => readFrame(e as FoldFileFrame));
+  // The first written whole, the rest moves from it (a fold bent on the way: see writeVia).
+  if (!('gami:moves' in entries[0])) {
+    const first = readFrame(entries[0] as FoldFileFrame);
+    const m = first.vertices_coords.length * 3;
+    const rest = entries.slice(1);
+    if (!rest.every((e) => 'gami:moves' in e && Array.isArray(e['gami:moves']) && e['gami:moves'].length === m && e['gami:moves'].every((x) => Number.isSafeInteger(x)))) {
+      warnings.push(`Step ${k + 1}’s in-between frames aren’t well formed, so it plays straight to its end.`);
+      return undefined;
+    }
+    let at = first.vertices_coords.flatMap((p) => p.map((x) => Math.round(x * BENT)));
+    const { faces_parent: _, ...shape } = first;
+    return [
+      first,
+      ...(rest as MovedFrame[]).map((e): FoldFrame => {
+        at = at.map((x, i) => x + e['gami:moves'][i]);
+        return { ...shape, vertices_coords: first.vertices_coords.map((_q, v) => [at[3 * v] / BENT || 0, at[3 * v + 1] / BENT || 0, at[3 * v + 2] / BENT || 0]) };
+      }),
+    ];
+  }
   const n = frame.vertices_coords.length * 3;
   const whole = (m: unknown): m is number[] => Array.isArray(m) && m.length === n && m.every((x) => Number.isSafeInteger(x));
   if (!entries.every((e) => 'gami:moves' in e && whole(e['gami:moves']))) {

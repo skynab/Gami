@@ -119,7 +119,8 @@ describe('compound folds', () => {
     const model = crane();
     // The square base's collapse and both petal folds, which each face once played its own way, coming apart.
     for (const k of [9, 15, 21]) expect(torn(model, k), `crane step ${k}`).toBeLessThan(0.01);
-  });
+    // Making the crane solves its three reverse folds' bent frames: well over a minute with the other tests running.
+  }, 300_000);
 
   it('keeps the paper joined through petal folds, if grazing a little', () => {
     // The lily's squash-and-petal folds came apart by 0.4 of the sheet, and the frog base's petal folds by
@@ -154,5 +155,6 @@ describe('compound folds', () => {
     }
     expect(crossings(model).filter((c) => c.depth > 2 * LAYER_GAP)).toEqual([]);
     expect(torn(fox(), 13)).toBeLessThan(0.01);
-  });
+    // Making the fox solves its tail's bent frames: most of a minute with the other tests running.
+  }, 300_000);
 });

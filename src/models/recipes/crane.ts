@@ -36,10 +36,14 @@ export function crane() {
     { title: 'Reverse-fold the neck', text: 'Push the left point up between the layers so it sticks out at an angle. This will be the neck.', kind: 'reverse' },
     [{ through: [table(...root), table(...swing(-1))], kind: 'inside', only: legLeft }],
     paper(-0.3, 0.3),
+    undefined,
+    {},
   ).collapse(
     { title: 'Reverse-fold the tail', text: 'Do the same with the right point to make the tail.', kind: 'reverse' },
     [{ through: [table(...root), table(...swing(1))], kind: 'inside', only: legRight }],
     paper(-0.3, 0.3),
+    undefined,
+    {},
   );
 
   // The head: a smaller reverse fold near the neck's tip, which is the sheet's corner (½, ½).
@@ -62,6 +66,8 @@ export function crane() {
       },
     ],
     paper(-0.3, 0.3),
+    undefined,
+    {},
   );
 
   // The wings fold down level with the top of the body, the sheet's centre. Any lower and the fold would cut

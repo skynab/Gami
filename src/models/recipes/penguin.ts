@@ -62,6 +62,9 @@ export function penguin() {
     { title: 'Turn the head down', text: 'Open the top a little and turn the point down round the outside, for the head and beak. Done!', kind: 'reverse' },
     [{ through: [table(...mid), table(mid[0] + dir[0], mid[1] + dir[1])], kind: 'outside' }],
     r.sheetAt([0.1, 0.1]),
+    undefined,
+    // Bent on the way (fold/bend/reverse.ts): rigid, the head went 0.005 through the body as it landed.
+    {},
   );
   return r.build();
 }

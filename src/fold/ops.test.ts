@@ -328,7 +328,8 @@ describe('key points', () => {
     // The two squashes.
     expect(keyPoints(butterfly())).toEqual([21, 22]);
     expect(keyPoints(paperPlane())).toEqual([]);
-  });
+    // Making the crane solves its three reverse folds' bent frames: well over a minute with the other tests running.
+  }, 300_000);
 
   it('count parts of a step made together, and go by the label without an operation', () => {
     const line = { line: { p: [0, 0] as Vec2, d: [1, 0] as Vec2 } };

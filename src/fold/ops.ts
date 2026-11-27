@@ -10,6 +10,8 @@ import { anchorFor, centre, inside, locate, smallerSideMoves, topLayers } from '
 import { curl, radial, reparent, shape, type Bend, type Ray } from './shape';
 import { sheetOf } from './sheets';
 import { bendFrame } from './bend/frame';
+import { bentWay, type BentWay } from './bend/reverse';
+import { transitionBetween } from './animate';
 import { isPenColour } from './marks';
 import { pinchedUnfold } from './pinch';
 import { keepIn, tape } from './tape';
@@ -85,6 +87,8 @@ export type Op =
       anchor: { paper: Vec2 } | { auto: true; among?: Faces };
       /** Tucking: the moving paper slides under these faces. */
       under?: Faces;
+      /** Plays bending on the way, though it ends flat (see bend/reverse.ts): a point turned in between layers. */
+      bent?: BentWay;
     }
   /**
    * Opens back up to the paper after step `to` (0: the start). Left out: undoes the last fold since the last unfold.
@@ -173,6 +177,7 @@ export function parseOp(x: unknown, path = 'op', depth = 0): Op {
         }),
         anchor: anchor(o.anchor, `${path}.anchor`),
         ...opt(o, 'under', (v, p) => faces(v, p, 0), path),
+        ...opt(o, 'bent', bentWayOf, path),
       };
     case 'unfold':
       return { op: 'unfold', ...opt(o, 'to', count, path), ...opt(o, 'pinch', (v, p) => pair(v, p, vec2), path) };
@@ -344,6 +349,13 @@ const count: Check<number> = (x, path) => {
   const n = num(x, path);
   if (!Number.isInteger(n) || n < 0) throw new OpError(`${path}: expected a whole number`);
   return n;
+};
+
+const bentWayOf: Check<BentWay> = (x, path) => {
+  const r = record(x, path);
+  const positive: Check<number> = (v, p) => between(num(v, p), p, 1e-3, 1);
+  const some: Check<number> = (v, p) => between(count(v, p), p, 1, 64);
+  return { ...opt(r, 'near', positive, path), ...opt(r, 'mesh', positive, path), ...opt(r, 'stages', some, path), ...opt(r, 'iterations', (v, p) => between(count(v, p), p, 1, 1000), path) };
 };
 
 function between(n: number, path: string, lo: number, hi: number): number {
@@ -695,7 +707,9 @@ function runOp(op: Op, ctx: Context): { frame: FoldFrame; via?: FoldFrame[]; fla
         if (!found) throw new NoStillError('noStill');
         anchor = found;
       }
-      return { frame: collapse(frame, { creases, anchor, under: test(op.under) }) };
+      const folded = collapse(frame, { creases, anchor, under: test(op.under) });
+      // Bent on the way: the frames it passes through, guided along the way rigid paper goes (see bend/reverse.ts).
+      return op.bent ? { frame: folded, via: bentWay(folded, transitionBetween(frame, folded), op.bent) } : { frame: folded };
     }
     case 'unfold': {
       let to = op.to;
