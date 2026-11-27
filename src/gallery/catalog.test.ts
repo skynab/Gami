@@ -19,10 +19,10 @@ describe('catalog', () => {
   it('filters by query, level and category together', () => {
     expect(filterModels(MODELS, { query: 'CRANE' }).map((m) => m.id)).toEqual(['crane']);
     expect(filterModels(MODELS, { level: 'hard' }).every((m) => m.difficulty >= 4)).toBe(true);
-    expect(filterModels(MODELS, { category: 'modular' }).map((m) => m.id)).toEqual(['ninja-star', 'rainbow-chain', 'business-card-cube', 'dice', 'kusudama', 'chrysanthemum']);
+    expect(filterModels(MODELS, { category: 'modular' }).map((m) => m.id)).toEqual(['ninja-star', 'business-card-cube', 'dice', 'chrysanthemum', 'rainbow-chain', 'kusudama']);
     expect(filterModels(MODELS, { level: 'easy', category: 'animal' }).map((m) => m.id)).toEqual([
-      'dog-face', 'cat-face', 'cicada', 'jumping-frog', 'fox', 'swan', 'penguin', 'whale', 'pajarita', 'fish', 'peacock', 'cute-cat', 'bat',
-      'bull', 't-rex', 'turtle', 'squirrel', 'parrot', 'chicken', 'horse',
+      'jumping-frog', 'fox', 'swan', 'whale', 'penguin', 'dog-face', 'cat-face', 'pajarita', 't-rex', 'peacock', 'turtle', 'cicada', 'bat',
+      'fish', 'squirrel', 'cute-cat', 'chicken', 'parrot', 'bull', 'horse',
     ]);
     expect(filterModels(MODELS, {})).toHaveLength(MODELS.length);
     // Everything but the planes, and but the planes and lessons.
@@ -57,8 +57,8 @@ describe('catalog', () => {
     const all = ids(withPairs(MODELS));
     expect(all).toContain('masu-box+masu-lid');
     expect(all).not.toContain('masu-lid');
-    // In the box's place, after the sword.
-    expect(all[all.indexOf('masu-box+masu-lid') - 1]).toBe('sword');
+    // In the box's place, after the whale.
+    expect(all[all.indexOf('masu-box+masu-lid') - 1]).toBe('whale');
     // Sorted Z to A, the lid comes first, but the box stays on the left.
     expect(ids(withPairs(sortModels(MODELS, 'za')))).toContain('masu-box+masu-lid');
     // Filtered down to one of them, it has a card of its own.
