@@ -22,9 +22,11 @@ export function pinwheel() {
     title: 'Squash the top',
     text: 'Fold the top edge down to the middle, pulling the top left corner out to the side and the top right corner up. Flatten them into triangles.',
   }, {});
+  // The bottom's on a finer mesh: on the usual one, its fourth bent frame of sixteen went 0.0044 through, between
+  // the samples the checks looked at until 27 November 2026 (0.0033 now).
   squashEnd(r, 1, 'end', 'side', {
     title: 'Squash the bottom',
     text: 'The same at the bottom, the other way round: the bottom right corner out to the side and the bottom left one down. Pin the middle to a stick and blow: it spins!',
-  }, {});
+  }, { mesh: 0.04 });
   return r.build();
 }

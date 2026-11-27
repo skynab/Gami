@@ -46,13 +46,11 @@ export const GRAZES: Record<string, Record<number, number>> = {
   // Reverse folds, their points tucked in between the flap's halves (November 2026): the point turns as one and
   // settles in between, through about half the stack. Real paper bends a little to open the flap; rigid paper
   // can't without opening it right out (docs/next-tasks-plan.md). Played bent on the way (`bent`, see
-  // fold/bend/reverse.ts), most don't; the crane's neck, the fox's tail and the swallow's second wing, bent, still
-  // just over between the old samples (0.0037), and the pinwheel's second squash at one of its bent frames.
+  // fold/bend/reverse.ts), most don't; the crane's neck and the swallow's second wing, bent, still just over
+  // between the old samples (0.0037; no mesh or number of frames tried took them under, 27 November 2026).
   horse: { 30: 0.008, 31: 0.0085 }, // The tail and head, through the neck's stack (whatever the head's angle).
   crane: { 27: 0.004 },
-  fox: { 14: 0.004 },
   swallow: { 28: 0.004 },
-  pinwheel: { 12: 0.005 },
   crow: { 26: 0.0045 }, // Making the head, an inside reverse fold; no better bent on the way.
   // Folding the top down: the white side triangles lie on the point it turns up through as it starts.
   heart: { 12: 0.013 },

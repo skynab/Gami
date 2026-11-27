@@ -77,8 +77,9 @@ export function fox() {
     [{ through: [table(x, -2), table(x, 2)], kind: 'inside' }],
     paper(0.5, 0),
     undefined,
-    // Bent on the way (fold/bend/reverse.ts): rigid, the tail went 0.0075 through the body as it landed.
-    {},
+    // Bent on the way (fold/bend/reverse.ts): rigid, the tail went 0.0075 through the body as it landed. Through
+    // 24 frames rather than 16: 0.0037 to 0.0034, looking every hundredth of the way (27 November 2026).
+    { stages: 24 },
   );
 
   // The face: the squashed diamond, from where the ears meet down to its point, where the sheet's corners are.
