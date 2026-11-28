@@ -269,6 +269,7 @@ export const ja: Messages = {
     faq: 'よくある質問',
     privacy: 'プライバシーポリシー',
     licences: 'オープンソースライセンス',
+    version: 'バージョン {{version}}',
   },
   privacy: {
     title: 'プライバシーポリシー',

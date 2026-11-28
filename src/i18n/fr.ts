@@ -269,6 +269,7 @@ export const fr: Messages = {
     faq: 'Questions fréquentes',
     privacy: 'Politique de confidentialité',
     licences: 'Licences open source',
+    version: 'Version {{version}}',
   },
   privacy: {
     title: 'Politique de confidentialité',

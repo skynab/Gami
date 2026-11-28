@@ -269,6 +269,7 @@ export const es: Messages = {
     faq: 'Preguntas frecuentes',
     privacy: 'Política de privacidad',
     licences: 'Licencias de código abierto',
+    version: 'Versión {{version}}',
   },
   privacy: {
     title: 'Política de privacidad',

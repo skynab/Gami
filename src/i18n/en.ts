@@ -210,6 +210,7 @@ export const en = {
     faq: 'FAQ',
     privacy: 'Privacy policy',
     licences: 'Open-source licences',
+    version: 'Version {{version}}',
   },
   privacy: {
     title: 'Privacy policy',

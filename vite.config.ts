@@ -3,12 +3,15 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import { thirdPartyLicences } from './scripts/third-party-licences.ts';
+import pkg from './package.json' with { type: 'json' };
 
 // Where the site is served from. `/` for most hosts and app wrappers; GitHub Pages sets BASE_PATH=/Gami/.
 const base = (process.env.BASE_PATH ?? '/').replace(/\/?$/, '/');
 
 export default defineConfig({
   base,
+  // The app's version, from package.json, shown in the footer. See .claude/skills/update-version.
+  define: { __APP_VERSION__: JSON.stringify(pkg.version) },
   plugins: [
     react(),
     // The open-source notices: every bundled library's licence, for the Licences page.
