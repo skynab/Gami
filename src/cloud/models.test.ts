@@ -58,14 +58,14 @@ describe('cloud models', () => {
   it('submits a design through the database, saying whose it is, then reads it back', async () => {
     // The function answers with the id; then the model is read, as submitted.
     rpcNext = { data: 'm1', error: null };
-    next = { data: { ...row, status: 'submitted', ownership: 'traditional', credit: 'Gami', first_published: null, licence: 'CC-BY-4.0' }, error: null };
-    const saved = await submitDesign(basics, { ownership: 'traditional', credit: ' Gami ', firstPublished: '' });
+    next = { data: { ...row, status: 'submitted', ownership: 'traditional', credit: 'Orikata', first_published: null, licence: 'CC-BY-4.0' }, error: null };
+    const saved = await submitDesign(basics, { ownership: 'traditional', credit: ' Orikata ', firstPublished: '' });
     expect(calls.find((c) => c.op === 'rpc')).toMatchObject({
       table: 'submit_design',
-      args: [{ model_id: null, title: 'Folding basics', ownership: 'traditional', credit: 'Gami', first_published: null }],
+      args: [{ model_id: null, title: 'Folding basics', ownership: 'traditional', credit: 'Orikata', first_published: null }],
     });
     expect(saved.status).toBe('submitted');
-    expect(saved.submission).toEqual({ ownership: 'traditional', credit: 'Gami', firstPublished: '', licence: 'CC-BY-4.0' });
+    expect(saved.submission).toEqual({ ownership: 'traditional', credit: 'Orikata', firstPublished: '', licence: 'CC-BY-4.0' });
     // Nothing is put into review by setting its status directly.
     expect(calls.some((c) => c.op === 'update')).toBe(false);
   });

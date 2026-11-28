@@ -4,7 +4,7 @@ import type { Vec2 } from '../../fold/types';
 import { birdBase } from './bird-base';
 
 /**
- * A hovering hummingbird, Gami's own, after the look of OrigamiOK's: the traditional bird base, its lower points
+ * A hovering hummingbird, Orikata's own, after the look of OrigamiOK's: the traditional bird base, its lower points
  * narrowed as the crane's are, then each turned out with an outside reverse fold, wrapped round the outside of the
  * body: one high up, forwards, for a long beak; the other lower, back, for the tail. Both point a little down, and
  * the bird is tilted nose up at the end, so the beak points forwards and the tail down.

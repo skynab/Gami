@@ -1,6 +1,6 @@
 # Accounts and the Studio
 
-Learning on Gami needs no account, and nor does designing in the Studio. Accounts exist so anyone can submit
+Learning on Orikata needs no account, and nor does designing in the Studio. Accounts exist so anyone can submit
 a design to the gallery, approved **creators** can also save drafts online, and **admins** can review
 submissions, deal with reports and approve creators.
 
@@ -26,7 +26,7 @@ people can't use. `npm test` runs `supabase/tests/rls.test.ts`, which checks the
    with the Supabase CLI, `supabase link` then `supabase db push`. A project set up before 13 November 2026 needs
    the newer one, `20261113000000_submissions.sql`, before this version of the site is deployed: without it,
    submitting and reporting fail.
-3. **Authentication → URL configuration:** set the Site URL to where Gami is hosted, and add it (plus
+3. **Authentication → URL configuration:** set the Site URL to where Orikata is hosted, and add it (plus
    `http://localhost:5180` for development) to the redirect URLs, so sign-in links come back to the site.
 4. Copy `.env.example` to `.env.local` and fill in the project URL and anon key from
    **Project Settings → API**. Set the same two variables in your host for production builds.

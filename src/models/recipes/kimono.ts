@@ -8,7 +8,7 @@ export const OBI: [number, number] = [-0.22, -0.13];
 export const OBI_COLOUR = '#d9a441';
 
 /**
- * A kimono, Gami's own way of folding one (Gilad's database lists traditional kimonos, but this follows neither them
+ * A kimono, Orikata's own way of folding one (Gilad's database lists traditional kimonos, but this follows neither them
  * nor origami.me's), from one square: the sides folded to the middle for the coloured body, their edges at the top
  * turned back on a slant for a white collar, and their bottom corners folded out and carried up behind, as a
  * dollar-bill shirt's sleeves are, so the sleeves show the coloured side at the shoulders. The obi, a band across

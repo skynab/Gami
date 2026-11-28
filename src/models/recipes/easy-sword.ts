@@ -2,7 +2,7 @@ import { Recipe, table } from '../../fold/recipe';
 import { moved } from './waterbomb-base';
 
 /**
- * An easy sword, Gami's own, after the look of OrigamiOK's, from one square: a kite narrowed again for the long
+ * An easy sword, Orikata's own, after the look of OrigamiOK's, from one square: a kite narrowed again for the long
  * blade and its short end narrowed too, then that end folded up over the blade and most of it back down, leaving a
  * band across for the crossguard and a point below for the handle, its long tip folded behind.
  */

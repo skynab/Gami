@@ -2,7 +2,7 @@ import { Recipe, table } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 
 /**
- * A finger trap, Gami's own, after the look of OrigamiOK's woven tube but with no cuts: a square with its top and
+ * A finger trap, Orikata's own, after the look of OrigamiOK's woven tube but with no cuts: a square with its top and
  * bottom edges folded to the middle, turned over, criss-crossed with a pen for the weave, and curled round across
  * its width into a long, thin tube.
  */

@@ -1,7 +1,7 @@
 import { Recipe, table } from '../../fold/recipe';
 
 /**
- * A green leaf, Gami's own: a diamond with its lower and upper edges folded to the middle, turned over so the
+ * A green leaf, Orikata's own: a diamond with its lower and upper edges folded to the middle, turned over so the
  * front is plain, then its two halves raised a little either side of the midrib, the middle crease.
  */
 export function greenLeaf() {

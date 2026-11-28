@@ -1,17 +1,17 @@
 # Where each model comes from
 
-A record of every gallery model's design: who designed it, what Gami followed to make its steps, and whether
-it's clear to use. Gallery models must be traditional, openly licensed, or Gami's own (see
+A record of every gallery model's design: who designed it, what Orikata followed to make its steps, and whether
+it's clear to use. Gallery models must be traditional, openly licensed, or Orikata's own (see
 `docs/bogota-2013-plan.md`), and this file is where that's checked and kept.
 
 **When you add a model, add its row here before writing the recipe.** A test (`src/gallery/catalog.test.ts`)
 fails if a gallery model with steps has no row.
 
-## How Gami's steps are made
+## How Orikata's steps are made
 
 Every model is a recipe in `src/models/recipes`: folds described the way a diagram does ("this corner onto
 that point"), with the geometry, pictures and animation worked out by the fold engine. No diagram, photo or
-video is copied, and step text is written in Gami's own words. Where a recipe follows a published tutorial,
+video is copied, and step text is written in Orikata's own words. Where a recipe follows a published tutorial,
 it follows the *sequence of folds*; the wording was spot-checked against the source (heart and fox, October
 2026) and doesn't reuse it.
 
@@ -21,7 +21,7 @@ them be shared.
 
 ## Status
 
-- **Clear**: traditional (no known designer), a mathematical method, or Gami's own.
+- **Clear**: traditional (no known designer), a mathematical method, or Orikata's own.
 - **Unattributed**: no designer found after checking; widely published with no credit. Fine to use, but
   credit and change it if a designer turns up.
 - **Kept by decision**: a designer holds the rights and hasn't opened them; kept anyway (see the note).
@@ -40,14 +40,14 @@ noted when it was written, and the model was folded from the common traditional 
 | `navy-plane` | Unattributed: Fold'N Fly's Navy Plane (design #35) names no designer | Unknown: no designer found | [Fold'N Fly: Navy Plane](https://www.foldnfly.com/35.html) | Unattributed | 21 Oct 2026 |
 | `king-bee` | Unattributed: Fold'N Fly's King Bee (design #22) names no designer | Unknown: no designer found | [Fold'N Fly: King Bee](https://www.foldnfly.com/22.html) | Unattributed | 21 Oct 2026 |
 | `sprinter` | Unattributed: Fold'N Fly's Sprinter (design #4) names no designer; its references are four books by different authors, none named as the source | Unknown: no designer found | [Fold'N Fly: The Sprinter](https://www.foldnfly.com/4.html) | Unattributed | 29 Oct 2026 |
-| `fun-flyer` | Unattributed: Fold'N Fly's Fun Flyer (design #45) names no designer and lists no references | Unknown: no designer found | [Fold'N Fly: Fun Flyer](https://www.foldnfly.com/45.html), for the order of folds; Gami leaves out its rabbit ears (see the notes) | Unattributed | 29 Oct 2026 |
-| `corkscrew` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a needle-nosed stunt dart after the look of Fold'N Fly's Spin Plane, which is likely Keith Laux's, folded differently (see the notes); its nose folds are the traditional dart's | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 29 Oct 2026 |
+| `fun-flyer` | Unattributed: Fold'N Fly's Fun Flyer (design #45) names no designer and lists no references | Unknown: no designer found | [Fold'N Fly: Fun Flyer](https://www.foldnfly.com/45.html), for the order of folds; Orikata leaves out its rabbit ears (see the notes) | Unattributed | 29 Oct 2026 |
+| `corkscrew` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a needle-nosed stunt dart after the look of Fold'N Fly's Spin Plane, which is likely Keith Laux's, folded differently (see the notes); its nose folds are the traditional dart's | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 29 Oct 2026 |
 | `wilson` | Unattributed: Fold'N Fly's Wilson (design #53) names no designer and lists no references | Unknown: no designer found | [Fold'N Fly: Wilson](https://www.foldnfly.com/53.html) | Unattributed | 25 Nov 2026 |
 | `fast-glider` | Unattributed: Fold'N Fly's Fast Glider (design #48) names no designer and lists no references | Unknown: no designer found | [Fold'N Fly: Fast Glider](https://www.foldnfly.com/48.html) | Unattributed | 25 Nov 2026 |
-| `kestrel` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a broad swept glider with upturned tips after the look of Fold'N Fly's Fast Hawk, which is likely Keith Laux's, folded differently (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 25 Nov 2026 |
-| `albatross` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a long-winged slow glider after the look of Fold'N Fly's Underside Plane, which is likely Norman Schmidt's, folded differently (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 25 Nov 2026 |
-| `manta` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a flying wing after the look of Fold'N Fly's Sky OmniWing, by OrigamiAirEnforcer after Mike Kelsey's Proto OmniWing, folded differently and with no cutting or tape (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 25 Nov 2026 |
-| `flying-saucer` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a round floater after the look of Fold'N Fly's UFO, which is Ken Blackburn and Jeff Lammers's, folded differently and without scissors (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 29 Oct 2026 |
+| `kestrel` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a broad swept glider with upturned tips after the look of Fold'N Fly's Fast Hawk, which is likely Keith Laux's, folded differently (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 25 Nov 2026 |
+| `albatross` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a long-winged slow glider after the look of Fold'N Fly's Underside Plane, which is likely Norman Schmidt's, folded differently (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 25 Nov 2026 |
+| `manta` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a flying wing after the look of Fold'N Fly's Sky OmniWing, by OrigamiAirEnforcer after Mike Kelsey's Proto OmniWing, folded differently and with no cutting or tape (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 25 Nov 2026 |
+| `flying-saucer` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a round floater after the look of Fold'N Fly's UFO, which is Ken Blackburn and Jeff Lammers's, folded differently and without scissors (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 29 Oct 2026 |
 | `boomerang` | Unattributed: Fold'N Fly's Boomerang (design #56) names no designer | Unknown: no designer found | [Fold'N Fly: Boomerang](https://www.foldnfly.com/56.html) | Unattributed | 22 Oct 2026 |
 | `dog-face` | Traditional | None needed: nobody owns it | none recorded | Clear | 18 Oct 2026 |
 | `cat-face` | Traditional | None needed: nobody owns it | none recorded | Clear | 18 Oct 2026 |
@@ -63,7 +63,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `crane` | Traditional | None needed: nobody owns it | none recorded | Clear | 16 Oct 2026 |
 | `swan` | Traditional | None needed: nobody owns it | none recorded | Clear | 18 Oct 2026 |
 | `lily` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/lily](https://origami.me/lily/) | Clear | 17 Oct 2026 |
-| `sword` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 18 Oct 2026 |
+| `sword` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 18 Oct 2026 |
 | `folding-geometry` | Mathematics: the Huzita–Hatori axioms and Hisashi Abe's angle trisection, after Robert Geretschläger's *Geometric Origami* | None needed: nobody owns it | the book, for the ideas only | Clear | 18 Oct 2026 |
 | `folds-lesson` | Folding techniques: valley and mountain, inside and outside reverse, squash, rabbit ear, pleat, crimp and petal folds (the choice of folds after origami.me's beginner's guide, its words and pictures not used) | None needed: nobody owns them | [origami.me/beginners-guide](https://origami.me/beginners-guide/), for the choice of folds only | Clear | 21 Oct 2026 |
 | `bases-lesson` | Traditional: the kite, square, water bomb, bird, fish and frog bases (the choice of bases after origami.me's beginner's guide, its words and pictures not used) | None needed: nobody owns them | [origami.me/beginners-guide](https://origami.me/beginners-guide/), for the choice of bases only | Clear | 21 Oct 2026 |
@@ -76,7 +76,7 @@ noted when it was written, and the model was folded from the common traditional 
 | `frog` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/traditional-frog](https://origami.me/traditional-frog/) | Clear | 21 Oct 2026 |
 | `penguin` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/penguin](https://origami.me/penguin/) | Clear | 21 Oct 2026 |
 | `whale` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/whale](https://origami.me/whale/) | Clear | 21 Oct 2026 |
-| `fish` | Traditional (origami.me: "Traditional"; Gilad's database lists simple fish as "Traditional") | None needed: nobody owns it | [origami.me/fish](https://origami.me/fish/), for the order of folds; Gami chose its own reference points, as origami.me gives none | Clear | 22 Oct 2026 |
+| `fish` | Traditional (origami.me: "Traditional"; Gilad's database lists simple fish as "Traditional") | None needed: nobody owns it | [origami.me/fish](https://origami.me/fish/), for the order of folds; Orikata chose its own reference points, as origami.me gives none | Clear | 22 Oct 2026 |
 | `dolphin` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/dolphin](https://origami.me/dolphin/) | Clear | 21 Oct 2026 |
 | `crow` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/crow](https://origami.me/crow/) | Clear | 21 Oct 2026 |
 | `butterfly` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/butterfly](https://origami.me/butterfly/) | Clear | 21 Oct 2026 |
@@ -89,57 +89,57 @@ noted when it was written, and the model was folded from the common traditional 
 | `envelope` | Traditional (origami.me: "Traditional"; Gilad's database lists over a hundred envelopes and letter-folds as "Traditional", among many by named designers) | None needed: nobody owns it | [origami.me/paper-envelope](https://origami.me/paper-envelope/), for the order of folds | Clear | 22 Oct 2026 |
 | `masu-lid` | Traditional (origami.me: "Traditional"; the masu box with its corners folded short of the middle) | None needed: nobody owns it | [origami.me/box](https://origami.me/box/) (its classic lid) | Clear | 22 Oct 2026 |
 | `christmas-tree` | Traditional (origami.me: "Traditional") | None needed: nobody owns it | [origami.me/christmas-tree](https://origami.me/christmas-tree/) | Clear | 21 Oct 2026 |
-| `crown` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a simpler crown than OrigamiOK's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
-| `sailboat` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a simpler sailboat than OrigamiOK's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
-| `lotus` | Traditional (Gilad's database lists "Lotus" and "Lotus flower" as Traditional in many books, LaFosse and Yamaguchi among them; OrigamiOK calls it traditional) | None needed: nobody owns it | [OrigamiOK: lotus flower](https://origamiok.com/origami-lotus-flower/), for its first rounds only; Gami lifts the petals instead (see the notes) | Clear | 28 Oct 2026 |
+| `crown` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a simpler crown than OrigamiOK's (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 28 Oct 2026 |
+| `sailboat` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a simpler sailboat than OrigamiOK's (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 28 Oct 2026 |
+| `lotus` | Traditional (Gilad's database lists "Lotus" and "Lotus flower" as Traditional in many books, LaFosse and Yamaguchi among them; OrigamiOK calls it traditional) | None needed: nobody owns it | [OrigamiOK: lotus flower](https://origamiok.com/origami-lotus-flower/), for its first rounds only; Orikata lifts the petals instead (see the notes) | Clear | 28 Oct 2026 |
 | `tulip-bloom` | Traditional (Gilad's database lists the tulip blossom from the water bomb base as Traditional in many books) | None needed: nobody owns it | [OrigamiOK: tulip](https://origamiok.com/origami-tulip/), the blossom only, for the order of folds | Clear | 28 Oct 2026 |
-| `peacock` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a simpler peacock than OrigamiOK's (see the notes); the body's kite and neck are the traditional swan's first folds | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
-| `cactus` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's cactus (a ribbed body in a pot, a flower on top), folded differently and with no glue or scissors (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
-| `pirate-hat` | Traditional: the newspaper hat (Gilad's database lists "Newspaper Hat" and "Hats" as Traditional, in Van Sicklen's *The Joy of Origami* and Beech's *Origami: The Complete Guide*); OrigamiOK's pirate hat folds the same way | None needed: nobody owns it | [OrigamiOK: pirate hat](https://origamiok.com/origami-pirate-hat/), for the order of folds; Gami folds the band up twice, as the newspaper hat usually is | Clear | 28 Oct 2026 |
-| `frog-bookmark` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's frog bookmark, its eyes folded out instead of cut out and glued on (see the notes); the corner pocket and side flaps are the common corner bookmark's | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
-| `heart-bookmark` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a heart on the common corner bookmark, in place of OrigamiOK's heart on a long strip (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
-| `cute-cat` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's cute cat (a slim cat sitting up, ears pointed, tail to one side), from two squares instead of half of one (see the notes); its head is the traditional cat face's folds | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
-| `bat` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a water bomb base with its bottom corners folded up into wings, in place of OrigamiOK's pleated bat (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
-| `bull` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a body snipped into four legs and a head folded like the heart bookmark, in place of OrigamiOK's one-sheet bull (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
-| `t-rex` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a kite folded in half for the body, tail and legs, and a small square for the head, in place of OrigamiOK's one-sheet T-rex (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
-| `knife` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): one strip from half a square, in place of OrigamiOK's three-sheet knife (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
-| `kunai` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a diamond blade and a strip handle, in place of OrigamiOK's glued three-sheet kunai (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
-| `hand-fan` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's flat fan (an uchiwa), a square rounded off with a strip for the handle (see the notes); not the pleated `fan`, still to come | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
-| `rose` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a flat rose, the corners folded in twice and folded back out turned one way, in place of OrigamiOK's twisted rose (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
-| `palm-leaf` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a narrow leaf pleated across its length and let open, in place of OrigamiOK's glued palm leaf (see the notes); "Palm leaf" in Gilad's database is Mark Bolitho's | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
-| `green-leaf` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a plain leaf with its halves raised about the midrib, in place of OrigamiOK's cut and pleated round leaf (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
-| `pyramid` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a square creased into sixteen and popped up point first, each side's spare paper tucked inside, in place of OrigamiOK's glued pyramid (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
-| `diamond` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): the pyramid's pop upside down from an octagon, in place of OrigamiOK's cut and glued diamond (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
-| `bracelet` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a band curled into a ring; Gilad's database lists Traditional bracelets, but OrigamiOK's pleated pattern wasn't traced, so Gami's is its own and plainer (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
-| `diamond-ring` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a band curled round under a little blintzed gem, in place of OrigamiOK's one-sheet ring (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
-| `finger-trap` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a strip rolled into a tube with its weave drawn on, in place of OrigamiOK's cut finger trap; Gilad's database lists only Pedruzzi's and Garibi's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 28 Oct 2026 |
-| `easy-sword` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's easy sword, from a kite with its end folded up and back down for the crossguard; Gilad's database lists no Traditional sword (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 29 Oct 2026 |
+| `peacock` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a simpler peacock than OrigamiOK's (see the notes); the body's kite and neck are the traditional swan's first folds | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 28 Oct 2026 |
+| `cactus` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's cactus (a ribbed body in a pot, a flower on top), folded differently and with no glue or scissors (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 28 Oct 2026 |
+| `pirate-hat` | Traditional: the newspaper hat (Gilad's database lists "Newspaper Hat" and "Hats" as Traditional, in Van Sicklen's *The Joy of Origami* and Beech's *Origami: The Complete Guide*); OrigamiOK's pirate hat folds the same way | None needed: nobody owns it | [OrigamiOK: pirate hat](https://origamiok.com/origami-pirate-hat/), for the order of folds; Orikata folds the band up twice, as the newspaper hat usually is | Clear | 28 Oct 2026 |
+| `frog-bookmark` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's frog bookmark, its eyes folded out instead of cut out and glued on (see the notes); the corner pocket and side flaps are the common corner bookmark's | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 28 Oct 2026 |
+| `heart-bookmark` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a heart on the common corner bookmark, in place of OrigamiOK's heart on a long strip (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 28 Oct 2026 |
+| `cute-cat` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's cute cat (a slim cat sitting up, ears pointed, tail to one side), from two squares instead of half of one (see the notes); its head is the traditional cat face's folds | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 28 Oct 2026 |
+| `bat` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a water bomb base with its bottom corners folded up into wings, in place of OrigamiOK's pleated bat (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 28 Oct 2026 |
+| `bull` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a body snipped into four legs and a head folded like the heart bookmark, in place of OrigamiOK's one-sheet bull (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 28 Oct 2026 |
+| `t-rex` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a kite folded in half for the body, tail and legs, and a small square for the head, in place of OrigamiOK's one-sheet T-rex (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 28 Oct 2026 |
+| `knife` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): one strip from half a square, in place of OrigamiOK's three-sheet knife (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 28 Oct 2026 |
+| `kunai` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a diamond blade and a strip handle, in place of OrigamiOK's glued three-sheet kunai (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 28 Oct 2026 |
+| `hand-fan` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's flat fan (an uchiwa), a square rounded off with a strip for the handle (see the notes); not the pleated `fan`, still to come | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 28 Oct 2026 |
+| `rose` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a flat rose, the corners folded in twice and folded back out turned one way, in place of OrigamiOK's twisted rose (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 28 Oct 2026 |
+| `palm-leaf` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a narrow leaf pleated across its length and let open, in place of OrigamiOK's glued palm leaf (see the notes); "Palm leaf" in Gilad's database is Mark Bolitho's | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 28 Oct 2026 |
+| `green-leaf` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a plain leaf with its halves raised about the midrib, in place of OrigamiOK's cut and pleated round leaf (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 28 Oct 2026 |
+| `pyramid` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a square creased into sixteen and popped up point first, each side's spare paper tucked inside, in place of OrigamiOK's glued pyramid (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 28 Oct 2026 |
+| `diamond` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): the pyramid's pop upside down from an octagon, in place of OrigamiOK's cut and glued diamond (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 28 Oct 2026 |
+| `bracelet` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a band curled into a ring; Gilad's database lists Traditional bracelets, but OrigamiOK's pleated pattern wasn't traced, so Orikata's is its own and plainer (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 28 Oct 2026 |
+| `diamond-ring` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a band curled round under a little blintzed gem, in place of OrigamiOK's one-sheet ring (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 28 Oct 2026 |
+| `finger-trap` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a strip rolled into a tube with its weave drawn on, in place of OrigamiOK's cut finger trap; Gilad's database lists only Pedruzzi's and Garibi's (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 28 Oct 2026 |
+| `easy-sword` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's easy sword, from a kite with its end folded up and back down for the crossguard; Gilad's database lists no Traditional sword (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 29 Oct 2026 |
 | `rainbow-chain` | Traditional: the gum wrapper chain (Gilad's database: "Gum wrapper chain", Traditional, in *Creating Origami*), folded in rainbow colours after OrigamiOK's rainbow chain, which names no designer (see the notes) | None needed: nobody owns it | [Origami Resource Center: bubble gum wrapper chain](https://origami-resource-center.com/bubble-gum-wrapper-paper-chain/), for the order of folds; [OrigamiOK: rainbow chain](https://origamiok.com/origami-rainbow-chain/), for the idea | Clear | 29 Oct 2026 |
 | `business-card-cube` | Traditional: the business card cube (Gilad's database: "Business card cube", Traditional, in Thomas Hull's *Project Origami*), in place of OrigamiOK's cube, which is Mitsunobu Sonobe's unit (see the notes) | None needed: nobody owns it | none recorded: the common sequence, two cards crossed and each one's ends folded round the other | Clear | 29 Oct 2026 |
 | `dice` | Traditional: the business card cube (Gilad's database: "Business card cube", Traditional) put together with its flaps inside, the dots drawn on, in place of OrigamiOK's dice, which is Stéphane Gigandet's (see the notes) | None needed: nobody owns it | none recorded: as `business-card-cube` | Clear | 29 Oct 2026 |
 | `kusudama` | Traditional: the flower kusudama (Gilad's database: "Flower Kusudama", Traditional, in *Charming Flower Origami*), as OrigamiOK's kusudama flower ball, which names no designer (see the notes) | None needed: nobody owns it | [OrigamiOK: kusudama flower ball](https://origamiok.com/origami-kusudama-flower-ball/), for the order of folds | Clear | 29 Oct 2026 |
-| `chrysanthemum` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of origami.me's kusudama chrysanthemum (Traditional), whose text doesn't say where its petals' squashed flaps go or which corners are glued; Gami's units are windmill bases with their arms opened as petals, glued corner to corner on a cube (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami, after the look of [origami.me/kusudama-chrysanthemum](https://origami.me/kusudama-chrysanthemum/) | Clear | 29 Oct 2026 |
-| `turtle` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a turtle seen from above, folded from the water bomb base, after the look of OrigamiOK's turtle, which names no designer (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
-| `sunflower` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's sunflower, which names no designer, from three squares and no glue: Gami's own petals and middle, and the flat tulip's traditional stem with a leaf (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
-| `lizard` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the general look of OrigamiOK's lizard, which is Lee Won-pyo's, folded differently: the turtle's narrowed water bomb base with steeper legs, and a separate tail (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
-| `squirrel` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a squirrel sitting up, after the look of OrigamiOK's, which names no designer, from three squares rather than one (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
-| `strawberry` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a strawberry in 3D, after the look of OrigamiOK's, which names no designer: the berry popped point down as Gami's diamond is, the leaves folded as the sunflower's petals are (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
-| `fox-3d` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a fox standing in 3D, in place of OrigamiOK's, which is Hoàng Tiến Quyết's; its head is the traditional cat face's folds (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 13 Nov 2026 |
-| `hummingbird` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a hummingbird from the traditional bird base, after the look of OrigamiOK's, which names no designer (the site says it designed that version itself); Gilad's database lists no Traditional hummingbird (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 21 Nov 2026 |
-| `skull` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a skull face, the corners folded to the middle and the side flaps' tips turned back out for dark eye sockets, after the look of OrigamiOK's skull, which names no designer; Gilad's database lists no Traditional skull (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 21 Nov 2026 |
-| `cute-whale` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a box whale, the traditional masu box worn upside down with one end flap folded out over its wall for a tail, after the look of OrigamiOK's cute whale, which names no designer; Gilad's database lists no Traditional whale in what could be read (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the box's folds follow `masu-box` ([origami.me/box](https://origami.me/box/)) | Clear | 21 Nov 2026 |
-| `pot-plant` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a plant standing in a pot, from five squares: the traditional masu box for the pot, a blintzed square for the soil and three leaves folded as the flat tulip's traditional leafy stem starts, after the look of OrigamiOK's pot plant, which names no designer (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the pot's folds follow `masu-box` ([origami.me/box](https://origami.me/box/)), the stems' `tulip` | Clear | 21 Nov 2026 |
-| `unicorn` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a unicorn standing in 3D from five sheets, built as Gami's standing fox is, after the look of OrigamiOK's unicorn, whose page credits **Imai Yudai** (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the body's folds follow `fox-3d`, the mane's and tail's leaves `palm-leaf` | Clear | 21 Nov 2026 |
-| `kaiju` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a generic monster standing upright in 3D from six squares, in place of OrigamiOK's Godzilla, which is Toho's character (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the body's folds follow the `unicorn`'s neck, the arms' its horn | Clear | 21 Nov 2026 |
-| `dragon` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a winged dragon standing in 3D from the traditional bird base and two little squares, after the look of OrigamiOK's "Easy Origami Dragon", which names no designer; Gilad's database lists no Traditional dragon in what could be read (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the bird base's folds follow `crane`, the horns' and legs' the `kaiju`'s arms | Clear | 22 Nov 2026 |
-| `necktie` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a striped necktie from a kite narrowed at the top, its point folded down and back up for the knot, as Gami's easy sword makes its crossguard; origami.me credits its necktie as Traditional, but Gilad's database lists only neckties by named designers (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 22 Nov 2026 |
-| `kimono` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a kimono from the sides folded to the middle, their edges turned back for a white collar and their bottom corners folded out and carried up behind for the sleeves, as a dollar-bill shirt's are; Gilad's database lists traditional kimonos, but Gami's follows neither them nor origami.me's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 22 Nov 2026 |
+| `chrysanthemum` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of origami.me's kusudama chrysanthemum (Traditional), whose text doesn't say where its petals' squashed flaps go or which corners are glued; Orikata's units are windmill bases with their arms opened as petals, glued corner to corner on a cube (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata, after the look of [origami.me/kusudama-chrysanthemum](https://origami.me/kusudama-chrysanthemum/) | Clear | 29 Oct 2026 |
+| `turtle` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a turtle seen from above, folded from the water bomb base, after the look of OrigamiOK's turtle, which names no designer (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 13 Nov 2026 |
+| `sunflower` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the look of OrigamiOK's sunflower, which names no designer, from three squares and no glue: Orikata's own petals and middle, and the flat tulip's traditional stem with a leaf (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 13 Nov 2026 |
+| `lizard` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): after the general look of OrigamiOK's lizard, which is Lee Won-pyo's, folded differently: the turtle's narrowed water bomb base with steeper legs, and a separate tail (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 13 Nov 2026 |
+| `squirrel` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a squirrel sitting up, after the look of OrigamiOK's, which names no designer, from three squares rather than one (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 13 Nov 2026 |
+| `strawberry` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a strawberry in 3D, after the look of OrigamiOK's, which names no designer: the berry popped point down as Orikata's diamond is, the leaves folded as the sunflower's petals are (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 13 Nov 2026 |
+| `fox-3d` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a fox standing in 3D, in place of OrigamiOK's, which is Hoàng Tiến Quyết's; its head is the traditional cat face's folds (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 13 Nov 2026 |
+| `hummingbird` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a hummingbird from the traditional bird base, after the look of OrigamiOK's, which names no designer (the site says it designed that version itself); Gilad's database lists no Traditional hummingbird (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 21 Nov 2026 |
+| `skull` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a skull face, the corners folded to the middle and the side flaps' tips turned back out for dark eye sockets, after the look of OrigamiOK's skull, which names no designer; Gilad's database lists no Traditional skull (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 21 Nov 2026 |
+| `cute-whale` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a box whale, the traditional masu box worn upside down with one end flap folded out over its wall for a tail, after the look of OrigamiOK's cute whale, which names no designer; Gilad's database lists no Traditional whale in what could be read (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata; the box's folds follow `masu-box` ([origami.me/box](https://origami.me/box/)) | Clear | 21 Nov 2026 |
+| `pot-plant` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a plant standing in a pot, from five squares: the traditional masu box for the pot, a blintzed square for the soil and three leaves folded as the flat tulip's traditional leafy stem starts, after the look of OrigamiOK's pot plant, which names no designer (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata; the pot's folds follow `masu-box` ([origami.me/box](https://origami.me/box/)), the stems' `tulip` | Clear | 21 Nov 2026 |
+| `unicorn` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a unicorn standing in 3D from five sheets, built as Orikata's standing fox is, after the look of OrigamiOK's unicorn, whose page credits **Imai Yudai** (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata; the body's folds follow `fox-3d`, the mane's and tail's leaves `palm-leaf` | Clear | 21 Nov 2026 |
+| `kaiju` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a generic monster standing upright in 3D from six squares, in place of OrigamiOK's Godzilla, which is Toho's character (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata; the body's folds follow the `unicorn`'s neck, the arms' its horn | Clear | 21 Nov 2026 |
+| `dragon` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a winged dragon standing in 3D from the traditional bird base and two little squares, after the look of OrigamiOK's "Easy Origami Dragon", which names no designer; Gilad's database lists no Traditional dragon in what could be read (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata; the bird base's folds follow `crane`, the horns' and legs' the `kaiju`'s arms | Clear | 22 Nov 2026 |
+| `necktie` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a striped necktie from a kite narrowed at the top, its point folded down and back up for the knot, as Orikata's easy sword makes its crossguard; origami.me credits its necktie as Traditional, but Gilad's database lists only neckties by named designers (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 22 Nov 2026 |
+| `kimono` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a kimono from the sides folded to the middle, their edges turned back for a white collar and their bottom corners folded out and carried up behind for the sleeves, as a dollar-bill shirt's are; Gilad's database lists traditional kimonos, but Orikata's follows neither them nor origami.me's (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 22 Nov 2026 |
 | `wallet` | Traditional (origami.me credits it as a traditional design; Gilad's database lists six Traditional wallets, among them Robinson's *World's Best Origami* and Palacios's *Beginning Origami*) | None needed: nobody owns it | [origami.me/wallet](https://origami.me/wallet/) (order of folds only) | Clear | 22 Nov 2026 |
-| `parrot` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a parrot from a kite, its long point pleated for the tail, folded in half and its short point reverse-folded for a hooked beak; Gilad's database lists a traditional parrot (in Saydak's *Everyone Can Learn Origami*), but Gami's follows neither it nor origami.me's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami | Clear | 22 Nov 2026 |
+| `parrot` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a parrot from a kite, its long point pleated for the tail, folded in half and its short point reverse-folded for a hooked beak; Gilad's database lists a traditional parrot (in Saydak's *Everyone Can Learn Origami*), but Orikata's follows neither it nor origami.me's (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata | Clear | 22 Nov 2026 |
 | `chicken` | Traditional (origami.me credits it as a traditional design; Gilad's database lists three Traditional chickens, among them Saydak's *Everyone Can Learn Origami* and NOA 156) | None needed: nobody owns it | [origami.me/chicken](https://origami.me/chicken/) (order of folds, but its wings) | Clear | 22 Nov 2026 |
 | `horse` | Traditional (origami.me credits it as a traditional design; Gilad's database lists twelve Horses credited Traditional, most from a square with cuts, among them Saydak's *Everyone Can Learn Origami*, Fuse's *Action Origami* and NOA 168) | None needed: nobody owns it | [origami.me/horse](https://origami.me/horse/) (order of folds) | Clear | 25 Nov 2026 |
 | `crab` | Traditional (origami.me credits it as a traditional design; Gilad's database lists six Crabs credited Traditional, five from a square with cuts, among them Saydak's *Everyone Can Learn Origami*, Honda's *The World of Origami* and ORU 1) | None needed: nobody owns it | [origami.me/crab](https://origami.me/crab/) (order of folds) | Clear | 26 Nov 2026 |
-| `swallow` | **Gami**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a swallow seen from above, from the traditional bird base with its legs narrowed and reverse-folded out as swept-back wings, the front flap folded down for the head and the back flap cut up the middle and folded apart for a forked tail; Gilad's database lists traditional swallows (Saydak's *Everyone Can Learn Origami* and others), but Gami's follows neither them nor origami.me's (see the notes) | CC BY 4.0 (Gami) | none: designed for Gami; the bird base's folds follow `crane` | Clear | 24 Nov 2026 |
+| `swallow` | **Orikata**, licensed CC BY 4.0 (`DESIGNS-LICENSE.md`): a swallow seen from above, from the traditional bird base with its legs narrowed and reverse-folded out as swept-back wings, the front flap folded down for the head and the back flap cut up the middle and folded apart for a forked tail; Gilad's database lists traditional swallows (Saydak's *Everyone Can Learn Origami* and others), but Orikata's follows neither them nor origami.me's (see the notes) | CC BY 4.0 (Orikata) | none: designed for Orikata; the bird base's folds follow `crane` | Clear | 24 Nov 2026 |
 
 ### Notes
 
@@ -147,117 +147,117 @@ noted when it was written, and the model was folded from the common traditional 
   Of the seven asked for, only the unicorn page names a designer (Imai Yudai). The hummingbird page says it's built on
   the bird base, and a reply from the site says OrigamiOK designed that version itself; the others name only their
   writer. Gilad's database lists no Traditional skull, dragon, unicorn, Godzilla, whale or hummingbird in what could
-  be read, so each is Gami's own. Godzilla is Toho's character, so Gami folds a generic kaiju in its place.
-  Gami's hummingbird starts from the traditional bird base and narrows its lower points as the crane does; from
+  be read, so each is Orikata's own. Godzilla is Toho's character, so Orikata folds a generic kaiju in its place.
+  Orikata's hummingbird starts from the traditional bird base and narrows its lower points as the crane does; from
   there it's its own: the points turned out with outside reverse folds for the beak and tail, the wings left standing
   and spread, the bird tilted nose up. OrigamiOK's folds its wings down and back up, makes feet and pinches the neck.
-  Gami's skull is the blintz (corners to the middle, dark side out) with the side flaps' tips folded back out so
+  Orikata's skull is the blintz (corners to the middle, dark side out) with the side flaps' tips folded back out so
   the dark side shows as eye sockets, its outline folded behind and its nose and teeth drawn; OrigamiOK's opens
   pockets, pulls out sandwiched flaps and pleats the teeth.
-  Gami's cute whale is the traditional masu box (as `masu-box`) worn open side down: one end locked as usual, the
+  Orikata's cute whale is the traditional masu box (as `masu-box`) worn open side down: one end locked as usual, the
   other end's flap folded out over its wall rather than into the box, so it runs up the outside and its point flicks
   back above the back as a tail; eyes drawn. OrigamiOK's raises the head into a cube from a crease grid.
-  Gami's pot plant puts traditional parts together: the masu box as the pot, a square with its corners folded to
+  Orikata's pot plant puts traditional parts together: the masu box as the pot, a square with its corners folded to
   the middle as the soil, and three leaves standing on it, each narrowed into a long kite as the tulip's stem starts. OrigamiOK's uses eight sheets, cuts
   its leaves and stems, rolls the stems and glues them into a rolled filler.
-  Gami's unicorn takes nothing from Imai Yudai's, which collapses one square from a full crease grid and makes the
-  horn, head, legs and tail from its layers. Gami's is five sheets put together in 3D, as its standing fox is: a
+  Orikata's unicorn takes nothing from Imai Yudai's, which collapses one square from a full crease grid and makes the
+  horn, head, legs and tail from its layers. Orikata's is five sheets put together in 3D, as its standing fox is: a
   rectangle snipped for legs and folded in half along the back; a kite with its top folded behind and folded in half
   for the neck, the head turned out with an outside reverse fold and eyes drawn; a kite folded in half for the horn;
   and two long leaves, folded in half and rippled, for the mane and tail. Only the subject is shared.
-  Gami's kaiju is a generic upright monster with plates down its back, named only "Kaiju": nothing in its title,
+  Orikata's kaiju is a generic upright monster with plates down its back, named only "Kaiju": nothing in its title,
   blurb or steps names Godzilla, and it takes no detail from Toho's character or from OrigamiOK's model (a crease
-  grid collapsed into a body, with fins glued into a slot). Gami's is six squares put together in 3D: a kite with its
+  grid collapsed into a body, with fins glued into a slot). Orikata's is six squares put together in 3D: a kite with its
   top folded behind and folded in half for the body, its point turned out with an outside reverse fold for the head;
   a kite folded in half for the tail and a small one for the arms; three squares folded into triangles for the plates.
-  Gami's dragon starts from the traditional bird base and narrows its lower points as the crane does; from there
+  Orikata's dragon starts from the traditional bird base and narrows its lower points as the crane does; from there
   it's its own: the points turned out with outside reverse folds for the neck and tail, the neck's top turned out
   again to stand up and its tip pushed in for the head (an S), the tail crimped, the wings spread out sideways and rippled, eyes drawn, and two little squares
   folded into kites and folded in half for horns and legs. OrigamiOK's collapses a square into a small square,
   zigzags the tail, makes the head and horn from the top flaps and spreads zigzag wings.
 - **More from origami.me** (checked 22 November 2026; the plan is `docs/origami-me-more-plan.md`). origami.me credits
   its necktie as Traditional, but all ten neckties in Gilad's database have named designers (Yamaguchi, Takagi,
-  Uchiyama, Huisken, Nir and others), none Traditional, so Gami's is its own rather than a traditional one. It doesn't
-  follow origami.me's either, whose knot is squashed out from a pleat: Gami's is a kite narrowed at the top and
+  Uchiyama, Huisken, Nir and others), none Traditional, so Orikata's is its own rather than a traditional one. It doesn't
+  follow origami.me's either, whose knot is squashed out from a pleat: Orikata's is a kite narrowed at the top and
   turned over, the point folded down and back up for a plain knot and its tip folded behind, with stripes drawn
   across below it. The rest of the batch gets the same check before its recipe. The kimono passes it: Gilad's
   database has eight Traditional kimonos (Takagi's *Joy of Origami*, Gardiner's *Essential Origami*, NOA 14, 143, 163
   and 227 and others) among dozens by named designers. But origami.me's is a square folded in half with narrow strips
-  and a squash, and Gami's is folded its own way, the sides to the middle with the collar turned back from their edges
-  and the sleeves carried up behind, so it's Gami's too. The wallet passes it and is traditional: Gilad's database
+  and a squash, and Orikata's is folded its own way, the sides to the middle with the collar turned back from their edges
+  and the sleeves carried up behind, so it's Orikata's too. The wallet passes it and is traditional: Gilad's database
   lists six wallets credited Traditional (Robinson's *World's Best Origami*, Palacios's *Beginning Origami*,
   Kawasaki's *Doctor's Origami Dream Book*, Pajarita 5 and others) and two Unknown, among about ninety by named
-  designers. Gami follows origami.me's order of folds, leaving out its turns of the paper between folds. The parrot
+  designers. Orikata follows origami.me's order of folds, leaving out its turns of the paper between folds. The parrot
   is listed in Gilad's database as Traditional (Saydak's *Everyone Can Learn Origami*; Saydak also wrote origami.me's
   page) and Unknown (Origami Deutschland 1990), among dozens by named designers. But origami.me's squashes the head
-  out of the kite's flaps in steps its own readers say can't be followed from the text, and Gami's is folded its own
-  way: the kite folded in half coloured side out, the top point reverse-folded for the beak, so it's Gami's. The
+  out of the kite's flaps in steps its own readers say can't be followed from the text, and Orikata's is folded its own
+  way: the kite folded in half coloured side out, the top point reverse-folded for the beak, so it's Orikata's. The
   chicken is traditional: Gilad's database lists three Chickens credited Traditional (Saydak's *Everyone Can Learn
   Origami*, NOA 156 folded by Saydak, Der Falter 61) among dozens by named designers, and Saydak wrote origami.me's
-  page. Gami follows its order of folds, with its landmarks pinched (since 24 November) and the feet reverse-folded
+  page. Orikata follows its order of folds, with its landmarks pinched (since 24 November) and the feet reverse-folded
   round the outside rather than inside (inside, the layers pass through each other in the engine), and leaves out its
   wings, a squash of the front flap either side. Since 25 November its comb is folded as origami.me folds it (the
   beak's outer point opened back up and its tip turned down round the outside), worked out from its diagrams; before
   that it was drawn on. The comb's turned-over tip is coloured red, with a wattle and an eye drawn on, on both sides; the kimono's obi is drawn on in gold and the parrot's beak coloured pale yellow, where
   the paper can't show those colours.
-  The swallow is Gami's: Gilad's database lists five Swallows credited Traditional (Saydak's *Everyone Can Learn
+  The swallow is Orikata's: Gilad's database lists five Swallows credited Traditional (Saydak's *Everyone Can Learn
   Origami*, Cunliffe, LaFosse, Takahama, Sakade) and two Unknown, but origami.me's step text leans on its diagrams
-  for which flap becomes which part, and four readings of it didn't fold (`docs/origami-me-more-plan.md`). Gami's
+  for which flap becomes which part, and four readings of it didn't fold (`docs/origami-me-more-plan.md`). Orikata's
   takes the crane's bird base and leg narrowing, swings the legs out as wings, folds one long flap down for the head
   and cuts the other into a forked tail, in its own order and words (24 November 2026).
   The horse is traditional: Gilad's database lists twelve Horses credited Traditional (Saydak's *Everyone Can Learn
   Origami*, Fuse's *Action Origami*, Kawasaki's *Doctor's Origami Dream Book*, NOA 10, 168 and 605, and others), most
-  from a square with cuts, and Saydak wrote origami.me's page. Gami follows origami.me's order of folds, worked out
+  from a square with cuts, and Saydak wrote origami.me's page. Orikata follows origami.me's order of folds, worked out
   from its diagrams (25 November 2026): a square base creased for a petal fold and cut up the middle front and back,
   the cut halves lifted for legs, the hooves' tips folded in, the sides folded in, the tail reverse-folded out level
-  and the neck's tip reverse-folded for the head. Its step text is Gami's own.
+  and the neck's tip reverse-folded for the head. Its step text is Orikata's own.
   The crab is traditional: Gilad's database lists six Crabs credited Traditional (Saydak's *Everyone Can Learn
   Origami*, Honda's *The World of Origami*, the Biddles' *Essential Origami*, Momotani, ORU 1, Le Pli 92) and one
-  Unknown, and Saydak wrote origami.me's page. Gami follows its order of folds, worked out from its diagrams (26
+  Unknown, and Saydak wrote origami.me's page. Orikata follows its order of folds, worked out from its diagrams (26
   November 2026): the frog base, its lower point cut up the middle, every flap narrowed, short cuts at the shoulders
   and the top folded down, the flaps turned out in pairs for legs and claws and bent at the knee. It cuts the middle
   through every layer at once, lays the top over the front rather than tucking it, and turns each pair out over the
-  last rather than behind it (see the recipe). Its step text is Gami's own.
+  last rather than behind it (see the recipe). Its step text is Orikata's own.
 - **Intermediate models from OrigamiOK** (checked 13 November 2026; the plan is `docs/origamiok-intermediate-plan.md`).
   Its fox page credits Hoàng Tiến Quyết and its lizard page Lee Won-pyo; the rest name only their writer and
   photographer. Gilad's database lists about ten Traditional square turtles (Gross's *Zoogami*, Momotani, NOA 493 and
-  others), but none whose order of folds could be checked against OrigamiOK's, so Gami's turtle is its own: the water
+  others), but none whose order of folds could be checked against OrigamiOK's, so Orikata's turtle is its own: the water
   bomb base narrowed on each side as the water bomb is, its loose points folded out as flippers rather than tucked.
   Every one of the 81 sunflowers in Gilad's database has a named designer (Yoshizawa, Kasahara, Petty, Yamaguchi and
-  others), so Gami's is its own: corners to the middle and back out for eight petals, a brown octagon for the middle,
+  others), so Orikata's is its own: corners to the middle and back out for eight petals, a brown octagon for the middle,
   set on the flat tulip's stem. OrigamiOK's head is cut, opened and pushed into a hollow, and its stem rolled and glued.
-  OrigamiOK's lizard is Lee Won-pyo's, and none of the 147 lizards in Gilad's database is Traditional, so Gami's is
+  OrigamiOK's lizard is Lee Won-pyo's, and none of the 147 lizards in Gilad's database is Traditional, so Orikata's is
   its own, from two squares: the body is the turtle's narrowed water bomb base, its legs folded out steeper (the front
   ones reaching forwards), and the tail a smaller square narrowed twice into a long point, slipped under it. Lee's
   shapes four legs with zigzag folds from one sheet; the fish base's side flaps, the first thing tried, can't swing
   out flat as legs (as the whale's fins can't).
-  None of the squirrels read in Gilad's database (276 found) is Traditional, so Gami's squirrel is its own, from
+  None of the squirrels read in Gilad's database (276 found) is Traditional, so Orikata's squirrel is its own, from
   three squares: a triangle for the body, a tall kite with its tip flicked over for the tail, and a small triangle for
   the head. From one sheet, as OrigamiOK's is, the tail and head reverse-folded from a triangle's corners came out
   too thin or tucked inside the body.
-  None of the 49 strawberries in Gilad's database is Traditional (the "classic" one is Rae Cooker's), so Gami's is
-  its own: a red square creased as Gami's pyramid is, its corners folded in, popped point down as Gami's diamond is,
+  None of the 49 strawberries in Gilad's database is Traditional (the "classic" one is Rae Cooker's), so Orikata's is
+  its own: a red square creased as Orikata's pyramid is, its corners folded in, popped point down as Orikata's diamond is,
   red side out, seeds drawn on, with an eight-pointed green star for the leaves set on its rim. OrigamiOK's is a
   square base opened into a berry, with a cut calyx and a rolled stalk glued on. (A flat strawberry went in first,
   the same day; the 3D one replaced it.)
   OrigamiOK's fox is Hoàng Tiến Quyết's, so the standing fox (decided 13 November, to sit beside Okuda's flat one) is
-  Gami's own, from three squares: the body snipped for four legs, its belly strips folded inside, folded in half and
+  Orikata's own, from three squares: the body snipped for four legs, its belly strips folded inside, folded in half and
   opened a little to stand; the head the traditional cat face's folds, set facing forwards; the tail a kite folded in
   half, held out behind.
 
 - **Modular models from OrigamiOK** (checked 29 October 2026; the plan is `docs/modular-plan.md`). OrigamiOK's
-  modular pages name no designer either. Its rainbow chain wasn't found by name; Gami folds the traditional gum
+  modular pages name no designer either. Its rainbow chain wasn't found by name; Orikata folds the traditional gum
   wrapper chain instead, from strips rather than squares, which gives the same zigzag of colours. Its cube is
-  Mitsunobu Sonobe's unit, so Gami's cube is the traditional business card cube; its dice, too, is the business card cube, its flaps inside and its dots drawn on,
+  Mitsunobu Sonobe's unit, so Orikata's cube is the traditional business card cube; its dice, too, is the business card cube, its flaps inside and its dots drawn on,
   as OrigamiOK's (Stéphane Gigandet's) isn't open. Its kusudama flower ball is the
   traditional flower kusudama. Its eight-point ninja star (every 8-unit ninja star in Gilad's database has a named
-  designer), magic circle (Kumasaka Hiroshi's) and infinity cube were left out. The kusudama chrysanthemum is origami.me's, Traditional, but its text leaves its petals' folds and gluing to the diagrams, so Gami's is its own: windmill units, petals opened out, glued corner to corner.
+  designer), magic circle (Kumasaka Hiroshi's) and infinity cube were left out. The kusudama chrysanthemum is origami.me's, Traditional, but its text leaves its petals' folds and gluing to the diagrams, so Orikata's is its own: windmill units, petals opened out, glued corner to corner.
 - **OrigamiOK** (checked 28 October 2026). Its pages name no designer and give no licence for the designs, only a
   copyright notice for the site, and only the lotus page calls its model traditional; so each model was looked up in
   Gilad's database. The cactus turned up no open design (every cactus there has a named designer but one "cactus
-  seed holder"). The lotus and the 3D tulip's blossom are traditional, and Gami follows their order of folds in its
+  seed holder"). The lotus and the 3D tulip's blossom are traditional, and Orikata follows their order of folds in its
   own words. The lotus stops before OrigamiOK's back fold and pulled-out petals, which hold and curl the paper in
-  ways rigid paper can't, and lifts its four petals instead. The crown, sailboat, peacock and cactus are Gami's own
+  ways rigid paper can't, and lifts its four petals instead. The crown, sailboat, peacock and cactus are Orikata's own
   simpler designs (`DESIGNS-LICENSE.md`): OrigamiOK's steps rely on photos for where their folds go, their 3D
   endings (a crown opened into a band, a peacock's eight-feather fan) are beyond the engine, and its cactus is
   glued. The cactus keeps the look of OrigamiOK's (a ribbed body in a pot, a flower on top) and is folded its own
@@ -266,56 +266,56 @@ noted when it was written, and the model was folded from the common traditional 
   the traditional newspaper hat. The two bookmarks are built on the corner bookmark, a pocket with its side flaps
   folded up, which is folded everywhere with no credit; Gilad's database lists several page-corner designs by named
   designers (LaFosse, Engels, Ng) but none matches it as the source. OrigamiOK's frog cuts its eyes from spare paper
-  and glues them on: Gami's folds the flaps' points out past the sides instead, with no scissors or glue. OrigamiOK's
+  and glues them on: Orikata's folds the flaps' points out past the sides instead, with no scissors or glue. OrigamiOK's
   heart bookmark is a heart on a long strip, made with squash folds from half a square; heart bookmarks are listed
   by several named designers (Shumakov, Shinde, Yamaguchi, Sy Chen, Overmars) and the source of OrigamiOK's wasn't
-  found, so Gami's is its own, a heart on the corner bookmark: the top point folded behind, the flaps' points folded
+  found, so Orikata's is its own, a heart on the corner bookmark: the top point folded behind, the flaps' points folded
   down for the notch, then the humps and sides rounded.
-  The cute cat, bat, bull and T-rex (also checked 28 October 2026) are Gami's own: Gilad's database lists no
-  Traditional bull, bat or T-rex among hundreds by named designers, and OrigamiOK's cat couldn't be traced, so Gami
+  The cute cat, bat, bull and T-rex (also checked 28 October 2026) are Orikata's own: Gilad's database lists no
+  Traditional bull, bat or T-rex among hundreds by named designers, and OrigamiOK's cat couldn't be traced, so Orikata
   keeps the general look and folds its own way. OrigamiOK's bat, bull and T-rex shape their wings, horns, heads and
-  legs with squash and swivel folds that rigid paper can't follow, so Gami's use two squares where a separate head
+  legs with squash and swivel folds that rigid paper can't follow, so Orikata's use two squares where a separate head
   is simpler (the cat, bull and T-rex), and two short snips for the bull's legs.
-  The knife and kunai are Gami's own too: Gilad's database has no Traditional kunai or knife (only a throwing knife,
-  a different model), and OrigamiOK's are glued from three sheets with rolled handles. Gami's knife is one strip
+  The knife and kunai are Orikata's own too: Gilad's database has no Traditional kunai or knife (only a throwing knife,
+  a different model), and OrigamiOK's are glued from three sheets with rolled handles. Orikata's knife is one strip
   with its handle end rolled over and coloured in with a pen (a strip folded from one-sided paper shows the same
   side all over); its kunai is a diamond blade from a square with a strip folded thin for the handle, no glue.
   OrigamiOK's fan is a flat paddle fan (an uchiwa), not origami.me's pleated fan, which stays Coming soon until
-  bending can open it: Gami's hand fan is its own, a rounded square on a strip handle. OrigamiOK's rose twists its
+  bending can open it: Orikata's hand fan is its own, a rounded square on a strip handle. OrigamiOK's rose twists its
   middle into a spiral, which rigid paper can't follow, and Gilad's database lists hundreds of roses by named
-  designers: Gami's is a flat rose of its own, its four points folded back out all turned one way so they spiral.
-  The two leaves are Gami's own as well: OrigamiOK's palm leaf is a cut triangle pleated and glued into a fan, and
-  its green leaf a cut triangle pleated round from the stem. Gami's palm leaf is a square folded to a long, narrow
+  designers: Orikata's is a flat rose of its own, its four points folded back out all turned one way so they spiral.
+  The two leaves are Orikata's own as well: OrigamiOK's palm leaf is a cut triangle pleated and glued into a fan, and
+  its green leaf a cut triangle pleated round from the stem. Orikata's palm leaf is a square folded to a long, narrow
   leaf and pleated across, opened a little into ripples; its green leaf is the same narrow leaf left smooth, with
   its halves raised either side of the midrib. No scissors or glue.
-  The pyramid and diamond are Gami's own: OrigamiOK glues both, and the diamond is cut too; Gilad's database has
-  hundreds of named pyramids and gems, with only a pyramid-shaped candy box marked Traditional. Gami's pop a square
+  The pyramid and diamond are Orikata's own: OrigamiOK glues both, and the diamond is cut too; Gilad's database has
+  hundreds of named pyramids and gems, with only a pyramid-shaped candy box marked Traditional. Orikata's pop a square
   creased into sixteen from the middle, the diagonals rising (or, for the diamond, falling) as ridges and each
   side's spare paper tucked inside along its middle crease, so the sides stay flat and nothing needs glue.
-  The bracelet, diamond ring and finger trap, which close into a band or a tube, are Gami's own too, curled with
+  The bracelet, diamond ring and finger trap, which close into a band or a tube, are Orikata's own too, curled with
   `shape`'s spread bends rather than waiting on bending: a band folded to the middle and curled round for the
   bracelet; a band curled round under a gem (a small square with its corners folded in) for the ring; and a strip
   with its weave drawn on, rolled into a tube, for the finger trap. Neither OrigamiOK's pleats nor its cuts are used.
-  The easy sword (added 29 October 2026, to compare with Gami's `sword`) is Gami's own: Gilad's database lists 95
+  The easy sword (added 29 October 2026, to compare with Orikata's `sword`) is Orikata's own: Gilad's database lists 95
   swords, all by named designers, and OrigamiOK's names none. It keeps the look of OrigamiOK's (a long blade, a
   small crossguard, a short handle) but is folded from a kite: the short end folded up over the blade and most of
   it back down, leaving a band across for the guard.
 - **Fox.** Okuda's design isn't openly licensed. It was kept on 18 October 2026 because it's very widely
   folded and taught (see the decisions log in `PLAN.md`). The gallery doesn't credit him yet. If the rule
-  is tightened, the choices are: ask for permission, swap in a traditional fox, or design Gami's own.
+  is tightened, the choices are: ask for permission, swap in a traditional fox, or design Orikata's own.
 - **Origami.me's [licensing page](https://origami.me/licensing/)** (checked 21 October 2026) says models it
   credits as *Traditional design* are classics where "nobody owns the design", so the jumping frog, ninja star
   and lily are free to fold and teach. The same page keeps its own diagrams, photos and videos under
   copyright even for traditional models (reposting, translating or paid use needs permission), and says
-  nothing about Creative Commons or the public domain. So Gami follows only the fold sequence and copies
+  nothing about Creative Commons or the public domain. So Orikata follows only the fold sequence and copies
   nothing. Designs with a named designer belong to that designer: origami.me's permission to publish the
-  fox doesn't pass on to Gami. "Designer unknown" models (the heart) get credited if a designer comes
+  fox doesn't pass on to Orikata. "Designer unknown" models (the heart) get credited if a designer comes
   forward.
-- **Folding geometry.** Mathematical facts and methods aren't anyone's to own; the lesson's text is Gami's.
+- **Folding geometry.** Mathematical facts and methods aren't anyone's to own; the lesson's text is Orikata's.
 - **Fold'N Fly planes** (navy plane, king bee; checked 21 October 2026). Fold'N Fly's pages credit no designer
   and give no licence for the designs, only a copyright notice for the site itself. Web searches turned up no
   designer either, and Gilad's database covers origami rather than paper planes. So like the glider they're
-  Unattributed: fine to use, but credit and change them if a designer turns up. Gami follows only the fold
+  Unattributed: fine to use, but credit and change them if a designer turns up. Orikata follows only the fold
   sequence, in its own words and pictures. The king bee includes its optional extras (aileron slits cut in
   the wings and bent up, wingtips turned up), so its card shows scissors. The navy plane leaves out its last
   step, two small tail flaps folded up: each flap runs across the wing's fold into the body, so standing it
@@ -323,34 +323,34 @@ noted when it was written, and the model was folded from the common traditional 
   doesn't). The boomerang (Fold'N Fly #56,
   checked 22 October 2026: no designer, no licence) ends in the same L, with the same strip and tips, but gets
   there differently. Fold'N Fly twists the open strip until its sides stand up as walls, then folds the walls
-  down into each other's pockets. Rigid paper can't twist, so Gami folds the strip in half first and turns it
+  down into each other's pockets. Rigid paper can't twist, so Orikata folds the strip in half first and turns it
   with one 45° fold. Fold'N Fly tucks the tips' corners in between the layers; the engine's reverse fold
-  moves a corner four layers thick as one piece, so Gami folds them behind instead. Gami's version starts on the half sheet, so its card shows no scissors (the first step
+  moves a corner four layers thick as one piece, so Orikata folds them behind instead. Orikata's version starts on the half sheet, so its card shows no scissors (the first step
   says to cut letter paper in half). The sprinter (Fold'N Fly #4, checked 29 October 2026: no designer, no
   licence) lists four general books on paper planes as references (Keith Laux's among them), with none named as
-  its source, so it's Unattributed too. Fold'N Fly staples its nose; Gami's last step suggests
+  its source, so it's Unattributed too. Fold'N Fly staples its nose; Orikata's last step suggests
   staples rather than needing them, as the engine has no stapler. The Spin Plane and UFO, checked the same day,
   each cite only one book of a named designer's own planes (Laux's, and Ken Blackburn and Jeff Lammers's), so
-  they're left out for Gami's own (see `docs/foldnfly-planes-plan.md`). The fun flyer (Fold'N Fly #45, checked the same
+  they're left out for Orikata's own (see `docs/foldnfly-planes-plan.md`). The fun flyer (Fold'N Fly #45, checked the same
   day: no designer, no licence, no references) is Unattributed too. Fold'N Fly creases the diamond's two flaps
   and rabbit-ears them into narrow spikes; each flap is joined to the layers under it along its bottom edge,
-  which a rabbit ear has to fold, so rigid paper can't follow. Gami leaves those steps out: the flaps' tips stick
+  which a rabbit ear has to fold, so rigid paper can't follow. Orikata leaves those steps out: the flaps' tips stick
   out in front as they are, so it folds the point down a quarter of the way rather than halfway, to keep them
-  small, and its wings fold along a line that slants a little from nose to tail. In place of the Spin Plane, Gami has its
+  small, and its wings fold along a line that slants a little from nose to tail. In place of the Spin Plane, Orikata has its
   own corkscrew: the traditional dart's nose folds on letter paper, which leave a long needle nose and swept
   wings, a notch reverse-folded into the tail, and the wingtips bent opposite ways so it rolls. The Spin Plane
   starts from a water bomb base and stands two flaps up as a cockpit; the corkscrew has neither. In place of the
-  UFO, Gami has its own flying saucer: the top folded down to the middle for a thick front edge, the front
+  UFO, Orikata has its own flying saucer: the top folded down to the middle for a thick front edge, the front
   corners turned in, and the back corners folded behind and rounded off with smaller folds, so it's nearly round
   from above. The UFO cuts a corner round with scissors and folds a dart's nose first; the saucer cuts nothing.
   The Wilson (Fold'N Fly #53) and the fast glider (#48), checked 25 November 2026, name no designer, give no licence
-  and list no references, so they're Unattributed and follow Fold'N Fly's order of folds, in Gami's own words. The
+  and list no references, so they're Unattributed and follow Fold'N Fly's order of folds, in Orikata's own words. The
   Wilson's flaps fold back out along lines about 9° off the middle, read from Fold'N Fly's photos; it suggests a
   staple rather than needing one. The fast glider's notch is cut out through every layer and thrown away (a cut's
   `away`, added for it). Checked the same day and not followed: the Fast Hawk (#21), whose only reference is
   Laux's book, as the Spin Plane's; the Underside Plane (#27), whose only reference is *Great Paper Airplanes*,
   Norman Schmidt's book of his own gliders; and the Sky OmniWing (#60), credited to OrigamiAirEnforcer after Mike
-  Kelsey's Proto OmniWing, with no open licence. In their place, Gami has three of its own, decided the same day,
+  Kelsey's Proto OmniWing, with no open licence. In their place, Orikata has three of its own, decided the same day,
   each keeping only the general look. The kestrel, after the Fast Hawk: a sheet held sideways, the corners to the
   middle, the point folded down blunt and its corners folded in again, folded in half with swept wings, the tips
   turned up (the Fast Hawk folds a strip down first, then accordion-folds and tucks its sides). The albatross, after
@@ -363,11 +363,11 @@ noted when it was written, and the model was folded from the common traditional 
   yet. Each is credited "Traditional" on origami.me. When one gets a recipe, set its reference to what was
   actually followed and its date to when it shipped. Other traditional models on origami.me that aren't
   listed yet are in `docs/origami-me-candidates.md`.
-- **Boat** (checked 9 November 2026). Gami follows origami.me's order of folds, from an A4 sheet. Its last move,
+- **Boat** (checked 9 November 2026). Orikata follows origami.me's order of folds, from an A4 sheet. Its last move,
   pulling the small diamond's top points apart, is shown as two steps: pulled out into a boat lying flat (as
   origami.me's last diagram shows it), then opened a little and stood up. (Since 12 November 2026 no paper bends
   there: see `docs/bending-plan.md`, step 7.)
-- **Fan** (checked 7 November 2026). Gami follows origami.me's order of folds, pleated from the back so the strip
+- **Fan** (checked 7 November 2026). Orikata follows origami.me's order of folds, pleated from the back so the strip
   beside the flap ends in the middle of the stack, but leaves the flap out where origami.me closes it towards
   the middle: its two layers hang from the two middle layers, so closed over either face it would hold half the
   fan shut. Its corners, folded through both layers, still lock the halves together. The spread is bent paper
@@ -380,4 +380,4 @@ noted when it was written, and the model was folded from the common traditional 
 2. Add a row: designer (or "Traditional" with where that's stated), the licence, the reference you follow, the status, the
    date.
 3. Write the steps in your own words; don't copy text or pictures.
-4. If it's Gami's own design, also list it in `DESIGNS-LICENSE.md`.
+4. If it's Orikata's own design, also list it in `DESIGNS-LICENSE.md`.

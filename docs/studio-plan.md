@@ -146,7 +146,7 @@ publishing), and adds what an open gallery needs:
 - **Ownership**: on submitting, the person certifies the design is their own (or traditional, with no known
   designer), names how they'd like to be credited, and says where it was first published, if anywhere. Kept with the
   model and shown on its page, like `PROVENANCE.md` records the built-in models.
-- **A licence**: the gallery takes only open designs (traditional, openly licensed, or Gami's own under CC BY 4.0,
+- **A licence**: the gallery takes only open designs (traditional, openly licensed, or Orikata's own under CC BY 4.0,
   `DESIGNS-LICENSE.md`). A submission is published under an open licence the person chooses at submission (CC BY 4.0
   by default), so anyone can fold and teach it. They're told this before they submit.
 - **Review**: the existing admin queue, with the certification shown, a check against known copyrighted designs

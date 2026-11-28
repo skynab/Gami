@@ -89,7 +89,7 @@ function Library() {
   const importFile = async (f: File | undefined) => {
     if (!f) return;
     try {
-      // Read through the model, so a file Gami can't fold is turned away here rather than in the editor.
+      // Read through the model, so a file Orikata can't fold is turned away here rather than in the editor.
       const file = toFoldFile(fromFoldFile(JSON.parse(await f.text()) as FoldFile));
       await add(designOf(file, { dirty: true }));
     } catch (e) {

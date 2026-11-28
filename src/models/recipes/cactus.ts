@@ -3,7 +3,7 @@ import { paper, Recipe, table } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 
 /**
- * A potted cactus, Gami's own, after the look of OrigamiOK's (a ribbed green body in a pot, a flower on top) but
+ * A potted cactus, Orikata's own, after the look of OrigamiOK's (a ribbed green body in a pot, a flower on top) but
  * with no glue or scissors: three squares. The body is folded to the middle from both sides, the folds' inner
  * edges turned back out into ribs and its top corners rounded; the pot is a square with a rim folded down and its
  * sides and bottom folded behind; the flower is a small square with its corners folded to the middle.

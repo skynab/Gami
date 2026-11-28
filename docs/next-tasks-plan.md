@@ -1,6 +1,6 @@
 # Plan: what's next (November 2026)
 
-Where Gami stands on 7 November 2026 (brought up to date 23 November): the housekeeping done, what's waiting on a decision or on something
+Where Orikata stands on 7 November 2026 (brought up to date 23 November): the housekeeping done, what's waiting on a decision or on something
 only the owner can see, and the order of work after that. Each area keeps its detail in its own plan; this
 one points to them and is kept up to date as items close.
 
@@ -12,9 +12,9 @@ request.
 
 | Item | Status |
 |---|---|
-| OrigamiOK's intermediate folds | Done 13 November (`docs/origamiok-intermediate-plan.md`): turtle, sunflower, lizard, squirrel, strawberry and a standing fox, all Gami's own; the creeper left out. The strawberry and fox are 3D: the strawberry pops up point down, which needed `popUp`'s `only` and `assemble` after a pop-up (both new). |
+| OrigamiOK's intermediate folds | Done 13 November (`docs/origamiok-intermediate-plan.md`): turtle, sunflower, lizard, squirrel, strawberry and a standing fox, all Orikata's own; the creeper left out. The strawberry and fox are 3D: the strawberry pops up point down, which needed `popUp`'s `only` and `assemble` after a pop-up (both new). |
 | The decision on `PROVENANCE.md` was in the `PLAN.md` decisions log twice | Done: one copy removed. |
-| Fold'N Fly plan: "Gami's own planes need names of their own" | Done: they're the corkscrew and the flying saucer. Taken off the open questions. |
+| Fold'N Fly plan: "Orikata's own planes need names of their own" | Done: they're the corkscrew and the flying saucer. Taken off the open questions. |
 | A link here from `PLAN.md` | Done, under the milestones. |
 | CI's first run (`Tests`, 7 November, on `dev` at `933b887`) | **Failed in the end-to-end job**: found and fixed 8 November (see "Waiting" below), to confirm on CI. The type check and unit tests passed. The e2e job's report was never uploaded, as Playwright wasn't writing one; on CI it now writes an HTML report, with a trace of each test that fails once and is run again, which the workflow uploads as `playwright-report`. |
 | Finished sessions' worktrees | Done: "Lesson: common origami folds", "Lesson: origami bases" and "Standardise fold vocabulary and unfold logic" are archived and their worktrees removed. Their work is all in `dev` (the third's commit, `5dbf414`, landed in another form: `CREASE_KINDS`, `FOLD_KINDS`, `lastFold`). |
@@ -297,8 +297,8 @@ The frog now grazes a little deeper, 0.0106 at most (step 45) against 0.0094, st
 
 | Batch | Status |
 |---|---|
-| OrigamiOK's advanced folds (`docs/origamiok-advanced-plan.md`) | ✅ All seven, 21–22 November, Gami's own: hummingbird, skull, cute whale, pot plant, unicorn, dragon, kaiju. The unicorn and dragon are several sheets; one-sheet versions wait on reverse folds that bend (`docs/clipping-plan.md`, row 3). |
-| Eight more from origami.me (`docs/origami-me-more-plan.md`) | ✅ **All eight**: necktie, kimono, wallet, parrot, chicken (22 November), a swallow of Gami's own (24 November) in place of origami.me's, the horse (25 November) and the crab (26 November). |
+| OrigamiOK's advanced folds (`docs/origamiok-advanced-plan.md`) | ✅ All seven, 21–22 November, Orikata's own: hummingbird, skull, cute whale, pot plant, unicorn, dragon, kaiju. The unicorn and dragon are several sheets; one-sheet versions wait on reverse folds that bend (`docs/clipping-plan.md`, row 3). |
+| Eight more from origami.me (`docs/origami-me-more-plan.md`) | ✅ **All eight**: necktie, kimono, wallet, parrot, chicken (22 November), a swallow of Orikata's own (24 November) in place of origami.me's, the horse (25 November) and the crab (26 November). |
 
 What the five left out, and the engine features that would bring it back (detail in `docs/origami-me-more-plan.md`):
 
@@ -315,7 +315,7 @@ Also: the chicken stood up with `assemble`, and the wallet opened part way with 
 | Item | Status |
 |---|---|
 | Housekeeping | Done but for the `fold-grazes` worktree (above). 12 November: settled questions taken off "Waiting", CI's actions moved to Node 24 (see Smaller). 23 November: branches checked, the New cutoff moved, the content batches added (5), `docs/origami-me-candidates.md` brought up to date. |
-| Models | 21–22 November: OrigamiOK's advanced batch done, origami.me's eight paused at five (see 5). 23 November: coloured pen marks, and the chicken's comb, kimono's obi and parrot's beak drawn with them. 24 November: Gami's own swallow, and pinches (the chicken's landmarks). 25 November: the chicken's comb folded as origami.me folds it, and the horse, both worked out from origami.me's diagrams looked at as pictures. |
+| Models | 21–22 November: OrigamiOK's advanced batch done, origami.me's eight paused at five (see 5). 23 November: coloured pen marks, and the chicken's comb, kimono's obi and parrot's beak drawn with them. 24 November: Orikata's own swallow, and pinches (the chicken's landmarks). 25 November: the chicken's comb folded as origami.me folds it, and the horse, both worked out from origami.me's diagrams looked at as pictures. |
 | Studio, rows 6 and the open questions | Done 11 November: bend with crease goals, share links, a first-visit tour, a note on phones, Submit hidden (`docs/studio-plan.md`). |
 | Unit tests' speed | Done 11 November: 444 s to 217 s, the model checks in four shards (see Smaller). |
 | Clipping | 15 November: paper through paper checked where steps come to rest, `npm run clip-report`, and the squirrel, T-rex, chrysanthemum and kusudama fixed. 20 November: the 3D fox and butterfly fixed at rest; the motion check compares faces meeting at a point, near steps' ends too. What's next is in `docs/clipping-plan.md`. |

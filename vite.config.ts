@@ -18,8 +18,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
       manifest: {
-        name: 'Gami: learn origami in 3D',
-        short_name: 'Gami',
+        name: 'Orikata: learn origami in 3D',
+        short_name: 'Orikata',
         description: 'Learn origami step by step in 3D. Rotate, zoom and watch every fold.',
         theme_color: '#4f46e5',
         background_color: '#ffffff',

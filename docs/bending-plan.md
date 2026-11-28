@@ -1,6 +1,6 @@
 # Plan: paper that bends
 
-Gami's paper is rigid: every face is a flat polygon that keeps its shape, and paper only changes direction at
+Orikata's paper is rigid: every face is a flat polygon that keeps its shape, and paper only changes direction at
 creases. That covers every gallery model so far. Three don't fit, because real paper bends to make them:
 
 - **The fan** (`wip/fan`). Spread out, each pleat is nearly closed at the pinched end and open at the far end. A
@@ -20,7 +20,7 @@ the paper that bends is cut into a fine mesh of small triangles, with a very sli
 curve is a row of tiny creases, as a curl already is (`shape`'s `segments`), but in any direction and with the
 angles worked out rather than given.
 
-That keeps the rest of Gami as it is:
+That keeps the rest of Orikata as it is:
 
 - **The format.** A bent frame is FOLD faces and vertices like any other. Only the mesh edges need marking as
   soft (`gami:soft`, below), so they're drawn without crease lines.

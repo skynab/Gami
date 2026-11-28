@@ -3,7 +3,7 @@ import type { Vec2 } from '../../fold/types';
 import { halves } from './face';
 
 /**
- * A frog's head that slips over the corner of a page, Gami's own: the common corner bookmark, its two side flaps
+ * A frog's head that slips over the corner of a page, Orikata's own: the common corner bookmark, its two side flaps
  * folded up to the top, then their points folded out past the sides for eyes.
  */
 export function frogBookmark() {

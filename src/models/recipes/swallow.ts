@@ -4,7 +4,7 @@ import { birdBase } from './bird-base';
 import type { Vec2 } from '../../fold/types';
 
 /**
- * Gami's own swallow, seen from above: the crane's bird base and leg narrowing, the legs reverse-folded out as
+ * Orikata's own swallow, seen from above: the crane's bird base and leg narrowing, the legs reverse-folded out as
  * swept-back wings, the front long flap folded down for the head, and the back one cut up the middle and its
  * halves folded apart for a forked tail. Then turned round, head up.
  */

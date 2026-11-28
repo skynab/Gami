@@ -1,11 +1,11 @@
 ---
 name: start-site
-description: Start (or run) the Gami website locally, check it's really working at localhost (pages, code, model files, the 3D viewer, no console errors), and give the user a link to open it. Use when asked to run, start, launch, serve or open the program, site, website or app.
+description: Start (or run) the Orikata website locally, check it's really working at localhost (pages, code, model files, the 3D viewer, no console errors), and give the user a link to open it. Use when asked to run, start, launch, serve or open the program, site, website or app.
 ---
 
-# Start the Gami website
+# Start the Orikata website
 
-Gami is a Vite + React app. Locally it runs as the Vite dev server, set up in `.claude/launch.json` as `dev`
+Orikata is a Vite + React app. Locally it runs as the Vite dev server, set up in `.claude/launch.json` as `dev`
 (`npm run dev -- --port 5180 --strictPort`). Built-in models are static files in `public/models/`, served at
 `/models/<id>.fold`.
 
@@ -37,7 +37,7 @@ curl -s -o /dev/null -w "code %{http_code}\n" $base/src/main.tsx
 curl -s $base/models/paper-plane.fold | head -c 12; echo
 ```
 
-Expect `page 200`, `<title>Gami</title>`, `code 200`, and `{"file_spec"`. Anything else: read the server's
+Expect `page 200`, `<title>Orikata</title>`, `code 200`, and `{"file_spec"`. Anything else: read the server's
 output (`preview_logs` with level `error`, or the terminal), fix the cause, and check again.
 
 Then look at it in a browser (the browser pane: `navigate` to `$base/`):

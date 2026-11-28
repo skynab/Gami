@@ -1,7 +1,7 @@
 import { paper, Recipe, table } from '../../fold/recipe';
 
 /**
- * Gami's own sword, from a 1 × 4 strip: narrowed to a quarter of its width with a point at the top, then
+ * Orikata's own sword, from a 1 × 4 strip: narrowed to a quarter of its width with a point at the top, then
  * turned sideways by a 45° fold, doubled back across both sides for the crossguard, and turned down again
  * for the handle, with the end folded up for a pommel. Narrowing seals the front inside, so the finished
  * sword is all silver (the back); the gold front shows while folding, which keeps the early steps easy to follow.

@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { isPattern, type Pattern } from '../viewer/patterns';
 
 /**
- * Small preferences kept in this browser, set from the menu behind the Gami name at the top of the gallery.
+ * Small preferences kept in this browser, set from the menu behind the Orikata name at the top of the gallery.
  * Storage can be blocked or cleared at any time, so every read and write is allowed to fail quietly: the
  * defaults come back.
  */

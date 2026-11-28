@@ -8,13 +8,13 @@ model is marked New on its card.
 
 - **OrigamiOK credits nobody.** Each page names its writer (Bella) and photographer (Tomas), with no designer
   and no licence. So each model's status comes from [Gilad's database](https://www.giladorigami.com/origami-database/kusudama%20flower)
-  (`/origami-database/<name>`) and origami.me. Gami follows the order of folds only and copies none of
+  (`/origami-database/<name>`) and origami.me. Orikata follows the order of folds only and copies none of
   OrigamiOK's text or photos.
 - **What the engine lacks.** Sheets can only be placed **flat on the table** (`place`), on top or underneath,
   so units can't yet be stood up and plugged together in 3D. That already blocked the cube, dice and spinning top
   (`docs/origamiok-easy-plan.md`, phase 5). There is also no way to **tuck a placed unit between layers** of
   another, or to fold one unit and **make N more like it**. So far no model has used more than three sheets, and
-  each sheet is folded on screen (`together`), which won't scale to 28 or 60 units. Glue isn't needed: Gami's
+  each sheet is folded on screen (`together`), which won't scale to 28 or 60 units. Glue isn't needed: Orikata's
   sticky tape (`tape`) can hold joins together, as glue does.
 - **The six, checked:**
 
@@ -22,10 +22,10 @@ model is marked New on its card.
   |---|---|---|---|---|
   | [Rainbow chain](https://origamiok.com/origami-rainbow-chain/) | 28 squares, 9 folds each | Each unit is a narrow folded strip; the next unit's layers tuck into it. Ends join into a bracelet | Not found by name. Two near relatives are **Traditional**: the *gum wrapper chain* (Gilad: *Creating Origami*) and the *chain bracelet* (*Creative Origami and Beyond*) | **Clear as a traditional chain**: fold the gum wrapper chain in rainbow colours |
   | [Kusudama flower ball](https://origamiok.com/origami-kusudama-flower-ball/) | 60 squares, glued | Five petals glued into a flower, 12 flowers glued into a ball | *Flower Kusudama*: **Traditional** (Gilad: *Charming Flower Origami*) | **Clear** |
-  | [Infinity cube](https://origamiok.com/origami-infinity-cube/) | 48 squares, glue and tape | Eight small glued cubes, taped at hinges so they flip round endlessly | A hinge toy, not a folded design; the six-panel cube inside it is unnamed | **Gami's own**: eight of Gami's cubes joined with tape hinges |
+  | [Infinity cube](https://origamiok.com/origami-infinity-cube/) | 48 squares, glue and tape | Eight small glued cubes, taped at hinges so they flip round endlessly | A hinge toy, not a folded design; the six-panel cube inside it is unnamed | **Orikata's own**: eight of Orikata's cubes joined with tape hinges |
   | [Cube](https://origamiok.com/origami-cube/) | 6 squares | Edges to the middle, turn over, corners to opposite edges: a parallelogram with two tabs | This is the **Sonobe unit** (Mitsunobu Sonobe; origami.me's cube credits him too) | **Not open.** Use the **business card cube** instead: 6 units, **Traditional** (Gilad: Hull, *Project Origami*) |
-  | [Ninja star, 8 points](https://origamiok.com/origami-ninja-stars-8-points/) | 8 squares | Each unit's corners folded in and collapsed, then wrapped round its neighbour into a ring | Every 8-unit ninja star on Gilad's is named (Jose Meeusen; Jaime Niño Bernal); the transforming star is Robert Neale's. Only the two-unit shuriken is Traditional | **Not open**: Gami's own eight-point star |
-  | [Magic circle](https://origamiok.com/origami-magic-circle/) | 9 squares | Units wrapped into a ring whose flaps flip inside out over and over | *Magic circle*: **Kumasaka Hiroshi** (Gilad: Temko, *Origami Magic*); the 8-unit *Kurum kurum* is George Rhoads's | **Not open**: Gami's own flipping ring, or drop it |
+  | [Ninja star, 8 points](https://origamiok.com/origami-ninja-stars-8-points/) | 8 squares | Each unit's corners folded in and collapsed, then wrapped round its neighbour into a ring | Every 8-unit ninja star on Gilad's is named (Jose Meeusen; Jaime Niño Bernal); the transforming star is Robert Neale's. Only the two-unit shuriken is Traditional | **Not open**: Orikata's own eight-point star |
+  | [Magic circle](https://origamiok.com/origami-magic-circle/) | 9 squares | Units wrapped into a ring whose flaps flip inside out over and over | *Magic circle*: **Kumasaka Hiroshi** (Gilad: Temko, *Origami Magic*); the 8-unit *Kurum kurum* is George Rhoads's | **Not open**: Orikata's own flipping ring, or drop it |
 
 - **Other open modulars found:**
 
@@ -46,13 +46,13 @@ As in `docs/origamiok-easy-plan.md`: licence row first (`record-model-licence`);
 `src/models/recipes`; `npm run models`; no crossings; catalog entry, category `modular`, `sheets` set, `added` set
 to the ship date; update the Modular filter test in `src/gallery/catalog.test.ts` (it expects only the ninja star);
 Japanese, Spanish and French steps; `npm test` and `npm run typecheck`; look at it in the viewer. Where OrigamiOK
-glues, Gami says to glue (glue isn't drawn: tape can't be laid on paper standing up in 3D). Fold the first unit in
+glues, Orikata says to glue (glue isn't drawn: tape can't be laid on paper standing up in 3D). Fold the first unit in
 full; the rest are "fold the others the same way" (`copy`).
 
 ## Order
 
 On 29 October 2026 the user chose three: the **kusudama flower ball**, the **rainbow chain** and the **cube**. The
-eight-point star, magic circle and infinity cube are dropped, Gami's own versions too ("too proprietary"). Each
+eight-point star, magic circle and infinity cube are dropped, Orikata's own versions too ("too proprietary"). Each
 phase can ship alone.
 
 | Phase | Work | Engine fit | Risk |
@@ -80,4 +80,4 @@ phase can ship alone.
 | 4. Cube | Done: the business card cube in three colours, each pair of cards making two units, the cube built up from the bottom, every edge held by a flap over the next face. It's turned 35° so its card shows two sides; cards seen at a slant are now painted in the order faces cover each other, which showed flaps under the faces they lie on (and, on the bracelet and lotus, colours the viewer doesn't show). |
 | 5. Kusudama flower ball | Done. The squash is the flap folded in half on its crease, then its top layer opened back out over the diamond's lower edge, two folds as one step. Each petal is a three-sided cone: its halves 66° apart, so its lower edges are 45° apart and the flaps (22.5° each) meet between them. Five petals tilt 70° out from each flower's middle, their flaps outward; flowers sit 0.5 out from the ball's middle, each petal towards a corner of its face. Small gaps show where three flowers meet, as on a real one. The file is 1.0 MB (about 210 KB compressed), the biggest by far: every face of every assembled step is kept. A flap's bend names its quarter of the square rather than each of its faces, which saved 15%. |
 | Later: glue and dice | Done. Glue is a tool on the card, as tape is: an assembly step can say its pieces are glued (`glue`, not drawn), and the kusudama's are. The **dice** is the business card cube in white cards put together with its flaps inside, so each face is one plain square, the units turned over to draw the dots on the side that ends up outside, 1 to 6 with opposite faces adding to 7. Cards seen at a slant now draw pen marks, and break rings of faces covering each other (three flaps meeting in a corner) within the ring. |
-| Later: medium tasks | The rainbow chain closes into a bracelet and the kusudama hangs from a glued loop (both done). The spinning top and basic cube from `docs/origamiok-easy-plan.md` aren't open (Makoto Yamaguchi's and Paul Jackson's) and were dropped. The kusudama chrysanthemum (origami.me, Traditional) couldn't be followed: its text doesn't say where step 11's squashed flaps go or which corners are glued together, which only its diagrams show. So `chrysanthemum` is Gami's own after its look (CC BY 4.0): six windmill bases on a cube's sides, glued where their squares' corners meet, their arms opened 50° as petals. |
+| Later: medium tasks | The rainbow chain closes into a bracelet and the kusudama hangs from a glued loop (both done). The spinning top and basic cube from `docs/origamiok-easy-plan.md` aren't open (Makoto Yamaguchi's and Paul Jackson's) and were dropped. The kusudama chrysanthemum (origami.me, Traditional) couldn't be followed: its text doesn't say where step 11's squashed flaps go or which corners are glued together, which only its diagrams show. So `chrysanthemum` is Orikata's own after its look (CC BY 4.0): six windmill bases on a cube's sides, glued where their squares' corners meet, their arms opened 50° as petals. |

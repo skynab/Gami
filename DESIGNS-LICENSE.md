@@ -1,15 +1,15 @@
-# Licence for Gami's own origami designs
+# Licence for Orikata's own origami designs
 
-Origami designs created for Gami are licensed under the
+Origami designs created for Orikata are licensed under the
 [Creative Commons Attribution 4.0 International licence (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
 
 You may fold, teach, diagram, adapt and share these designs, including commercially, as long as you credit
-**Gami** as the designer and link to this licence.
+**Orikata** as the designer and link to this licence.
 
 This covers the designs themselves: the folding sequences and the finished forms. It doesn't cover the
 site's source code, or any other model in the gallery.
 
-## Gami's own designs
+## Orikata's own designs
 
 | Model | Recipe | Since |
 |---|---|---|
@@ -62,8 +62,8 @@ site's source code, or any other model in the gallery.
 
 ## Other models in the gallery
 
-The other gallery models aren't Gami's designs, so this licence doesn't cover them. They are traditional
+The other gallery models aren't Orikata's designs, so this licence doesn't cover them. They are traditional
 (crane, cup, lily and others), or follow freely published instructions, recorded with where they come from
-(see `PROVENANCE.md`). New gallery models must be traditional, openly licensed, or Gami's own.
+(see `PROVENANCE.md`). New gallery models must be traditional, openly licensed, or Orikata's own.
 
-When you add a design of Gami's own, add it to the table above.
+When you add a design of Orikata's own, add it to the table above.

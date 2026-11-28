@@ -1,7 +1,7 @@
 import { Recipe, table } from '../../fold/recipe';
 
 /**
- * A bracelet, Gami's own: a square folded to the middle twice into a narrow band, then curled round into a ring,
+ * A bracelet, Orikata's own: a square folded to the middle twice into a narrow band, then curled round into a ring,
  * its ends meeting. A 15 cm square makes a band about 15 cm round, a child's wrist.
  */
 export function bracelet() {

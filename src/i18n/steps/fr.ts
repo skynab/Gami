@@ -2,8 +2,8 @@
 export const fr: Record<string, string> = {
   "Stepping through":
     "Étape par étape",
-  "Welcome to Gami":
-    "Bienvenue dans Gami",
+  "Welcome to Orikata":
+    "Bienvenue dans Orikata",
   "Each step shows one fold. Press Next step (›) or → to go on.":
     "Chaque étape montre un pli. Appuyez sur Étape suivante (›) ou → pour continuer.",
   "Going back":
@@ -64,8 +64,8 @@ export const fr: Record<string, string> = {
     "Le ˅ de cette carte la masque, pour mieux voir le modèle. Afficher les instructions (I) la fait revenir.",
   "Pick up where you left off":
     "Reprendre où vous en étiez",
-  "Gami remembers your step in every model and marks the ones you finish. Press ? for every keyboard shortcut.":
-    "Gami retient votre étape dans chaque modèle et marque ceux que vous terminez. Appuyez sur ? pour voir tous les raccourcis clavier.",
+  "Orikata remembers your step in every model and marks the ones you finish. Press ? for every keyboard shortcut.":
+    "Orikata retient votre étape dans chaque modèle et marque ceux que vous terminez. Appuyez sur ? pour voir tous les raccourcis clavier.",
   "Fold in half diagonally":
     "Plier en deux en diagonale",
   "Unfold":

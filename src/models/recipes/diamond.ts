@@ -2,7 +2,7 @@ import { paper, Recipe, table } from '../../fold/recipe';
 import { creased, pyramidRays, SLOPE } from './pyramid';
 
 /**
- * A diamond, the gem, Gami's own: a creased square with its corners folded behind into an octagon, popped point
+ * A diamond, the gem, Orikata's own: a creased square with its corners folded behind into an octagon, popped point
  * down as the pyramid is point up, so it's a cut stone's lower half, its rim the octagon. No glue.
  */
 export function diamond() {

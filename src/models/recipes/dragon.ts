@@ -6,7 +6,7 @@ import type { Vec2, Vec3 } from '../../fold/types';
 import { birdBase } from './bird-base';
 
 /**
- * A dragon, Gami's own: the traditional bird base, its lower points narrowed as the crane's are, then turned with
+ * A dragon, Orikata's own: the traditional bird base, its lower points narrowed as the crane's are, then turned with
  * outside reverse folds (wrapped round the body, as the hummingbird's are) into a neck rising forwards and a long
  * tail behind, sloping down so its end rests on the table once the dragon stands. The neck's top is turned out
  * again to stand straight up, and its tip pushed in between its layers for the head, pointing forwards and down: an

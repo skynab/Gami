@@ -81,11 +81,11 @@ export const ja: Messages = {
   },
   donate: {
     button: '寄付',
-    title: 'Gami を応援する',
-    body: 'Gami は無料で、広告もなく、学ぶのに登録もいりません。折るのに役立ったなら、少額のチップが運営の支えになります。',
+    title: 'Orikata を応援する',
+    body: 'Orikata は無料で、広告もなく、学ぶのに登録もいりません。折るのに役立ったなら、少額のチップが運営の支えになります。',
     other: 'その他の金額',
     note: 'お支払いは新しいタブで Stripe により安全に処理されます。チップは任意で、税控除の対象にはなりません。',
-    thanks: 'Gami を応援していただき、ありがとうございます！',
+    thanks: 'Orikata を応援していただき、ありがとうございます！',
   },
   gallery: {
     title: '折り紙を折ってみよう',
@@ -119,7 +119,7 @@ export const ja: Messages = {
   categories: { lesson: 'レッスン', animal: '動物', object: 'もの', toy: 'おもちゃ', plane: '飛行機', modular: 'ユニット', flower: '花' },
   forms: { '2d': '平面', '3d': '立体' },
   brandMenu: {
-    title: 'Gami メニュー',
+    title: 'Orikata メニュー',
     previews: 'カードで折り方を再生する',
     paper: '紙',
     experimental: '試験中',
@@ -507,7 +507,7 @@ export const ja: Messages = {
     },
     details: '詳しく(任意):だれの作品で、どこで発表されたか',
     contact: '返事がほしい場合の連絡先(任意)',
-    private: '報告を見られるのは Gami の管理者だけです。',
+    private: '報告を見られるのは Orikata の管理者だけです。',
     send: '報告を送る',
     thanks: 'ありがとうございます。管理者が確認します。',
   },

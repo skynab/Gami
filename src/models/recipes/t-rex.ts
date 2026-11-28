@@ -3,7 +3,7 @@ import { paper, Recipe, table, type ShapeBend } from '../../fold/recipe';
 import type { Vec2, Vec3 } from '../../fold/types';
 
 /**
- * A T-rex, Gami's own, from two squares: a big one for the body, a kite folded in half and laid on its side, its long
+ * A T-rex, Orikata's own, from two squares: a big one for the body, a kite folded in half and laid on its side, its long
  * point the tail and its corner the legs, and a small one for the head, folded in half with its snout's top corner
  * folded behind, set high on the body's front end. Then stood up in 3D, the body's halves opened a little and the
  * head sitting up on the front of its back.

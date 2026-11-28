@@ -26,7 +26,7 @@ function clip(poly: Vec2[], a: Vec2, d: Vec2, keep: 1 | -1): Vec2[] {
 }
 
 /**
- * A necktie, Gami's own (origami.me credits one as traditional, but every necktie in Gilad's database has a named
+ * A necktie, Orikata's own (origami.me credits one as traditional, but every necktie in Gilad's database has a named
  * designer), from one square: a kite, its long point narrowed for the
  * part round the neck, turned over; the point folded down and back up for the knot, and its tip folded away
  * behind. The kite's short end is the tie's wide blade. Stripes are drawn with a pen before the knot is folded, on

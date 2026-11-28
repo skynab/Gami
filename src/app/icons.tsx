@@ -66,7 +66,7 @@ export const StudioIcon = icon(
   </>,
 );
 
-/** A square sheet with one corner folded over: Gami's stand-in for "a model". */
+/** A square sheet with one corner folded over: Orikata's stand-in for "a model". */
 export const PaperIcon = icon(
   <>
     <path d="M4 4l16 16H4z" fill="currentColor" fillOpacity=".22" stroke="none" />

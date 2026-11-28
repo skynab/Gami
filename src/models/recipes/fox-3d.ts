@@ -5,7 +5,7 @@ import { faceMarks } from './face';
 import { moved } from './waterbomb-base';
 
 /**
- * A fox standing on four legs, in 3D, Gami's own, from three squares: the body snipped for legs, its belly strips
+ * A fox standing on four legs, in 3D, Orikata's own, from three squares: the body snipped for legs, its belly strips
  * folded inside and folded in half along the back, then opened a little so it stands; a fox face from the cat face's
  * folds, looking forwards; and a long kite for the tail, held out behind.
  */

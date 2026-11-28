@@ -2,7 +2,7 @@ import { paper, Recipe, table } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 
 /**
- * A heart that slips over the corner of a page, Gami's own: the common corner bookmark with its top point folded
+ * A heart that slips over the corner of a page, Orikata's own: the common corner bookmark with its top point folded
  * away behind, so the side flaps' points stand up above it as the heart's two humps.
  */
 export function heartBookmark() {

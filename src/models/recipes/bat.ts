@@ -3,7 +3,7 @@ import type { Vec2 } from '../../fold/types';
 import { waterbombBase } from './waterbomb-base';
 
 /**
- * A bat with its wings raised, seen from the front, Gami's own: a water bomb base with its bottom corners folded
+ * A bat with its wings raised, seen from the front, Orikata's own: a water bomb base with its bottom corners folded
  * up and out into wings either side of the top point, which is the head.
  */
 export function bat() {

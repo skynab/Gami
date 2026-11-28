@@ -2,7 +2,7 @@ import { paper, Recipe, table } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 
 /**
- * A three-pointed crown, Gami's own: a triangle whose top is the middle point, its two bottom corners folded up
+ * A three-pointed crown, Orikata's own: a triangle whose top is the middle point, its two bottom corners folded up
  * into points leaning out either side, and its bottom folded behind for a straight band.
  */
 export function crown() {

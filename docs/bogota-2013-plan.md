@@ -28,18 +28,18 @@ confirmed first.
 | Rabbit baby | **Traditional rabbit** (waterbomb-base rabbit) | Good: the waterbomb base is already in the lily, so this is mostly flat folds plus a little 3D. |
 | Elephant | **Traditional elephant** (the simple flat head or the body from a kite) | Good: reverse folds for the trunk, as in the swan. |
 | Iris star | **A traditional eight-pointed star** (modular, 8 squares) | Fair: modular assembly works already (ninja star, tulip). An octagon sheet isn't needed. |
-| Sword | **Gami's own 1 × 4 sword** (done, milestone 16): no traditional or openly licensed sword exists, so Gami designed one | Flat folds only. |
+| Sword | **Orikata's own 1 × 4 sword** (done, milestone 16): no traditional or openly licensed sword exists, so Orikata designed one | Flat folds only. |
 | Den Den Mushi | Nothing clearly traditional found yet | Keep looking; drop if none. |
 | Water dragon | Nothing clearly traditional found yet | Keep looking; drop if none. |
 
 ## Order
 
 1. **Check sources**: confirm each candidate is traditional or openly licensed, and pick the reference
-   instructions to follow (written fresh in Gami's words, never copied).
+   instructions to follow (written fresh in Orikata's words, never copied).
 2. **Traditional rabbit** and **traditional elephant**: quick wins with moves the engine already has.
 3. **Masu box**: with the "walls rise together" shaping step.
 4. **Eight-pointed star**: eight units and an assembly.
-5. Revisit the snail and dragon if open designs turn up, or design Gami's own as with the sword.
+5. Revisit the snail and dragon if open designs turn up, or design Orikata's own as with the sword.
 
 Each model follows the usual routine: recipe in `src/models/recipes`, `npm run models`, `crossings` kept
 low, steps translated in `src/i18n/steps`, card in `src/gallery/catalog.ts`, milestone in `PLAN.md`.

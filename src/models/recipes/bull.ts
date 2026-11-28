@@ -3,7 +3,7 @@ import { paper, Recipe, table, type ShapeBend } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 
 /**
- * A bull, Gami's own, from two squares: a big one for the body, folded in half with two snips up from its bottom
+ * A bull, Orikata's own, from two squares: a big one for the body, folded in half with two snips up from its bottom
  * edge and the paper between them tucked up inside, leaving four legs, and a small one for the head, folded like
  * the heart bookmark so its two humps stand up as horns, set at the front. Then stood up in 3D, the body's sides
  * opened a little and the face looking forwards.

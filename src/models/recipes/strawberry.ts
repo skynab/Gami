@@ -4,7 +4,7 @@ import { creased, pyramidRays, SLOPE } from './pyramid';
 import { moved } from './waterbomb-base';
 
 /**
- * A strawberry in 3D, Gami's own, from two squares and no glue: the berry a red square creased as the pyramid is,
+ * A strawberry in 3D, Orikata's own, from two squares and no glue: the berry a red square creased as the pyramid is,
  * its corners folded in so its rim is rounder, seeds drawn on its red side, then popped point down as the
  * diamond is, red side out; the leaves a green square folded as the sunflower's petals are (corners to the middle
  * and back out), an eight-pointed star set on its rim.

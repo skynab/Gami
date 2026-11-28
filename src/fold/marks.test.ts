@@ -59,7 +59,7 @@ describe('marks drawn on the paper', () => {
   });
 
   it('stay with their step when its operations can’t be read', () => {
-    // Saved by a newer Gami: the operations are left out, but the drawing is part of the step.
+    // Saved by a newer Orikata: the operations are left out, but the drawing is part of the step.
     const warnings: string[] = [];
     const read = throughFile(drawn(), (f) => (f['gami:ops'] = 999), warnings);
     expect(warnings).toHaveLength(1);

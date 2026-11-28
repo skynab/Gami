@@ -15,7 +15,7 @@ const ARM_UP = 0.5;
 const ARM_DOWN = 35;
 
 /**
- * A kaiju, Gami's own generic monster, standing upright in 3D. The body is a big kite with its top corner folded
+ * A kaiju, Orikata's own generic monster, standing upright in 3D. The body is a big kite with its top corner folded
  * behind, so it stands on a straight edge, then folded in half: a tall column, straight up the back and its chest
  * sloping in to the top, where the point is turned out forwards with an outside reverse fold for the head. The tail
  * is a second kite folded in half, lying behind on the table and rising to the back. A row of three small squares,

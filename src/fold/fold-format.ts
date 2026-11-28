@@ -3,8 +3,9 @@ import { CATEGORIES, DIFFICULTIES, STEP_KINDS, type About, type FoldFrame, type 
 
 /**
  * Reading and writing .fold files (https://github.com/edemaine/fold). The start of the model is the file's
- * top-level frame and each step is one of `file_frames`. Standard fields keep their FOLD names; Gami's own
- * fields are prefixed `gami:`, which other FOLD tools ignore.
+ * top-level frame and each step is one of `file_frames`. Standard fields keep their FOLD names; Orikata's own
+ * fields are prefixed `gami:`, which other FOLD tools ignore. (The prefix is from the app's first name, Gami.
+ * It stays, so files already saved and shared still open.)
  *
  * A step may also say how it was made (`gami:op`, see ops.ts), so it can be folded again after an earlier
  * step changes. Files with operations say which version of them they use in `gami:ops`.
@@ -75,7 +76,7 @@ export interface FoldFile extends FoldFileFrame {
 export function toFoldFile(model: OrigamiModel): FoldFile {
   return {
     file_spec: 1.2,
-    file_creator: 'Gami',
+    file_creator: 'Orikata',
     file_title: model.title,
     file_classes: ['diagrams'],
     'gami:id': model.id,
@@ -99,15 +100,15 @@ export function toFoldFile(model: OrigamiModel): FoldFile {
 }
 
 /**
- * Reads a .fold file made by Gami. Operations that aren't well formed, or are from a newer version of Gami,
+ * Reads a .fold file made by Orikata. Operations that aren't well formed, or are from a newer version of Orikata,
  * are left out, so those steps can only be played, not folded again; `warnings` collects why.
  */
 export function fromFoldFile(file: FoldFile, warnings: string[] = []): OrigamiModel {
   const sheets = file['gami:sheets'] ?? (file['gami:sheet'] && [file['gami:sheet']]);
-  if (!sheets || !Array.isArray(file.file_frames)) throw new Error('This .fold file wasn’t made by Gami.');
+  if (!sheets || !Array.isArray(file.file_frames)) throw new Error('This .fold file wasn’t made by Orikata.');
   const version = file['gami:ops'];
   const withOps = version === OPS_VERSION;
-  if (version !== undefined && !withOps) warnings.push(`This file’s steps were saved by a newer Gami, so they can be played but not changed.`);
+  if (version !== undefined && !withOps) warnings.push(`This file’s steps were saved by a newer Orikata, so they can be played but not changed.`);
   const opOf = (f: FoldFileFrame, k: number): { op?: Op } => {
     if (!withOps || f['gami:op'] === undefined) return {};
     try {

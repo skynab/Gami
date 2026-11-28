@@ -49,7 +49,7 @@ export function FoldedPaper({ model, edgeColor }: { model: OrigamiModel; edgeCol
   const tape = useRef<Mesh | null>(null);
   const invalidate = useThree((s) => s.invalidate);
   const grain = useMemo(paperGrain, []);
-  // Patterned paper (an experiment, chosen in the Gami menu): printed on each sheet's coloured side, in its colour.
+  // Patterned paper (an experiment, chosen in the Orikata menu): printed on each sheet's coloured side, in its colour.
   const paper = useSettings((s) => s.paper);
   const sides = model.sheets.map((sheet) => {
     const printed = paper === 'plain' ? null : printedSide(sheet.front, sheet.back);

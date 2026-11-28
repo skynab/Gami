@@ -5,7 +5,7 @@ import { finishPlane } from './paper-plane';
 export const ROLL = 0.09;
 
 /**
- * The albatross, Gami's own: a glider with long, narrow, straight wings and a heavy front edge, which circles slowly,
+ * The albatross, Orikata's own: a glider with long, narrow, straight wings and a heavy front edge, which circles slowly,
  * after the look of Fold'N Fly's Underside Plane (design #27), which is likely Norman Schmidt's, but folded its own
  * way: a sheet held sideways folded in half from top to bottom, its folded edge rolled over twice for a thick leading
  * edge, then folded in half with a short body, so nearly all of its width is wing. From US letter paper held

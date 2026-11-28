@@ -3,7 +3,7 @@ import { paper, Recipe, table } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 
 /**
- * A flat hand fan (an uchiwa), Gami's own, after the look of OrigamiOK's, from a square and a strip: the square's
+ * A flat hand fan (an uchiwa), Orikata's own, after the look of OrigamiOK's, from a square and a strip: the square's
  * corners folded behind into a round green paddle, and the strip folded lengthwise into a thin white handle, its
  * end folded back, slipped under the paddle.
  */

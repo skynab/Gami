@@ -4,7 +4,7 @@ import { onTop } from './face';
 import { cornersUp, T, waterbombBase } from './waterbomb-base';
 
 /**
- * A turtle seen from above, Gami's own: a water bomb base narrowed on each side as the water bomb is (corners up,
+ * A turtle seen from above, Orikata's own: a water bomb base narrowed on each side as the water bomb is (corners up,
  * corners in) into a tall six-sided shell, the loose points at the top then folded down and out as flippers rather
  * than tucked away: the back side's low down, the front side's high up. The base's top point is the head.
  */

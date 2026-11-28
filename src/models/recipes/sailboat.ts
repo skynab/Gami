@@ -1,7 +1,7 @@
 import { Recipe, table } from '../../fold/recipe';
 
 /**
- * A sailboat, Gami's own: the bottom edge folded up for a coloured hull, the top left half folded behind for a
+ * A sailboat, Orikata's own: the bottom edge folded up for a coloured hull, the top left half folded behind for a
  * white sail (its point tucked up out of sight), and the hull's ends folded behind at a slant for the bow and stern.
  */
 export function sailboat() {

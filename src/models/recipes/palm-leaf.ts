@@ -2,7 +2,7 @@ import { paper, Recipe, table } from '../../fold/recipe';
 import { moved } from './waterbomb-base';
 
 /**
- * A pleated palm leaf, Gami's own, after the look of OrigamiOK's: a diamond with all four edges folded to the
+ * A pleated palm leaf, Orikata's own, after the look of OrigamiOK's: a diamond with all four edges folded to the
  * middle into a long, narrow leaf, then pleated back and forth across its length and let open a little, so it
  * ripples.
  */

@@ -1,10 +1,10 @@
 # Patterned paper
 
-A hidden choice in the menu behind the Gami name (on the gallery, `Brand` in `src/app/TopBar.tsx`): fold every model
+A hidden choice in the menu behind the Orikata name (on the gallery, `Brand` in `src/app/TopBar.tsx`): fold every model
 on patterned paper instead of plain coloured paper. Like real patterned origami paper (chiyogami, washi), the pattern
 is printed on one side and the other side stays plain white.
 
-**Built (15 November 2026), as an experiment:** steps 1–4 below. The Gami menu has a *Paper* row (marked
+**Built (15 November 2026), as an experiment:** steps 1–4 below. The Orikata menu has a *Paper* row (marked
 experimental) of swatches: plain and the eight patterns. The choice is kept in this browser and prints the pattern on
 each sheet's coloured side wherever the viewer folds a model (`src/viewer/patterns.ts` draws the tiles,
 `pattern-texture.ts` makes them textures, `FoldedPaper.tsx` puts them on the side `printedSide` picks). The cards'
@@ -25,7 +25,7 @@ tests, so the tiles were checked by eye, tiled 2×2 in three colours. The questi
 
 ## The plan
 
-1. **The setting.** `useSettings` (`src/state/settings.ts`) gets `paper: 'plain' | <pattern id>`, and the Gami menu
+1. **The setting.** `useSettings` (`src/state/settings.ts`) gets `paper: 'plain' | <pattern id>`, and the Orikata menu
    gets a second entry under "Play the cards' folds": *Patterned paper*, opening a row of swatches (plain, then each
    pattern). It's kept in this browser like the other setting, and applies everywhere a model is folded: the
    viewer, the Studio's preview and the finished-model dialog.
@@ -65,5 +65,5 @@ tests, so the tiles were checked by eye, tiled 2×2 in three colours. The questi
 - **The motifs, and how bold.** Small and subtle so the creases still read, or large and decorative? A first batch of
   tiles rendered side by side, on two or three models, would settle it.
 - **Cards.** Plain pictures on the cards (simplest, and they load fastest), or patterned too (step 5)?
-- **Hidden or not.** It's behind the Gami name for now, as asked. If people like it, it could move to the viewer's
+- **Hidden or not.** It's behind the Orikata name for now, as asked. If people like it, it could move to the viewer's
   own controls.

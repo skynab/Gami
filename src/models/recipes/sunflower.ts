@@ -5,7 +5,7 @@ import { leafyStem } from './tulip';
 import { moved } from './waterbomb-base';
 
 /**
- * A sunflower, Gami's own, after the look of OrigamiOK's, from three squares and no glue: petals from a yellow
+ * A sunflower, Orikata's own, after the look of OrigamiOK's, from three squares and no glue: petals from a yellow
  * square, its corners folded to the middle and their points folded back out past the edges, an eight-pointed star;
  * a small brown square with its corners folded behind for the middle, its seeds drawn on in a spiral; and the flat
  * tulip's traditional stem with a leaf.

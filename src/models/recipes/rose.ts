@@ -3,7 +3,7 @@ import type { Vec2 } from '../../fold/types';
 import { moved } from './waterbomb-base';
 
 /**
- * A flat rose, Gami's own, after the look of OrigamiOK's twisted rose: the corners folded to the middle twice,
+ * A flat rose, Orikata's own, after the look of OrigamiOK's twisted rose: the corners folded to the middle twice,
  * then each of the four points folded back out past the edge, each turned the same way round, so the petals
  * spiral.
  */

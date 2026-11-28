@@ -3,7 +3,7 @@ import type { Ray } from '../../fold/shape';
 import type { Vec2 } from '../../fold/types';
 
 /**
- * A pyramid, Gami's own, popped up from a creased square as the fortune teller opens, but point up: the diagonals
+ * A pyramid, Orikata's own, popped up from a creased square as the fortune teller opens, but point up: the diagonals
  * slope down from the middle to the corners as ridges, and each side's spare paper tucks inside along its middle
  * crease, so the sides stay flat. No glue.
  */

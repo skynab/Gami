@@ -8,7 +8,7 @@ export const TIP_UP = 75;
 export const DIHEDRAL = 10;
 
 /**
- * The manta, Gami's own: a flying wing with no tail, wide from front to back, with a heavy front edge and its tips
+ * The manta, Orikata's own: a flying wing with no tail, wide from front to back, with a heavy front edge and its tips
  * turned up, which floats a long time, after the look of Fold'N Fly's Sky OmniWing (design #60, by OrigamiAirEnforcer,
  * after Mike Kelsey's Proto OmniWing), but folded its own way, with no cutting or tape: a sheet held sideways, its
  * top corners folded in and the top edge folded over three times for weight at the front; creased down the

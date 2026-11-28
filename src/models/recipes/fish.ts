@@ -8,7 +8,7 @@ import type { Vec2 } from '../../fold/types';
  * up and back down in a pleat (the belly fins), the left corner pleated up and over (the tail), then turned
  * over and the head folded down.
  *
- * origami.me gives no reference points for most of these folds, so Gami picks its own, noted below.
+ * origami.me gives no reference points for most of these folds, so Orikata picks its own, noted below.
  */
 export function fish() {
   // Folded in half, the triangle's long edge runs along z = 0 from (−h, 0) to (h, 0), its point at (0, h).

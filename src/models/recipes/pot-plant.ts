@@ -5,7 +5,7 @@ import { masuBends, masuFolds } from './masu-box';
 import { leafyStemFolds } from './tulip';
 
 /**
- * A potted plant, Gami's own, after the look of OrigamiOK's (leaves standing in a pot) but from five squares and no
+ * A potted plant, Orikata's own, after the look of OrigamiOK's (leaves standing in a pot) but from five squares and no
  * scissors or glue, all of them traditional parts: three long leaves, each a square narrowed twice into a long kite
  * as the flat tulip's leafy stem starts (`leafyStemFolds`), folded side by side; a small brown
  * square with its corners folded to the middle, for the soil; and the masu box (`masuFolds`, `masuBends`) for the

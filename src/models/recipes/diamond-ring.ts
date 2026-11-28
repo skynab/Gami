@@ -2,7 +2,7 @@ import { paper, Recipe, table } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 
 /**
- * A diamond ring, Gami's own, from a strip and a small square: the strip folded to the middle into a band, the
+ * A diamond ring, Orikata's own, from a strip and a small square: the strip folded to the middle into a band, the
  * square's corners folded to its middle into a faceted gem set on one end of the band, and the rest of the band
  * curled round underneath, so the gem sits on top and hides the join.
  */

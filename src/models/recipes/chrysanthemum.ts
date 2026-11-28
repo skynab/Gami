@@ -10,7 +10,7 @@ const COLOURS: [string, string][] = [
 ];
 
 /**
- * A chrysanthemum kusudama, Gami's own: after the look of the traditional one (origami.me's kusudama
+ * A chrysanthemum kusudama, Orikata's own: after the look of the traditional one (origami.me's kusudama
  * chrysanthemum), whose petals' folds its text leaves unsaid. Each unit is a windmill base, a square half as wide
  * as the paper with four arms whirling round it; six units go on the sides of a cube, glued where their squares'
  * corners meet, each one's arms opened out as petals.

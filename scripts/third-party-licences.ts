@@ -1,5 +1,5 @@
 /**
- * The open-source notices Gami ships with: every library in the build, its licence and the licence's full text, as
+ * The open-source notices Orikata ships with: every library in the build, its licence and the licence's full text, as
  * the MIT, Apache and BSD licences ask. The Vite plugin works out which packages the build really bundled (from
  * Rollup's module graph), so the list can't fall behind the code, and writes it into the build as
  * `third-party-licences.json`. Under `npm run dev` it serves the same from package-lock.json instead, a little
@@ -110,7 +110,7 @@ export function collectLicences(dirs: Iterable<string>): Notices {
     if (!existsSync(join(dir, 'package.json'))) continue;
     const pkg = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'));
     const name: string = pkg.name;
-    // Type packages hold no code, and Gami isn't a library of its own.
+    // Type packages hold no code, and Orikata isn't a library of its own.
     if (!name || name.startsWith('@types/') || seen.has(`${name}@${pkg.version}`)) continue;
     seen.add(`${name}@${pkg.version}`);
     const file = licenceText(dir);
@@ -131,7 +131,7 @@ export function collectLicences(dirs: Iterable<string>): Notices {
 export function thirdPartyLicences(): Plugin {
   let root = process.cwd();
   return {
-    name: 'gami-third-party-licences',
+    name: 'orikata-third-party-licences',
     configResolved(config) {
       root = config.root;
     },

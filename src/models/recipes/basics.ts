@@ -13,7 +13,7 @@ export function folds() {
     new Recipe({ id: basics.id, title: 'Basics', sheet: basics.sheets[0] })
       .section('Stepping through')
       .onto(paper(-0.5, -0.5), paper(0.5, 0.5), {
-        title: 'Welcome to Gami',
+        title: 'Welcome to Orikata',
         text: 'Each step shows one fold. Press Next step (›) or → to go on.',
       })
       .unfold({
@@ -70,7 +70,7 @@ export function folds() {
       })
       .rotate(-45, {
         title: 'Pick up where you left off',
-        text: 'Gami remembers your step in every model and marks the ones you finish. Press ? for every keyboard shortcut.',
+        text: 'Orikata remembers your step in every model and marks the ones you finish. Press ? for every keyboard shortcut.',
       })
       .build()
   );

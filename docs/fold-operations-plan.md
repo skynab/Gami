@@ -20,7 +20,7 @@ steps after it worked out again.
 
 ## Approach
 
-1. **Keep the baked frames.** The viewer, gallery cards, other FOLD tools and older Gami builds read them
+1. **Keep the baked frames.** The viewer, gallery cards, other FOLD tools and older Orikata builds read them
    as they do now. They're also what replaying is checked against.
 2. **Add `gami:op` to each step**: one JSON object saying which engine call made the step from the frame
    before, with every argument in plain data.

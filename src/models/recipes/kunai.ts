@@ -3,7 +3,7 @@ import { paper, Recipe, table } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 
 /**
- * A kunai, Gami's own, from a square and a strip: the square's upper and lower edges folded to the middle into a
+ * A kunai, Orikata's own, from a square and a strip: the square's upper and lower edges folded to the middle into a
  * long-pointed diamond and its bottom point folded behind, the blade, and the strip folded lengthwise into a thin
  * handle, its end folded back for a pommel, slipped under the blade's base.
  */

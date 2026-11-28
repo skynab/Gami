@@ -5,7 +5,7 @@ import { narrowedSide } from './turtle';
 import { waterbombBase } from './waterbomb-base';
 
 /**
- * A lizard seen from above, Gami's own, from two squares: the body a water bomb base narrowed on each side with its
+ * A lizard seen from above, Orikata's own, from two squares: the body a water bomb base narrowed on each side with its
  * loose points folded out as legs, as the turtle's flippers but narrower and steeper, its top point the head; and a
  * long thin tail from a smaller square folded into a narrow kite, slipped under the body.
  */

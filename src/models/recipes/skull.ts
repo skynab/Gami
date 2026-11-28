@@ -2,7 +2,7 @@ import { paper, Recipe, table } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 
 /**
- * A skull, Gami's own, after the look of OrigamiOK's (a pale skull face, dark eye sockets and nose, a row of teeth)
+ * A skull, Orikata's own, after the look of OrigamiOK's (a pale skull face, dark eye sockets and nose, a row of teeth)
  * but folded differently: the blintz, dark side out, so the face is the pale back of the paper. The top corner goes
  * a little past the middle, the side corners to it, and the side flaps' tips are folded back out: where each tip was,
  * the dark middle of the sheet shows through, and the tip turned over is dark too, together an eye socket. The top

@@ -2,7 +2,7 @@ import { paper, Recipe, table } from '../../fold/recipe';
 import { finishPlane } from './paper-plane';
 
 /**
- * The flying saucer, Gami's own floater: the top folded down to the middle for a thick, blunt front edge, its
+ * The flying saucer, Orikata's own floater: the top folded down to the middle for a thick, blunt front edge, its
  * corners turned in, and the back corners folded behind and rounded off, so from above it's nearly round. A
  * short body and broad wings let it float slowly round in wide circles. After the look of Fold'N Fly's UFO,
  * folded differently and without scissors. From a sheet of US letter paper, held upright (8.5 : 11).

@@ -26,6 +26,8 @@ export interface LocalDesign {
   problem?: Problem | null;
 }
 
+// Named for the app's first name, Gami, as the `gami.` keys in localStorage are: renaming them would lose what
+// people have already saved.
 const DB = 'gami';
 const STORE = 'designs';
 /** The single draft the Studio kept before it had a library. */

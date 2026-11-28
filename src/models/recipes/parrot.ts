@@ -13,7 +13,7 @@ export const BEAK_TURN = 150;
 export const BEAK_COLOUR = '#f0d890';
 
 /**
- * A parrot, Gami's own (Gilad's database lists a traditional parrot, from Peter Saydak's book, but this doesn't
+ * A parrot, Orikata's own (Gilad's database lists a traditional parrot, from Peter Saydak's book, but this doesn't
  * follow it or origami.me's, whose head is squashed out from the kite's flaps), from one square: a kite with its long
  * point pleated for the tail, folded in half with the coloured side out, and its short point pushed forward and down
  * between its layers for a hooked beak. The fold is the chest, the kite's side corner the shoulder. The beak shows

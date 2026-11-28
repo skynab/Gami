@@ -2,7 +2,7 @@ import { paper, Recipe, table, type At } from '../../fold/recipe';
 import { foldWings } from './paper-plane';
 
 /**
- * The corkscrew, Gami's own stunt plane: the classic dart's nose folds on a wider sheet, so the edges reach
+ * The corkscrew, Orikata's own stunt plane: the classic dart's nose folds on a wider sheet, so the edges reach
  * nearly to the back and leave a long needle nose with swept wings; a notch reverse-folded into the tail, and
  * the wingtips bent opposite ways so it rolls as it flies. After the look of Fold'N Fly's Spin Plane, folded
  * differently. From a sheet of US letter paper, held upright (8.5 : 11).

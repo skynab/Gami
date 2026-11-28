@@ -4,7 +4,7 @@ import type { Vec2 } from '../../fold/types';
 import { faceMarks } from './face';
 
 /**
- * A sitting cat seen from the front, Gami's own, after the look of OrigamiOK's cute cat but from two squares: a big
+ * A sitting cat seen from the front, Orikata's own, after the look of OrigamiOK's cute cat but from two squares: a big
  * one for the body, a tall kite with its bottom point folded up behind for a tail, and a small one for the head, the
  * cat face (a triangle with its corners folded up into ears), set on top. Then stood up in 3D, the body's sides bent
  * back so it stands like a tent.

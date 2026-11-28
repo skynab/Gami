@@ -3,7 +3,7 @@ import { paper, Recipe, table, type ShapeBend } from '../../fold/recipe';
 import type { Vec2, Vec3 } from '../../fold/types';
 
 /**
- * A squirrel sitting up, Gami's own, from three squares: a triangle for the body, its point tucked inside for feet;
+ * A squirrel sitting up, Orikata's own, from three squares: a triangle for the body, its point tucked inside for feet;
  * a tall kite for the bushy tail, its top flicked over, rising behind the back; and a small triangle for the head,
  * its top corner the ear. Then stood up in 3D: the body's sides opened a little, the tail turned out behind and the
  * head turned to look out.

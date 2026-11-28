@@ -5,7 +5,7 @@ import type { Vec2 } from '../../fold/types';
  * The traditional lotus, simplified: the corners folded to the middle three times, as OrigamiOK does, then the last
  * round's corners lifted back out from the middle as four pointed petals, curling outwards. OrigamiOK also folds the
  * corners in once on the back, then pulls each layer of flaps out from underneath, so the back folds hold them and
- * they curl into three rings of petals. Rigid paper can't stretch round those folds, so Gami leaves them out.
+ * they curl into three rings of petals. Rigid paper can't stretch round those folds, so Orikata leaves them out.
  */
 export function lotus() {
   const r = new Recipe({ id: 'lotus', title: 'Lotus', card: 'finished', sheet: { size: [1, 1], front: '#3f9a4a', back: '#f2a7c3' } });

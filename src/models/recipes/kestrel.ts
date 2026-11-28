@@ -6,7 +6,7 @@ export const TIP = 0.06;
 export const TIP_UP = 80;
 
 /**
- * The kestrel, Gami's own: a broad glider with swept wings and their tips turned up, after the look of Fold'N Fly's
+ * The kestrel, Orikata's own: a broad glider with swept wings and their tips turned up, after the look of Fold'N Fly's
  * Fast Hawk (design #21), which is likely Keith Laux's, but folded its own way: on a sheet held sideways, the
  * corners folded to the middle, the point folded down to make a blunt, thick nose and that nose's corners folded in
  * again for a short point; folded in half, the wings folded along a line deeper at the back, so they sweep back; then

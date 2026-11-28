@@ -17,7 +17,7 @@ const RIPPLE_DEG = 25;
 const TAIL_DROP = 45;
 
 /**
- * A unicorn standing on four legs, in 3D, Gami's own, with the look of OrigamiOK's (Imai Yudai's, collapsed from
+ * A unicorn standing on four legs, in 3D, Orikata's own, with the look of OrigamiOK's (Imai Yudai's, collapsed from
  * one square) but built as the standing fox is, from several sheets. A rectangle for the body, snipped for four
  * long legs, its belly strips folded inside and folded in half along the back; a kite with its top corner folded
  * behind and folded in half for the neck, its tip turned out forwards with an outside reverse fold for the head; a

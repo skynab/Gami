@@ -99,7 +99,7 @@ type Preview = 'off' | 'on' | 'loaded';
  * screens can't hover (a finger scrolling past would start it), so there it plays while `ref` is mid-screen
  * instead, after the finished model has had a moment to be seen (`TOUCH_HOLD`): starting straight away, from the
  * bare sheet, it was hard to tell what the card was. `play` goes on whatever should start it. None of it plays when
- * turned off in the menu behind the Gami name.
+ * turned off in the menu behind the Orikata name.
  */
 function usePreview(model: ModelInfo) {
   const [preview, setPreview] = useState<Preview>('off');

@@ -3,7 +3,7 @@ import { paper, Recipe, table } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 
 /**
- * A peacock showing off its tail, seen from the front, Gami's own, from two squares: a big green one for the tail,
+ * A peacock showing off its tail, seen from the front, Orikata's own, from two squares: a big green one for the tail,
  * its bottom and top corners folded behind into a fan, and a small blue one for the body, a kite narrowed twice
  * into a long neck with its tip folded down for the head, set in front of the tail.
  */

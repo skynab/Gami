@@ -86,7 +86,7 @@ function NoWebGL() {
   return (
     <div className="stage-empty">
       <h1>3D isn’t available</h1>
-      <p className="muted">Your browser or device couldn’t start WebGL, which Gami needs to show the model.</p>
+      <p className="muted">Your browser or device couldn’t start WebGL, which Orikata needs to show the model.</p>
     </div>
   );
 }

@@ -70,7 +70,7 @@ function LanguageMenu() {
 }
 
 /**
- * The Gami name and logo. Elsewhere it goes back to the gallery; on the gallery itself, where that would go
+ * The Orikata name and logo. Elsewhere it goes back to the gallery; on the gallery itself, where that would go
  * nowhere, it opens a small menu of quieter settings, kept out of the way: whether the cards play their folds.
  */
 export function Brand() {
@@ -78,7 +78,7 @@ export function Brand() {
   const face = (
     <>
       <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" width="26" height="26" />
-      <span>Gami</span>
+      <span>Orikata</span>
     </>
   );
   if (!home) {

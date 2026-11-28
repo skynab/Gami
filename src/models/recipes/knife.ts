@@ -2,7 +2,7 @@ import { Recipe, table } from '../../fold/recipe';
 import type { Vec2 } from '../../fold/types';
 
 /**
- * A knife, Gami's own, from half a square: its long edges folded to the middle twice into a strip, one end's
+ * A knife, Orikata's own, from half a square: its long edges folded to the middle twice into a strip, one end's
  * corner folded behind into a slanted tip, and the other end rolled over twice for the handle, coloured in.
  */
 export function knife() {

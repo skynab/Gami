@@ -2,8 +2,8 @@
 export const es: Record<string, string> = {
   "Stepping through":
     "Paso a paso",
-  "Welcome to Gami":
-    "Te damos la bienvenida a Gami",
+  "Welcome to Orikata":
+    "Te damos la bienvenida a Orikata",
   "Each step shows one fold. Press Next step (›) or → to go on.":
     "Cada paso muestra un pliegue. Pulsa Paso siguiente (›) o → para avanzar.",
   "Going back":
@@ -64,8 +64,8 @@ export const es: Record<string, string> = {
     "El ˅ de esta tarjeta la oculta, para ver mejor el modelo. Mostrar instrucciones (I) la vuelve a mostrar.",
   "Pick up where you left off":
     "Sigue donde lo dejaste",
-  "Gami remembers your step in every model and marks the ones you finish. Press ? for every keyboard shortcut.":
-    "Gami recuerda tu paso en cada modelo y marca los que terminas. Pulsa ? para ver todos los atajos de teclado.",
+  "Orikata remembers your step in every model and marks the ones you finish. Press ? for every keyboard shortcut.":
+    "Orikata recuerda tu paso en cada modelo y marca los que terminas. Pulsa ? para ver todos los atajos de teclado.",
   "Fold in half diagonally":
     "Dobla por la mitad en diagonal",
   "Unfold":

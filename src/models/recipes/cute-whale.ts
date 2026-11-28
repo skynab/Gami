@@ -3,7 +3,7 @@ import type { Vec2 } from '../../fold/types';
 import { masuBends, masuFolds, type MasuBend } from './masu-box';
 
 /**
- * A cute whale, Gami's own, after the look of OrigamiOK's (a blocky whale that's a box when turned over): the
+ * A cute whale, Orikata's own, after the look of OrigamiOK's (a blocky whale that's a box when turned over): the
  * traditional masu box, as `masu-box` folds it, worn open side down. The eyes are drawn on the outside of the side
  * walls while the paper's still flat. The top end locks into the box as usual, for the head. The bottom end's flap
  * is folded under while the paper's flat, so it rises up the outside of its end wall with the walls, and its point,

@@ -7,7 +7,7 @@ import { fr } from './fr';
 import { ja } from './ja';
 
 /**
- * The interface's languages. The first visit picks the browser's language if Gami has it (English
+ * The interface's languages. The first visit picks the browser's language if Orikata has it (English
  * otherwise); choosing one in the menu is remembered on this device.
  */
 export const LANGUAGES = [

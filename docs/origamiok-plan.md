@@ -10,19 +10,19 @@ card. Each phase ships on its own, one commit per model, like `docs/origami-me-p
   collective heritage", but no model page names a designer or gives a licence, only "Copyright © 2026 ·
   OrigamiOK" for the site. Only the lotus page calls its model traditional. So each model's status comes from
   [Gilad's database](https://www.giladorigami.com/origami-database/lotus), as `PROVENANCE.md` already does. As
-  with origami.me, Gami follows the order of folds only and copies none of OrigamiOK's text or photos.
+  with origami.me, Orikata follows the order of folds only and copies none of OrigamiOK's text or photos.
 - **Lotus.** Traditional: Gilad's lists "Lotus" and "Lotus flower" as Traditional in many books (LaFosse,
   Yamaguchi, NOA). One sheet, 19 steps, no cuts or glue. **Clear.**
 - **Boat.** Already in the catalog as Coming soon, with a Clear row in `PROVENANCE.md`. **Blocked by the
   engine**: its last step, pulling the diamond's points apart into a hull, needs the bend solver to reach a
   shape it can't reach yet, and its two diamond squashes pass paper through paper (`docs/bending-plan.md`, step 7;
   branch `wip/boat`).
-- **Tulip.** Gami already has the flat tulip from two squares. OrigamiOK's is different: a 3D blossom, plus a pot
+- **Tulip.** Orikata already has the flat tulip from two squares. OrigamiOK's is different: a 3D blossom, plus a pot
   and two leaves, four sheets in all. The blossom is the traditional water bomb tulip; the pot needs checking.
 - **Cactus.** **Not open.** Gilad's lists 55 cactus designs, all with named designers (Kawasaki, Montroll,
   Petty, and others) except one "cactus seed holder". OrigamiOK names no designer for its own, and it takes three
   sheets, scissors and glue (the engine has cuts but no glue).
-- **The rest of the page.** Many are already in Gami (crane, flapping bird, frog, plane, samurai hat, box, lily,
+- **The rest of the page.** Many are already in Orikata (crane, flapping bird, frog, plane, samurai hat, box, lily,
   crow, penguin, dog and cat faces, fish, fox, cicada, heart, cup, fan, sword, balloon, fortune teller, balloon
   rabbit). The new ones were checked against Gilad's:
 
@@ -89,7 +89,7 @@ Easiest first, by what the engine already does. Each can ship alone.
 
 ## Decisions (28 October 2026)
 
-- **Cactus.** Gami's own, keeping the general look: a ribbed body in a pot with a flower on top, from three squares,
+- **Cactus.** Orikata's own, keeping the general look: a ribbed body in a pot with a flower on top, from three squares,
   no glue or scissors.
 - **Tulip.** Both: the 3D tulip shares a split card with the flat one (`PAIRS`).
 - **Extras.** Crown, sailboat and peacock. Not the star box or lantern, for now.
@@ -99,11 +99,11 @@ Easiest first, by what the engine already does. Each can ship alone.
 | Phase | Status |
 |---|---|
 | 1. New filter, sort and badge | Done. The star and chip are purple (`--new`), in light and dark. |
-| Crown | Done, Gami's own: a triangle with its bottom corners folded up into leaning points, the bottom behind. OrigamiOK's opens into a band, which the engine can't pose. |
-| Sailboat | Done, Gami's own: the hull folded up, the top left half behind for the sail, the ends slanted. OrigamiOK's steps lean on photos for where its folds go. |
+| Crown | Done, Orikata's own: a triangle with its bottom corners folded up into leaning points, the bottom behind. OrigamiOK's opens into a band, which the engine can't pose. |
+| Sailboat | Done, Orikata's own: the hull folded up, the top left half behind for the sail, the ends slanted. OrigamiOK's steps lean on photos for where its folds go. |
 | Lotus | Done, simplified: three rounds of corners to the middle, then the last round's corners lifted as four curling petals. OrigamiOK's back fold and pulled-out petals curl paper round folds, which rigid paper can't. |
 | 3D tulip | Done (`tulip-bloom`): water bomb base, corners up, sides overlapped and tucked, blown up like the balloon. Its card shows it before blowing up, as the bent mesh draws speckled. The petals aren't peeled down; the leaves and pot are left out. |
-| Peacock | Done, Gami's own, from two squares: a green fan for the tail and a blue kite narrowed into a neck, set in front. OrigamiOK's eight-feather fan can't open in the engine, and one square leaves only a third of the paper for a tail. |
-| Cactus | Done, Gami's own (see Decisions). |
+| Peacock | Done, Orikata's own, from two squares: a green fan for the tail and a blue kite narrowed into a neck, set in front. OrigamiOK's eight-feather fan can't open in the engine, and one square leaves only a third of the paper for a tail. |
+| Cactus | Done, Orikata's own (see Decisions). |
 | Star box, lantern | Not planned for now. |
 | Boat | Still waits for bending. |
