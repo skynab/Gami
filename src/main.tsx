@@ -5,6 +5,7 @@ import './app/app.css';
 import './app/theme';
 import './i18n';
 import { useAuth } from './auth/store';
+import { Faq } from './routes/Faq';
 import { Gallery } from './routes/Gallery';
 import { CommunityModel } from './routes/CommunityModel';
 import { Learn } from './routes/Learn';
@@ -31,6 +32,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/m/:id" element={<CommunityModel />} />
         <Route path="/s/:token" element={<CommunityModel shared />} />
         <Route path="/mine/:id" element={<MyDesign />} />
+        <Route path="/faq" element={<Faq />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/licences" element={<Licences />} />
         <Route

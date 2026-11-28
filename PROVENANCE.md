@@ -303,6 +303,12 @@ noted when it was written, and the model was folded from the common traditional 
 - **Fox.** Okuda's design isn't openly licensed. It was kept on 18 October 2026 because it's very widely
   folded and taught (see the decisions log in `PLAN.md`). The gallery doesn't credit him yet. If the rule
   is tightened, the choices are: ask for permission, swap in a traditional fox, or design Orikata's own.
+  On 27 November 2026 the owner looked up Okuda's fox and compared it with Orikata's. The owner judges them
+  quite different models, with Orikata's at most loosely based on his. Orikata's is the common simple
+  sitting fox: a diamond with its bottom folded up and its side corners folded to the top, then turned over,
+  folded in half, and given an ear. The status
+  stays "Kept by decision" because origami.me still calls its version "a simple variation" of Okuda's, but the
+  owner sees little risk and isn't planning to replace it.
 - **Origami.me's [licensing page](https://origami.me/licensing/)** (checked 21 October 2026) says models it
   credits as *Traditional design* are classics where "nobody owns the design", so the jumping frog, ninja star
   and lily are free to fold and teach. The same page keeps its own diagrams, photos and videos under
@@ -312,6 +318,15 @@ noted when it was written, and the model was folded from the common traditional 
   fox doesn't pass on to Orikata. "Designer unknown" models (the heart) get credited if a designer comes
   forward.
 - **Folding geometry.** Mathematical facts and methods aren't anyone's to own; the lesson's text is Orikata's.
+- **Fold'N Fly planes, overall** (owner's decision, 27 November 2026). Seven planes follow Fold'N Fly's order of
+  folds: the navy plane, king bee, sprinter, fun flyer, Wilson, fast glider and boomerang. They're treated as free
+  to use. No designer is named for any of them, on Fold'N Fly
+  or anywhere else, and only the order of folds is used, never Fold'N Fly's photos, videos, printable plans or
+  wording. Fold'N Fly doesn't grant a licence for the designs either: its copyright notice covers the site, and
+  its printable plans are for personal printing. So "free to use" here means "unattributed, and nothing of theirs
+  copied", not an open licence. If a designer turns up, credit them and change the plane, as with any
+  Unattributed model. The planes after the look of a named designer's plane (corkscrew, kestrel, albatross, manta,
+  flying saucer) are Orikata's own designs, folded differently, under CC BY 4.0.
 - **Fold'N Fly planes** (navy plane, king bee; checked 21 October 2026). Fold'N Fly's pages credit no designer
   and give no licence for the designs, only a copyright notice for the site itself. Web searches turned up no
   designer either, and Gilad's database covers origami rather than paper planes. So like the glider they're

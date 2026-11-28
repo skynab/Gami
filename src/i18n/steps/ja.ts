@@ -3,7 +3,7 @@ export const ja: Record<string, string> = {
   "Stepping through":
     "手順の進め方",
   "Welcome to Orikata":
-    "Gamiへようこそ",
+    "Orikataへようこそ",
   "Each step shows one fold. Press Next step (›) or → to go on.":
     "手順ごとに一回ずつ折ります。次の手順（›）か→で進みます。",
   "Going back":
@@ -65,7 +65,7 @@ export const ja: Record<string, string> = {
   "Pick up where you left off":
     "続きから再開",
   "Orikata remembers your step in every model and marks the ones you finish. Press ? for every keyboard shortcut.":
-    "Gamiはモデルごとに手順を覚えていて、折り終えたものに印をつけます。?ですべてのキーボードショートカットを表示します。",
+    "Orikataはモデルごとに手順を覚えていて、折り終えたものに印をつけます。?ですべてのキーボードショートカットを表示します。",
   "Fold in half diagonally":
     "対角線で半分に折る",
   "Unfold":

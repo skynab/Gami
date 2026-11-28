@@ -6,7 +6,11 @@ import { TopBar } from '../app/TopBar';
 import { accountsEnabled } from '../auth/store';
 import { CONTACT_EMAIL, DONATE_OPTIONS } from '../config';
 
-/** The day the policy last changed in substance. Move it on with any change to what it says. */
+/**
+ * The policy's version and the day it last changed in substance, shown at its top for the record. Move both on with
+ * any change to what it says, and add the change to docs/privacy-policy-history.md.
+ */
+export const PRIVACY_VERSION = '1.0';
 export const PRIVACY_UPDATED = '2026-11-27';
 
 /**
@@ -20,13 +24,15 @@ export function Privacy() {
     window.scrollTo(0, 0);
   }, []);
   const date = new Intl.DateTimeFormat(i18n.resolvedLanguage, { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(PRIVACY_UPDATED));
+  const donations = DONATE_OPTIONS.length > 0;
   const sections = [
     'device',
     'hosting',
     ...(accountsEnabled ? ['accounts', 'reports'] : []),
-    ...(DONATE_OPTIONS.length ? ['donate'] : []),
+    ...(donations ? ['donate'] : []),
     'children',
-    'rights',
+    // Asking to see or delete what we hold only means something where we hold something: accounts or donation records.
+    ...(accountsEnabled || donations ? ['rights'] : []),
   ];
   return (
     <div className="page">
@@ -34,7 +40,7 @@ export function Privacy() {
       <main className="legal">
         <BackLink />
         <h1>{t('privacy.title')}</h1>
-        <p className="muted">{t('privacy.updated', { date })}</p>
+        <p className="muted">{t('privacy.updated', { version: PRIVACY_VERSION, date })}</p>
         {i18n.resolvedLanguage !== 'en' && <p className="muted small">{t('privacy.translation')}</p>}
         <p>{t('privacy.intro')}</p>
         {sections.map((s) => (
