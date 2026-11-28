@@ -10,17 +10,20 @@ import type { FoldFrame, OrigamiModel, Vec2, Vec3 } from './types';
 
 /**
  * The finished model as a small SVG for the gallery: seen from above, as it was before any 3D shaping, or
- * if the model asks (a fortune teller popped open), finished and seen from above at a slant. It needs no browser or WebGL, and its
+ * if the model asks (a fortune teller popped open, a paper plane), finished and seen from above at a slant. It needs no browser or WebGL, and its
  * transparent background suits light and dark themes.
  */
 export function thumbnailSvg(model: OrigamiModel, size = 240): string {
   const last = model.steps.at(-1)?.frame ?? model.start;
-  if (model.card === 'finished' && !flat(last)) return slanted(model, last, size, marksAt(model, model.steps.length));
+  if (shownFinished(model.card) && !flat(last)) return slanted(model, last, size, marksAt(model, model.steps.length));
   const k = model.steps.findLastIndex((s) => flat(s.frame)) + 1;
   const { box, body } = fromAbove(model, k ? model.steps[k - 1].frame : model.start, marksAt(model, k));
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${box.join(' ')}" width="${size}" height="${size}">${body}</svg>
 `;
 }
+
+/** Whether a card shows its model finished in 3D, at a slant, rather than at its last flat step. */
+const shownFinished = (card: OrigamiModel['card']) => card === 'finished' || card === 'angled';
 
 export const flat = (f: FoldFrame) => f.vertices_coords.every((p) => Math.abs(p[1]) < 1e-6);
 
@@ -112,7 +115,7 @@ export function previewSvg(model: OrigamiModel, size = 240): string {
   // A model whose card shows it finished in 3D (a balloon blown up) ends on that, as its card does, rather than on
   // its last flat state: the flat moments lead up to it.
   const last = model.steps.at(-1)?.frame ?? model.start;
-  const finished = model.card === 'finished' && !flat(last);
+  const finished = shownFinished(model.card) && !flat(last);
   const n = Math.min(PREVIEW_FRAMES - (finished ? 1 : 0), frames.length);
   const flats = Array.from({ length: n }, (_, i) => frames[Math.round((i * (frames.length - 1)) / Math.max(1, n - 1))]);
   const picked: ({ frame: FoldFrame; k: number } | null)[] = finished ? [...flats, null] : flats;
@@ -138,12 +141,30 @@ export function previewSvg(model: OrigamiModel, size = 240): string {
 /** How steeply the slanted view looks down at a model finished in 3D. */
 const SLANT = (55 * Math.PI) / 180;
 
+/**
+ * For an `angled` card, how steeply the view looks down, and how far it's turned from in front about the vertical:
+ * a paper plane (its nose towards −x, its tail +x) is seen from above, behind and to one side, heading away up and to
+ * the right of the card, its wings and keel both showing. Side on, as the other models are, it's a thin sliver.
+ */
+const ANGLED_SLANT = (45 * Math.PI) / 180;
+const ANGLED_TURN = (240 * Math.PI) / 180;
+
+/** Where the slanted view looks from, as a direction towards the viewer (+y up): `finished` from above and in front. */
+function viewFrom(card: OrigamiModel['card']): Vec3 {
+  if (card !== 'angled') return [0, Math.sin(SLANT), Math.cos(SLANT)];
+  const level = Math.cos(ANGLED_SLANT);
+  return [-level * Math.sin(ANGLED_TURN), Math.sin(ANGLED_SLANT), level * Math.cos(ANGLED_TURN)];
+}
+
 function slanted(model: OrigamiModel, frame: FoldFrame, size: number, marks: Mark[] = []): string {
   const lifts = frame === model.steps.at(-1)?.frame ? finishedLifts(model) : undefined;
-  // Looking down from above and in front: screen right is +x, screen up tilts back with the view.
-  const toViewer: Vec3 = [0, Math.sin(SLANT), Math.cos(SLANT)];
-  const up: Vec3 = [0, Math.cos(SLANT), -Math.sin(SLANT)];
   const dot = (a: Vec3, b: Vec3) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  const cross = (a: Vec3, b: Vec3): Vec3 => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+  // Screen up is straight up, tilted back with the view; screen right is square to both.
+  const toViewer = viewFrom(model.card);
+  const level = Math.hypot(toViewer[0], toViewer[2]);
+  const up: Vec3 = [(-toViewer[0] * toViewer[1]) / level, level, (-toViewer[2] * toViewer[1]) / level];
+  const right = cross(up, toViewer);
   // Where each face is drawn, flat-lying layers lifted by their gaps as the viewer draws them.
   const placed = facePositions(frame);
   // Edges between triangles of paper that bends get no line.
@@ -163,7 +184,7 @@ function slanted(model: OrigamiModel, frame: FoldFrame, size: number, marks: Mar
       paper: face.map((v) => frame.vertices_paper[v]),
       world,
       lined: face.map((u, c) => (soft.has(key(u, face[(c + 1) % face.length])) ? [] : parts(frame.vertices_paper[u], frame.vertices_paper[face[(c + 1) % face.length]]))),
-      screen: world.map((p): Vec2 => [p[0], -dot(p, up)]),
+      screen: world.map((p): Vec2 => [dot(p, right), -dot(p, up)]),
       depth: world.reduce((s, p) => s + dot(p, toViewer), 0) / world.length,
       facing,
       offset: dot(facing, world[0]),
@@ -175,9 +196,9 @@ function slanted(model: OrigamiModel, frame: FoldFrame, size: number, marks: Mar
   // other, however their middles lie: a big floor face's middle may be nearer than a small flap's lying on it, or a
   // cube's face's than the flap over it.
   const order = paintOrder(faces, ({ facing, offset }, [x, y]) => {
-    // The depth towards the viewer of the point of the face's plane drawn at (x, y): x along +x, −y along `up`.
+    // The depth towards the viewer of the point of the face's plane drawn at (x, y): x along `right`, −y along `up`.
     const across = dot(facing, toViewer);
-    return across > 1e-6 ? (offset - facing[0] * x + dot(facing, up) * y) / across : null;
+    return across > 1e-6 ? (offset - dot(facing, right) * x + dot(facing, up) * y) / across : null;
   });
   faces.splice(0, faces.length, ...order.map((i) => faces[i]));
   const pts = faces.flatMap((f) => f.screen);
@@ -198,7 +219,7 @@ function slanted(model: OrigamiModel, frame: FoldFrame, size: number, marks: Mar
       // Each mark's part on this face, if it's drawn on the side facing the viewer, as the face is drawn.
       const onScreen = (p: Vec2): Vec2 => {
         const q = toWorld(f.paper, f.world)(p);
-        return [q[0], -dot(q, up)];
+        return [dot(q, right), -dot(q, up)];
       };
       const drawn = marks
         .filter((m) => (m.side === 'front') === f.front)

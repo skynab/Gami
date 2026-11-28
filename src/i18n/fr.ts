@@ -802,7 +802,7 @@ export const fr: Messages = {
       minutes: 'Minutes',
       card: 'La carte montre',
       cardTitle: 'Comment la carte de la galerie représente le modèle',
-      cards: { flat: 'La dernière étape à plat', finished: 'Le modèle fini, en biais' },
+      cards: { flat: 'La dernière étape à plat', finished: 'Le modèle fini, en biais', angled: 'Le modèle fini, vu d’en haut et de derrière (pour les avions)' },
     },
     addBend: 'Ajouter la ligne',
     addBendTitle: 'Garder cette ligne et en choisir une autre : l’étape soulève selon toutes à la fois',

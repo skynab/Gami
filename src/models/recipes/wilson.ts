@@ -22,7 +22,7 @@ export function wilson() {
   // The third folds' lines run from the nose to the bottom edge, 11.25° off the middle.
   const third = h * t(11.25);
 
-  const plane = new Recipe({ id: 'wilson', title: 'Wilson', sheet: { size: [w, h], front: '#4a90d9', back: '#f6f3ec' } })
+  const plane = new Recipe({ id: 'wilson', title: 'Wilson', card: 'angled', sheet: { size: [w, h], front: '#4a90d9', back: '#f6f3ec' } })
     .crease(paper(l, 0), paper(r, 0), { title: 'Fold in half lengthwise', text: 'Bring the left edge over to the right edge and crease down the middle.' })
     .onto(paper(l, top), table(0, corner), { title: 'Fold the top-left corner to the middle', text: 'Line the top edge up with the centre crease.' })
     .onto(paper(r, top), table(0, corner), { title: 'Fold the top-right corner to the middle', text: 'The two corners meet on the centre crease, making a point at the top.' })

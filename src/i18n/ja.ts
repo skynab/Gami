@@ -802,7 +802,7 @@ export const ja: Messages = {
       minutes: '所要時間(分)',
       card: 'カードの絵',
       cardTitle: 'ギャラリーのカードにどう描くか',
-      cards: { flat: '最後の平らな手順', finished: '完成した形を斜めから' },
+      cards: { flat: '最後の平らな手順', finished: '完成した形を斜めから', angled: '完成した形を斜め後ろの上から（紙飛行機向け）' },
     },
     addBend: '曲げ線を追加',
     addBendTitle: 'この線を残して次の線を選びます。すべての線でまとめて持ち上げます',

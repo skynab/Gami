@@ -111,9 +111,9 @@ export interface OrigamiModel {
   steps: Step[];
   /**
    * How the gallery card shows a model finished in 3D: as it was just before (the default), or finished,
-   * seen at a slant.
+   * seen at a slant: from in front, or (`angled`, for a paper plane) from above, behind and to one side.
    */
-  card?: 'flat' | 'finished';
+  card?: 'flat' | 'finished' | 'angled';
   /** How the gallery describes it, kept in its file so a shared model carries it along. */
   about?: About;
 }

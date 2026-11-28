@@ -19,6 +19,7 @@ export function navyPlane() {
   const plane = new Recipe({
     id: 'navy-plane',
     title: 'Navy plane',
+    card: 'angled',
     sheet: { size: [w, h], front: '#f6f3ec', back: '#3d5a80' },
   })
     .crease(paper(l, 0), paper(r, 0), {

@@ -24,6 +24,7 @@ export function funFlyer() {
   const plane = new Recipe({
     id: 'fun-flyer',
     title: 'Fun flyer',
+    card: 'angled',
     sheet: { size: [w, h], front: '#f6f3ec', back: '#e76f51' },
   })
     .crease(paper(l, top), table(r, base), {

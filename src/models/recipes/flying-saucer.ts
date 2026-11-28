@@ -22,6 +22,7 @@ export function flyingSaucer() {
   const plane = new Recipe({
     id: 'flying-saucer',
     title: 'Flying saucer',
+    card: 'angled',
     sheet: { size: [w, h], front: '#f6f3ec', back: '#4d908e' },
   })
     .crease(paper(l, 0), paper(r, 0), {

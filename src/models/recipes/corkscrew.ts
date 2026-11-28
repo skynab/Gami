@@ -23,6 +23,7 @@ export function corkscrew() {
   const plane = new Recipe({
     id: 'corkscrew',
     title: 'Corkscrew',
+    card: 'angled',
     sheet: { size: [w, h], front: '#f6f3ec', back: '#6a4c93' },
   })
     .crease(paper(l, 0), paper(r, 0), {

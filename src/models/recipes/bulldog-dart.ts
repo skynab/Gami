@@ -19,6 +19,7 @@ export function bulldogDart() {
   const plane = new Recipe({
     id: 'bulldog-dart',
     title: 'Bulldog dart',
+    card: 'angled',
     sheet: { size: [w, h], front: '#f6f3ec', back: '#6b6f7a' },
   })
     .crease(paper(l, 0), paper(r, 0), {

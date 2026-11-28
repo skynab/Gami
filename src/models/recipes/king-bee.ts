@@ -21,6 +21,7 @@ export function kingBee() {
   const plane = new Recipe({
     id: 'king-bee',
     title: 'King bee',
+    card: 'angled',
     sheet: { size: [w, h], front: '#f6f3ec', back: '#f2c230' },
   })
     .crease(paper(l, top), table(r, base), {

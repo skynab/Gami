@@ -20,7 +20,7 @@ export function manta() {
   const [l, r, top, bottom] = [-w / 2, w / 2, -h / 2, h / 2];
   // The top corners folded in at 45°, far enough to show past the front edge's folds: the tips taper.
   const nip = 0.3;
-  const plane = new Recipe({ id: 'manta', title: 'Manta', sheet: { size: [w, h], front: '#2f4858', back: '#f6f3ec' } })
+  const plane = new Recipe({ id: 'manta', title: 'Manta', card: 'angled', sheet: { size: [w, h], front: '#2f4858', back: '#f6f3ec' } })
     .crease(paper(0, top), paper(0, bottom), { title: 'Fold in half', text: 'With the paper sideways, bring the left edge over to the right edge, crease down the middle and open it again.' })
     .along(table(l + nip, top), table(l, top + nip), table(l, top), { title: 'Fold in the top-left corner', text: 'Fold the top-left corner down, so its edges meet the top and side about 8 cm (3 inch) from the corner.' })
     .along(table(r - nip, top), table(r, top + nip), table(r, top), { title: 'Fold in the top-right corner', text: 'And the top-right corner, to match.' });

@@ -22,7 +22,7 @@ export function kestrel() {
   const blunt = (top + corner) / 2;
   const half = (corner - top) / 2;
 
-  const plane = new Recipe({ id: 'kestrel', title: 'Kestrel', sheet: { size: [w, h], front: '#8a5a3c', back: '#f6f3ec' } })
+  const plane = new Recipe({ id: 'kestrel', title: 'Kestrel', card: 'angled', sheet: { size: [w, h], front: '#8a5a3c', back: '#f6f3ec' } })
     .crease(paper(0, top), paper(0, -top), { title: 'Fold in half', text: 'With the paper sideways, bring the left edge over to the right edge, crease down the middle and open it again.' })
     .onto(paper(l, top), table(0, corner), { title: 'Fold the top-left corner to the middle', text: 'Line the top edge up with the centre crease.' })
     .onto(paper(r, top), table(0, corner), { title: 'Fold the top-right corner to the middle', text: 'The two corners meet on the centre crease, making a point at the top.' })

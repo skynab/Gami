@@ -162,7 +162,7 @@ function aboutOf(x: unknown): Pick<OrigamiModel, 'about' | 'card'> {
   };
   return {
     ...(Object.keys(about).length && { about }),
-    ...((o.card === 'flat' || o.card === 'finished') && { card: o.card }),
+    ...((o.card === 'flat' || o.card === 'finished' || o.card === 'angled') && { card: o.card }),
   };
 }
 

@@ -15,6 +15,7 @@ export function glider() {
   const plane = new Recipe({
     id: 'glider',
     title: 'Glider',
+    card: 'angled',
     sheet: { size: [w, h], front: '#f6f3ec', back: '#3e8ed0' },
   })
     .crease(paper(l, 0), paper(r, 0), {

@@ -33,6 +33,7 @@ export function sprinter() {
   const plane = new Recipe({
     id: 'sprinter',
     title: 'Sprinter',
+    card: 'angled',
     sheet: { size: [w, h], front: '#f6f3ec', back: '#2a9d8f' },
   }).onto(paper(l, bottom), table(r, top), {
     title: 'Fold one corner onto the other',

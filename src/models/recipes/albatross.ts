@@ -16,7 +16,7 @@ export function albatross() {
   const h = 0.77;
   const [top, bottom] = [-h / 2, h / 2];
 
-  const plane = new Recipe({ id: 'albatross', title: 'Albatross', sheet: { size: [w, h], front: '#5a6b7a', back: '#f6f3ec' } })
+  const plane = new Recipe({ id: 'albatross', title: 'Albatross', card: 'angled', sheet: { size: [w, h], front: '#5a6b7a', back: '#f6f3ec' } })
     .crease(paper(0, top), paper(0, bottom), { title: 'Fold in half', text: 'With the paper sideways, bring the left edge over to the right edge, crease down the middle and open it again.' })
     .onto(paper(0, top), paper(0, bottom), { title: 'Fold in half the other way', text: 'Bring the top edge down to the bottom edge. The fold along the top is the front of the wing.' })
     .along(table(-1, ROLL), table(1, ROLL), table(0, 0), { title: 'Roll the front edge', text: 'Fold the folded top edge down about 2.5 cm (1 inch).' })

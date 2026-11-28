@@ -63,9 +63,13 @@ export function AboutPanel({ model, onChange }: { model: OrigamiModel; onChange(
       </div>
       <label className="field" title={t('studio.about.cardTitle')}>
         <span>{t('studio.about.card')}</span>
-        <select value={model.card ?? 'flat'} onChange={(e) => onChange({ card: e.target.value === 'finished' ? 'finished' : undefined })}>
+        <select
+          value={model.card ?? 'flat'}
+          onChange={(e) => onChange({ card: e.target.value === 'finished' || e.target.value === 'angled' ? e.target.value : undefined })}
+        >
           <option value="flat">{t('studio.about.cards.flat')}</option>
           <option value="finished">{t('studio.about.cards.finished')}</option>
+          <option value="angled">{t('studio.about.cards.angled')}</option>
         </select>
       </label>
     </details>

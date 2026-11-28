@@ -14,6 +14,7 @@ export function paperPlane() {
   const plane = new Recipe({
     id: 'paper-plane',
     title: 'Paper plane',
+    card: 'angled',
     sheet: { size: [w, h], front: '#e8553f', back: '#f6f3ec' },
   })
     .crease(paper(l, 0), paper(r, 0), {

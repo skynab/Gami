@@ -25,7 +25,7 @@ export function fastGlider() {
   // The flat top's corners folded in: its halves turn down onto the middle, on 45° lines from its middle.
   const half = (corner - top) / 2;
 
-  const plane = new Recipe({ id: 'fast-glider', title: 'Fast glider', sheet: { size: [w, h], front: '#d94a4a', back: '#f6f3ec' } })
+  const plane = new Recipe({ id: 'fast-glider', title: 'Fast glider', card: 'angled', sheet: { size: [w, h], front: '#d94a4a', back: '#f6f3ec' } })
     .crease(paper(l, 0), paper(r, 0), { title: 'Fold in half lengthwise', text: 'Bring the left edge over to the right edge and crease down the middle.' })
     .onto(paper(l, top), table(0, corner), { title: 'Fold the top-left corner to the middle', text: 'Line the top edge up with the centre crease.' })
     .onto(paper(r, top), table(0, corner), { title: 'Fold the top-right corner to the middle', text: 'The two corners meet on the centre crease, making a point at the top.' })

@@ -744,7 +744,7 @@ export const en = {
       minutes: 'Minutes',
       card: 'Card shows',
       cardTitle: 'How the gallery card pictures the model',
-      cards: { flat: 'The last flat step', finished: 'The finished model, at a slant' },
+      cards: { flat: 'The last flat step', finished: 'The finished model, at a slant', angled: 'The finished model, from above and behind (for planes)' },
     },
     addBend: 'Add bend',
     addBendTitle: 'Keep this line and pick another: the step lifts about them all at once',
