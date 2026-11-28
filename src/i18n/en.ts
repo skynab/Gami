@@ -43,6 +43,8 @@ export const en = {
     hideFilters: 'Hide filters',
     filtersOn_one: '{{count}} filter on',
     filtersOn_other: '{{count}} filters on',
+    showing_one: '{{count}} model',
+    showing_other: '{{count}} models',
     favorites: 'Favourites',
     new: 'New',
     noFavorites: 'No favourites yet. Press the heart on a model to keep it here.',

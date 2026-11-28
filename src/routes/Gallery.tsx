@@ -236,6 +236,10 @@ export function Gallery() {
               </select>
             </label>
           </div>
+          {/* How many models the filters leave, at the end of the row whether the filters are out or put away. */}
+          <p className="result-count" role="status">
+            {t('gallery.showing', { count: models.length })}
+          </p>
         </div>
 
         {models.length > 0 ? (

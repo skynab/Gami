@@ -102,6 +102,8 @@ export const es: Messages = {
     hideFilters: 'Ocultar filtros',
     filtersOn_one: '{{count}} filtro activo',
     filtersOn_other: '{{count}} filtros activos',
+    showing_one: '{{count}} modelo',
+    showing_other: '{{count}} modelos',
     favorites: 'Favoritos',
     new: 'Nuevos',
     noFavorites: 'Aún no tienes favoritos. Pulsa el corazón de un modelo para guardarlo aquí.',

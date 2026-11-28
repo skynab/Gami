@@ -1246,6 +1246,20 @@ kbd {
   color: var(--fg);
 }
 
+.result-count {
+  margin: 0;
+  margin-inline-start: auto;
+  color: var(--muted);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* With the filters out, the sort already pushes to the end of the row: the count sits just after it. */
+.filter-set:not([hidden]) + .result-count {
+  margin-inline-start: 0;
+}
+
 .sort[data-changed] {
   color: var(--accent);
   font-weight: 550;

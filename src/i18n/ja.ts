@@ -102,6 +102,8 @@ export const ja: Messages = {
     hideFilters: '絞り込みを隠す',
     filtersOn_one: '{{count}}件の絞り込み中',
     filtersOn_other: '{{count}}件の絞り込み中',
+    showing_one: '{{count}}件のモデル',
+    showing_other: '{{count}}件のモデル',
     favorites: 'お気に入り',
     new: '新着',
     noFavorites: 'お気に入りはまだありません。モデルのハートを押すと、ここに表示されます。',
