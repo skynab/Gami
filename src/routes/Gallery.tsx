@@ -6,6 +6,7 @@ import { Footer } from '../app/Footer';
 import { TopBar } from '../app/TopBar';
 import { AccountButton } from '../auth/AccountButton';
 import { accountsEnabled } from '../auth/store';
+import { STUDIO_ENABLED } from '../config';
 import { CATEGORIES, filterModels, FORMS, isNew, LEVELS, MODELS, SORTS, sortModels, withPairs, type Category, type Form, type Level, type Sort } from '../gallery/catalog';
 import { ModelCard, PairCard } from '../gallery/ModelCard';
 import { useFavorites } from '../state/favorites';
@@ -119,10 +120,12 @@ export function Gallery() {
       <TopBar
         end={
           <>
-            <Link to="/studio" className="secondary" title={t('gallery.studioTitle')}>
-              <StudioIcon width={18} height={18} />
-              <span>{t('common.studio')}</span>
-            </Link>
+            {STUDIO_ENABLED && (
+              <Link to="/studio" className="secondary" title={t('gallery.studioTitle')}>
+                <StudioIcon width={18} height={18} />
+                <span>{t('common.studio')}</span>
+              </Link>
+            )}
             <AccountButton />
           </>
         }

@@ -4,7 +4,7 @@ import { BackLink } from '../app/BackLink';
 import { Footer } from '../app/Footer';
 import { TopBar } from '../app/TopBar';
 import { accountsEnabled } from '../auth/store';
-import { CONTACT_EMAIL, DONATE_OPTIONS } from '../config';
+import { CONTACT_EMAIL, DONATE_OPTIONS, STUDIO_ENABLED } from '../config';
 
 /**
  * The policy's version and the day it last changed in substance, shown at its top for the record. Move both on with
@@ -34,6 +34,9 @@ export function Privacy() {
     // Asking to see or delete what we hold only means something where we hold something: accounts or donation records.
     ...(accountsEnabled || donations ? ['rights'] : []),
   ];
+  // Without accounts there's nothing for a child to sign up to, and without the Studio no designs to keep.
+  const variant = (s: string) =>
+    s === 'children' && !accountsEnabled ? 'privacy.childrenLocal' : s === 'device' && !STUDIO_ENABLED ? 'privacy.deviceNoStudio' : `privacy.${s}`;
   return (
     <div className="page">
       <TopBar />
@@ -42,12 +45,11 @@ export function Privacy() {
         <h1>{t('privacy.title')}</h1>
         <p className="muted">{t('privacy.updated', { version: PRIVACY_VERSION, date })}</p>
         {i18n.resolvedLanguage !== 'en' && <p className="muted small">{t('privacy.translation')}</p>}
-        <p>{t('privacy.intro')}</p>
+        <p>{t(STUDIO_ENABLED ? 'privacy.intro' : 'privacy.introNoStudio')}</p>
         {sections.map((s) => (
           <section key={s}>
             <h2>{t(`privacy.${s}Heading`)}</h2>
-            {/* Without accounts, there's nothing for a child to sign up to. */}
-            <p>{t(s === 'children' && !accountsEnabled ? 'privacy.childrenLocal' : `privacy.${s}`)}</p>
+            <p>{t(variant(s))}</p>
           </section>
         ))}
         <section>

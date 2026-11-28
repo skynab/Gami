@@ -29,3 +29,10 @@ export const DONATE_CURRENCY: string = env.VITE_DONATE_CURRENCY || 'USD';
  * the site or an app: the stores want a way to reach you. Left empty, the policy points to the store page instead.
  */
 export const CONTACT_EMAIL: string = env.VITE_CONTACT_EMAIL || '';
+
+/**
+ * Whether the Studio, for designing models, is part of this build: its button in the gallery, its pages and the
+ * privacy policy's mention of designs kept on the device. `VITE_STUDIO=on` or `off` decides. Left empty, it's on
+ * under `npm run dev`, to work on it, and off in a build, so a launch build leaves it out unless asked for.
+ */
+export const STUDIO_ENABLED: boolean = env.VITE_STUDIO ? env.VITE_STUDIO === 'on' : env.DEV;

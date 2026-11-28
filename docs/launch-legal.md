@@ -11,9 +11,9 @@ designs, CC BY 4.0), `docs/name-choice.md` (the name), `docs/privacy-policy-hist
 
 - **No sign-in and no Studio at launch.** That leaves no accounts, community submissions or uploads, so no
   terms of use, takedown agent or account deletion are needed yet. They come back if sign-in or the Studio is
-  switched on. Sign-in is already off unless the Supabase settings are given (`docs/accounts.md`). **The Studio
-  has no off switch yet**: the gallery's Studio button always shows. It needs one before launch, and the privacy
-  policy's line about Studio designs should go with it.
+  switched on. Sign-in is off unless the Supabase settings are given (`docs/accounts.md`). The Studio is left out
+  of a build unless `VITE_STUDIO=on`. That removes its gallery button, its pages and the privacy policy's mention
+  of designs kept on the device. It still shows under `npm run dev`, or set `VITE_STUDIO=off` to see a launch build.
 - **Donate on the website only.** Apple and Google don't allow outside payment links like Stripe in apps. The
   button shows only when `VITE_DONATE_LINK_*` are set, so set them for the website's build and never for an app
   build. When Donate is on, the privacy policy adds its Donations and Your choices sections by itself.
@@ -30,18 +30,17 @@ designs, CC BY 4.0), `docs/name-choice.md` (the name), `docs/privacy-policy-hist
 
 1. **Contact email.** Set `VITE_CONTACT_EMAIL` for the website and every app build. Both stores expect the policy
    to say how to reach you.
-2. **The Studio's off switch** (see above).
-3. **Store privacy forms.** In Google Play's Data safety and Apple's App Privacy, with no sign-in and no Donate in
+2. **Store privacy forms.** In Google Play's Data safety and Apple's App Privacy, with no sign-in and no Donate in
    the apps, the answer is "no data collected" and "no tracking".
-4. **Age ratings.** For Apple's age rating and Google's IARC questionnaire: no violence, no user content, no chat,
+3. **Age ratings.** For Apple's age rating and Google's IARC questionnaire: no violence, no user content, no chat,
    no ads, no purchases inside the app, no data collected. Expect 4+ on Apple and Everyone on Google. The FAQ
    page says it's made for all ages.
-5. **Step wording.** Each recipe's step text should be Orikata's own words, not the tutorial's it followed. Only
+4. **Step wording.** Each recipe's step text should be Orikata's own words, not the tutorial's it followed. Only
    the heart and fox have been compared, out of about 57 recipes that follow a published tutorial.
-6. **The repository.** Recommended: make it private and add a notice "Copyright © 2026 Zaro Software LLC. All
+5. **The repository.** Recommended: make it private and add a notice "Copyright © 2026 Zaro Software LLC. All
    rights reserved." An open-source licence would let anyone publish free copies of a paid app. Orikata's own
    designs stay under CC BY 4.0 (`DESIGNS-LICENSE.md`) whatever the code's licence. Not decided yet.
-7. **A lawyer's read** of the privacy policy, the fox decision and the ORIGATA question before charging money.
+6. **A lawyer's read** of the privacy policy, the fox decision and the ORIGATA question before charging money.
 
 ## The name (Orikata)
 

@@ -9,4 +9,5 @@ interface ImportMetaEnv {
   readonly VITE_DONATE_LINK_CUSTOM?: string;
   readonly VITE_DONATE_CURRENCY?: string;
   readonly VITE_CONTACT_EMAIL?: string;
+  readonly VITE_STUDIO?: string;
 }

@@ -25,7 +25,8 @@ Without `VITE_CONTACT_EMAIL`, Contact points to the store page or website instea
 The first version, written before launch.
 
 - No ads, analytics or trackers, and nothing sold.
-- Settings, progress, favourites and Studio designs stay on the device.
+- Settings, progress and favourites stay on the device, and so do Studio designs in builds with the Studio
+  (`VITE_STUDIO`). Without it, the intro and the device section don't mention designing.
 - The host's request logs are mentioned, and so are the stores' own handling of downloads and payments.
 - Sign-in, reports and Stripe donations are described only in the builds that have them.
 - **Your choices** (to see, correct or delete what we hold, answered within 30 days) appears only where

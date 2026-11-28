@@ -5,6 +5,7 @@ import './app/app.css';
 import './app/theme';
 import './i18n';
 import { useAuth } from './auth/store';
+import { STUDIO_ENABLED } from './config';
 import { Faq } from './routes/Faq';
 import { Gallery } from './routes/Gallery';
 import { CommunityModel } from './routes/CommunityModel';
@@ -31,26 +32,31 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/learn/:modelId" element={<Learn />} />
         <Route path="/m/:id" element={<CommunityModel />} />
         <Route path="/s/:token" element={<CommunityModel shared />} />
-        <Route path="/mine/:id" element={<MyDesign />} />
         <Route path="/faq" element={<Faq />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/licences" element={<Licences />} />
-        <Route
-          path="/shared"
-          element={
-            <Suspense fallback={null}>
-              <SharedDesign />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/studio/:id?"
-          element={
-            <Suspense fallback={null}>
-              <Studio />
-            </Suspense>
-          }
-        />
+        {/* The Studio and the pages for its designs (kept in this browser, or shared by a link) exist only where it's switched on. */}
+        {STUDIO_ENABLED && (
+          <>
+            <Route path="/mine/:id" element={<MyDesign />} />
+            <Route
+              path="/shared"
+              element={
+                <Suspense fallback={null}>
+                  <SharedDesign />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/studio/:id?"
+              element={
+                <Suspense fallback={null}>
+                  <Studio />
+                </Suspense>
+              }
+            />
+          </>
+        )}
         <Route
           path="/admin"
           element={

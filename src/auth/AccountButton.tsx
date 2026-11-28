@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { Modal } from '../app/Modal';
+import { STUDIO_ENABLED } from '../config';
 import { useAuth } from './store';
 
 /**
@@ -59,12 +60,13 @@ function AccountMenu() {
             {email && email !== label && <span className="muted small">{email}</span>}
             {role && <span className="role">{t(`account.roles.${role}`)}</span>}
           </div>
-          {role === 'learner' && (
+          {/* Becoming a creator, and creating, both happen in the Studio. */}
+          {STUDIO_ENABLED && role === 'learner' && (
             <Link role="menuitem" to="/studio" onClick={() => setOpen(false)}>
               {t('account.become')}
             </Link>
           )}
-          {(role === 'creator' || role === 'admin') && (
+          {STUDIO_ENABLED && (role === 'creator' || role === 'admin') && (
             <Link role="menuitem" to="/studio" onClick={() => setOpen(false)}>
               {t('common.studio')}
             </Link>

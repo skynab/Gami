@@ -4,7 +4,8 @@ Learning on Orikata needs no account, and nor does designing in the Studio. Acco
 a design to the gallery, approved **creators** can also save drafts online, and **admins** can review
 submissions, deal with reports and approve creators.
 
-Without the settings below the site works normally: the sign-in button and Studio simply aren't shown.
+Without the settings below the site works normally, and the sign-in button simply isn't shown. The Studio has its own
+setting, `VITE_STUDIO`: it's left out of a build unless set to `on` (see `.env.example`).
 
 ## Roles
 
