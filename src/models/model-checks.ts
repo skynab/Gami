@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { restingBreaks } from '../fold/breaks';
 import { crossings, partings, playing, restingCrossings } from '../fold/collisions';
 import { fromFoldFile, toFoldFile } from '../fold/fold-format';
 import { framesOf } from '../fold/frames';
@@ -9,7 +10,7 @@ import { previewSvg, thumbnailSvg } from '../fold/thumbnail';
 import { problems } from '../fold/validate';
 import { MODELS } from '../gallery/catalog';
 import { paperRatio } from '../gallery/ModelCard';
-import { GRAZE, GRAZES, REST, RESTS, TEAR, TEARS } from './known-clipping';
+import { BREAK, BREAKS, GRAZE, GRAZES, REST, RESTS, TEAR, TEARS } from './known-clipping';
 import { RECIPES } from './recipes';
 
 /**
@@ -54,6 +55,15 @@ function checks(id: string, model: ReturnType<(typeof RECIPES)[number]>) {
     expect(deepest).toBeLessThanOrEqual(RESTS[id] ?? REST);
     // A model that no longer goes deeper comes off the list.
     if (id in RESTS) expect(deepest).toBeGreaterThan(REST);
+  });
+
+  it('rests with joined paper together, or no further apart than it’s known to', () => {
+    // Faces joined along a crease, as the viewer draws them where each step comes to rest: apart, but for stacked
+    // layers' gaps at a fold (which the viewer closes with a bend), the paper shows torn there.
+    const widest = Math.max(0, ...restingBreaks(model, 0).map((b) => b.gap));
+    expect(widest).toBeLessThanOrEqual(BREAKS[id] ?? BREAK);
+    // A model that no longer comes apart further comes off the list.
+    if (id in BREAKS) expect(widest).toBeGreaterThan(BREAK);
   });
 
   // After the crossings, which work out each step's motion: about half a second a model.

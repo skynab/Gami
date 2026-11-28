@@ -274,7 +274,7 @@ export function checkNoTear(pieces: (FlatFace & { moves: boolean })[], line: Lin
  * Smallest whole-number layers that keep the same order wherever faces overlap, so stacks stay thin.
  * Faces that don't overlap can share a layer.
  */
-function compact(faces: FlatFace[]): number[] {
+export function compact(faces: FlatFace[]): number[] {
   const order = faces.map((_, i) => i).sort((a, b) => faces[a].layer - faces[b].layer || a - b);
   const out = new Array<number>(faces.length).fill(0);
   const placed: number[] = [];

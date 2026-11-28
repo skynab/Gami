@@ -1,3 +1,4 @@
+import { BREAK } from '../fold/breaks';
 import { REST } from '../fold/collisions';
 
 /**
@@ -91,4 +92,34 @@ export const TEARS: Record<string, number> = {
   chrysanthemum: 0.013, // Its pinwheel unit's squash, as the pinwheel's.
   'rainbow-chain': 0.043, // Joining the ends.
   lily: 0.018, // The petal folds, stood up first so they no longer snap down at the end: apart a little on the way.
+};
+
+/**
+ * How far joined paper may be apart where a step comes to rest, as the viewer draws it, other than stacked layers'
+ * gaps at a fold (see fold/breaks.ts): as far as `TEAR`. Until 27 November 2026 nothing looked, and the king bee's
+ * body stood 6 mm clear of its wings once they opened, every plane's a little (see `between` in fold/shape.ts).
+ */
+export { BREAK };
+/**
+ * The models known to come further apart at rest, each a little over what it was measured at (on 27 November 2026),
+ * and where. Each shows as paper floating off the paper it's folded from: to be fixed, not added to. `npm run
+ * break-report` says where.
+ */
+export const BREAKS: Record<string, number> = {
+  // Opening the wings: the body stands on its wings, as thick as the thicker, its layers either side of the hinge,
+  // but the wings are many layers thick there (20 to 37), and their bottom layers are joined to the body's foot.
+  'fast-glider': 0.0275,
+  'navy-plane': 0.015,
+  kestrel: 0.011,
+  // Opening the fins and flippers: each turns up 60° with its foot as high as its flat stack's top was, above the
+  // paper it's joined to (as the planes' bodies were, before 27 November 2026).
+  dolphin: 0.018,
+  seal: 0.0175,
+  whale: 0.0142,
+  // Curling the petals out and spreading the wings, each in rows turned by bends of their own: the rows stand off
+  // their neighbours by different numbers of layers.
+  dragon: 0.0202,
+  lily: 0.0125,
+  // Pressing it flat and joining the ends: rigid links set on a ring, where they hook into each other.
+  'rainbow-chain': 0.011,
 };

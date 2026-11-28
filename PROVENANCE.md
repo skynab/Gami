@@ -331,8 +331,9 @@ noted when it was written, and the model was folded from the common traditional 
   and give no licence for the designs, only a copyright notice for the site itself. Web searches turned up no
   designer either, and Gilad's database covers origami rather than paper planes. So like the glider they're
   Unattributed: fine to use, but credit and change them if a designer turns up. Orikata follows only the fold
-  sequence, in its own words and pictures. The king bee includes its optional extras (aileron slits cut in
-  the wings and bent up, wingtips turned up), so its card shows scissors. The navy plane leaves out its last
+  sequence, in its own words and pictures. The king bee includes its optional wingtips turned up, but leaves
+  out the aileron slits Fold'N Fly cuts in the back of the wings (27 November 2026), so it folds from paper alone
+  and its card shows no scissors. The navy plane leaves out its last
   step, two small tail flaps folded up: each flap runs across the wing's fold into the body, so standing it
   up would stretch the paper where its crease meets that fold (real paper gives a little there; the engine's
   doesn't). The boomerang (Fold'N Fly #56,

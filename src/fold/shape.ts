@@ -1,4 +1,4 @@
-import { checkNoTear, FoldError, placeLike, toFlat, type FlatFace } from './fold';
+import { checkNoTear, compact, FoldError, placeLike, toFlat, type FlatFace } from './fold';
 import { joinedSegment, overlapArea, sideOf, split, type Cut, type Line } from './geometry2d';
 import { LAYER_GAP } from './frames';
 import { centre } from './select';
@@ -149,8 +149,8 @@ export function shape(
   // the other way round, on the table.
   const over = (i: number) => ups[i] !== null && ups[i]![1] < -0.999;
   const overTop = Math.max(0, ...pieces.filter((_, i) => over(i)).map((p) => p.layer));
-  // Paper turned further, at a slant, on paper turned right over (the king bee's aileron, on a wing turned over by
-  // the body's bend and the wing's) is lifted as that paper is, so it stays hinged to it. Lifted along its own way
+  // Paper turned further, at a slant, on paper turned right over (an aileron, as the king bee once had, on a wing turned
+  // over by the body's bend and the wing's) is lifted as that paper is, so it stays hinged to it. Lifted along its own way
   // up, which points down and to the side, it sat as many layers below and beside it (49 layers: 3 cm off).
   const onOver = (i: number) => {
     if (cornerOf[i] || over(i)) return false;
@@ -178,7 +178,7 @@ export function shape(
   };
   const nearest = (i: number) => lineOf(order.findLast((k) => moves[k][i]) ?? -1);
   const turnedBy = (i: number) => moves.filter((m) => m[i]).length;
-  const base = new Map<string, { bottom: number; top: number; lifted: boolean; rest: number; beyond: Vec3 | null }>();
+  const base = new Map<string, { bottom: number; top: number; lifted: boolean; rest: number; beyond: Vec3 | null; between: number | null; level: Map<number, number>; depth: number }>();
   pieces.forEach((_, i) => {
     const k = nearest(i);
     if (!ups[i] || over(i) || cornerOf[i] || turnedBy(i) !== 1 || base.has(k)) return;
@@ -192,20 +192,38 @@ export function shape(
     // Lifted only if all of it is: a stack can carry on past its line the other way, turned down by the same turn
     // (a plane's fin, past its body), and that part's fold has its inside at the bottom.
     const lifted = stack.every((j) => bends[order.findLast((b) => moves[b][j])!].angle > 0);
-    base.set(k, { bottom, top: Math.max(...layers), lifted, rest, beyond: Math.abs(uy) < 0.5 ? [ux * width, 0, uz * width] : null });
+    // A stack standing between paper lying still on one side and paper turned right over about the same line onto
+    // the other (a plane's body between its wings, opened out flat): it stands on both, as thick as the thicker,
+    // its layers either side of the line, those joined to each side's paper on that side. Turned about its top or
+    // bottom layer instead, its layers all to one side and its foot as high as its top was, the paper it's joined
+    // to on one side or both lay a stack's thickness or more away (the king bee's body, 6 mm off its wings on a
+    // 15 cm sheet; the navy plane's, 9.5 mm: November 2026). The paper turned over is hinged at the line, not beyond
+    // the stack, and so is paper turned further on it (a wingtip turned up). Not with a fin, which hangs down
+    // through the table at the line until the plane turns over: the paper turned over lies beyond the stack, out
+    // of its way, as before (the sprinter's).
+    const flipped = pieces.filter((_, j) => over(j) && nearest(j) === k).map((p) => p.layer);
+    const between = flipped.length && lifted ? Math.max(rest, 1 + overTop - Math.min(...flipped)) : null;
+    // Standing, its layers no longer have the paper either side between them: stacked again by themselves, as thin
+    // as their own overlaps allow (the navy plane's body, 45 layers in the whole stack, came half a millimetre nearer
+    // its wings).
+    const packed = between === null ? [] : compact(stack.map((j) => pieces[j]));
+    const level = new Map(stack.map((j, n) => [j, packed[n] ?? 0]));
+    base.set(k, { bottom, top: Math.max(...layers), lifted, rest, beyond: Math.abs(uy) < 0.5 ? [ux * width, 0, uz * width] : null, between, level, depth: Math.max(0, ...packed) });
   });
   pieces.forEach((p, i) => {
     const up = ups[i];
     const b = base.get(nearest(i));
     const stack = b && !over(i) && !cornerOf[i] && turnedBy(i) === 1;
-    if (!up || (!p.layer && !over(i) && !onOver(i) && !(stack && b.rest) && !b?.beyond)) return;
-    const shift = b?.beyond && !stack ? b.beyond : [0, 0, 0];
+    if (!up || (!p.layer && !over(i) && !onOver(i) && !(stack && (b.rest || b.between !== null)) && !b?.beyond)) return;
+    const shift = b?.beyond && !stack && b.between === null ? b.beyond : [0, 0, 0];
     const offset = (
       over(i)
         ? [0, (overTop - 2 * p.layer) * LAYER_GAP, 0]
         : onOver(i)
           ? // As the paper it's on ends up, which is also lifted by its layer when drawn, flat; this isn't.
             [0, (overTop - p.layer) * LAYER_GAP, 0]
+        : stack && b.between !== null
+          ? up.map((c, n) => c * (b.level.get(i)! - b.depth / 2) * LAYER_GAP + (n === 1 ? b.between! * LAYER_GAP : 0))
         : stack && b.lifted
           ? // Lifted, the fold's inside is the stack's top: it turns about that, its lower layers swinging out round
             // it. Turned about its bottom layer, its upper layers' edges swung in past the crease, through any

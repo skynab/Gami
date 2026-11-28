@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit",
     "models": "tsx scripts/build-models.ts",
     "bend-report": "tsx scripts/bend-report.ts",
+    "break-report": "tsx scripts/break-report.ts",
     "clip-report": "tsx scripts/clip-report.ts",
     "icons": "tsx scripts/build-icons.ts"
   },
