@@ -2,6 +2,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+import { thirdPartyLicences } from './scripts/third-party-licences.ts';
 
 // Where the site is served from. `/` for most hosts and app wrappers; GitHub Pages sets BASE_PATH=/Gami/.
 const base = (process.env.BASE_PATH ?? '/').replace(/\/?$/, '/');
@@ -10,6 +11,8 @@ export default defineConfig({
   base,
   plugins: [
     react(),
+    // The open-source notices: every bundled library's licence, for the Licences page.
+    thirdPartyLicences(),
     // Installable and usable offline: the app, the 3D viewer and every built-in model are cached on first visit.
     VitePWA({
       registerType: 'autoUpdate',
@@ -30,7 +33,7 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,fold}'],
+        globPatterns: ['**/*.{js,css,html,svg,png,fold,json}'],
         // The 3D viewer chunk is about 1 MB.
         maximumFileSizeToCacheInBytes: 2 * 1024 * 1024,
         // Deep links (/learn/crane) load the app shell when offline.

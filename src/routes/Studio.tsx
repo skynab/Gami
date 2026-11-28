@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate, useParams } from 'react-router';
+import { Footer } from '../app/Footer';
 import { StudioIcon } from '../app/icons';
 import { TopBar } from '../app/TopBar';
 import { AccountButton, SignInDialog } from '../auth/AccountButton';
@@ -200,6 +201,7 @@ function Library() {
         )}
         <CloudNote />
       </main>
+      <Footer />
     </div>
   );
 }

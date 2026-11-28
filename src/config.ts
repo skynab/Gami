@@ -23,3 +23,9 @@ export const DONATE_OPTIONS: DonateOption[] = [
 
 /** ISO currency of the preset amounts, used only to display them. */
 export const DONATE_CURRENCY: string = env.VITE_DONATE_CURRENCY || 'USD';
+
+/**
+ * Where people write about their privacy (and anything else), shown in the privacy policy. Set it before publishing
+ * the site or an app: the stores want a way to reach you. Left empty, the policy points to the store page instead.
+ */
+export const CONTACT_EMAIL: string = env.VITE_CONTACT_EMAIL || '';

@@ -8,8 +8,10 @@ import { useAuth } from './auth/store';
 import { Gallery } from './routes/Gallery';
 import { CommunityModel } from './routes/CommunityModel';
 import { Learn } from './routes/Learn';
+import { Licences } from './routes/Licences';
 import { MyDesign } from './routes/MyDesign';
 import { NotFound } from './routes/NotFound';
+import { Privacy } from './routes/Privacy';
 
 // Only people making models need the Studio, so everyone else never downloads it.
 const Studio = lazy(() => import('./routes/Studio'));
@@ -29,6 +31,8 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/m/:id" element={<CommunityModel />} />
         <Route path="/s/:token" element={<CommunityModel shared />} />
         <Route path="/mine/:id" element={<MyDesign />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/licences" element={<Licences />} />
         <Route
           path="/shared"
           element={

@@ -1611,6 +1611,120 @@ kbd {
   font-size: 20px;
 }
 
+/* The links at the bottom of the scrolling pages. */
+.footer {
+  max-width: 1120px;
+  margin-inline: auto;
+  padding: 20px 16px 32px;
+  border-top: 1px solid var(--line);
+}
+
+.footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  font-size: 14px;
+}
+
+.footer a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  color: var(--fg);
+  text-decoration: underline;
+}
+
+/* The privacy policy and the open-source notices: plain reading width. */
+.legal {
+  max-width: 720px;
+  margin-inline: auto;
+  padding: 28px 16px 48px;
+  line-height: 1.6;
+}
+
+.legal .back-link {
+  display: inline-block;
+  margin-bottom: 16px;
+  color: var(--muted);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.legal .back-link:hover {
+  color: var(--fg);
+}
+
+.legal h1 {
+  margin: 0 0 4px;
+  font-size: clamp(24px, 4vw, 32px);
+  letter-spacing: -0.02em;
+}
+
+.legal h2 {
+  margin: 28px 0 4px;
+  font-size: 18px;
+}
+
+.legal p {
+  margin: 0 0 12px;
+}
+
+.legal a {
+  color: var(--accent);
+}
+
+.licence-list {
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.licence-list li {
+  border-bottom: 1px solid var(--line);
+}
+
+.licence-list summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  padding: 10px 4px;
+  cursor: pointer;
+}
+
+.licence-name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.licence-tag {
+  margin-inline-start: auto;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 13px;
+}
+
+.licence-list details > p {
+  padding-inline: 4px;
+}
+
+.licence-list pre {
+  margin: 0 0 12px;
+  padding: 12px;
+  max-height: 320px;
+  overflow: auto;
+  border-radius: 8px;
+  background: var(--surface);
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 /* Studio editor */
 
 .studio {

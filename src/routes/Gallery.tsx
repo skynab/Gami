@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { NotIcon, OrigamiHeartIcon, OrigamiStarIcon, SearchIcon, SortIcon, StudioIcon } from '../app/icons';
+import { Footer } from '../app/Footer';
 import { TopBar } from '../app/TopBar';
 import { AccountButton } from '../auth/AccountButton';
 import { accountsEnabled } from '../auth/store';
@@ -213,6 +214,7 @@ export function Gallery() {
           </Suspense>
         )}
       </main>
+      <Footer />
     </div>
   );
 }
