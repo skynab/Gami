@@ -10,7 +10,8 @@ import { previewSvg, thumbnailSvg } from '../fold/thumbnail';
 import { problems } from '../fold/validate';
 import { MODELS } from '../gallery/catalog';
 import { paperRatio } from '../gallery/ModelCard';
-import { BREAK, BREAKS, GRAZE, GRAZES, REST, RESTS, TEAR, TEARS } from './known-clipping';
+import { stepsShowingThrough } from '../viewer/depth';
+import { BREAK, BREAKS, GRAZE, GRAZES, REST, RESTS, SHOWING, TEAR, TEARS } from './known-clipping';
 import { RECIPES } from './recipes';
 
 /**
@@ -64,6 +65,13 @@ function checks(id: string, model: ReturnType<(typeof RECIPES)[number]>) {
     expect(widest).toBeLessThanOrEqual(BREAKS[id] ?? BREAK);
     // A model that no longer comes apart further comes off the list.
     if (id in BREAKS) expect(widest).toBeGreaterThan(BREAK);
+  });
+
+  it('keeps paper underneath out of sight, even zoomed right out, or where it’s known not to', () => {
+    // The depth buffer's steps, from as far off as the camera goes, have to keep each layer apart from the paper on
+    // top of it, or the crease lines underneath show through (viewer/depth.ts). A step that no longer shows through
+    // comes off the list.
+    expect(stepsShowingThrough(model)).toEqual(SHOWING[id] ?? []);
   });
 
   // After the crossings, which work out each step's motion: about half a second a model.

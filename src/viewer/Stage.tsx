@@ -11,6 +11,7 @@ import { CameraRig } from './CameraRig';
 import { FoldedPaper } from './FoldedPaper';
 import { FoldGuides } from './FoldGuides';
 import { CubeCorner } from './ViewCube';
+import { CAMERA } from './views';
 
 /**
  * The 3D viewport: the paper on a table, lit softly, with a view cube in the corner. Loaded on demand.
@@ -35,7 +36,7 @@ export default function Stage({ model, onTap }: { model: OrigamiModel; onTap?: (
       // Draw only when something changes, so an idle model costs no battery.
       frameloop="demand"
       dpr={[1, 2]}
-      camera={{ fov: 35, near: 0.01, far: 100, position: [0, 2, 2] }}
+      camera={{ fov: CAMERA.fov, near: CAMERA.near, far: CAMERA.far, position: [0, 2, 2] }}
       fallback={<NoWebGL />}
       // A "miss" is a click that hit nothing clickable (only the view cube is) and moved under 2px since going down.
       // With the view cube grown, a click elsewhere only shrinks it back.

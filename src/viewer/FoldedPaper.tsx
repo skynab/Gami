@@ -17,6 +17,7 @@ import { affine, playedTo, poseAt, stepTransition, transition, type Transition }
 import { stackLifts, type StackLifts } from '../fold/bend/stack';
 import { FoldError } from '../fold/fold';
 import { framesOf, LAYER_GAP, normal } from '../fold/frames';
+import { DEPTH_BITS, lineCovers, SLACK, SURFACE_OFFSET } from './depth';
 import { joinedSegment } from '../fold/geometry2d';
 import { MARK_WIDTH, markColour, marksUpTo, onFace } from '../fold/marks';
 import { drawnParts } from '../fold/pinch';
@@ -48,6 +49,7 @@ export function FoldedPaper({ model, edgeColor }: { model: OrigamiModel; edgeCol
   const marks = useRef<Mesh | null>(null);
   const tape = useRef<Mesh | null>(null);
   const invalidate = useThree((s) => s.invalidate);
+  viewHeight.value = useThree((s) => s.size.height * s.viewport.dpr);
   const grain = useMemo(paperGrain, []);
   // Patterned paper (an experiment, chosen in the Orikata menu): printed on each sheet's coloured side, in its colour.
   const paper = useSettings((s) => s.paper);
@@ -394,7 +396,19 @@ function buildPart(
   const rank = new Float32Array(corners);
   const rankBack = new Float32Array(corners);
   const index: number[] = [];
-  const { lines, smooth, softly } = softness(frame, faceIndices, prior);
+  const softened = softness(frame, faceIndices, prior);
+  const { smooth, softly } = softened;
+  // Each line cut into stretches by the paper lying over it where the step comes to rest, on each side (see
+  // `lineCovers`): the shader leaves out a stretch whose paper is too close above it for the depth buffer to hide it.
+  // Bent paper is drawn in its stacking order instead (see LIFT).
+  const covers = frame.soft?.length ? null : lineCovers(t.faces.map((f) => f.after));
+  const lines = softened.lines.flatMap(([a, i, from, to, when]) => {
+    const after = tracks[a].after;
+    const stretches = covers ? covers(faceIndices[a], after[i], after[(i + 1) % after.length], from, to) : [{ from, to, front: Infinity, back: Infinity }];
+    return stretches.map((s) => [a, i, s.from, s.to, when, s.front, s.back] as const);
+  });
+  const coverFront = new Float32Array(lines.length * 2);
+  const coverBack = new Float32Array(lines.length * 2);
   const edgePositions = new Float32Array(lines.length * 6);
   // Each line drawn as near the eye as its face's side facing it.
   const edgeRanks = new Float32Array(lines.length * 2);
@@ -505,6 +519,20 @@ function buildPart(
   edges.setAttribute('rank', new BufferAttribute(edgeRanks, 1));
   edges.setAttribute('rankBack', new BufferAttribute(edgeRanksBack, 1));
   edges.setAttribute('faceNormal', new BufferAttribute(edgeNormals, 3));
+  edges.setAttribute('coverFront', new BufferAttribute(coverFront, 1));
+  edges.setAttribute('coverBack', new BufferAttribute(coverBack, 1));
+  // The paper over each stretch counts only at rest: as the step plays, the paper moves off it.
+  let covering: boolean | null = null;
+  const cover = (resting: boolean) => {
+    if (resting === covering) return;
+    covering = resting;
+    lines.forEach(([, , , , , front, back], e) => {
+      coverFront[2 * e] = coverFront[2 * e + 1] = resting ? Math.min(front, NO_COVER) : NO_COVER;
+      coverBack[2 * e] = coverBack[2 * e + 1] = resting ? Math.min(back, NO_COVER) : NO_COVER;
+    });
+    edges.attributes.coverFront.needsUpdate = true;
+    edges.attributes.coverBack.needsUpdate = true;
+  };
 
   // The places each face is drawn nearer the eye, `bent` of the way from the flat stack's order (its layer from
   // one side, less its layer from the other) to its place in what it's still stacked with.
@@ -531,6 +559,7 @@ function buildPart(
     part: { surface, edges, bends },
     update(pose, bent, resting) {
       rankFaces(bent);
+      cover(resting);
       let c = 0;
       const faceNormals = faceIndices.map((i) => normal(pose[i]));
       faceIndices.forEach((i, a) => {
@@ -721,15 +750,37 @@ const lift = (rank: string) => (shader: { vertexShader: string }) => {
 };
 const liftFront = lift('rank');
 const liftBack = lift('rankBack');
-/** Lines take their face's lift, by which of its sides faces the eye. */
-const liftLines = (shader: { vertexShader: string }) => {
+/** No paper over a stretch of line (within `COVER_RANGE`), as the shader reads it. */
+const NO_COVER = 1e6;
+/** The height of the canvas in pixels, for the size of a pixel where each line is (see `coverNeeded`). */
+const viewHeight = { value: 800 };
+/**
+ * Lines take their face's lift, by which of its sides faces the eye. A stretch with paper over it on that side, too
+ * close above it for the depth buffer to hide it, is left out (`coverNeeded` in depth.ts, worked out here for each
+ * line as it's drawn: the size of a pixel where it is, how far its face is turned from the eye, and the near plane).
+ */
+const liftLines = (shader: { vertexShader: string; fragmentShader: string; uniforms: Record<string, { value: unknown }> }) => {
+  shader.uniforms.viewHeight = viewHeight;
   shader.vertexShader = shader.vertexShader
-    .replace('#include <common>', '#include <common>\nattribute float rank;\nattribute float rankBack;\nattribute vec3 faceNormal;')
+    .replace(
+      '#include <common>',
+      '#include <common>\nattribute float rank;\nattribute float rankBack;\nattribute vec3 faceNormal;\nattribute float coverFront;\nattribute float coverBack;\nuniform float viewHeight;\nvarying float vCovered;',
+    )
     .replace(
       '#include <project_vertex>',
-      `#include <project_vertex>\nfloat lifted = dot(normalMatrix * faceNormal, -mvPosition.xyz) >= 0.0 ? rank : rankBack;\nmvPosition.xyz *= 1.0 - lifted * ${LIFT.toFixed(6)} / max(length(mvPosition.xyz), 1e-6);\ngl_Position = projectionMatrix * mvPosition;`,
+      `#include <project_vertex>
+float towards = dot(normalize(normalMatrix * faceNormal), normalize(-mvPosition.xyz));
+float eyeDistance = length(mvPosition.xyz);
+float pixel = 2.0 * eyeDistance / (projectionMatrix[1][1] * viewHeight);
+float near = projectionMatrix[3][2] / (projectionMatrix[2][2] - 1.0);
+float needed = 1.25 * pixel * sqrt(max(0.0, 1.0 - towards * towards)) + ${(SURFACE_OFFSET + SLACK).toFixed(1)} * eyeDistance * eyeDistance / (near * ${(2 ** DEPTH_BITS - 1).toFixed(1)});
+vCovered = (towards >= 0.0 ? coverFront : coverBack) < needed ? 1.0 : 0.0;
+float lifted = towards >= 0.0 ? rank : rankBack;
+mvPosition.xyz *= 1.0 - lifted * ${LIFT.toFixed(6)} / max(eyeDistance, 1e-6);
+gl_Position = projectionMatrix * mvPosition;`,
     );
+  shader.fragmentShader = shader.fragmentShader.replace('void main() {', 'varying float vCovered;\nvoid main() {\n  if (vCovered > 0.5) discard;');
 };
-const liftLinesKey = () => 'lift-lines-by-side';
+const liftLinesKey = () => 'lift-lines-by-side-uncovered';
 const liftFrontKey = () => 'lift-front-by-side';
 const liftBackKey = () => 'lift-back-by-side';

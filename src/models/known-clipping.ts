@@ -123,3 +123,26 @@ export const BREAKS: Record<string, number> = {
   // Pressing it flat and joining the ends: rigid links set on a ring, where they hook into each other.
   'rainbow-chain': 0.011,
 };
+
+/**
+ * The steps (1-based) known to have paper lying right on other paper, no gap between, as each comes to rest: the
+ * paper underneath shows through the paper on top, its crease lines or its other side, from close up as from far
+ * off (see viewer/depth.ts). Found 27 November 2026, when the check first looked; to be fixed, not added to. Paper
+ * a layer's gap apart stays hidden from as far off as the camera goes.
+ */
+export const SHOWING: Record<string, number[]> = {
+  // Popping up: the pleats pressed back to back, each a face's two halves.
+  diamond: [7],
+  strawberry: [12, 13],
+  pyramid: [6],
+  // Raising the walls: the corners, pinched into ears, lie on the walls.
+  'masu-box': [20, 21, 22],
+  'masu-lid': [20, 21, 22],
+  'masu-shallow-lid': [30, 31, 32],
+  'pot-plant': [28, 29, 30, 31, 32],
+  'cute-whale': [24, 25, 26],
+  // The wingtips turned up: the second wing's two layers at the tip stand back to back, lifted as if lying flat.
+  'king-bee': [19, 20],
+  // Pressing it flat: two links lying on one another.
+  'rainbow-chain': [14],
+};

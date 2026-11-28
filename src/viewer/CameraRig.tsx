@@ -1,9 +1,9 @@
 import { CameraControls, CameraControlsImpl } from '@react-three/drei';
-import { useThree } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { PerspectiveCamera, Sphere } from 'three';
 import { useViewer } from '../state/viewer';
-import { anglesFrom, nearestAngle, sameAngles, VIEW_ANGLES, type Angles } from './views';
+import { anglesFrom, CAMERA, nearestAngle, nearFor, sameAngles, VIEW_ANGLES, type Angles } from './views';
 
 const { ACTION } = CameraControlsImpl;
 const ROTATING = ACTION.ROTATE | ACTION.TOUCH_ROTATE | ACTION.TOUCH_DOLLY_ROTATE | ACTION.TOUCH_ZOOM_ROTATE;
@@ -108,7 +108,17 @@ export function CameraRig({ fit }: { fit: Sphere }) {
     return () => c.removeEventListener('control', onControl);
   }, []);
 
-  return <CameraControls ref={ref} makeDefault minDistance={0.3} maxDistance={8} />;
+  // The near plane follows the camera out (see `nearFor`), so stacked layers stay apart in depth however far off.
+  useFrame(() => {
+    const c = ref.current;
+    if (!c) return;
+    const near = nearFor(c.distance);
+    if (Math.abs(camera.near - near) < 1e-6) return;
+    camera.near = near;
+    camera.updateProjectionMatrix();
+  });
+
+  return <CameraControls ref={ref} makeDefault minDistance={CAMERA.minDistance} maxDistance={CAMERA.maxDistance} />;
 }
 
 /**

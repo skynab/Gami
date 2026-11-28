@@ -25,6 +25,25 @@ export const VIEW_ANGLES: Record<View, Angles> = {
   side: { azimuth: Math.PI / 2, polar: Math.PI / 2 },
 };
 
+/**
+ * The viewer's camera: its field of view (degrees, top to bottom), its nearest near plane and its far plane, and how
+ * close to and far from what it looks at it can be zoomed.
+ */
+export const CAMERA = { fov: 35, near: 0.01, far: 100, minDistance: 0.3, maxDistance: 8 };
+
+/**
+ * The near plane for the camera `distance` from what it looks at: a fiftieth of the way there, or `CAMERA.near`
+ * when close. The depth buffer's steps grow with the square of the distance over the near plane, so with the near
+ * plane fixed at 0.01, zoomed right out a step was more than half the gap between stacked layers, too coarse to keep
+ * the paper underneath behind the paper on top (November 2026). Following the camera out, the step grows only as
+ * fast as the distance does: 16 times finer, zoomed right out (see viewer/depth.ts). Zoomed in to
+ * half a sheet away or closer, the near plane is where it always was; zoomed right out, paper within a sixth of a
+ * sheet of the camera is out of sight, which only a model reaching 7.8 sheets from its middle could be.
+ */
+export function nearFor(distance: number): number {
+  return Math.max(CAMERA.near, distance / 50);
+}
+
 const EPS = 1e-3;
 
 /** The camera angles that look at the model from `dir` (any length). */
