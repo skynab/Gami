@@ -120,6 +120,14 @@ export const NotIcon = icon(
     <path d="M6.7 17.3 17.3 6.7" />
   </>,
 );
+/** Two sliders: the filters, shown or put away. */
+export const FiltersIcon = icon(
+  <>
+    <path d="M4 8h9M17 8h3M4 16h3M11 16h9" />
+    <circle cx="15" cy="8" r="2" />
+    <circle cx="9" cy="16" r="2" />
+  </>,
+);
 export const SortIcon = icon(<path d="M7 4v16M3.5 16.5 7 20l3.5-3.5M13 6h8M13 12h6M13 18h3" />);
 /**
  * The origami heart, as the gallery's Heart model folds it: two squared-off lobes, the middle crease, and a corner

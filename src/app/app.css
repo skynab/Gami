@@ -1067,11 +1067,59 @@ kbd {
   margin-block: 20px 24px;
 }
 
+.filter-set {
+  display: contents;
+}
+
+.filter-set[hidden] {
+  display: none;
+}
+
+/* Puts the filters away or brings them out (Gallery.tsx), so the row can be just the search. */
+.filters-toggle {
+  display: inline-flex;
+  align-items: center;
+  align-self: stretch;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--muted);
+  font-weight: 550;
+}
+
+.filters-toggle:hover {
+  background: var(--surface-hover);
+  color: var(--fg);
+}
+
+.filters-toggle[aria-expanded='true'] {
+  color: var(--fg);
+}
+
+/* How many filters are on while they're put away. */
+.filters-count {
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .search {
   display: flex;
   align-items: center;
   gap: 6px;
-  flex: 1 1 220px;
+  /* Small enough to share a phone's width with the filters button. */
+  flex: 1 1 160px;
+  min-width: 0;
   max-width: 320px;
   padding: 0 12px;
   border: 1px solid var(--line);

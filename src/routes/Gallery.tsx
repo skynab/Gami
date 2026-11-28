@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { NotIcon, OrigamiHeartIcon, OrigamiStarIcon, SearchIcon, SortIcon, StudioIcon } from '../app/icons';
+import { FiltersIcon, NotIcon, OrigamiHeartIcon, OrigamiStarIcon, SearchIcon, SortIcon, StudioIcon } from '../app/icons';
 import { Footer } from '../app/Footer';
 import { TopBar } from '../app/TopBar';
 import { AccountButton } from '../auth/AccountButton';
@@ -49,6 +49,25 @@ function savePlace(change: Partial<Place>) {
   }
 }
 
+// Whether the filters beside the search are out or put away: kept on this device, as it's how someone likes the page.
+const FILTERS_KEY = 'gami.filtersShown';
+
+function readFiltersShown(): boolean {
+  try {
+    return localStorage.getItem(FILTERS_KEY) !== '0';
+  } catch {
+    return true;
+  }
+}
+
+function saveFiltersShown(shown: boolean) {
+  try {
+    localStorage.setItem(FILTERS_KEY, shown ? '1' : '0');
+  } catch {
+    // Nothing to do: the filters just show next time.
+  }
+}
+
 export function Gallery() {
   const { t, i18n } = useTranslation();
   const [place] = useState(readPlace);
@@ -63,6 +82,7 @@ export function Gallery() {
   const [onlyNew, setOnlyNew] = useState(anyNew && place.onlyNew === true);
   const favorites = useFavorites((s) => s.ids);
   const [hideFolded, setHideFolded] = useState(readHideFolded);
+  const [filtersShown, setFiltersShown] = useState(readFiltersShown);
   useEffect(
     () => savePlace({ query, level, category, without, form, sort, favorites: onlyFavorites, onlyNew }),
     [query, level, category, without, form, sort, onlyFavorites, onlyNew],
@@ -82,6 +102,13 @@ export function Gallery() {
     sort,
     i18n.language,
   );
+  // What's narrowing (or reordering) the list. With the filters put away their button counts these, so nothing is hidden by surprise.
+  const filtersOn =
+    (level ? 1 : 0) + (category ? 1 : 0) + without.length + (form ? 1 : 0) + (onlyFavorites ? 1 : 0) + (onlyNew ? 1 : 0) + (hideFolded ? 1 : 0) + (sort !== 'natural' ? 1 : 0);
+  const toggleFilters = () => {
+    setFiltersShown(!filtersShown);
+    saveFiltersShown(!filtersShown);
+  };
   const toggleHideFolded = () => {
     setHideFolded(!hideFolded);
     saveHideFolded(!hideFolded);
@@ -110,83 +137,105 @@ export function Gallery() {
             <span className="sr-only">{t('gallery.searchLabel')}</span>
             <input type="search" placeholder={t('gallery.search')} value={query} onChange={(e) => setQuery(e.target.value)} />
           </label>
-          <div className="segmented" role="group" aria-label={t('gallery.difficulty')}>
-            <button type="button" aria-pressed={level === null} onClick={() => setLevel(null)}>
-              {t('gallery.all')}
-            </button>
-            {LEVELS.map((l) => (
-              <button key={l.id} type="button" aria-pressed={level === l.id} onClick={() => setLevel(l.id)}>
-                {t(`levels.${l.id}`)}
-              </button>
-            ))}
-          </div>
-          <div className="chips" role="group" aria-label={t('gallery.category')}>
-            {CATEGORIES.map((c) => {
-              const name = t(`categories.${c.id}`);
-              const left = without.includes(c.id);
-              return (
-                // One pill in two parts: its name shows only that category, the ⊘ at its end everything but it.
-                <span key={c.id} className={left ? 'chip-pair without' : 'chip-pair'}>
-                  <button
-                    type="button"
-                    className="chip"
-                    aria-pressed={category === c.id}
-                    onClick={() => {
-                      setCategory(category === c.id ? null : c.id);
-                      setWithout([]);
-                    }}
-                  >
-                    {name}
-                  </button>
-                  <button
-                    type="button"
-                    className="chip chip-not"
-                    aria-pressed={left}
-                    aria-label={t('gallery.without', { name })}
-                    title={t('gallery.without', { name })}
-                    onClick={() => {
-                      setWithout(left ? without.filter((w) => w !== c.id) : [...without, c.id]);
-                      setCategory(null);
-                    }}
-                  >
-                    <NotIcon width={14} height={14} />
-                  </button>
+          <button
+            type="button"
+            className="filters-toggle"
+            aria-expanded={filtersShown}
+            aria-controls="gallery-filters"
+            title={t(filtersShown ? 'gallery.hideFilters' : 'gallery.showFilters')}
+            onClick={toggleFilters}
+          >
+            <FiltersIcon width={18} height={18} />
+            {t('gallery.filters')}
+            {!filtersShown && filtersOn > 0 && (
+              <>
+                <span className="filters-count" aria-hidden="true">
+                  {filtersOn}
                 </span>
-              );
-            })}
-          </div>
-          <div className="chips" role="group" aria-label={t('gallery.form')}>
-            {FORMS.map((f) => (
-              <button key={f} type="button" className="chip" aria-pressed={form === f} title={t(f === '3d' ? 'card.form3d' : 'card.form2d')} onClick={() => setForm(form === f ? null : f)}>
-                {t(`forms.${f}`)}
+                <span className="sr-only">{t('gallery.filtersOn', { count: filtersOn })}</span>
+              </>
+            )}
+          </button>
+          {/* Laid out as part of the row (display: contents), so put away they leave just the search and their button. */}
+          <div id="gallery-filters" className="filter-set" hidden={!filtersShown}>
+            <div className="segmented" role="group" aria-label={t('gallery.difficulty')}>
+              <button type="button" aria-pressed={level === null} onClick={() => setLevel(null)}>
+                {t('gallery.all')}
               </button>
-            ))}
-          </div>
-          <button type="button" className="chip favorites-chip" aria-pressed={onlyFavorites} onClick={() => setOnlyFavorites(!onlyFavorites)}>
-            <OrigamiHeartIcon width={16} height={16} />
-            {t('gallery.favorites')}
-          </button>
-          {anyNew && (
-            <button type="button" className="chip new-chip" aria-pressed={onlyNew} onClick={() => setOnlyNew(!onlyNew)}>
-              <OrigamiStarIcon width={16} height={16} />
-              {t('gallery.new')}
-            </button>
-          )}
-          <button type="button" className="chip" aria-pressed={hideFolded} onClick={toggleHideFolded}>
-            {t('gallery.hideFolded')}
-          </button>
-          {/* Small and out of the way at the end of the row: most people keep the natural order. */}
-          <label className="sort" title={t('gallery.sortLabel')} data-changed={sort !== 'natural' || undefined}>
-            <SortIcon width={16} height={16} />
-            <span className="sr-only">{t('gallery.sortLabel')}</span>
-            <select value={sort} onChange={(e) => setSort(e.target.value as Sort)}>
-              {SORTS.map((s) => (
-                <option key={s} value={s}>
-                  {t(`sorts.${s}`)}
-                </option>
+              {LEVELS.map((l) => (
+                <button key={l.id} type="button" aria-pressed={level === l.id} onClick={() => setLevel(l.id)}>
+                  {t(`levels.${l.id}`)}
+                </button>
               ))}
-            </select>
-          </label>
+            </div>
+            <div className="chips" role="group" aria-label={t('gallery.category')}>
+              {CATEGORIES.map((c) => {
+                const name = t(`categories.${c.id}`);
+                const left = without.includes(c.id);
+                return (
+                  // One pill in two parts: its name shows only that category, the ⊘ at its end everything but it.
+                  <span key={c.id} className={left ? 'chip-pair without' : 'chip-pair'}>
+                    <button
+                      type="button"
+                      className="chip"
+                      aria-pressed={category === c.id}
+                      onClick={() => {
+                        setCategory(category === c.id ? null : c.id);
+                        setWithout([]);
+                      }}
+                    >
+                      {name}
+                    </button>
+                    <button
+                      type="button"
+                      className="chip chip-not"
+                      aria-pressed={left}
+                      aria-label={t('gallery.without', { name })}
+                      title={t('gallery.without', { name })}
+                      onClick={() => {
+                        setWithout(left ? without.filter((w) => w !== c.id) : [...without, c.id]);
+                        setCategory(null);
+                      }}
+                    >
+                      <NotIcon width={14} height={14} />
+                    </button>
+                  </span>
+                );
+              })}
+            </div>
+            <div className="chips" role="group" aria-label={t('gallery.form')}>
+              {FORMS.map((f) => (
+                <button key={f} type="button" className="chip" aria-pressed={form === f} title={t(f === '3d' ? 'card.form3d' : 'card.form2d')} onClick={() => setForm(form === f ? null : f)}>
+                  {t(`forms.${f}`)}
+                </button>
+              ))}
+            </div>
+            <button type="button" className="chip favorites-chip" aria-pressed={onlyFavorites} onClick={() => setOnlyFavorites(!onlyFavorites)}>
+              <OrigamiHeartIcon width={16} height={16} />
+              {t('gallery.favorites')}
+            </button>
+            {anyNew && (
+              <button type="button" className="chip new-chip" aria-pressed={onlyNew} onClick={() => setOnlyNew(!onlyNew)}>
+                <OrigamiStarIcon width={16} height={16} />
+                {t('gallery.new')}
+              </button>
+            )}
+            <button type="button" className="chip" aria-pressed={hideFolded} onClick={toggleHideFolded}>
+              {t('gallery.hideFolded')}
+            </button>
+            {/* Small and out of the way at the end of the row: most people keep the natural order. */}
+            <label className="sort" title={t('gallery.sortLabel')} data-changed={sort !== 'natural' || undefined}>
+              <SortIcon width={16} height={16} />
+              <span className="sr-only">{t('gallery.sortLabel')}</span>
+              <select value={sort} onChange={(e) => setSort(e.target.value as Sort)}>
+                {SORTS.map((s) => (
+                  <option key={s} value={s}>
+                    {t(`sorts.${s}`)}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
         </div>
 
         {models.length > 0 ? (
